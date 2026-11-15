@@ -1,105 +1,46 @@
-//! # vc-llm (Task 8, stub)
+//! # vc-llm
 //!
-//! `VertexLlm`, `VertexEmbedder`, `PgLedger` (two-row reservation, §17.4), `VertexBatchRunner`
-//! (§17.3), the billing breaker and `llm_cache`. With `llm.enabled = false` every call returns
-//! `LlmError::Disabled` without touching the network. Block 14xx.
+//! Gemini on Vertex AI for the crawler, always under the race-free budget (spec §5.8, §17.3,
+//! §17.4):
+//!
+//! - [`VertexLlm`]: REST `generateContent` on the global endpoint with `responseSchema`,
+//!   `maxOutputTokens`, `thinkingConfig` and `labels {app: voyager-crawler, purpose}`, an
+//!   optional [`LlmCache`] (`llm_cache`), and the startup [`VertexLlm::probe`];
+//! - [`VertexEmbedder`]: `text-embedding-005` (768) via `predict`;
+//! - [`PgLedger`]: the two-row (+ purpose) reservation, the dynamic daily cap, purpose shares,
+//!   and the 1 h stale settle (batch reservations exempt);
+//! - [`VertexBatchRunner`]: batch prediction with JSONL in GCS (prepare → submit → reconcile →
+//!   ingest, 72 h cancel);
+//! - [`VertexClient`]: ADC tokens, error mapping and the 6 h [`Breaker`] on a billing/budget
+//!   403/429.
+//!
+//! With `llm.enabled = false` (the default) every call returns [`LlmError::Disabled`] without
+//! touching the network. Logs carry token counts and cost only, never prompt or page text.
+//!
+//! [`LlmError::Disabled`]: vc_core::llm::LlmError::Disabled
 
-use std::time::Duration;
+mod batch;
+mod cache;
+mod client;
+mod crc;
+mod embed;
+mod generate;
+mod ledger;
+mod pricing;
+mod schema;
 
-use async_trait::async_trait;
-use sqlx::PgPool;
-use vc_config::LlmConfig;
-use vc_core::llm::{
-    BatchIngest, BatchItem, BatchRunner, BudgetLedger, Embedder, LlmClient, LlmError, LlmRequest,
-    LlmResponse, Purpose, ReconcileReport, Reservation, Usage, Usd,
+pub use batch::{KEY_LABEL, VertexBatchRunner, key_of};
+pub use cache::{CacheKey, LlmCache};
+pub use client::{
+    APP_LABEL, AdcToken, Breaker, CLOUD_PLATFORM_SCOPE, StaticToken, TokenSource, VertexClient,
+    is_billing_error, labels,
 };
-use vc_core::{BatchJobId, ModelId, Result};
-
-/// Gemini on Vertex AI (REST `generateContent`).
-#[derive(Debug, Clone)]
-pub struct VertexLlm {
-    /// Settings.
-    pub config: LlmConfig,
-}
-
-#[async_trait]
-impl LlmClient for VertexLlm {
-    async fn generate(&self, _r: &Reservation, _req: LlmRequest) -> Result<LlmResponse> {
-        if !self.config.enabled {
-            return Err(LlmError::Disabled.into());
-        }
-        todo!("Task 8")
-    }
-}
-
-/// Vertex text embeddings.
-#[derive(Debug, Clone)]
-pub struct VertexEmbedder {
-    /// Settings.
-    pub config: LlmConfig,
-    /// Model id.
-    pub model: ModelId,
-}
-
-#[async_trait]
-impl Embedder for VertexEmbedder {
-    fn model(&self) -> &ModelId {
-        &self.model
-    }
-    fn dim(&self) -> usize {
-        self.config.embedding_dim
-    }
-    async fn embed(&self, _r: &Reservation, _texts: &[String]) -> Result<Vec<Vec<f32>>> {
-        if !self.config.enabled {
-            return Err(LlmError::Disabled.into());
-        }
-        todo!("Task 8")
-    }
-}
-
-/// The Postgres budget ledger.
-#[derive(Debug, Clone)]
-pub struct PgLedger {
-    /// Pool.
-    pub pool: PgPool,
-    /// Settings.
-    pub config: LlmConfig,
-}
-
-#[async_trait]
-impl BudgetLedger for PgLedger {
-    async fn reserve(&self, _purpose: Purpose, _est: Usd) -> Result<Option<Reservation>> {
-        todo!("Task 8")
-    }
-    async fn reserve_batch(&self, _purpose: Purpose, _est: Usd) -> Result<Option<Reservation>> {
-        todo!("Task 8")
-    }
-    async fn settle(&self, _r: Reservation, _actual: Usage) -> Result<()> {
-        todo!("Task 8")
-    }
-}
-
-/// The Vertex batch-prediction runner.
-#[derive(Debug, Clone)]
-pub struct VertexBatchRunner {
-    /// Pool.
-    pub pool: PgPool,
-    /// Settings.
-    pub config: LlmConfig,
-}
-
-#[async_trait]
-impl BatchRunner for VertexBatchRunner {
-    async fn prepare(&self, _r: Reservation, _items: Vec<BatchItem>) -> Result<BatchJobId> {
-        todo!("Task 8")
-    }
-    async fn submit(&self, _id: &BatchJobId) -> Result<()> {
-        todo!("Task 8")
-    }
-    async fn reconcile(&self, _timeout: Duration) -> Result<ReconcileReport> {
-        todo!("Task 8")
-    }
-    async fn ingest(&self, _id: &BatchJobId) -> Result<BatchIngest> {
-        todo!("Task 8")
-    }
-}
+pub use crc::crc32c;
+pub use embed::{MAX_TEXTS_PER_REQUEST, VertexEmbedder};
+pub use generate::{
+    ProbeOutcome, TEMPERATURE, VertexLlm, finish_reason, generate_body, parse_response,
+    thinking_config, usage_of,
+};
+pub use ledger::{BudgetRow, PgLedger, remaining_days};
+pub use pricing::{Pricing, thinking_allowance};
+pub use schema::to_vertex_schema;

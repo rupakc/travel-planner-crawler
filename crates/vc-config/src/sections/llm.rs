@@ -81,6 +81,26 @@ pub struct LlmConfig {
     pub batch_timeout_h: u64,
     /// Request timeout, seconds.
     pub request_timeout_s: u64,
+    /// Vertex API base URL override (empty = derived from the location:
+    /// `https://aiplatform.googleapis.com` for `global`, else `https://{loc}-aiplatform…`).
+    /// Tests point it at a wiremock server.
+    pub api_endpoint: String,
+    /// Location of the embedding model (`text-embedding-005` is regional).
+    pub embedding_location: String,
+    /// List price of input tokens, USD per 1M (gemini-3.1-flash-lite, global: 0.25).
+    pub input_usd_per_m: f64,
+    /// List price of output tokens (thinking included), USD per 1M (1.50).
+    pub output_usd_per_m: f64,
+    /// List price of cached input tokens, USD per 1M (0.025).
+    pub cached_input_usd_per_m: f64,
+    /// Batch prediction price as a fraction of list price (0.5).
+    pub batch_discount: f64,
+    /// Embedding price, USD per 1,000 input characters (text-embedding-005: 0.000025).
+    pub embedding_usd_per_1k_chars: f64,
+    /// GCS bucket for batch-prediction input and output (the ops bucket).
+    pub batch_bucket: String,
+    /// Object prefix for batch jobs inside `batch_bucket` (`<prefix><job id>/…`).
+    pub batch_prefix: String,
 }
 
 impl Default for LlmConfig {
@@ -104,6 +124,15 @@ impl Default for LlmConfig {
             stale_settle_h: 1,
             batch_timeout_h: 72,
             request_timeout_s: 60,
+            api_endpoint: String::new(),
+            embedding_location: "us-central1".into(),
+            input_usd_per_m: 0.25,
+            output_usd_per_m: 1.50,
+            cached_input_usd_per_m: 0.025,
+            batch_discount: 0.5,
+            embedding_usd_per_1k_chars: 0.000025,
+            batch_bucket: "voyager-crawler-ops".into(),
+            batch_prefix: "llm-batch/".into(),
         }
     }
 }
