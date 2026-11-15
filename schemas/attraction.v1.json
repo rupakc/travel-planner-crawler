@@ -1,0 +1,252 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/rupakc/travel-planner-crawler/schemas/attraction.v1.json",
+  "title": "Attraction",
+  "description": "One record: one sight or attraction to visit (landmark, museum, temple, viewpoint, park, market, palace, monument). Voyager use: places_to_see (name, category, description, neighbourhood, address, visit_duration_hours, best_time_to_visit, admission_fee_usd, highlights, info_url, accessibility).",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "name": {
+      "type": "string",
+      "maxLength": 160,
+      "description": "The attraction's name as written."
+    },
+    "category": {
+      "type": "string",
+      "enum": [
+        "landmark",
+        "religious_site",
+        "museum",
+        "viewpoint",
+        "park_garden",
+        "market",
+        "palace_castle",
+        "natural_wonder",
+        "historic_district",
+        "monument",
+        "zoo_aquarium",
+        "theme_park",
+        "other"
+      ],
+      "description": "Category."
+    },
+    "description": {
+      "type": "string",
+      "maxLength": 600,
+      "description": "Two or three sentences: what it is and why visit."
+    },
+    "neighbourhood": {
+      "type": "string",
+      "maxLength": 120,
+      "description": "Neighbourhood or district."
+    },
+    "address": {
+      "type": "string",
+      "maxLength": 240,
+      "description": "Street address as written."
+    },
+    "city": {
+      "type": "string",
+      "maxLength": 120,
+      "description": "City in English. Always paired with `country`."
+    },
+    "country": {
+      "type": "string",
+      "maxLength": 80,
+      "description": "Country in English (e.g. \"Japan\"). Required whenever `city` is set."
+    },
+    "country_code": {
+      "type": "string",
+      "maxLength": 2,
+      "description": "ISO 3166-1 alpha-2 country code of `country`.",
+      "pattern": "^[A-Z]{2}$"
+    },
+    "lat": {
+      "type": "number",
+      "description": "Latitude in decimal degrees, only if the page states coordinates.",
+      "minimum": -90,
+      "maximum": 90
+    },
+    "lng": {
+      "type": "number",
+      "description": "Longitude in decimal degrees, only if the page states coordinates.",
+      "minimum": -180,
+      "maximum": 180
+    },
+    "visit_duration_hours": {
+      "type": "number",
+      "description": "Typical visit length the page suggests, in hours.",
+      "minimum": 0,
+      "maximum": 24
+    },
+    "opening_hours": {
+      "type": "string",
+      "maxLength": 240,
+      "description": "Opening hours as written (days and times)."
+    },
+    "closed_days": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "mon",
+          "tue",
+          "wed",
+          "thu",
+          "fri",
+          "sat",
+          "sun"
+        ],
+        "description": "Day."
+      },
+      "maxItems": 7,
+      "description": "Weekly closing days."
+    },
+    "best_time_to_visit": {
+      "type": "string",
+      "maxLength": 200,
+      "description": "Advice on when to go (time of day, season)."
+    },
+    "admission": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "text": {
+          "type": "string",
+          "maxLength": 80,
+          "description": "The price exactly as written on the page, e.g. \"€45.00\", \"from ¥1,500\", \"Free\"."
+        },
+        "amount": {
+          "type": "number",
+          "description": "The number in `text`, without currency symbols or thousands separators.",
+          "minimum": 0
+        },
+        "currency": {
+          "type": "string",
+          "maxLength": 3,
+          "description": "ISO 4217 code of the currency in `text`; never converted.",
+          "pattern": "^[A-Z]{3}$"
+        },
+        "unit": {
+          "type": "string",
+          "maxLength": 40,
+          "description": "What the price is for, e.g. \"per person\", \"per night\", \"per ride\"."
+        },
+        "is_free": {
+          "type": "boolean",
+          "description": "True only if the page says it is free (tips may still be expected)."
+        }
+      },
+      "description": "Standard adult admission."
+    },
+    "highlights": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "maxLength": 100,
+        "description": "A highlight."
+      },
+      "maxItems": 6,
+      "description": "Must-see parts of the attraction."
+    },
+    "booking_required": {
+      "type": "boolean",
+      "description": "True if the page says advance booking or timed tickets are required."
+    },
+    "phone": {
+      "type": "string",
+      "maxLength": 32,
+      "description": "Phone number. As written on the page (digits, spaces, +, -, (, ), .).",
+      "pattern": "^\\+?[0-9][0-9 ().\\-/]{1,30}$"
+    },
+    "info_url": {
+      "type": "string",
+      "maxLength": 2048,
+      "description": "Official page or ticket page for the attraction.",
+      "pattern": "^https?://[^\\s]+$"
+    },
+    "accessibility_features": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "wheelchair_accessible",
+          "step_free_access",
+          "accessible_toilet",
+          "elevator",
+          "ramp",
+          "audio_guide",
+          "sign_language",
+          "braille",
+          "hearing_loop",
+          "service_animals_allowed",
+          "seating_available",
+          "stroller_friendly"
+        ],
+        "description": "An accessibility feature."
+      },
+      "maxItems": 8,
+      "description": "Accessibility features the page states explicitly."
+    },
+    "wheelchair_accessible": {
+      "type": "boolean",
+      "description": "Stated wheelchair access."
+    },
+    "family_friendly": {
+      "type": "boolean",
+      "description": "Stated as suitable for children."
+    },
+    "rating": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "value": {
+          "type": "number",
+          "description": "Average rating as shown.",
+          "minimum": 0,
+          "maximum": 100
+        },
+        "scale": {
+          "type": "number",
+          "description": "Top of the rating scale (5, 10 or 100).",
+          "minimum": 1,
+          "maximum": 100
+        },
+        "count": {
+          "type": "integer",
+          "description": "Number of reviews behind the rating.",
+          "minimum": 0
+        }
+      },
+      "description": "A rating shown on the page (never computed)."
+    },
+    "source_url": {
+      "type": "string",
+      "maxLength": 2048,
+      "description": "The page's own link for this item (official site, booking or detail page), copied verbatim from the page.",
+      "pattern": "^https?://[^\\s]+$"
+    },
+    "as_of": {
+      "type": "string",
+      "maxLength": 10,
+      "description": "The \"last updated\", \"valid from\" or publication date the page itself states for this information (YYYY-MM-DD).",
+      "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$"
+    },
+    "evidence": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "maxLength": 300,
+        "description": "A verbatim quote from the page."
+      },
+      "maxItems": 3,
+      "description": "Up to 3 short verbatim quotes from the page that support the most important facts."
+    }
+  },
+  "required": [
+    "name",
+    "category",
+    "city",
+    "country"
+  ]
+}

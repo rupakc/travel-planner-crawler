@@ -1,0 +1,124 @@
+# Kind registry policy (spec §5.7, §17.8). One table per kind; see crates/vc-kinds for the rules
+# the loader enforces. JSON pointers in `verbatim` may use `*` for "every array element";
+# the loader expands it to concrete indices (0 .. the schema's maxItems).
+# `source_classes = []` would mean "all"; every v1 kind lists its classes explicitly.
+
+[kinds.activity]
+version = 1
+storage = "record"
+source_classes = ["official", "reference", "editorial", "commercial_api"]
+verbatim = ["/price/text", "/price/amount", "/booking_url", "/phone", "/source_url", "/as_of", "/evidence/*"]
+
+[kinds.advisory]
+version = 1
+storage = "record"
+source_classes = ["official"]
+verbatim = ["/issued_date", "/updated_date", "/level", "/regions/*/level", "/source_url", "/as_of", "/evidence/*"]
+high_stakes = true
+
+[kinds.airport]
+version = 1
+storage = "record"
+source_classes = ["official", "reference", "commercial_api"]
+verbatim = ["/city_transfers/*/price/text", "/city_transfers/*/price/amount", "/phone", "/website_url", "/source_url", "/as_of", "/evidence/*"]
+
+[kinds.article]
+version = 1
+storage = "record"
+source_classes = ["official", "reference", "editorial"]
+verbatim = ["/published_date", "/updated_date", "/source_url", "/as_of", "/evidence/*"]
+
+[kinds.attraction]
+version = 1
+storage = "record"
+source_classes = ["official", "reference", "editorial", "commercial_api"]
+verbatim = ["/admission/text", "/admission/amount", "/phone", "/info_url", "/source_url", "/as_of", "/evidence/*"]
+
+[kinds.emergency_numbers]
+version = 1
+storage = "record"
+source_classes = ["official", "reference"]
+verbatim = ["/numbers/*/number", "/embassies/*/phone", "/embassies/*/after_hours_phone", "/embassies/*/website_url", "/source_url", "/as_of", "/evidence/*"]
+high_stakes = true
+min_reference_agreement = 2
+
+[kinds.event]
+version = 1
+storage = "record"
+source_classes = ["official", "reference", "editorial", "commercial_api"]
+verbatim = ["/start_date", "/end_date", "/start_time", "/price/text", "/price/amount", "/ticket_url", "/source_url", "/as_of", "/evidence/*"]
+
+[kinds.fx_rate]
+version = 1
+storage = "observation"
+source_classes = ["official", "reference", "commercial_api"]
+verbatim = ["/rate", "/rate_date", "/source_url", "/as_of", "/evidence/*"]
+series_key = "fx:{base_currency}:{quote_currency}"
+
+[kinds.hotel]
+version = 1
+storage = "record"
+source_classes = ["official", "reference", "editorial", "commercial_api"]
+verbatim = ["/phone", "/website_url", "/check_in_time", "/check_out_time", "/source_url", "/as_of", "/evidence/*"]
+
+[kinds.packing_hint]
+version = 1
+storage = "record"
+source_classes = ["official", "reference", "editorial", "community"]
+verbatim = ["/voltage_v", "/source_url", "/as_of", "/evidence/*"]
+
+[kinds.place]
+version = 1
+storage = "record"
+source_classes = ["official", "reference", "editorial", "commercial_api"]
+verbatim = ["/official_tourism_url", "/source_url", "/as_of", "/evidence/*"]
+
+[kinds.qa_thread]
+version = 1
+storage = "record"
+source_classes = ["community"]
+verbatim = ["/asked_date", "/last_activity_date", "/source_url", "/as_of", "/evidence/*"]
+
+[kinds.route]
+version = 1
+storage = "record"
+source_classes = ["official", "reference", "commercial_api"]
+verbatim = ["/start_date", "/end_date", "/source_url", "/as_of", "/evidence/*"]
+
+[kinds.sim_offer]
+version = 1
+storage = "record"
+source_classes = ["official", "reference", "editorial", "commercial_api"]
+verbatim = ["/price/text", "/price/amount", "/url", "/source_url", "/as_of", "/evidence/*"]
+
+[kinds.tip]
+version = 1
+storage = "record"
+source_classes = ["official", "reference", "editorial", "community"]
+verbatim = ["/source_url", "/as_of", "/evidence/*"]
+
+[kinds.transport_option]
+version = 1
+storage = "record"
+source_classes = ["official", "reference", "editorial", "commercial_api"]
+verbatim = ["/fares/*/price/text", "/fares/*/price/amount", "/tourist_pass/price/text", "/tourist_pass/price/amount", "/booking_url", "/source_url", "/as_of", "/evidence/*"]
+
+[kinds.visa_rule]
+version = 1
+storage = "record"
+source_classes = ["official"]
+verbatim = ["/max_stay_days", "/fee/text", "/fee/amount", "/application_url", "/effective_date", "/source_url", "/as_of", "/evidence/*"]
+high_stakes = true
+
+[kinds.walking_tour]
+version = 1
+storage = "record"
+source_classes = ["official", "reference", "editorial", "commercial_api"]
+verbatim = ["/price/text", "/price/amount", "/booking_url", "/start_times/*", "/source_url", "/as_of", "/evidence/*"]
+
+[kinds.weather_normal]
+version = 1
+storage = "observation"
+source_classes = ["official", "reference"]
+verbatim = ["/period", "/source_url", "/as_of", "/evidence/*"]
+series_key = "weather_normal:{place_id}:{month:02}"

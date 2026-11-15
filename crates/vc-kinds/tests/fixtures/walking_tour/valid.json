@@ -1,0 +1,34 @@
+{
+  "name": "Gion & Higashiyama Free Walking Tour",
+  "provider": "GuruWalk",
+  "description": "Geisha district lanes, Yasaka Shrine and the preserved streets of Higashiyama.",
+  "city": "Kyoto",
+  "country": "Japan",
+  "country_code": "JP",
+  "meeting_point": "In front of Yasaka Shrine west gate",
+  "duration_hours": 2,
+  "price_model": "free_tip_based",
+  "themes": [
+    "history",
+    "culture"
+  ],
+  "languages": [
+    "English"
+  ],
+  "start_times": [
+    "10:00",
+    "15:00"
+  ],
+  "days": [
+    "mon",
+    "wed",
+    "fri",
+    "sat"
+  ],
+  "booking_url": "https://www.guruwalk.com/walks/12345-gion",
+  "rating": {
+    "value": 4.9,
+    "scale": 5,
+    "count": 1280
+  }
+}

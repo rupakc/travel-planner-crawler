@@ -1,0 +1,165 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/rupakc/travel-planner-crawler/schemas/emergency_numbers.v1.json",
+  "title": "Emergency numbers",
+  "description": "One record: the emergency phone numbers of one country (or one city), plus embassy contacts if the page lists them. Voyager use: emergency_card (emergency_numbers police/ambulance/fire/tourist_police, embassy).",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "city": {
+      "type": "string",
+      "maxLength": 120,
+      "description": "City in English. Always paired with `country`."
+    },
+    "country": {
+      "type": "string",
+      "maxLength": 80,
+      "description": "Country in English (e.g. \"Japan\"). Required whenever `city` is set."
+    },
+    "country_code": {
+      "type": "string",
+      "maxLength": 2,
+      "description": "ISO 3166-1 alpha-2 country code of `country`.",
+      "pattern": "^[A-Z]{2}$"
+    },
+    "applies_to": {
+      "type": "string",
+      "enum": [
+        "country",
+        "city",
+        "region"
+      ],
+      "description": "Whether the numbers are national or local."
+    },
+    "numbers": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "service": {
+            "type": "string",
+            "enum": [
+              "general",
+              "police",
+              "ambulance",
+              "fire",
+              "tourist_police",
+              "coast_guard",
+              "mountain_rescue",
+              "poison_control",
+              "women_helpline",
+              "child_helpline",
+              "roadside",
+              "other"
+            ],
+            "description": "Service."
+          },
+          "number": {
+            "type": "string",
+            "maxLength": 20,
+            "description": "The number exactly as written (digits, spaces, +, -).",
+            "pattern": "^\\+?[0-9][0-9 \\-]{0,18}$"
+          },
+          "note": {
+            "type": "string",
+            "maxLength": 160,
+            "description": "Conditions, e.g. \"from mobiles\", \"English spoken\"."
+          }
+        },
+        "required": [
+          "service",
+          "number"
+        ]
+      },
+      "maxItems": 12,
+      "description": "Emergency numbers.",
+      "minItems": 1
+    },
+    "embassies": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "of_country": {
+            "type": "string",
+            "maxLength": 80,
+            "description": "Whose embassy or consulate it is, in English."
+          },
+          "of_country_code": {
+            "type": "string",
+            "maxLength": 2,
+            "description": "ISO 3166-1 alpha-2 of `of_country`.",
+            "pattern": "^[A-Z]{2}$"
+          },
+          "name": {
+            "type": "string",
+            "maxLength": 160,
+            "description": "Mission name."
+          },
+          "address": {
+            "type": "string",
+            "maxLength": 240,
+            "description": "Address as written."
+          },
+          "phone": {
+            "type": "string",
+            "maxLength": 32,
+            "description": "Main phone. As written on the page (digits, spaces, +, -, (, ), .).",
+            "pattern": "^\\+?[0-9][0-9 ().\\-/]{1,30}$"
+          },
+          "after_hours_phone": {
+            "type": "string",
+            "maxLength": 32,
+            "description": "After-hours emergency phone. As written on the page (digits, spaces, +, -, (, ), .).",
+            "pattern": "^\\+?[0-9][0-9 ().\\-/]{1,30}$"
+          },
+          "website_url": {
+            "type": "string",
+            "maxLength": 2048,
+            "description": "Mission website.",
+            "pattern": "^https?://[^\\s]+$"
+          },
+          "hours": {
+            "type": "string",
+            "maxLength": 120,
+            "description": "Opening hours."
+          }
+        },
+        "required": [
+          "of_country",
+          "name"
+        ]
+      },
+      "maxItems": 4,
+      "description": "Embassies or consulates listed on the page."
+    },
+    "source_url": {
+      "type": "string",
+      "maxLength": 2048,
+      "description": "The page's own link for this item (official site, booking or detail page), copied verbatim from the page.",
+      "pattern": "^https?://[^\\s]+$"
+    },
+    "as_of": {
+      "type": "string",
+      "maxLength": 10,
+      "description": "The \"last updated\", \"valid from\" or publication date the page itself states for this information (YYYY-MM-DD).",
+      "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$"
+    },
+    "evidence": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "maxLength": 300,
+        "description": "A verbatim quote from the page."
+      },
+      "maxItems": 3,
+      "description": "Up to 3 short verbatim quotes from the page that support the most important facts."
+    }
+  },
+  "required": [
+    "country",
+    "numbers"
+  ]
+}

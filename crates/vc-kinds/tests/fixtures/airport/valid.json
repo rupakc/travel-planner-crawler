@@ -1,0 +1,26 @@
+{
+  "iata": "KIX",
+  "icao": "RJBB",
+  "name": "Kansai International Airport",
+  "city": "Osaka",
+  "country": "Japan",
+  "country_code": "JP",
+  "terminals": [
+    "Terminal 1",
+    "Terminal 2"
+  ],
+  "city_transfers": [
+    {
+      "mode": "train",
+      "name": "Haruka Express",
+      "to": "Kyoto Station",
+      "duration_minutes": 75,
+      "price": {
+        "text": "¥3,640",
+        "amount": 3640,
+        "currency": "JPY"
+      }
+    }
+  ],
+  "website_url": "https://www.kansai-airport.or.jp/en/"
+}

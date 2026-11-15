@@ -1,0 +1,149 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/rupakc/travel-planner-crawler/schemas/advisory.v1.json",
+  "title": "Travel advisory",
+  "description": "One record: one government travel advisory for one country (overall level and regional exceptions). Voyager use: tips (safety), visa notes, Travel Ease grade.",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "country": {
+      "type": "string",
+      "maxLength": 80,
+      "description": "The country the advisory is about, in English."
+    },
+    "country_code": {
+      "type": "string",
+      "maxLength": 2,
+      "description": "ISO 3166-1 alpha-2 country code of `country`.",
+      "pattern": "^[A-Z]{2}$"
+    },
+    "issuer": {
+      "type": "string",
+      "maxLength": 120,
+      "description": "The issuing government body (e.g. \"US Department of State\")."
+    },
+    "issuer_country_code": {
+      "type": "string",
+      "maxLength": 2,
+      "description": "ISO 3166-1 alpha-2 of the issuing government.",
+      "pattern": "^[A-Z]{2}$"
+    },
+    "level": {
+      "type": "integer",
+      "description": "Advisory level on the issuer's scale.",
+      "minimum": 0,
+      "maximum": 10
+    },
+    "level_max": {
+      "type": "integer",
+      "description": "Top of the issuer's scale (4 for the US).",
+      "minimum": 1,
+      "maximum": 10
+    },
+    "level_label": {
+      "type": "string",
+      "maxLength": 120,
+      "description": "The level's wording, e.g. \"Exercise increased caution\"."
+    },
+    "summary": {
+      "type": "string",
+      "maxLength": 600,
+      "description": "The main reasons, neutrally stated."
+    },
+    "reasons": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "crime",
+          "terrorism",
+          "civil_unrest",
+          "armed_conflict",
+          "health",
+          "natural_disaster",
+          "kidnapping",
+          "wrongful_detention",
+          "infrastructure",
+          "other"
+        ],
+        "description": "Reason."
+      },
+      "maxItems": 8,
+      "description": "Reasons cited."
+    },
+    "regions": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "name": {
+            "type": "string",
+            "maxLength": 120,
+            "description": "Region or city name."
+          },
+          "level": {
+            "type": "integer",
+            "description": "Advisory level on the issuer's scale.",
+            "minimum": 0,
+            "maximum": 10
+          },
+          "level_label": {
+            "type": "string",
+            "maxLength": 120,
+            "description": "Level wording."
+          },
+          "summary": {
+            "type": "string",
+            "maxLength": 240,
+            "description": "Why."
+          }
+        },
+        "required": [
+          "name"
+        ]
+      },
+      "maxItems": 10,
+      "description": "Regions with a different level from the country's."
+    },
+    "issued_date": {
+      "type": "string",
+      "maxLength": 10,
+      "description": "Date issued or last reissued (YYYY-MM-DD).",
+      "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$"
+    },
+    "updated_date": {
+      "type": "string",
+      "maxLength": 10,
+      "description": "Date last updated (YYYY-MM-DD).",
+      "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$"
+    },
+    "source_url": {
+      "type": "string",
+      "maxLength": 2048,
+      "description": "The page's own link for this item (official site, booking or detail page), copied verbatim from the page.",
+      "pattern": "^https?://[^\\s]+$"
+    },
+    "as_of": {
+      "type": "string",
+      "maxLength": 10,
+      "description": "The \"last updated\", \"valid from\" or publication date the page itself states for this information (YYYY-MM-DD).",
+      "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$"
+    },
+    "evidence": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "maxLength": 300,
+        "description": "A verbatim quote from the page."
+      },
+      "maxItems": 3,
+      "description": "Up to 3 short verbatim quotes from the page that support the most important facts."
+    }
+  },
+  "required": [
+    "country",
+    "issuer",
+    "level_label"
+  ]
+}

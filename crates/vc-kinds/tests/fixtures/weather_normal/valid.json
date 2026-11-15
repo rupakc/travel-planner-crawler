@@ -1,0 +1,15 @@
+{
+  "city": "Kyoto",
+  "country": "Japan",
+  "country_code": "JP",
+  "station": "Kyoto",
+  "month": 7,
+  "temp_high_c": 33.3,
+  "temp_low_c": 24.3,
+  "temp_mean_c": 28.2,
+  "precipitation_mm": 220.4,
+  "precipitation_days": 13.6,
+  "sunshine_hours": 157.2,
+  "humidity_pct": 75,
+  "period": "1991–2020"
+}

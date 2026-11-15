@@ -1,0 +1,33 @@
+{
+  "name": "Kyoto",
+  "place_type": "city",
+  "city": "Kyoto",
+  "country": "Japan",
+  "country_code": "JP",
+  "region": "Kyoto Prefecture",
+  "summary": "Former imperial capital with over 1,600 temples, traditional wooden machiya and the Gion geisha district.",
+  "known_for": [
+    "temples",
+    "gardens",
+    "kaiseki cuisine"
+  ],
+  "neighbourhoods": [
+    {
+      "name": "Gion",
+      "description": "Historic geisha district with teahouses."
+    }
+  ],
+  "best_time_to_visit": "Late March to early April for cherry blossom; November for autumn leaves.",
+  "languages": [
+    "Japanese"
+  ],
+  "currency": "JPY",
+  "time_zone": "Asia/Tokyo",
+  "lat": 35.0116,
+  "lng": 135.7681,
+  "official_tourism_url": "https://kyoto.travel/en/",
+  "as_of": "2026-09-01",
+  "evidence": [
+    "Kyoto was the capital of Japan for over a thousand years"
+  ]
+}

@@ -1,0 +1,30 @@
+{
+  "name": "Fushimi Inari Taisha",
+  "category": "religious_site",
+  "description": "Shinto shrine famous for thousands of vermilion torii gates winding up Mount Inari.",
+  "neighbourhood": "Fushimi",
+  "address": "68 Fukakusa Yabunouchicho, Fushimi Ward, Kyoto",
+  "city": "Kyoto",
+  "country": "Japan",
+  "country_code": "JP",
+  "visit_duration_hours": 2.5,
+  "opening_hours": "Open 24 hours",
+  "best_time_to_visit": "Early morning before 8am",
+  "admission": {
+    "text": "Free",
+    "amount": 0,
+    "currency": "JPY",
+    "is_free": true
+  },
+  "highlights": [
+    "Senbon Torii",
+    "Yotsutsuji intersection view"
+  ],
+  "phone": "+81 75-641-7331",
+  "info_url": "https://inari.jp/en/",
+  "family_friendly": true,
+  "evidence": [
+    "Admission: Free",
+    "Open 24 hours"
+  ]
+}

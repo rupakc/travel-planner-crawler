@@ -1,0 +1,21 @@
+{
+  "name": "Hotel Kanra Kyoto",
+  "property_type": "hotel",
+  "star_rating": 4,
+  "tier": "premium",
+  "description": "Design hotel in a former school building near Kyoto Station, with machiya-inspired rooms.",
+  "address": "190 Kitamachi, Shimogyo-ku, Kyoto",
+  "neighbourhood": "Shimogyo",
+  "city": "Kyoto",
+  "country": "Japan",
+  "country_code": "JP",
+  "amenities": [
+    "spa",
+    "restaurant",
+    "free wifi"
+  ],
+  "check_in_time": "15:00",
+  "check_out_time": "11:00",
+  "phone": "+81 75-344-3815",
+  "website_url": "https://www.uds-hotels.com/en/kanra/kyoto/"
+}

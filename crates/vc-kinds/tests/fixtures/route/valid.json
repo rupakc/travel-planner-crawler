@@ -1,0 +1,18 @@
+{
+  "origin_iata": "JFK",
+  "origin_city": "New York",
+  "origin_country": "United States",
+  "destination_iata": "KIX",
+  "destination_city": "Osaka",
+  "destination_country": "Japan",
+  "airlines": [
+    {
+      "name": "Japan Airlines",
+      "iata_code": "JL"
+    }
+  ],
+  "nonstop": true,
+  "seasonal": false,
+  "frequency_per_week": 7,
+  "duration_minutes": 845
+}

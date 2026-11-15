@@ -1,0 +1,38 @@
+{
+  "country": "Thailand",
+  "country_code": "TH",
+  "applies_to": "country",
+  "numbers": [
+    {
+      "service": "police",
+      "number": "191"
+    },
+    {
+      "service": "ambulance",
+      "number": "1669"
+    },
+    {
+      "service": "fire",
+      "number": "199"
+    },
+    {
+      "service": "tourist_police",
+      "number": "1155",
+      "note": "English spoken"
+    }
+  ],
+  "embassies": [
+    {
+      "of_country": "United States",
+      "of_country_code": "US",
+      "name": "U.S. Embassy Bangkok",
+      "address": "95 Wireless Road, Bangkok 10330",
+      "phone": "+66-2-205-4000",
+      "after_hours_phone": "+66-2-205-4049",
+      "website_url": "https://th.usembassy.gov"
+    }
+  ],
+  "evidence": [
+    "Tourist Police: 1155"
+  ]
+}

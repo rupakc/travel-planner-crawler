@@ -1,0 +1,183 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/rupakc/travel-planner-crawler/schemas/visa_rule.v1.json",
+  "title": "Visa rule",
+  "description": "One record: the entry requirement for holders of one nationality's passport visiting one destination country. Voyager use: visa.requirement (visa_type, max_stay_days, requirements, processing_time, fee_usd, official_url, notes).",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "destination_country": {
+      "type": "string",
+      "maxLength": 80,
+      "description": "The country being entered, in English."
+    },
+    "destination_country_code": {
+      "type": "string",
+      "maxLength": 2,
+      "description": "ISO 3166-1 alpha-2 of `destination_country`.",
+      "pattern": "^[A-Z]{2}$"
+    },
+    "nationality": {
+      "type": "string",
+      "maxLength": 80,
+      "description": "The passport country the rule applies to, in English (\"all\" if it applies to every nationality)."
+    },
+    "nationality_code": {
+      "type": "string",
+      "maxLength": 2,
+      "description": "ISO 3166-1 alpha-2 of `nationality`; leave out for \"all\".",
+      "pattern": "^[A-Z]{2}$"
+    },
+    "purpose": {
+      "type": "string",
+      "enum": [
+        "tourism",
+        "business",
+        "transit",
+        "any"
+      ],
+      "description": "Purpose of travel the rule covers."
+    },
+    "visa_type": {
+      "type": "string",
+      "enum": [
+        "visa_free",
+        "visa_on_arrival",
+        "e_visa",
+        "eta",
+        "visa_required",
+        "entry_banned",
+        "other"
+      ],
+      "description": "Requirement."
+    },
+    "max_stay_days": {
+      "type": "integer",
+      "description": "Maximum stay in days as stated.",
+      "minimum": 0,
+      "maximum": 3650
+    },
+    "stay_period_rule": {
+      "type": "string",
+      "maxLength": 160,
+      "description": "How the stay limit is counted, as written (e.g. \"90 days in any 180-day period\")."
+    },
+    "passport_validity_months": {
+      "type": "integer",
+      "description": "Passport validity beyond the stay required, in months.",
+      "minimum": 0,
+      "maximum": 24
+    },
+    "requirements": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "maxLength": 200,
+        "description": "A requirement."
+      },
+      "maxItems": 10,
+      "description": "Documents and conditions (return ticket, funds, photos...)."
+    },
+    "exemptions": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "maxLength": 240,
+        "description": "An exemption or alternative route."
+      },
+      "maxItems": 6,
+      "description": "Exemptions as written, e.g. holders of a valid US visa or an EU residence permit."
+    },
+    "fee": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "text": {
+          "type": "string",
+          "maxLength": 80,
+          "description": "The price exactly as written on the page, e.g. \"€45.00\", \"from ¥1,500\", \"Free\"."
+        },
+        "amount": {
+          "type": "number",
+          "description": "The number in `text`, without currency symbols or thousands separators.",
+          "minimum": 0
+        },
+        "currency": {
+          "type": "string",
+          "maxLength": 3,
+          "description": "ISO 4217 code of the currency in `text`; never converted.",
+          "pattern": "^[A-Z]{3}$"
+        },
+        "unit": {
+          "type": "string",
+          "maxLength": 40,
+          "description": "What the price is for, e.g. \"per person\", \"per night\", \"per ride\"."
+        },
+        "is_free": {
+          "type": "boolean",
+          "description": "True only if the page says it is free (tips may still be expected)."
+        }
+      },
+      "description": "Visa or authorisation fee."
+    },
+    "processing_time": {
+      "type": "string",
+      "maxLength": 120,
+      "description": "Processing time as written."
+    },
+    "application_url": {
+      "type": "string",
+      "maxLength": 2048,
+      "description": "Official application portal.",
+      "pattern": "^https?://[^\\s]+$"
+    },
+    "health_requirements": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "maxLength": 200,
+        "description": "A requirement."
+      },
+      "maxItems": 6,
+      "description": "Mandatory vaccinations or health declarations."
+    },
+    "effective_date": {
+      "type": "string",
+      "maxLength": 10,
+      "description": "The date the rule takes or took effect, if stated (YYYY-MM-DD).",
+      "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$"
+    },
+    "notes": {
+      "type": "string",
+      "maxLength": 400,
+      "description": "Other conditions travellers must know."
+    },
+    "source_url": {
+      "type": "string",
+      "maxLength": 2048,
+      "description": "The page's own link for this item (official site, booking or detail page), copied verbatim from the page.",
+      "pattern": "^https?://[^\\s]+$"
+    },
+    "as_of": {
+      "type": "string",
+      "maxLength": 10,
+      "description": "The \"last updated\", \"valid from\" or publication date the page itself states for this information (YYYY-MM-DD).",
+      "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$"
+    },
+    "evidence": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "maxLength": 300,
+        "description": "A verbatim quote from the page."
+      },
+      "maxItems": 3,
+      "description": "Up to 3 short verbatim quotes from the page that support the most important facts."
+    }
+  },
+  "required": [
+    "destination_country",
+    "nationality",
+    "visa_type"
+  ]
+}
