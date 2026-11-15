@@ -4,6 +4,9 @@
 //! `mark_fetched`, park ladder, batched enqueue, recrawl estimator). The only crate (besides
 //! testkit) allowed to call `ClaimPermit::mint`. Migration block 11xx.
 
+pub mod estimator;
+pub mod schedule;
+
 use std::time::Duration;
 
 use async_trait::async_trait;
@@ -27,6 +30,11 @@ impl PgFrontier {
     /// Creates a frontier.
     pub fn new(pool: PgPool, config: FrontierConfig) -> Self {
         PgFrontier { pool, config }
+    }
+
+    /// Next recrawl time for a URL (stub).
+    pub async fn estimate_next_fetch(&self, _url: &UrlKey, _min: Duration, _max: Duration) -> Result<DateTime<Utc>> {
+        todo!("Task 2")
     }
 }
 
