@@ -156,6 +156,17 @@ jobs:
           shellcheck --version
           git ls-files -z '*.sh' | xargs -0 -r shellcheck -x
 
+  deploy-kit:
+    name: deploy kit tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - name: deploy.sh and bootstrap.sh tests (fakes, no GCP)
+        run: bash deploy/tests/test_deploy.sh && bash infrastructure/tests/test_bootstrap.sh
+
   scripts:
     name: scripts (python + ownership self-test)
     runs-on: ubuntu-latest
