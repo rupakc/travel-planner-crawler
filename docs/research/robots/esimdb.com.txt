@@ -1,0 +1,43 @@
+User-agent: *
+Disallow: /admin/
+Disallow: /stats/
+Disallow: /partner
+Allow: /
+
+Sitemap: https://esimdb.com/sitemap.xml
+Sitemap: https://esimdb.com/en/sitemap.xml
+Sitemap: https://esimdb.com/ja/sitemap.xml
+Sitemap: https://esimdb.com/fr/sitemap.xml
+Sitemap: https://esimdb.com/es/sitemap.xml
+Sitemap: https://esimdb.com/it/sitemap.xml
+
+# LLM metadata
+Allow: /llms.txt
+
+User-agent: DataForSeoBot
+Disallow: /
+
+User-agent: AhrefsSiteAudit
+Crawl-delay: 30
+
+User-agent: AhrefsBot
+Crawl-delay: 30
+
+User-agent: SemrushBot
+Crawl-delay: 30
+
+User-agent: bingbot
+Disallow: /admin/
+Disallow: /stats/
+Disallow: /partner
+Allow: /
+Crawl-delay: 5
+
+User-agent: ClaudeBot
+Crawl-delay: 5
+
+User-agent: GPTBot
+Crawl-delay: 1
+
+User-agent: meta-externalagent
+Crawl-delay: 5

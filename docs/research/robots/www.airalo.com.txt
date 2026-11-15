@@ -1,0 +1,22 @@
+# START nuxt-robots (indexable)
+User-agent: *
+Allow: /auth/login
+Allow: /auth/signup
+Disallow: /auth
+Disallow: /verify
+Disallow: /profile
+Disallow: /esims
+Disallow: /esim-installations
+Disallow: /more-info/languages
+Disallow: /my-esims
+Disallow: /buy-esim
+Disallow: /esim-buy
+Disallow: /order
+Disallow: /*serverDetector.ts$
+
+Sitemap: https://www.airalo.com/sitemap-v2-pages.xml
+Sitemap: https://www.airalo.com/help-v2/sitemap-v2-index.xml
+Sitemap: https://www.airalo.com/sitemap-v2-posts-index.xml
+Sitemap: https://www.airalo.com/sitemap-v2-countries.xml
+Sitemap: https://www.airalo.com/sitemap-v2-index.xml
+# END nuxt-robots

@@ -1,0 +1,1453 @@
+# Seed list for the polite travel crawler (research 2026-11-15).
+# allowed=false: must NOT be crawled (ToS/robots/bot wall). cadence: never|on_demand|on_change|hourly|2h|6h|12h|daily|weekly|monthly|quarterly|semiannual|yearly
+seeds:
+  - id: ourairports
+    category: "flights"
+    name: "OurAirports"
+    url: "https://davidmegginson.github.io/ourairports-data/airports.csv"
+    method: "dump"
+    license: "Public domain"
+    cadence: "weekly"
+    needs_key: false
+    allowed: true
+    notes: "also runways/countries CSVs"
+  - id: wikidata-aviation
+    category: "flights"
+    name: "Wikidata airlines/airports (SPARQL)"
+    url: "https://query.wikidata.org/sparql"
+    method: "api"
+    license: "CC0"
+    cadence: "monthly"
+    needs_key: false
+    allowed: true
+    notes: "UA with contact required"
+  - id: enwiki-dump
+    category: "flights"
+    name: "Wikipedia dump (airport destinations tables, visa articles, emergency list)"
+    url: "https://dumps.wikimedia.org/enwiki/latest/"
+    method: "dump"
+    license: "CC BY-SA 4.0"
+    cadence: "monthly"
+    needs_key: false
+    allowed: true
+    notes: "shared by flights, visa, sim, emergency, packing"
+  - id: bts-t100
+    category: "flights"
+    name: "US BTS T-100 / DB1B"
+    url: "https://www.transtats.bts.gov/"
+    method: "dump"
+    license: "US public domain"
+    cadence: "quarterly"
+    needs_key: false
+    allowed: true
+    notes: "US routes/fare samples"
+  - id: opensky
+    category: "flights"
+    name: "OpenSky Network API"
+    url: "https://opensky-network.org/api/"
+    method: "api"
+    license: "Non-commercial/research terms"
+    cadence: "on_demand"
+    needs_key: true
+    allowed: true
+    notes: "flight status only"
+  - id: duffel
+    category: "flights"
+    name: "Duffel API"
+    url: "https://api.duffel.com/"
+    method: "api"
+    license: "Commercial API ToS"
+    cadence: "on_demand"
+    needs_key: true
+    allowed: true
+    notes: "live offers; verify pricing"
+  - id: travelpayouts
+    category: "flights"
+    name: "Travelpayouts/Aviasales Data API"
+    url: "https://api.travelpayouts.com/"
+    method: "api"
+    license: "Affiliate ToS"
+    cadence: "daily"
+    needs_key: true
+    allowed: true
+    notes: "cached cheapest fares"
+  - id: openflights
+    category: "flights"
+    name: "OpenFlights routes"
+    url: "https://raw.githubusercontent.com/jpatokal/openflights/master/data/routes.dat"
+    method: "dump"
+    license: "ODbL 1.0"
+    cadence: "never"
+    needs_key: false
+    allowed: true
+    notes: "stale since 2014; fallback only"
+  - id: amadeus-selfservice
+    category: "flights"
+    name: "Amadeus Self-Service"
+    url: "https://developers.amadeus.com"
+    method: "api"
+    license: "Shut down 2026-07-17"
+    cadence: "never"
+    needs_key: true
+    allowed: false
+    notes: "Enterprise only now"
+  - id: google-flights
+    category: "flights"
+    name: "Google Flights / Travel"
+    url: "https://www.google.com/travel/flights"
+    method: "html"
+    license: "Google ToS bans automated access against robots.txt"
+    cadence: "never"
+    needs_key: false
+    allowed: false
+    notes: "robots disallows /travel/flights/search"
+  - id: skyscanner
+    category: "flights"
+    name: "Skyscanner"
+    url: "https://www.skyscanner.net"
+    method: "html"
+    license: "ToS: no bots/spiders to scan, copy, index"
+    cadence: "never"
+    needs_key: false
+    allowed: false
+    notes: "partner API only"
+  - id: kayak
+    category: "flights"
+    name: "Kayak"
+    url: "https://www.kayak.com"
+    method: "html"
+    license: "Booking Holdings ToS; robots large disallow list"
+    cadence: "never"
+    needs_key: false
+    allowed: false
+    notes: "not checked in detail; treat as forbidden"
+  - id: open-meteo
+    category: "weather"
+    name: "Open-Meteo forecast/climate/archive"
+    url: "https://api.open-meteo.com/v1/forecast"
+    method: "api"
+    license: "CC BY 4.0 data; free API non-commercial <10k/day"
+    cadence: "hourly_cache"
+    needs_key: false
+    allowed: true
+    notes: "commercial => subscription or self-host (AGPLv3)"
+  - id: met-norway
+    category: "weather"
+    name: "MET Norway Locationforecast"
+    url: "https://api.met.no/weatherapi/locationforecast/2.0/compact"
+    method: "api"
+    license: "CC BY 4.0 / NLOD"
+    cadence: "on_demand"
+    needs_key: false
+    allowed: true
+    notes: "identifying UA mandatory; honour Expires"
+  - id: nws
+    category: "weather"
+    name: "US National Weather Service API"
+    url: "https://api.weather.gov"
+    method: "api"
+    license: "US public domain"
+    cadence: "on_demand"
+    needs_key: false
+    allowed: true
+    notes: "US only; UA with contact"
+  - id: ecmwf-open
+    category: "weather"
+    name: "ECMWF Open Data"
+    url: "https://data.ecmwf.int/forecasts/"
+    method: "dump"
+    license: "CC BY 4.0"
+    cadence: "4x_daily"
+    needs_key: false
+    allowed: true
+    notes: "GRIB2; only if self-hosting"
+  - id: ghcn
+    category: "weather"
+    name: "NOAA GHCN-Daily / normals"
+    url: "https://www.ncei.noaa.gov/pub/data/ghcn/daily/"
+    method: "dump"
+    license: "US public domain"
+    cadence: "yearly"
+    needs_key: false
+    allowed: true
+    notes: "climate normals for packing"
+  - id: meteostat
+    category: "weather"
+    name: "Meteostat bulk"
+    url: "https://bulk.meteostat.net/v2/"
+    method: "dump"
+    license: "CC BY-NC 4.0"
+    cadence: "yearly"
+    needs_key: false
+    allowed: true
+    notes: "non-commercial only"
+  - id: osm-geofabrik
+    category: "hotels"
+    name: "OpenStreetMap extracts (Geofabrik)"
+    url: "https://download.geofabrik.de/"
+    method: "dump"
+    license: "ODbL 1.0"
+    cadence: "monthly"
+    needs_key: false
+    allowed: true
+    notes: "hotels, attractions, transit; shared"
+  - id: overpass
+    category: "hotels"
+    name: "Overpass API"
+    url: "https://overpass-api.de/api/interpreter"
+    method: "api"
+    license: "ODbL 1.0"
+    cadence: "on_demand"
+    needs_key: false
+    allowed: true
+    notes: "shared infra, was at capacity; small queries, 1 concurrent, or self-host"
+  - id: overture-places
+    category: "hotels"
+    name: "Overture Maps Places"
+    url: "https://docs.overturemaps.org/getting-data/"
+    method: "dump"
+    license: "CDLA-Permissive-2.0"
+    cadence: "monthly"
+    needs_key: false
+    allowed: true
+    notes: "GeoParquet on S3/Azure"
+  - id: fsq-os-places
+    category: "hotels"
+    name: "Foursquare OS Places"
+    url: "https://docs.foursquare.com/data-products/docs/fsq-places-open-source"
+    method: "dump"
+    license: "Apache 2.0"
+    cadence: "monthly"
+    needs_key: true
+    allowed: true
+    notes: "HF gated / Iceberg token; attribution Foursquare Labs"
+  - id: booking-demand-api
+    category: "hotels"
+    name: "Booking.com Demand API"
+    url: "https://developers.booking.com/"
+    method: "api"
+    license: "Partner ToS"
+    cadence: "on_demand"
+    needs_key: true
+    allowed: true
+    notes: "approval required"
+  - id: booking-html
+    category: "hotels"
+    name: "Booking.com site"
+    url: "https://www.booking.com"
+    method: "html"
+    license: "ToS forbids automated access/scraping without written permission"
+    cadence: "never"
+    needs_key: false
+    allowed: false
+    notes: ""
+  - id: expedia-html
+    category: "hotels"
+    name: "Expedia / Hotels.com site"
+    url: "https://www.expedia.com"
+    method: "html"
+    license: "ToS: no robot/spider/scraper without prior express written permission"
+    cadence: "never"
+    needs_key: false
+    allowed: false
+    notes: "Rapid API by contract"
+  - id: airbnb-html
+    category: "hotels"
+    name: "Airbnb site"
+    url: "https://www.airbnb.com"
+    method: "html"
+    license: "ToS: 'Do not use bots, crawlers, scrapers…'"
+    cadence: "never"
+    needs_key: false
+    allowed: false
+    notes: ""
+  - id: inside-airbnb
+    category: "hotels"
+    name: "Inside Airbnb datasets"
+    url: "https://insideairbnb.com/get-the-data/"
+    method: "dump"
+    license: "CC BY 4.0"
+    cadence: "quarterly"
+    needs_key: false
+    allowed: true
+    notes: "neighbourhood context only"
+  - id: tripadvisor-html
+    category: "activities"
+    name: "Tripadvisor site + forums"
+    url: "https://www.tripadvisor.com"
+    method: "html"
+    license: "ToS bans bots/scrapers; AI bots Disallow: /"
+    cadence: "never"
+    needs_key: false
+    allowed: false
+    notes: "Content API by key"
+  - id: wikivoyage-dump
+    category: "places"
+    name: "Wikivoyage dump (en)"
+    url: "https://dumps.wikimedia.org/enwikivoyage/latest/enwikivoyage-latest-pages-articles.xml.bz2"
+    method: "dump"
+    license: "CC BY-SA 4.0"
+    cadence: "monthly"
+    needs_key: false
+    allowed: true
+    notes: "See/Do/Eat/Sleep/Get around/Connect/Stay safe/Respect; site crawl-delay 5, use dump"
+  - id: wikipedia-geosearch
+    category: "places"
+    name: "Wikipedia API geosearch"
+    url: "https://en.wikipedia.org/w/api.php"
+    method: "api"
+    license: "CC BY-SA 4.0"
+    cadence: "on_demand"
+    needs_key: false
+    allowed: true
+    notes: "UA with contact"
+  - id: wikidata-dump
+    category: "places"
+    name: "Wikidata JSON dump"
+    url: "https://dumps.wikimedia.org/wikidatawiki/entities/"
+    method: "dump"
+    license: "CC0"
+    cadence: "monthly"
+    needs_key: false
+    allowed: true
+    notes: "POIs, P2852 emergency, P2853 plugs, P2884 voltage"
+  - id: opentripmap
+    category: "activities"
+    name: "OpenTripMap API"
+    url: "https://api.opentripmap.com/0.1/"
+    method: "api"
+    license: "ODbL (OSM) + CC BY-SA (Wikipedia)"
+    cadence: "on_demand"
+    needs_key: true
+    allowed: true
+    notes: "free key; cache 30 d"
+  - id: unesco-whc
+    category: "places"
+    name: "UNESCO World Heritage List XML"
+    url: "https://whc.unesco.org/en/list/xml/"
+    method: "dump"
+    license: "UNESCO terms, attribution (verify)"
+    cadence: "yearly"
+    needs_key: false
+    allowed: true
+    notes: ""
+  - id: viator-partner
+    category: "activities"
+    name: "Viator Partner API"
+    url: "https://docs.viator.com/partner-api/"
+    method: "api"
+    license: "Affiliate ToS"
+    cadence: "on_demand"
+    needs_key: true
+    allowed: true
+    notes: ""
+  - id: viator-html
+    category: "activities"
+    name: "Viator site"
+    url: "https://www.viator.com"
+    method: "html"
+    license: "robots.txt 403 to honest bot; Tripadvisor-family ToS"
+    cadence: "never"
+    needs_key: false
+    allowed: false
+    notes: ""
+  - id: gyg-partner
+    category: "activities"
+    name: "GetYourGuide Partner API"
+    url: "https://partner.getyourguide.com"
+    method: "api"
+    license: "Affiliate ToS"
+    cadence: "on_demand"
+    needs_key: true
+    allowed: true
+    notes: ""
+  - id: gyg-html
+    category: "activities"
+    name: "GetYourGuide site"
+    url: "https://www.getyourguide.com"
+    method: "html"
+    license: "robots.txt 403 (bot wall)"
+    cadence: "never"
+    needs_key: false
+    allowed: false
+    notes: ""
+  - id: freetour
+    category: "walking_tours"
+    name: "FreeTour.com"
+    url: "https://www.freetour.com/sitemap.xml"
+    method: "sitemap"
+    license: "robots Allow /; ToS not verified"
+    cadence: "monthly"
+    needs_key: false
+    allowed: true
+    notes: "facts+link only; skip /booking /review /company"
+  - id: guruwalk
+    category: "walking_tours"
+    name: "GuruWalk"
+    url: "https://www.guruwalk.com"
+    method: "sitemap"
+    license: "robots allows tour pages; ToS not verified"
+    cadence: "monthly"
+    needs_key: false
+    allowed: true
+    notes: "skip */api/* */booking/* reviews"
+  - id: paris-quefaire
+    category: "events"
+    name: "Paris open data 'Que faire à Paris'"
+    url: "https://opendata.paris.fr/explore/dataset/que-faire-a-paris-/"
+    method: "api"
+    license: "ODbL"
+    cadence: "daily"
+    needs_key: false
+    allowed: true
+    notes: "model for city open-data event feeds"
+  - id: ticketmaster
+    category: "events"
+    name: "Ticketmaster Discovery API v2"
+    url: "https://app.ticketmaster.com/discovery/v2/events.json"
+    method: "api"
+    license: "Ticketmaster developer ToS + branding"
+    cadence: "on_demand"
+    needs_key: true
+    allowed: true
+    notes: "5000/day, 2-5 rps; cache 6-24 h"
+  - id: predicthq
+    category: "events"
+    name: "PredictHQ"
+    url: "https://api.predicthq.com/v1/events/"
+    method: "api"
+    license: "Commercial; 14-day trial, free plan has no API"
+    cadence: "never"
+    needs_key: true
+    allowed: true
+    notes: "only if paid"
+  - id: eventbrite-api
+    category: "events"
+    name: "Eventbrite API v3 (by organiser/venue)"
+    url: "https://www.eventbriteapi.com/v3/"
+    method: "api"
+    license: "Eventbrite API ToS; public search shut 2019"
+    cadence: "daily"
+    needs_key: true
+    allowed: true
+    notes: "curated organiser list only"
+  - id: eventbrite-rss
+    category: "events"
+    name: "Eventbrite RSS/search pages"
+    url: "https://www.eventbrite.com/rss/"
+    method: "rss"
+    license: "robots Disallow /rss/ /events/rss/"
+    cadence: "never"
+    needs_key: false
+    allowed: false
+    notes: ""
+  - id: seatgeek
+    category: "events"
+    name: "SeatGeek Platform API"
+    url: "https://api.seatgeek.com/2/events"
+    method: "api"
+    license: "SeatGeek API ToS, attribution"
+    cadence: "on_demand"
+    needs_key: true
+    allowed: true
+    notes: "verify current availability"
+  - id: nager-date
+    category: "events"
+    name: "Nager.Date public holidays"
+    url: "https://date.nager.at/api/v3/PublicHolidays/{year}/{cc}"
+    method: "api"
+    license: "MIT (open source)"
+    cadence: "yearly"
+    needs_key: false
+    allowed: true
+    notes: ""
+  - id: timeout-news-sitemap
+    category: "events"
+    name: "Time Out news sitemap"
+    url: "https://www.timeout.com/news_sitemap.xml"
+    method: "sitemap"
+    license: "copyright; robots allows"
+    cadence: "daily"
+    needs_key: false
+    allowed: true
+    notes: "link-only discovery"
+  - id: timeout-blog-rss
+    category: "news"
+    name: "Time Out blog RSS"
+    url: "https://www.timeout.com/blog/feed.rss"
+    method: "rss"
+    license: "copyright"
+    cadence: "12h"
+    needs_key: false
+    allowed: true
+    notes: "robots explicitly allows"
+  - id: fcdo-content-api
+    category: "visa"
+    name: "UK FCDO travel advice Content API"
+    url: "https://www.gov.uk/api/content/foreign-travel-advice/{country}"
+    method: "api"
+    license: "OGL v3.0"
+    cadence: "on_change"
+    needs_key: false
+    allowed: true
+    notes: "entry reqs, safety, laws, emergency"
+  - id: fcdo-atom
+    category: "visa"
+    name: "UK FCDO travel advice Atom"
+    url: "https://www.gov.uk/foreign-travel-advice.atom"
+    method: "rss"
+    license: "OGL v3.0"
+    cadence: "hourly"
+    needs_key: false
+    allowed: true
+    notes: "change feed driving refetch"
+  - id: gov-uk-check-visa
+    category: "visa"
+    name: "gov.uk Check if you need a UK visa"
+    url: "https://www.gov.uk/api/content/check-uk-visa"
+    method: "api"
+    license: "OGL v3.0"
+    cadence: "weekly"
+    needs_key: false
+    allowed: true
+    notes: ""
+  - id: state-dept-advisories-api
+    category: "visa"
+    name: "US State Dept Travel Advisories API"
+    url: "https://cadataapi.state.gov/api/TravelAdvisories"
+    method: "api"
+    license: "US public domain"
+    cadence: "6h"
+    needs_key: false
+    allowed: true
+    notes: ""
+  - id: state-dept-advisories-rss
+    category: "visa"
+    name: "US State Dept advisories RSS"
+    url: "https://travel.state.gov/_res/rss/TAsTWs.xml"
+    method: "rss"
+    license: "US public domain"
+    cadence: "6h"
+    needs_key: false
+    allowed: true
+    notes: ""
+  - id: state-dept-country-pages
+    category: "visa"
+    name: "travel.state.gov country information pages"
+    url: "https://travel.state.gov/content/travel/en/international-travel/International-Travel-Country-Information-Pages.html"
+    method: "html"
+    license: "US public domain"
+    cadence: "weekly"
+    needs_key: false
+    allowed: true
+    notes: "<=1 req/5 s"
+  - id: canada-travel-json
+    category: "visa"
+    name: "Canada travel advice JSON"
+    url: "https://data.international.gc.ca/travel-voyage/index-alpha-eng.json"
+    method: "api"
+    license: "Open Government Licence - Canada"
+    cadence: "daily"
+    needs_key: false
+    allowed: true
+    notes: "per-country cta-cap-{ISO}-eng.json"
+  - id: eu-visa-reg
+    category: "visa"
+    name: "EU Reg. 2018/1806 visa lists"
+    url: "https://eur-lex.europa.eu/eli/reg/2018/1806"
+    method: "html"
+    license: "EU reuse policy (attribution)"
+    cadence: "monthly"
+    needs_key: false
+    allowed: true
+    notes: "plus ETIAS page travel-europe.europa.eu"
+  - id: smartraveller
+    category: "visa"
+    name: "Australia Smartraveller"
+    url: "https://www.smartraveller.gov.au"
+    method: "html"
+    license: "CC BY 4.0"
+    cadence: "daily"
+    needs_key: false
+    allowed: true
+    notes: "timed out to honest UA 2026-11-15; retry politely, never evade"
+  - id: passport-index-dataset
+    category: "visa"
+    name: "ilyankou/passport-index-dataset"
+    url: "https://github.com/ilyankou/passport-index-dataset"
+    method: "dump"
+    license: "MIT (scraped from passportindex.org; provenance caveat)"
+    cadence: "monthly"
+    needs_key: false
+    allowed: true
+    notes: "secondary cross-check only"
+  - id: timatic
+    category: "visa"
+    name: "IATA Timatic / iatatravelcentre"
+    url: "https://www.iatatravelcentre.com"
+    method: "html"
+    license: "Commercial licence; Content-Signal ai-train=no, use=reference"
+    cadence: "never"
+    needs_key: false
+    allowed: false
+    notes: ""
+  - id: esimdb
+    category: "sim"
+    name: "eSIMDB"
+    url: "https://esimdb.com/sitemap.xml"
+    method: "sitemap"
+    license: "robots Allow /; ToS not verified"
+    cadence: "weekly"
+    needs_key: false
+    allowed: true
+    notes: "facts+link, prices labelled observed"
+  - id: airalo-partner
+    category: "sim"
+    name: "Airalo Partner API"
+    url: "https://partners-doc.airalo.com"
+    method: "api"
+    license: "Partner ToS"
+    cadence: "on_demand"
+    needs_key: true
+    allowed: true
+    notes: ""
+  - id: cdc-travel
+    category: "tips"
+    name: "CDC Travelers' Health destinations"
+    url: "https://wwwnc.cdc.gov/travel/destinations/list"
+    method: "html"
+    license: "US public domain"
+    cadence: "weekly"
+    needs_key: false
+    allowed: true
+    notes: "robots Crawl-delay: 20"
+  - id: who-ith
+    category: "tips"
+    name: "WHO international travel and health"
+    url: "https://www.who.int/health-topics/travel-and-health"
+    method: "html"
+    license: "CC BY-NC-SA 3.0 IGO (most)"
+    cadence: "quarterly"
+    needs_key: false
+    allowed: true
+    notes: "non-commercial"
+  - id: usembassy-list
+    category: "emergency_card"
+    name: "US embassies list"
+    url: "https://www.usembassy.gov"
+    method: "html"
+    license: "US public domain"
+    cadence: "quarterly"
+    needs_key: false
+    allowed: true
+    notes: ""
+  - id: mobility-database
+    category: "getting_around"
+    name: "Mobility Database catalog CSV"
+    url: "https://files.mobilitydatabase.org/feeds_v2.csv"
+    method: "dump"
+    license: "CC0 catalog; per-feed licences"
+    cadence: "weekly"
+    needs_key: false
+    allowed: true
+    notes: "API needs free refresh token"
+  - id: mobility-database-api
+    category: "getting_around"
+    name: "Mobility Database API"
+    url: "https://api.mobilitydatabase.org/v1/"
+    method: "api"
+    license: "CC0 catalog; per-feed licences"
+    cadence: "weekly"
+    needs_key: true
+    allowed: true
+    notes: ""
+  - id: transitland
+    category: "getting_around"
+    name: "Transitland v2 REST"
+    url: "https://transit.land/api/v2/rest/feeds"
+    method: "api"
+    license: "Transitland ToS; per-feed licences"
+    cadence: "monthly"
+    needs_key: true
+    allowed: true
+    notes: ""
+  - id: gbfs-systems
+    category: "getting_around"
+    name: "GBFS systems.csv"
+    url: "https://raw.githubusercontent.com/MobilityData/gbfs/master/systems.csv"
+    method: "dump"
+    license: "CC0 list; feed licences vary"
+    cadence: "weekly"
+    needs_key: false
+    allowed: true
+    notes: ""
+  - id: seat61
+    category: "getting_around"
+    name: "The Man in Seat 61"
+    url: "https://www.seat61.com"
+    method: "html"
+    license: "Personal copyright; link/reference only"
+    cadence: "quarterly"
+    needs_key: false
+    allowed: true
+    notes: "very slow; no text reuse"
+  - id: rome2rio
+    category: "getting_around"
+    name: "Rome2rio"
+    url: "https://www.rome2rio.com"
+    method: "html"
+    license: "ToS not verified; commercial product"
+    cadence: "never"
+    needs_key: false
+    allowed: false
+    notes: "link-only"
+  - id: ecb-eurofxref
+    category: "forex"
+    name: "ECB euro reference rates"
+    url: "https://www.ecb.europa.eu/stats/eurofxref/eurofxref-daily.xml"
+    method: "dump"
+    license: "ECB reuse with attribution"
+    cadence: "daily"
+    needs_key: false
+    allowed: true
+    notes: "~16:00 CET TARGET days; also eurofxref-hist.zip"
+  - id: frankfurter
+    category: "forex"
+    name: "Frankfurter API"
+    url: "https://api.frankfurter.dev/v1/latest"
+    method: "api"
+    license: "MIT code; ECB data"
+    cadence: "daily"
+    needs_key: false
+    allowed: true
+    notes: ""
+  - id: fred-h10
+    category: "forex"
+    name: "FRED (Fed H.10)"
+    url: "https://api.stlouisfed.org/fred/series/observations"
+    method: "api"
+    license: "Public domain series; FRED ToS"
+    cadence: "weekly"
+    needs_key: true
+    allowed: true
+    notes: ""
+  - id: boc-valet
+    category: "forex"
+    name: "Bank of Canada Valet API"
+    url: "https://www.bankofcanada.ca/valet/observations/group/FX_RATES_DAILY/json"
+    method: "api"
+    license: "Bank of Canada terms (attribution)"
+    cadence: "daily"
+    needs_key: false
+    allowed: true
+    notes: ""
+  - id: er-api-open
+    category: "forex"
+    name: "ExchangeRate-API open endpoint"
+    url: "https://open.er-api.com/v6/latest/USD"
+    method: "api"
+    license: "Free; attribution link required"
+    cadence: "daily"
+    needs_key: false
+    allowed: true
+    notes: "covers currencies ECB lacks"
+  - id: imf-fx
+    category: "forex"
+    name: "IMF representative rates"
+    url: "https://www.imf.org/external/np/fin/data/param_rms_mth.aspx"
+    method: "html"
+    license: "IMF terms (attribution)"
+    cadence: "monthly"
+    needs_key: false
+    allowed: true
+    notes: ""
+  - id: numbeo
+    category: "tips"
+    name: "Numbeo"
+    url: "https://www.numbeo.com"
+    method: "html"
+    license: "ToS restricts automated extraction; paid API"
+    cadence: "never"
+    needs_key: false
+    allowed: false
+    notes: ""
+  - id: common-crawl
+    category: "corpus"
+    name: "Common Crawl index"
+    url: "https://index.commoncrawl.org/collinfo.json"
+    method: "dump"
+    license: "Common Crawl ToU; page copyright remains"
+    cadence: "monthly"
+    needs_key: false
+    allowed: true
+    notes: "latest CC-MAIN-2026-43; URL discovery"
+  - id: se-dump
+    category: "forums"
+    name: "Stack Exchange Data Dump 2025-12-31 (community mirror)"
+    url: "https://archive.org/details/stackexchange_20251231"
+    method: "dump"
+    license: "CC BY-SA (3.0/4.0 by date)"
+    cadence: "semiannual"
+    needs_key: false
+    allowed: true
+    notes: "travel.stackexchange.com.7z; 2025-06-30 dump watermarked; no training use"
+  - id: se-api
+    category: "forums"
+    name: "Stack Exchange API v2.3 (site=travel)"
+    url: "https://api.stackexchange.com/2.3/questions?site=travel"
+    method: "api"
+    license: "CC BY-SA"
+    cadence: "daily"
+    needs_key: false
+    allowed: true
+    notes: "300/day anon, 10k with key"
+  - id: se-html
+    category: "forums"
+    name: "travel.stackexchange.com HTML"
+    url: "https://travel.stackexchange.com"
+    method: "html"
+    license: "robots Disallow: / ; ai-train=no"
+    cadence: "never"
+    needs_key: false
+    allowed: false
+    notes: ""
+  - id: ricksteves-forum
+    category: "forums"
+    name: "Rick Steves Travel Forum"
+    url: "https://community.ricksteves.com/travel-forum"
+    method: "html"
+    license: "robots disallows only /users/; ToS not verified; user copyright"
+    cadence: "weekly"
+    needs_key: false
+    allowed: true
+    notes: "<=1 req/10 s, summaries+link only, no RSS"
+  - id: thorntree
+    category: "forums"
+    name: "Lonely Planet Thorn Tree"
+    url: "https://www.lonelyplanet.com/thorntree"
+    method: "html"
+    license: "Closed 2021; robots Disallow /thorntree/*"
+    cadence: "never"
+    needs_key: false
+    allowed: false
+    notes: ""
+  - id: flyertalk
+    category: "forums"
+    name: "FlyerTalk"
+    url: "https://www.flyertalk.com"
+    method: "html"
+    license: "robots.txt 403 to honest bot (bot wall)"
+    cadence: "never"
+    needs_key: false
+    allowed: false
+    notes: ""
+  - id: fodors-forum
+    category: "forums"
+    name: "Fodor's Travel Talk"
+    url: "https://www.fodors.com/community"
+    method: "html"
+    license: "403 bot wall"
+    cadence: "never"
+    needs_key: false
+    allowed: false
+    notes: ""
+  - id: travelfish-board
+    category: "forums"
+    name: "Travelfish board"
+    url: "https://www.travelfish.org/board"
+    method: "html"
+    license: "403 bot wall on board/feeds"
+    cadence: "never"
+    needs_key: false
+    allowed: false
+    notes: ""
+  - id: reddit
+    category: "forums"
+    name: "Reddit (r/travel etc.)"
+    url: "https://www.reddit.com"
+    method: "html"
+    license: "robots Disallow: / ; Data API free tier non-commercial only (100 QPM)"
+    cadence: "never"
+    needs_key: false
+    allowed: false
+    notes: "commercial needs agreement"
+  - id: lonelyplanet-sitemaps
+    category: "news"
+    name: "Lonely Planet sitemaps (articles, google-news)"
+    url: "https://www.lonelyplanet.com/sitemaps/google-news/sitemap.xml"
+    method: "sitemap"
+    license: "copyright; robots allows articles"
+    cadence: "daily"
+    needs_key: false
+    allowed: true
+    notes: "link-only; no RSS"
+  - id: wikitravel
+    category: "places"
+    name: "Wikitravel"
+    url: "https://wikitravel.org"
+    method: "html"
+    license: "403 bot wall"
+    cadence: "never"
+    needs_key: false
+    allowed: false
+    notes: "use Wikivoyage"
+  - id: blog-nomadicmatt
+    category: "blogs"
+    name: "Nomadic Matt"
+    url: "https://www.nomadicmatt.com/feed/"
+    method: "rss"
+    license: "Copyright; headline+link+excerpt only"
+    cadence: "12h"
+    needs_key: false
+    allowed: true
+    notes: "RSS verified 2026-11-15"
+  - id: blog-adventurouskate
+    category: "blogs"
+    name: "Adventurous Kate"
+    url: "https://www.adventurouskate.com/feed/"
+    method: "rss"
+    license: "Copyright; headline+link+excerpt only"
+    cadence: "12h"
+    needs_key: false
+    allowed: true
+    notes: "RSS verified 2026-11-15"
+  - id: blog-legalnomads
+    category: "blogs"
+    name: "Legal Nomads"
+    url: "https://www.legalnomads.com/feed/"
+    method: "rss"
+    license: "Copyright; headline+link+excerpt only"
+    cadence: "12h"
+    needs_key: false
+    allowed: true
+    notes: "RSS verified 2026-11-15"
+  - id: blog-theblondeabroad
+    category: "blogs"
+    name: "The Blonde Abroad"
+    url: "https://www.theblondeabroad.com/feed/"
+    method: "rss"
+    license: "Copyright; headline+link+excerpt only"
+    cadence: "12h"
+    needs_key: false
+    allowed: true
+    notes: "RSS verified 2026-11-15"
+  - id: blog-ytravelblog
+    category: "blogs"
+    name: "Y Travel Blog"
+    url: "https://www.ytravelblog.com/feed/"
+    method: "rss"
+    license: "Copyright; headline+link+excerpt only"
+    cadence: "12h"
+    needs_key: false
+    allowed: true
+    notes: "RSS verified 2026-11-15"
+  - id: blog-neverendingfootsteps
+    category: "blogs"
+    name: "Never Ending Footsteps"
+    url: "https://www.neverendingfootsteps.com/feed/"
+    method: "rss"
+    license: "Copyright; headline+link+excerpt only"
+    cadence: "12h"
+    needs_key: false
+    allowed: true
+    notes: "RSS verified 2026-11-15"
+  - id: blog-wanderlustcrew
+    category: "blogs"
+    name: "Wanderlust Crew"
+    url: "https://www.wanderlustcrew.com/feed/"
+    method: "rss"
+    license: "Copyright; headline+link+excerpt only"
+    cadence: "12h"
+    needs_key: false
+    allowed: true
+    notes: "RSS verified 2026-11-15"
+  - id: blog-dangerousbusiness
+    category: "blogs"
+    name: "Dangerous Business"
+    url: "https://www.dangerous-business.com/feed/"
+    method: "rss"
+    license: "Copyright; headline+link+excerpt only"
+    cadence: "12h"
+    needs_key: false
+    allowed: true
+    notes: "RSS verified 2026-11-15"
+  - id: blog-alexinwanderland
+    category: "blogs"
+    name: "Alex in Wanderland"
+    url: "https://www.alexinwanderland.com/feed/"
+    method: "rss"
+    license: "Copyright; headline+link+excerpt only"
+    cadence: "12h"
+    needs_key: false
+    allowed: true
+    notes: "RSS verified 2026-11-15"
+  - id: blog-goatsontheroad
+    category: "blogs"
+    name: "Goats on the Road"
+    url: "https://www.goatsontheroad.com/feed/"
+    method: "rss"
+    license: "Copyright; headline+link+excerpt only"
+    cadence: "12h"
+    needs_key: false
+    allowed: true
+    notes: "RSS verified 2026-11-15"
+  - id: blog-twowanderingsoles
+    category: "blogs"
+    name: "Two Wandering Soles"
+    url: "https://www.twowanderingsoles.com/feed/"
+    method: "rss"
+    license: "Copyright; headline+link+excerpt only"
+    cadence: "12h"
+    needs_key: false
+    allowed: true
+    notes: "RSS verified 2026-11-15"
+  - id: blog-atlasandboots
+    category: "blogs"
+    name: "Atlas & Boots"
+    url: "https://www.atlasandboots.com/feed/"
+    method: "rss"
+    license: "Copyright; headline+link+excerpt only"
+    cadence: "12h"
+    needs_key: false
+    allowed: true
+    notes: "RSS verified 2026-11-15"
+  - id: blog-bemytravelmuse
+    category: "blogs"
+    name: "Be My Travel Muse"
+    url: "https://www.bemytravelmuse.com/feed/"
+    method: "rss"
+    license: "Copyright; headline+link+excerpt only"
+    cadence: "12h"
+    needs_key: false
+    allowed: true
+    notes: "RSS verified 2026-11-15"
+  - id: blog-uncorneredmarket
+    category: "blogs"
+    name: "Uncornered Market"
+    url: "https://www.uncorneredmarket.com/feed/"
+    method: "rss"
+    license: "Copyright; headline+link+excerpt only"
+    cadence: "12h"
+    needs_key: false
+    allowed: true
+    notes: "RSS verified 2026-11-15"
+  - id: blog-migrationology
+    category: "blogs"
+    name: "Migrationology"
+    url: "https://www.migrationology.com/feed/"
+    method: "rss"
+    license: "Copyright; headline+link+excerpt only"
+    cadence: "12h"
+    needs_key: false
+    allowed: true
+    notes: "RSS verified 2026-11-15"
+  - id: blog-earthtrekkers
+    category: "blogs"
+    name: "Earth Trekkers"
+    url: "https://www.earthtrekkers.com/feed/"
+    method: "rss"
+    license: "Copyright; headline+link+excerpt only"
+    cadence: "12h"
+    needs_key: false
+    allowed: true
+    notes: "RSS verified 2026-11-15"
+  - id: blog-heartmybackpack
+    category: "blogs"
+    name: "Heart My Backpack"
+    url: "https://www.heartmybackpack.com/feed/"
+    method: "rss"
+    license: "Copyright; headline+link+excerpt only"
+    cadence: "12h"
+    needs_key: false
+    allowed: true
+    notes: "RSS verified 2026-11-15"
+  - id: blog-hoponworld
+    category: "blogs"
+    name: "Hop On World"
+    url: "https://www.hoponworld.com/feed/"
+    method: "rss"
+    license: "Copyright; headline+link+excerpt only"
+    cadence: "12h"
+    needs_key: false
+    allowed: true
+    notes: "RSS verified 2026-11-15"
+  - id: blog-worldofwanderlust
+    category: "blogs"
+    name: "World of Wanderlust"
+    url: "https://www.worldofwanderlust.com/feed/"
+    method: "rss"
+    license: "Copyright; headline+link+excerpt only"
+    cadence: "12h"
+    needs_key: false
+    allowed: true
+    notes: "RSS verified 2026-11-15"
+  - id: blog-lostwithpurpose
+    category: "blogs"
+    name: "Lost With Purpose"
+    url: "https://www.lostwithpurpose.com/feed/"
+    method: "rss"
+    license: "Copyright; headline+link+excerpt only"
+    cadence: "12h"
+    needs_key: false
+    allowed: true
+    notes: "RSS verified 2026-11-15"
+  - id: blog-theplanetd
+    category: "blogs"
+    name: "The Planet D"
+    url: "https://www.theplanetd.com/feed/"
+    method: "rss"
+    license: "Copyright; headline+link+excerpt only"
+    cadence: "12h"
+    needs_key: false
+    allowed: true
+    notes: "RSS verified 2026-11-15"
+  - id: blog-wildjunket
+    category: "blogs"
+    name: "Wild Junket"
+    url: "https://www.wildjunket.com/feed/"
+    method: "rss"
+    license: "Copyright; headline+link+excerpt only"
+    cadence: "12h"
+    needs_key: false
+    allowed: true
+    notes: "RSS verified 2026-11-15"
+  - id: blog-travelsofadam
+    category: "blogs"
+    name: "Travels of Adam"
+    url: "https://www.travelsofadam.com/feed/"
+    method: "rss"
+    license: "Copyright; headline+link+excerpt only"
+    cadence: "12h"
+    needs_key: false
+    allowed: true
+    notes: "RSS verified 2026-11-15"
+  - id: blog-nomadasaurus
+    category: "blogs"
+    name: "Nomadasaurus"
+    url: "https://www.nomadasaurus.com/feed/"
+    method: "rss"
+    license: "Copyright; headline+link+excerpt only"
+    cadence: "12h"
+    needs_key: false
+    allowed: true
+    notes: "RSS verified 2026-11-15"
+  - id: blog-saltinourhair
+    category: "blogs"
+    name: "Salt in our Hair"
+    url: "https://www.saltinourhair.com/feed/"
+    method: "rss"
+    license: "Copyright; headline+link+excerpt only"
+    cadence: "12h"
+    needs_key: false
+    allowed: true
+    notes: "RSS verified 2026-11-15"
+  - id: blog-everythingeverywhere
+    category: "blogs"
+    name: "Everything Everywhere"
+    url: "https://www.everythingeverywhere.com/feed/"
+    method: "rss"
+    license: "Copyright; headline+link+excerpt only"
+    cadence: "12h"
+    needs_key: false
+    allowed: true
+    notes: "RSS verified 2026-11-15; slow host"
+  - id: blog-onemileatatime
+    category: "blogs"
+    name: "One Mile at a Time"
+    url: "https://onemileatatime.com/feed/"
+    method: "rss"
+    license: "Copyright; headline+link+excerpt only"
+    cadence: "12h"
+    needs_key: false
+    allowed: true
+    notes: "RSS verified 2026-11-15"
+  - id: blog-viewfromthewing
+    category: "blogs"
+    name: "View from the Wing"
+    url: "https://viewfromthewing.com/feed/"
+    method: "rss"
+    license: "Copyright; headline+link+excerpt only"
+    cadence: "12h"
+    needs_key: false
+    allowed: true
+    notes: "RSS verified 2026-11-15"
+  - id: blog-thepointsguy
+    category: "blogs"
+    name: "The Points Guy"
+    url: "https://thepointsguy.com/feed/"
+    method: "rss"
+    license: "Copyright; headline+link+excerpt only"
+    cadence: "12h"
+    needs_key: false
+    allowed: true
+    notes: "RSS verified 2026-11-15"
+  - id: blog-headforpoints
+    category: "blogs"
+    name: "Head for Points"
+    url: "https://www.headforpoints.com/feed/"
+    method: "rss"
+    license: "Copyright; headline+link+excerpt only"
+    cadence: "12h"
+    needs_key: false
+    allowed: true
+    notes: "RSS verified 2026-11-15"
+  - id: blog-matadornetwork
+    category: "blogs"
+    name: "Matador Network"
+    url: "https://matadornetwork.com/feed/"
+    method: "rss"
+    license: "Copyright; headline+link+excerpt only"
+    cadence: "12h"
+    needs_key: false
+    allowed: true
+    notes: "RSS verified 2026-11-15"
+  - id: news-guardian
+    category: "news"
+    name: "The Guardian Travel"
+    url: "https://www.theguardian.com/travel/rss"
+    method: "rss"
+    license: "Copyright; headline+link+excerpt only"
+    cadence: "2h"
+    needs_key: false
+    allowed: true
+    notes: "RSS verified 2026-11-15"
+  - id: news-bbc
+    category: "news"
+    name: "BBC Travel"
+    url: "https://www.bbc.com/travel/feed.rss"
+    method: "rss"
+    license: "Copyright; headline+link+excerpt only"
+    cadence: "2h"
+    needs_key: false
+    allowed: true
+    notes: "RSS verified 2026-11-15"
+  - id: news-nyt
+    category: "news"
+    name: "New York Times Travel"
+    url: "https://rss.nytimes.com/services/xml/rss/nyt/Travel.xml"
+    method: "rss"
+    license: "Copyright; headline+link+excerpt only"
+    cadence: "2h"
+    needs_key: false
+    allowed: true
+    notes: "RSS verified 2026-11-15"
+  - id: news-independent
+    category: "news"
+    name: "The Independent Travel"
+    url: "https://www.independent.co.uk/travel/rss"
+    method: "rss"
+    license: "Copyright; headline+link+excerpt only"
+    cadence: "2h"
+    needs_key: false
+    allowed: true
+    notes: "RSS verified 2026-11-15"
+  - id: news-telegraph
+    category: "news"
+    name: "The Telegraph Travel"
+    url: "https://www.telegraph.co.uk/travel/rss.xml"
+    method: "rss"
+    license: "Copyright; headline+link+excerpt only"
+    cadence: "2h"
+    needs_key: false
+    allowed: true
+    notes: "RSS verified 2026-11-15"
+  - id: news-cnn
+    category: "news"
+    name: "CNN Travel"
+    url: "http://rss.cnn.com/rss/edition_travel.rss"
+    method: "rss"
+    license: "Copyright; headline+link+excerpt only"
+    cadence: "2h"
+    needs_key: false
+    allowed: true
+    notes: "RSS verified 2026-11-15"
+  - id: news-cnbc
+    category: "news"
+    name: "CNBC Travel"
+    url: "https://www.cnbc.com/id/10000739/device/rss/rss.html"
+    method: "rss"
+    license: "Copyright; headline+link+excerpt only"
+    cadence: "2h"
+    needs_key: false
+    allowed: true
+    notes: "RSS verified 2026-11-15"
+  - id: news-euronews
+    category: "news"
+    name: "Euronews Travel"
+    url: "https://www.euronews.com/rss?level=vertical&name=travel"
+    method: "rss"
+    license: "Copyright; headline+link+excerpt only"
+    cadence: "2h"
+    needs_key: false
+    allowed: true
+    notes: "RSS verified 2026-11-15"
+  - id: news-cntraveler
+    category: "news"
+    name: "Condé Nast Traveler (US)"
+    url: "https://www.cntraveler.com/feed/rss"
+    method: "rss"
+    license: "Copyright; headline+link+excerpt only"
+    cadence: "2h"
+    needs_key: false
+    allowed: true
+    notes: "RSS verified 2026-11-15"
+  - id: news-cntraveller
+    category: "news"
+    name: "Condé Nast Traveller (UK)"
+    url: "https://www.cntraveller.com/feed/rss"
+    method: "rss"
+    license: "Copyright; headline+link+excerpt only"
+    cadence: "2h"
+    needs_key: false
+    allowed: true
+    notes: "RSS verified 2026-11-15"
+  - id: news-smithsonian
+    category: "news"
+    name: "Smithsonian Travel"
+    url: "https://www.smithsonianmag.com/rss/travel/"
+    method: "rss"
+    license: "Copyright; headline+link+excerpt only"
+    cadence: "2h"
+    needs_key: false
+    allowed: true
+    notes: "RSS verified 2026-11-15"
+  - id: news-skift
+    category: "news"
+    name: "Skift"
+    url: "https://skift.com/feed/"
+    method: "rss"
+    license: "Copyright; headline+link+excerpt only"
+    cadence: "2h"
+    needs_key: false
+    allowed: true
+    notes: "RSS verified 2026-11-15"
+  - id: news-simpleflying
+    category: "news"
+    name: "Simple Flying"
+    url: "https://simpleflying.com/feed/"
+    method: "rss"
+    license: "Copyright; headline+link+excerpt only"
+    cadence: "2h"
+    needs_key: false
+    allowed: true
+    notes: "RSS verified 2026-11-15"
+  - id: news-traveldailynews
+    category: "news"
+    name: "TravelDailyNews"
+    url: "https://www.traveldailynews.com/feed/"
+    method: "rss"
+    license: "Copyright; headline+link+excerpt only"
+    cadence: "2h"
+    needs_key: false
+    allowed: true
+    notes: "RSS verified 2026-11-15"
+  - id: news-wanderlust
+    category: "news"
+    name: "Wanderlust (UK)"
+    url: "https://www.wanderlust.co.uk/rss"
+    method: "rss"
+    license: "Copyright; headline+link+excerpt only"
+    cadence: "2h"
+    needs_key: false
+    allowed: true
+    notes: "RSS verified 2026-11-15"
+  - id: news-thetravel
+    category: "news"
+    name: "TheTravel"
+    url: "https://www.thetravel.com/feed/"
+    method: "rss"
+    license: "Copyright; headline+link+excerpt only"
+    cadence: "2h"
+    needs_key: false
+    allowed: true
+    notes: "RSS verified 2026-11-15"
+  - id: news-atlasobscura
+    category: "news"
+    name: "Atlas Obscura (feed only)"
+    url: "https://www.atlasobscura.com/feeds/latest"
+    method: "rss"
+    license: "Copyright; headline+link+excerpt only"
+    cadence: "2h"
+    needs_key: false
+    allowed: true
+    notes: "RSS verified 2026-11-15; site is bot-walled, use feed only"
+  - id: news-travelmag
+    category: "news"
+    name: "Travel-Mag"
+    url: "https://www.travel-mag.com/feed/"
+    method: "rss"
+    license: "Copyright; headline+link+excerpt only"
+    cadence: "2h"
+    needs_key: false
+    allowed: true
+    notes: "RSS verified 2026-11-15; slow host"
+  - id: blocked-travelandleisure
+    category: "news"
+    name: "Travel + Leisure"
+    url: "https://www.travelandleisure.com/rss"
+    method: "rss"
+    license: "403 to honest bot (bot wall)"
+    cadence: "never"
+    needs_key: false
+    allowed: false
+    notes: "do not evade"
+  - id: blocked-travelpulse
+    category: "news"
+    name: "TravelPulse"
+    url: "https://www.travelpulse.com/rss"
+    method: "rss"
+    license: "403 to honest bot (bot wall)"
+    cadence: "never"
+    needs_key: false
+    allowed: false
+    notes: "do not evade"
+  - id: blocked-travelweekly
+    category: "news"
+    name: "Travel Weekly"
+    url: "https://www.travelweekly.com/rss"
+    method: "rss"
+    license: "403 to honest bot (bot wall)"
+    cadence: "never"
+    needs_key: false
+    allowed: false
+    notes: "do not evade"
+  - id: blocked-frommers
+    category: "news"
+    name: "Frommer's"
+    url: "https://www.frommers.com/rss"
+    method: "rss"
+    license: "403 to honest bot (bot wall)"
+    cadence: "never"
+    needs_key: false
+    allowed: false
+    notes: "do not evade"
+  - id: blocked-phocuswire
+    category: "news"
+    name: "PhocusWire"
+    url: "https://www.phocuswire.com/rss"
+    method: "rss"
+    license: "403 to honest bot (bot wall)"
+    cadence: "never"
+    needs_key: false
+    allowed: false
+    notes: "do not evade"
+  - id: blocked-thepoortraveler
+    category: "news"
+    name: "The Poor Traveler"
+    url: "https://www.thepoortraveler.net/feed/"
+    method: "rss"
+    license: "403 to honest bot (bot wall)"
+    cadence: "never"
+    needs_key: false
+    allowed: false
+    notes: "do not evade"
+  - id: blocked-bucketlistly
+    category: "news"
+    name: "Bucketlistly"
+    url: "https://www.bucketlistly.blog/rss/"
+    method: "rss"
+    license: "403 to honest bot (bot wall)"
+    cadence: "never"
+    needs_key: false
+    allowed: false
+    notes: "do not evade"

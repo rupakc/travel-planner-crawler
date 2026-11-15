@@ -1,0 +1,6 @@
+User-Agent: *
+Allow: /
+Disallow: /studio
+Disallow: /studio/
+
+Sitemap: https://www.gigsky.com/sitemap.xml
