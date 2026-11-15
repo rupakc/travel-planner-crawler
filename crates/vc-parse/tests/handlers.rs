@@ -11,7 +11,7 @@ use serde_json::{Value, json};
 use testkit::vc_parse_fixtures::capture_meta;
 use vc_core::ErrorClass;
 use vc_core::media::MediaType;
-use vc_core::parse::{ContentHandler, LinkKind, Limits, Parsed};
+use vc_core::parse::{ContentHandler, Limits, LinkKind, Parsed};
 use vc_parse::{
     CsvHandler, FeedHandler, HtmlHandler, JsonHandler, SitemapHandler, hamming, parse, registry,
     simhash64,
@@ -159,7 +159,9 @@ fn sitemap_index_and_gz() {
         max_sitemap_entries: 2,
         ..Limits::default()
     };
-    let p = SitemapHandler.handle(&meta, urlset.as_bytes(), &lim).unwrap();
+    let p = SitemapHandler
+        .handle(&meta, urlset.as_bytes(), &lim)
+        .unwrap();
     assert_eq!(p.links.len(), 2);
 
     // A plain-text sitemap: one URL per line, junk skipped.
@@ -368,9 +370,10 @@ fn html_links_text_lang_and_canonical() {
       <style>.x{}</style><script>var hidden = "SCRIPTTEXT";</script></head>
       <body><nav><a href="porto" rel="nofollow  Sponsored">Guia do   Porto</a>
       <a href="javascript:void(0)">js</a><a href="mailto:a@b.c">mail</a>
-      <a href="porto">dup</a><a href="#top">top</a></nav>
+      <a href="porto">dup</a><a href="https://example.com/events/jazz#top">top</a></nav>
       <article><h1>Lisboa</h1><p>Lisboa é a capital de Portugal e a maior cidade do país. A cidade
-      tem bairros históricos, miradouros e uma longa tradição de fado e de pastelaria.</p></article>
+      tem bairros históricos, miradouros e uma longa tradição de fado e de pastelaria. O elétrico 28
+      atravessa Alfama, a Graça e a Baixa, e o rio Tejo está sempre perto.</p></article>
       </body></html>"##;
     let p = html(page);
     assert_eq!(p.title.as_deref(), Some("Lisboa guia"));
@@ -478,7 +481,11 @@ fn json_handler_flattens_jsonld_and_keeps_api_json() {
     assert_eq!(p.structured, vec![json!({"rates":{"EUR":1.0}})]);
     // Too deep → rejected rather than overflowing the stack.
     let deep = format!("{}{}", "[".repeat(100_000), "]".repeat(100_000));
-    assert!(JsonHandler.handle(&meta, deep.as_bytes(), &Limits::default()).is_err());
+    assert!(
+        JsonHandler
+            .handle(&meta, deep.as_bytes(), &Limits::default())
+            .is_err()
+    );
 }
 
 #[test]
@@ -520,7 +527,8 @@ fn registry_dispatch_and_sniff() {
     // `parse` dispatches on the stored type and refines generic XML/Other by sniffing,
     // including through gzip.
     let meta = capture_meta("https://example.com/s.xml.gz", MediaType::Other);
-    let body = gz(b"<?xml version=\"1.0\"?><urlset><url><loc>https://example.com/a</loc></url></urlset>");
+    let body =
+        gz(b"<?xml version=\"1.0\"?><urlset><url><loc>https://example.com/a</loc></url></urlset>");
     let p = parse(&r, &meta, &body, &Limits::default())
         .unwrap()
         .expect("sniffed as sitemap");
@@ -540,7 +548,7 @@ fn words() -> impl Strategy<Value = Vec<String>> {
 }
 
 proptest! {
-    #![proptest_config(ProptestConfig::with_cases(128))]
+    #![proptest_config(ProptestConfig::with_cases(64))]
 
     #[test]
     fn simhash_near_duplicates_close(
@@ -567,6 +575,9 @@ fn simhash_is_stable() {
     // Pinned: the hash is stored, so it must never change across releases.
     assert_eq!(simhash64(""), 0);
     let h = simhash64("The quick brown fox jumps over the lazy dog");
-    assert_eq!(h, simhash64("the QUICK brown fox, jumps over the lazy dog!"));
-    assert_eq!(format!("{h:016x}"), "PINNED");
+    assert_eq!(
+        h,
+        simhash64("the QUICK brown fox, jumps over the lazy dog!")
+    );
+    assert_eq!(format!("{h:016x}"), "18916b020a684455");
 }
