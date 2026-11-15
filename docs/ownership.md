@@ -45,7 +45,7 @@ different phases; phases do not overlap).
 | T2 | vc-frontier | `crates/vc-frontier/**`, `migrations/11xx` |
 | T3 | vc-store | `crates/vc-store/**`, `migrations/12xx` |
 | T4 | vc-fetch | `crates/vc-fetch/**` |
-| T5 | vc-render | `crates/vc-render/**`, `deploy/chromium/**` |
+| T5 | vc-render | `crates/vc-render/**`; `deploy/chromium/**` only to wire its renderer (say so in the PR; TD owns it) |
 | T6 | vc-parse | `crates/vc-parse/**` |
 | T7 | vc-kinds, kind schemas, prompts | `crates/vc-kinds/**`, `schemas/*.v*.json`, `prompts/**`, `kinds.toml` |
 | T8 | vc-llm | `crates/vc-llm/**`, `migrations/14xx` |
@@ -55,7 +55,7 @@ different phases; phases do not overlap).
 | T12 | vc-api | `crates/vc-api/**`, `migrations/16xx` |
 | T13 | vc-queue, vc-obs, vc-secrets | those crates, `migrations/13xx`, `migrations/18xx` |
 | T14 | testkit full (fake web, fake Gemini, oracles) | `testkit/**` |
-| TD | deploy kit + bootstrap | `deploy/**` (not `deploy/chromium`), `infrastructure/**`, `.github/workflows/deploy.yml` |
+| TD | deploy kit + bootstrap | `deploy/**` (including `deploy/chromium/**`), `infrastructure/**`, `.github/workflows/deploy.yml` |
 | T15 | vcrawl binary | `crates/vcrawl/**`, `migrations/contract/**` |
 | T16 | E2E in CI | `e2e/**`, `.github/workflows/e2e.yml` |
 | T17 | agentic loops | `crates/vcrawl/src/agentic/**`, `prompts/agentic/**`, `docs/proposals/**` |
@@ -121,7 +121,7 @@ t4 testkit/src/vc_fetch_fixtures.rs
 t5 crates/vc-render/*
 t5 crates/vc-config/src/sections/render.rs
 t5 crates/vc-config/src/sections/vc_render.rs
-t5 deploy/chromium/*
+t5 deploy/chromium/*   # renderer wiring only; note it in the PR (TD owns deploy/**)
 t5 testkit/fixtures/vc-render/*
 t5 testkit/src/vc_render_fixtures.rs
 t6 crates/vc-parse/*
@@ -188,7 +188,6 @@ t13 testkit/src/vc_secrets_fixtures.rs
 t14 testkit/*
 # --- deploy kit ---
 td deploy/*
-td !deploy/chromium/*
 td infrastructure/*
 td .github/workflows/deploy.yml
 td .github/workflows/prod-scan.yml
