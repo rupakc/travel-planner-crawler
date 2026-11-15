@@ -5647,7 +5647,6 @@ dependencies = [
  "jsonschema",
  "serde",
  "serde_json",
- "tempfile",
  "testkit",
  "thiserror 2.0.21",
  "toml 1.2.1+spec-1.1.0",

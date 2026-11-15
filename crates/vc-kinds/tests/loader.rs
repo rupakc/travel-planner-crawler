@@ -9,19 +9,33 @@ use vc_core::KindId;
 use vc_core::kinds::KindRegistry;
 use vc_kinds::FileKindRegistry;
 
+/// A temporary directory removed on drop (std only, no extra dependency).
 struct Tmp {
-    dir: tempfile::TempDir,
+    dir: std::path::PathBuf,
+}
+
+impl Drop for Tmp {
+    fn drop(&mut self) {
+        let _ = std::fs::remove_dir_all(&self.dir);
+    }
 }
 
 impl Tmp {
     fn new() -> Self {
-        let dir = tempfile::tempdir().unwrap();
-        std::fs::create_dir_all(dir.path().join("schemas")).unwrap();
-        std::fs::create_dir_all(dir.path().join("prompts")).unwrap();
+        static N: std::sync::atomic::AtomicU64 = std::sync::atomic::AtomicU64::new(0);
+        let n = N.fetch_add(1, std::sync::atomic::Ordering::Relaxed);
+        let nanos = std::time::SystemTime::now()
+            .duration_since(std::time::UNIX_EPOCH)
+            .map(|d| d.as_nanos())
+            .unwrap_or_default();
+        let dir =
+            std::env::temp_dir().join(format!("vc-kinds-test-{}-{n}-{nanos}", std::process::id()));
+        std::fs::create_dir_all(dir.join("schemas")).unwrap();
+        std::fs::create_dir_all(dir.join("prompts")).unwrap();
         Tmp { dir }
     }
     fn p(&self) -> &Path {
-        self.dir.path()
+        &self.dir
     }
     fn toml(&self, s: &str) -> &Self {
         std::fs::write(self.p().join("kinds.toml"), s).unwrap();
