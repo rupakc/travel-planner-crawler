@@ -1,0 +1,68 @@
+name: VoyagerBot opt-out or removal request
+description: Ask VoyagerBot to stop crawling your site and/or remove data it collected.
+title: "[opt-out] "
+labels: [opt-out]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thank you for telling us. The fastest opt-out is robots.txt (see [BOT.md](https://github.com/rupakc/travel-planner-crawler/blob/main/BOT.md)):
+
+        ```
+        User-agent: VoyagerBot
+        Disallow: /
+        ```
+
+        This form works too, and also covers removal of data already collected.
+        **This issue is public.** Do not include personal data you don't want published;
+        for a private request, see BOT.md.
+
+        Our commitments (BOT.md): removed from the API and index within 24 hours, from raw
+        storage within 7 days, and from backups and snapshots within 21 days.
+  - type: input
+    id: domains
+    attributes:
+      label: Domain(s)
+      description: The host(s) or registrable domain(s) this applies to, comma-separated.
+      placeholder: example.com, blog.example.org
+    validations:
+      required: true
+  - type: dropdown
+    id: scope
+    attributes:
+      label: What should we do?
+      options:
+        - Stop crawling and remove everything collected
+        - Stop crawling only (keep nothing new; existing data may stay)
+        - Remove specific URLs or content only
+        - Stop AI/LLM use of my content (keep links and titles only)
+    validations:
+      required: true
+  - type: textarea
+    id: paths
+    attributes:
+      label: Specific paths or URLs (optional)
+      description: One per line. Leave empty to cover the whole domain.
+  - type: dropdown
+    id: relationship
+    attributes:
+      label: Your relationship to the site
+      options:
+        - I run or own the site
+        - I act for the owner
+        - I'm the author of content on the site (personal data / authorship)
+        - Other
+    validations:
+      required: true
+  - type: textarea
+    id: verification
+    attributes:
+      label: How can we verify the request? (optional)
+      description: For example, a robots.txt change, a TXT record or a file you placed on the site. A robots.txt change needs no verification.
+  - type: checkboxes
+    id: ack
+    attributes:
+      label: Acknowledgement
+      options:
+        - label: I understand this issue is public.
+          required: true

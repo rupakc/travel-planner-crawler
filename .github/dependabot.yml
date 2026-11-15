@@ -1,0 +1,37 @@
+# Dependabot opens PRs; the controller reviews them. Agents never run `cargo update`
+# (docs/ownership.md rule 3), so Cargo bumps only arrive through these PRs.
+version: 2
+updates:
+  - package-ecosystem: cargo
+    directory: /
+    schedule:
+      interval: weekly
+      day: monday
+    open-pull-requests-limit: 5
+    groups:
+      cargo-patch:
+        update-types: [patch]
+    labels: [dependencies, rust]
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
+      day: monday
+    groups:
+      actions:
+        patterns: ["*"]
+    labels: [dependencies, ci]
+  - package-ecosystem: docker
+    directories:
+      - /deploy
+      - /deploy/chromium
+      - /e2e
+    schedule:
+      interval: weekly
+      day: monday
+    labels: [dependencies, docker]
+  - package-ecosystem: pip
+    directory: /scripts
+    schedule:
+      interval: monthly
+    labels: [dependencies, python]
