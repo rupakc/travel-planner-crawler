@@ -20,6 +20,8 @@ pub struct FetchConfig {
     pub max_nested_gzip: u8,
     /// Allowed `Content-Type` essences.
     pub allowed_content_types: Vec<String>,
+    /// Extra `Content-Type` essences allowed for render sub-requests only (scripts, styles).
+    pub subresource_content_types: Vec<String>,
     /// Daily raw-bytes cap across all keys (3 GB).
     pub daily_raw_bytes_cap: u64,
 }
@@ -48,6 +50,15 @@ impl Default for FetchConfig {
                 "application/gzip",
                 "application/x-gzip",
                 "application/x-bzip2",
+            ]
+            .map(String::from)
+            .to_vec(),
+            subresource_content_types: [
+                "text/css",
+                "text/javascript",
+                "application/javascript",
+                "application/x-javascript",
+                "application/ecmascript",
             ]
             .map(String::from)
             .to_vec(),
