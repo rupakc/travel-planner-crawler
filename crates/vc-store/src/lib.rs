@@ -1,65 +1,65 @@
-//! # vc-store (Task 3, stub)
+//! # vc-store
 //!
-//! WARC/1.1 writer/reader + CDXJ, the fsynced `Spool`, `SegmentRoller`, `GcsBlobStore` /
-//! `FsBlobStore`, and `PgSegmentCommitter` (one `vc_commit_segment` call). Block 12xx.
+//! The raw store (spec §5.5, §17.2, §17.7): WARC/1.1 writer/reader + CDXJ, the fsynced
+//! [`Spool`], the [`SegmentRoller`], [`GcsBlobStore`] / [`FsBlobStore`], [`PgSegmentCommitter`]
+//! (one `vc_commit_segment` call) and the purge rewrite. Migration block 12xx.
+//!
+//! ## Raw first, crash-consistent
+//!
+//! 1. [`vc_core::store::CaptureSink::append`] writes a spool frame and **fsyncs** before it
+//!    returns; an unacknowledged (torn) frame is truncated on the next open and never published.
+//! 2. A sealed spool file fixes a segment's id and content. [`SegmentRoller::publish`] builds the
+//!    segment deterministically, uploads it with `ifGenerationMatch=0` (an identical existing
+//!    object is success, a different one is a conflict), then the CDXJ.
+//! 3. One `vc_commit_segment(jsonb)` transaction makes the captures visible and moves the
+//!    `url_state` validators (monotonic on `captured_at`).
+//! 4. Only then is the sealed spool file deleted. On start, [`SegmentRoller::tick`] replays every
+//!    sealed file; steps 2–3 are idempotent by segment id.
+//!
+//! Until step 3 nothing derived from a capture is visible and the frontier keeps the **old**
+//! validators, so a crash can never produce a 304 for a body that is not stored.
+//!
+//! ## Failpoints
+//!
+//! With the `failpoints` feature (on in this crate's tests): `spool::before_fsync`,
+//! `spool::before_seal`, `segment::before_upload`, `segment::after_upload`,
+//! `segment::before_commit`, `segment::after_commit`.
 
-use std::ops::Range;
+pub mod cdxj;
+pub mod commit;
+pub mod fs;
+pub mod gcs;
+pub mod paths;
+pub mod purge;
+pub mod segment;
+pub mod spool;
+pub mod text;
+pub mod warc;
 
-use async_trait::async_trait;
-use bytes::Bytes;
-use sqlx::PgPool;
-use vc_core::store::{
-    BlobStore, CaptureSink, PutOutcome, SegmentCommitter, SegmentManifest, SpoolRecord,
+use std::sync::Arc;
+
+use vc_core::Result;
+use vc_core::store::BlobStore;
+
+pub use crate::commit::PgSegmentCommitter;
+pub use crate::fs::FsBlobStore;
+pub use crate::gcs::{GcsBlobStore, GcsOptions};
+pub use crate::purge::{SegmentRewrite, finish_rewrite, rewrite_segment_without};
+pub use crate::segment::{
+    BuiltSegment, SegmentRoller, build_segment, read_capture, read_cdxj, read_segment,
 };
-use vc_core::{CaptureId, Result};
+pub use crate::spool::{SealedSpool, Spool, SpoolEntry, SpoolOptions};
 
-/// Local-filesystem blob store.
-#[derive(Debug, Clone)]
-pub struct FsBlobStore {
-    /// Root directory.
-    pub root: std::path::PathBuf,
-}
-
-#[async_trait]
-impl BlobStore for FsBlobStore {
-    async fn put_if_absent(&self, _path: &str, _bytes: Bytes, _crc32c: u32) -> Result<PutOutcome> {
-        todo!("Task 3")
-    }
-    async fn get(&self, _path: &str, _range: Option<Range<u64>>) -> Result<Bytes> {
-        todo!("Task 3")
-    }
-    async fn delete(&self, _path: &str) -> Result<()> {
-        todo!("Task 3")
-    }
-    async fn list(&self, _prefix: &str) -> Result<Vec<String>> {
-        todo!("Task 3")
-    }
-}
-
-/// The fsynced local spool of one role instance.
-#[derive(Debug)]
-pub struct Spool {
-    /// Spool directory (`spool/<role>-<instance>/`).
-    pub dir: std::path::PathBuf,
-}
-
-#[async_trait]
-impl CaptureSink for Spool {
-    async fn append(&mut self, _r: SpoolRecord) -> Result<CaptureId> {
-        todo!("Task 3")
-    }
-}
-
-/// Commits segments through `vc_commit_segment(jsonb)`.
-#[derive(Debug, Clone)]
-pub struct PgSegmentCommitter {
-    /// Pool.
-    pub pool: PgPool,
-}
-
-#[async_trait]
-impl SegmentCommitter for PgSegmentCommitter {
-    async fn commit(&self, _m: &SegmentManifest) -> Result<()> {
-        todo!("Task 3")
-    }
+/// Builds the configured raw-bucket blob store (`[store] backend`).
+pub async fn blob_store_from_config(cfg: &vc_config::StoreConfig) -> Result<Arc<dyn BlobStore>> {
+    Ok(match cfg.backend {
+        vc_config::BlobBackend::Fs => Arc::new(FsBlobStore::new(&cfg.fs_root)),
+        vc_config::BlobBackend::Gcs => {
+            let opts = GcsOptions {
+                endpoint: (!cfg.gcs_endpoint.is_empty()).then(|| cfg.gcs_endpoint.clone()),
+                anonymous: cfg.gcs_anonymous,
+            };
+            Arc::new(GcsBlobStore::new(&cfg.raw_bucket, opts).await?)
+        }
+    })
 }
