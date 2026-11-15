@@ -73,6 +73,25 @@ async fn entity_of(ix: &PgIndex, key: &str) -> EntityId {
     id.parse().unwrap()
 }
 
+/// Waits until every committed `changes` row is below the cluster-wide xmin. Transaction ids
+/// are cluster-wide, so open transactions of tests running in parallel (other databases on the
+/// same server) hold the feed back, exactly as a slow writer would in production.
+async fn settle(ix: &PgIndex) {
+    for _ in 0..1500 {
+        let done: bool = sqlx::query_scalar(
+            "SELECT coalesce(max(xid) < pg_snapshot_xmin(pg_current_snapshot()), true) FROM changes",
+        )
+        .fetch_one(&ix.pool)
+        .await
+        .unwrap();
+        if done {
+            return;
+        }
+        tokio::time::sleep(std::time::Duration::from_millis(20)).await;
+    }
+    panic!("change feed did not settle");
+}
+
 // ---------------------------------------------------------------------------------------------
 // Plan tests
 // ---------------------------------------------------------------------------------------------
@@ -87,6 +106,7 @@ async fn version_only_on_change() {
     assert_eq!((rep.inserted, rep.new_versions, rep.unchanged), (1, 0, 0));
 
     // Same data again (another capture, keys in another order): no new version, no change row.
+    settle(&ix).await;
     let changes_before = ix.changes(None, &[], 100).await.unwrap().changes.len();
     let same = record("poi", "k1", json!({"hours": "9-5", "name": "Old Bridge"}));
     let p2 = prov("wv", open(), "https://example.org/a");
@@ -96,6 +116,7 @@ async fn version_only_on_change() {
     let id = record_id(&ix, "k1").await;
     let v = ix.record_versions(id, 10, None).await.unwrap();
     assert_eq!(v.items.len(), 1);
+    settle(&ix).await;
     assert_eq!(
         ix.changes(None, &[], 100).await.unwrap().changes.len(),
         changes_before
@@ -212,6 +233,7 @@ async fn entity_redirect_followed() {
     assert_eq!(entity_of(&ix, "b").await, ea);
 
     // The merge is in the change feed.
+    settle(&ix).await;
     let ch = ix.changes(None, &[], 100).await.unwrap();
     assert!(ch.changes.iter().any(|c| c.op == ChangeOp::Redirect
         && c.owner_type == OwnerType::Entity
@@ -261,7 +283,10 @@ async fn observation_series_append() {
     // Replay of the same capture: idempotent. A new day appends.
     let rep = ix
         .upsert(
-            vec![obs("d2", t0 + Duration::days(1), 1.11), obs("d3", t0 + Duration::days(2), 1.12)],
+            vec![
+                obs("d2", t0 + Duration::days(1), 1.11),
+                obs("d3", t0 + Duration::days(2), 1.12),
+            ],
             &prov("ecb", open(), "https://ecb.example/fx"),
         )
         .await
@@ -280,7 +305,12 @@ async fn observation_series_append() {
 
     // [from, to) and limit.
     let pts = ix
-        .observations("fx:EUR:USD", t0 + Duration::days(1), t0 + Duration::days(2), 100)
+        .observations(
+            "fx:EUR:USD",
+            t0 + Duration::days(1),
+            t0 + Duration::days(2),
+            100,
+        )
         .await
         .unwrap();
     assert_eq!(pts.len(), 1);
@@ -290,9 +320,13 @@ async fn observation_series_append() {
         .unwrap();
     assert_eq!(pts.len(), 2);
 
+    settle(&ix).await;
     let ch = ix.changes(None, &[], 100).await.unwrap();
-    assert!(ch.changes.iter().any(|c| c.owner_type == OwnerType::Observation
-        && c.owner_id == "fx:EUR:USD"));
+    assert!(
+        ch.changes
+            .iter()
+            .any(|c| c.owner_type == OwnerType::Observation && c.owner_id == "fx:EUR:USD")
+    );
 }
 
 #[tokio::test]
@@ -393,6 +427,7 @@ async fn tombstoned_never_returned() {
         Err(Error::NotFound(_))
     ));
     assert_eq!(ix.entity(&ent).await.unwrap(), EntityLookup::NotFound);
+    settle(&ix).await;
     let ch = ix.changes(None, &[], 100).await.unwrap();
     assert!(ch.changes.iter().any(|c| c.op == ChangeOp::Tombstone
         && c.owner_type == OwnerType::Record
@@ -407,7 +442,13 @@ async fn tombstoned_never_returned() {
         .await
         .unwrap();
     assert_eq!(rep.inserted + rep.new_versions, 0);
-    assert!(ix.search(&query(Some("garden"))).await.unwrap().items.is_empty());
+    assert!(
+        ix.search(&query(Some("garden")))
+            .await
+            .unwrap()
+            .items
+            .is_empty()
+    );
 
     // Tombstoning again is a no-op.
     let n = ix
@@ -436,10 +477,17 @@ async fn changes_ordered_by_xid() {
         let ix = ix.clone();
         tasks.push(tokio::spawn(async move {
             for i in 0..5 {
-                let r = record("poi", &format!("w{w}-{i}"), json!({"name": format!("Place {w} {i}")}));
-                ix.upsert(vec![r], &prov("src", open(), &format!("https://w{w}.example/{i}")))
-                    .await
-                    .unwrap();
+                let r = record(
+                    "poi",
+                    &format!("w{w}-{i}"),
+                    json!({"name": format!("Place {w} {i}")}),
+                );
+                ix.upsert(
+                    vec![r],
+                    &prov("src", open(), &format!("https://w{w}.example/{i}")),
+                )
+                .await
+                .unwrap();
             }
         }));
     }
@@ -449,10 +497,14 @@ async fn changes_ordered_by_xid() {
 
     // Nothing at or after the open transaction's xid is visible yet: no commit can be skipped.
     let early = ix.changes(None, &[], 1000).await.unwrap();
-    assert!(early.changes.is_empty(), "rows newer than the oldest open xid are held back");
+    assert!(
+        early.changes.is_empty(),
+        "rows newer than the oldest open xid are held back"
+    );
     assert_eq!(early.next, None);
 
     slow.commit().await.unwrap();
+    settle(&ix).await;
 
     // Page through with a small limit: strictly increasing (xid, seq), no gaps, no duplicates.
     let total: i64 = sqlx::query_scalar("SELECT count(*) FROM changes")
@@ -478,11 +530,18 @@ async fn changes_ordered_by_xid() {
     assert_eq!(first.changes[0].owner_id, "slow");
 
     // Kind filter.
-    let only = ix.changes(None, &[KindId::new("event")], 1000).await.unwrap();
+    let only = ix
+        .changes(None, &[KindId::new("event")], 1000)
+        .await
+        .unwrap();
     assert!(only.changes.is_empty());
     let poi = ix.changes(None, &[KindId::new("poi")], 1000).await.unwrap();
     assert!(!poi.changes.is_empty());
-    assert!(poi.changes.iter().all(|c| c.kind == Some(KindId::new("poi"))));
+    assert!(
+        poi.changes
+            .iter()
+            .all(|c| c.kind == Some(KindId::new("poi")))
+    );
 }
 
 // ---------------------------------------------------------------------------------------------
@@ -522,7 +581,12 @@ async fn older_capture_never_overwrites_newer() {
     let rep = ix
         .upsert(
             vec![record("poi", "k", json!({"name": "Old"}))],
-            &prov_at("s", open(), "https://example.org/k", now - Duration::hours(1)),
+            &prov_at(
+                "s",
+                open(),
+                "https://example.org/k",
+                now - Duration::hours(1),
+            ),
         )
         .await
         .unwrap();
@@ -541,28 +605,45 @@ async fn use_policy_limits_serving() {
         noindex: true,
         ..Default::default()
     });
-    let mut ai = record("poi", "ai", json!({"name": "Linked Cafe", "secret": "menu"}));
+    let mut ai = record(
+        "poi",
+        "ai",
+        json!({"name": "Linked Cafe", "secret": "menu"}),
+    );
     ai.use_policy = UsePolicy::from_signals(&UseSignals {
         tdm_reserved: true,
         ..Default::default()
     });
     assert_eq!(ai.use_policy.index, IndexUse::TitleAndLink);
-    ix.upsert(vec![noindex, ai], &prov("s", open(), "https://example.org/cafes"))
-        .await
-        .unwrap();
+    ix.upsert(
+        vec![noindex, ai],
+        &prov("s", open(), "https://example.org/cafes"),
+    )
+    .await
+    .unwrap();
     let page = ix.search(&query(Some("cafe"))).await.unwrap();
     assert_eq!(page.items.len(), 1);
     assert_eq!(page.items[0].title.as_deref(), Some("Linked Cafe"));
     assert_eq!(page.items[0].data, json!({}));
     assert!(page.items[0].excerpt.is_none());
     // Only title and link are indexed: body text does not match.
-    assert!(ix.search(&query(Some("menu"))).await.unwrap().items.is_empty());
+    assert!(
+        ix.search(&query(Some("menu")))
+            .await
+            .unwrap()
+            .items
+            .is_empty()
+    );
 }
 
 #[tokio::test]
 async fn facts_only_excerpt_and_licence_served() {
     let ix = index().await;
-    let mut r = record("article", "a1", json!({"name": "Ten things to do in Lisbon"}));
+    let mut r = record(
+        "article",
+        "a1",
+        json!({"name": "Ten things to do in Lisbon"}),
+    );
     r.excerpt = Some("x".repeat(300));
     let p = prov(
         "blog",
@@ -584,7 +665,13 @@ async fn facts_only_excerpt_and_licence_served() {
 async fn search_cursor_pages_without_overlap() {
     let ix = index().await;
     let recs = (0..25)
-        .map(|i| record("poi", &format!("p{i}"), json!({"name": format!("Museum {i}")})))
+        .map(|i| {
+            record(
+                "poi",
+                &format!("p{i}"),
+                json!({"name": format!("Museum {i}")}),
+            )
+        })
         .collect();
     ix.upsert(recs, &prov("s", open(), "https://example.org/museums"))
         .await
@@ -650,7 +737,11 @@ async fn embeddings_feed_vector_rank() {
     let todo = ix.pending_embeddings(&model, 10).await.unwrap();
     assert_eq!(todo.len(), 2);
     for t in &todo {
-        let v = if t.text.contains("Beta") { unit(1, 4) } else { unit(0, 4) };
+        let v = if t.text.contains("Beta") {
+            unit(1, 4)
+        } else {
+            unit(0, 4)
+        };
         ix.store_embedding(t, &model, &v).await.unwrap();
     }
     assert!(ix.pending_embeddings(&model, 10).await.unwrap().is_empty());
@@ -659,7 +750,10 @@ async fn embeddings_feed_vector_rank() {
         model: model.clone(),
         vec: unit(1, 4),
     }));
-    let page = ix.search(&query(Some("something unrelated"))).await.unwrap();
+    let page = ix
+        .search(&query(Some("something unrelated")))
+        .await
+        .unwrap();
     assert_eq!(page.items.len(), 2);
     assert_eq!(page.items[0].title.as_deref(), Some("Beta"));
 
@@ -671,4 +765,200 @@ async fn embeddings_feed_vector_rank() {
     .await
     .unwrap();
     assert_eq!(ix.pending_embeddings(&model, 10).await.unwrap().len(), 1);
+}
+
+#[tokio::test]
+async fn author_purge_and_gone_revival() {
+    let ix = index().await;
+    let qa = |key: &str, author: &str| {
+        record(
+            "qa_thread",
+            key,
+            json!({"name": format!("Visa question {key}"),
+                   "answers": [{"author": author, "text": "answer"}]}),
+        )
+    };
+    ix.upsert(
+        vec![qa("q1", "alice"), qa("q2", "bob")],
+        &prov("se", share_alike(), "https://travel.se.example/q"),
+    )
+    .await
+    .unwrap();
+    let n = ix
+        .tombstone(
+            &PurgeSelector::Author("alice".into()),
+            TombstoneReason::Purge,
+        )
+        .await
+        .unwrap();
+    assert_eq!(n, 1);
+    let page = ix.search(&query(Some("visa"))).await.unwrap();
+    assert_eq!(page.items.len(), 1);
+    assert_eq!(page.items[0].title.as_deref(), Some("Visa question q2"));
+    // A new record by the same author is excluded on ingest.
+    ix.upsert(
+        vec![qa("q3", "alice")],
+        &prov("se", share_alike(), "https://travel.se.example/q3"),
+    )
+    .await
+    .unwrap();
+    assert_eq!(
+        ix.search(&query(Some("visa"))).await.unwrap().items.len(),
+        1
+    );
+
+    // `gone` hides a record but a later sighting revives it (no standing exclusion).
+    let q2 = record_id(&ix, "q2").await;
+    let n = ix
+        .tombstone(&PurgeSelector::Record(q2), TombstoneReason::Gone)
+        .await
+        .unwrap();
+    assert_eq!(n, 1);
+    assert!(
+        ix.search(&query(Some("visa")))
+            .await
+            .unwrap()
+            .items
+            .is_empty()
+    );
+    ix.upsert(
+        vec![qa("q2", "bob")],
+        &prov("se", share_alike(), "https://travel.se.example/q"),
+    )
+    .await
+    .unwrap();
+    assert_eq!(
+        ix.search(&query(Some("visa"))).await.unwrap().items.len(),
+        1
+    );
+}
+
+#[tokio::test]
+async fn stricter_policy_applies_without_new_version() {
+    let ix = index().await;
+    let r = poi("p", "Clock Tower", 5, 1.0, 1.0);
+    ix.upsert(
+        vec![r.clone()],
+        &prov("s", open(), "https://example.org/clock"),
+    )
+    .await
+    .unwrap();
+    let ent = entity_of(&ix, "p").await;
+    assert!(matches!(
+        ix.entity(&ent).await.unwrap(),
+        EntityLookup::Found(_)
+    ));
+
+    // The site adds noindex: same data, no new version, but no longer served or linked.
+    let mut p = prov("s", open(), "https://example.org/clock");
+    p.use_policy = UsePolicy::from_signals(&UseSignals {
+        noindex: true,
+        ..Default::default()
+    });
+    let rep = ix.upsert(vec![r], &p).await.unwrap();
+    assert_eq!((rep.unchanged, rep.new_versions), (1, 0));
+    assert!(
+        ix.search(&query(Some("clock")))
+            .await
+            .unwrap()
+            .items
+            .is_empty()
+    );
+    assert_eq!(ix.entity(&ent).await.unwrap(), EntityLookup::NotFound);
+    let id = record_id(&ix, "p").await;
+    let v = ix.record_versions(id, 10, None).await.unwrap();
+    assert_eq!(v.items.len(), 1);
+    assert_eq!(v.items[0].use_policy.index, IndexUse::None);
+}
+
+#[tokio::test]
+async fn versions_page_and_operator_merge_rules() {
+    let ix = index().await;
+    for i in 0..5 {
+        ix.upsert(
+            vec![record("poi", "k", json!({"name": "Fort", "rev": i}))],
+            &prov("s", open(), "https://example.org/fort"),
+        )
+        .await
+        .unwrap();
+    }
+    let id = record_id(&ix, "k").await;
+    let p1 = ix.record_versions(id, 2, None).await.unwrap();
+    assert_eq!(
+        p1.items.iter().map(|v| v.version).collect::<Vec<_>>(),
+        [5, 4]
+    );
+    let p2 = ix.record_versions(id, 2, p1.next_cursor).await.unwrap();
+    assert_eq!(
+        p2.items.iter().map(|v| v.version).collect::<Vec<_>>(),
+        [3, 2]
+    );
+    let p3 = ix.record_versions(id, 2, p2.next_cursor).await.unwrap();
+    assert_eq!(p3.items.iter().map(|v| v.version).collect::<Vec<_>>(), [1]);
+    assert!(p3.next_cursor.is_none());
+    assert!(matches!(
+        ix.record_versions(RecordId(999_999), 2, None).await,
+        Err(Error::NotFound(_))
+    ));
+
+    // Operators cannot merge across licences or kinds either.
+    ix.upsert(
+        vec![poi("o", "Fort", 1, 1.0, 1.0)],
+        &prov("a", open(), "https://a.example/fort"),
+    )
+    .await
+    .unwrap();
+    ix.upsert(
+        vec![poi("s", "Fort", 1, 1.0, 1.0)],
+        &prov("b", share_alike(), "https://b.example/fort"),
+    )
+    .await
+    .unwrap();
+    let (eo, es) = (entity_of(&ix, "o").await, entity_of(&ix, "s").await);
+    assert!(matches!(
+        ix.merge_entities(&es, &eo).await,
+        Err(Error::Policy(_))
+    ));
+    assert!(matches!(
+        ix.merge_entities(&eo, &eo).await,
+        Err(Error::Invalid(_))
+    ));
+    assert!(matches!(
+        ix.merge_entities(&EntityId::new(), &eo).await,
+        Err(Error::NotFound(_))
+    ));
+}
+
+#[tokio::test]
+async fn source_purge_hides_observations() {
+    let ix = index().await;
+    let t0 = Utc.with_ymd_and_hms(2026, 1, 1, 0, 0, 0).unwrap();
+    let mut r = record("advisory_level", "a", json!({"level": 2}));
+    r.observation = Some(ObservationPoint {
+        series_key: "advisory:FR".into(),
+        observed_at: t0,
+        value: json!(2),
+    });
+    ix.upsert(vec![r], &prov("gov", open(), "https://gov.example/fr"))
+        .await
+        .unwrap();
+    assert_eq!(
+        ix.observations("advisory:FR", t0, t0 + Duration::days(1), 10)
+            .await
+            .unwrap()
+            .len(),
+        1
+    );
+    ix.tombstone(
+        &PurgeSelector::Source(vc_core::SourceId("gov".into())),
+        TombstoneReason::OptOut,
+    )
+    .await
+    .unwrap();
+    assert!(
+        ix.observations("advisory:FR", t0, t0 + Duration::days(1), 10)
+            .await
+            .unwrap()
+            .is_empty()
+    );
 }
