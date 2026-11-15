@@ -1,0 +1,36 @@
+[package]
+name = "vc-sources"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+repository.workspace = true
+publish.workspace = true
+
+[lints]
+workspace = true
+
+[dependencies]
+vc-core = { workspace = true }
+vc-config = { workspace = true }
+async-trait = { workspace = true }
+serde = { workspace = true }
+serde_norway = { workspace = true }
+serde_json = { workspace = true }
+regex = { workspace = true }
+quick-xml = { workspace = true }
+csv = { workspace = true }
+flate2 = { workspace = true }
+bzip2 = { workspace = true }
+sqlx = { workspace = true }
+tokio = { workspace = true }
+futures = { workspace = true }
+bytes = { workspace = true }
+chrono = { workspace = true }
+url = { workspace = true }
+tracing = { workspace = true }
+thiserror = { workspace = true }
+
+[dev-dependencies]
+testkit = { workspace = true }
+wiremock = { workspace = true }

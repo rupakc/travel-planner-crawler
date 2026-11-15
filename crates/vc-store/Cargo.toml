@@ -1,0 +1,39 @@
+[package]
+name = "vc-store"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+repository.workspace = true
+publish.workspace = true
+
+[lints]
+workspace = true
+
+[dependencies]
+vc-core = { workspace = true }
+vc-config = { workspace = true }
+async-trait = { workspace = true }
+warc = { workspace = true }
+zstd = { workspace = true }
+google-cloud-storage = { workspace = true }
+google-cloud-auth = { workspace = true }
+crc32c = { workspace = true }
+sha2 = { workspace = true }
+hex = { workspace = true }
+ulid = { workspace = true }
+tokio = { workspace = true }
+sqlx = { workspace = true }
+fail = { workspace = true }
+serde = { workspace = true }
+serde_json = { workspace = true }
+bytes = { workspace = true }
+chrono = { workspace = true }
+tracing = { workspace = true }
+thiserror = { workspace = true }
+http = { workspace = true }
+
+[dev-dependencies]
+testkit = { workspace = true }
+proptest = { workspace = true }
+tempfile = { workspace = true }

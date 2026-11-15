@@ -1,0 +1,60 @@
+# cargo-deny: licences, advisories, sources, and bans on bot-detection evasion crates.
+
+[graph]
+all-features = false
+
+[advisories]
+version = 2
+yanked = "deny"
+ignore = [
+    # Unmaintained (not vulnerable); only reached through testcontainers 0.28 in tests.
+    { id = "RUSTSEC-2026-0440", reason = "astral-tokio-tar via testcontainers, dev-only; revisit on the next testcontainers release" },
+]
+
+[licenses]
+version = 2
+confidence-threshold = 0.9
+allow = [
+    "MIT",
+    "MIT-0",
+    "Apache-2.0",
+    "Apache-2.0 WITH LLVM-exception",
+    "BSD-2-Clause",
+    "BSD-3-Clause",
+    "ISC",
+    "Zlib",
+    "0BSD",
+    "CC0-1.0",
+    "Unicode-3.0",
+    "Unicode-DFS-2016",
+    "BSL-1.0",
+    "MPL-2.0",
+    "CDLA-Permissive-2.0",
+    "OpenSSL",
+    "bzip2-1.0.6",
+]
+
+[bans]
+multiple-versions = "allow"
+wildcards = "deny"
+allow-wildcard-paths = true
+# Anti-goal: no bot-detection evasion (stealth, fingerprint/UA spoofing, TLS impersonation,
+# proxy rotation). One honest UA only.
+deny = [
+    { crate = "spider", reason = "evasion features (ua_generator, real_browser) on by default" },
+    { crate = "spider_fingerprint", reason = "browser fingerprint spoofing" },
+    { crate = "spider_chrome", reason = "spider's Chromium fork with stealth features" },
+    { crate = "chromey", reason = "spider's Chromium fork with stealth features" },
+    { crate = "ua_generator", reason = "User-Agent rotation" },
+    { crate = "fake_user_agent", reason = "User-Agent spoofing" },
+    { crate = "chrome_stealth", reason = "headless stealth" },
+    { crate = "wreq", reason = "TLS/HTTP2 fingerprint impersonation" },
+    { crate = "rquest", reason = "TLS/HTTP2 fingerprint impersonation" },
+    { crate = "reqwest-impersonate", reason = "TLS fingerprint impersonation" },
+    { crate = "curl-impersonate", reason = "TLS fingerprint impersonation" },
+]
+
+[sources]
+unknown-registry = "deny"
+unknown-git = "deny"
+allow-registry = ["https://github.com/rust-lang/crates.io-index"]

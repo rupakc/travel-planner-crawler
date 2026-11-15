@@ -1,0 +1,42 @@
+[package]
+name = "vcrawl"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+repository.workspace = true
+publish.workspace = true
+description = "The Voyager crawler binary: roles, admin CLI and migrate."
+
+[lints]
+workspace = true
+
+[dependencies]
+vc-core = { workspace = true }
+vc-config = { workspace = true }
+vc-policy = { workspace = true }
+vc-frontier = { workspace = true }
+vc-fetch = { workspace = true }
+vc-render = { workspace = true }
+vc-store = { workspace = true }
+vc-parse = { workspace = true }
+vc-kinds = { workspace = true }
+vc-llm = { workspace = true }
+vc-extract = { workspace = true }
+vc-sources = { workspace = true }
+vc-queue = { workspace = true }
+vc-index = { workspace = true }
+vc-api = { workspace = true }
+vc-obs = { workspace = true }
+vc-secrets = { workspace = true }
+clap = { workspace = true }
+tokio = { workspace = true }
+anyhow = { workspace = true }
+tracing = { workspace = true }
+fail = { workspace = true }
+sqlx = { workspace = true }
+serde_json = { workspace = true }
+chrono = { workspace = true }
+
+[dev-dependencies]
+testkit = { workspace = true }
