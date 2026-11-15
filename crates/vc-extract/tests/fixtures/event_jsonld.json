@@ -1,0 +1,17 @@
+{
+  "title": "Jazz Night | Blue Room Lisbon",
+  "text": "Jazz Night at the Blue Room, Lisbon. Doors open at 19:00 on 20 November 2026. Tickets €25.",
+  "links": ["https://tickets.blueroom-example.pt/e/1"],
+  "structured": [{
+    "@context": "https://schema.org",
+    "@graph": [
+      {"@type": "WebPage", "@id": "https://www.blueroom-example.pt/events/jazz"},
+      {"@type": "MusicEvent", "@id": "https://www.blueroom-example.pt/events/jazz#event",
+       "name": "Jazz Night", "startDate": "2026-11-20T19:00:00+00:00",
+       "location": {"@type": "Place", "name": "Blue Room",
+         "address": {"@type": "PostalAddress", "addressLocality": "Lisbon", "addressCountry": "PT"},
+         "geo": {"@type": "GeoCoordinates", "latitude": 38.7167, "longitude": -9.1333}},
+       "offers": {"@type": "Offer", "price": "25", "priceCurrency": "EUR", "url": "https://tickets.blueroom-example.pt/e/1"}}
+    ]
+  }]
+}
