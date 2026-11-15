@@ -1,0 +1,202 @@
+# Voyager Crawler on one VM (spec §6, §17.1, §17.5).
+#
+# Run only through the host scripts (deploy.sh, voyager-crawler.service), which
+# always pass:  -p voyager-crawler -f /opt/voyager-crawler/compose.yaml
+#               --env-file /var/lib/voyager-crawler/deploy/image.env
+# image.env holds VC_IMAGE=ghcr.io/rupakc/voyager-crawler@sha256:… (the last
+# cosign-verified digest) and VC_API_BIND (the reserved internal IP).
+#
+# Contract with the vcrawl image (Task 15 implements it):
+#   ENTRYPOINT ["vcrawl"]; the role is the command (`vcrawl fetcher`, …).
+#   `vcrawl health` exits 0 when the role in this container is healthy. It is
+#   progress-based: e.g. the fetcher fails it after 10 min without a
+#   completion while due work exists.
+#   Secrets arrive as files (/run/secrets/*), never as environment values.
+#   Labels: io.voyager-crawler.schema (highest migration the image ships) and
+#   io.voyager-crawler.min-schema (lowest schema it runs against).
+#
+# Networks:
+#   db        internal: Postgres and the roles that use it. No route out.
+#   render    internal: Chromium and its only peer, the fetcher (CDP). No route
+#             out, so every Chromium request is paused and fulfilled by the
+#             fetcher under the page's permit (§17.1).
+#   egress    the roles that call GCS, Vertex, the metadata server or (fetcher
+#             only, through vc-frontier permits) the web.
+#   pgbackup  Postgres alone: wal-g's route to gs://voyager-crawler-ops. No
+#             other container shares it, and no port is published on it.
+# Memory limits: §6 without egress (removed by §17.1): 7.06 GB of 8 GB.
+
+name: voyager-crawler
+
+x-role: &role
+  image: ${VC_IMAGE:?VC_IMAGE is set by deploy.sh}
+  restart: unless-stopped
+  init: true
+  read_only: true
+  user: "65532:65532"
+  cap_drop: [ALL]
+  security_opt: ["no-new-privileges:true"]
+  tmpfs: ["/tmp:size=64m"]
+  stop_grace_period: 30s
+  logging:
+    driver: json-file
+    options: { max-size: "20m", max-file: "5" }
+  secrets: [pg_password]
+  environment: &role-env
+    VC_DATABASE_URL: postgres://vcrawl@postgres:5432/vcrawl
+    VC_DATABASE_PASSWORD_FILE: /run/secrets/pg_password
+    VC_GCS_RAW_BUCKET: voyager-crawler-raw
+    VC_GCS_OPS_BUCKET: voyager-crawler-ops
+    VC_GCP_PROJECT: voyager-prod-ohzkl
+    VC_LOG_FORMAT: json
+    VC_LLM_ENABLED: ${VC_LLM_ENABLED:-false}
+  healthcheck:
+    test: ["CMD", "vcrawl", "health"]
+    interval: 60s
+    timeout: 10s
+    retries: 3
+    start_period: 120s
+  depends_on:
+    postgres: { condition: service_healthy }
+  networks: [db, egress]
+
+services:
+  postgres:
+    # Postgres 17 + pgvector, pinned by digest. wal-g is the host's pinned,
+    # checksum-verified binary (first-boot.sh), mounted read-only.
+    image: pgvector/pgvector:pg17@sha256:b513c48566e4777cd3370451400000c78eda6a08131d68f4c31d4a76f27bd8fd
+    restart: unless-stopped
+    shm_size: 256m
+    command: ["postgres", "-c", "config_file=/etc/postgresql/postgresql.conf"]
+    environment:
+      POSTGRES_USER: vcrawl
+      POSTGRES_DB: vcrawl
+      POSTGRES_PASSWORD_FILE: /run/secrets/pg_password_db
+      PGDATA: /var/lib/postgresql/data/pgdata
+    env_file: [/opt/voyager-crawler/postgres/walg.env]
+    secrets: [pg_password_db]
+    volumes:
+      - /var/lib/voyager-crawler/pgdata:/var/lib/postgresql/data
+      - /opt/voyager-crawler/postgres/postgresql.conf:/etc/postgresql/postgresql.conf:ro
+      - /opt/voyager-crawler/bin/wal-g:/usr/local/bin/wal-g:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U vcrawl -d vcrawl"]
+      interval: 10s
+      timeout: 5s
+      retries: 6
+      start_period: 60s
+    deploy:
+      resources: { limits: { memory: 3g } }
+    logging:
+      driver: json-file
+      options: { max-size: "20m", max-file: "5" }
+    networks: [db, pgbackup]
+
+  chromium:
+    # chromedp/headless-shell 158.0.8127.18, pinned by digest. Chrome's own
+    # sandbox stays on (no --no-sandbox): Chrome's seccomp profile allows the
+    # user-namespace calls it needs; non-root, read-only root filesystem.
+    image: chromedp/headless-shell:158.0.8127.18@sha256:830fa77e0602cb42e5cb2cbd9237ba27b649ad69d5fb82b54713aac8b7ab4f29
+    restart: unless-stopped
+    init: true
+    user: "1000:1000"
+    read_only: true
+    cap_drop: [ALL]
+    security_opt: ["seccomp=/opt/voyager-crawler/chromium/seccomp.json", "no-new-privileges:true"]
+    tmpfs: ["/tmp:size=512m", "/home/chromium:size=64m,uid=1000,gid=1000"]
+    shm_size: 512m
+    environment: { HOME: /home/chromium }
+    entrypoint: ["/headless-shell/headless-shell"]
+    command:
+      - --headless
+      - --remote-debugging-address=0.0.0.0
+      - --remote-debugging-port=9222
+      - --disable-gpu
+      - --disable-dev-shm-usage
+      - --disable-background-networking
+      - --disable-component-update
+      - --disable-sync
+      - --no-first-run
+      - --user-data-dir=/tmp/profile
+    # No health check of its own: a broken Chromium fails the fetcher's
+    # progress health (renders stop completing), and the watchdog restarts it
+    deploy:
+      resources: { limits: { memory: 1536m } }
+    logging:
+      driver: json-file
+      options: { max-size: "5m", max-file: "2" }
+    networks: [render]
+
+  scheduler:
+    <<: *role
+    command: ["scheduler"]
+    deploy: { resources: { limits: { memory: 256m } } }
+
+  maintenance:
+    <<: *role
+    command: ["maintenance"]
+    deploy: { resources: { limits: { memory: 256m } } }
+
+  fetcher:
+    <<: *role
+    command: ["fetcher"]
+    environment:
+      <<: *role-env
+      VC_RENDER_CDP_URL: http://chromium:9222
+      VC_SPOOL_DIR: /spool
+    volumes:
+      - /var/lib/voyager-crawler/spool:/spool
+    depends_on:
+      postgres: { condition: service_healthy }
+      chromium: { condition: service_started }
+    deploy: { resources: { limits: { memory: 512m } } }
+    networks: [db, egress, render]
+
+  processor:
+    <<: *role
+    command: ["processor"]
+    deploy: { resources: { limits: { memory: 768m } } }
+
+  embedder:
+    <<: *role
+    command: ["embedder"]
+    deploy: { resources: { limits: { memory: 256m } } }
+
+  api:
+    <<: *role
+    command: ["api"]
+    secrets: [pg_password, api_token_voyager, api_tls_key, api_tls_cert]
+    environment:
+      <<: *role-env
+      VC_API_LISTEN: 0.0.0.0:8443
+      VC_API_TOKEN_FILE: /run/secrets/api_token_voyager
+      VC_API_TLS_KEY_FILE: /run/secrets/api_tls_key
+      VC_API_TLS_CERT_FILE: /run/secrets/api_tls_cert
+    # Published on the reserved internal IP only; the firewall admits
+    # tcp:8443 from the app VM's service account alone
+    ports: ["${VC_API_BIND:?VC_API_BIND is set by first-boot.sh}:8443:8443"]
+    deploy: { resources: { limits: { memory: 512m } } }
+
+  # One-shot, run by deploy.sh before any role rolls (expand-only, §17.6)
+  migrate:
+    <<: *role
+    command: ["migrate"]
+    restart: "no"
+    healthcheck: { disable: true }
+    profiles: [tools]
+    deploy: { resources: { limits: { memory: 256m } } }
+
+secrets:
+  # Written by deploy.sh from Secret Manager into tmpfs (/run), mode 0400,
+  # owned by the reading uid: 999 (postgres) for *_db, 65532 for the roles
+  pg_password_db: { file: /run/voyager-crawler/secrets/pg_password_db }
+  pg_password: { file: /run/voyager-crawler/secrets/pg_password }
+  api_token_voyager: { file: /run/voyager-crawler/secrets/api_token_voyager }
+  api_tls_key: { file: /run/voyager-crawler/secrets/api_tls_key }
+  api_tls_cert: { file: /run/voyager-crawler/secrets/api_tls_cert }
+
+networks:
+  db: { internal: true }
+  render: { internal: true }
+  egress: {}
+  pgbackup: {}

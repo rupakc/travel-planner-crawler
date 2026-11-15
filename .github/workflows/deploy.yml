@@ -1,0 +1,130 @@
+name: Deploy
+
+# After CI passes on a push to main: build ghcr.io/rupakc/voyager-crawler
+# (tag sha-<commit>), Trivy-scan it, then sign it with cosign keyless and move
+# `prod` to it. The VM's deploy.sh (every 2 min) cosign-verifies `prod`
+# against this workflow's identity on main, pulls by digest, migrates and
+# rolls (spec §8). No GCP credentials here: the VM pulls.
+#
+# The build is skipped (nothing to promote) until the repository has a
+# root Dockerfile (Task 15).
+
+on:
+  workflow_run:
+    workflows: [CI]
+    types: [completed]
+    branches: [main]
+  workflow_dispatch:
+
+concurrency:
+  group: deploy-main
+  cancel-in-progress: false
+
+permissions: {}
+
+env:
+  IMAGE: ghcr.io/rupakc/voyager-crawler
+
+jobs:
+  build:
+    # Only a green CI run of a push to main (or a manual run on main)
+    if: >-
+      github.ref == 'refs/heads/main' &&
+      (github.event_name == 'workflow_dispatch' ||
+       (github.event.workflow_run.conclusion == 'success' &&
+        github.event.workflow_run.event == 'push' &&
+        github.event.workflow_run.head_branch == 'main'))
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    permissions:
+      contents: read
+      packages: write # push the sha-* tag (nothing is signed here: no id-token)
+    outputs:
+      digest: ${{ steps.image.outputs.digest }}
+      sha: ${{ steps.src.outputs.sha }}
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
+        with:
+          ref: ${{ github.event.workflow_run.head_sha || github.sha }}
+          persist-credentials: false
+
+      - name: Source commit, schema labels, Dockerfile present?
+        id: src
+        env:
+          HAS_DOCKERFILE: ${{ hashFiles('Dockerfile') != '' }}
+        run: |
+          set -euo pipefail
+          echo "sha=$(git rev-parse HEAD)" >>"$GITHUB_OUTPUT"
+          echo "build=$HAS_DOCKERFILE" >>"$GITHUB_OUTPUT"
+          # io.voyager-crawler.schema = the highest expand migration shipped;
+          # an image needs at least that schema (deploy.sh --rollback checks it)
+          schema="$(find migrations -maxdepth 1 -name '[0-9]*.sql' 2>/dev/null |
+            sed -E 's|.*/0*([0-9]+)[^/]*$|\1|' | sort -n | tail -n1)"
+          echo "schema=${schema:-0}" >>"$GITHUB_OUTPUT"
+          if [[ "$HAS_DOCKERFILE" != true ]]; then
+            echo "::notice::no Dockerfile at the repository root yet: nothing to build or promote"
+          fi
+
+      - uses: docker/setup-buildx-action@8d2750c68a42422c14e847fe6c8ac0403b4cbd6f # v3.12.0
+        if: steps.src.outputs.build == 'true'
+      - uses: docker/login-action@c94ce9fb468520275223c153574b00df6fe4bcc9 # v3.7.0
+        if: steps.src.outputs.build == 'true'
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build and push (sha tag only)
+        id: image
+        if: steps.src.outputs.build == 'true'
+        uses: docker/build-push-action@10e90e3645eae34f1e60eeb005ba3a3d33f178e8 # v6.19.2
+        with:
+          context: .
+          file: Dockerfile
+          platforms: linux/amd64
+          push: true
+          provenance: false
+          tags: ${{ env.IMAGE }}:sha-${{ steps.src.outputs.sha }}
+          labels: |
+            org.opencontainers.image.source=https://github.com/${{ github.repository }}
+            org.opencontainers.image.revision=${{ steps.src.outputs.sha }}
+            io.voyager-crawler.build=${{ github.run_number }}
+            io.voyager-crawler.schema=${{ steps.src.outputs.schema }}
+            io.voyager-crawler.min-schema=${{ steps.src.outputs.schema }}
+          cache-from: type=gha,scope=crawler
+          cache-to: type=gha,mode=max,scope=crawler
+
+      - name: Trivy scan (unfixed ignored; a fixed CRITICAL fails)
+        if: steps.src.outputs.build == 'true'
+        run: bash deploy/ci/trivy-scan.sh "$IMAGE@${{ steps.image.outputs.digest }}"
+
+  promote:
+    needs: build
+    if: needs.build.outputs.digest != ''
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: read # checkout (deploy/ci/promote-image.sh)
+      packages: write # signatures live in GHCR; move the prod tag
+      id-token: write # cosign keyless: GitHub OIDC → Sigstore certificate
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
+        with:
+          ref: ${{ needs.build.outputs.sha }}
+          persist-credentials: false
+      - uses: docker/login-action@c94ce9fb468520275223c153574b00df6fe4bcc9 # v3.7.0
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - uses: sigstore/cosign-installer@7e8b541eb2e61bf99390e1afd4be13a184e9ebc5 # v3.10.1
+        with:
+          cosign-release: v2.4.1 # the same version the VM verifies with
+      - name: HEAD check → sign → verify as the VM will → move prod
+        env:
+          DIGEST: ${{ needs.build.outputs.digest }}
+          REPO: ${{ github.repository }}
+          SHA: ${{ needs.build.outputs.sha }}
+          CERT_IDENTITY: https://github.com/${{ github.repository }}/.github/workflows/deploy.yml@refs/heads/main
+          CERT_ISSUER: https://token.actions.githubusercontent.com
+        run: bash deploy/ci/promote-image.sh

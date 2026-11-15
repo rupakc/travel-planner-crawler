@@ -1,0 +1,11 @@
+[Unit]
+Description=Voyager Crawler weekly light restore drill (spec §17.9; reports restore_drill_ok)
+Requires=docker.service
+After=docker.service voyager-crawler.service
+RequiresMountsFor=/var/lib/voyager-crawler
+ConditionPathExists=/var/lib/voyager-crawler/deploy/image.env
+
+[Service]
+Type=oneshot
+ExecStart=/opt/voyager-crawler/host/vc-compose.sh run --rm maintenance maintenance restore-drill --light
+TimeoutStartSec=2h

@@ -1,0 +1,11 @@
+[Unit]
+Description=Voyager Crawler deployer, every 2 minutes
+
+[Timer]
+OnBootSec=3min
+# A run with nothing new is one registry lookup (no pull, no cosign)
+OnUnitActiveSec=2min
+RandomizedDelaySec=10s
+
+[Install]
+WantedBy=timers.target

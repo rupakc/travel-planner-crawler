@@ -1,0 +1,29 @@
+#!/usr/bin/env bash
+# Fake gcloud for infrastructure/tests: records every call in $CALLS.
+#   FAKE_EXIST=1  every resource already exists (describe/list find it)
+#   FAKE_EXIST=0  nothing exists until this run creates it
+# Created resources are remembered in $FAKE_STATE, so a list after a create
+# finds the new resource (e.g. the notification channel).
+echo "gcloud $*" >>"$CALLS"
+args=" $* "
+mkdir -p "$FAKE_STATE"
+exist() { [[ "${FAKE_EXIST:-0}" == 1 ]]; }
+
+case "$args" in
+  *" components list "*) echo core; echo beta; exit 0 ;;
+  *" monitoring channels create "*) touch "$FAKE_STATE/channel"; exit 0 ;;
+  *" monitoring channels list "*)
+    if exist || [[ -f "$FAKE_STATE/channel" ]]; then echo "projects/voyager-prod-ohzkl/notificationChannels/42"; fi
+    exit 0 ;;
+  *" monitoring policies list "*) exist && echo "projects/voyager-prod-ohzkl/alertPolicies/7"; exit 0 ;;
+  *" billing budgets list "*) exist && echo "billingAccounts/010A0B-F39593-14A899/budgets/b1"; exit 0 ;;
+  *" secrets versions list "*) exist && echo "projects/1/secrets/x/versions/1"; exit 0 ;;
+  *" projects describe "*) echo 123456789; exit 0 ;;
+  *" addresses describe crawler-internal-ip "*"value(address)"*) echo 10.142.0.50; exit 0 ;;
+  *" addresses describe crawler-external-ip "*"value(address)"*) echo 34.0.0.7; exit 0 ;;
+  *" disks describe "*"value(resourcePolicies)"*)
+    exist && echo "https://www.googleapis.com/compute/v1/projects/voyager-prod-ohzkl/regions/us-east1/resourcePolicies/crawler-data-daily"
+    exit 0 ;;
+  *" describe "*) exist && exit 0; exit 1 ;;
+esac
+exit 0

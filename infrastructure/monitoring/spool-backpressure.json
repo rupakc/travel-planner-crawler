@@ -1,0 +1,39 @@
+{
+  "displayName": "voyager-crawler: spool backpressure",
+  "combiner": "OR",
+  "enabled": true,
+  "userLabels": {
+    "app": "voyager-crawler"
+  },
+  "documentation": {
+    "content": "Fetchers paused: the spool is over 2 GB or segment uploads have failed for more than 15 min (\u00a75.5). Check GCS access and `/var/lib/voyager-crawler/spool`.",
+    "mimeType": "text/markdown"
+  },
+  "conditions": [
+    {
+      "displayName": "fetchers paused by backpressure",
+      "conditionThreshold": {
+        "filter": "metric.type=\"custom.googleapis.com/crawler/backpressure\" AND resource.type=\"gce_instance\"",
+        "comparison": "COMPARISON_GT",
+        "thresholdValue": 0,
+        "duration": "300s",
+        "aggregations": [
+          {
+            "alignmentPeriod": "300s",
+            "perSeriesAligner": "ALIGN_MAX"
+          }
+        ],
+        "trigger": {
+          "count": 1
+        }
+      }
+    }
+  ],
+  "notificationChannels": [
+    "__CHANNEL__"
+  ],
+  "alertStrategy": {
+    "autoClose": "86400s"
+  },
+  "severity": "ERROR"
+}
