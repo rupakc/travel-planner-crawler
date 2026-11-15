@@ -64,7 +64,9 @@ fn hours_ms(h: u64) -> i64 {
 
 /// The per-request delay: `max(Crawl-delay, min delay, factor × EWMA, penalty)`, capped.
 pub fn delay_ms(cfg: &FrontierConfig, row: &KeyRow) -> i64 {
-    let floor = row.min_delay_ms.max(ms(Duration::from_secs(cfg.min_delay_s)));
+    let floor = row
+        .min_delay_ms
+        .max(ms(Duration::from_secs(cfg.min_delay_s)));
     let latency = row
         .ewma_latency_ms
         .map(|e| (e as f64 * cfg.latency_factor).round() as i64)
@@ -98,7 +100,9 @@ pub fn park_for(cfg: &FrontierConfig, level: i64, reason: &ParkReason) -> Park {
     }
     let max = Duration::from_secs(cfg.park_max_days.saturating_mul(86_400));
     let shift = u32::try_from(level.clamp(0, 32)).unwrap_or(32);
-    let hours = cfg.park_initial_h.saturating_mul(1u64.checked_shl(shift).unwrap_or(u64::MAX));
+    let hours = cfg
+        .park_initial_h
+        .saturating_mul(1u64.checked_shl(shift).unwrap_or(u64::MAX));
     let duration = Duration::from_secs(hours.saturating_mul(3600)).min(max);
     Park {
         duration,

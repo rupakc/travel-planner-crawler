@@ -16,9 +16,7 @@ use vc_core::frontier::{
 };
 use vc_core::media::{FetchMode, MediaType};
 use vc_core::policy::{RobotsEntry, RobotsStatus};
-use vc_core::{
-    CanonicalUrl, Error, LeaseLostReason, OriginKey, PolitenessKey, SourceId, UrlKey,
-};
+use vc_core::{CanonicalUrl, Error, LeaseLostReason, OriginKey, PolitenessKey, SourceId, UrlKey};
 use vc_frontier::PgFrontier;
 
 // ---------------------------------------------------------------------------------------------
@@ -120,7 +118,7 @@ async fn two_claimers_never_share_a_key() {
     let fa = Arc::new(PgFrontier::new(pool_a.clone(), cfg()));
     let fb = Arc::new(PgFrontier::new(pool_b, cfg()));
     for i in 0..8 {
-        seed(&fa, &format!("site{i}.example.com"), 3).await;
+        seed(&fa, &format!("www.site{i}.org"), 3).await;
     }
 
     let held: Arc<Mutex<HashMap<PolitenessKey, usize>>> = Arc::default();
@@ -169,7 +167,11 @@ async fn two_claimers_never_share_a_key() {
     for t in tasks {
         t.await.expect("task");
     }
-    assert!(violations.lock().unwrap().is_empty(), "{:?}", violations.lock().unwrap());
+    assert!(
+        violations.lock().unwrap().is_empty(),
+        "{:?}",
+        violations.lock().unwrap()
+    );
     let e = epochs.lock().unwrap();
     assert_eq!(e.len(), 1000);
     let uniq: HashSet<i64> = e.iter().copied().collect();
@@ -184,15 +186,28 @@ async fn racing_claimers_take_each_key_once() {
     let fa = Arc::new(PgFrontier::new(pool.clone(), cfg()));
     let fb = Arc::new(PgFrontier::new(pool_b, cfg()));
     for i in 0..40 {
-        seed(&fa, &format!("k{i}.example.org"), 2).await;
+        seed(&fa, &format!("www.k{i}.org"), 2).await;
     }
+    // A claimer may see `None` while the remaining keys are row-locked by others (SKIP LOCKED),
+    // so every task keeps trying until all keys are taken or a time limit passes.
+    let taken = Arc::new(std::sync::atomic::AtomicUsize::new(0));
+    let start = Instant::now();
     let mut tasks = Vec::new();
     for t in 0..8 {
         let f = if t % 2 == 0 { fa.clone() } else { fb.clone() };
+        let taken = taken.clone();
         tasks.push(tokio::spawn(async move {
             let mut mine = Vec::new();
-            while let Some(c) = f.claim(&[0], 5).await.expect("claim") {
-                mine.push(c);
+            while taken.load(std::sync::atomic::Ordering::SeqCst) < 40
+                && start.elapsed() < Duration::from_secs(30)
+            {
+                match f.claim(&[0], 5).await.expect("claim") {
+                    Some(c) => {
+                        taken.fetch_add(1, std::sync::atomic::Ordering::SeqCst);
+                        mine.push(c);
+                    }
+                    None => tokio::task::yield_now().await,
+                }
             }
             mine
         }));
@@ -206,6 +221,10 @@ async fn racing_claimers_take_each_key_once() {
     assert_eq!(keys.len(), 40);
     let uniq: HashSet<_> = keys.into_iter().collect();
     assert_eq!(uniq.len(), 40);
+    assert!(
+        fa.claim(&[0], 5).await.unwrap().is_none(),
+        "every key is held"
+    );
 }
 
 #[tokio::test]
@@ -221,16 +240,32 @@ async fn stale_epoch_completion_rejected() {
     let e = f.check(&old.permit).await.unwrap_err();
     assert_eq!(e.reason, LeaseLostReason::Superseded);
     assert!(f.take_rate_token(&old.permit).await.is_err());
-    assert!(f.extend(&old.permit, Duration::from_secs(60)).await.is_err());
-    assert!(f.mark_fetched(&old.permit, &urls[0], Utc::now()).await.is_err());
-    let e = f.complete(old.permit, not_attempted(&urls)).await.unwrap_err();
+    assert!(
+        f.extend(&old.permit, Duration::from_secs(60))
+            .await
+            .is_err()
+    );
+    assert!(
+        f.mark_fetched(&old.permit, &urls[0], Utc::now())
+            .await
+            .is_err()
+    );
+    let e = f
+        .complete(old.permit, not_attempted(&urls))
+        .await
+        .unwrap_err();
     assert_eq!(e.reason, LeaseLostReason::Superseded);
 
     // The stale completion changed nothing: the URLs are still leased by the new epoch.
     for u in &urls {
-        assert_eq!(state_of(&pool, u).await, ("leased".into(), Some(new.permit.epoch().0)));
+        assert_eq!(
+            state_of(&pool, u).await,
+            ("leased".into(), Some(new.permit.epoch().0))
+        );
     }
-    f.complete(new.permit, not_attempted(&urls)).await.expect("current completes");
+    f.complete(new.permit, not_attempted(&urls))
+        .await
+        .expect("current completes");
     for u in &urls {
         assert_eq!(state_of(&pool, u).await, ("due".into(), None));
     }
@@ -248,11 +283,18 @@ async fn lease_expiry_returns_leased_urls_to_due() {
     expire(&pool, "example.com").await;
     let e = f.check(&first.permit).await.unwrap_err();
     assert_eq!(e.reason, LeaseLostReason::Expired);
-    let second = f.claim(&[0], 5).await.unwrap().expect("re-claim after expiry");
+    let second = f
+        .claim(&[0], 5)
+        .await
+        .unwrap()
+        .expect("re-claim after expiry");
     let got: HashSet<UrlKey> = second.urls.iter().map(|u| u.url_key).collect();
     assert_eq!(got, urls.iter().copied().collect());
     for u in &urls {
-        assert_eq!(state_of(&pool, u).await, ("leased".into(), Some(second.permit.epoch().0)));
+        assert_eq!(
+            state_of(&pool, u).await,
+            ("leased".into(), Some(second.permit.epoch().0))
+        );
     }
 }
 
@@ -264,10 +306,17 @@ async fn fetched_pending_never_released() {
     let first = f.claim(&[0], 5).await.unwrap().expect("claim");
     let e1 = first.permit.epoch().0;
     let next = Utc::now() + chrono::Duration::days(1);
-    f.mark_fetched(&first.permit, &urls[0], next).await.expect("mark");
+    f.mark_fetched(&first.permit, &urls[0], next)
+        .await
+        .expect("mark");
     // Idempotent for the same epoch.
-    f.mark_fetched(&first.permit, &urls[0], next).await.expect("mark again");
-    assert_eq!(state_of(&pool, &urls[0]).await, ("fetched_pending".into(), Some(e1)));
+    f.mark_fetched(&first.permit, &urls[0], next)
+        .await
+        .expect("mark again");
+    assert_eq!(
+        state_of(&pool, &urls[0]).await,
+        ("fetched_pending".into(), Some(e1))
+    );
 
     // The holder dies; the next claim gets only the other URL.
     expire(&pool, "example.com").await;
@@ -275,13 +324,20 @@ async fn fetched_pending_never_released() {
     let got: Vec<UrlKey> = second.urls.iter().map(|u| u.url_key).collect();
     assert_eq!(got, vec![urls[1]]);
     // Completing the new claim (even naming the pending URL) never releases it.
-    f.complete(second.permit, not_attempted(&urls)).await.unwrap();
-    assert_eq!(state_of(&pool, &urls[0]).await, ("fetched_pending".into(), Some(e1)));
+    f.complete(second.permit, not_attempted(&urls))
+        .await
+        .unwrap();
+    assert_eq!(
+        state_of(&pool, &urls[0]).await,
+        ("fetched_pending".into(), Some(e1))
+    );
     // Nor does a later claim, once the key is ready.
     make_ready(&pool, "example.com").await;
     let third = f.claim(&[0], 5).await.unwrap().expect("claim");
     assert!(third.urls.iter().all(|u| u.url_key != urls[0]));
-    f.complete(third.permit, KeyOutcome::normal()).await.unwrap();
+    f.complete(third.permit, KeyOutcome::normal())
+        .await
+        .unwrap();
 
     // Only the segment commit (spool replay, same epoch) returns it to due.
     let manifest = serde_json::json!({
@@ -350,7 +406,10 @@ async fn rate_token_global_across_pools() {
         total += t.await.unwrap();
     }
     let rate = f64::from(total) / window.as_secs_f64();
-    assert!((3.6..=4.4).contains(&rate), "rate {rate}/s ({total} tokens)");
+    assert!(
+        (3.6..=4.4).contains(&rate),
+        "rate {rate}/s ({total} tokens)"
+    );
     // Every token was counted against the keys' daily budgets.
     let (used,): (i64,) = sqlx::query_as("SELECT sum(used_today)::bigint FROM politeness_keys")
         .fetch_one(&pool)
@@ -380,7 +439,9 @@ async fn park_ladder_doubles_to_30d() {
     assert_eq!(got, vec![24, 48, 96, 192, 384, 720, 720]);
 
     // A park while already parked does not climb the ladder twice.
-    f.park(&k, ParkReason::Unauthorized { status: 403 }).await.unwrap();
+    f.park(&k, ParkReason::Unauthorized { status: 403 })
+        .await
+        .unwrap();
     f.park(&k, ParkReason::Challenge).await.unwrap();
     let s = secs_until(&pool, sql, "example.com").await;
     assert_eq!((s / 3600.0).round() as i64, 720);
@@ -505,7 +566,13 @@ async fn concurrent_enqueue_inserts_once() {
         tasks.push(tokio::spawn(async move {
             // Overlapping, differently ordered batches over several keys.
             let mut b: Vec<NewUrl> = (0..600)
-                .map(|i| NewUrl::new(url(&format!("https://h{}.race{}.example/{i}", i % 3, i % 5))))
+                .map(|i| {
+                    NewUrl::new(url(&format!(
+                        "https://h{}.race{}.example/{i}",
+                        i % 3,
+                        i % 5
+                    )))
+                })
                 .collect();
             if t % 3 == 1 {
                 b.reverse();
@@ -554,7 +621,11 @@ async fn claim_leases_by_priority_and_reports_fields() {
     // Wrong shard: nothing.
     assert!(f.claim(&[3], 5).await.unwrap().is_none());
 
-    let c = f.claim(&[], 2).await.unwrap().expect("claim (config shards)");
+    let c = f
+        .claim(&[], 2)
+        .await
+        .unwrap()
+        .expect("claim (config shards)");
     let prios: Vec<f32> = c.urls.iter().map(|u| u.priority).collect();
     assert_eq!(prios, vec![0.9, 0.7]);
     let u = &c.urls[0];
@@ -564,7 +635,10 @@ async fn claim_leases_by_priority_and_reports_fields() {
     assert_eq!(u.fetch_mode, FetchMode::Adapter("nager".into()));
     assert!(u.validators.is_empty());
     assert!(u.last_capture.is_none());
-    assert_eq!(c.robots_due, vec![OriginKey("https://prio.example.com".into())]);
+    assert_eq!(
+        c.robots_due,
+        vec![OriginKey("https://prio.example.com".into())]
+    );
     let remaining = c.permit.remaining(Utc::now());
     assert!(remaining > Duration::from_secs(470) && remaining <= Duration::from_secs(480));
     assert_eq!(c.permit.scope().key, key("example.com"));
@@ -595,7 +669,10 @@ async fn extend_moves_deadline_and_holds_off_next_claim() {
         .execute(&pool)
         .await
         .unwrap();
-    let e = f.extend(&c.permit, Duration::from_secs(60)).await.unwrap_err();
+    let e = f
+        .extend(&c.permit, Duration::from_secs(60))
+        .await
+        .unwrap_err();
     assert_eq!(e.reason, LeaseLostReason::Expired);
     let e = f.take_rate_token(&c.permit).await.unwrap_err();
     assert_eq!(e.reason, LeaseLostReason::Expired);
@@ -648,10 +725,22 @@ async fn url_results_are_applied() {
     f.mark_fetched(&c.permit, &urls[0], retry_at).await.unwrap();
     let outcome = KeyOutcome {
         urls: vec![
-            UrlOutcome { url_key: urls[0], result: UrlResult::Fetched },
-            UrlOutcome { url_key: urls[1], result: UrlResult::Retry { at: retry_at } },
-            UrlOutcome { url_key: urls[2], result: UrlResult::Gone },
-            UrlOutcome { url_key: urls[3], result: UrlResult::Disallowed },
+            UrlOutcome {
+                url_key: urls[0],
+                result: UrlResult::Fetched,
+            },
+            UrlOutcome {
+                url_key: urls[1],
+                result: UrlResult::Retry { at: retry_at },
+            },
+            UrlOutcome {
+                url_key: urls[2],
+                result: UrlResult::Gone,
+            },
+            UrlOutcome {
+                url_key: urls[3],
+                result: UrlResult::Disallowed,
+            },
             UrlOutcome {
                 url_key: urls[4],
                 result: UrlResult::Failed {
@@ -685,7 +774,10 @@ async fn url_results_are_applied() {
     let c = f.claim(&[0], 5).await.unwrap().expect("claim");
     assert!(c.urls.iter().any(|u| u.url_key == urls[2]));
     let outcome = KeyOutcome {
-        urls: vec![UrlOutcome { url_key: urls[2], result: UrlResult::Gone }],
+        urls: vec![UrlOutcome {
+            url_key: urls[2],
+            result: UrlResult::Gone,
+        }],
         ..KeyOutcome::normal()
     };
     f.complete(c.permit, outcome).await.unwrap();
@@ -701,7 +793,9 @@ async fn rate_limited_backs_off() {
 
     let c = f.claim(&[0], 5).await.unwrap().unwrap();
     let o = KeyOutcome {
-        signal: KeySignal::RateLimited { retry_after: Some(Duration::from_secs(120)) },
+        signal: KeySignal::RateLimited {
+            retry_after: Some(Duration::from_secs(120)),
+        },
         ..KeyOutcome::normal()
     };
     f.complete(c.permit, o).await.unwrap();
@@ -723,7 +817,9 @@ async fn rate_limited_backs_off() {
     make_ready(&pool, "example.com").await;
     let c = f.claim(&[0], 5).await.unwrap().unwrap();
     let o = KeyOutcome {
-        signal: KeySignal::RateLimited { retry_after: Some(Duration::from_secs(10 * 86_400)) },
+        signal: KeySignal::RateLimited {
+            retry_after: Some(Duration::from_secs(10 * 86_400)),
+        },
         ..KeyOutcome::normal()
     };
     f.complete(c.permit, o).await.unwrap();
@@ -763,7 +859,10 @@ async fn server_errors_park_one_hour_after_threshold() {
     .await;
     assert!((3590.0..=3610.0).contains(&s), "parked 1h: {s}");
     make_ready(&pool, "example.com").await;
-    assert!(f.claim(&[0], 5).await.unwrap().is_none(), "parked keys are not claimed");
+    assert!(
+        f.claim(&[0], 5).await.unwrap().is_none(),
+        "parked keys are not claimed"
+    );
 }
 
 #[tokio::test]
@@ -802,7 +901,9 @@ async fn park_signal_and_park_revoke_live_lease() {
     assert!(f.claim(&[0], 5).await.unwrap().is_none());
 
     // Parking an unknown key creates it parked.
-    f.park(&key("new.example"), ParkReason::RobotsBlocked).await.unwrap();
+    f.park(&key("new.example"), ParkReason::RobotsBlocked)
+        .await
+        .unwrap();
     let (n,): (i64,) = sqlx::query_as(
         "SELECT count(*) FROM politeness_keys WHERE key = 'new.example' AND parked_until > now()",
     )
@@ -828,7 +929,10 @@ async fn robots_roundtrip_is_lease_checked() {
         status: RobotsStatus::Ok,
         http_status: Some(200),
         body: Some(b"User-agent: *\nDisallow: /x\n".to_vec().into()),
-        last_good: Some((b"User-agent: *\n".to_vec().into(), now - chrono::Duration::days(1))),
+        last_good: Some((
+            b"User-agent: *\n".to_vec().into(),
+            now - chrono::Duration::days(1),
+        )),
         fetched_at: now,
         expires_at: now + chrono::Duration::hours(24),
     };
@@ -837,7 +941,10 @@ async fn robots_roundtrip_is_lease_checked() {
     assert_eq!(got.status, RobotsStatus::Ok);
     assert_eq!(got.http_status, Some(200));
     assert_eq!(got.body, entry.body);
-    assert_eq!(got.last_good.as_ref().map(|x| x.0.clone()), entry.last_good.as_ref().map(|x| x.0.clone()));
+    assert_eq!(
+        got.last_good.as_ref().map(|x| x.0.clone()),
+        entry.last_good.as_ref().map(|x| x.0.clone())
+    );
     assert_eq!(got.fetched_at.timestamp_micros(), now.timestamp_micros());
 
     // Other statuses round-trip too.
@@ -847,7 +954,12 @@ async fn robots_roundtrip_is_lease_checked() {
         RobotsStatus::Challenge,
         RobotsStatus::Unavailable,
     ] {
-        let e = RobotsEntry { status: st, body: None, last_good: None, ..entry.clone() };
+        let e = RobotsEntry {
+            status: st,
+            body: None,
+            last_good: None,
+            ..entry.clone()
+        };
         f.store_robots(&c.permit, e).await.unwrap();
         assert_eq!(f.robots(&origin).await.unwrap().unwrap().status, st);
     }
@@ -857,8 +969,14 @@ async fn robots_roundtrip_is_lease_checked() {
         origin: OriginKey("https://evil.example.org".into()),
         ..entry.clone()
     };
-    assert!(matches!(f.store_robots(&c.permit, foreign).await, Err(Error::Policy(_))));
-    let bad = RobotsEntry { origin: OriginKey("not a url".into()), ..entry.clone() };
+    assert!(matches!(
+        f.store_robots(&c.permit, foreign).await,
+        Err(Error::Policy(_))
+    ));
+    let bad = RobotsEntry {
+        origin: OriginKey("not a url".into()),
+        ..entry.clone()
+    };
     assert!(f.store_robots(&c.permit, bad).await.is_err());
 
     // Fresh robots: the next claim does not ask for it again.
@@ -885,13 +1003,20 @@ async fn take_rate_token_waits_for_refill() {
     seed(&f, "wait.example.com", 1).await;
     let c = f.claim(&[0], 5).await.unwrap().unwrap();
     // The bucket row is recreated if missing.
-    sqlx::query("DELETE FROM rate_bucket").execute(&pool).await.unwrap();
+    sqlx::query("DELETE FROM rate_bucket")
+        .execute(&pool)
+        .await
+        .unwrap();
     let t = Instant::now();
     for _ in 0..6 {
         f.take_rate_token(&c.permit).await.unwrap();
     }
     // Starting from an empty recreated bucket, 6 tokens at 4/s need ≥ ~1.5 s.
-    assert!(t.elapsed() >= Duration::from_millis(1400), "{:?}", t.elapsed());
+    assert!(
+        t.elapsed() >= Duration::from_millis(1400),
+        "{:?}",
+        t.elapsed()
+    );
 }
 
 #[tokio::test]
@@ -901,7 +1026,10 @@ async fn estimate_next_fetch_uses_change_history() {
     let urls = seed(&f, "est.example.com", 2).await;
     let bounds = (Duration::from_secs(3600), Duration::from_secs(30 * 86_400));
     // No history: the lower bound.
-    let at = f.estimate_next_fetch(&urls[0], bounds.0, bounds.1).await.unwrap();
+    let at = f
+        .estimate_next_fetch(&urls[0], bounds.0, bounds.1)
+        .await
+        .unwrap();
     let secs = (at - Utc::now()).num_seconds();
     assert!((3590..=3600).contains(&secs), "{secs}");
     // Never changed in 20 fetches: back off towards the upper bound.
@@ -909,14 +1037,20 @@ async fn estimate_next_fetch_uses_change_history() {
         .execute(&pool)
         .await
         .unwrap();
-    let at = f.estimate_next_fetch(&urls[0], bounds.0, bounds.1).await.unwrap();
+    let at = f
+        .estimate_next_fetch(&urls[0], bounds.0, bounds.1)
+        .await
+        .unwrap();
     assert!((at - Utc::now()).num_seconds() > 86_400);
     // Changed every time: the lower bound.
     sqlx::query("UPDATE url_state SET fetch_count = 20, change_count = 19, est_interval_s = 7200")
         .execute(&pool)
         .await
         .unwrap();
-    let at = f.estimate_next_fetch(&urls[1], bounds.0, bounds.1).await.unwrap();
+    let at = f
+        .estimate_next_fetch(&urls[1], bounds.0, bounds.1)
+        .await
+        .unwrap();
     assert!((at - Utc::now()).num_seconds() <= 3600);
     let missing = UrlKey::of("https://nowhere.example/");
     assert!(matches!(
@@ -934,12 +1068,31 @@ async fn database_failure_fails_closed() {
     pool.close().await;
     let e = f.check(&c.permit).await.unwrap_err();
     assert_eq!(e.reason, LeaseLostReason::Unverifiable);
-    assert_eq!(f.take_rate_token(&c.permit).await.unwrap_err().reason, LeaseLostReason::Unverifiable);
+    assert_eq!(
+        f.take_rate_token(&c.permit).await.unwrap_err().reason,
+        LeaseLostReason::Unverifiable
+    );
     assert!(f.extend(&c.permit, Duration::from_secs(1)).await.is_err());
-    assert!(f.mark_fetched(&c.permit, &UrlKey::of("x"), Utc::now()).await.is_err());
+    assert!(
+        f.mark_fetched(&c.permit, &UrlKey::of("x"), Utc::now())
+            .await
+            .is_err()
+    );
     assert!(matches!(f.claim(&[0], 5).await, Err(Error::Db(_))));
-    assert!(f.enqueue(&[NewUrl::new(url("https://a.example/"))]).await.is_err());
-    assert!(f.park(&key("example.com"), ParkReason::Challenge).await.is_err());
-    assert!(f.robots(&OriginKey("https://a.example".into())).await.is_err());
+    assert!(
+        f.enqueue(&[NewUrl::new(url("https://a.example/"))])
+            .await
+            .is_err()
+    );
+    assert!(
+        f.park(&key("example.com"), ParkReason::Challenge)
+            .await
+            .is_err()
+    );
+    assert!(
+        f.robots(&OriginKey("https://a.example".into()))
+            .await
+            .is_err()
+    );
     assert!(f.complete(c.permit, KeyOutcome::normal()).await.is_err());
 }
