@@ -46,10 +46,8 @@ impl Buf {
 #[test]
 fn log_fields_allowlisted_no_body() {
     let buf = Buf::default();
-    let subscriber = tracing_subscriber::registry().with(vc_obs::logging::json_layer(
-        "fetcher",
-        buf.clone(),
-    ));
+    let subscriber =
+        tracing_subscriber::registry().with(vc_obs::logging::json_layer("fetcher", buf.clone()));
     tracing::subscriber::with_default(subscriber, || {
         let span = info_span!(
             "claim",
@@ -66,7 +64,11 @@ fn log_fields_allowlisted_no_body() {
             status = 200u16,
             "fetched"
         );
-        warn!(authorization = "Bearer xyz", error_class = "policy", "refused");
+        warn!(
+            authorization = "Bearer xyz",
+            error_class = "policy",
+            "refused"
+        );
         info!(source_id = "wikivoyage", "{}", "x".repeat(5000));
     });
     let text = buf.text();
@@ -183,7 +185,11 @@ fn alert_metric_names_match_monitoring_policies() {
     assert!(referenced.len() >= 11, "{referenced:?}");
     let ours: BTreeSet<String> = ALERT_METRICS
         .iter()
-        .map(|m| m.cloud_type.trim_start_matches("custom.googleapis.com/crawler/").to_string())
+        .map(|m| {
+            m.cloud_type
+                .trim_start_matches("custom.googleapis.com/crawler/")
+                .to_string()
+        })
         .collect();
     assert_eq!(ours, referenced);
 
@@ -217,7 +223,10 @@ fn alert_metric_names_match_monitoring_policies() {
         vc_obs::metrics::cloud_monitoring_type("crawler_captures_committed_total").as_deref(),
         Some("custom.googleapis.com/crawler/captures_committed")
     );
-    assert_eq!(vc_obs::metrics::cloud_monitoring_type("http_requests"), None);
+    assert_eq!(
+        vc_obs::metrics::cloud_monitoring_type("http_requests"),
+        None
+    );
 }
 
 #[test]
@@ -230,7 +239,10 @@ fn metrics_values_and_heartbeat_absence() {
     m.parked_keys_ratio.set(0.125);
     m.heartbeat("fetcher");
     let text = m.encode();
-    assert!(text.contains("crawler_captures_committed_total 3"), "{text}");
+    assert!(
+        text.contains("crawler_captures_committed_total 3"),
+        "{text}"
+    );
     assert!(text.contains("crawler_due_urls 17"));
     assert!(text.contains("crawler_backpressure 1"));
     assert!(text.contains("crawler_parked_keys_ratio 0.125"));
@@ -251,7 +263,10 @@ async fn heartbeat_writer_upserts_row() {
         Arc::new(clock.clone()),
         Duration::from_secs(600),
     ));
-    let metrics = Arc::new(Metrics::new(Arc::new(clock.clone()), Duration::from_secs(180)));
+    let metrics = Arc::new(Metrics::new(
+        Arc::new(clock.clone()),
+        Duration::from_secs(180),
+    ));
     let hb = vc_obs::HeartbeatWriter::new(
         pool.clone(),
         "processor",
@@ -272,7 +287,11 @@ async fn heartbeat_writer_upserts_row() {
     assert_eq!(rows[0].1, "inst-1");
     assert_eq!(rows[0].2["completed"], 5);
     assert_eq!(rows[0].2["healthy"], true);
-    assert!(metrics.encode().contains("crawler_heartbeat{role=\"processor\"} 1"));
+    assert!(
+        metrics
+            .encode()
+            .contains("crawler_heartbeat{role=\"processor\"} 1")
+    );
 }
 
 #[tokio::test]
@@ -282,7 +301,10 @@ async fn http_endpoint_serves_metrics_and_health() {
         Arc::new(clock.clone()),
         Duration::from_secs(600),
     ));
-    let metrics = Arc::new(Metrics::new(Arc::new(clock.clone()), Duration::from_secs(180)));
+    let metrics = Arc::new(Metrics::new(
+        Arc::new(clock.clone()),
+        Duration::from_secs(180),
+    ));
     metrics.due_urls.set(4);
     let listener = tokio::net::TcpListener::bind("127.0.0.1:0").await.unwrap();
     let addr = listener.local_addr().unwrap();

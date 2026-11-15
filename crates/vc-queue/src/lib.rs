@@ -289,10 +289,7 @@ impl WorkQueue for PgWorkQueue {
         .fetch_all(&self.pool)
         .await
         .map_err(db)?;
-        let mut items = rows
-            .into_iter()
-            .map(to_item)
-            .collect::<Result<Vec<_>>>()?;
+        let mut items = rows.into_iter().map(to_item).collect::<Result<Vec<_>>>()?;
         // RETURNING has no defined order: hand items out FIFO.
         items.sort_by_key(|i| i.id);
         Ok(items)

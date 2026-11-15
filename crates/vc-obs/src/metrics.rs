@@ -64,27 +64,83 @@ macro_rules! alert {
 
 /// Every metric read by `infrastructure/monitoring/*.json` (README "Runtime contract").
 pub const ALERT_METRICS: &[AlertMetric] = &[
-    alert!("heartbeat", "crawler_heartbeat", Gauge, ["role"],
-        "1 while the role's heartbeat is fresh; absent otherwise (crawler-down alert)"),
-    alert!("captures_committed", "crawler_captures_committed_total", Counter, [],
-        "Captures committed by vc_commit_segment (no-captures alert)"),
-    alert!("due_urls", "crawler_due_urls", Gauge, [], "URLs due for fetching now"),
-    alert!("backpressure", "crawler_backpressure", Gauge, [],
-        "1 while fetchers are paused by spool backpressure"),
-    alert!("wal_archive_age_seconds", "crawler_wal_archive_age_seconds", Gauge, [],
-        "Age of the newest archived WAL segment"),
-    alert!("base_backup_age_seconds", "crawler_base_backup_age_seconds", Gauge, [],
-        "Age of the newest base backup"),
-    alert!("restore_drill_ok", "crawler_restore_drill_ok", Gauge, [],
-        "1 when the last restore drill passed"),
-    alert!("restore_drill_age_seconds", "crawler_restore_drill_age_seconds", Gauge, [],
-        "Age of the last successful restore drill"),
-    alert!("llm_month_spend_ratio", "crawler_llm_month_spend_ratio", Gauge, [],
-        "LLM spend this month / monthly cap"),
-    alert!("parked_keys_ratio", "crawler_parked_keys_ratio", Gauge, [],
-        "Parked politeness keys / active keys"),
-    alert!("tls_cert_days_left", "crawler_tls_cert_days_left", Gauge, [],
-        "Days until the API TLS certificate expires"),
+    alert!(
+        "heartbeat",
+        "crawler_heartbeat",
+        Gauge,
+        ["role"],
+        "1 while the role's heartbeat is fresh; absent otherwise (crawler-down alert)"
+    ),
+    alert!(
+        "captures_committed",
+        "crawler_captures_committed_total",
+        Counter,
+        [],
+        "Captures committed by vc_commit_segment (no-captures alert)"
+    ),
+    alert!(
+        "due_urls",
+        "crawler_due_urls",
+        Gauge,
+        [],
+        "URLs due for fetching now"
+    ),
+    alert!(
+        "backpressure",
+        "crawler_backpressure",
+        Gauge,
+        [],
+        "1 while fetchers are paused by spool backpressure"
+    ),
+    alert!(
+        "wal_archive_age_seconds",
+        "crawler_wal_archive_age_seconds",
+        Gauge,
+        [],
+        "Age of the newest archived WAL segment"
+    ),
+    alert!(
+        "base_backup_age_seconds",
+        "crawler_base_backup_age_seconds",
+        Gauge,
+        [],
+        "Age of the newest base backup"
+    ),
+    alert!(
+        "restore_drill_ok",
+        "crawler_restore_drill_ok",
+        Gauge,
+        [],
+        "1 when the last restore drill passed"
+    ),
+    alert!(
+        "restore_drill_age_seconds",
+        "crawler_restore_drill_age_seconds",
+        Gauge,
+        [],
+        "Age of the last successful restore drill"
+    ),
+    alert!(
+        "llm_month_spend_ratio",
+        "crawler_llm_month_spend_ratio",
+        Gauge,
+        [],
+        "LLM spend this month / monthly cap"
+    ),
+    alert!(
+        "parked_keys_ratio",
+        "crawler_parked_keys_ratio",
+        Gauge,
+        [],
+        "Parked politeness keys / active keys"
+    ),
+    alert!(
+        "tls_cert_days_left",
+        "crawler_tls_cert_days_left",
+        Gauge,
+        [],
+        "Days until the API TLS certificate expires"
+    ),
 ];
 
 /// Cloud Monitoring type for an exposed Prometheus family name: `crawler_<x>[_total]` →
@@ -196,17 +252,61 @@ impl Metrics {
                 .map(|m| m.help)
                 .unwrap_or("")
         };
-        reg.register("crawler_heartbeat", help("crawler_heartbeat"), heartbeat.clone());
-        reg.register("crawler_captures_committed", help("crawler_captures_committed"), captures_committed.clone());
-        reg.register("crawler_due_urls", help("crawler_due_urls"), due_urls.0.clone());
-        reg.register("crawler_backpressure", help("crawler_backpressure"), backpressure.0.clone());
-        reg.register("crawler_wal_archive_age_seconds", help("crawler_wal_archive_age_seconds"), wal_archive_age_seconds.0.clone());
-        reg.register("crawler_base_backup_age_seconds", help("crawler_base_backup_age_seconds"), base_backup_age_seconds.0.clone());
-        reg.register("crawler_restore_drill_ok", help("crawler_restore_drill_ok"), restore_drill_ok.0.clone());
-        reg.register("crawler_restore_drill_age_seconds", help("crawler_restore_drill_age_seconds"), restore_drill_age_seconds.0.clone());
-        reg.register("crawler_llm_month_spend_ratio", help("crawler_llm_month_spend_ratio"), llm_month_spend_ratio.0.clone());
-        reg.register("crawler_parked_keys_ratio", help("crawler_parked_keys_ratio"), parked_keys_ratio.0.clone());
-        reg.register("crawler_tls_cert_days_left", help("crawler_tls_cert_days_left"), tls_cert_days_left.0.clone());
+        reg.register(
+            "crawler_heartbeat",
+            help("crawler_heartbeat"),
+            heartbeat.clone(),
+        );
+        reg.register(
+            "crawler_captures_committed",
+            help("crawler_captures_committed"),
+            captures_committed.clone(),
+        );
+        reg.register(
+            "crawler_due_urls",
+            help("crawler_due_urls"),
+            due_urls.0.clone(),
+        );
+        reg.register(
+            "crawler_backpressure",
+            help("crawler_backpressure"),
+            backpressure.0.clone(),
+        );
+        reg.register(
+            "crawler_wal_archive_age_seconds",
+            help("crawler_wal_archive_age_seconds"),
+            wal_archive_age_seconds.0.clone(),
+        );
+        reg.register(
+            "crawler_base_backup_age_seconds",
+            help("crawler_base_backup_age_seconds"),
+            base_backup_age_seconds.0.clone(),
+        );
+        reg.register(
+            "crawler_restore_drill_ok",
+            help("crawler_restore_drill_ok"),
+            restore_drill_ok.0.clone(),
+        );
+        reg.register(
+            "crawler_restore_drill_age_seconds",
+            help("crawler_restore_drill_age_seconds"),
+            restore_drill_age_seconds.0.clone(),
+        );
+        reg.register(
+            "crawler_llm_month_spend_ratio",
+            help("crawler_llm_month_spend_ratio"),
+            llm_month_spend_ratio.0.clone(),
+        );
+        reg.register(
+            "crawler_parked_keys_ratio",
+            help("crawler_parked_keys_ratio"),
+            parked_keys_ratio.0.clone(),
+        );
+        reg.register(
+            "crawler_tls_cert_days_left",
+            help("crawler_tls_cert_days_left"),
+            tls_cert_days_left.0.clone(),
+        );
         reg.register(
             "crawler_queue_items",
             "Work items per kind and state",
@@ -284,10 +384,7 @@ mod tests {
 
     #[test]
     fn unset_gauges_are_not_exported() {
-        let m = Metrics::new(
-            Arc::new(vc_core::SystemClock),
-            Duration::from_secs(180),
-        );
+        let m = Metrics::new(Arc::new(vc_core::SystemClock), Duration::from_secs(180));
         let text = m.encode();
         assert!(!text.contains("crawler_restore_drill_ok "), "{text}");
         assert!(!text.contains("crawler_tls_cert_days_left "), "{text}");
@@ -302,10 +399,7 @@ mod tests {
 
     #[test]
     fn extra_metrics_and_labels() {
-        let m = Metrics::new(
-            Arc::new(vc_core::SystemClock),
-            Duration::from_secs(180),
-        );
+        let m = Metrics::new(Arc::new(vc_core::SystemClock), Duration::from_secs(180));
         m.queue_items
             .get_or_create(&vec![
                 ("kind".into(), "extract".into()),

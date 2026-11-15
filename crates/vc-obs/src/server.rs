@@ -91,8 +91,11 @@ async fn respond(
 pub async fn get(addr: SocketAddr, path: &str) -> std::io::Result<(u16, String)> {
     let fut = async {
         let mut s = TcpStream::connect(addr).await?;
-        s.write_all(format!("GET {path} HTTP/1.1\r\nHost: localhost\r\nConnection: close\r\n\r\n").as_bytes())
-            .await?;
+        s.write_all(
+            format!("GET {path} HTTP/1.1\r\nHost: localhost\r\nConnection: close\r\n\r\n")
+                .as_bytes(),
+        )
+        .await?;
         let mut out = Vec::new();
         s.read_to_end(&mut out).await?;
         let text = String::from_utf8_lossy(&out).into_owned();
@@ -101,7 +104,10 @@ pub async fn get(addr: SocketAddr, path: &str) -> std::io::Result<(u16, String)>
             .nth(1)
             .and_then(|c| c.parse().ok())
             .ok_or_else(|| std::io::Error::other("bad status line"))?;
-        let body = text.split_once("\r\n\r\n").map(|(_, b)| b.to_string()).unwrap_or_default();
+        let body = text
+            .split_once("\r\n\r\n")
+            .map(|(_, b)| b.to_string())
+            .unwrap_or_default();
         Ok((status, body))
     };
     tokio::time::timeout(TIMEOUT, fut)

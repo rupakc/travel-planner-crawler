@@ -10,7 +10,8 @@ use vc_secrets::{EnvSource, SecretManagerSource, StaticToken};
 use wiremock::matchers::{header, method, path};
 use wiremock::{Mock, MockServer, ResponseTemplate};
 
-const PATH: &str = "/v1/projects/voyager-prod-ohzkl/secrets/crawler-pg-password/versions/latest:access";
+const PATH: &str =
+    "/v1/projects/voyager-prod-ohzkl/secrets/crawler-pg-password/versions/latest:access";
 
 async fn source(server: &MockServer) -> SecretManagerSource {
     let config = SecretsConfig {
@@ -45,7 +46,10 @@ async fn secret_manager_reads_latest_version() {
     assert_eq!(secret.expose(), "hunter2\n");
     // Neither the source nor the secret prints the value or the token.
     let dbg = format!("{s:?} {secret:?}");
-    assert!(!dbg.contains("hunter2") && !dbg.contains("test-token"), "{dbg}");
+    assert!(
+        !dbg.contains("hunter2") && !dbg.contains("test-token"),
+        "{dbg}"
+    );
 }
 
 #[tokio::test]
@@ -93,8 +97,18 @@ async fn secret_names_are_validated_before_any_request() {
         .mount(&server)
         .await;
     let s = source(&server).await;
-    for name in ["", "../crawler-pg-password", "a/b", "a?b", "a b", &"x".repeat(256)] {
-        assert!(matches!(s.get(name).await, Err(Error::Invalid(_))), "{name}");
+    for name in [
+        "",
+        "../crawler-pg-password",
+        "a/b",
+        "a?b",
+        "a b",
+        &"x".repeat(256),
+    ] {
+        assert!(
+            matches!(s.get(name).await, Err(Error::Invalid(_))),
+            "{name}"
+        );
     }
 }
 

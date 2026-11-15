@@ -132,13 +132,21 @@ async fn dedupe_key() {
     let pool = testkit::pg().await;
     let q = PgWorkQueue::new(pool.clone(), fast());
     let a = q
-        .enqueue(WorkKind::CaptureReady, json!({"capture_id": "x"}), Some("x"))
+        .enqueue(
+            WorkKind::CaptureReady,
+            json!({"capture_id": "x"}),
+            Some("x"),
+        )
         .await
         .unwrap();
     assert!(a.is_some());
     // Same key while pending (ready) → None.
     let b = q
-        .enqueue(WorkKind::CaptureReady, json!({"capture_id": "x"}), Some("x"))
+        .enqueue(
+            WorkKind::CaptureReady,
+            json!({"capture_id": "x"}),
+            Some("x"),
+        )
         .await
         .unwrap();
     assert_eq!(b, None);
@@ -162,7 +170,11 @@ async fn dedupe_key() {
     // After ack the key is free again.
     q.ack(a.unwrap()).await.unwrap();
     let c = q
-        .enqueue(WorkKind::CaptureReady, json!({"capture_id": "x"}), Some("x"))
+        .enqueue(
+            WorkKind::CaptureReady,
+            json!({"capture_id": "x"}),
+            Some("x"),
+        )
         .await
         .unwrap();
     assert!(c.is_some());

@@ -34,7 +34,9 @@ pub async fn bind_metrics(config: &ObsConfig) -> Result<Option<tokio::net::TcpLi
     if config.metrics_addr.trim().is_empty() {
         return Ok(None);
     }
-    Ok(Some(tokio::net::TcpListener::bind(config.metrics_addr.trim()).await?))
+    Ok(Some(
+        tokio::net::TcpListener::bind(config.metrics_addr.trim()).await?,
+    ))
 }
 
 /// Installs the global tracing subscriber: the allowlisting layer (`obs.log_format` `json` or

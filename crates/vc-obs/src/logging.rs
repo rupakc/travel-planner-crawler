@@ -112,7 +112,10 @@ impl Visit for Fields {
     }
     fn record_error(&mut self, field: &Field, value: &(dyn std::error::Error + 'static)) {
         if allowed(field.name()) {
-            self.put(field, Value::String(cut(&value.to_string(), MAX_VALUE_CHARS)));
+            self.put(
+                field,
+                Value::String(cut(&value.to_string(), MAX_VALUE_CHARS)),
+            );
         }
     }
     fn record_debug(&mut self, field: &Field, value: &dyn std::fmt::Debug) {

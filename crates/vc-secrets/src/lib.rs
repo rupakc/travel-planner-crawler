@@ -117,9 +117,10 @@ impl TokenProvider for AdcTokens {
                     .map_err(|e| Error::Invalid(format!("application default credentials: {e}")))
             })
             .await?;
-        let t = creds.access_token().await.map_err(|e| {
-            Error::Io(std::io::Error::other(format!("access token: {e}")))
-        })?;
+        let t = creds
+            .access_token()
+            .await
+            .map_err(|e| Error::Io(std::io::Error::other(format!("access token: {e}"))))?;
         Ok(t.token)
     }
 }
@@ -229,9 +230,10 @@ impl SecretSource for SecretManagerSource {
                 ))));
             }
         }
-        let body: AccessResponse = resp.json().await.map_err(|_| {
-            Error::Invalid(format!("secret {name}: malformed access response"))
-        })?;
+        let body: AccessResponse = resp
+            .json()
+            .await
+            .map_err(|_| Error::Invalid(format!("secret {name}: malformed access response")))?;
         let data = base64::decode(&body.payload.data)
             .ok_or_else(|| Error::Invalid(format!("secret {name}: payload is not base64")))?;
         if let Some(want) = body.payload.data_crc32c {
