@@ -22,6 +22,10 @@ pub struct SecretsConfig {
     pub project: String,
     /// Env prefix for the `env` backend (`crawler-pg-password` → `VC_SECRET_CRAWLER_PG_PASSWORD`).
     pub env_prefix: String,
+    /// Secret Manager REST endpoint (tests point it at a mock).
+    pub endpoint: String,
+    /// Request timeout, seconds.
+    pub timeout_s: u64,
 }
 
 impl Default for SecretsConfig {
@@ -30,6 +34,8 @@ impl Default for SecretsConfig {
             backend: SecretBackend::SecretManager,
             project: "voyager-prod-ohzkl".into(),
             env_prefix: "VC_SECRET_".into(),
+            endpoint: "https://secretmanager.googleapis.com".into(),
+            timeout_s: 10,
         }
     }
 }

@@ -134,35 +134,44 @@ fn health_fails_without_progress() {
     assert_eq!(p.snapshot()["completed"], 1);
 }
 
+fn ident(s: &str) -> String {
+    s.chars()
+        .take_while(|c| c.is_ascii_lowercase() || *c == '_')
+        .collect()
+}
+
 /// Every `custom.googleapis.com/crawler/*` metric the alert policies and the infrastructure
 /// README name.
 fn referenced_metrics() -> BTreeSet<String> {
+    const PREFIX: &str = "custom.googleapis.com/crawler/";
     let root = std::path::Path::new(env!("CARGO_MANIFEST_DIR")).join("../../infrastructure");
-    let re = regex::Regex::new(r"custom\.googleapis\.com/crawler/([a-z_]+)").unwrap();
     let mut out = BTreeSet::new();
-    let mut texts = vec![std::fs::read_to_string(root.join("README.md")).unwrap()];
-    // The README lists them as `custom.googleapis.com/crawler/…` then bare names.
-    let readme = texts[0].clone();
+    let readme = std::fs::read_to_string(root.join("README.md")).unwrap();
+    // The README lists them as `custom.googleapis.com/crawler/…` followed by bare names.
     let list = readme
         .split("custom.googleapis.com/crawler/…")
         .nth(1)
         .expect("README metric list")
         .split("Disk usage")
         .next()
-        .unwrap()
-        .to_string();
-    let bare = regex::Regex::new(r"`([a-z_]+)`").unwrap();
-    for c in bare.captures_iter(&list) {
-        out.insert(c[1].to_string());
+        .unwrap();
+    for (i, part) in list.split('`').enumerate() {
+        if i % 2 == 1 && !part.is_empty() && ident(part) == part {
+            out.insert(part.to_string());
+        }
     }
     out.remove("gce_instance");
     out.remove("role");
+    let mut texts = vec![readme.clone()];
     for e in std::fs::read_dir(root.join("monitoring")).unwrap() {
         texts.push(std::fs::read_to_string(e.unwrap().path()).unwrap());
     }
     for t in &texts {
-        for c in re.captures_iter(t) {
-            out.insert(c[1].to_string());
+        for part in t.split(PREFIX).skip(1) {
+            let name = ident(part);
+            if !name.is_empty() {
+                out.insert(name);
+            }
         }
     }
     out
