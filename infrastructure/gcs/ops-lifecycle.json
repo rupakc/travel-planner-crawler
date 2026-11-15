@@ -1,0 +1,16 @@
+{
+  "rule": [
+    {
+      "action": { "type": "Delete" },
+      "condition": { "age": 14, "matchesPrefix": ["walg/"] }
+    },
+    {
+      "action": { "type": "Delete" },
+      "condition": { "age": 7, "matchesPrefix": ["batch/"] }
+    },
+    {
+      "action": { "type": "Delete" },
+      "condition": { "isLive": false, "daysSinceNoncurrentTime": 0 }
+    }
+  ]
+}

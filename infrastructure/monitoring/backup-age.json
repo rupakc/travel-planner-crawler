@@ -1,0 +1,57 @@
+{
+  "displayName": "voyager-crawler: backup or WAL archive too old",
+  "combiner": "OR",
+  "enabled": true,
+  "userLabels": {
+    "app": "voyager-crawler"
+  },
+  "documentation": {
+    "content": "The newest archived WAL segment is older than 2 h, or the newest base backup is older than 30 h (wal-g \u2192 gs://voyager-crawler-ops/walg). Check `voyager-crawler-basebackup.service` and Postgres `archive_command` errors.",
+    "mimeType": "text/markdown"
+  },
+  "conditions": [
+    {
+      "displayName": "WAL archive age > 2 h",
+      "conditionThreshold": {
+        "filter": "metric.type=\"custom.googleapis.com/crawler/wal_archive_age_seconds\" AND resource.type=\"gce_instance\"",
+        "comparison": "COMPARISON_GT",
+        "thresholdValue": 7200,
+        "duration": "300s",
+        "aggregations": [
+          {
+            "alignmentPeriod": "300s",
+            "perSeriesAligner": "ALIGN_MAX"
+          }
+        ],
+        "trigger": {
+          "count": 1
+        }
+      }
+    },
+    {
+      "displayName": "base backup age > 30 h",
+      "conditionThreshold": {
+        "filter": "metric.type=\"custom.googleapis.com/crawler/base_backup_age_seconds\" AND resource.type=\"gce_instance\"",
+        "comparison": "COMPARISON_GT",
+        "thresholdValue": 108000,
+        "duration": "300s",
+        "aggregations": [
+          {
+            "alignmentPeriod": "300s",
+            "perSeriesAligner": "ALIGN_MAX"
+          }
+        ],
+        "trigger": {
+          "count": 1
+        }
+      }
+    }
+  ],
+  "notificationChannels": [
+    "__CHANNEL__"
+  ],
+  "alertStrategy": {
+    "autoClose": "86400s"
+  },
+  "severity": "ERROR"
+}

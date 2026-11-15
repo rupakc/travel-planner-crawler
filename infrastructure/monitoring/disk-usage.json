@@ -1,0 +1,39 @@
+{
+  "displayName": "voyager-crawler: disk over 80%",
+  "combiner": "OR",
+  "enabled": true,
+  "userLabels": {
+    "app": "voyager-crawler"
+  },
+  "documentation": {
+    "content": "A disk of the crawler VM (boot or the 100 GB data disk) is over 80 % full.",
+    "mimeType": "text/markdown"
+  },
+  "conditions": [
+    {
+      "displayName": "disk used > 80 %",
+      "conditionThreshold": {
+        "filter": "metric.type=\"agent.googleapis.com/disk/percent_used\" AND resource.type=\"gce_instance\" AND metadata.user_labels.\"app\"=\"voyager-crawler\" AND metric.label.\"state\"=\"used\"",
+        "comparison": "COMPARISON_GT",
+        "thresholdValue": 80,
+        "duration": "600s",
+        "aggregations": [
+          {
+            "alignmentPeriod": "300s",
+            "perSeriesAligner": "ALIGN_MEAN"
+          }
+        ],
+        "trigger": {
+          "count": 1
+        }
+      }
+    }
+  ],
+  "notificationChannels": [
+    "__CHANNEL__"
+  ],
+  "alertStrategy": {
+    "autoClose": "86400s"
+  },
+  "severity": "ERROR"
+}

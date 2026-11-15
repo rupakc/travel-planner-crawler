@@ -59,38 +59,53 @@ secrets_fresh() {
 }
 
 # refresh_secrets — hourly (Secret Manager free tier: 10k accesses/month).
-# A changed TLS pair recreates the api container (rotation, §17.5).
+# Everything is fetched first; a TLS key that doesn't match the certificate
+# (a rotation caught half-way) keeps the old pair. A changed pair recreates
+# the api container (rotation, §17.5).
 refresh_secrets() {
   secrets_fresh && return 0
-  local project token name file uid tmp changed=0
+  local project token name file uid changed=0 ok=1
   project="$(curl -fsS -H 'Metadata-Flavor: Google' "$MD/project/project-id")" ||
     { log "metadata server unreachable: secrets not refreshed"; return 1; }
   token="$(curl -fsS -H 'Metadata-Flavor: Google' "$MD/instance/service-accounts/default/token" | jq -r .access_token)" ||
     { log "no access token: secrets not refreshed"; return 1; }
   install -d -m 0711 "$VC_SECRETS_DIR"
   while IFS=: read -r name file uid; do
-    tmp="$VC_SECRETS_DIR/.$file.new"
     if ! (umask 077 && curl -fsS -H "Authorization: Bearer $token" \
       "https://secretmanager.googleapis.com/v1/projects/$project/secrets/$name/versions/latest:access" |
-      jq -er .payload.data | base64 -d >"$tmp") || [[ ! -s "$tmp" ]]; then
-      rm -f "$tmp"
+      jq -er .payload.data | base64 -d >"$VC_SECRETS_DIR/.$file.new") || [[ ! -s "$VC_SECRETS_DIR/.$file.new" ]]; then
+      rm -f "$VC_SECRETS_DIR/.$file.new"
       log "secret $name could not be read (no version yet?): keeping the old file"
+      ok=0
       continue
     fi
-    chown "$uid:$uid" "$tmp"
-    chmod 0400 "$tmp"
-    if ! cmp -s "$tmp" "$VC_SECRETS_DIR/$file"; then
-      [[ "$file" == api_tls_* ]] && changed=1
-      mv -f "$tmp" "$VC_SECRETS_DIR/$file"
+    chown "$uid:$uid" "$VC_SECRETS_DIR/.$file.new"
+    chmod 0400 "$VC_SECRETS_DIR/.$file.new"
+  done <<<"$SECRET_MAP"
+
+  local k="$VC_SECRETS_DIR/.api_tls_key.new" c="$VC_SECRETS_DIR/.api_tls_cert.new"
+  if [[ -s "$k" && -s "$c" ]] &&
+    [[ "$(openssl pkey -in "$k" -pubout 2>/dev/null)" != "$(openssl x509 -in "$c" -noout -pubkey 2>/dev/null)" ]]; then
+    log "TLS key and certificate don't match (rotation in progress?): keeping the old pair"
+    rm -f "$k" "$c"
+    ok=0
+  fi
+
+  while IFS=: read -r _ file _; do
+    [[ -f "$VC_SECRETS_DIR/.$file.new" ]] || continue
+    if cmp -s "$VC_SECRETS_DIR/.$file.new" "$VC_SECRETS_DIR/$file"; then
+      rm -f "$VC_SECRETS_DIR/.$file.new"
     else
-      rm -f "$tmp"
+      [[ "$file" == api_tls_* ]] && changed=1
+      mv -f "$VC_SECRETS_DIR/.$file.new" "$VC_SECRETS_DIR/$file"
     fi
   done <<<"$SECRET_MAP"
-  touch "$VC_STATE/secrets.stamp"
+  ((ok)) && touch "$VC_STATE/secrets.stamp"
   if ((changed)) && [[ -n "$(current_image)" ]] && [[ -n "$(vc_compose ps -q api 2>/dev/null)" ]]; then
     log "TLS certificate changed: recreating api"
     vc_compose up -d --no-deps --force-recreate api || log "api recreate failed"
   fi
+  return 0
 }
 
 # ── Images ────────────────────────────────────────────────────────────────

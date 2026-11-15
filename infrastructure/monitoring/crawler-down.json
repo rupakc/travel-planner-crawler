@@ -1,0 +1,37 @@
+{
+  "displayName": "voyager-crawler: crawler down",
+  "combiner": "OR",
+  "enabled": true,
+  "userLabels": {
+    "app": "voyager-crawler"
+  },
+  "documentation": {
+    "content": "A role stopped sending `crawler/heartbeat` for 15 min (or the VM is down). Check `vc-compose.sh ps` over IAP SSH and the watchdog log in `/var/lib/voyager-crawler/deploy/watchdog.log`.",
+    "mimeType": "text/markdown"
+  },
+  "conditions": [
+    {
+      "displayName": "heartbeat absent 15 min",
+      "conditionAbsent": {
+        "filter": "metric.type=\"custom.googleapis.com/crawler/heartbeat\" AND resource.type=\"gce_instance\"",
+        "duration": "900s",
+        "aggregations": [
+          {
+            "alignmentPeriod": "300s",
+            "perSeriesAligner": "ALIGN_MAX"
+          }
+        ],
+        "trigger": {
+          "count": 1
+        }
+      }
+    }
+  ],
+  "notificationChannels": [
+    "__CHANNEL__"
+  ],
+  "alertStrategy": {
+    "autoClose": "86400s"
+  },
+  "severity": "ERROR"
+}

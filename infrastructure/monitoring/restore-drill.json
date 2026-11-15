@@ -1,0 +1,57 @@
+{
+  "displayName": "voyager-crawler: restore drill failed",
+  "combiner": "OR",
+  "enabled": true,
+  "userLabels": {
+    "app": "voyager-crawler"
+  },
+  "documentation": {
+    "content": "The last restore drill failed (`crawler/restore_drill_ok` = 0), or none succeeded in 8 days. See `journalctl -u voyager-crawler-restore-drill`.",
+    "mimeType": "text/markdown"
+  },
+  "conditions": [
+    {
+      "displayName": "restore drill failed",
+      "conditionThreshold": {
+        "filter": "metric.type=\"custom.googleapis.com/crawler/restore_drill_ok\" AND resource.type=\"gce_instance\"",
+        "comparison": "COMPARISON_LT",
+        "thresholdValue": 1,
+        "duration": "0s",
+        "aggregations": [
+          {
+            "alignmentPeriod": "300s",
+            "perSeriesAligner": "ALIGN_MIN"
+          }
+        ],
+        "trigger": {
+          "count": 1
+        }
+      }
+    },
+    {
+      "displayName": "no successful drill in 8 days",
+      "conditionThreshold": {
+        "filter": "metric.type=\"custom.googleapis.com/crawler/restore_drill_age_seconds\" AND resource.type=\"gce_instance\"",
+        "comparison": "COMPARISON_GT",
+        "thresholdValue": 691200,
+        "duration": "300s",
+        "aggregations": [
+          {
+            "alignmentPeriod": "300s",
+            "perSeriesAligner": "ALIGN_MAX"
+          }
+        ],
+        "trigger": {
+          "count": 1
+        }
+      }
+    }
+  ],
+  "notificationChannels": [
+    "__CHANNEL__"
+  ],
+  "alertStrategy": {
+    "autoClose": "86400s"
+  },
+  "severity": "ERROR"
+}

@@ -50,7 +50,7 @@ x-role: &role
     VC_GCP_PROJECT: voyager-prod-ohzkl
     VC_LOG_FORMAT: json
     VC_LLM_ENABLED: ${VC_LLM_ENABLED:-false}
-  healthcheck: &role-health
+  healthcheck:
     test: ["CMD", "vcrawl", "health"]
     interval: 60s
     timeout: 10s

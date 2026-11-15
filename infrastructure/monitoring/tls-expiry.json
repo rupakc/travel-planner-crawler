@@ -1,0 +1,39 @@
+{
+  "displayName": "voyager-crawler: API TLS certificate expires within 30 days",
+  "combiner": "OR",
+  "enabled": true,
+  "userLabels": {
+    "app": "voyager-crawler"
+  },
+  "documentation": {
+    "content": "The crawler API's self-signed certificate expires in under 30 days. Rotate with `infrastructure/bootstrap.sh --rotate-tls` (\u00a717.5).",
+    "mimeType": "text/markdown"
+  },
+  "conditions": [
+    {
+      "displayName": "certificate days left < 30",
+      "conditionThreshold": {
+        "filter": "metric.type=\"custom.googleapis.com/crawler/tls_cert_days_left\" AND resource.type=\"gce_instance\"",
+        "comparison": "COMPARISON_LT",
+        "thresholdValue": 30,
+        "duration": "0s",
+        "aggregations": [
+          {
+            "alignmentPeriod": "300s",
+            "perSeriesAligner": "ALIGN_MIN"
+          }
+        ],
+        "trigger": {
+          "count": 1
+        }
+      }
+    }
+  ],
+  "notificationChannels": [
+    "__CHANNEL__"
+  ],
+  "alertStrategy": {
+    "autoClose": "86400s"
+  },
+  "severity": "ERROR"
+}

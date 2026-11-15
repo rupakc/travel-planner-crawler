@@ -1,0 +1,59 @@
+{
+  "displayName": "voyager-crawler: no captures for 60 min while work is due",
+  "combiner": "AND",
+  "enabled": true,
+  "userLabels": {
+    "app": "voyager-crawler"
+  },
+  "documentation": {
+    "content": "No `crawler/captures_committed` in the last hour while `crawler/due_urls` > 0. Check fetcher health, parked keys and the spool.",
+    "mimeType": "text/markdown"
+  },
+  "conditions": [
+    {
+      "displayName": "no captures committed in 60 min",
+      "conditionThreshold": {
+        "filter": "metric.type=\"custom.googleapis.com/crawler/captures_committed\" AND resource.type=\"gce_instance\"",
+        "comparison": "COMPARISON_LT",
+        "thresholdValue": 1,
+        "duration": "0s",
+        "aggregations": [
+          {
+            "alignmentPeriod": "3600s",
+            "perSeriesAligner": "ALIGN_DELTA",
+            "crossSeriesReducer": "REDUCE_SUM"
+          }
+        ],
+        "trigger": {
+          "count": 1
+        }
+      }
+    },
+    {
+      "displayName": "due work exists",
+      "conditionThreshold": {
+        "filter": "metric.type=\"custom.googleapis.com/crawler/due_urls\" AND resource.type=\"gce_instance\"",
+        "comparison": "COMPARISON_GT",
+        "thresholdValue": 0,
+        "duration": "0s",
+        "aggregations": [
+          {
+            "alignmentPeriod": "3600s",
+            "perSeriesAligner": "ALIGN_MIN",
+            "crossSeriesReducer": "REDUCE_SUM"
+          }
+        ],
+        "trigger": {
+          "count": 1
+        }
+      }
+    }
+  ],
+  "notificationChannels": [
+    "__CHANNEL__"
+  ],
+  "alertStrategy": {
+    "autoClose": "86400s"
+  },
+  "severity": "ERROR"
+}
