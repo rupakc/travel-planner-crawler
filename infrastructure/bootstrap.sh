@@ -36,7 +36,8 @@
 #   firewall: allow-crawler-api (tcp:8443, source SA vm-runtime → target SA
 #     crawler-runtime), allow-crawler-iap-ssh (tcp:22 from IAP), and
 #     deny-crawler-ingress (everything else, so the project-wide
-#     default-allow-internal doesn't open the crawler to every internal VM)
+#     default-allow-internal and the app's voyager-web (0.0.0.0/0:80,443,
+#     every instance) do not open the crawler VM; DENY wins at equal priority)
 #   instance template crawler-drill-template (Spot e2-standard-2, as crawler-drill)
 #   VM voyager-crawler: e2-standard-2, Debian 12, 20 GB boot disk, Shielded
 #     VM, OS Login, both static IPs, automatic restart + live migration,
@@ -378,7 +379,7 @@ firewall() {
     g compute firewall-rules create deny-crawler-ingress --network=default --direction=INGRESS \
       --action=DENY --rules=all --priority=1000 --source-ranges=0.0.0.0/0 \
       --target-service-accounts="$RUNTIME_SA" \
-      --description="Nothing else reaches the crawler VM (overrides default-allow-internal)"
+      --description="Nothing else reaches the crawler VM (overrides default-allow-internal and voyager-web)"
 }
 
 drill_template() {
