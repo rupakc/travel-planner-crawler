@@ -1,0 +1,11 @@
+[Unit]
+Description=Voyager Crawler watchdog, every 2 minutes
+
+[Timer]
+# Leave the services their health start period after a boot
+OnBootSec=10min
+OnUnitActiveSec=2min
+RandomizedDelaySec=15s
+
+[Install]
+WantedBy=timers.target

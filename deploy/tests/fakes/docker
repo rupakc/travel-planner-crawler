@@ -1,0 +1,79 @@
+#!/usr/bin/env bash
+# Fake docker for deploy/tests. Records every call in $CALLS (compose calls
+# with the VC_IMAGE they ran with). Behaviour:
+#   FAKE_PROD_DIGEST       digest the :prod tag resolves to ("" → failure)
+#   FAKE_RUNNING           services `compose ps --services --status running` lists
+#   FAKE_UNHEALTHY_DIGEST  a role whose container runs this digest is "unhealthy"
+#   FAKE_MIGRATE_RC        exit code of `compose run --rm migrate` (default 0)
+#   FAKE_LABEL_<NAME>      value of image label io.voyager-crawler.<name>
+#   FAKE_PS_A              output of `compose ps -a --format …` (watchdog)
+# Per-service images are kept in $FAKE_STATE/<service>.
+set -uo pipefail
+st="${FAKE_STATE:?}"
+mkdir -p "$st"
+
+if [[ "${1:-}" == compose ]]; then
+  echo "compose VC_IMAGE=${VC_IMAGE:-} ${*:2}" >>"$CALLS"
+  shift
+  # drop compose's own options
+  while [[ $# -gt 0 ]]; do
+    case "$1" in
+      -p | -f | --env-file) shift 2 ;;
+      *) break ;;
+    esac
+  done
+  sub="${1:-}"
+  shift || true
+  case "$sub" in
+    ps)
+      if [[ "$*" == *"--services --status running"* ]]; then
+        # shellcheck disable=SC2086 # a list
+        printf '%s\n' ${FAKE_RUNNING-postgres chromium maintenance scheduler processor embedder fetcher api}
+      elif [[ "${1:-}" == -a ]]; then
+        printf '%s' "${FAKE_PS_A:-}"
+      elif [[ "${1:-}" == -q ]]; then
+        [[ -f "$st/$2" ]] && echo "cid-$2"
+      fi
+      ;;
+    up)
+      svcs=()
+      for a in "$@"; do [[ "$a" == -* ]] || svcs+=("$a"); done
+      for s in ${svcs[@]+"${svcs[@]}"}; do
+        # postgres/chromium are pinned in compose.yaml, not VC_IMAGE
+        case "$s" in
+          postgres | chromium) echo pinned >"$st/$s" ;;
+          *) echo "${VC_IMAGE:-}" >"$st/$s" ;;
+        esac
+      done
+      ;;
+    run) [[ "$*" == *migrate* ]] && exit "${FAKE_MIGRATE_RC:-0}" ;;
+    restart) ;;
+  esac
+  exit 0
+fi
+
+echo "$*" >>"$CALLS"
+case "${1:-} ${2:-}" in
+  "buildx imagetools")
+    [[ -n "${FAKE_PROD_DIGEST:-}" ]] || exit 1
+    printf '{"mediaType":"application/vnd.oci.image.index.v1+json","digest":"%s","size":1234}\n' "$FAKE_PROD_DIGEST"
+    ;;
+  "pull "*) exit 0 ;;
+  "inspect "*)
+    svc="${*: -1}"
+    svc="${svc#cid-}"
+    img="$(cat "$st/$svc" 2>/dev/null)"
+    if [[ -n "${FAKE_UNHEALTHY_DIGEST:-}" && "$img" == *"$FAKE_UNHEALTHY_DIGEST" ]]; then
+      echo unhealthy
+    else
+      echo healthy
+    fi
+    ;;
+  "image inspect")
+    fmt="$4"
+    name="$(sed -n 's/.*io\.voyager-crawler\.\([a-z-]*\).*/\1/p' <<<"$fmt" | tr '-' '_' | tr '[:lower:]' '[:upper:]')"
+    var="FAKE_LABEL_$name"
+    echo "${!var:-}"
+    ;;
+esac
+exit 0

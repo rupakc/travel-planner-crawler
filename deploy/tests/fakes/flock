@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+# Fake flock: $FAKE_LOCKED=1 means another holder has the lock
+[[ "${FAKE_LOCKED:-0}" == 1 ]] && exit 1
+exit 0

@@ -1,0 +1,10 @@
+[Unit]
+Description=Voyager Crawler watchdog (restart unhealthy services; reboot after 3 failed restarts in 30 min)
+Requires=docker.service
+After=docker.service voyager-crawler.service
+RequiresMountsFor=/var/lib/voyager-crawler
+
+[Service]
+Type=oneshot
+ExecStart=/opt/voyager-crawler/host/watchdog.sh
+TimeoutStartSec=10min

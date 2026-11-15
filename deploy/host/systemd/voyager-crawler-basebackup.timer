@@ -1,0 +1,10 @@
+[Unit]
+Description=Voyager Crawler base backup, daily (WAL and backups expire after 14 days by lifecycle)
+
+[Timer]
+OnCalendar=*-*-* 03:15:00 UTC
+Persistent=true
+RandomizedDelaySec=15min
+
+[Install]
+WantedBy=timers.target

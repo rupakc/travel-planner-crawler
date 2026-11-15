@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+# Fake curl: the deploy tests must never reach the network
+echo "curl $*" >>"$CALLS"
+exit 7
