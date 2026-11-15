@@ -1,0 +1,28 @@
+[package]
+name = "testkit"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+repository.workspace = true
+publish.workspace = true
+description = "Test fixtures: migrated Postgres containers, FakeClock, in-memory fakes of the vc-core traits, and the frozen request-log schema."
+
+[lints]
+workspace = true
+
+[dependencies]
+vc-core = { workspace = true }
+async-trait = { workspace = true }
+tokio = { workspace = true }
+sqlx = { workspace = true }
+testcontainers = { workspace = true }
+serde = { workspace = true }
+serde_json = { workspace = true }
+bytes = { workspace = true }
+chrono = { workspace = true }
+crc32c = { workspace = true }
+ulid = { workspace = true }
+blake3 = { workspace = true }
+
+[dev-dependencies]

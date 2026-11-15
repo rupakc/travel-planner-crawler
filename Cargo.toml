@@ -1,0 +1,143 @@
+[workspace]
+resolver = "3"
+members = [
+    "crates/vc-core",
+    "crates/vc-config",
+    "crates/vc-policy",
+    "crates/vc-frontier",
+    "crates/vc-fetch",
+    "crates/vc-render",
+    "crates/vc-store",
+    "crates/vc-parse",
+    "crates/vc-kinds",
+    "crates/vc-llm",
+    "crates/vc-extract",
+    "crates/vc-sources",
+    "crates/vc-queue",
+    "crates/vc-index",
+    "crates/vc-api",
+    "crates/vc-obs",
+    "crates/vc-secrets",
+    "crates/vcrawl",
+    "testkit",
+]
+
+[workspace.package]
+version = "0.1.0"
+edition = "2024"
+rust-version = "1.99.0"
+license = "MIT"
+repository = "https://github.com/rupakc/travel-planner-crawler"
+publish = false
+
+[workspace.lints.rust]
+unsafe_code = "forbid"
+missing_docs = "warn"
+
+[workspace.lints.clippy]
+dbg_macro = "warn"
+todo = "allow"
+
+# Dependencies are only added here, by the controller (see docs/ownership.md).
+# Crates reference them with `workspace = true` and may only add features.
+[workspace.dependencies]
+# --- workspace crates ---
+vc-core = { path = "crates/vc-core" }
+vc-config = { path = "crates/vc-config" }
+vc-policy = { path = "crates/vc-policy" }
+vc-frontier = { path = "crates/vc-frontier" }
+vc-fetch = { path = "crates/vc-fetch" }
+vc-render = { path = "crates/vc-render" }
+vc-store = { path = "crates/vc-store" }
+vc-parse = { path = "crates/vc-parse" }
+vc-kinds = { path = "crates/vc-kinds" }
+vc-llm = { path = "crates/vc-llm" }
+vc-extract = { path = "crates/vc-extract" }
+vc-sources = { path = "crates/vc-sources" }
+vc-queue = { path = "crates/vc-queue" }
+vc-index = { path = "crates/vc-index" }
+vc-api = { path = "crates/vc-api" }
+vc-obs = { path = "crates/vc-obs" }
+vc-secrets = { path = "crates/vc-secrets" }
+testkit = { path = "testkit" }
+
+# --- runtime / async ---
+tokio = { version = "1.54.1", features = ["full"] }
+tokio-util = { version = "0.7.20", features = ["io"] }
+futures = "0.3.34"
+async-trait = "0.1.92"
+
+# --- errors / basics ---
+thiserror = "2.0.21"
+anyhow = "1.0.104"
+serde = { version = "1.0.229", features = ["derive", "rc"] }
+serde_json = "1.0.154"
+serde_norway = "0.9.42"
+toml = "1.2.1"
+bytes = { version = "1.12.1", features = ["serde"] }
+ulid = { version = "3.0.0", features = ["serde"] }
+blake3 = "1.8.7"
+sha2 = "0.11.1"
+crc32c = "0.6.9"
+hex = "0.4.3"
+chrono = { version = "0.4.45", default-features = false, features = ["clock", "serde", "std"] }
+url = { version = "2.5.8", features = ["serde"] }
+psl = "2.1.255"
+regex = "1.13.1"
+http = "1.5.0"
+httpdate = "1.0.3"
+jsonschema = { version = "0.61.2", default-features = false }
+
+# --- HTTP / network ---
+reqwest = { version = "0.13.5", default-features = false, features = ["rustls", "http2", "gzip", "brotli", "zstd", "deflate", "stream", "charset", "hickory-dns", "json"] }
+hickory-resolver = "0.26.3"
+chromiumoxide = "0.9.1"
+texting_robots = "0.2.2"
+
+# --- parsing ---
+quick-xml = "0.42.0"
+feed-rs = "3.0.0"
+scraper = "0.29.0"
+dom_smoothie = "0.19.0"
+whatlang = "0.18.0"
+encoding_rs = "0.8.44"
+csv = "1.4.0"
+
+# --- storage / compression ---
+warc = "0.4.0"
+zstd = "0.14.4"
+flate2 = "1.1.11"
+bzip2 = "0.6.1"
+async-compression = { version = "0.4.52", features = ["tokio", "gzip"] }
+sqlx = { version = "0.9.0", default-features = false, features = ["runtime-tokio", "tls-rustls", "postgres", "macros", "migrate", "chrono", "json", "uuid"] }
+pgvector = { version = "0.4.2", features = ["sqlx", "halfvec"] }
+google-cloud-storage = "1.22.0"
+google-cloud-auth = "1.19.0"
+
+# --- API ---
+axum = "0.8.9"
+axum-server = { version = "0.9.2", features = ["tls-rustls"] }
+tower-http = { version = "0.7.1", features = ["trace", "timeout", "limit"] }
+utoipa = { version = "6.0.0", features = ["axum_extras", "chrono"] }
+argon2 = "0.6.0"
+
+# --- observability / config / cli ---
+tracing = "0.1.44"
+tracing-subscriber = { version = "0.3.23", features = ["json", "env-filter"] }
+prometheus-client = "0.26.0"
+figment = { version = "0.10.19", features = ["toml", "env"] }
+clap = { version = "4.6.7", features = ["derive", "env"] }
+
+# --- testing ---
+fail = "0.5.1"
+proptest = "1.12.0"
+insta = { version = "1.49.0", features = ["json", "yaml"] }
+wiremock = "0.6.5"
+testcontainers = { version = "0.28.0", features = ["blocking"] }
+tempfile = "3.27.0"
+
+[profile.dev]
+debug = "line-tables-only"
+
+[profile.dev.package."*"]
+debug = false

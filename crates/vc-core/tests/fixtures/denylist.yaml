@@ -1,0 +1,150 @@
+# Hosts VoyagerBot never requests (spec §2 anti-goals, §5.2; research docs/research/sources.md §0).
+# Read by vc-policy (Policy::denied), the source scout and scripts/seeds_to_sources.py.
+#
+# Entry: {host, reason, source} plus an optional path_prefix.
+#   host         a host name; it matches that host and every subdomain of it
+#                (booking.com matches www.booking.com, m.booking.com).
+#                "<brand>.*" matches the brand label directly under ANY public suffix
+#                (expedia.* matches expedia.com, www.expedia.co.uk, expedia.de) – the
+#                organisation rule from review r3 #8.
+#   path_prefix  only URLs whose path starts with this prefix are denied.
+#   except_hosts partner-API hosts of a denied organisation (and their subdomains) that are
+#                NOT covered by the entry. Usable only under a signed partner agreement;
+#                the matching sources/*.yaml stay enabled: false until then.
+#   source       where the decision comes from: a seeds.yaml id ("seed:<id>"),
+#                "sources.md §N", or "brand" (brand domain of a denied organisation).
+#
+# Removing an entry needs the owner's approval in the PR (CODEOWNERS). Adding one never does.
+version: 1
+entries:
+  # --- seeds.yaml allowed:false -------------------------------------------------------
+  - host: developers.amadeus.com
+    reason: Self-Service API shut down 2026-07-17; Enterprise access is contract-only
+    source: seed:amadeus-selfservice
+  - host: google.com
+    path_prefix: /travel
+    reason: Google ToS bans automated access against robots.txt; robots disallows /travel/*
+    source: seed:google-flights
+  - host: google.com
+    path_prefix: /flights
+    reason: Google Flights entry path; same ToS as /travel
+    source: brand
+  - host: skyscanner.*
+    reason: "ToS: no bots/spiders to scan, copy or index; partner API only"
+    source: seed:skyscanner
+  - host: kayak.*
+    reason: Booking Holdings ToS; large robots disallow list
+    source: seed:kayak
+  - host: booking.com
+    except_hosts: [developers.booking.com, demandapi.booking.com]
+    reason: ToS bars automated access (scraping, crawling) without written permission
+    source: seed:booking-html
+  - host: expedia.*
+    reason: ToS bars robots, spiders and scrapers without prior written permission
+    source: seed:expedia-html
+  - host: airbnb.*
+    reason: ToS bans bots, crawlers and scrapers
+    source: seed:airbnb-html
+  - host: tripadvisor.*
+    reason: ToS prohibits bots unless expressly approved; AI bots disallowed site-wide
+    source: seed:tripadvisor-html
+  - host: viator.com
+    except_hosts: [docs.viator.com, api.viator.com]
+    reason: robots.txt answers 403 to an honest bot; Tripadvisor-family terms
+    source: seed:viator-html
+  - host: getyourguide.*
+    except_hosts: [partner.getyourguide.com, api.getyourguide.com]
+    reason: robots.txt answers 403 to an honest bot (bot wall)
+    source: seed:gyg-html
+  - host: eventbrite.com
+    path_prefix: /rss/
+    reason: robots disallows /rss/ for *
+    source: seed:eventbrite-rss
+  - host: eventbrite.com
+    path_prefix: /events/rss/
+    reason: robots disallows /events/rss/ for *
+    source: seed:eventbrite-rss
+  - host: eventbrite.com
+    path_prefix: /atom/
+    reason: robots disallows /atom/ for *
+    source: seed:eventbrite-rss
+  - host: iatatravelcentre.com
+    reason: Timatic is a commercial licence product; Content-Signal ai-train=no, use=reference
+    source: seed:timatic
+  - host: rome2rio.com
+    reason: commercial product, ToS not verified; link-only, never crawl content
+    source: seed:rome2rio
+  - host: numbeo.com
+    reason: ToS restricts automated extraction (paid API)
+    source: seed:numbeo
+  - host: travel.stackexchange.com
+    reason: "robots Disallow: / with Content-signal search=no, ai-train=no; use the data dump"
+    source: seed:se-html
+  - host: lonelyplanet.com
+    path_prefix: /thorntree
+    reason: forum closed and removed in 2021; robots disallows /thorntree/*
+    source: seed:thorntree
+  - host: flyertalk.com
+    reason: robots.txt and RSS answer 403 to an honest bot (bot wall)
+    source: seed:flyertalk
+  - host: fodors.com
+    reason: 403 to an honest bot (bot wall)
+    source: seed:fodors-forum
+  - host: travelfish.org
+    reason: site and feeds answer 403 to an honest bot
+    source: seed:travelfish-board
+  - host: reddit.com
+    reason: "robots Disallow: /; Data API is non-commercial only"
+    source: seed:reddit
+  - host: wikitravel.org
+    reason: 403 to an honest bot; use Wikivoyage
+    source: seed:wikitravel
+  - host: travelandleisure.com
+    reason: feed answers 403 to an honest bot; do not evade
+    source: seed:blocked-travelandleisure
+  - host: travelpulse.com
+    reason: feed answers 403 to an honest bot; do not evade
+    source: seed:blocked-travelpulse
+  - host: travelweekly.com
+    reason: feed answers 403 to an honest bot; do not evade
+    source: seed:blocked-travelweekly
+  - host: frommers.com
+    reason: feed answers 403 to an honest bot; do not evade
+    source: seed:blocked-frommers
+  - host: phocuswire.com
+    reason: feed answers 403 to an honest bot; do not evade
+    source: seed:blocked-phocuswire
+  - host: thepoortraveler.net
+    reason: feed answers 403 to an honest bot; do not evade
+    source: seed:blocked-thepoortraveler
+  - host: bucketlistly.blog
+    reason: feed answers 403 to an honest bot; do not evade
+    source: seed:blocked-bucketlistly
+  # --- brand domains of denied organisations (review r3 #8) ----------------------------
+  - host: hotels.com
+    reason: Expedia Group brand; same ToS as Expedia
+    source: brand
+  - host: vrbo.com
+    reason: Expedia Group brand; same ToS as Expedia
+    source: brand
+  - host: travelocity.com
+    reason: Expedia Group brand; ToS bars violating robot exclusion headers
+    source: brand
+  - host: orbitz.com
+    reason: Expedia Group brand
+    source: brand
+  - host: momondo.*
+    reason: Booking Holdings brand (Kayak group)
+    source: brand
+  - host: trivago.*
+    reason: Expedia Group brand (metasearch)
+    source: brand
+  - host: agoda.com
+    reason: Booking Holdings brand
+    source: brand
+  - host: priceline.com
+    reason: Booking Holdings brand
+    source: brand
+  - host: cheapflights.*
+    reason: Booking Holdings brand (Kayak group)
+    source: brand

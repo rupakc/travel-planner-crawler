@@ -1,0 +1,6 @@
+# Only vc-frontier and testkit may mint permits or move their deadline; they do so behind a
+# local `#[allow(clippy::disallowed_methods)]`. Everyone else gets a ClaimPermit from a claim.
+disallowed-methods = [
+    { path = "vc_core::frontier::ClaimPermit::mint", reason = "only vc-frontier (and testkit) may mint ClaimPermits" },
+    { path = "vc_core::frontier::ClaimPermit::extend_to", reason = "only vc-frontier (and testkit) may move a permit deadline; call Frontier::extend" },
+]
