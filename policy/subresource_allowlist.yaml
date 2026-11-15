@@ -1,0 +1,28 @@
+# Third-party hosts a render may load sub-resources from (spec §5.4, §17.1).
+# Read by vc-render. Anything not listed here and not on the page's own politeness key
+# is answered with Fetch.failRequest.
+#
+# Every allowed sub-request still goes through the full gate: SSRF check, denylist, robots
+# from the origins cache (stale or missing -> fail and enqueue a refresh), a lease check
+# and a global rate token via PermitClient, and the 250 ms per-key sub-resource gap.
+# These hosts are seeded as politeness keys so their robots.txt stays fresh.
+#
+# types: CDP Network.ResourceType values (lowercase) allowed from that host.
+# Images, media, fonts and known trackers are always blocked, whatever the host.
+version: 1
+hosts:
+  - host: cdnjs.cloudflare.com
+    types: [script, stylesheet, xhr, fetch]
+    reason: public JS/CSS CDN
+  - host: cdn.jsdelivr.net
+    types: [script, stylesheet, xhr, fetch]
+    reason: public JS/CSS CDN
+  - host: unpkg.com
+    types: [script, stylesheet, xhr, fetch]
+    reason: public JS/CSS CDN
+  - host: ajax.googleapis.com
+    types: [script, stylesheet]
+    reason: Google Hosted Libraries (JS)
+  - host: fonts.googleapis.com
+    types: [stylesheet]
+    reason: CSS only; the font files themselves (fonts.gstatic.com) are blocked
