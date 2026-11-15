@@ -1,6 +1,8 @@
-# Voyager Crawler — Design (v2)
+# Voyager Crawler — Design (v3)
 
-Status: v2, revised after review round 1 (`docs/reviews/r1_*.md`) · 2026-11-15 · Owner: rupakc
+Status: **v3 (approved for build)** · reviewed 5× (round 1: r1–r3; round 2: r4 verify, r5 builder check; all in `docs/reviews/`) · 2026-11-15 · Owner: rupakc
+
+> **§17 is normative and overrides any earlier section it contradicts.**
 Research: `docs/research/{rust_stack,sources,gcp}.md`, `docs/research/seeds.yaml`
 
 Changes from v1 are listed in §16.
@@ -97,9 +99,8 @@ crates/
   vc-frontier  trait Frontier (claim/complete/enqueue/park) + Postgres impl; fenced leases;
                DB-backed global rate limit; recrawl estimator
   vc-fetch     reqwest fetch requiring a ClaimPermit; conditional GET, streaming limits, redirects
-  vc-egress    forward proxy for Chromium: every sub-request checked (permit scope, robots,
-               SSRF, per-key serialisation + delay, third-party allowlist)
-  vc-render    chromiumoxide: network-idle, auto-scroll, allowlisted expand clicks, resource blocking
+  vc-render    chromiumoxide with CDP Fetch interception: Chromium has NO network; every request it makes
+               is paused and fulfilled by vc-fetch under the permit (§17.1); auto-scroll, expand clicks
   vc-store     trait BlobStore (GCS, local FS, fake), WARC writer/reader, Spool, SegmentRoller, CDXJ
   vc-parse     trait ContentHandler per media type (html, feed, sitemap, json, csv; pdf later),
                main content (dom_smoothie), JSON-LD/microdata, lang, simhash, links
@@ -528,3 +529,110 @@ The 100 GB disk is enough for year 1 at 1x.
 **Not taken**
 - r3's "defer Chromium/vector search": the owner explicitly asked for a headless browser and an index. Both are kept, but isolated and budgeted.
 - r3's "separate project": the owner chose the same project.
+
+## 17. v3 amendments (review round 2, normative)
+
+These amendments resolve r4 (round-2 verification) and adopt r5 (builder check) Q1–Q16 and its P0 list. **r5's resolutions are adopted as written** unless amended below.
+
+### 17.1 Chromium: interception, not a proxy (r4 B1)
+
+A CONNECT proxy can't see inside HTTPS, so **`vc-egress` is removed**.
+- Chromium runs on a Docker network with **no egress at all**; its only peer is the fetcher's CDP client.
+- `vc-render` enables CDP `Fetch.enable` for all URL patterns. Every request Chromium makes (document, XHR, script, CSS) is paused (`Fetch.requestPaused`). The renderer then does three things:
+  1. It applies the policy checks: SSRF, denylist, robots from the `origins` cache (stale or missing → fail the request, and a refresh is enqueued; egress never fetches robots), the permit scope (the page's own key, or `policy/subresource_allowlist.yaml` hosts), and the blocked resource types (images, media, fonts, known trackers).
+  2. It fetches through `PermitClient` (so it takes a lease check + global rate token per request).
+  3. It answers Chromium with `Fetch.fulfillRequest`, or `Fetch.failRequest` if a check failed.
+- Every sub-request is a normal `Exchange` → WARC `request`/`response` records in the same spool as the DOM `resource` record. One process, one permit, no HMAC.
+- **Sub-resource cache:** content-addressed, TTL 24 h, shared across renders. Most JS/CSS of a site is fetched once a day.
+- **Render budget:** 90 s, ≤ 60 sub-requests. Per-key sub-resource gap 250 ms. "Network idle" = no paused request outstanding for 1 s. Render deadlines count against the claim deadline.
+
+### 17.2 Leases, URL states and commit (r4 B2)
+
+- A claim leases **≤ 5 URLs**. The deadline is `5 × per-URL budget` (per-URL budget = 30 s request + 5 hops × 30 s, or the 90 s render, + 60 s body; ≈ 4 min) and is extendable with the epoch-fenced `extend`. Socket, connect and read timeouts are always `min(own timeout, deadline − now())`, so no request outlives its lease.
+- URL states:
+  - `due` → `leased(epoch)` at claim;
+  - → `fetched_pending` (a small epoch-fenced tx right after the spool record is fsynced; sets `next_fetch_at`; validators **not** touched);
+  - → `due` again when the segment commit runs `vc_commit_segment`.
+- `vc_commit_segment` writes validators/payload hash only `WHERE url_state.last_captured_at < captured_at` (monotonic guard, not epoch-gated). This makes late, orphan or replayed segments safe.
+- `leased` URLs whose epoch is dead return to `due` at the next claim of that key. `fetched_pending` URLs are never re-leased; the spool replay always completes them.
+
+### 17.3 Batch prediction lifecycle (r4 B3)
+
+`batch_jobs(id ULID, state, purpose, model, input_uri, output_uri, vertex_job_name, reserved_usd, request_count, created_at, submitted_at, finished_at, ingested_at, error)`.
+
+1. **Create.** The row is inserted `state = 'prepared'` with the input JSONL already written to GCS. Each line has `key = <work_id>`.
+2. **Submit.** The job is submitted with display name = the row id and label `batch_id = <row id>`; the row then goes to `submitted` with the job name.
+3. **Reconcile.** On start, and every 10 minutes, list Vertex jobs labelled `app=voyager-crawler` and adopt any whose `batch_id` row lacks a job name. This handles a crash between submit and the row update. Never resubmit a `prepared` row without listing first.
+4. **Ingest.** Results are mapped by `key`. Missing or failed keys go back to the queue with `nack`.
+5. **Timeout.** After 72 h → cancel, mark `failed`, nack all items.
+
+The reservation stays open until ingest (batch reservations are exempt from the 1 h auto-settle).
+
+### 17.4 Budget arithmetic (r4 M8)
+
+- One statement reserves against **both** the day and the month row:
+
+  ```sql
+  WITH d AS (UPDATE llm_budget SET reserved = reserved + $e
+             WHERE period = $day AND spent + reserved + $e <= cap RETURNING 1),
+       m AS (UPDATE llm_budget SET reserved = reserved + $e
+             WHERE period = $month AND spent + reserved + $e <= cap AND EXISTS (SELECT 1 FROM d) RETURNING 1)
+  ```
+
+  Rows count only if both CTEs returned a row; otherwise the transaction rolls back.
+- The daily cap is dynamic: `min(VC_LLM_DAILY_USD, 1.5 × remaining_month_cap / remaining_days)`. Defaults: month 40, day 1.50.
+- Purpose sub-shares of the monthly cap: extraction 70%, embeddings 8%, triage 8%, auditor 7%, scout 4%, place disambiguation 3%.
+- **One formula for protecting Voyager:** the crawler's monthly cap must be ≤ 50% of `VC_PROJECT_CAP_USD` (the owner enters the value they set in the console). Startup refuses otherwise, and the runbook lists the matching console value.
+- `llm_cache(model, prompt_hash, input_hash) → output`, so identical inputs are never paid twice.
+- Model: `VC_LLM_MODEL` defaults to `gemini-3.1-flash-lite` (cheapest per the research: $0.25/$1.50 per 1M tokens, batch half that). Startup probes the model with a one-token call and fails loudly if it's unavailable. `gemini-3.5-flash-lite` (the app's model) is one setting away.
+
+### 17.5 VM, health, TLS (r4 M5)
+
+- **No MIG.** A plain VM with automatic restart on host maintenance. Static **internal** IP (10.142.0.x, reserved) and static external IP (the crawl identity in BOT.md).
+- Docker `restart: unless-stopped` + progress health checks + a host `watchdog.timer` (restarts unhealthy services; reboots the VM after 3 failed restarts in 30 min).
+- Deploy state (`/var/lib/voyager-crawler`) lives on the data disk.
+- **TLS:** a self-signed certificate for the static internal IP.
+  - The private key lives in secret `crawler-api-tls-key` (crawler SA only).
+  - The certificate lives in `crawler-api-tls-cert` (readable by `vm-runtime` for pinning). Two-year validity.
+  - `bootstrap.sh --rotate-tls` rotates it; the client accepts the current or next certificate during rotation.
+  - An expiry metric alerts 30 days before.
+
+### 17.6 Migrations and rollback (r4 M6)
+
+- Every migration is **expand-only**; contract migrations live in `migrations/contract/` and run only via `vcrawl migrate --contract`, which refuses unless the current image has run for 7 days and no rollback happened in that window. Rollback targets are limited to images whose `min_schema ≤ current schema` (stamped as an image label).
+- Every migration does `SET lock_timeout = '5s'`. Indexes on partitioned tables are created per partition (`CONCURRENTLY`), then `ATTACH`.
+- No foreign keys into partitioned tables. References carry `(id, month)`.
+
+### 17.7 Purge and retention, honestly (r4 M7)
+
+- **Opt-out SLA (BOT.md):**
+  - removed from the API and index within 24 h;
+  - removed from GCS raw/text/Parquet within 7 days: segment rewrite without the records, then deletion of non-current object versions;
+  - gone from backups (WAL 14 d) and snapshots (7 d) within **21 days**.
+- `noarchive` and TDM-reserved captures go to the `ephemeral/` prefix (lifecycle delete at 30 days; never Coldline).
+- `cdxj/` and `text/` are excluded from the Coldline lifecycle rule.
+
+### 17.8 Licence and source classes (r4 M9, r5 Q12)
+
+- `SourceSpec` gets `source_class: official | reference | editorial | community | commercial_api`. `official` = government or intergovernmental domains/APIs only; Wikipedia/Wikidata are `reference`.
+- High-stakes kinds:
+  - `visa_rule` and `advisory` come from `official` only;
+  - `emergency_numbers` comes from `official`, or from `reference` only when two independent reference sources agree.
+- New licence class `api_terms`. The data is usable per the provider's terms; the source sets `max_retention_days` and `display_requirements`. Ticketmaster and Nager.Date are of this class, which keeps events in scope.
+- `weather_normal` comes from MET Norway (CC BY 4.0) + Wikipedia climate tables (`share_alike`).
+- Grounding passed to Voyager (§13) is wrapped as **untrusted reference data** in the prompt, with licence and conflict flags.
+
+### 17.9 Change feed, restore drill, sizing (r4 M9)
+
+- **Change feed:** `changes` rows carry `xid8 = pg_current_xact_id()`. `/v1/changes` serves only rows with `xid < pg_snapshot_xmin(pg_current_snapshot())`. The cursor is `(xid, seq)`. No skipped commits.
+- **Restore drill:**
+  - weekly on the VM: `wal-g backup-verify` + a schema-only restore into a 256 MB container;
+  - monthly full drill: `vcrawl maintenance restore-drill` creates an ephemeral **Spot e2-standard-2** VM (≈ $0.05 per drill) that restores the latest base backup + WAL, runs the equivalence checks, reports `restore_drill_ok` and deletes itself.
+
+  This needs `compute.instances.create` on a dedicated template only (a custom role scoped by an IAM condition on name prefix `crawler-drill-`).
+- **HNSW sizing:** at 1x, embed only current entities and article summaries (≤ 400k vectors, halfvec, `m = 16`) ≈ 0.9 GB. Beyond that, see §11.
+- `url_state` updates touch indexed columns, so they are not HOT. Partitioning + per-partition autovacuum (`scale_factor 0.02`) is the mitigation; the `fillfactor` claim is dropped.
+
+### 17.10 Ownership and parallel build (r5 d)
+
+`docs/ownership.md` maps paths to owners. `scripts/check-ownership.sh` runs in CI on agent branches. `vc-core` is frozen after P0, and changes go through the controller. Dependencies are pinned in the root `Cargo.toml` during P0. Migration blocks: frontier 11xx, store 12xx, queue 13xx, llm 14xx, index 15xx, api 16xx, sources 17xx, ops 18xx. Merges are serialised: testkit first, and the workspace must be green on every merge.
