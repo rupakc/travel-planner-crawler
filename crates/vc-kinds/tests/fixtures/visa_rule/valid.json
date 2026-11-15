@@ -1,0 +1,25 @@
+{
+  "destination_country": "Japan",
+  "destination_country_code": "JP",
+  "nationality": "United States",
+  "nationality_code": "US",
+  "purpose": "tourism",
+  "visa_type": "visa_free",
+  "max_stay_days": 90,
+  "passport_validity_months": 0,
+  "requirements": [
+    "Passport valid for the duration of stay",
+    "Onward or return ticket"
+  ],
+  "fee": {
+    "text": "No fee",
+    "amount": 0,
+    "currency": "JPY",
+    "is_free": true
+  },
+  "source_url": "https://www.mofa.go.jp/j_info/visit/visa/short/novisa.html",
+  "as_of": "2026-04-01",
+  "evidence": [
+    "United States of America: 90 days"
+  ]
+}

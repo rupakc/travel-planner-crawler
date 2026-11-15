@@ -1,0 +1,13 @@
+{
+  "item": "Type A/B plug adapter",
+  "category": "electronics",
+  "essential": true,
+  "reason": "Japan uses two-pin type A and B sockets at 100 V.",
+  "country": "Japan",
+  "country_code": "JP",
+  "plug_types": [
+    "A",
+    "B"
+  ],
+  "voltage_v": 100
+}

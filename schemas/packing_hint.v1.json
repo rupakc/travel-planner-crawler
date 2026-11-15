@@ -1,0 +1,146 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/rupakc/travel-planner-crawler/schemas/packing_hint.v1.json",
+  "title": "Packing hint",
+  "description": "One record: one destination-specific packing item and why to bring it. Voyager use: packing_list.categories[].items (item, essential, note).",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "item": {
+      "type": "string",
+      "maxLength": 120,
+      "description": "What to pack."
+    },
+    "category": {
+      "type": "string",
+      "enum": [
+        "documents",
+        "clothing",
+        "electronics",
+        "health",
+        "toiletries",
+        "activity_gear",
+        "destination_specific",
+        "other"
+      ],
+      "description": "Category."
+    },
+    "essential": {
+      "type": "boolean",
+      "description": "True if forgetting it would seriously affect the trip."
+    },
+    "reason": {
+      "type": "string",
+      "maxLength": 240,
+      "description": "Why, tied to the destination."
+    },
+    "city": {
+      "type": "string",
+      "maxLength": 120,
+      "description": "City in English. Always paired with `country`."
+    },
+    "country": {
+      "type": "string",
+      "maxLength": 80,
+      "description": "Country in English (e.g. \"Japan\"). Required whenever `city` is set."
+    },
+    "country_code": {
+      "type": "string",
+      "maxLength": 2,
+      "description": "ISO 3166-1 alpha-2 country code of `country`.",
+      "pattern": "^[A-Z]{2}$"
+    },
+    "months": {
+      "type": "array",
+      "items": {
+        "type": "integer",
+        "description": "Month 1-12.",
+        "minimum": 1,
+        "maximum": 12
+      },
+      "maxItems": 12,
+      "description": "Months it applies to (empty = all year)."
+    },
+    "conditions": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "rain",
+          "cold",
+          "heat",
+          "snow",
+          "humidity",
+          "sun",
+          "altitude",
+          "insects",
+          "dress_code",
+          "beach",
+          "hiking"
+        ],
+        "description": "Condition."
+      },
+      "maxItems": 6,
+      "description": "Conditions that call for it."
+    },
+    "plug_types": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "A",
+          "B",
+          "C",
+          "D",
+          "E",
+          "F",
+          "G",
+          "H",
+          "I",
+          "J",
+          "K",
+          "L",
+          "M",
+          "N",
+          "O"
+        ],
+        "description": "IEC plug type letter."
+      },
+      "maxItems": 6,
+      "description": "Plug types (electronics hints)."
+    },
+    "voltage_v": {
+      "type": "integer",
+      "description": "Mains voltage, if this hint is about power.",
+      "minimum": 90,
+      "maximum": 260
+    },
+    "source_url": {
+      "type": "string",
+      "maxLength": 2048,
+      "description": "The page's own link for this item (official site, booking or detail page), copied verbatim from the page.",
+      "pattern": "^https?://[^\\s]+$"
+    },
+    "as_of": {
+      "type": "string",
+      "maxLength": 10,
+      "description": "The \"last updated\", \"valid from\" or publication date the page itself states for this information (YYYY-MM-DD).",
+      "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$"
+    },
+    "evidence": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "maxLength": 300,
+        "description": "A verbatim quote from the page."
+      },
+      "maxItems": 3,
+      "description": "Up to 3 short verbatim quotes from the page that support the most important facts."
+    }
+  },
+  "required": [
+    "item",
+    "category",
+    "country"
+  ]
+}

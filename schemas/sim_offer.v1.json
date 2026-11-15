@@ -1,0 +1,179 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/rupakc/travel-planner-crawler/schemas/sim_offer.v1.json",
+  "title": "SIM offer",
+  "description": "One record: one prepaid SIM or eSIM data plan for travellers. Voyager use: sim.plans (provider, plan_name, data_gb, validity_days, price_usd, purchase_location, url, network_quality).",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "provider": {
+      "type": "string",
+      "maxLength": 120,
+      "description": "Provider name."
+    },
+    "plan_name": {
+      "type": "string",
+      "maxLength": 160,
+      "description": "Plan name as written."
+    },
+    "sim_type": {
+      "type": "string",
+      "enum": [
+        "esim",
+        "physical",
+        "both"
+      ],
+      "description": "SIM type."
+    },
+    "city": {
+      "type": "string",
+      "maxLength": 120,
+      "description": "City in English. Always paired with `country`."
+    },
+    "country": {
+      "type": "string",
+      "maxLength": 80,
+      "description": "Country in English (e.g. \"Japan\"). Required whenever `city` is set."
+    },
+    "country_code": {
+      "type": "string",
+      "maxLength": 2,
+      "description": "ISO 3166-1 alpha-2 country code of `country`.",
+      "pattern": "^[A-Z]{2}$"
+    },
+    "coverage_country_codes": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "maxLength": 2,
+        "description": "A covered country.",
+        "pattern": "^[A-Z]{2}$"
+      },
+      "maxItems": 40,
+      "description": "Countries covered (multi-country plans)."
+    },
+    "data_gb": {
+      "type": "number",
+      "description": "Included data in GB (convert MB/1000).",
+      "minimum": 0,
+      "maximum": 10000
+    },
+    "unlimited_data": {
+      "type": "boolean",
+      "description": "True for unlimited data plans."
+    },
+    "validity_days": {
+      "type": "integer",
+      "description": "Validity in days.",
+      "minimum": 0,
+      "maximum": 3650
+    },
+    "price": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "text": {
+          "type": "string",
+          "maxLength": 80,
+          "description": "The price exactly as written on the page, e.g. \"€45.00\", \"from ¥1,500\", \"Free\"."
+        },
+        "amount": {
+          "type": "number",
+          "description": "The number in `text`, without currency symbols or thousands separators.",
+          "minimum": 0
+        },
+        "currency": {
+          "type": "string",
+          "maxLength": 3,
+          "description": "ISO 4217 code of the currency in `text`; never converted.",
+          "pattern": "^[A-Z]{3}$"
+        },
+        "unit": {
+          "type": "string",
+          "maxLength": 40,
+          "description": "What the price is for, e.g. \"per person\", \"per night\", \"per ride\"."
+        },
+        "is_free": {
+          "type": "boolean",
+          "description": "True only if the page says it is free (tips may still be expected)."
+        }
+      },
+      "description": "Plan price."
+    },
+    "calls_included": {
+      "type": "boolean",
+      "description": "Includes local calls."
+    },
+    "sms_included": {
+      "type": "boolean",
+      "description": "Includes SMS."
+    },
+    "local_number": {
+      "type": "boolean",
+      "description": "Comes with a local phone number."
+    },
+    "hotspot_allowed": {
+      "type": "boolean",
+      "description": "Tethering allowed."
+    },
+    "network": {
+      "type": "string",
+      "maxLength": 120,
+      "description": "Host network(s)."
+    },
+    "speed": {
+      "type": "string",
+      "maxLength": 40,
+      "description": "Network generation, e.g. \"5G\", \"4G LTE\"."
+    },
+    "purchase_location": {
+      "type": "string",
+      "enum": [
+        "online",
+        "airport",
+        "carrier_store",
+        "convenience_store",
+        "other"
+      ],
+      "description": "Where to buy."
+    },
+    "registration_requirements": {
+      "type": "string",
+      "maxLength": 200,
+      "description": "ID/passport registration rules as written."
+    },
+    "url": {
+      "type": "string",
+      "maxLength": 2048,
+      "description": "Plan or purchase page.",
+      "pattern": "^https?://[^\\s]+$"
+    },
+    "source_url": {
+      "type": "string",
+      "maxLength": 2048,
+      "description": "The page's own link for this item (official site, booking or detail page), copied verbatim from the page.",
+      "pattern": "^https?://[^\\s]+$"
+    },
+    "as_of": {
+      "type": "string",
+      "maxLength": 10,
+      "description": "The \"last updated\", \"valid from\" or publication date the page itself states for this information (YYYY-MM-DD).",
+      "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$"
+    },
+    "evidence": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "maxLength": 300,
+        "description": "A verbatim quote from the page."
+      },
+      "maxItems": 3,
+      "description": "Up to 3 short verbatim quotes from the page that support the most important facts."
+    }
+  },
+  "required": [
+    "provider",
+    "plan_name",
+    "country"
+  ]
+}

@@ -1,0 +1,10 @@
+{
+  "base_currency": "EUR",
+  "quote_currency": "JPY",
+  "rate": 168.2,
+  "rate_date": "2026-11-13",
+  "rate_type": "reference",
+  "publisher": "European Central Bank",
+  "local_currency_name": "Japanese yen",
+  "local_currency_symbol": "¥"
+}

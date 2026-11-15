@@ -1,0 +1,31 @@
+{
+  "name": "Nishiki Market Food Walk",
+  "category": "food",
+  "description": "A guided tasting walk through Nishiki Market sampling pickles, tamagoyaki and matcha sweets.",
+  "city": "Kyoto",
+  "country": "Japan",
+  "country_code": "JP",
+  "location": "Nishiki Market",
+  "meeting_point": "Daimaru Kyoto main entrance",
+  "duration_hours": 3,
+  "price": {
+    "text": "¥9,800 per person",
+    "amount": 9800,
+    "currency": "JPY",
+    "unit": "per person"
+  },
+  "operator": "Kyoto Food Walks",
+  "booking_url": "https://example-tours.jp/nishiki-food-walk",
+  "languages": [
+    "English",
+    "Japanese"
+  ],
+  "schedule": "Daily at 10:00",
+  "age_suitability": "all ages",
+  "family_friendly": true,
+  "rating": {
+    "value": 4.8,
+    "scale": 5,
+    "count": 412
+  }
+}

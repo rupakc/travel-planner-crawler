@@ -1,0 +1,136 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/rupakc/travel-planner-crawler/schemas/route.v1.json",
+  "title": "Air route",
+  "description": "One record: one scheduled air route between two airports. Voyager use: flights (nonstop options, airlines), fare calendar sanity checks.",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "origin_iata": {
+      "type": "string",
+      "maxLength": 3,
+      "description": "Origin IATA code.",
+      "pattern": "^[A-Z]{3}$"
+    },
+    "origin_city": {
+      "type": "string",
+      "maxLength": 120,
+      "description": "Origin city in English."
+    },
+    "origin_country": {
+      "type": "string",
+      "maxLength": 80,
+      "description": "Origin country in English."
+    },
+    "destination_iata": {
+      "type": "string",
+      "maxLength": 3,
+      "description": "Destination IATA code.",
+      "pattern": "^[A-Z]{3}$"
+    },
+    "destination_city": {
+      "type": "string",
+      "maxLength": 120,
+      "description": "Destination city in English."
+    },
+    "destination_country": {
+      "type": "string",
+      "maxLength": 80,
+      "description": "Destination country in English."
+    },
+    "airlines": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "name": {
+            "type": "string",
+            "maxLength": 120,
+            "description": "Airline name."
+          },
+          "iata_code": {
+            "type": "string",
+            "maxLength": 2,
+            "description": "Airline IATA code.",
+            "pattern": "^[A-Z0-9]{2}$"
+          }
+        },
+        "required": [
+          "name"
+        ]
+      },
+      "maxItems": 12,
+      "description": "Airlines operating it."
+    },
+    "nonstop": {
+      "type": "boolean",
+      "description": "True for a nonstop service."
+    },
+    "seasonal": {
+      "type": "boolean",
+      "description": "True if it only runs part of the year."
+    },
+    "season": {
+      "type": "string",
+      "maxLength": 120,
+      "description": "When it runs, as written."
+    },
+    "frequency_per_week": {
+      "type": "integer",
+      "description": "Flights per week.",
+      "minimum": 0,
+      "maximum": 500
+    },
+    "duration_minutes": {
+      "type": "integer",
+      "description": "Scheduled block time.",
+      "minimum": 0,
+      "maximum": 1500
+    },
+    "distance_km": {
+      "type": "integer",
+      "description": "Great-circle distance.",
+      "minimum": 0,
+      "maximum": 20100
+    },
+    "start_date": {
+      "type": "string",
+      "maxLength": 10,
+      "description": "Service start date (YYYY-MM-DD).",
+      "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$"
+    },
+    "end_date": {
+      "type": "string",
+      "maxLength": 10,
+      "description": "Service end date (YYYY-MM-DD).",
+      "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$"
+    },
+    "source_url": {
+      "type": "string",
+      "maxLength": 2048,
+      "description": "The page's own link for this item (official site, booking or detail page), copied verbatim from the page.",
+      "pattern": "^https?://[^\\s]+$"
+    },
+    "as_of": {
+      "type": "string",
+      "maxLength": 10,
+      "description": "The \"last updated\", \"valid from\" or publication date the page itself states for this information (YYYY-MM-DD).",
+      "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$"
+    },
+    "evidence": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "maxLength": 300,
+        "description": "A verbatim quote from the page."
+      },
+      "maxItems": 3,
+      "description": "Up to 3 short verbatim quotes from the page that support the most important facts."
+    }
+  },
+  "required": [
+    "origin_iata",
+    "destination_iata"
+  ]
+}

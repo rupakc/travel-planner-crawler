@@ -1,0 +1,26 @@
+{
+  "name": "Gion Matsuri Yamaboko Junko",
+  "category": "festival",
+  "description": "The main float procession of the Gion Festival; streets in central Kyoto close to traffic.",
+  "start_date": "2026-07-17",
+  "end_date": "2026-07-17",
+  "start_time": "09:00",
+  "date_certainty": "confirmed_annual",
+  "recurrence": "annual",
+  "venue": "Shijo-dori",
+  "city": "Kyoto",
+  "country": "Japan",
+  "country_code": "JP",
+  "price": {
+    "text": "Free to watch",
+    "amount": 0,
+    "currency": "JPY",
+    "is_free": true
+  },
+  "ticket_url": "https://www.gionmatsuri.or.jp/en/",
+  "impact": "highlight",
+  "interests": [
+    "culture",
+    "history"
+  ]
+}

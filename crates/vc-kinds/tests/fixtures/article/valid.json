@@ -1,0 +1,24 @@
+{
+  "headline": "48 hours in Kyoto: temples, tofu and tea",
+  "summary": "A two-day route through eastern Kyoto pairing early temple visits with tofu kaiseki lunches.",
+  "author": "A. Writer",
+  "published_date": "2026-10-02",
+  "article_type": "itinerary",
+  "topics": [
+    "food",
+    "culture"
+  ],
+  "city": "Kyoto",
+  "country": "Japan",
+  "country_code": "JP",
+  "places_mentioned": [
+    {
+      "name": "Kiyomizu-dera",
+      "city": "Kyoto",
+      "country": "Japan"
+    }
+  ],
+  "facts": [
+    "Kiyomizu-dera opens at 6am, before tour groups arrive."
+  ]
+}

@@ -1,0 +1,254 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/rupakc/travel-planner-crawler/schemas/transport_option.v1.json",
+  "title": "Transport option",
+  "description": "One record: one way of getting around a city or between cities (metro, bus, train, ferry, taxi app, pass). Voyager use: getting_around.options (name, type, scope, description, coverage, price_info, operating_hours, tips, booking_url, tourist_pass).",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "name": {
+      "type": "string",
+      "maxLength": 160,
+      "description": "Name, e.g. \"Kyoto City Bus\"."
+    },
+    "type": {
+      "type": "string",
+      "enum": [
+        "metro",
+        "bus",
+        "tram",
+        "taxi",
+        "rideshare",
+        "bike",
+        "scooter",
+        "walking",
+        "water_transport",
+        "tourist_transport",
+        "train",
+        "long_distance_bus",
+        "domestic_flight",
+        "car_rental",
+        "ferry"
+      ],
+      "description": "Mode."
+    },
+    "scope": {
+      "type": "string",
+      "enum": [
+        "intra_city",
+        "inter_city"
+      ],
+      "description": "Within the city or between cities."
+    },
+    "city": {
+      "type": "string",
+      "maxLength": 120,
+      "description": "City in English. Always paired with `country`."
+    },
+    "country": {
+      "type": "string",
+      "maxLength": 80,
+      "description": "Country in English (e.g. \"Japan\"). Required whenever `city` is set."
+    },
+    "country_code": {
+      "type": "string",
+      "maxLength": 2,
+      "description": "ISO 3166-1 alpha-2 country code of `country`.",
+      "pattern": "^[A-Z]{2}$"
+    },
+    "to_city": {
+      "type": "string",
+      "maxLength": 120,
+      "description": "For inter-city options: the other city, in English. Paired with `to_country`."
+    },
+    "to_country": {
+      "type": "string",
+      "maxLength": 80,
+      "description": "Country of `to_city`, in English."
+    },
+    "operator": {
+      "type": "string",
+      "maxLength": 120,
+      "description": "Operator."
+    },
+    "description": {
+      "type": "string",
+      "maxLength": 400,
+      "description": "What it is and when to use it."
+    },
+    "coverage": {
+      "type": "string",
+      "maxLength": 200,
+      "description": "Area or lines covered."
+    },
+    "fares": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "label": {
+            "type": "string",
+            "maxLength": 80,
+            "description": "Fare name, e.g. \"Single ride\"."
+          },
+          "price": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "text": {
+                "type": "string",
+                "maxLength": 80,
+                "description": "The price exactly as written on the page, e.g. \"€45.00\", \"from ¥1,500\", \"Free\"."
+              },
+              "amount": {
+                "type": "number",
+                "description": "The number in `text`, without currency symbols or thousands separators.",
+                "minimum": 0
+              },
+              "currency": {
+                "type": "string",
+                "maxLength": 3,
+                "description": "ISO 4217 code of the currency in `text`; never converted.",
+                "pattern": "^[A-Z]{3}$"
+              },
+              "unit": {
+                "type": "string",
+                "maxLength": 40,
+                "description": "What the price is for, e.g. \"per person\", \"per night\", \"per ride\"."
+              },
+              "is_free": {
+                "type": "boolean",
+                "description": "True only if the page says it is free (tips may still be expected)."
+              }
+            },
+            "description": "Fare."
+          }
+        },
+        "required": [
+          "label"
+        ]
+      },
+      "maxItems": 6,
+      "description": "Fares."
+    },
+    "operating_hours": {
+      "type": "string",
+      "maxLength": 120,
+      "description": "Hours as written."
+    },
+    "frequency": {
+      "type": "string",
+      "maxLength": 120,
+      "description": "How often it runs."
+    },
+    "journey_minutes": {
+      "type": "integer",
+      "description": "Typical journey time in minutes (inter-city).",
+      "minimum": 0,
+      "maximum": 6000
+    },
+    "payment_methods": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "maxLength": 60,
+        "description": "e.g. \"ICOCA card\", \"cash\"."
+      },
+      "maxItems": 6,
+      "description": "How to pay."
+    },
+    "tourist_pass": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "name": {
+          "type": "string",
+          "maxLength": 120,
+          "description": "Pass name."
+        },
+        "durations": {
+          "type": "string",
+          "maxLength": 80,
+          "description": "Durations, e.g. \"1-5 days\"."
+        },
+        "price": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "text": {
+              "type": "string",
+              "maxLength": 80,
+              "description": "The price exactly as written on the page, e.g. \"€45.00\", \"from ¥1,500\", \"Free\"."
+            },
+            "amount": {
+              "type": "number",
+              "description": "The number in `text`, without currency symbols or thousands separators.",
+              "minimum": 0
+            },
+            "currency": {
+              "type": "string",
+              "maxLength": 3,
+              "description": "ISO 4217 code of the currency in `text`; never converted.",
+              "pattern": "^[A-Z]{3}$"
+            },
+            "unit": {
+              "type": "string",
+              "maxLength": 40,
+              "description": "What the price is for, e.g. \"per person\", \"per night\", \"per ride\"."
+            },
+            "is_free": {
+              "type": "boolean",
+              "description": "True only if the page says it is free (tips may still be expected)."
+            }
+          },
+          "description": "Pass price."
+        }
+      },
+      "required": [
+        "name"
+      ],
+      "description": "A visitor pass that covers this option."
+    },
+    "tips": {
+      "type": "string",
+      "maxLength": 300,
+      "description": "Practical advice."
+    },
+    "booking_url": {
+      "type": "string",
+      "maxLength": 2048,
+      "description": "Official or booking page.",
+      "pattern": "^https?://[^\\s]+$"
+    },
+    "source_url": {
+      "type": "string",
+      "maxLength": 2048,
+      "description": "The page's own link for this item (official site, booking or detail page), copied verbatim from the page.",
+      "pattern": "^https?://[^\\s]+$"
+    },
+    "as_of": {
+      "type": "string",
+      "maxLength": 10,
+      "description": "The \"last updated\", \"valid from\" or publication date the page itself states for this information (YYYY-MM-DD).",
+      "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$"
+    },
+    "evidence": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "maxLength": 300,
+        "description": "A verbatim quote from the page."
+      },
+      "maxItems": 3,
+      "description": "Up to 3 short verbatim quotes from the page that support the most important facts."
+    }
+  },
+  "required": [
+    "name",
+    "type",
+    "scope",
+    "city",
+    "country"
+  ]
+}

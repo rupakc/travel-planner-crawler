@@ -1,0 +1,35 @@
+{
+  "name": "Kyoto City Bus",
+  "type": "bus",
+  "scope": "intra_city",
+  "city": "Kyoto",
+  "country": "Japan",
+  "country_code": "JP",
+  "operator": "Kyoto City Transportation Bureau",
+  "description": "Dense bus network reaching most temples; crowded at peak times.",
+  "fares": [
+    {
+      "label": "Single ride (flat fare zone)",
+      "price": {
+        "text": "¥230",
+        "amount": 230,
+        "currency": "JPY"
+      }
+    }
+  ],
+  "operating_hours": "About 5:30 to 23:00",
+  "payment_methods": [
+    "ICOCA card",
+    "cash"
+  ],
+  "tourist_pass": {
+    "name": "Subway & Bus 1-Day Pass",
+    "durations": "1 day",
+    "price": {
+      "text": "¥1,100",
+      "amount": 1100,
+      "currency": "JPY"
+    }
+  },
+  "booking_url": "https://www2.city.kyoto.lg.jp/kotsu/webguide/en/"
+}

@@ -1,0 +1,18 @@
+{
+  "provider": "Airalo",
+  "plan_name": "Moshi Moshi 5 GB - 30 days",
+  "sim_type": "esim",
+  "country": "Japan",
+  "country_code": "JP",
+  "data_gb": 5,
+  "validity_days": 30,
+  "price": {
+    "text": "$13.00",
+    "amount": 13,
+    "currency": "USD"
+  },
+  "hotspot_allowed": true,
+  "speed": "5G",
+  "purchase_location": "online",
+  "url": "https://www.airalo.com/japan-esim"
+}

@@ -1,0 +1,26 @@
+{
+  "country": "Thailand",
+  "country_code": "TH",
+  "issuer": "US Department of State",
+  "issuer_country_code": "US",
+  "level": 1,
+  "level_max": 4,
+  "level_label": "Exercise normal precautions",
+  "summary": "Exercise normal precautions; some southern provinces carry a higher level due to civil unrest.",
+  "reasons": [
+    "civil_unrest"
+  ],
+  "regions": [
+    {
+      "name": "Yala, Pattani, Narathiwat and Songkhla provinces",
+      "level": 3,
+      "level_label": "Reconsider travel",
+      "summary": "Civil unrest associated with ethnic Malay separatism."
+    }
+  ],
+  "issued_date": "2026-06-10",
+  "source_url": "https://travel.state.gov/content/travel/en/traveladvisories/traveladvisories/thailand-travel-advisory.html",
+  "evidence": [
+    "Exercise normal precautions in Thailand."
+  ]
+}

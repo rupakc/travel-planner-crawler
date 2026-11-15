@@ -1,0 +1,126 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/rupakc/travel-planner-crawler/schemas/qa_thread.v1.json",
+  "title": "Q&A thread",
+  "description": "One record: one community question-and-answer thread about travel. Voyager use: chat grounding (traveller experience), tips.",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "question_title": {
+      "type": "string",
+      "maxLength": 200,
+      "description": "The question's title as written."
+    },
+    "question_summary": {
+      "type": "string",
+      "maxLength": 400,
+      "description": "What is being asked, in your own words."
+    },
+    "answer_summary": {
+      "type": "string",
+      "maxLength": 600,
+      "description": "The consensus or best-supported answer, in your own words."
+    },
+    "answer_count": {
+      "type": "integer",
+      "description": "Number of answers.",
+      "minimum": 0
+    },
+    "has_accepted_answer": {
+      "type": "boolean",
+      "description": "The thread marks an accepted answer."
+    },
+    "score": {
+      "type": "integer",
+      "description": "Question score/votes as shown.",
+      "minimum": -100000,
+      "maximum": 1000000
+    },
+    "asked_date": {
+      "type": "string",
+      "maxLength": 10,
+      "description": "Date asked (YYYY-MM-DD).",
+      "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$"
+    },
+    "last_activity_date": {
+      "type": "string",
+      "maxLength": 10,
+      "description": "Date of the last answer or edit (YYYY-MM-DD).",
+      "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$"
+    },
+    "topics": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "visa",
+          "transport",
+          "money",
+          "safety",
+          "accommodation",
+          "food",
+          "itinerary",
+          "connectivity",
+          "health",
+          "customs",
+          "other"
+        ],
+        "description": "Topic."
+      },
+      "maxItems": 4,
+      "description": "Topics."
+    },
+    "city": {
+      "type": "string",
+      "maxLength": 120,
+      "description": "City in English. Always paired with `country`."
+    },
+    "country": {
+      "type": "string",
+      "maxLength": 80,
+      "description": "Country in English (e.g. \"Japan\"). Required whenever `city` is set."
+    },
+    "country_code": {
+      "type": "string",
+      "maxLength": 2,
+      "description": "ISO 3166-1 alpha-2 country code of `country`.",
+      "pattern": "^[A-Z]{2}$"
+    },
+    "tags": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "maxLength": 40,
+        "description": "A tag."
+      },
+      "maxItems": 8,
+      "description": "Tags shown on the thread."
+    },
+    "source_url": {
+      "type": "string",
+      "maxLength": 2048,
+      "description": "The page's own link for this item (official site, booking or detail page), copied verbatim from the page.",
+      "pattern": "^https?://[^\\s]+$"
+    },
+    "as_of": {
+      "type": "string",
+      "maxLength": 10,
+      "description": "The \"last updated\", \"valid from\" or publication date the page itself states for this information (YYYY-MM-DD).",
+      "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$"
+    },
+    "evidence": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "maxLength": 300,
+        "description": "A verbatim quote from the page."
+      },
+      "maxItems": 3,
+      "description": "Up to 3 short verbatim quotes from the page that support the most important facts."
+    }
+  },
+  "required": [
+    "question_title",
+    "question_summary"
+  ]
+}
