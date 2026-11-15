@@ -1,0 +1,1826 @@
+---
+source: crates/vc-api/tests/api.rs
+expression: json
+---
+{
+  "components": {
+    "schemas": {
+      "ChangeDto": {
+        "description": "One change.",
+        "properties": {
+          "at": {
+            "description": "When.",
+            "format": "date-time",
+            "type": "string"
+          },
+          "cursor": {
+            "description": "Opaque position (`<xid>-<seq>`).",
+            "type": "string"
+          },
+          "kind": {
+            "description": "Kind, when applicable.",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "op": {
+            "$ref": "#/components/schemas/ChangeOpDto",
+            "description": "Operation."
+          },
+          "owner_id": {
+            "description": "Owner id.",
+            "type": "string"
+          },
+          "owner_type": {
+            "$ref": "#/components/schemas/OwnerTypeDto",
+            "description": "Owner type."
+          }
+        },
+        "required": [
+          "cursor",
+          "owner_type",
+          "owner_id",
+          "op",
+          "at"
+        ],
+        "type": "object"
+      },
+      "ChangeOpDto": {
+        "description": "`changes.op`.",
+        "enum": [
+          "upsert",
+          "tombstone",
+          "redirect"
+        ],
+        "type": "string"
+      },
+      "ChangesDto": {
+        "description": "A page of the change feed.",
+        "properties": {
+          "changes": {
+            "description": "Changes in cursor order.",
+            "items": {
+              "$ref": "#/components/schemas/ChangeDto"
+            },
+            "type": "array"
+          },
+          "next": {
+            "description": "Pass as `since` next time (the last change, or the input cursor when empty).",
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "changes"
+        ],
+        "type": "object"
+      },
+      "ClaimDto": {
+        "description": "One per-attribute claim of an entity.",
+        "properties": {
+          "attribute": {
+            "description": "Attribute.",
+            "type": "string"
+          },
+          "confidence": {
+            "description": "Confidence in `[0, 1]`.",
+            "format": "float",
+            "type": "number"
+          },
+          "record_id": {
+            "description": "Contributing record.",
+            "format": "int64",
+            "type": "integer"
+          },
+          "value": {
+            "description": "Value.",
+            "type": "object"
+          },
+          "version": {
+            "description": "Record version.",
+            "format": "int32",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "attribute",
+          "value",
+          "record_id",
+          "version",
+          "confidence"
+        ],
+        "type": "object"
+      },
+      "EntityDto": {
+        "description": "An entity with its claims.",
+        "properties": {
+          "claims": {
+            "description": "Per-attribute provenance.",
+            "items": {
+              "$ref": "#/components/schemas/ClaimDto"
+            },
+            "type": "array"
+          },
+          "item": {
+            "$ref": "#/components/schemas/ItemDto",
+            "description": "The entity."
+          }
+        },
+        "required": [
+          "item",
+          "claims"
+        ],
+        "type": "object"
+      },
+      "ErrorBody": {
+        "description": "The body of every error response.",
+        "properties": {
+          "error": {
+            "description": "Stable machine-readable code: `unauthorized`, `bad_request`, `not_found`,\n`rate_limited`, `unavailable`, `internal`.",
+            "type": "string"
+          },
+          "message": {
+            "description": "Human-readable detail (never contains page content or tokens).",
+            "type": "string"
+          }
+        },
+        "required": [
+          "error",
+          "message"
+        ],
+        "type": "object"
+      },
+      "ExtractionMethodDto": {
+        "description": "How a record was extracted.",
+        "enum": [
+          "structured",
+          "adapter",
+          "llm"
+        ],
+        "type": "string"
+      },
+      "ExtractorDto": {
+        "description": "Who/what extracted a record.",
+        "properties": {
+          "method": {
+            "$ref": "#/components/schemas/ExtractionMethodDto",
+            "description": "Method."
+          },
+          "model": {
+            "description": "Model id, for LLM extraction.",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "prompt_hash": {
+            "description": "blake3 hex of the prompt, for LLM extraction.",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "run_id": {
+            "description": "Extraction run id (ULID), if any.",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "version": {
+            "description": "Extractor version.",
+            "type": "string"
+          }
+        },
+        "required": [
+          "version",
+          "method"
+        ],
+        "type": "object"
+      },
+      "IndexUseDto": {
+        "description": "What may be indexed and served.",
+        "enum": [
+          "title_and_link",
+          "full"
+        ],
+        "type": "string"
+      },
+      "ItemDto": {
+        "description": "One served item (entity or record).",
+        "properties": {
+          "conflict": {
+            "description": "A cross-source conflict on a high-stakes field: show with care.",
+            "type": "boolean"
+          },
+          "data": {
+            "description": "Facts, per the kind's JSON schema.",
+            "type": "object"
+          },
+          "excerpt": {
+            "description": "≤ 300-character excerpt (the only text served for `facts_only`).",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "id": {
+            "description": "Entity id (ULID) or record id (decimal).",
+            "type": "string"
+          },
+          "kind": {
+            "description": "Kind (e.g. `attraction`, `event`, `article`).",
+            "type": "string"
+          },
+          "licence": {
+            "$ref": "#/components/schemas/LicenceDto",
+            "description": "Licence."
+          },
+          "place_ids": {
+            "description": "GeoNames ids.",
+            "items": {
+              "format": "int64",
+              "type": "integer"
+            },
+            "type": "array"
+          },
+          "provenance": {
+            "description": "One entry per contributing record.",
+            "items": {
+              "$ref": "#/components/schemas/ProvenanceDto"
+            },
+            "type": "array"
+          },
+          "schema": {
+            "description": "`kind@version` of `data`.",
+            "type": "string"
+          },
+          "score": {
+            "description": "Ranking score (search only).",
+            "format": "float",
+            "type": [
+              "number",
+              "null"
+            ]
+          },
+          "title": {
+            "description": "Title / headline.",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "updated_at": {
+            "description": "Last update.",
+            "format": "date-time",
+            "type": "string"
+          },
+          "use_policy": {
+            "$ref": "#/components/schemas/UsePolicyDto",
+            "description": "Effective use policy."
+          }
+        },
+        "required": [
+          "id",
+          "kind",
+          "schema",
+          "data",
+          "place_ids",
+          "licence",
+          "provenance",
+          "conflict",
+          "use_policy",
+          "updated_at"
+        ],
+        "type": "object"
+      },
+      "ItemPage": {
+        "description": "A page of items.",
+        "properties": {
+          "items": {
+            "description": "Items.",
+            "items": {
+              "$ref": "#/components/schemas/ItemDto"
+            },
+            "type": "array"
+          },
+          "next_cursor": {
+            "description": "Pass as `cursor` for the next page; absent on the last page.",
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "items"
+        ],
+        "type": "object"
+      },
+      "LicenceClassDto": {
+        "description": "Licence class of served data (`restricted` data is never ingested or served).",
+        "enum": [
+          "open",
+          "share_alike",
+          "facts_only",
+          "api_terms"
+        ],
+        "type": "string"
+      },
+      "LicenceDto": {
+        "description": "`licence {class, spdx, attribution, url}`, on every item.",
+        "properties": {
+          "attribution": {
+            "description": "Attribution to display.",
+            "type": "string"
+          },
+          "class": {
+            "$ref": "#/components/schemas/LicenceClassDto",
+            "description": "Licence class."
+          },
+          "spdx": {
+            "description": "SPDX id, when there is one.",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "url": {
+            "description": "Licence or terms URL.",
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "class",
+          "attribution"
+        ],
+        "type": "object"
+      },
+      "ObservationDto": {
+        "description": "One observation.",
+        "properties": {
+          "licence": {
+            "$ref": "#/components/schemas/LicenceDto",
+            "description": "Licence."
+          },
+          "observed_at": {
+            "description": "Time.",
+            "format": "date-time",
+            "type": "string"
+          },
+          "series_key": {
+            "description": "Series (e.g. `fx:USD:EUR`).",
+            "type": "string"
+          },
+          "source_id": {
+            "description": "Source id.",
+            "type": "string"
+          },
+          "value": {
+            "description": "Value.",
+            "type": "object"
+          }
+        },
+        "required": [
+          "series_key",
+          "observed_at",
+          "value",
+          "source_id",
+          "licence"
+        ],
+        "type": "object"
+      },
+      "ObservationList": {
+        "description": "Observations of a series.",
+        "properties": {
+          "items": {
+            "description": "Points, oldest first.",
+            "items": {
+              "$ref": "#/components/schemas/ObservationDto"
+            },
+            "type": "array"
+          }
+        },
+        "required": [
+          "items"
+        ],
+        "type": "object"
+      },
+      "OwnerTypeDto": {
+        "description": "`changes.owner_type`.",
+        "enum": [
+          "record",
+          "entity",
+          "observation",
+          "source"
+        ],
+        "type": "string"
+      },
+      "PlaceDto": {
+        "description": "A candidate place.",
+        "properties": {
+          "admin1": {
+            "description": "First-level admin region.",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "country": {
+            "description": "ISO 3166-1 alpha-2 country.",
+            "type": "string"
+          },
+          "geoname_id": {
+            "description": "GeoNames id.",
+            "format": "int64",
+            "type": "integer"
+          },
+          "lat": {
+            "description": "Latitude.",
+            "format": "double",
+            "type": "number"
+          },
+          "lon": {
+            "description": "Longitude.",
+            "format": "double",
+            "type": "number"
+          },
+          "name": {
+            "description": "Canonical name.",
+            "type": "string"
+          },
+          "score": {
+            "description": "Confidence in `[0, 1]`.",
+            "format": "float",
+            "type": "number"
+          }
+        },
+        "required": [
+          "geoname_id",
+          "name",
+          "country",
+          "lat",
+          "lon",
+          "score"
+        ],
+        "type": "object"
+      },
+      "PlaceList": {
+        "description": "Place candidates, best first.",
+        "properties": {
+          "items": {
+            "description": "Candidates (empty when unresolved).",
+            "items": {
+              "$ref": "#/components/schemas/PlaceDto"
+            },
+            "type": "array"
+          }
+        },
+        "required": [
+          "items"
+        ],
+        "type": "object"
+      },
+      "ProvenanceDto": {
+        "description": "Where a served item came from.",
+        "properties": {
+          "captured_at": {
+            "description": "Capture time.",
+            "format": "date-time",
+            "type": "string"
+          },
+          "extractor": {
+            "$ref": "#/components/schemas/ExtractorDto",
+            "description": "Extractor."
+          },
+          "source_id": {
+            "description": "Source id (`/v1/sources`).",
+            "type": "string"
+          },
+          "url": {
+            "description": "Page URL (the link to show).",
+            "type": "string"
+          }
+        },
+        "required": [
+          "source_id",
+          "url",
+          "captured_at",
+          "extractor"
+        ],
+        "type": "object"
+      },
+      "RecordVersionDto": {
+        "description": "One version of a record.",
+        "properties": {
+          "captured_at": {
+            "description": "Capture time.",
+            "format": "date-time",
+            "type": "string"
+          },
+          "data": {
+            "description": "Data.",
+            "type": "object"
+          },
+          "data_hash": {
+            "description": "blake3 hex of the canonical JSON.",
+            "type": "string"
+          },
+          "extractor": {
+            "$ref": "#/components/schemas/ExtractorDto",
+            "description": "Extractor."
+          },
+          "licence_class": {
+            "$ref": "#/components/schemas/LicenceClassDto",
+            "description": "Licence class."
+          },
+          "record_id": {
+            "description": "Record id.",
+            "format": "int64",
+            "type": "integer"
+          },
+          "schema": {
+            "description": "`kind@version`.",
+            "type": "string"
+          },
+          "superseded_at": {
+            "description": "Superseded at (absent = current).",
+            "format": "date-time",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "use_policy": {
+            "$ref": "#/components/schemas/UsePolicyDto",
+            "description": "Effective use policy."
+          },
+          "valid_from": {
+            "description": "Valid from.",
+            "format": "date-time",
+            "type": "string"
+          },
+          "version": {
+            "description": "Version (1-based).",
+            "format": "int32",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "record_id",
+          "version",
+          "schema",
+          "data",
+          "data_hash",
+          "captured_at",
+          "extractor",
+          "licence_class",
+          "use_policy",
+          "valid_from"
+        ],
+        "type": "object"
+      },
+      "RedirectDto": {
+        "description": "Body of a `301` for a merged entity (`Location` carries the same path).",
+        "properties": {
+          "location": {
+            "description": "Its path.",
+            "type": "string"
+          },
+          "redirect_to": {
+            "description": "The entity it was merged into.",
+            "type": "string"
+          }
+        },
+        "required": [
+          "redirect_to",
+          "location"
+        ],
+        "type": "object"
+      },
+      "ServeUseDto": {
+        "description": "What may be shown to Voyager's agents.",
+        "enum": [
+          "link_only",
+          "facts_only",
+          "full"
+        ],
+        "type": "string"
+      },
+      "SourceDto": {
+        "description": "One configured source.",
+        "properties": {
+          "category": {
+            "description": "Category.",
+            "type": "string"
+          },
+          "enabled": {
+            "description": "Whether it is crawled.",
+            "type": "boolean"
+          },
+          "licence": {
+            "$ref": "#/components/schemas/LicenceDto",
+            "description": "Licence."
+          },
+          "method": {
+            "description": "`html`, `rss`, `sitemap`, `api` or `dump`.",
+            "type": "string"
+          },
+          "name": {
+            "description": "Name.",
+            "type": "string"
+          },
+          "source_class": {
+            "description": "`official`, `reference`, `editorial`, `community` or `commercial_api`.",
+            "type": "string"
+          },
+          "source_id": {
+            "description": "Source id.",
+            "type": "string"
+          }
+        },
+        "required": [
+          "source_id",
+          "name",
+          "category",
+          "source_class",
+          "licence",
+          "method",
+          "enabled"
+        ],
+        "type": "object"
+      },
+      "SourceList": {
+        "description": "The sources.",
+        "properties": {
+          "items": {
+            "description": "Sources, by id.",
+            "items": {
+              "$ref": "#/components/schemas/SourceDto"
+            },
+            "type": "array"
+          }
+        },
+        "required": [
+          "items"
+        ],
+        "type": "object"
+      },
+      "StatsDto": {
+        "description": "Index statistics.",
+        "properties": {
+          "changes_seq_max": {
+            "description": "Highest change-feed sequence (absent when empty).",
+            "format": "int64",
+            "type": [
+              "integer",
+              "null"
+            ]
+          },
+          "entities_active": {
+            "description": "Active entities.",
+            "format": "int64",
+            "type": "integer"
+          },
+          "generated_at": {
+            "description": "When these numbers were computed (cached up to 60 s).",
+            "format": "date-time",
+            "type": "string"
+          },
+          "records_active": {
+            "description": "Active records.",
+            "format": "int64",
+            "type": "integer"
+          },
+          "sources_enabled": {
+            "description": "Enabled sources.",
+            "format": "int64",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "sources_enabled",
+          "records_active",
+          "entities_active",
+          "generated_at"
+        ],
+        "type": "object"
+      },
+      "StatusDto": {
+        "description": "Probe answer.",
+        "properties": {
+          "status": {
+            "description": "`ok` or `ready`.",
+            "type": "string"
+          }
+        },
+        "required": [
+          "status"
+        ],
+        "type": "object"
+      },
+      "UsePolicyDto": {
+        "description": "The effective use policy of an item (the API has already applied it).",
+        "properties": {
+          "index": {
+            "$ref": "#/components/schemas/IndexUseDto",
+            "description": "Index use."
+          },
+          "serve": {
+            "$ref": "#/components/schemas/ServeUseDto",
+            "description": "Serve use."
+          }
+        },
+        "required": [
+          "index",
+          "serve"
+        ],
+        "type": "object"
+      },
+      "VersionPage": {
+        "description": "A page of record versions, newest first.",
+        "properties": {
+          "items": {
+            "description": "Versions.",
+            "items": {
+              "$ref": "#/components/schemas/RecordVersionDto"
+            },
+            "type": "array"
+          },
+          "next_cursor": {
+            "description": "Next page cursor.",
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "items"
+        ],
+        "type": "object"
+      }
+    },
+    "securitySchemes": {
+      "bearer": {
+        "scheme": "bearer",
+        "type": "http"
+      }
+    }
+  },
+  "info": {
+    "description": "Private, internal-only read API of the Voyager crawler. Frozen /v1 contract: additive changes only (docs/Crawler-API.md).",
+    "license": {
+      "identifier": "MIT",
+      "name": "MIT"
+    },
+    "title": "Voyager Crawler read API",
+    "version": "1"
+  },
+  "openapi": "3.1.0",
+  "paths": {
+    "/healthz": {
+      "get": {
+        "operationId": "healthz",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StatusDto"
+                }
+              }
+            }
+          }
+        },
+        "summary": "Liveness.",
+        "tags": [
+          "probe"
+        ]
+      }
+    },
+    "/readyz": {
+      "get": {
+        "operationId": "readyz",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StatusDto"
+                }
+              }
+            }
+          },
+          "503": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorBody"
+                }
+              }
+            }
+          }
+        },
+        "summary": "Readiness (the database answers).",
+        "tags": [
+          "probe"
+        ]
+      }
+    },
+    "/v1/articles": {
+      "get": {
+        "operationId": "articles",
+        "parameters": [
+          {
+            "description": "Free text.",
+            "in": "query",
+            "name": "q",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "Exact GeoNames id.",
+            "in": "query",
+            "name": "place",
+            "required": false,
+            "schema": {
+              "format": "int64",
+              "type": "integer"
+            }
+          },
+          {
+            "description": "Comma-separated kinds (ignored by `/v1/articles`, which is always `article`).",
+            "in": "query",
+            "name": "kind",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "Radius search: latitude (with `lon` and `radius_km`).",
+            "in": "query",
+            "name": "lat",
+            "required": false,
+            "schema": {
+              "format": "double",
+              "type": "number"
+            }
+          },
+          {
+            "description": "Radius search: longitude.",
+            "in": "query",
+            "name": "lon",
+            "required": false,
+            "schema": {
+              "format": "double",
+              "type": "number"
+            }
+          },
+          {
+            "description": "Radius search: radius in km.",
+            "in": "query",
+            "name": "radius_km",
+            "required": false,
+            "schema": {
+              "format": "double",
+              "type": "number"
+            }
+          },
+          {
+            "description": "Only items updated since (RFC 3339).",
+            "in": "query",
+            "name": "updated_since",
+            "required": false,
+            "schema": {
+              "format": "date-time",
+              "type": "string"
+            }
+          },
+          {
+            "description": "Page size (default 20, max `max_page`).",
+            "in": "query",
+            "name": "limit",
+            "required": false,
+            "schema": {
+              "format": "int32",
+              "minimum": 0,
+              "type": "integer"
+            }
+          },
+          {
+            "description": "`next_cursor` of the previous page.",
+            "in": "query",
+            "name": "cursor",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ItemPage"
+                }
+              }
+            }
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorBody"
+                }
+              }
+            }
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorBody"
+                }
+              }
+            }
+          },
+          "429": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorBody"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Articles (headline + excerpt + facts + link).",
+        "tags": [
+          "read"
+        ]
+      }
+    },
+    "/v1/changes": {
+      "get": {
+        "operationId": "changes",
+        "parameters": [
+          {
+            "description": "`next` of the previous page (absent = from the start).",
+            "in": "query",
+            "name": "since",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "Comma-separated kinds (absent = all).",
+            "in": "query",
+            "name": "kinds",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "Page size (default 20, max `max_page`).",
+            "in": "query",
+            "name": "limit",
+            "required": false,
+            "schema": {
+              "format": "int32",
+              "minimum": 0,
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ChangesDto"
+                }
+              }
+            }
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorBody"
+                }
+              }
+            }
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorBody"
+                }
+              }
+            }
+          },
+          "429": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorBody"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "The change feed. Only committed transactions older than every open one are served, so a\nclient that pages with `since = next` never skips a change.",
+        "tags": [
+          "sync"
+        ]
+      }
+    },
+    "/v1/entities": {
+      "get": {
+        "operationId": "entities",
+        "parameters": [
+          {
+            "description": "Free text.",
+            "in": "query",
+            "name": "q",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "Exact GeoNames id.",
+            "in": "query",
+            "name": "place",
+            "required": false,
+            "schema": {
+              "format": "int64",
+              "type": "integer"
+            }
+          },
+          {
+            "description": "Comma-separated kinds (ignored by `/v1/articles`, which is always `article`).",
+            "in": "query",
+            "name": "kind",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "Radius search: latitude (with `lon` and `radius_km`).",
+            "in": "query",
+            "name": "lat",
+            "required": false,
+            "schema": {
+              "format": "double",
+              "type": "number"
+            }
+          },
+          {
+            "description": "Radius search: longitude.",
+            "in": "query",
+            "name": "lon",
+            "required": false,
+            "schema": {
+              "format": "double",
+              "type": "number"
+            }
+          },
+          {
+            "description": "Radius search: radius in km.",
+            "in": "query",
+            "name": "radius_km",
+            "required": false,
+            "schema": {
+              "format": "double",
+              "type": "number"
+            }
+          },
+          {
+            "description": "Only items updated since (RFC 3339).",
+            "in": "query",
+            "name": "updated_since",
+            "required": false,
+            "schema": {
+              "format": "date-time",
+              "type": "string"
+            }
+          },
+          {
+            "description": "Page size (default 20, max `max_page`).",
+            "in": "query",
+            "name": "limit",
+            "required": false,
+            "schema": {
+              "format": "int32",
+              "minimum": 0,
+              "type": "integer"
+            }
+          },
+          {
+            "description": "`next_cursor` of the previous page.",
+            "in": "query",
+            "name": "cursor",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ItemPage"
+                }
+              }
+            }
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorBody"
+                }
+              }
+            }
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorBody"
+                }
+              }
+            }
+          },
+          "429": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorBody"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Entities by place, kind and text.",
+        "tags": [
+          "read"
+        ]
+      }
+    },
+    "/v1/entities/{id}": {
+      "get": {
+        "operationId": "entity",
+        "parameters": [
+          {
+            "description": "Entity id (ULID)",
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EntityDto"
+                }
+              }
+            }
+          },
+          "301": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RedirectDto"
+                }
+              }
+            },
+            "description": "Merged; `Location` names the successor"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorBody"
+                }
+              }
+            }
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorBody"
+                }
+              }
+            }
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorBody"
+                }
+              }
+            }
+          },
+          "429": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorBody"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "One entity with its claims; a merged entity answers `301` to its successor.",
+        "tags": [
+          "read"
+        ]
+      }
+    },
+    "/v1/observations": {
+      "get": {
+        "operationId": "observations",
+        "parameters": [
+          {
+            "description": "Series key (e.g. `fx:USD:EUR`).",
+            "in": "query",
+            "name": "series",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "From (inclusive, RFC 3339; default `to` − 30 days).",
+            "in": "query",
+            "name": "from",
+            "required": false,
+            "schema": {
+              "format": "date-time",
+              "type": "string"
+            }
+          },
+          {
+            "description": "To (exclusive, RFC 3339; default now).",
+            "in": "query",
+            "name": "to",
+            "required": false,
+            "schema": {
+              "format": "date-time",
+              "type": "string"
+            }
+          },
+          {
+            "description": "Max points (default 20, max `max_page`).",
+            "in": "query",
+            "name": "limit",
+            "required": false,
+            "schema": {
+              "format": "int32",
+              "minimum": 0,
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ObservationList"
+                }
+              }
+            }
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorBody"
+                }
+              }
+            }
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorBody"
+                }
+              }
+            }
+          },
+          "429": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorBody"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Points of an observation series in `[from, to)`.",
+        "tags": [
+          "read"
+        ]
+      }
+    },
+    "/v1/openapi.json": {
+      "get": {
+        "operationId": "openapi_json",
+        "responses": {
+          "200": {
+            "description": "The OpenAPI 3.1 document"
+          }
+        },
+        "summary": "This document.",
+        "tags": [
+          "meta"
+        ]
+      }
+    },
+    "/v1/places/resolve": {
+      "get": {
+        "operationId": "places_resolve",
+        "parameters": [
+          {
+            "description": "Place name as written.",
+            "in": "query",
+            "name": "name",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "ISO 3166-1 alpha-2 country hint.",
+            "in": "query",
+            "name": "country",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "Nearby latitude (with `lon`).",
+            "in": "query",
+            "name": "lat",
+            "required": false,
+            "schema": {
+              "format": "double",
+              "type": "number"
+            }
+          },
+          {
+            "description": "Nearby longitude (with `lat`).",
+            "in": "query",
+            "name": "lon",
+            "required": false,
+            "schema": {
+              "format": "double",
+              "type": "number"
+            }
+          },
+          {
+            "description": "Language of `name`.",
+            "in": "query",
+            "name": "lang",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PlaceList"
+                }
+              }
+            }
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorBody"
+                }
+              }
+            }
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorBody"
+                }
+              }
+            }
+          },
+          "429": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorBody"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Resolves a place name to GeoNames candidates, best first.",
+        "tags": [
+          "read"
+        ]
+      }
+    },
+    "/v1/records/{id}/versions": {
+      "get": {
+        "operationId": "record_versions",
+        "parameters": [
+          {
+            "description": "Record id",
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "format": "int64",
+              "type": "integer"
+            }
+          },
+          {
+            "description": "Page size (default 20, max `max_page`).",
+            "in": "query",
+            "name": "limit",
+            "required": false,
+            "schema": {
+              "format": "int32",
+              "minimum": 0,
+              "type": "integer"
+            }
+          },
+          {
+            "description": "`next_cursor` of the previous page.",
+            "in": "query",
+            "name": "cursor",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/VersionPage"
+                }
+              }
+            }
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorBody"
+                }
+              }
+            }
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorBody"
+                }
+              }
+            }
+          },
+          "429": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorBody"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Versions of a record, newest first.",
+        "tags": [
+          "read"
+        ]
+      }
+    },
+    "/v1/search": {
+      "get": {
+        "operationId": "search",
+        "parameters": [
+          {
+            "description": "Free text.",
+            "in": "query",
+            "name": "q",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "Exact GeoNames id.",
+            "in": "query",
+            "name": "place",
+            "required": false,
+            "schema": {
+              "format": "int64",
+              "type": "integer"
+            }
+          },
+          {
+            "description": "Comma-separated kinds (ignored by `/v1/articles`, which is always `article`).",
+            "in": "query",
+            "name": "kind",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "Radius search: latitude (with `lon` and `radius_km`).",
+            "in": "query",
+            "name": "lat",
+            "required": false,
+            "schema": {
+              "format": "double",
+              "type": "number"
+            }
+          },
+          {
+            "description": "Radius search: longitude.",
+            "in": "query",
+            "name": "lon",
+            "required": false,
+            "schema": {
+              "format": "double",
+              "type": "number"
+            }
+          },
+          {
+            "description": "Radius search: radius in km.",
+            "in": "query",
+            "name": "radius_km",
+            "required": false,
+            "schema": {
+              "format": "double",
+              "type": "number"
+            }
+          },
+          {
+            "description": "Only items updated since (RFC 3339).",
+            "in": "query",
+            "name": "updated_since",
+            "required": false,
+            "schema": {
+              "format": "date-time",
+              "type": "string"
+            }
+          },
+          {
+            "description": "Page size (default 20, max `max_page`).",
+            "in": "query",
+            "name": "limit",
+            "required": false,
+            "schema": {
+              "format": "int32",
+              "minimum": 0,
+              "type": "integer"
+            }
+          },
+          {
+            "description": "`next_cursor` of the previous page.",
+            "in": "query",
+            "name": "cursor",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ItemPage"
+                }
+              }
+            }
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorBody"
+                }
+              }
+            }
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorBody"
+                }
+              }
+            }
+          },
+          "429": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorBody"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Hybrid search over entities and records.",
+        "tags": [
+          "read"
+        ]
+      }
+    },
+    "/v1/sources": {
+      "get": {
+        "operationId": "sources",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SourceList"
+                }
+              }
+            }
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorBody"
+                }
+              }
+            }
+          },
+          "429": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorBody"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "The configured sources and their licences.",
+        "tags": [
+          "meta"
+        ]
+      }
+    },
+    "/v1/stats": {
+      "get": {
+        "operationId": "stats",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StatsDto"
+                }
+              }
+            }
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorBody"
+                }
+              }
+            }
+          },
+          "429": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorBody"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Index statistics (cached up to 60 s).",
+        "tags": [
+          "meta"
+        ]
+      }
+    }
+  },
+  "tags": [
+    {
+      "description": "Entities, records, articles, observations, places",
+      "name": "read"
+    },
+    {
+      "description": "Change feed",
+      "name": "sync"
+    },
+    {
+      "description": "Sources, statistics, this document",
+      "name": "meta"
+    },
+    {
+      "description": "Health probes (no auth)",
+      "name": "probe"
+    }
+  ]
+}
