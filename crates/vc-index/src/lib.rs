@@ -14,10 +14,54 @@ use vc_core::records::{ExtractedRecord, Provenance};
 use vc_core::{EntityId, KindId, RecordId, Result};
 
 /// The Postgres index (writer and reader).
-#[derive(Debug, Clone)]
+#[derive(Clone)]
 pub struct PgIndex {
     /// Pool.
     pub pool: PgPool,
+}
+
+/// Embeds search text.
+#[async_trait]
+pub trait QueryEmbedder: Send + Sync {
+    /// Model.
+    fn model(&self) -> &vc_core::ModelId;
+    /// Dim.
+    fn dim(&self) -> usize;
+    /// Embeds.
+    async fn embed_query(&self, q: &str) -> Result<Option<Vec<f32>>>;
+}
+
+/// Task.
+pub struct EmbeddingTask {
+    /// Text.
+    pub text: String,
+}
+
+impl PgIndex {
+    /// New.
+    pub fn new(pool: PgPool) -> Self {
+        PgIndex { pool }
+    }
+    /// With.
+    pub fn with_query_embedder(self, _e: std::sync::Arc<dyn QueryEmbedder>) -> Self {
+        todo!()
+    }
+    /// Merge.
+    pub async fn merge_entities(&self, _a: &EntityId, _b: &EntityId) -> Result<()> {
+        todo!()
+    }
+    /// Ensure.
+    pub async fn ensure_embedding_index(&self, _m: &vc_core::ModelId, _d: usize) -> Result<bool> {
+        todo!()
+    }
+    /// Pending.
+    pub async fn pending_embeddings(&self, _m: &vc_core::ModelId, _l: u32) -> Result<Vec<EmbeddingTask>> {
+        todo!()
+    }
+    /// Store.
+    pub async fn store_embedding(&self, _t: &EmbeddingTask, _m: &vc_core::ModelId, _v: &[f32]) -> Result<()> {
+        todo!()
+    }
 }
 
 #[async_trait]
