@@ -1,0 +1,8 @@
+blank_issues_enabled: true
+contact_links:
+  - name: Security vulnerability
+    url: https://github.com/rupakc/travel-planner-crawler/security/advisories/new
+    about: Report security issues privately (see SECURITY.md), not as a public issue.
+  - name: About VoyagerBot
+    url: https://github.com/rupakc/travel-planner-crawler/blob/main/BOT.md
+    about: Who we are, how we crawl, and how to opt out.

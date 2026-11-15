@@ -1,0 +1,187 @@
+name: CI
+
+# Every PR must pass this workflow (plan Task 0B). Rust jobs skip their steps until the
+# workspace exists (Task 0A). Actions are pinned by commit SHA; the tag is in the comment.
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+  workflow_call:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.event_name }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+env:
+  CARGO_TERM_COLOR: always
+  CARGO_INCREMENTAL: "0"
+  RUST_BACKTRACE: "1"
+
+jobs:
+  fmt:
+    name: rustfmt
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - id: ws
+        name: Detect workspace
+        run: |
+          if [ -f Cargo.toml ]; then echo "present=true" >> "$GITHUB_OUTPUT"; else
+            echo "present=false" >> "$GITHUB_OUTPUT"; echo "::notice::no Cargo.toml yet; skipping"; fi
+      - name: Install toolchain (rust-toolchain.toml)
+        if: steps.ws.outputs.present == 'true'
+        run: |
+          rustup toolchain install --profile minimal
+          rustup component add rustfmt
+          rustc --version
+      - name: cargo fmt --check
+        if: steps.ws.outputs.present == 'true'
+        run: cargo fmt --all -- --check
+
+  clippy:
+    name: clippy
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - id: ws
+        name: Detect workspace
+        run: |
+          if [ -f Cargo.toml ]; then echo "present=true" >> "$GITHUB_OUTPUT"; else
+            echo "present=false" >> "$GITHUB_OUTPUT"; echo "::notice::no Cargo.toml yet; skipping"; fi
+      - name: Install toolchain (rust-toolchain.toml)
+        if: steps.ws.outputs.present == 'true'
+        run: |
+          rustup toolchain install --profile minimal
+          rustup component add clippy
+          rustc --version
+      - uses: Swatinem/rust-cache@d1527c8f67ef9af357290475d4af4b0fab8f12e0 # v2.9.3
+        if: steps.ws.outputs.present == 'true'
+        with:
+          shared-key: clippy
+          save-if: ${{ github.ref == 'refs/heads/main' }}
+      - name: cargo clippy
+        if: steps.ws.outputs.present == 'true'
+        run: cargo clippy --workspace --all-targets --locked -- -D warnings
+
+  test:
+    name: test
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - id: ws
+        name: Detect workspace
+        run: |
+          if [ -f Cargo.toml ]; then echo "present=true" >> "$GITHUB_OUTPUT"; else
+            echo "present=false" >> "$GITHUB_OUTPUT"; echo "::notice::no Cargo.toml yet; skipping"; fi
+      - name: Install toolchain (rust-toolchain.toml)
+        if: steps.ws.outputs.present == 'true'
+        run: |
+          rustup toolchain install --profile minimal
+          rustc --version
+      - uses: Swatinem/rust-cache@d1527c8f67ef9af357290475d4af4b0fab8f12e0 # v2.9.3
+        if: steps.ws.outputs.present == 'true'
+        with:
+          shared-key: test
+          save-if: ${{ github.ref == 'refs/heads/main' }}
+      - name: Docker for testcontainers
+        if: steps.ws.outputs.present == 'true'
+        run: docker version
+      - name: cargo test (Postgres via testcontainers)
+        if: steps.ws.outputs.present == 'true'
+        run: cargo test --workspace --all-targets --locked
+      - name: cargo test --doc
+        if: steps.ws.outputs.present == 'true'
+        run: cargo test --workspace --doc --locked
+
+  deny:
+    name: cargo-deny
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - id: ws
+        name: Detect workspace
+        run: |
+          if [ -f Cargo.toml ] && [ -f deny.toml ]; then echo "present=true" >> "$GITHUB_OUTPUT"; else
+            echo "present=false" >> "$GITHUB_OUTPUT"; echo "::notice::no Cargo.toml/deny.toml yet; skipping"; fi
+      # Licences, advisories, sources and the evasion-crate bans (spider_fingerprint,
+      # ua_generator, chrome_stealth, wreq, rquest, spider) from deny.toml.
+      - uses: EmbarkStudios/cargo-deny-action@3c6349835b2b7b196a839186cb8b78e02f7b5f25 # v2.1.1
+        if: steps.ws.outputs.present == 'true'
+        with:
+          command: check
+          arguments: --all-features --locked
+
+  ownership:
+    name: ownership
+    if: github.event_name == 'pull_request' && startsWith(github.head_ref, 'agent/')
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - name: Check paths against docs/ownership.md
+        env:
+          BASE_REF: ${{ github.base_ref }}
+          HEAD_REF: ${{ github.head_ref }}
+        run: bash scripts/check-ownership.sh --branch "$HEAD_REF" --base "origin/$BASE_REF"
+
+  shellcheck:
+    name: shellcheck
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - name: shellcheck every tracked *.sh
+        run: |
+          shellcheck --version
+          git ls-files -z '*.sh' | xargs -0 -r shellcheck -x
+
+  deploy-kit:
+    name: deploy kit tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - name: deploy.sh and bootstrap.sh tests (fakes, no GCP)
+        run: bash deploy/tests/test_deploy.sh && bash infrastructure/tests/test_bootstrap.sh
+
+  scripts:
+    name: scripts (python + ownership self-test)
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0 # v7.1.0
+        with:
+          python-version: "3.12"
+          cache: pip
+          cache-dependency-path: scripts/requirements.txt
+      - run: pip install -r scripts/requirements.txt
+      - name: pytest scripts/tests
+        run: python -m pytest -q scripts/tests
+      - name: check-ownership.sh --self-test
+        run: bash scripts/check-ownership.sh --self-test

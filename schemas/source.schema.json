@@ -1,0 +1,100 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/rupakc/travel-planner-crawler/blob/main/schemas/source.schema.json",
+  "title": "SourceSpec",
+  "description": "One crawl source (sources/<id>.yaml). Mirrors vc-core SourceSpec (serde, deny_unknown_fields, enums snake_case). Plan Task 0A is the authority for the field list; spec §5.9 and §17.8 for the classes.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["id", "name", "category", "source_class", "licence", "method", "cadence"],
+  "properties": {
+    "id": {
+      "description": "Stable source id; equals the file name without .yaml.",
+      "type": "string",
+      "pattern": "^[a-z0-9][a-z0-9-]{1,62}$"
+    },
+    "name": { "type": "string", "minLength": 1 },
+    "category": {
+      "description": "Voyager domain the source serves (flights, weather, hotels, places, activities, walking_tours, events, visa, sim, tips, emergency_card, getting_around, forex, blogs, news, forums, corpus, ...).",
+      "type": "string",
+      "pattern": "^[a-z][a-z_]*$"
+    },
+    "source_class": {
+      "description": "official = government or intergovernmental domains/APIs only. Wikipedia/Wikidata are reference (spec §17.8).",
+      "enum": ["official", "reference", "editorial", "community", "commercial_api"]
+    },
+    "licence": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["class", "attribution"],
+      "properties": {
+        "class": {
+          "description": "Spec §5.9 + §17.8. restricted = non-commercial or unknown: not ingested in v1 (enabled must be false).",
+          "enum": ["open", "share_alike", "facts_only", "api_terms", "restricted"]
+        },
+        "spdx": { "type": ["string", "null"] },
+        "attribution": { "type": "string" },
+        "url": { "type": ["string", "null"], "format": "uri", "pattern": "^https?://" }
+      }
+    },
+    "method": { "enum": ["html", "rss", "sitemap", "api", "dump"] },
+    "seeds": { "$ref": "#/$defs/urls", "default": [] },
+    "sitemaps": { "$ref": "#/$defs/urls", "default": [] },
+    "feeds": { "$ref": "#/$defs/urls", "default": [] },
+    "adapter": {
+      "description": "Name of a registered SourceAdapter in vc-sources (adapters::REGISTRY).",
+      "type": ["string", "null"],
+      "pattern": "^[a-z][a-z0-9_]*$"
+    },
+    "include": { "$ref": "#/$defs/regexes", "default": [] },
+    "exclude": { "$ref": "#/$defs/regexes", "default": [] },
+    "max_depth": { "type": "integer", "minimum": 0, "maximum": 255, "default": 2 },
+    "kinds": { "$ref": "#/$defs/kinds", "default": [] },
+    "llm_kinds": { "$ref": "#/$defs/kinds", "default": [] },
+    "render": { "enum": ["never", "auto", "always"], "default": "never" },
+    "cadence": {
+      "enum": ["hourly", "h2", "h6", "h12", "daily", "weekly", "monthly", "quarterly", "yearly", "on_demand"]
+    },
+    "min_delay_s": {
+      "description": "Lower bound on the per-key delay. Robots Crawl-delay and the EWMA rule can only raise it.",
+      "type": "integer", "minimum": 1, "maximum": 3600, "default": 5
+    },
+    "daily_budget": {
+      "description": "Requests per key per day. Sources can only lower the global default (3000).",
+      "type": "integer", "minimum": 1, "maximum": 3000, "default": 3000
+    },
+    "politeness_key": { "type": ["string", "null"] },
+    "enabled": { "type": "boolean", "default": true },
+    "needs_key": { "type": "boolean", "default": false },
+    "key_secret": {
+      "description": "Secret Manager secret name holding the API key (never the key itself).",
+      "type": ["string", "null"],
+      "pattern": "^crawler-[a-z0-9-]+$"
+    },
+    "max_retention_days": { "type": ["integer", "null"], "minimum": 1 },
+    "display_requirements": { "type": ["string", "null"] },
+    "notes": { "type": ["string", "null"] }
+  },
+  "allOf": [
+    {
+      "if": { "properties": { "licence": { "properties": { "class": { "const": "restricted" } } } } },
+      "then": { "properties": { "enabled": { "const": false } }, "required": ["enabled"] }
+    },
+    {
+      "if": { "properties": { "needs_key": { "const": true } }, "required": ["needs_key"] },
+      "then": { "required": ["key_secret"], "properties": { "key_secret": { "type": "string" } } }
+    }
+  ],
+  "$defs": {
+    "urls": {
+      "type": "array",
+      "items": { "type": "string", "format": "uri", "pattern": "^https?://[^\\s{}]+$" },
+      "uniqueItems": true
+    },
+    "regexes": { "type": "array", "items": { "type": "string", "format": "regex" } },
+    "kinds": {
+      "type": "array",
+      "items": { "type": "string", "pattern": "^[a-z][a-z_]*$" },
+      "uniqueItems": true
+    }
+  }
+}

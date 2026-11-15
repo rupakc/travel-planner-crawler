@@ -1,0 +1,21 @@
+# The owner reviews everything; these lines document the paths that need extra care.
+*                                   @rupakc
+
+# Politeness and compliance contract (no evasion, robots, denylist): owner sign-off.
+/policy/                            @rupakc
+/BOT.md                             @rupakc
+/crates/vc-policy/                  @rupakc
+/crates/vc-fetch/                   @rupakc
+/crates/vc-render/                  @rupakc
+/deny.toml                          @rupakc
+/clippy.toml                        @rupakc
+
+# Contracts frozen after P0, supply chain and deploy.
+/crates/vc-core/                    @rupakc
+/Cargo.toml                         @rupakc
+/Cargo.lock                         @rupakc
+/migrations/                        @rupakc
+/.github/                           @rupakc
+/deploy/                            @rupakc
+/infrastructure/                    @rupakc
+/docs/ownership.md                  @rupakc
