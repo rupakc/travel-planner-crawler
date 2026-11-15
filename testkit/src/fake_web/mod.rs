@@ -352,7 +352,7 @@ impl FakeWeb {
     pub fn policy_snapshot(&self) -> PolicySnapshot {
         let mut snap = PolicySnapshot::new();
         for s in self.sites.read().expect("sites lock").values() {
-            let e = snap.keys.entry(s.key()).or_insert_with(KeyRules::default);
+            let e = snap.keys.entry(s.key()).or_default();
             if s.min_delay_ms.is_some() {
                 e.min_delay_ms = e.min_delay_ms.max(s.min_delay_ms);
             }
