@@ -1,0 +1,14 @@
+Google robots.txt test cases (vendored)
+
+cases.json is derived from robots_test.cc of https://github.com/google/robotstxt
+(commit 22b355ff855419e6a3ff8ff09c0ad7fdb17116f9), Copyright 2019 Google LLC,
+licensed under the Apache License, Version 2.0 (see LICENSE in this directory).
+
+Changes: every EXPECT_TRUE/EXPECT_FALSE(IsUserAgentAllowed(robotstxt, agent, url))
+assertion of the tests in that file was converted mechanically into one JSON object
+{test, robotstxt, agent, url, allowed}. Tests that do not call IsUserAgentAllowed
+(user-agent validity, parser line/BOM reporting, sitemap reporting, path/escape helpers)
+and GoogleOnly_LineTooLong (built with absl::StrCat) are not included; they are listed
+in "skipped_tests" or covered by own tests in crates/vc-policy/tests/robots.rs.
+No expectation was changed. Cases where VoyagerBot deliberately differs are listed with
+their reason in crates/vc-policy/tests/robots.rs (KNOWN_DEVIATIONS).
