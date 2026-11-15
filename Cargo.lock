@@ -5643,9 +5643,11 @@ dependencies = [
 name = "vc-kinds"
 version = "0.1.0"
 dependencies = [
+ "blake3",
  "jsonschema",
  "serde",
  "serde_json",
+ "tempfile",
  "testkit",
  "thiserror 2.0.21",
  "toml 1.2.1+spec-1.1.0",
