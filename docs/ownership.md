@@ -17,9 +17,9 @@ Every agent writes **only** the paths its task owns (spec §17.10, review r5 §(
    index 15xx, api 16xx, sources 17xx, ops 18xx. P0 owns 0001–0099. Editable until P3
    (fresh databases only); after the first production deploy they are append-only,
    expand/contract, covered by the N-1 test.
-5. **Test fixtures.** A P1 task may add `testkit/src/<crate>_fixtures.rs` (crate name with
-   `_`, e.g. `vc_policy_fixtures.rs`) and `testkit/fixtures/<crate>/**`. Registering the
-   module in `testkit/src/lib.rs` is a one-line controller change (ask in the PR).
+5. **Test fixtures.** A P1 task may edit its `testkit/src/<crate>_fixtures.rs` (crate name
+   with `_`, e.g. `vc_policy_fixtures.rs`; already registered in `testkit/src/lib.rs` by P0A)
+   and add `testkit/fixtures/<crate>/**`.
 6. **Integration is P2a's job.** No P1 task edits `crates/vcrawl`.
 7. **Controller** (branches not named `agent/*`) may touch anything; it is reviewed by the owner.
 
@@ -61,7 +61,7 @@ different phases; phases do not overlap).
 | T17 | agentic loops | `crates/vcrawl/src/agentic/**`, `prompts/agentic/**`, `docs/proposals/**` |
 | T18 | provisioning and go-live | `docs/runbooks/**`, `sources/**`, `BOT.md` (egress IP) |
 
-Every task may also edit its own section of `vc-config` (`crates/vc-config/src/sections/<crate>.rs`).
+Every task may also edit its own section of `vc-config` (`crates/vc-config/src/sections/<x>.rs`, e.g. `policy.rs`; `mod.rs` and `database.rs` belong to the controller).
 
 ```ownership
 # --- P0A: workspace + contracts ---
@@ -97,41 +97,34 @@ p0b schemas/source.schema.json
 # --- P1 crates ---
 t1 crates/vc-policy/*
 t1 crates/vc-config/src/sections/policy.rs
-t1 crates/vc-config/src/sections/vc_policy.rs
 t1 testkit/fixtures/challenges/*
 t1 testkit/fixtures/vc-policy/*
 t1 testkit/src/vc_policy_fixtures.rs
 t2 crates/vc-frontier/*
 t2 crates/vc-config/src/sections/frontier.rs
-t2 crates/vc-config/src/sections/vc_frontier.rs
 t2 migrations/11[0-9][0-9]_*
 t2 testkit/fixtures/vc-frontier/*
 t2 testkit/src/vc_frontier_fixtures.rs
 t3 crates/vc-store/*
 t3 crates/vc-config/src/sections/store.rs
-t3 crates/vc-config/src/sections/vc_store.rs
 t3 migrations/12[0-9][0-9]_*
 t3 testkit/fixtures/vc-store/*
 t3 testkit/src/vc_store_fixtures.rs
 t4 crates/vc-fetch/*
 t4 crates/vc-config/src/sections/fetch.rs
-t4 crates/vc-config/src/sections/vc_fetch.rs
 t4 testkit/fixtures/vc-fetch/*
 t4 testkit/src/vc_fetch_fixtures.rs
 t5 crates/vc-render/*
 t5 crates/vc-config/src/sections/render.rs
-t5 crates/vc-config/src/sections/vc_render.rs
 t5 deploy/chromium/*   # renderer wiring only; note it in the PR (TD owns deploy/**)
 t5 testkit/fixtures/vc-render/*
 t5 testkit/src/vc_render_fixtures.rs
 t6 crates/vc-parse/*
 t6 crates/vc-config/src/sections/parse.rs
-t6 crates/vc-config/src/sections/vc_parse.rs
 t6 testkit/fixtures/vc-parse/*
 t6 testkit/src/vc_parse_fixtures.rs
 t7 crates/vc-kinds/*
 t7 crates/vc-config/src/sections/kinds.rs
-t7 crates/vc-config/src/sections/vc_kinds.rs
 t7 schemas/*.v[0-9]*.json
 t7 prompts/*
 t7 kinds.toml
@@ -140,31 +133,26 @@ t7 testkit/fixtures/vc-kinds/*
 t7 testkit/src/vc_kinds_fixtures.rs
 t8 crates/vc-llm/*
 t8 crates/vc-config/src/sections/llm.rs
-t8 crates/vc-config/src/sections/vc_llm.rs
 t8 migrations/14[0-9][0-9]_*
 t8 testkit/fixtures/vc-llm/*
 t8 testkit/src/vc_llm_fixtures.rs
 t9 crates/vc-extract/*
 t9 crates/vc-config/src/sections/extract.rs
-t9 crates/vc-config/src/sections/vc_extract.rs
 t9 testkit/fixtures/vc-extract/*
 t9 testkit/src/vc_extract_fixtures.rs
 t10 crates/vc-sources/*
 t10 crates/vc-config/src/sections/sources.rs
-t10 crates/vc-config/src/sections/vc_sources.rs
 t10 migrations/17[0-9][0-9]_*
 t10 sources/*
 t10 testkit/fixtures/vc-sources/*
 t10 testkit/src/vc_sources_fixtures.rs
 t11 crates/vc-index/*
 t11 crates/vc-config/src/sections/index.rs
-t11 crates/vc-config/src/sections/vc_index.rs
 t11 migrations/15[0-9][0-9]_*
 t11 testkit/fixtures/vc-index/*
 t11 testkit/src/vc_index_fixtures.rs
 t12 crates/vc-api/*
 t12 crates/vc-config/src/sections/api.rs
-t12 crates/vc-config/src/sections/vc_api.rs
 t12 migrations/16[0-9][0-9]_*
 t12 testkit/fixtures/vc-api/*
 t12 testkit/src/vc_api_fixtures.rs
@@ -174,9 +162,6 @@ t13 crates/vc-secrets/*
 t13 crates/vc-config/src/sections/queue.rs
 t13 crates/vc-config/src/sections/obs.rs
 t13 crates/vc-config/src/sections/secrets.rs
-t13 crates/vc-config/src/sections/vc_queue.rs
-t13 crates/vc-config/src/sections/vc_obs.rs
-t13 crates/vc-config/src/sections/vc_secrets.rs
 t13 migrations/13[0-9][0-9]_*
 t13 migrations/18[0-9][0-9]_*
 t13 testkit/fixtures/vc-queue/*
@@ -191,7 +176,6 @@ td deploy/*
 td infrastructure/*
 td .github/workflows/deploy.yml
 td .github/workflows/prod-scan.yml
-td crates/vc-config/src/sections/deploy.rs
 # --- P2 / P3 ---
 t15 crates/vcrawl/*
 t15 crates/vc-config/src/sections/vcrawl.rs
