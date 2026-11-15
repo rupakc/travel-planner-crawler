@@ -4790,16 +4790,21 @@ name = "testkit"
 version = "0.1.0"
 dependencies = [
  "async-trait",
+ "axum",
  "blake3",
  "bytes",
  "chrono",
  "crc32c",
+ "http",
+ "reqwest",
  "serde",
  "serde_json",
  "sqlx",
  "testcontainers",
+ "texting_robots",
  "tokio",
  "ulid",
+ "url",
  "vc-core",
 ]
 

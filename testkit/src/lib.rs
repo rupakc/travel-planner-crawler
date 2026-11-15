@@ -10,16 +10,29 @@
 //!   `Embedder`), [`MemLedger`].
 //! * [`request_log`] — the **frozen** request-log schema the politeness oracle reads.
 //!
-//! P1 agents may add `src/<crate>_fixtures.rs`; the P1 testkit task adds fake-web, fake-gemini,
-//! fake-gcs and the oracles.
+//!
+//! Full testkit (Task 14):
+//!
+//! * [`fake_web`] — the scripted "mini internet" of spec §12 (seven sites, cycles, request log,
+//!   admin endpoints); binary `fake_web`, image `testkit-fake-web` (`testkit/Dockerfile.fake-web`).
+//! * [`fake_gemini`] — Vertex AI online + batch wire format, scripted; binary `fake_gemini`.
+//! * [`fake_gcs`] — the `fsouza/fake-gcs-server` container helper and a `BlobStore` over it.
+//! * [`oracle`] — [`assert_polite`] (request log × [`PolicySnapshot`]) and [`assert_raw_first`].
+//!
+//! P1 agents may add `src/<crate>_fixtures.rs`.
 
 pub mod blob;
 pub mod clock;
+pub mod fake_gcs;
+pub mod fake_gemini;
+pub mod fake_web;
 pub mod frontier;
 pub mod llm;
+pub mod oracle;
 pub mod pg;
 pub mod queue;
 pub mod request_log;
+pub mod server;
 
 // One fixtures module per P1 crate (each owned by that crate's task).
 pub mod vc_api_fixtures;
@@ -40,8 +53,13 @@ pub mod vc_store_fixtures;
 
 pub use blob::MemBlobStore;
 pub use clock::FakeClock;
+pub use fake_gcs::{FakeGcsStore, fake_gcs};
+pub use fake_gemini::FakeGemini;
+pub use fake_web::{FakeWeb, FakeWebServer};
 pub use frontier::{MemFrontier, UrlState};
 pub use llm::{FakeLlm, MemLedger};
+pub use oracle::{PolicySnapshot, assert_polite, assert_raw_first};
 pub use pg::{MIGRATOR, pg, pg_with_url};
 pub use queue::MemQueue;
 pub use request_log::{RequestLog, RequestLogEntry};
+pub use server::FakeServer;

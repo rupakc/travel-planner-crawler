@@ -1,0 +1,33 @@
+# syntax=docker/dockerfile:1
+# testkit-fake-web: the E2E fakes (spec §12, plan Task 14).
+#
+#   docker build -f testkit/Dockerfile.fake-web -t testkit-fake-web .     # from the repo root
+#   docker run --rm -p 8081:80 testkit-fake-web                           # fake web (default)
+#   docker run --rm -p 8082:8080 testkit-fake-web fake_gemini --gcs-url http://fake-gcs:4443 --buckets vc-batch
+#
+# One image, two binaries: `fake_web` (the seven scripted sites, request log, admin endpoints)
+# and `fake_gemini` (Vertex online + batch wire format). Test-only; never deployed.
+
+FROM rust:1.99.0-slim-trixie AS build
+WORKDIR /src
+COPY . .
+RUN --mount=type=cache,target=/usr/local/cargo/registry \
+    --mount=type=cache,target=/src/target \
+    cargo build --release --locked -p testkit --bin fake_web --bin fake_gemini \
+ && mkdir -p /out \
+ && cp target/release/fake_web target/release/fake_gemini /out/
+
+FROM debian:trixie-slim
+COPY --from=build /out/fake_web /out/fake_gemini /usr/local/bin/
+# curl for the health check; port 80 as a non-root user via a file capability.
+RUN apt-get update \
+ && apt-get install -y --no-install-recommends ca-certificates curl libcap2-bin \
+ && setcap cap_net_bind_service=+ep /usr/local/bin/fake_web \
+ && apt-get purge -y libcap2-bin && apt-get autoremove -y \
+ && rm -rf /var/lib/apt/lists/* \
+ && useradd --system --uid 10001 fake
+USER fake
+EXPOSE 80 8080
+HEALTHCHECK --interval=5s --timeout=3s --retries=10 \
+  CMD curl -fsS http://127.0.0.1:80/__admin/health || curl -fsS http://127.0.0.1:8080/health || exit 1
+CMD ["fake_web", "--listen", "0.0.0.0:80"]
