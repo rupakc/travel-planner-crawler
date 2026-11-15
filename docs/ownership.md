@@ -61,6 +61,8 @@ different phases; phases do not overlap).
 | T17 | agentic loops | `crates/vcrawl/src/agentic/**`, `prompts/agentic/**`, `docs/proposals/**` |
 | T18 | provisioning and go-live | `docs/runbooks/**`, `sources/**`, `BOT.md` (egress IP) |
 
+Any task may change `Cargo.lock` dependency edges (adding a `workspace = true` dep its crate didn't list). Adding or upgrading packages stays controller-only; `scripts/check-ownership.sh` enforces this with a package-set diff against `main`.
+
 Every task may also edit its own section of `vc-config` (`crates/vc-config/src/sections/<x>.rs`, e.g. `policy.rs`; `mod.rs` and `database.rs` belong to the controller).
 
 ```ownership

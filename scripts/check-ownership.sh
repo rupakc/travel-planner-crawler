@@ -48,6 +48,8 @@ check() {
   fi
   while IFS= read -r path || [[ -n "$path" ]]; do
     [[ -z "$path" ]] && continue
+    # Cargo.lock: any task may change dependency edges; lock_guard forbids new packages.
+    if [[ "$path" == Cargo.lock ]]; then continue; fi
     ok=0
     while read -r t glob; do
       [[ "$t" == "$task" ]] || continue
@@ -139,6 +141,20 @@ EOF
   echo "self-test: all passed"
 }
 
+# lock_guard <base>: Cargo.lock may change only dependency edges, never the package set.
+lock_packages() { # stdin: Cargo.lock; stdout: sorted "name version" lines
+  awk '/^\[\[package\]\]/{n="";v=""} /^name = /{n=$3} /^version = /{v=$3; print n, v}' | tr -d '"' | sort
+}
+lock_guard() {
+  local base="$1" added
+  added="$(comm -13 <(git show "$base:Cargo.lock" | lock_packages) <(lock_packages < Cargo.lock))"
+  if [[ -n "$added" ]]; then
+    echo "check-ownership: Cargo.lock adds packages (controller only):" >&2
+    printf '  %s\n' "$added" >&2
+    return 1
+  fi
+}
+
 main() {
   local task="" branch="" base="origin/main" files_from="" map=""
   while [[ $# -gt 0 ]]; do
@@ -179,6 +195,9 @@ main() {
     cp "$files_from" "$list"
   else
     git diff --name-only --no-renames "$base...HEAD" > "$list"
+  fi
+  if grep -qx 'Cargo.lock' "$list" && [[ -z "$files_from" ]]; then
+    lock_guard "$base" || return 1
   fi
   if check "$task" "$map" "$list"; then
     echo "check-ownership: $(grep -c . "$list" || true) changed path(s), all owned by $task"
