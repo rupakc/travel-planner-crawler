@@ -26,9 +26,10 @@ cadence: yearly
 min_delay_s: 5
 daily_budget: 3000
 politeness_key: null
-enabled: true
+enabled: false
 needs_key: false
 key_secret: null
 max_retention_days: null
 display_requirements: Credit Nager.Date with a link.
-notes: 'URL template: https://date.nager.at/api/v3/PublicHolidays/{year}/{cc}'
+notes: 'URL template: https://date.nager.at/api/v3/PublicHolidays/{year}/{cc} | Disabled: robots.txt of
+  date.nager.at disallows /api/v for all agents (checked 2026-11-16); the data is not published as files.'

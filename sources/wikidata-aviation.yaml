@@ -29,9 +29,12 @@ cadence: monthly
 min_delay_s: 5
 daily_budget: 3000
 politeness_key: null
-enabled: true
+enabled: false
 needs_key: false
 key_secret: null
 max_retention_days: null
 display_requirements: null
-notes: UA with contact required
+notes: 'UA with contact required | Disabled: robots.txt of query.wikidata.org disallows /sparql for all
+  agents (checked 2026-11-16). No allowed bulk route: www.wikidata.org disallows /w/api.php and /api/,
+  Special:EntityData is per entity only, and the dumps.wikimedia.org JSON dump is too large (see wikidata-dump).
+  Airports come from OurAirports.'
