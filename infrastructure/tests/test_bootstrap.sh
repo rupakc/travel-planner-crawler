@@ -74,8 +74,7 @@ test_fresh_project_creates_everything() {
     "compute instances create voyager-crawler" "--private-network-ip=10.142.0.50" "--address=34.0.0.7" \
     "monitoring channels create" "email_address=alerts@example.invalid" \
     "billing budgets create" "--budget-amount=9000INR" \
-    "--notifications-rule-monitoring-notification-channels=projects/voyager-prod-ohzkl/notificationChannels/42" \
-    "service-123456789@gcp-sa-aiplatform"; do
+    "--notifications-rule-monitoring-notification-channels=projects/voyager-prod-ohzkl/notificationChannels/42"; do
     grep -qF -- "$want" "$CALLS" || { fail fresh_project_creates_everything "missing: $want"; return; }
   done
   [[ "$(grep -c 'monitoring policies create' "$CALLS")" == 9 ]] || { fail fresh_project_creates_everything "policies: $(grep -c 'monitoring policies create' "$CALLS")"; return; }
@@ -103,6 +102,17 @@ test_second_run_creates_nothing() {
     grep -qF "iam roles update voyagerCrawlerDrill" "$CALLS" &&
     grep -qF "secrets add-iam-policy-binding crawler-api-tls-cert --member=serviceAccount:vm-runtime@" "$CALLS" &&
     ok second_run_creates_nothing || fail second_run_creates_nothing "re-asserts missing"
+}
+
+# The VM gets no instance-creating role until the Spot drill that needs it
+# exists, and no Vertex service agent reaches -ops until batch is wired
+test_no_drill_or_vertex_agent_bindings() {
+  setup
+  export FAKE_EXIST=0
+  PATH="$HERE/fakes:$PATH" bash "$SCRIPT" >"$T/out" 2>&1 || { fail no_drill_or_vertex_agent_bindings "exit $?"; return; }
+  local bad
+  bad="$(grep -E 'roles/voyagerCrawlerDrill|iam.serviceAccountUser|gcp-sa-aiplatform|storage.objectUser|services identity create' "$CALLS" || true)"
+  [[ -z "$bad" ]] && ok no_drill_or_vertex_agent_bindings || fail no_drill_or_vertex_agent_bindings "$bad"
 }
 
 test_rotate_tls_touches_only_tls() {

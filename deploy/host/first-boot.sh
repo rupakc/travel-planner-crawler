@@ -23,6 +23,7 @@ MD="http://metadata.google.internal/computeMetadata/v1"
 OPT=/opt/voyager-crawler
 DATA=/var/lib/voyager-crawler
 DISK=/dev/disk/by-id/google-crawler-data
+SYSTEMD_DIR="${VC_SYSTEMD_DIR:-/etc/systemd/system}"
 COSIGN_VERSION=v2.4.1
 COSIGN_SHA256=8b24b946dd5809c6bd93de08033bcf6bc0ed7d336b7785787c080f574b89249b
 WALG_VERSION=v3.0.9
@@ -134,6 +135,21 @@ mount_data_disk() {
   install -d -m 0700 "$DATA/deploy"
 }
 
+# docker_waits_for_data_disk — docker.service needs the data disk mounted
+# (fstab has `nofail`, so a missing disk would otherwise let Docker start
+# the stack on the boot disk's empty /var/lib/voyager-crawler)
+docker_waits_for_data_disk() {
+  local dir="$SYSTEMD_DIR/docker.service.d" want
+  want="# Written by first-boot.sh: Docker starts only once the data disk is mounted
+[Unit]
+RequiresMountsFor=$DATA"
+  install -d "$dir"
+  if [[ "$(cat "$dir/10-voyager-crawler-data.conf" 2>/dev/null)" != "$want" ]]; then
+    printf '%s\n' "$want" >"$dir/10-voyager-crawler-data.conf"
+    systemctl daemon-reload
+  fi
+}
+
 install_bundle() {
   local b64 tmp ip
   b64="$(md instance/attributes/crawler-bundle)"
@@ -173,6 +189,7 @@ main() {
   install_packages
   configure_docker
   mount_data_disk
+  docker_waits_for_data_disk
   install_bundle
   install_binaries
   install_units
@@ -180,4 +197,5 @@ main() {
   systemctl start --no-block voyager-crawler.service voyager-crawler-deploy.service
 }
 
-main "$@"
+# deploy/tests source this file for its functions only
+[[ -n "${VC_FIRST_BOOT_FUNCTIONS_ONLY:-}" ]] || main "$@"
