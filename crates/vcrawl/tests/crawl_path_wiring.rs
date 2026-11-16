@@ -1,5 +1,5 @@
 //! Wiring of the crawl path: `vcrawl health`, the cross-process daily raw-bytes cap, and the
-//! sub-resource gap of the render client.
+//! sub-resource gap of the permit client.
 
 use std::net::{IpAddr, Ipv4Addr};
 use std::sync::Arc;
@@ -9,13 +9,12 @@ use chrono::Utc;
 use testkit::fake_web::{FakeWeb, Reply, Site};
 use testkit::vc_fetch_fixtures::StubPolicy;
 use testkit::{FakeClock, MemFrontier};
-use vc_core::fetch::{FetchRequest, PermitClient, RequestPurpose};
+use vc_core::fetch::{FetchRequest, RequestPurpose};
 use vc_core::frontier::{Frontier, NewUrl};
 use vc_core::policy::{RobotsEntry, RobotsStatus};
 use vc_core::{CanonicalUrl, Clock, SystemClock};
 use vc_fetch::StaticResolver;
 use vcrawl::Ctx;
-use vcrawl::wiring::fetch::SubresourcePacing;
 use vcrawl::wiring::rawcap::{PgRawBytes, RawBytesBudget};
 
 fn free_port() -> u16 {
@@ -158,11 +157,10 @@ async fn subresource_requests_use_the_gap_not_the_page_delay() {
     let resolver =
         Arc::new(StaticResolver::new().with("site.test", IpAddr::V4(Ipv4Addr::LOCALHOST)));
     let cfg = vc_config::Config::default();
-    let inner =
+    let client =
         vcrawl::wiring::fetch::permit_client(&cfg, frontier.clone(), policy, clock, Some(resolver));
     let gap = Duration::from_millis(cfg.render.subresource_gap_ms);
     assert_eq!(gap, Duration::from_millis(250));
-    let client = SubresourcePacing::new(inner, gap);
 
     let get = |path: &str, purpose| FetchRequest::get(url(path), purpose);
     let ex = client
@@ -199,6 +197,8 @@ async fn subresource_requests_use_the_gap_not_the_page_delay() {
     );
     // Five requests, all with the one UA, through the permit (lease check + token each).
     assert_eq!(frontier.rate_tokens_taken(), 5);
+    // KeyOutcome.requests comes from the permit: one count per request, none inflated.
+    assert_eq!(p.requests_made(), 5);
     let log = web.log();
     assert_eq!(log.entries().len(), 5);
     assert!(log.entries().iter().all(|e| e.ua == vc_core::USER_AGENT));

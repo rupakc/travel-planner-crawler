@@ -730,6 +730,86 @@ async fn paced_by_permit_delay() {
     );
 }
 
+/// Spec §17.1: render sub-requests are spaced by the sub-resource gap (250 ms), not the page
+/// delay; the page delay still applies to the next page.
+#[tokio::test]
+async fn subresources_paced_by_gap_not_page_delay() {
+    let delay = Duration::from_secs(3);
+    let env = Env::with(Duration::from_secs(240), delay, FetchConfig::default()).await;
+    Mock::given(path("/p"))
+        .respond_with(ResponseTemplate::new(200).insert_header("content-type", "text/html"))
+        .mount(&env.server)
+        .await;
+    Mock::given(path("/s.js"))
+        .respond_with(
+            ResponseTemplate::new(200)
+                .insert_header("content-type", "text/javascript")
+                .set_body_string("1"),
+        )
+        .mount(&env.server)
+        .await;
+    let u = env.url("site.test", "/p");
+    let claim = env.claim(&u, "", &["site.test"]).await;
+    let p = &claim.permit;
+    env.client.fetch(p, page(u.clone())).await.unwrap();
+    let t0 = Instant::now();
+    for _ in 0..3 {
+        let req = FetchRequest::get(env.url("site.test", "/s.js"), RequestPurpose::SubResource);
+        env.client.fetch(p, req).await.unwrap();
+    }
+    let subs = t0.elapsed();
+    assert!(
+        subs >= Duration::from_millis(3 * 250 - 30),
+        "sub-requests keep the gap: {subs:?}"
+    );
+    assert!(
+        subs < Duration::from_millis(1500),
+        "not the page delay: {subs:?}"
+    );
+    // Every request is counted once.
+    assert_eq!(p.requests_made(), 4);
+    let t1 = Instant::now();
+    env.client.fetch(p, page(u)).await.unwrap();
+    assert!(
+        t1.elapsed() >= delay - Duration::from_millis(50),
+        "the next page still waits for the page delay: {:?}",
+        t1.elapsed()
+    );
+    assert_eq!(p.requests_made(), 5);
+}
+
+#[tokio::test]
+async fn subresource_gap_is_configurable_and_never_exceeds_delay() {
+    let env = Env::with(
+        Duration::from_secs(240),
+        Duration::from_millis(300),
+        FetchConfig::default(),
+    )
+    .await;
+    let client = env
+        .client
+        .clone()
+        .with_subresource_gap(Duration::from_secs(5));
+    Mock::given(path("/s.js"))
+        .respond_with(
+            ResponseTemplate::new(200)
+                .insert_header("content-type", "text/javascript")
+                .set_body_string("1"),
+        )
+        .mount(&env.server)
+        .await;
+    let u = env.url("site.test", "/s.js");
+    let claim = env.claim(&u, "", &["site.test"]).await;
+    let sub = || FetchRequest::get(u.clone(), RequestPurpose::SubResource);
+    client.fetch(&claim.permit, sub()).await.unwrap();
+    let t0 = Instant::now();
+    client.fetch(&claim.permit, sub()).await.unwrap();
+    let e = t0.elapsed();
+    // A gap longer than the page delay is capped at the delay.
+    assert!(e >= Duration::from_millis(250), "{e:?}");
+    assert!(e < Duration::from_secs(2), "{e:?}");
+}
+
 #[tokio::test]
 async fn stream_yields_decoded_and_caps() {
     let env = Env::new().await;
