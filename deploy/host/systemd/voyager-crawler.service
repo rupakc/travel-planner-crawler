@@ -1,5 +1,7 @@
 [Unit]
 Description=Voyager Crawler stack (docker compose, last verified digest)
+# A failure is recorded for the crawler_host_units_failed alert
+OnFailure=voyager-crawler-failed@%n.service
 Requires=docker.service
 After=docker.service network-online.target
 Wants=network-online.target
@@ -13,6 +15,8 @@ RemainAfterExit=yes
 # Secrets live in tmpfs (/run): fetch them before compose needs the files
 ExecStartPre=/opt/voyager-crawler/host/deploy.sh --secrets
 ExecStart=/opt/voyager-crawler/host/vc-compose.sh up -d --remove-orphans
+# Records success (and the last_ok_at the backup/drill age alerts read); never fails the unit
+ExecStartPost=-/opt/voyager-crawler/host/unit-status.sh ok %n
 ExecStop=/opt/voyager-crawler/host/vc-compose.sh stop -t 30
 TimeoutStartSec=10min
 TimeoutStopSec=3min

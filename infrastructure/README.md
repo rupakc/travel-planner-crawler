@@ -114,5 +114,19 @@ on-demand weeks. Raise it in `host.local.env` only after one of those, and keep
 `bash infrastructure/tests/test_bootstrap.sh` (golden `--dry-run` transcript in
 `tests/golden/`, regenerate with `UPDATE_GOLDEN=1`; a fake `gcloud` for the fresh,
 second-run and `--rotate-tls` cases) and `bash deploy/tests/test_deploy.sh`
-(fake docker/cosign: unsigned refused, rollback on unhealthy, migrate before roll,
-idempotent on an unchanged digest, watchdog). Both need no GCP, Docker or root.
+(fake docker/cosign: unsigned refused, transient cosign/migrate failures retried and
+never held, rollback on unhealthy, migrate before roll, idempotent on an unchanged
+digest, watchdog, the deploy/drift heartbeat, unit outcomes, the light restore drill).
+
+## Host jobs and their alerts
+
+- `voyager-crawler-restore-drill.timer` (Sundays): `deploy/host/restore-drill.sh` restores
+  the latest wal-g base backup into a scratch directory on the data disk, in a throwaway
+  container of the postgres image on the `pgbackup` network only, starts it as a
+  read-only hot standby (`archive_mode=off`), checks it answers (applied migrations,
+  `segments`), and removes everything.
+- Every crawler unit has `OnFailure=voyager-crawler-failed@%n.service` and records its
+  outcome (`deploy/host/unit-status.sh`) in `heartbeats` (`role = 'host'`, instance
+  `unit:<unit>`); `deploy.sh` records the running vs the prod digest and the API
+  certificate's expiry (instance `deploy`) every tick. The maintenance role turns these
+  rows into alert metrics. Both need no GCP, Docker or root.

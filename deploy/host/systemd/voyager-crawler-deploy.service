@@ -1,5 +1,7 @@
 [Unit]
 Description=Voyager Crawler signed-digest deployer (prod tag → cosign verify → pull → migrate → roll → health → rollback)
+# A failure is recorded for the crawler_host_units_failed alert
+OnFailure=voyager-crawler-failed@%n.service
 Requires=docker.service
 Wants=network-online.target
 After=docker.service network-online.target voyager-crawler.service
@@ -8,5 +10,7 @@ RequiresMountsFor=/var/lib/voyager-crawler
 [Service]
 Type=oneshot
 ExecStart=/opt/voyager-crawler/host/deploy.sh
+# Records success (and the last_ok_at the backup/drill age alerts read); never fails the unit
+ExecStartPost=-/opt/voyager-crawler/host/unit-status.sh ok %n
 # migrate + six roles × the health timeout, with room to roll back
 TimeoutStartSec=60min

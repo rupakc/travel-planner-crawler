@@ -6,10 +6,14 @@
 #      running one → make sure every service is up, and stop (no pull, no
 #      cosign, no migrate). A held digest (failed before) is skipped too.
 #   2. cosign verify the digest, pinned to the deploy workflow on main and
-#      GitHub's OIDC issuer. Unsigned or wrongly signed → held, never pulled.
+#      GitHub's OIDC issuer. Unsigned or wrongly signed ("no matching
+#      signatures") → held, never pulled. Any other cosign failure (registry,
+#      Rekor or network trouble) is retried, then the next tick tries again.
 #   3. Pull by digest; make sure postgres + chromium run (pinned in compose).
 #   4. `vcrawl migrate` with the NEW image (expand-only: the running image
-#      keeps working on the new schema). Failure → held, nothing rolled.
+#      keeps working on the new schema). Retried; still failing → nothing
+#      rolled, not held: the next tick tries again (a migration is one
+#      transaction, so a retry is safe), and the drift alert fires after 30 min.
 #      Then the image's io.voyager-crawler.min-schema label must not be above
 #      the database's schema (highest applied migration); else → held.
 #   5. Roll the roles one at a time (maintenance … api); after each, wait
@@ -17,6 +21,11 @@
 #      goes back to the previous digest, and the new one is held.
 #   6. Success: image.env names the new digest; the old one becomes the
 #      rollback target.
+#
+# Every tick also records a deploy heartbeat in Postgres (lib.sh host_beat):
+# the running and the prod digest, since when they differ, and the installed
+# API certificate's expiry. The maintenance role exports them as
+# crawler_deploy_drift_seconds (alert: > 30 min) and crawler_tls_cert_days_left.
 #
 # Held digests are listed in $VC_STATE/held ("<digest> <reason>"); deleting
 # a line releases it, and publishing a newer digest ends the hold.
@@ -41,6 +50,9 @@ HEALTH_TIMEOUT="${VC_HEALTH_TIMEOUT:-420}"
 HEALTH_POLL="${VC_HEALTH_POLL:-5}"
 SECRETS_MAX_AGE_MIN="${VC_SECRETS_MAX_AGE_MIN:-60}"
 HELD="$VC_STATE/held"
+DRIFT="$VC_STATE/drift-since"
+RETRIES="${VC_RETRIES:-3}"
+RETRY_SLEEP="${VC_RETRY_SLEEP:-15}"
 MD="http://metadata.google.internal/computeMetadata/v1"
 
 # ── Secrets: Secret Manager → tmpfs, owned by the uid that reads them ─────
@@ -129,10 +141,55 @@ hold() {
   log "HELD $1: $2 (delete its line in $HELD to release it)"
 }
 
-verified() {
-  log "verifying $1"
-  cosign verify --certificate-identity "$CERT_IDENTITY" --certificate-oidc-issuer "$CERT_ISSUER" \
-    "$1" >/dev/null 2>&1
+# verify REF → 0 signed by the pinned identity; 2 refused (cosign found no
+# matching signature: hold it); 1 cosign failed for another reason RETRIES
+# times (registry/Rekor/network: try again next tick, never hold)
+verify() {
+  local ref="$1" i out
+  for ((i = 1; i <= RETRIES; i++)); do
+    log "verifying $ref (attempt $i/$RETRIES)"
+    if out="$(cosign verify --certificate-identity "$CERT_IDENTITY" --certificate-oidc-issuer "$CERT_ISSUER" \
+      "$ref" 2>&1 >/dev/null)"; then
+      return 0
+    fi
+    if grep -qiE 'no matching signatures|no signatures found' <<<"$out"; then
+      log "signature refused: $(grep -iE 'no matching signatures|no signatures found' <<<"$out" | head -n1)"
+      return 2
+    fi
+    log "cosign verify failed (not a signature verdict): $(tail -n1 <<<"$out")"
+    ((i < RETRIES)) && sleep "$RETRY_SLEEP"
+  done
+  return 1
+}
+
+# migrate_with REF → 0 once `vcrawl migrate` of REF succeeded (RETRIES tries)
+migrate_with() {
+  local ref="$1" i
+  for ((i = 1; i <= RETRIES; i++)); do
+    VC_IMAGE="$ref" vc_compose run --rm migrate && return 0
+    log "migrate with $ref failed (attempt $i/$RETRIES)"
+    ((i < RETRIES)) && sleep "$RETRY_SLEEP"
+  done
+  return 1
+}
+
+# report PROD — the deploy heartbeat: running vs PROD digest, since when they
+# differ ($DRIFT keeps the first moment across ticks), the API certificate's
+# notAfter. Best effort.
+report() {
+  local prod="$1" running since="" tls="" drift=null tlsv=null
+  running="$(current_image)"
+  running="${running##*@}"
+  if [[ -n "$prod" && "$prod" != "$running" ]]; then
+    [[ -s "$DRIFT" ]] || now_epoch >"$DRIFT"
+    since="$(head -n1 "$DRIFT")"
+    [[ "$since" =~ ^[0-9]+$ ]] && drift="\"$(iso_utc "$since")\""
+  else
+    rm -f "$DRIFT"
+  fi
+  tls="$(openssl x509 -enddate -noout -in "$VC_SECRETS_DIR/api_tls_cert" 2>/dev/null | sed -n 's/^notAfter=//p')" || tls=""
+  [[ "$tls" =~ ^[A-Za-z0-9:\ ]+$ ]] && tlsv="\"$tls\""
+  host_beat deploy "{\"running\": \"$running\", \"prod\": \"$prod\", \"drift_since\": $drift, \"tls_not_after\": $tlsv}" || true
 }
 
 label() { docker image inspect -f "{{ index .Config.Labels \"$2\" }}" "$1" 2>/dev/null || true; }
@@ -241,6 +298,7 @@ deploy_once() {
   new="$(resolve_digest)" || die "could not resolve $VC_REPO_IMAGE:$TAG (registry unreachable?)"
   ref="$VC_REPO_IMAGE@$new"
   cur="$(current_image)"
+  report "$new"
 
   if [[ "$ref" == "$cur" ]]; then
     local missing
@@ -259,20 +317,23 @@ deploy_once() {
     return 0
   fi
 
-  if ! verified "$ref"; then
-    hold "$new" "signature check failed (identity $CERT_IDENTITY)"
-    exit 3
-  fi
+  local v=0
+  verify "$ref" || v=$?
+  case "$v" in
+    0) ;;
+    2)
+      hold "$new" "signature check failed (identity $CERT_IDENTITY)"
+      exit 3
+      ;;
+    *) die "could not verify $ref (cosign/registry trouble): retrying next tick" ;;
+  esac
   log "pulling $ref"
   docker pull -q "$ref" >/dev/null || die "pull of $ref failed (retrying next tick)"
 
   base_up "$ref" || die "postgres is not healthy: not migrating"
   ensure_rollback_log
   log "migrating with $ref"
-  if ! VC_IMAGE="$ref" vc_compose run --rm migrate; then
-    hold "$new" "migrate failed"
-    exit 1
-  fi
+  migrate_with "$ref" || die "migrate with $ref failed $RETRIES times: nothing rolled; retrying next tick"
   if why="$(schema_too_new "$ref")"; then
     hold "$new" "$why"
     exit 1
@@ -289,6 +350,7 @@ deploy_once() {
     exit 1
   fi
   record "$ref" "$cur"
+  report "$new"
   log "deployed $ref (previous: ${cur:-none})"
 }
 
@@ -298,7 +360,7 @@ rollback() {
   target="$(cat "$VC_STATE/previous" 2>/dev/null || true)"
   [[ -n "$target" && "$target" != "$cur" ]] || die "no previous image to roll back to"
   docker pull -q "$target" >/dev/null || die "pull of $target failed"
-  verified "$target" || die "$target no longer verifies: refusing"
+  verify "$target" || die "$target does not verify (now): refusing"
   if why="$(schema_too_new "$target")"; then
     die "$target $why: refusing (§17.6)"
   fi

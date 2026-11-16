@@ -1,0 +1,7 @@
+[Unit]
+Description=Voyager Crawler: record that %i failed (crawler_host_units_failed alert)
+
+[Service]
+Type=oneshot
+ExecStart=/opt/voyager-crawler/host/unit-status.sh failed %i
+TimeoutStartSec=2min
