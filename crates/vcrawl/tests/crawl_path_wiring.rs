@@ -80,33 +80,92 @@ async fn health_fails_when_postgres_is_unreachable() {
 #[tokio::test]
 async fn daily_raw_bytes_cap_holds_across_processes() {
     let pool = testkit::pg().await;
-    // Two fetcher processes share the counter through Postgres.
+    // Two fetcher processes share the counter through Postgres (each its own pool).
+    let pool_b = sqlx::PgPool::connect_with(pool.connect_options().as_ref().clone())
+        .await
+        .unwrap();
     let a = PgRawBytes::new(pool.clone(), 100);
-    let b = PgRawBytes::new(pool.clone(), 100);
+    let b = PgRawBytes::new(pool_b.clone(), 100);
     assert!(!a.exhausted().await.unwrap());
     assert_eq!(a.add(60).await.unwrap(), 60);
     assert!(!b.exhausted().await.unwrap(), "60 < 100");
     assert_eq!(b.add(50).await.unwrap(), 110);
     assert!(a.exhausted().await.unwrap(), "a sees b's bytes");
     assert!(b.exhausted().await.unwrap());
+    // Concurrent adds from both processes never lose an increment.
+    let mut tasks = Vec::new();
+    for i in 0..40u64 {
+        let c = if i % 2 == 0 { a.clone() } else { b.clone() };
+        tasks.push(tokio::spawn(async move { c.add(1).await.unwrap() }));
+    }
+    for t in tasks {
+        t.await.unwrap();
+    }
+    assert_eq!(a.today().await.unwrap(), 150);
     // No cap configured: never exhausted.
     assert!(!PgRawBytes::new(pool.clone(), 0).exhausted().await.unwrap());
-    // The frontier's global token row is untouched; old days are pruned.
-    sqlx::query(
-        "INSERT INTO rate_bucket (name, tokens, capacity, refill_per_s)
-         VALUES ('raw_bytes:2000-01-01', 5, 100, 1)",
-    )
-    .execute(&pool)
-    .await
-    .unwrap();
-    assert_eq!(a.prune().await.unwrap(), 1);
+    // The counter has its own table: the frontier's rate_bucket only holds its global row.
+    let (day_rows,): (i64,) = sqlx::query_as("SELECT count(*) FROM raw_bytes_daily")
+        .fetch_one(&pool)
+        .await
+        .unwrap();
+    assert_eq!(day_rows, 1);
     let names: Vec<(String,)> = sqlx::query_as("SELECT name FROM rate_bucket ORDER BY name")
         .fetch_all(&pool)
         .await
         .unwrap();
-    assert_eq!(names.len(), 2, "{names:?}");
-    assert_eq!(names[0].0, "global");
-    assert!(names[1].0.starts_with("raw_bytes:"));
+    assert_eq!(names, vec![("global".to_string(),)]);
+    // Earlier days (and legacy rate_bucket rows of earlier days) are pruned; today stays.
+    sqlx::query("INSERT INTO raw_bytes_daily (day, bytes) VALUES ('2000-01-01', 5)")
+        .execute(&pool)
+        .await
+        .unwrap();
+    sqlx::query(
+        "INSERT INTO rate_bucket (name, tokens, capacity, refill_per_s)
+         VALUES ('raw_bytes:2000-01-02', 5, 100, 1)",
+    )
+    .execute(&pool)
+    .await
+    .unwrap();
+    assert_eq!(a.prune().await.unwrap(), 2);
+    assert_eq!(a.today().await.unwrap(), 150);
+    let names: Vec<(String,)> = sqlx::query_as("SELECT name FROM rate_bucket ORDER BY name")
+        .fetch_all(&pool)
+        .await
+        .unwrap();
+    assert_eq!(names, vec![("global".to_string(),)]);
+}
+
+/// Migration 1801 carries a legacy `rate_bucket` counter of today over to `raw_bytes_daily`.
+#[tokio::test]
+async fn raw_bytes_migration_carries_legacy_counter_over() {
+    let pool = testkit::pg().await;
+    sqlx::query(
+        "INSERT INTO rate_bucket (name, tokens, capacity, refill_per_s)
+         VALUES ('raw_bytes:' || to_char(now() AT TIME ZONE 'UTC', 'YYYY-MM-DD'), 42, 100, 1),
+                ('raw_bytes:garbage', 7, 100, 1)",
+    )
+    .execute(&pool)
+    .await
+    .unwrap();
+    sqlx::query("DELETE FROM raw_bytes_daily")
+        .execute(&pool)
+        .await
+        .unwrap();
+    let sql = std::fs::read_to_string(
+        std::path::Path::new(env!("CARGO_MANIFEST_DIR"))
+            .join("../../migrations/1801_raw_bytes_daily.sql"),
+    )
+    .unwrap();
+    let insert = sql[sql.find("INSERT INTO raw_bytes_daily").unwrap()..].to_string();
+    sqlx::raw_sql(sqlx::AssertSqlSafe(insert))
+        .execute(&pool)
+        .await
+        .unwrap();
+    assert_eq!(
+        PgRawBytes::new(pool.clone(), 100).today().await.unwrap(),
+        42
+    );
 }
 
 /// Render sub-requests are spaced by the 250 ms sub-resource gap, not by the page delay; the
