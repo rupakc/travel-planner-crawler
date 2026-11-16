@@ -380,7 +380,7 @@ async fn reference_numbers_held_until_a_second_source_agrees() {
         &r.pool,
         &r.blobs,
         Cap::html(
-            "https://wiki-b.example.org/spain",
+            "https://wiki-b.example.net/spain",
             "wiki-b",
             &fixture("emergency_b.html"),
             at(5),
@@ -432,7 +432,7 @@ async fn disagreeing_reference_sources_stay_held() {
         &r.pool,
         &r.blobs,
         Cap::html(
-            "https://wiki-b.example.org/spain",
+            "https://wiki-b.example.net/spain",
             "wiki-b",
             &fixture("emergency_b.html"),
             at(5),
@@ -497,4 +497,99 @@ async fn unchanged_payload_skips_the_llm() {
     let o = r.proc.process(&a2).await.unwrap();
     assert!(!processed(&o).4, "payload unchanged");
     assert_eq!(r.llm.calls(), 1);
+}
+
+#[tokio::test]
+async fn sources_of_one_publisher_never_agree() {
+    let r = rig(
+        &["wiki-a", "wiki-b"],
+        RigOpts {
+            llm: true,
+            ..RigOpts::default()
+        },
+    )
+    .await;
+    r.llm.push_json(numbers());
+    let a = commit(
+        &r.pool,
+        &r.blobs,
+        Cap::html(
+            "https://wiki-a.example.org/spain",
+            "wiki-a",
+            &fixture("emergency_a.html"),
+            at(0),
+        ),
+    )
+    .await;
+    r.proc.process(&a).await.unwrap();
+    // Another source id, but the same registrable domain: one voice, nothing promoted.
+    r.llm.push_json(numbers());
+    let b = commit(
+        &r.pool,
+        &r.blobs,
+        Cap::html(
+            "https://mirror.example.org/spain",
+            "wiki-b",
+            &fixture("emergency_b.html"),
+            at(5),
+        ),
+    )
+    .await;
+    let o = r.proc.process(&b).await.unwrap();
+    let (rep, held, promoted, _, _) = processed(&o);
+    assert_eq!((rep.inserted, held, promoted), (0, 1, 0));
+    assert_eq!(r.proc.pending().len().await.unwrap(), 2);
+    assert_eq!(count(&r.pool, "SELECT count(*) FROM records").await, 0);
+}
+
+/// Inserts an active official `emergency_numbers` record (country-level) for `country`.
+async fn official_numbers(pool: &sqlx::PgPool, i: i64, country: &str, age_s: i64) {
+    let id: i64 = sqlx::query_scalar(
+        "INSERT INTO records (kind, source_id, url_key, record_key, licence_class, current_version,
+                              current_data_hash, source_class, host, updated_at)
+         VALUES ('emergency_numbers', 'gov-' || $1::text, decode(md5($1::text), 'hex'), 'k', 'facts_only', 1,
+                 '\\x00', 'official', 'gov' || $1::text || '.example', now() - make_interval(secs => $2))
+         RETURNING record_id",
+    )
+    .bind(i)
+    .bind(age_s as f64)
+    .fetch_one(pool)
+    .await
+    .unwrap();
+    sqlx::query(
+        "INSERT INTO record_versions (record_id, version, capture_id, captured_at, data, data_hash,
+                                      kind_schema, extractor_ver, method, licence_class, use_policy)
+         VALUES ($1, 1, 'c', now(), $2, '\\x00', 'emergency_numbers@1', 't', 'llm', 'facts_only', '{}')",
+    )
+    .bind(id)
+    .bind(json!({"country": country, "numbers": [{"number": "112"}]}))
+    .execute(pool)
+    .await
+    .unwrap();
+}
+
+#[tokio::test]
+async fn index_peers_filter_by_place_before_the_limit() {
+    use vc_core::{KindId, SourceId};
+    use vcrawl::data::peers::{MAX_INDEX_PEERS, PeerScope, index_peers};
+    let pool = testkit::pg().await;
+    official_numbers(&pool, 0, "ES", 3600).await;
+    for i in 1..=MAX_INDEX_PEERS + 20 {
+        official_numbers(&pool, i, "FR", 0).await;
+    }
+    let kinds = [KindId::new("emergency_numbers")];
+    let me = SourceId("wiki-a".into());
+    let es = PeerScope::of(&[], &json!({"country_code": "ES"}));
+    let peers = index_peers(&pool, &kinds, &me, &es).await.unwrap();
+    assert_eq!(peers.len(), 1, "the older ES peer is not crowded out");
+    assert_eq!(peers[0].source_id.0, "gov-0");
+    assert_eq!(peers[0].publisher.as_deref(), Some("gov0.example"));
+    // No location at all → no peers.
+    let none = PeerScope::of(&[], &json!({}));
+    assert!(
+        index_peers(&pool, &kinds, &me, &none)
+            .await
+            .unwrap()
+            .is_empty()
+    );
 }

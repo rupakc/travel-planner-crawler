@@ -6,10 +6,10 @@ licence:
   class: share_alike
   spdx: CC-BY-SA-4.0
   attribution: Reference wiki-b contributors
-  url: https://wiki-b.example.org/licence
+  url: https://wiki-b.example.net/licence
 method: html
 seeds:
-- https://wiki-b.example.org/
+- https://wiki-b.example.net/
 sitemaps: []
 feeds: []
 adapter: null

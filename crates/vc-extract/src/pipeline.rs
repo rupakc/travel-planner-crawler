@@ -407,7 +407,15 @@ impl Extractor {
                 out.report.skip(&c.kind, Skip::Duplicate);
                 continue;
             }
-            let verdict = compare_with_peers(def, &prov.source_id, &place_ids, &data, input.peers);
+            let publisher = crate::gate::publisher_of(prov.url.host());
+            let verdict = compare_with_peers(
+                def,
+                &prov.source_id,
+                Some(&publisher),
+                &place_ids,
+                &data,
+                input.peers,
+            );
             let rec = self.build_record(
                 def,
                 &c,

@@ -1,7 +1,8 @@
 //! Peers for the high-stakes agreement and conflict checks (spec §5.7 step 4, §17.8).
 //!
-//! * [`index_peers`]: current, active records of the given kinds from `official` and
-//!   `reference` sources (the only classes that count towards agreement).
+//! * [`index_peers`]: current, active records of the given kinds and place from `official`
+//!   and `reference` sources (the only classes that count towards agreement). Independence is
+//!   by publisher (registrable domain), not by source id.
 //! * [`PendingPeers`]: `reference` records that `vc-extract` held back (`Gate::NeedsAgreement`)
 //!   because no second independent source agreed yet. They are fed back as peers when later
 //!   captures of the same kind are extracted; once another source agrees, the held record is
@@ -19,41 +20,95 @@ use vc_core::licence::SourceClass;
 use vc_core::records::{ExtractedRecord, Provenance};
 use vc_core::{Error, KindId, RecordKey, Result, SourceId};
 use vc_extract::PeerRecord;
+use vc_extract::gate::publisher_of;
 
-/// `(source_id, source_class, kind, place_ids, data)`.
-type PeerRow = (String, Option<String>, String, Vec<i64>, serde_json::Value);
+/// `(source_id, source_class, kind, place_ids, host, data)`.
+type PeerRow = (
+    String,
+    Option<String>,
+    String,
+    Vec<i64>,
+    Option<String>,
+    serde_json::Value,
+);
 
-/// Max peers read from the index per capture.
+/// Max peers read from the index per record.
 pub const MAX_INDEX_PEERS: i64 = 500;
 
-/// Current records of `kinds` from official/reference sources other than `exclude`.
+/// Where a record is: its resolved place ids, else (country-level records) its country.
+#[derive(Debug, Clone, Default, PartialEq, Eq)]
+pub struct PeerScope {
+    /// Resolved place ids.
+    pub place_ids: Vec<i64>,
+    /// `country_code`, else `country`, when there are no place ids.
+    pub country: Option<String>,
+}
+
+impl PeerScope {
+    /// The scope of a record (`place_ids` and data).
+    pub fn of(place_ids: &[i64], data: &serde_json::Value) -> Self {
+        let country = if place_ids.is_empty() {
+            ["country_code", "country"].iter().find_map(|f| {
+                data.get(*f)
+                    .and_then(serde_json::Value::as_str)
+                    .map(str::trim)
+                    .filter(|s| !s.is_empty())
+                    .map(str::to_string)
+            })
+        } else {
+            None
+        };
+        PeerScope {
+            place_ids: place_ids.to_vec(),
+            country,
+        }
+    }
+
+    /// Whether the scope can match anything (records without any location never agree).
+    pub fn is_empty(&self) -> bool {
+        self.place_ids.is_empty() && self.country.is_none()
+    }
+}
+
+/// Current records of `kinds` from official/reference sources other than `exclude`, about the
+/// same place as `scope` (sharing a place id; or, for a country-level scope, having no place
+/// ids and the same country). The place filter runs before the limit, so unrelated places can
+/// never crowd out the relevant peers.
 pub async fn index_peers(
     pool: &PgPool,
     kinds: &[KindId],
     exclude: &SourceId,
+    scope: &PeerScope,
 ) -> Result<Vec<PeerRecord>> {
-    if kinds.is_empty() {
+    if kinds.is_empty() || scope.is_empty() {
         return Ok(Vec::new());
     }
     let kinds: Vec<String> = kinds.iter().map(|k| k.0.to_string()).collect();
     let rows: Vec<PeerRow> = sqlx::query_as(
-        "SELECT r.source_id, r.source_class, r.kind, r.place_ids, v.data
+        "SELECT r.source_id, r.source_class, r.kind, r.place_ids, r.host, v.data
              FROM records r
              JOIN record_versions v ON v.record_id = r.record_id AND v.version = r.current_version
              WHERE r.kind = ANY($1) AND r.state = 'active' AND r.source_id <> $2
                AND r.source_class IN ('official', 'reference')
+               AND CASE WHEN cardinality($4::bigint[]) > 0 THEN r.place_ids && $4::bigint[]
+                   ELSE cardinality(r.place_ids) = 0
+                        AND lower(coalesce(nullif(v.data ->> 'country_code', ''),
+                                           v.data ->> 'country')) = lower($5)
+                   END
              ORDER BY r.updated_at DESC
              LIMIT $3",
     )
     .bind(&kinds)
     .bind(&exclude.0)
     .bind(MAX_INDEX_PEERS)
+    .bind(&scope.place_ids)
+    .bind(scope.country.as_deref())
     .fetch_all(pool)
     .await
     .map_err(|e| Error::Db(e.to_string()))?;
     Ok(rows
         .into_iter()
-        .filter_map(|(sid, class, kind, place_ids, data)| {
+        .filter_map(|(sid, class, kind, place_ids, host, data)| {
             let class: SourceClass =
                 serde_json::from_value(serde_json::Value::String(class?)).ok()?;
             Some(PeerRecord {
@@ -62,6 +117,7 @@ pub async fn index_peers(
                 kind: KindId::new(&kind),
                 place_ids,
                 data,
+                publisher: host.as_deref().map(publisher_of),
             })
         })
         .collect())
@@ -87,6 +143,7 @@ impl Held {
             kind: self.record.kind.clone(),
             place_ids: self.record.place_ids.clone(),
             data: self.record.data.clone(),
+            publisher: Some(publisher_of(self.provenance.url.host())),
         }
     }
 }

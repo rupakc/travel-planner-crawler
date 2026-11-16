@@ -35,13 +35,13 @@ use vc_core::records::{ExtractedRecord, Provenance};
 use vc_core::store::{BlobStore, CaptureRole};
 use vc_core::usepolicy::UsePolicy;
 use vc_core::{CaptureRef, Error, ErrorClass, KindId, Result};
-use vc_extract::gate::{compare_with_peers, is_high_stakes};
+use vc_extract::gate::{compare_with_peers, is_high_stakes, publisher_of};
 use vc_extract::{ExtractInput, Extractor, Gate, PeerRecord, source_gate};
 
 use crate::agentic::AgenticLlm;
 use crate::agentic::triage::{LinkCandidate, PgTriageCache, triage_links};
 use crate::data::capture::{self, CaptureReady, StoredCapture};
-use crate::data::peers::{PendingPeers, index_peers};
+use crate::data::peers::{PeerScope, PendingPeers, index_peers};
 use crate::data::sources::{LoadedSource, SourceCache};
 use crate::data::stale::{self, Coverage};
 
@@ -283,7 +283,9 @@ impl Processor {
         input.llm_kinds = &src.spec.llm_kinds;
         input.payload_changed = payload_changed;
         input.peers = &peers;
-        let out = self.d.extractor.extract(&input).await?;
+        let mut out = self.d.extractor.extract(&input).await?;
+        self.check_index_peers(&mut out, &high, &prov, &peers)
+            .await?;
 
         let coverage = Coverage::of(&src.spec.kinds, &src.spec.llm_kinds, &out);
         let present: std::collections::HashSet<(String, String)> = out
@@ -341,21 +343,96 @@ impl Processor {
         })
     }
 
-    /// Index peers plus held records from other sources, for the high-stakes kinds.
+    /// Held records from other sources, for the high-stakes kinds. Index peers depend on each
+    /// record's place, so they are checked after extraction ([`Self::check_index_peers`]).
     async fn peers(&self, high: &[KindId], prov: &Provenance) -> Result<Vec<PeerRecord>> {
         if high.is_empty() {
             return Ok(Vec::new());
         }
-        let mut peers = index_peers(&self.d.pool, high, &prov.source_id).await?;
-        peers.extend(
-            self.pending
-                .of_kinds(high)
-                .await?
-                .iter()
-                .filter(|h| h.provenance.source_id != prov.source_id)
-                .map(|h| h.as_peer()),
-        );
-        Ok(peers)
+        Ok(self
+            .pending
+            .of_kinds(high)
+            .await?
+            .iter()
+            .filter(|h| h.provenance.source_id != prov.source_id)
+            .map(|h| h.as_peer())
+            .collect())
+    }
+
+    /// Checks each extracted high-stakes record against index peers of its own place (plus the
+    /// held peers): flags conflicts on accepted records, and accepts held-back ones that now
+    /// have enough independent agreeing publishers.
+    async fn check_index_peers(
+        &self,
+        out: &mut vc_extract::ExtractOutput,
+        high: &[KindId],
+        prov: &Provenance,
+        held: &[PeerRecord],
+    ) -> Result<()> {
+        if high.is_empty() {
+            return Ok(());
+        }
+        let publisher = publisher_of(prov.url.host());
+        let verdict = |def, rec: &ExtractedRecord, peers: &[PeerRecord]| {
+            compare_with_peers(
+                def,
+                &prov.source_id,
+                Some(&publisher),
+                &rec.place_ids,
+                &rec.data,
+                peers,
+            )
+        };
+        for rec in out.records.iter_mut() {
+            let Some(def) = self
+                .d
+                .kinds
+                .get(&rec.kind)
+                .filter(|_| high.contains(&rec.kind))
+            else {
+                continue;
+            };
+            let mut peers = self.scoped_peers(&rec.kind, prov, rec).await?;
+            peers.extend(held.iter().cloned());
+            rec.conflict |= verdict(def, rec, &peers).conflict;
+        }
+        let mut still = Vec::new();
+        for mut rec in std::mem::take(&mut out.pending) {
+            let Some(def) = self.d.kinds.get(&rec.kind) else {
+                still.push(rec);
+                continue;
+            };
+            let Gate::NeedsAgreement(need) = source_gate(def, prov.source_class) else {
+                still.push(rec);
+                continue;
+            };
+            let mut peers = self.scoped_peers(&rec.kind, prov, &rec).await?;
+            peers.extend(held.iter().cloned());
+            let v = verdict(def, &rec, &peers);
+            rec.conflict |= v.conflict;
+            if v.agreeing_sources >= need {
+                out.records.push(rec);
+            } else {
+                still.push(rec);
+            }
+        }
+        out.pending = still;
+        Ok(())
+    }
+
+    async fn scoped_peers(
+        &self,
+        kind: &KindId,
+        prov: &Provenance,
+        rec: &ExtractedRecord,
+    ) -> Result<Vec<PeerRecord>> {
+        index_peers(
+            &self.d.pool,
+            std::slice::from_ref(kind),
+            &prov.source_id,
+            &PeerScope::of(&rec.place_ids, &rec.data),
+        )
+        .await
     }
 
     /// Upserts held records of `kinds` that now have enough agreeing sources.
@@ -372,12 +449,7 @@ impl Processor {
                     Gate::Allowed => 1,
                     Gate::Denied => continue,
                 };
-                let mut peers = index_peers(
-                    &self.d.pool,
-                    std::slice::from_ref(kind),
-                    &h.provenance.source_id,
-                )
-                .await?;
+                let mut peers = self.scoped_peers(kind, &h.provenance, &h.record).await?;
                 peers.extend(
                     held.iter()
                         .filter(|o| o.provenance.source_id != h.provenance.source_id)
@@ -386,6 +458,7 @@ impl Processor {
                 let v = compare_with_peers(
                     def,
                     &h.provenance.source_id,
+                    Some(&publisher_of(h.provenance.url.host())),
                     &h.record.place_ids,
                     &h.record.data,
                     &peers,
