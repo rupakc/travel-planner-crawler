@@ -5877,6 +5877,7 @@ dependencies = [
  "bytes",
  "chrono",
  "clap",
+ "crc32c",
  "fail",
  "figment",
  "http",

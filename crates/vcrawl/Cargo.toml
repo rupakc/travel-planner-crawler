@@ -45,6 +45,7 @@ figment = { workspace = true }
 url = { workspace = true }
 http = { workspace = true }
 httpdate = { workspace = true }
+crc32c = { workspace = true }
 
 [features]
 # Compiles the `fail` failpoints in (the failpoint tests enable it through dev-dependencies).
