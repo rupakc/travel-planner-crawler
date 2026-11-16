@@ -105,11 +105,10 @@ async fn held_record_promoted_by_another_instance_after_restart() {
     .unwrap();
     assert_eq!(srcs, vec![("wiki-a".into(),), ("wiki-b".into(),)]);
     // A was promoted with its own provenance (its own URL and capture).
-    let a_url: String =
-        sqlx::query_scalar("SELECT url FROM records WHERE source_id = 'wiki-a'")
-            .fetch_one(&pool)
-            .await
-            .unwrap();
+    let a_url: String = sqlx::query_scalar("SELECT url FROM records WHERE source_id = 'wiki-a'")
+        .fetch_one(&pool)
+        .await
+        .unwrap();
     assert_eq!(a_url, "https://wiki-a.example.org/spain");
 }
 
