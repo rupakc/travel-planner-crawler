@@ -12,7 +12,7 @@ VC_REPO_IMAGE="${VC_REPO_IMAGE:-ghcr.io/rupakc/voyager-crawler}"
 # The roles deploy.sh rolls, in this order (the API last: it serves Voyager)
 VC_ROLES="${VC_ROLES:-maintenance scheduler processor embedder fetcher api}"
 # Third-party services, pinned by digest in compose.yaml (never rolled)
-VC_BASE_SERVICES="${VC_BASE_SERVICES:-postgres chromium}"
+VC_BASE_SERVICES="${VC_BASE_SERVICES:-postgres chromium otelcol}"
 
 log() {
   echo "${LOG_TAG:-voyager-crawler}: $*" >&2

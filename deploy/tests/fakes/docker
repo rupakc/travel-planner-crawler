@@ -28,7 +28,7 @@ if [[ "${1:-}" == compose ]]; then
     ps)
       if [[ "$*" == *"--services --status running"* ]]; then
         # shellcheck disable=SC2086 # a list
-        printf '%s\n' ${FAKE_RUNNING-postgres chromium maintenance scheduler processor embedder fetcher api}
+        printf '%s\n' ${FAKE_RUNNING-postgres chromium otelcol maintenance scheduler processor embedder fetcher api}
       elif [[ "${1:-}" == -a ]]; then
         printf '%s' "${FAKE_PS_A:-}"
       elif [[ "${1:-}" == -q ]]; then

@@ -147,7 +147,8 @@ install_bundle() {
   cp -a "$tmp/." "$OPT/"
   rm -rf "$tmp"
   chmod 0755 "$OPT"/host/*.sh
-  chmod 0644 "$OPT/chromium/seccomp.json" "$OPT/postgres/"*
+  chmod 0644 "$OPT/chromium/seccomp.json" "$OPT/chromium/run.sh" "$OPT/otelcol/config.yaml" \
+    "$OPT/postgres/"*
 
   ip="$(md instance/network-interfaces/0/ip)"
   [[ "$ip" =~ ^10\.[0-9.]+$ ]] || die "unexpected internal IP '$ip'"
