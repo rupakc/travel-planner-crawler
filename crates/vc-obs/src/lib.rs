@@ -7,12 +7,16 @@
 //!   in `infrastructure/monitoring/` read ([`ALERT_METRICS`]);
 //! - [`health`]: progress-based health ([`ProgressTracker`]);
 //! - [`heartbeat`]: the heartbeat writer ([`HeartbeatWriter`]);
+//! - [`ops`]: the operational alert gauges set from Postgres by the maintenance role
+//!   ([`ops::export_ops`]: WAL archive and backup ages, failed host units, deploy drift, TLS
+//!   expiry, LLM month spend, invalid LLM config);
 //! - [`server`]: `GET /metrics` and `GET /healthz` on `obs.metrics_addr`.
 
 pub mod health;
 pub mod heartbeat;
 pub mod logging;
 pub mod metrics;
+pub mod ops;
 pub mod server;
 
 pub use health::{Health, ProgressTracker};

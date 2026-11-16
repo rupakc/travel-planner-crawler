@@ -1,0 +1,55 @@
+{
+  "displayName": "voyager-crawler: running image differs from prod for over 30 min",
+  "combiner": "OR",
+  "enabled": true,
+  "userLabels": {
+    "app": "voyager-crawler"
+  },
+  "documentation": {
+    "content": "The VM has not been running the `:prod` digest for over 30 min: the digest is held (signature, schema or unhealthy roll; see `/var/lib/voyager-crawler/deploy/held`), or verify/pull/migrate keep failing (`journalctl -u voyager-crawler-deploy`). Absence: `deploy.sh` has not reported for an hour (timer stopped, registry unreachable, Postgres down).",
+    "mimeType": "text/markdown"
+  },
+  "conditions": [
+    {
+      "displayName": "running != prod for 30 min",
+      "conditionThreshold": {
+        "filter": "metric.type=\"custom.googleapis.com/crawler/deploy_drift_seconds\" AND resource.type=\"gce_instance\"",
+        "comparison": "COMPARISON_GT",
+        "thresholdValue": 1800,
+        "duration": "0s",
+        "aggregations": [
+          {
+            "alignmentPeriod": "300s",
+            "perSeriesAligner": "ALIGN_MAX"
+          }
+        ],
+        "trigger": {
+          "count": 1
+        }
+      }
+    },
+    {
+      "displayName": "deploy heartbeat absent 1 h",
+      "conditionAbsent": {
+        "filter": "metric.type=\"custom.googleapis.com/crawler/deploy_drift_seconds\" AND resource.type=\"gce_instance\"",
+        "duration": "3600s",
+        "aggregations": [
+          {
+            "alignmentPeriod": "300s",
+            "perSeriesAligner": "ALIGN_MAX"
+          }
+        ],
+        "trigger": {
+          "count": 1
+        }
+      }
+    }
+  ],
+  "notificationChannels": [
+    "__CHANNEL__"
+  ],
+  "alertStrategy": {
+    "autoClose": "86400s"
+  },
+  "severity": "ERROR"
+}

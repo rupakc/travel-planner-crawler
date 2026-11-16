@@ -688,6 +688,10 @@ pub async fn run(ctx: Ctx) -> anyhow::Result<()> {
     tasks.push(tokio::spawn(
         hb.run(StdDuration::from_secs(cfg.obs.heartbeat_s.max(1))),
     ));
+    // Alert gauges from Postgres + the hourly stale LLM settle (crate::obs_jobs)
+    tasks.push(tokio::spawn(
+        crate::obs_jobs::OpsJobs::new(pool.clone(), metrics.clone(), &cfg, clock.clone()).run(),
+    ));
     let agentic = agentic_from_config(&cfg, &pool, &store).await?;
     let m = Maintenance {
         pool,

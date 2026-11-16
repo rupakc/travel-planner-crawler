@@ -6,7 +6,7 @@
     "app": "voyager-crawler"
   },
   "documentation": {
-    "content": "LLM spend this month is over 80 % of the crawler's monthly cap (\u00a717.4). Hitting the daily cap is normal and is not alerted.",
+    "content": "LLM spend this month is over 80 % of the crawler's monthly cap (\u00a717.4). Hitting the daily cap is normal and is not alerted. The ratio is exported by the maintenance role from `llm_budget`; its absence (maintenance down or the exporter failing) alerts too.",
     "mimeType": "text/markdown"
   },
   "conditions": [
@@ -17,6 +17,22 @@
         "comparison": "COMPARISON_GT",
         "thresholdValue": 0.8,
         "duration": "0s",
+        "aggregations": [
+          {
+            "alignmentPeriod": "300s",
+            "perSeriesAligner": "ALIGN_MAX"
+          }
+        ],
+        "trigger": {
+          "count": 1
+        }
+      }
+    },
+    {
+      "displayName": "month spend ratio not reported for 30 min",
+      "conditionAbsent": {
+        "filter": "metric.type=\"custom.googleapis.com/crawler/llm_month_spend_ratio\" AND resource.type=\"gce_instance\"",
+        "duration": "1800s",
         "aggregations": [
           {
             "alignmentPeriod": "300s",

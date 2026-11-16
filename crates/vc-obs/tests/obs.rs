@@ -157,8 +157,9 @@ fn referenced_metrics() -> BTreeSet<String> {
         .split("Disk usage")
         .next()
         .unwrap();
+    // The split point is inside the `…` code span, so code spans are the even parts.
     for (i, part) in list.split('`').enumerate() {
-        if i % 2 == 1 && !part.is_empty() && ident(part) == part {
+        if i > 0 && i % 2 == 0 && !part.is_empty() && ident(part) == part {
             out.insert(part.to_string());
         }
     }
@@ -177,6 +178,46 @@ fn referenced_metrics() -> BTreeSet<String> {
         }
     }
     out
+}
+
+/// Go-live review 1: a gauge exported only once known can never cross a threshold while it
+/// is missing, so each of these has an absence condition in some policy.
+#[test]
+fn exported_when_known_gauges_alert_on_absence() {
+    let root =
+        std::path::Path::new(env!("CARGO_MANIFEST_DIR")).join("../../infrastructure/monitoring");
+    let mut absent = BTreeSet::new();
+    for e in std::fs::read_dir(root).unwrap() {
+        let v: serde_json::Value =
+            serde_json::from_str(&std::fs::read_to_string(e.unwrap().path()).unwrap()).unwrap();
+        for c in v["conditions"].as_array().unwrap() {
+            if let Some(f) = c
+                .pointer("/conditionAbsent/filter")
+                .and_then(|f| f.as_str())
+            {
+                let name = f
+                    .split("custom.googleapis.com/crawler/")
+                    .nth(1)
+                    .map(ident)
+                    .unwrap_or_default();
+                absent.insert(name);
+            }
+        }
+    }
+    for name in [
+        "heartbeat",
+        "wal_archive_age_seconds",
+        "base_backup_age_seconds",
+        "llm_month_spend_ratio",
+        "tls_cert_days_left",
+        "deploy_drift_seconds",
+        "backup_restore_age_seconds",
+    ] {
+        assert!(
+            absent.contains(name),
+            "no absence condition for {name}: {absent:?}"
+        );
+    }
 }
 
 #[test]
@@ -207,6 +248,10 @@ fn alert_metric_names_match_monitoring_policies() {
     m.llm_month_spend_ratio.set(0.1);
     m.parked_keys_ratio.set(0.0);
     m.tls_cert_days_left.set(700.0);
+    m.llm_config_invalid.set(0);
+    m.deploy_drift_seconds.set(0.0);
+    m.host_units_failed.set(0);
+    m.backup_restore_age_seconds.set(3600.0);
     let text = m.encode();
     for a in ALERT_METRICS {
         assert!(
@@ -328,4 +373,133 @@ async fn http_endpoint_serves_metrics_and_health() {
     let (status, _) = vc_obs::server::get(addr, "/nope").await.unwrap();
     assert_eq!(status, 404);
     server.abort();
+}
+
+/// Go-live review 1: the four alert gauges no role set (WAL archive age, base backup age,
+/// LLM month spend, TLS days left) and the new host gauges are exported from Postgres, and
+/// withdrawn (so the absence condition fires) when their source is missing or stale.
+#[tokio::test]
+async fn ops_gauges_from_postgres() {
+    use chrono::{Duration as CDuration, Utc};
+    use vc_obs::ops::{OpsInputs, export_ops};
+
+    let pool = testkit::pg().await;
+    let m = Metrics::new(Arc::new(vc_core::SystemClock), Duration::from_secs(180));
+    let now = Utc::now();
+    let close = |a: Option<f64>, b: f64| a.is_some_and(|a| (a - b).abs() < 1.0);
+
+    // Nothing recorded yet: only what is known is exported.
+    export_ops(&pool, &m, &OpsInputs::default(), now)
+        .await
+        .unwrap();
+    assert_eq!(
+        m.wal_archive_age_seconds.get(),
+        None,
+        "testkit has no archiving"
+    );
+    assert_eq!(m.base_backup_age_seconds.get(), None);
+    assert_eq!(m.backup_restore_age_seconds.get(), None);
+    assert_eq!(m.deploy_drift_seconds.get(), None);
+    assert_eq!(m.tls_cert_days_left.get(), None);
+    assert_eq!(m.host_units_failed.get(), Some(0));
+    assert_eq!(m.llm_month_spend_ratio.get(), Some(0.0));
+    assert_eq!(m.llm_config_invalid.get(), Some(0));
+    let text = m.encode();
+    assert!(!text.contains("crawler_base_backup_age_seconds "), "{text}");
+
+    let iso = |d: chrono::DateTime<Utc>| d.to_rfc3339();
+    let tls_end = (now + CDuration::days(20))
+        .format("%b %e %H:%M:%S %Y GMT")
+        .to_string();
+    let rows = [
+        (
+            "unit:voyager-crawler-basebackup.service",
+            now,
+            serde_json::json!({"failed": false, "last_ok_at": iso(now - CDuration::hours(1))}),
+        ),
+        (
+            "unit:voyager-crawler-restore-drill.service",
+            now,
+            serde_json::json!({"failed": true, "last_ok_at": iso(now - CDuration::days(8))}),
+        ),
+        (
+            "unit:voyager-crawler-deploy.service",
+            now,
+            serde_json::json!({"failed": false, "last_ok_at": iso(now)}),
+        ),
+        (
+            "deploy",
+            now - CDuration::minutes(1),
+            serde_json::json!({"running": "sha256:a", "prod": "sha256:b",
+                "drift_since": iso(now - CDuration::seconds(2000)), "tls_not_after": tls_end}),
+        ),
+    ];
+    for (instance, beat, progress) in rows {
+        sqlx::query(
+            "INSERT INTO heartbeats (role, instance, last_beat, progress) VALUES ('host', $1, $2, $3)",
+        )
+        .bind(instance)
+        .bind(beat)
+        .bind(progress)
+        .execute(&pool)
+        .await
+        .unwrap();
+    }
+    // A maintenance-owned row with failed=true must not count as a host unit.
+    sqlx::query(
+        "INSERT INTO heartbeats (role, instance, progress) VALUES ('maintenance', 'unit:x', '{\"failed\": true}')",
+    )
+    .execute(&pool)
+    .await
+    .unwrap();
+    sqlx::query("INSERT INTO llm_budget (period, cap, spent) VALUES ($1, 30, 27)")
+        .bind(now.format("%Y-%m").to_string())
+        .execute(&pool)
+        .await
+        .unwrap();
+
+    let forced = OpsInputs {
+        llm_forced_off: Some("llm.enabled requires VC_PROJECT_CAP_USD above 0".into()),
+    };
+    export_ops(&pool, &m, &forced, now).await.unwrap();
+    assert!(close(m.base_backup_age_seconds.get(), 3600.0));
+    assert!(close(m.backup_restore_age_seconds.get(), 8.0 * 86_400.0));
+    assert_eq!(m.host_units_failed.get(), Some(1));
+    assert!(close(m.deploy_drift_seconds.get(), 2000.0));
+    assert!(close(m.tls_cert_days_left.get(), 20.0));
+    assert!(close(m.llm_month_spend_ratio.get(), 0.9));
+    assert_eq!(m.llm_config_invalid.get(), Some(1));
+    let text = m.encode();
+    for name in [
+        "crawler_base_backup_age_seconds ",
+        "crawler_tls_cert_days_left ",
+        "crawler_llm_month_spend_ratio ",
+        "crawler_deploy_drift_seconds ",
+        "crawler_host_units_failed 1",
+        "crawler_llm_config_invalid 1",
+    ] {
+        assert!(text.contains(name), "{name} missing in\n{text}");
+    }
+
+    // deploy.sh stopped reporting: the drift gauge is withdrawn (its absence alerts), the
+    // certificate's expiry is still known. In sync again: drift 0.
+    let later = now + CDuration::minutes(40);
+    export_ops(&pool, &m, &OpsInputs::default(), later)
+        .await
+        .unwrap();
+    assert_eq!(m.deploy_drift_seconds.get(), None);
+    assert!(m.tls_cert_days_left.get().is_some());
+    assert_eq!(m.llm_config_invalid.get(), Some(0));
+    sqlx::query(
+        "UPDATE heartbeats SET last_beat = $1, progress = progress || '{\"drift_since\": null}'
+         WHERE role = 'host' AND instance = 'deploy'",
+    )
+    .bind(later)
+    .execute(&pool)
+    .await
+    .unwrap();
+    export_ops(&pool, &m, &OpsInputs::default(), later)
+        .await
+        .unwrap();
+    assert_eq!(m.deploy_drift_seconds.get(), Some(0.0));
 }

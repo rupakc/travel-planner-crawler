@@ -79,7 +79,10 @@ DRY RUN: nothing is called. project=voyager-prod-ohzkl quota project: voyager-pr
   gcloud  --project=voyager-prod-ohzkl  --quiet  beta  monitoring  channels  create  --display-name=Voyager\ crawler\ alerts  --type=email  --channel-labels=email_address=alerts@example.invalid  --user-labels=app=voyager-crawler
   gcloud  --project=voyager-prod-ohzkl  --quiet  monitoring  policies  create  --policy-from-file=<work>/backup-age.json
   gcloud  --project=voyager-prod-ohzkl  --quiet  monitoring  policies  create  --policy-from-file=<work>/crawler-down.json
+  gcloud  --project=voyager-prod-ohzkl  --quiet  monitoring  policies  create  --policy-from-file=<work>/deploy-drift.json
   gcloud  --project=voyager-prod-ohzkl  --quiet  monitoring  policies  create  --policy-from-file=<work>/disk-usage.json
+  gcloud  --project=voyager-prod-ohzkl  --quiet  monitoring  policies  create  --policy-from-file=<work>/host-units.json
+  gcloud  --project=voyager-prod-ohzkl  --quiet  monitoring  policies  create  --policy-from-file=<work>/llm-config.json
   gcloud  --project=voyager-prod-ohzkl  --quiet  monitoring  policies  create  --policy-from-file=<work>/llm-spend.json
   gcloud  --project=voyager-prod-ohzkl  --quiet  monitoring  policies  create  --policy-from-file=<work>/no-captures.json
   gcloud  --project=voyager-prod-ohzkl  --quiet  monitoring  policies  create  --policy-from-file=<work>/parked-keys.json

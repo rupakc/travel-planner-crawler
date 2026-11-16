@@ -33,7 +33,7 @@ the reserved internal address instead of letting GCP choose).
 | Instance template | `crawler-drill-template` | Spot e2-standard-2, runs as `crawler-drill`, max 4 h, deleted on stop |
 | Secrets | `crawler-pg-password`, `crawler-api-token-voyager`, `crawler-api-tls-key`, `crawler-api-tls-cert` | the first two get random values; the TLS pair is a self-signed P-256 cert for the internal IP, valid 2 years |
 | Firewall | `allow-crawler-api`, `allow-crawler-iap-ssh`, `deny-crawler-ingress` | tcp:8443 from SA `vm-runtime` only; SSH from IAP only; everything else denied (overrides `default-allow-internal`) |
-| Monitoring | channel "Voyager crawler alerts", 9 policies in `monitoring/` | its own email channel, so the app's channel stays quiet |
+| Monitoring | channel "Voyager crawler alerts", 12 policies in `monitoring/` | its own email channel, so the app's channel stays quiet |
 | Logs | bucket + sink `voyager-crawler-logs` | us-east1, 30-day retention; the VM's container logs (Ops Agent log `crawler_docker`, INFO and up), excluded from `_Default` so they are ingested once (spec §9) |
 | Budget | `voyager-crawler` | ₹9,000/month on label `app=voyager-crawler`, alerts at 50/90/100 % |
 
@@ -117,11 +117,18 @@ committed; with the LLM off (the default): ≈ $74 / $56.
   `gce_instance`): `heartbeat` (label `role`), `captures_committed` (cumulative),
   `due_urls`, `backpressure` (0/1), `wal_archive_age_seconds`,
   `base_backup_age_seconds`, `restore_drill_ok` (0/1), `restore_drill_age_seconds`,
-  `llm_month_spend_ratio`, `parked_keys_ratio`, `tls_cert_days_left`. Disk usage
+  `llm_month_spend_ratio`, `parked_keys_ratio`, `tls_cert_days_left`,
+  `llm_config_invalid` (0/1), `deploy_drift_seconds`, `host_units_failed`,
+  `backup_restore_age_seconds`. Disk usage
   comes from the Ops Agent. The role metrics reach Cloud Monitoring through the
   `otelcol` compose service (`deploy/otelcol/config.yaml`): it scrapes each role's
   `:9464` and renames `crawler_<x>[_total]` to `custom.googleapis.com/crawler/<x>`; the
   Ops Agent's Prometheus receiver cannot, as it always writes `prometheus.googleapis.com`.
+- The backup, WAL, TLS, drift, host-unit and LLM gauges are set by the maintenance role
+  from Postgres (`vc_obs::ops`: `pg_stat_archiver`, `llm_budget`, and the
+  `role = 'host'` rows of `heartbeats` that `deploy.sh` and `unit-status.sh` write). A
+  gauge with no known value is not exported, and each of them has an absence condition,
+  so "never measured" alerts too.
 
 ## Tests
 
