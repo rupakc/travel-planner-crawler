@@ -49,6 +49,30 @@ pub(crate) async fn lock_kinds<'a>(
     Ok(())
 }
 
+/// Orders writers against tombstones: every upsert holds this lock shared for its whole
+/// transaction (taken before anything else), a tombstone holds it exclusively. So an upsert
+/// either commits before the tombstone starts (and the tombstone then sees its records) or
+/// starts after the tombstone committed (and its exclusion check sees the new tombstone row);
+/// it can never read "no exclusion" and then commit a record the tombstone missed. Taken
+/// before the kind locks in both paths, so it never deadlocks with them.
+const TOMBSTONE_LOCK: &str = "vc-index:tombstones";
+
+async fn lock_tombstones(c: &mut PgConnection, exclusive: bool) -> Result<()> {
+    let f = if exclusive {
+        "pg_advisory_xact_lock"
+    } else {
+        "pg_advisory_xact_lock_shared"
+    };
+    sqlx::query(sqlx::AssertSqlSafe(format!(
+        "SELECT {f}(hashtextextended($1, 0))"
+    )))
+    .bind(TOMBSTONE_LOCK)
+    .execute(&mut *c)
+    .await
+    .map_err(db)?;
+    Ok(())
+}
+
 /// Standing exclusions that match the capture as a whole, and the excluded authors.
 async fn exclusions(c: &mut PgConnection, prov: &Provenance) -> Result<(bool, Vec<String>)> {
     let host = prov.url.host().to_ascii_lowercase();
@@ -90,6 +114,7 @@ pub(crate) async fn upsert(
         return Ok(report);
     }
     let mut tx = ix.pool.begin().await.map_err(db)?;
+    lock_tombstones(&mut tx, false).await?;
     lock_kinds(
         &mut tx,
         recs.iter()
@@ -106,7 +131,7 @@ pub(crate) async fn upsert(
             }
             match &rec.observation {
                 Some(pt) => {
-                    if observation(&mut tx, pt, prov).await? {
+                    if observation(&mut tx, pt, &rec.kind.0, prov).await? {
                         report.observations += 1;
                         series_changed.insert((pt.series_key.clone(), rec.kind.0.to_string()));
                     }
@@ -127,16 +152,17 @@ pub(crate) async fn upsert(
 async fn observation(
     c: &mut PgConnection,
     pt: &ObservationPoint,
+    kind: &str,
     prov: &Provenance,
 ) -> Result<bool> {
     let licence = serde_json::to_value(&prov.licence)?;
     let n = sqlx::query(
         "INSERT INTO observations
             (series_key, observed_at, source_id, value, capture_id, captured_at,
-             licence, url_key, url, host)
-         VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)
+             licence, url_key, url, host, kind)
+         VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11)
          ON CONFLICT (series_key, observed_at, source_id) DO UPDATE SET
-            value = EXCLUDED.value, capture_id = EXCLUDED.capture_id,
+            value = EXCLUDED.value, capture_id = EXCLUDED.capture_id, kind = EXCLUDED.kind,
             captured_at = EXCLUDED.captured_at, licence = EXCLUDED.licence,
             url_key = EXCLUDED.url_key, url = EXCLUDED.url, host = EXCLUDED.host
          WHERE observations.value IS DISTINCT FROM EXCLUDED.value
@@ -153,6 +179,7 @@ async fn observation(
     .bind(&prov.url_key.as_bytes()[..])
     .bind(prov.url.as_str())
     .bind(prov.url.host().to_ascii_lowercase())
+    .bind(kind)
     .execute(&mut *c)
     .await
     .map_err(db)?
@@ -173,44 +200,71 @@ async fn record(
     let policy = rec.use_policy.meet(&prov.use_policy);
     let captured_at = prov.capture.captured_at;
 
-    let inserted: Option<i64> = sqlx::query_scalar(
-        "INSERT INTO records (kind, source_id, url_key, record_key, licence_class)
-         VALUES ($1, $2, $3, $4, $5)
-         ON CONFLICT (url_key, kind, record_key) DO NOTHING
-         RETURNING record_id",
+    // An out-of-order older capture never creates a record that a newer capture of the same
+    // page (and kind) has already been judged against.
+    let newer_seen: bool = sqlx::query_scalar(
+        "SELECT EXISTS (SELECT 1 FROM records
+            WHERE url_key = $1 AND kind = $2
+              AND greatest(last_captured_at, stale_captured_at) > $3)",
     )
-    .bind(kind)
-    .bind(&prov.source_id.0)
     .bind(&prov.url_key.as_bytes()[..])
-    .bind(&rec.record_key.0)
-    .bind(prov.licence.class.as_str())
-    .fetch_optional(&mut *c)
+    .bind(kind)
+    .bind(captured_at)
+    .fetch_one(&mut *c)
     .await
     .map_err(db)?;
+    let inserted: Option<i64> = if newer_seen {
+        None
+    } else {
+        sqlx::query_scalar(
+            "INSERT INTO records (kind, source_id, url_key, record_key, licence_class)
+             VALUES ($1, $2, $3, $4, $5)
+             ON CONFLICT (url_key, kind, record_key) DO NOTHING
+             RETURNING record_id",
+        )
+        .bind(kind)
+        .bind(&prov.source_id.0)
+        .bind(&prov.url_key.as_bytes()[..])
+        .bind(&rec.record_key.0)
+        .bind(prov.licence.class.as_str())
+        .fetch_optional(&mut *c)
+        .await
+        .map_err(db)?
+    };
 
     // `revive`: a `gone` record seen again unchanged is re-served without a new version.
     let (record_id, version, revive) = match inserted {
         Some(id) => (id, 0, false),
         None => {
             let row = sqlx::query(
-                "SELECT record_id, state, current_version, current_data_hash, last_captured_at
+                "SELECT record_id, state, current_version, current_data_hash, last_captured_at,
+                        stale_captured_at
                  FROM records WHERE url_key = $1 AND kind = $2 AND record_key = $3 FOR UPDATE",
             )
             .bind(&prov.url_key.as_bytes()[..])
             .bind(kind)
             .bind(&rec.record_key.0)
-            .fetch_one(&mut *c)
+            .fetch_optional(&mut *c)
             .await
             .map_err(db)?;
+            let Some(row) = row else {
+                // Absent from a newer capture of its page: not created from an older one.
+                report.unchanged += 1;
+                return Ok(());
+            };
             let id: i64 = row.get("record_id");
             let state: String = row.get("state");
             let cur: i32 = row.get("current_version");
             let cur_hash: Option<Vec<u8>> = row.get("current_data_hash");
             let last: Option<chrono::DateTime<chrono::Utc>> = row.get("last_captured_at");
+            let stale_at: Option<chrono::DateTime<chrono::Utc>> = row.get("stale_captured_at");
             if state == "tombstoned" {
                 return Ok(());
             }
-            let older = last.is_some_and(|l| l > captured_at);
+            // Older than what the record last saw, or than the capture that found it missing
+            // (so an out-of-order capture never re-activates a record a newer one staled).
+            let older = last.is_some_and(|l| l > captured_at)
+                || (state == "stale" && stale_at.is_some_and(|s| s > captured_at));
             let same = cur > 0 && cur_hash.as_deref() == Some(&hash[..]);
             if cur > 0 && (older || same) && !(same && !older && state == "gone") {
                 report.unchanged += 1;
@@ -508,6 +562,7 @@ pub(crate) async fn tombstone(
     };
     let gone = reason == TombstoneReason::Gone;
     let mut tx = ix.pool.begin().await.map_err(db)?;
+    lock_tombstones(&mut tx, true).await?;
 
     let kinds: Vec<String> = sqlx::query_scalar(sqlx::AssertSqlSafe(format!(
         "SELECT DISTINCT r.kind FROM records r WHERE {pred}"
@@ -554,17 +609,25 @@ pub(crate) async fn tombstone(
 
     if !gone {
         if let Some(opred) = observation_sql(sel) {
-            let series: Vec<String> = sqlx::query_scalar(sqlx::AssertSqlSafe(format!(
-                "WITH t AS (UPDATE observations o SET tombstoned = true
-                            WHERE {opred} AND NOT o.tombstoned RETURNING o.series_key)
-                 SELECT DISTINCT series_key FROM t"
-            )))
-            .bind(&sel_value)
-            .fetch_all(&mut *tx)
-            .await
-            .map_err(db)?;
-            for s in series {
-                change(&mut tx, "observation", &s, "tombstone", None).await?;
+            // The kind of each series: from its points, else (points written before 1502)
+            // from the series' last upsert change.
+            let series: Vec<(String, Option<String>)> =
+                sqlx::query_as(sqlx::AssertSqlSafe(format!(
+                    "WITH t AS (UPDATE observations o SET tombstoned = true
+                            WHERE {opred} AND NOT o.tombstoned RETURNING o.series_key, o.kind)
+                 SELECT s.series_key, coalesce(s.kind, (
+                        SELECT ch.kind FROM changes ch
+                        WHERE ch.owner_type = 'observation' AND ch.owner_id = s.series_key
+                          AND ch.kind IS NOT NULL
+                        ORDER BY ch.seq DESC LIMIT 1))
+                 FROM (SELECT DISTINCT series_key, kind FROM t) s"
+                )))
+                .bind(&sel_value)
+                .fetch_all(&mut *tx)
+                .await
+                .map_err(db)?;
+            for (s, kind) in series {
+                change(&mut tx, "observation", &s, "tombstone", kind.as_deref()).await?;
             }
         }
         sqlx::query(

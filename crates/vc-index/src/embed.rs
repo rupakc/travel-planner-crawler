@@ -99,6 +99,8 @@ impl PgIndex {
 
     /// Stores the embedding of `task` for `model`. A no-op when the record changed or was
     /// tombstoned in the meantime (the next [`PgIndex::pending_embeddings`] picks it up again).
+    /// The record row is read `FOR SHARE`: a tombstone (or new version) in flight is waited for
+    /// and its outcome re-checked, so no embedding is written after its record is tombstoned.
     pub async fn store_embedding(
         &self,
         task: &EmbeddingTask,
@@ -109,9 +111,10 @@ impl PgIndex {
         sqlx::query(
             "INSERT INTO embeddings (owner_type, owner_id, model_id, dim, vec, content_hash)
              SELECT 'record', $1::text, $2, $3, $4::text::halfvec, $5
-             FROM records r
-             WHERE r.record_id = $6 AND r.current_data_hash = $5
-               AND r.state IN ('active', 'stale')
+             FROM (SELECT 1 FROM records r
+                   WHERE r.record_id = $6 AND r.current_data_hash = $5
+                     AND r.state IN ('active', 'stale')
+                   FOR SHARE) ok
              ON CONFLICT (owner_type, owner_id, model_id) DO UPDATE SET
                 dim = EXCLUDED.dim, vec = EXCLUDED.vec, content_hash = EXCLUDED.content_hash,
                 created_at = now()",
