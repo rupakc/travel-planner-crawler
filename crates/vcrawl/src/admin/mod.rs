@@ -10,6 +10,7 @@
 //!
 //! Every command prints one JSON document on stdout (ids and counts, never page content).
 
+pub mod author;
 pub mod purge;
 pub mod rebuild;
 pub mod reextract;

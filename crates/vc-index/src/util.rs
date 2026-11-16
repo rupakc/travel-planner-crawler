@@ -34,7 +34,7 @@ pub(crate) fn canonical(v: &Value) -> Value {
 }
 
 /// blake3 of the canonical JSON (32 bytes), as stored in `record_versions.data_hash`.
-pub(crate) fn data_hash(v: &Value) -> Vec<u8> {
+pub fn data_hash(v: &Value) -> Vec<u8> {
     let s = canonical(v).to_string();
     blake3::hash(s.as_bytes()).as_bytes().to_vec()
 }
@@ -259,16 +259,37 @@ pub(crate) fn licence_class_from(s: &str) -> LicenceClass {
     }
 }
 
-/// Whether `data` names `author` (`author`, `author.name` or `authors[]`, at any depth).
+/// Whether `s` is the author `selector`: a `sha256:<hex>` selector (how author purges store
+/// it, so the name is never kept) compares hashes, a plain one (older rows) compares names.
+pub(crate) fn is_author(s: &str, selector: &str) -> bool {
+    match selector.strip_prefix("sha256:") {
+        Some(h) => {
+            use sha2::{Digest, Sha256};
+            to_hex(Sha256::digest(s.as_bytes()).as_slice()) == h
+        }
+        None => s == selector,
+    }
+}
+
+/// Whether `data` names `author` (`author`, `author.name` or `authors[]`, at any depth);
+/// `author` may be hashed (see [`is_author`]).
 pub(crate) fn mentions_author(data: &Value, author: &str) -> bool {
     match data {
         Value::Object(m) => {
             let hit = match m.get("author") {
-                Some(Value::String(s)) => s == author,
-                Some(Value::Object(o)) => o.get("name").and_then(Value::as_str) == Some(author),
+                Some(Value::String(s)) => is_author(s, author),
+                Some(Value::Object(o)) => o
+                    .get("name")
+                    .and_then(Value::as_str)
+                    .is_some_and(|s| is_author(s, author)),
                 _ => false,
-            } || matches!(m.get("authors"), Some(Value::Array(a))
-                if a.iter().any(|x| x.as_str() == Some(author)));
+            } || match m.get("authors") {
+                Some(Value::Array(a)) => a
+                    .iter()
+                    .any(|x| x.as_str().is_some_and(|s| is_author(s, author))),
+                Some(Value::String(s)) => is_author(s, author),
+                _ => false,
+            };
             hit || m.values().any(|v| mentions_author(v, author))
         }
         Value::Array(a) => a.iter().any(|v| mentions_author(v, author)),
@@ -357,6 +378,13 @@ mod tests {
             assert!(mentions_author(&d, a));
         }
         assert!(!mentions_author(&d, "dave"));
+        // A hashed selector (author purges never store the name) matches the same authors.
+        let h = |n: &str| {
+            use sha2::{Digest, Sha256};
+            format!("sha256:{}", to_hex(Sha256::digest(n.as_bytes()).as_slice()))
+        };
+        assert!(mentions_author(&d, &h("carol")));
+        assert!(!mentions_author(&d, &h("dave")));
     }
 
     #[test]

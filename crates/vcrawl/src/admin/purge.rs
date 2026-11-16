@@ -11,18 +11,17 @@
 //!    segment (`vc-store` purge rewrite: new generation uploaded → one `vc_rewrite_segment`
 //!    transaction → old objects deleted; GCS then drops non-current versions within its 7-day
 //!    soft-delete window), its lines are removed from the segment's text-tier objects
-//!    (`text/` and `ephemeral/text/`), and for
-//!    `--author` the display name is scrubbed from every stored version, attribution, title,
-//!    excerpt and cached LLM output; → `raw_done`.
+//!    (`text/` and `ephemeral/text/`); → `raw_done`.
 //!    A crash between a rewrite's commit and the deletion of the old objects is repaired by
 //!    `store_garbage` (listed in the rewrite's transaction, collected on every run).
 //! 3. **done** (SLA 21 days): once `raw_done_at` is older than the backup/snapshot window
 //!    (WAL 14 d, snapshots 7 d) the data is gone from backups too.
 //!
 //! Raw scope per selector: `url`, `url_prefix`, `host`, `source` → the captures of those
-//! URLs; `author` → the captures that produced the author's records (for a dump that is the
-//! whole filtered-output capture); `record` → index only (a page's capture also holds other
-//! records; purge the URL to remove raw bytes).
+//! URLs; `author` → see [`super::author`] (the name is stored only as a hash, the author's
+//! records are scrubbed at the index stage, and every capture of their URLs is cut, later
+//! re-captures included; for a dump that is every dump capture); `record` → index only (a
+//! page's capture also holds other records; purge the URL to remove raw bytes).
 
 use std::collections::{BTreeMap, HashSet};
 
@@ -39,6 +38,7 @@ use vc_store::{
     rewrite_segment_without,
 };
 
+use super::author;
 use crate::Ctx;
 
 /// Replacement for scrubbed author names.
@@ -175,7 +175,7 @@ pub async fn request_purge(
         "INSERT INTO purge_requests (selector, reason, requested_by) VALUES ($1, $2, $3)
          RETURNING id",
     )
-    .bind(serde_json::to_value(sel)?)
+    .bind(serde_json::to_value(author::stored_selector(sel))?)
     .bind(reason_str(reason))
     .bind(requested_by)
     .fetch_one(pool)
@@ -227,16 +227,25 @@ pub async fn run_index_stage(pool: &PgPool, id: i64) -> anyhow::Result<PurgeOutc
     let r = load(pool, id).await?;
     let mut out = outcome(id, &r.state);
     if r.state == "pending" {
-        out.records_tombstoned = index_stage(pool, id, &r).await?;
+        (out.records_tombstoned, out.rows_scrubbed) = index_stage(pool, id, &r).await?;
         out.state = "index_done".into();
     }
     Ok(out)
 }
 
-async fn index_stage(pool: &PgPool, id: i64, r: &Request) -> anyhow::Result<u64> {
-    let n = vc_index::PgIndex::new(pool.clone())
-        .tombstone(&r.selector, r.reason)
-        .await?;
+/// Returns `(records tombstoned, rows scrubbed)`.
+async fn index_stage(pool: &PgPool, id: i64, r: &Request) -> anyhow::Result<(u64, u64)> {
+    let (n, scrubbed) = match &r.selector {
+        PurgeSelector::Author(a) => {
+            author::index_stage(pool, id, a, r.reason, reason_str(r.reason)).await?
+        }
+        sel => (
+            vc_index::PgIndex::new(pool.clone())
+                .tombstone(sel, r.reason)
+                .await?,
+            0,
+        ),
+    };
     let held = purge_held(pool, &r.selector).await?;
     if held > 0 {
         tracing::info!(purge_id = id, held, "purge: held records dropped");
@@ -252,7 +261,7 @@ async fn index_stage(pool: &PgPool, id: i64, r: &Request) -> anyhow::Result<u64>
     .bind(id)
     .execute(pool)
     .await?;
-    Ok(n)
+    Ok((n, scrubbed))
 }
 
 /// Advances one request as far as it can go at `now`.
@@ -265,16 +274,13 @@ pub async fn process_purge(
     let mut r = load(pool, id).await?;
     let mut out = outcome(id, &r.state);
     if r.state == "pending" {
-        out.records_tombstoned = index_stage(pool, id, &r).await?;
+        (out.records_tombstoned, out.rows_scrubbed) = index_stage(pool, id, &r).await?;
         r.state = "index_done".into();
     }
     if r.state == "index_done" {
-        let (caps, segs) = raw_stage(pool, store, &r.selector).await?;
+        let (caps, segs) = raw_stage(pool, store, id, &r.selector).await?;
         out.captures_removed = caps;
         out.segments_rewritten = segs;
-        if let PurgeSelector::Author(name) = &r.selector {
-            out.rows_scrubbed = scrub_author(pool, name).await?;
-        }
         sqlx::query(
             "UPDATE purge_requests SET state = 'raw_done', raw_done_at = $2
              WHERE id = $1 AND state = 'index_done'",
@@ -379,13 +385,7 @@ pub async fn purge_held(pool: &PgPool, sel: &PurgeSelector) -> anyhow::Result<u6
             h.clone(),
         ),
         PurgeSelector::Source(s) => ("h.source_id = $1".to_string(), s.0.clone()),
-        PurgeSelector::Author(a) => (
-            "jsonb_path_exists(h.record,
-                 'lax $.** ? (@.author == $a || @.author.name == $a || @.authors == $a)',
-                 jsonb_build_object('a', $1::text))"
-                .to_string(),
-            a.clone(),
-        ),
+        PurgeSelector::Author(a) => (author::author_sql("h.record"), author::digest(a)),
         PurgeSelector::Record(_) => return Ok(0),
     };
     Ok(sqlx::query(sqlx::AssertSqlSafe(format!(
@@ -410,11 +410,6 @@ pub struct DoomedCapture {
     pub cdxj_path: String,
 }
 
-/// The author predicate on `record_versions v` (same as vc-index's tombstone selector).
-pub const AUTHOR_PATH: &str = "jsonb_path_exists(v.data,
-     'lax $.** ? (@.author == $a || @.author.name == $a || @.authors == $a)',
-     jsonb_build_object('a', $1::text))";
-
 /// The committed captures a selector names (`None`: the selector has no raw scope).
 pub async fn captures_for(
     pool: &PgPool,
@@ -428,12 +423,10 @@ pub async fn captures_for(
             h.clone(),
         ),
         PurgeSelector::Source(s) => ("c.source_id = $1".to_string(), s.0.clone()),
-        PurgeSelector::Author(a) => (
-            format!(
-                "c.capture_id IN (SELECT v.capture_id FROM record_versions v WHERE {AUTHOR_PATH})"
-            ),
-            a.clone(),
-        ),
+        PurgeSelector::Author(a) => {
+            let sc = author::find_scope(pool, a).await?;
+            return Ok(Some(author::captures(pool, &sc).await?));
+        }
         PurgeSelector::Record(_) => return Ok(None),
     };
     let rows = sqlx::query(sqlx::AssertSqlSafe(format!(
@@ -464,10 +457,18 @@ pub async fn captures_for(
 async fn raw_stage(
     pool: &PgPool,
     store: &dyn BlobStore,
+    id: i64,
     sel: &PurgeSelector,
 ) -> anyhow::Result<(u64, u64)> {
-    let Some(doomed) = captures_for(pool, sel).await? else {
-        return Ok((0, 0));
+    let doomed = match sel {
+        // The scope fixed at the index stage (the scrubbed data no longer names the author).
+        PurgeSelector::Author(a) => {
+            author::captures(pool, &author::scope(pool, id, a).await?).await?
+        }
+        sel => match captures_for(pool, sel).await? {
+            Some(d) => d,
+            None => return Ok((0, 0)),
+        },
     };
     remove_captures(pool, store, &doomed).await
 }
@@ -581,72 +582,4 @@ pub async fn purge_text_tier(
         vc_store::segment::upload(store, &path, b).await?;
     }
     Ok(())
-}
-
-/// The JSON-escaped form of `s` without the quotes (how it appears inside `jsonb::text`).
-fn json_inner(s: &str) -> String {
-    let q = serde_json::Value::String(s.to_string()).to_string();
-    q[1..q.len() - 1].to_string()
-}
-
-/// Scrubs an author display name from every stored version, record, observation and cached
-/// LLM output. Returns the number of rows changed.
-pub async fn scrub_author(pool: &PgPool, name: &str) -> anyhow::Result<u64> {
-    let inner = json_inner(name);
-    let mut tx = pool.begin().await?;
-    let mut n = sqlx::query(
-        "UPDATE record_versions SET
-             data = CASE WHEN strpos(data::text, $2) > 0
-                         THEN replace(data::text, $2, $3)::jsonb ELSE data END,
-             attribution = replace(attribution, $1, $3),
-             title = replace(title, $1, $3),
-             excerpt = replace(excerpt, $1, $3)
-         WHERE strpos(data::text, $2) > 0 OR strpos(attribution, $1) > 0
-            OR strpos(title, $1) > 0 OR strpos(excerpt, $1) > 0",
-    )
-    .bind(name)
-    .bind(&inner)
-    .bind(REMOVED)
-    .execute(&mut *tx)
-    .await?
-    .rows_affected();
-    n += sqlx::query(
-        "UPDATE records SET
-             licence = CASE WHEN strpos(licence::text, $2) > 0
-                            THEN replace(licence::text, $2, $3)::jsonb ELSE licence END,
-             title = replace(title, $1, $3),
-             search_text = replace(search_text, $1, $3),
-             updated_at = now()
-         WHERE strpos(licence::text, $2) > 0 OR strpos(title, $1) > 0
-            OR strpos(search_text, $1) > 0",
-    )
-    .bind(name)
-    .bind(&inner)
-    .bind(REMOVED)
-    .execute(&mut *tx)
-    .await?
-    .rows_affected();
-    n += sqlx::query(
-        "UPDATE observations SET value = replace(value::text, $1, $2)::jsonb
-         WHERE strpos(value::text, $1) > 0",
-    )
-    .bind(&inner)
-    .bind(REMOVED)
-    .execute(&mut *tx)
-    .await?
-    .rows_affected();
-    n += sqlx::query(
-        "DELETE FROM held_records WHERE strpos(record::text || provenance::text, $1) > 0",
-    )
-    .bind(&inner)
-    .execute(&mut *tx)
-    .await?
-    .rows_affected();
-    n += sqlx::query("DELETE FROM llm_cache WHERE strpos(output::text, $1) > 0")
-        .bind(&inner)
-        .execute(&mut *tx)
-        .await?
-        .rows_affected();
-    tx.commit().await?;
-    Ok(n)
 }

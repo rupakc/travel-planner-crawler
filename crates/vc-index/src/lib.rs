@@ -39,6 +39,7 @@ use vc_core::records::{ExtractedRecord, Provenance};
 use vc_core::{EntityId, KindId, ModelId, RecordId, Result};
 
 pub use embed::EmbeddingTask;
+pub use util::data_hash;
 
 /// Embeds search text for the vector leg of hybrid search. `vcrawl` implements it over an
 /// `Embedder` and the LLM budget; returning `Ok(None)` (e.g. budget refused) or an error makes
