@@ -962,3 +962,231 @@ async fn source_purge_hides_observations() {
             .is_empty()
     );
 }
+
+// ---------------------------------------------------------------------------------------------
+// Final-review regressions (B11, B16, B17, B18)
+// ---------------------------------------------------------------------------------------------
+
+async fn state_of(ix: &PgIndex, key: &str) -> String {
+    sqlx::query_scalar("SELECT state FROM records WHERE record_key = $1")
+        .bind(key)
+        .fetch_one(&ix.pool)
+        .await
+        .unwrap()
+}
+
+#[tokio::test]
+async fn tombstone_and_concurrent_upsert_never_leave_an_active_record() {
+    let ix = index().await;
+    let url = "https://race.example/page";
+    let p = prov("s", open(), url);
+    // An uncommitted insert of the same record parks the upsert *after* it has read the
+    // standing exclusions (none yet) and before it writes.
+    let mut blocker = ix.pool.begin().await.unwrap();
+    sqlx::query(
+        "INSERT INTO records (kind, source_id, url_key, record_key, licence_class)
+         VALUES ('poi', 's', $1, 'race', 'open')",
+    )
+    .bind(&p.url_key.as_bytes()[..])
+    .execute(&mut *blocker)
+    .await
+    .unwrap();
+    let up = {
+        let ix = ix.clone();
+        let p = p.clone();
+        tokio::spawn(async move {
+            ix.upsert(vec![record("poi", "race", json!({"name": "Race"}))], &p)
+                .await
+        })
+    };
+    tokio::time::sleep(std::time::Duration::from_millis(300)).await;
+    let ts = {
+        let ix = ix.clone();
+        let sel = PurgeSelector::Url(p.url_key);
+        tokio::spawn(async move { ix.tombstone(&sel, TombstoneReason::OptOut).await })
+    };
+    tokio::time::sleep(std::time::Duration::from_millis(300)).await;
+    blocker.rollback().await.unwrap();
+    up.await.unwrap().unwrap();
+    ts.await.unwrap().unwrap();
+    let active: i64 = sqlx::query_scalar("SELECT count(*) FROM records WHERE state = 'active'")
+        .fetch_one(&ix.pool)
+        .await
+        .unwrap();
+    assert_eq!(active, 0, "the opted-out URL has no active record");
+}
+
+#[tokio::test]
+async fn older_capture_never_reactivates_a_record_a_newer_capture_staled() {
+    let ix = index().await;
+    let t = Utc::now() - Duration::hours(3);
+    let url = "https://example.org/stale";
+    ix.upsert(
+        vec![record("poi", "s1", json!({"name": "Kiosk"}))],
+        &prov_at("s", open(), url, t),
+    )
+    .await
+    .unwrap();
+    // A newer capture (t + 2h) no longer contains it: stale (as the processor marks it).
+    sqlx::query(
+        "UPDATE records SET state = 'stale', stale_since = now(), stale_capture_id = 'x',
+                stale_captured_at = $1 WHERE record_key = 's1'",
+    )
+    .bind(t + Duration::hours(2))
+    .execute(&ix.pool)
+    .await
+    .unwrap();
+    // An out-of-order capture from t + 1h, with other data, arrives late.
+    let rep = ix
+        .upsert(
+            vec![record(
+                "poi",
+                "s1",
+                json!({"name": "Kiosk", "hours": "9-5"}),
+            )],
+            &prov_at("s", open(), url, t + Duration::hours(1)),
+        )
+        .await
+        .unwrap();
+    assert_eq!((rep.new_versions, rep.unchanged), (0, 1));
+    assert_eq!(state_of(&ix, "s1").await, "stale");
+    let id = record_id(&ix, "s1").await;
+    assert_eq!(
+        ix.record_versions(id, 10, None).await.unwrap().items.len(),
+        1
+    );
+
+    // A capture newer than the stale one does re-activate it.
+    ix.upsert(
+        vec![record(
+            "poi",
+            "s1",
+            json!({"name": "Kiosk", "hours": "8-6"}),
+        )],
+        &prov_at(
+            "s",
+            open(),
+            url,
+            t + Duration::hours(3) - Duration::minutes(1),
+        ),
+    )
+    .await
+    .unwrap();
+    assert_eq!(state_of(&ix, "s1").await, "active");
+}
+
+#[tokio::test]
+async fn older_capture_never_inserts_a_record_a_newer_capture_lacks() {
+    let ix = index().await;
+    let t = Utc::now() - Duration::hours(3);
+    let url = "https://example.org/list";
+    ix.upsert(
+        vec![record("poi", "a", json!({"name": "A"}))],
+        &prov_at("s", open(), url, t + Duration::hours(2)),
+    )
+    .await
+    .unwrap();
+    // An older capture of the same page carries B (gone by the newer capture).
+    let rep = ix
+        .upsert(
+            vec![record("poi", "b", json!({"name": "B"}))],
+            &prov_at("s", open(), url, t + Duration::hours(1)),
+        )
+        .await
+        .unwrap();
+    assert_eq!(rep.inserted, 0);
+    let n: i64 = sqlx::query_scalar("SELECT count(*) FROM records WHERE record_key = 'b'")
+        .fetch_one(&ix.pool)
+        .await
+        .unwrap();
+    assert_eq!(n, 0);
+    // A newer capture with B inserts it.
+    let rep = ix
+        .upsert(
+            vec![record("poi", "b", json!({"name": "B"}))],
+            &prov_at(
+                "s",
+                open(),
+                url,
+                t + Duration::hours(2) + Duration::minutes(1),
+            ),
+        )
+        .await
+        .unwrap();
+    assert_eq!(rep.inserted, 1);
+}
+
+#[tokio::test]
+async fn observation_tombstone_change_carries_its_kind() {
+    let ix = index().await;
+    let t0 = Utc.with_ymd_and_hms(2026, 1, 1, 0, 0, 0).unwrap();
+    let mut r = record("advisory_level", "a", json!({"level": 2}));
+    r.observation = Some(ObservationPoint {
+        series_key: "advisory:FR".into(),
+        observed_at: t0,
+        value: json!(2),
+    });
+    ix.upsert(vec![r], &prov("gov", open(), "https://gov.example/fr"))
+        .await
+        .unwrap();
+    ix.tombstone(
+        &PurgeSelector::Source(vc_core::SourceId("gov".into())),
+        TombstoneReason::OptOut,
+    )
+    .await
+    .unwrap();
+    settle(&ix).await;
+    let ch = ix
+        .changes(None, &[KindId::new("advisory_level")], 100)
+        .await
+        .unwrap();
+    assert!(
+        ch.changes.iter().any(|c| c.op == ChangeOp::Tombstone
+            && c.owner_type == OwnerType::Observation
+            && c.owner_id == "advisory:FR"),
+        "kind-filtered clients see the observation tombstone"
+    );
+}
+
+#[tokio::test]
+async fn embedding_never_written_after_its_record_is_tombstoned() {
+    let ix = index().await;
+    let model = ModelId(Arc::from("test-embed-4"));
+    ix.ensure_embedding_index(&model, 4).await.unwrap();
+    ix.upsert(
+        vec![record("poi", "e1", json!({"name": "Alpha"}))],
+        &prov("s", open(), "https://example.org/e"),
+    )
+    .await
+    .unwrap();
+    let todo = ix.pending_embeddings(&model, 10).await.unwrap();
+    assert_eq!(todo.len(), 1);
+    // A tombstone in flight: the record row is updated and its embeddings deleted, not yet
+    // committed, while the embedder stores the vector it computed.
+    let id = todo[0].record_id.0;
+    let mut ts = ix.pool.begin().await.unwrap();
+    sqlx::query("UPDATE records SET state = 'tombstoned' WHERE record_id = $1")
+        .bind(id)
+        .execute(&mut *ts)
+        .await
+        .unwrap();
+    sqlx::query("DELETE FROM embeddings WHERE owner_type = 'record' AND owner_id = $1")
+        .bind(id.to_string())
+        .execute(&mut *ts)
+        .await
+        .unwrap();
+    let store = {
+        let ix = ix.clone();
+        let task = todo[0].clone();
+        let model = model.clone();
+        tokio::spawn(async move { ix.store_embedding(&task, &model, &unit(0, 4)).await })
+    };
+    tokio::time::sleep(std::time::Duration::from_millis(300)).await;
+    ts.commit().await.unwrap();
+    store.await.unwrap().unwrap();
+    let n: i64 = sqlx::query_scalar("SELECT count(*) FROM embeddings")
+        .fetch_one(&ix.pool)
+        .await
+        .unwrap();
+    assert_eq!(n, 0, "no embedding outlives its tombstoned record");
+}
