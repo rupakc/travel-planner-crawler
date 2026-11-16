@@ -235,3 +235,14 @@ def test_robots_disallowed_sources_are_off(generated, sid, host):
     src = generated[sid]
     assert src["enabled"] is False
     assert f"robots.txt of {host} disallows" in " ".join(src["notes"].split())
+
+
+def test_unreadable_robots_source_is_off(generated):
+    # api.mobilitydatabase.org/robots.txt redirects to a login page: no permission, so off.
+    src = generated["mobility-database-api"]
+    assert src["enabled"] is False
+    notes = " ".join(src["notes"].split())
+    assert "robots.txt of api.mobilitydatabase.org is unreadable" in notes
+    assert "When in doubt, don't crawl" in notes
+    committed = yaml.safe_load((ROOT / "sources" / "mobility-database-api.yaml").read_text())
+    assert committed["enabled"] is False
