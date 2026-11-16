@@ -3,7 +3,8 @@
 //!
 //! The LLM is wired only when `VC_LLM_ENABLED=true`; then the model is probed once at start
 //! (fail loudly when unavailable) and every extraction call reserves through `PgLedger` under
-//! the extraction share. With the LLM off, extraction is structured-only.
+//! the extraction share, and uncertain in-scope links are triaged (purpose `triage`). With the
+//! LLM off, extraction is structured-only and every in-scope link keeps the heuristic default.
 //!
 //! Each loop also writes the extracted-text tier of a few committed segments
 //! ([`crate::data::text_tier`]).
@@ -41,6 +42,7 @@ pub async fn run(ctx: Ctx) -> anyhow::Result<()> {
     let places: Arc<dyn PlaceResolver> =
         Arc::new(vc_extract::FilePlaceResolver::load(&cfg.extract).context("place data")?);
     let mut extractor = Extractor::new(kinds.clone(), cfg.extract.clone()).with_places(places);
+    let mut triage = None;
     if cfg.llm.enabled {
         let clock: Arc<dyn Clock> = Arc::new(vc_core::SystemClock);
         let vertex =
@@ -49,7 +51,13 @@ pub async fn run(ctx: Ctx) -> anyhow::Result<()> {
         let llm = vc_llm::VertexLlm::new(cfg.llm.clone(), vertex).with_cache(pool.clone());
         let probe = llm.probe(ledger.as_ref()).await.context("llm probe")?;
         tracing::info!(?probe, model = %cfg.llm.model, "llm probe");
-        extractor = extractor.with_llm(Arc::new(llm), ledger, cfg.llm.clone());
+        let llm = Arc::new(llm);
+        triage = Some(crate::agentic::AgenticLlm::new(
+            llm.clone(),
+            ledger.clone(),
+            cfg.llm.clone(),
+        ));
+        extractor = extractor.with_llm(llm, ledger, cfg.llm.clone());
     } else {
         tracing::info!("llm disabled: structured extraction only");
     }
@@ -72,7 +80,7 @@ pub async fn run(ctx: Ctx) -> anyhow::Result<()> {
         vc_parse::limits_from(&cfg.parse),
         cfg.store.zstd_level,
     );
-    let p = Arc::new(Processor::new(ProcessorDeps {
+    let mut p = Processor::new(ProcessorDeps {
         pool,
         blobs,
         queue,
@@ -82,7 +90,11 @@ pub async fn run(ctx: Ctx) -> anyhow::Result<()> {
         frontier: Some(frontier),
         handlers: vc_parse::registry_with(&cfg.parse),
         limits: vc_parse::limits_from(&cfg.parse),
-    }));
+    });
+    if let Some(t) = triage {
+        p = p.with_triage(t);
+    }
+    let p = Arc::new(p);
     let n = cfg.vcrawl.processor_concurrency.max(1);
     loop {
         let mut wait = match p.tick(n).await {

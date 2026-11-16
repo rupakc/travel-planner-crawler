@@ -184,6 +184,8 @@ pub struct RigOpts {
     pub llm: bool,
     /// Follow links into a `PgFrontier`.
     pub frontier: bool,
+    /// Wire link triage over the fake LLM: `Some(enabled)`.
+    pub triage: Option<bool>,
 }
 
 /// A processor over `pool` with the given sources seeded.
@@ -236,6 +238,17 @@ pub async fn rig_on(pool: PgPool, sources: &[&str], o: RigOpts) -> Rig {
         pool.clone(),
         std::time::Duration::ZERO,
     ));
+    let proc = match o.triage {
+        Some(enabled) => proc.with_triage(vcrawl::agentic::AgenticLlm::new(
+            llm.clone(),
+            ledger.clone(),
+            LlmConfig {
+                enabled,
+                ..LlmConfig::default()
+            },
+        )),
+        None => proc,
+    };
     Rig {
         pool,
         blobs,
