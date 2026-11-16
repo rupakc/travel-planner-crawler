@@ -14,7 +14,10 @@
 //!    closed with [`FetchError::RobotsUnavailable`] (robots.txt requests themselves skip this).
 //! 3. **DNS once per hop**: every resolved address goes through `Policy::ssrf_check`; the first
 //!    one is pinned for the connection (reqwest `resolve` override, proxies disabled).
-//! 4. **Pacing**: wait until `last request end + permit delay`.
+//! 4. **Pacing**: wait until `last request end + permit delay`; render sub-requests
+//!    ([`RequestPurpose::SubResource`]) wait the sub-resource gap instead (default 250 ms,
+//!    never more than the permit delay; spec §17.1), so the page delay still applies between
+//!    pages.
 //! 5. **Lease check + global rate token** (`LeaseCheck::check`, `Frontier::take_rate_token`).
 //! 6. The request, with timeouts `min(own, deadline − now)`, the one [`vc_core::USER_AGENT`],
 //!    no cookies, no automatic redirects, retries or decompression.
@@ -88,13 +91,18 @@ pub struct ReqwestPermitClient {
     pub policy: Arc<dyn Policy>,
     clock: Arc<dyn Clock>,
     resolver: Arc<dyn Resolve>,
+    subresource_gap: Duration,
 }
+
+/// Default per-key gap between render sub-requests (spec §17.1).
+pub const DEFAULT_SUBRESOURCE_GAP: Duration = Duration::from_millis(250);
 
 impl std::fmt::Debug for ReqwestPermitClient {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         f.debug_struct("ReqwestPermitClient")
             .field("config", &self.config)
             .field("resolver", &self.resolver)
+            .field("subresource_gap", &self.subresource_gap)
             .finish_non_exhaustive()
     }
 }
@@ -139,7 +147,15 @@ impl ReqwestPermitClient {
             policy,
             clock: Arc::new(SystemClock),
             resolver: Arc::new(HickoryResolver::new()),
+            subresource_gap: DEFAULT_SUBRESOURCE_GAP,
         }
+    }
+
+    /// Uses `gap` between render sub-requests instead of [`DEFAULT_SUBRESOURCE_GAP`]
+    /// (`[render] subresource_gap_ms`). It is capped at the permit delay.
+    pub fn with_subresource_gap(mut self, gap: Duration) -> Self {
+        self.subresource_gap = gap;
+        self
     }
 
     /// Uses `clock` for deadlines and timestamps (tests: `testkit::FakeClock`).
@@ -218,11 +234,21 @@ impl ReqwestPermitClient {
         Ok(first)
     }
 
-    /// Pacing, then lease check + rate token. Returns the hop timeout
-    /// `min(own, deadline − now)`.
-    async fn admit(&self, p: &ClaimPermit, own: Duration) -> Result<Duration, FetchError> {
+    /// Pacing (the page delay, or the sub-resource gap for render sub-requests), then lease
+    /// check + rate token. Returns the hop timeout `min(own, deadline − now)`.
+    async fn admit(
+        &self,
+        p: &ClaimPermit,
+        own: Duration,
+        purpose: RequestPurpose,
+    ) -> Result<Duration, FetchError> {
+        let pace = if purpose == RequestPurpose::SubResource {
+            self.subresource_gap.min(p.delay())
+        } else {
+            p.delay()
+        };
         if let Some(end) = p.last_request_end() {
-            let wait = p.delay().saturating_sub(end.elapsed());
+            let wait = pace.saturating_sub(end.elapsed());
             if !wait.is_zero() {
                 if wait >= p.remaining(self.clock.now()) {
                     return Err(FetchError::DeadlineExceeded);
@@ -399,7 +425,7 @@ impl ReqwestPermitClient {
             }
             let ip = self.pin(&url).await?;
             let headers = self.request_headers(req, &url, first)?;
-            let timeout = self.admit(p, own).await?;
+            let timeout = self.admit(p, own, purpose).await?;
             let hop_deadline = tokio::time::Instant::now() + timeout;
             let client = self.http_client(&url, ip, timeout, streaming)?;
             let started_at = self.clock.now();
