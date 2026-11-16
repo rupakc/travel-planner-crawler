@@ -33,7 +33,7 @@ COPY kinds.toml /app/kinds.toml
 COPY crates/vc-extract/data/ /app/data/
 COPY LICENSE BOT.md /app/
 USER 65532:65532
-ENV VC_LOG_FORMAT=json
+ENV VC_OBS_LOG_FORMAT=json
 EXPOSE 9464
 ENTRYPOINT ["vcrawl"]
 CMD ["--help"]
