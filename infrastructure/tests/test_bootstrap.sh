@@ -47,11 +47,14 @@ test_dry_run_passes_project_everywhere() {
   [[ -s "$T/g" && -z "$bad" ]] && ok dry_run_passes_project_everywhere || fail dry_run_passes_project_everywhere "$bad"
 }
 
+# fake gcloud, openssl, curl and gsutil on PATH: a dry run calls none of them
 test_dry_run_calls_nothing() {
   setup
-  PATH="$HERE/fakes:$PATH" bash "$SCRIPT" --dry-run >/dev/null 2>&1
-  PATH="$HERE/fakes:$PATH" bash "$SCRIPT" --dry-run --rotate-tls >/dev/null 2>&1
-  PATH="$HERE/fakes:$PATH" bash "$SCRIPT" --dry-run --update-host >/dev/null 2>&1
+  export CRAWLER_ALERT_EMAIL=example@example.com
+  local p="$HERE/fakes:$HERE/fakes-dry:$PATH"
+  PATH="$p" bash "$SCRIPT" --dry-run >/dev/null 2>&1
+  PATH="$p" bash "$SCRIPT" --dry-run --rotate-tls >/dev/null 2>&1
+  PATH="$p" bash "$SCRIPT" --dry-run --update-host >/dev/null 2>&1
   [[ ! -s "$CALLS" ]] && ok dry_run_calls_nothing || fail dry_run_calls_nothing "$(cat "$CALLS")"
 }
 
@@ -104,6 +107,45 @@ test_second_run_creates_nothing() {
     ok second_run_creates_nothing || fail second_run_creates_nothing "re-asserts missing"
 }
 
+# Go-live review 7: the §9 log bucket (30 days), its sink with the DEBUG
+# exclusion, and the _Default sink's exclusion (logs ingested once)
+test_log_bucket_and_sink() {
+  setup
+  export FAKE_EXIST=0
+  PATH="$HERE/fakes:$PATH" bash "$SCRIPT" >"$T/out" 2>&1 || { fail log_bucket_and_sink "exit $?"; return; }
+  local want
+  for want in "logging buckets create voyager-crawler-logs --location=us-east1 --retention-days=30" \
+    "logging sinks create voyager-crawler-logs logging.googleapis.com/projects/voyager-prod-ohzkl/locations/us-east1/buckets/voyager-crawler-logs --log-filter=logName=\"projects/voyager-prod-ohzkl/logs/crawler_docker\" --exclusion=name=debug,filter=severity<INFO" \
+    "logging sinks update _Default --add-exclusion=name=voyager-crawler-logs,filter=logName=\"projects/voyager-prod-ohzkl/logs/crawler_docker\""; do
+    grep -qF -- "$want" "$CALLS" || { fail log_bucket_and_sink "missing: $want"; return; }
+  done
+  ok log_bucket_and_sink
+}
+
+# Go-live review 17: a second run re-asserts policies (from their files),
+# the channel's email, the budget and the firewall rules, creating nothing
+test_second_run_reasserts() {
+  setup
+  export FAKE_EXIST=1 CRAWLER_ALERT_EMAIL=new-owner@example.invalid
+  PATH="$HERE/fakes:$PATH" bash "$SCRIPT" >"$T/out" 2>&1 || { fail second_run_reasserts "exit $?"; return; }
+  local n want
+  n="$(find "$ROOT/infrastructure/monitoring" -name '*.json' | wc -l | tr -d ' ')"
+  [[ "$(grep -c 'monitoring policies update projects/voyager-prod-ohzkl/alertPolicies/7 --policy-from-file=' "$CALLS")" == "$n" ]] ||
+    { fail second_run_reasserts "policy updates: $(grep -c 'monitoring policies update' "$CALLS"), want $n"; return; }
+  for want in "monitoring channels update projects/voyager-prod-ohzkl/notificationChannels/42 --update-channel-labels=email_address=new-owner@example.invalid" \
+    "billing budgets update billingAccounts/010A0B-F39593-14A899/budgets/b1 --billing-account=010A0B-F39593-14A899 --budget-amount=9000INR" \
+    "--clear-threshold-rules --add-threshold-rule=percent=0.5 --add-threshold-rule=percent=0.9 --add-threshold-rule=percent=1.0 --notifications-rule-monitoring-notification-channels=projects/voyager-prod-ohzkl/notificationChannels/42" \
+    "compute firewall-rules update allow-crawler-api --priority=900 --rules=tcp:8443" \
+    "compute firewall-rules update allow-crawler-iap-ssh --priority=900 --rules=tcp:22" \
+    "compute firewall-rules update deny-crawler-ingress --priority=1000 --rules=all" \
+    "logging buckets update voyager-crawler-logs --location=us-east1 --retention-days=30" \
+    "logging sinks update voyager-crawler-logs"; do
+    grep -qF -- "$want" "$CALLS" || { fail second_run_reasserts "missing: $want"; return; }
+  done
+  grep -q 'sinks update _Default' "$CALLS" && { fail second_run_reasserts "re-added the _Default exclusion"; return; }
+  ok second_run_reasserts
+}
+
 # The VM gets no instance-creating role until the Spot drill that needs it
 # exists, and no Vertex service agent reaches -ops until batch is wired
 test_no_drill_or_vertex_agent_bindings() {
@@ -135,7 +177,7 @@ test_requires_alert_email() {
 
 test_no_hardcoded_email() {
   if grep -rEn '[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[a-z]{2,}' "$ROOT/infrastructure" --include='*.sh' --include='*.json' |
-    grep -vE 'iam\.gserviceaccount\.com|example\.invalid|gcp-sa-aiplatform|noreply' >/dev/null; then
+    grep -vE 'iam\.gserviceaccount\.com|example\.invalid|example@example\.com|gcp-sa-aiplatform|noreply' >/dev/null; then
     fail no_hardcoded_email "an email address is hard-coded"
   else
     ok no_hardcoded_email

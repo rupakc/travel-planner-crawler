@@ -59,10 +59,15 @@ DRY RUN: nothing is called. project=voyager-prod-ohzkl quota project: voyager-pr
   gcloud  --project=voyager-prod-ohzkl  --quiet  compute  resource-policies  create  snapshot-schedule  crawler-data-daily  --region=us-east1  --daily-schedule  --start-time=04:00  --max-retention-days=7  --storage-location=us-east1  --on-source-disk-delete=keep-auto-snapshots  --snapshot-labels=app=voyager-crawler
   gcloud  --project=voyager-prod-ohzkl  --quiet  compute  disks  create  crawler-data  --zone=us-east1-b  --size=100GB  --type=pd-balanced  --resource-policies=crawler-data-daily  --labels=app=voyager-crawler
 
-==> Firewall
-  gcloud  --project=voyager-prod-ohzkl  --quiet  compute  firewall-rules  create  allow-crawler-api  --network=default  --direction=INGRESS  --action=ALLOW  --rules=tcp:8443  --priority=900  --source-service-accounts=vm-runtime@voyager-prod-ohzkl.iam.gserviceaccount.com  --target-service-accounts=crawler-runtime@voyager-prod-ohzkl.iam.gserviceaccount.com  --description=Voyager\ app\ VM\ to\ the\ crawler\ read\ API
-  gcloud  --project=voyager-prod-ohzkl  --quiet  compute  firewall-rules  create  allow-crawler-iap-ssh  --network=default  --direction=INGRESS  --action=ALLOW  --rules=tcp:22  --priority=900  --source-ranges=35.235.240.0/20  --target-service-accounts=crawler-runtime@voyager-prod-ohzkl.iam.gserviceaccount.com  --description=IAP\ TCP\ forwarding\ \(SSH\)\ to\ the\ crawler\ VM
-  gcloud  --project=voyager-prod-ohzkl  --quiet  compute  firewall-rules  create  deny-crawler-ingress  --network=default  --direction=INGRESS  --action=DENY  --rules=all  --priority=1000  --source-ranges=0.0.0.0/0  --target-service-accounts=crawler-runtime@voyager-prod-ohzkl.iam.gserviceaccount.com  --description=Nothing\ else\ reaches\ the\ crawler\ VM\ \(overrides\ default-allow-internal\ and\ voyager-web\)
+==> Firewall (re-asserted)
+  gcloud  --project=voyager-prod-ohzkl  --quiet  compute  firewall-rules  create  allow-crawler-api  --network=default  --direction=INGRESS  --action=ALLOW  --priority=900  --rules=tcp:8443  --source-service-accounts=vm-runtime@voyager-prod-ohzkl.iam.gserviceaccount.com  --target-service-accounts=crawler-runtime@voyager-prod-ohzkl.iam.gserviceaccount.com  --description=Voyager\ app\ VM\ to\ the\ crawler\ read\ API
+  gcloud  --project=voyager-prod-ohzkl  --quiet  compute  firewall-rules  create  allow-crawler-iap-ssh  --network=default  --direction=INGRESS  --action=ALLOW  --priority=900  --rules=tcp:22  --source-ranges=35.235.240.0/20  --target-service-accounts=crawler-runtime@voyager-prod-ohzkl.iam.gserviceaccount.com  --description=IAP\ TCP\ forwarding\ \(SSH\)\ to\ the\ crawler\ VM
+  gcloud  --project=voyager-prod-ohzkl  --quiet  compute  firewall-rules  create  deny-crawler-ingress  --network=default  --direction=INGRESS  --action=DENY  --priority=1000  --rules=all  --source-ranges=0.0.0.0/0  --target-service-accounts=crawler-runtime@voyager-prod-ohzkl.iam.gserviceaccount.com  --description=Nothing\ else\ reaches\ the\ crawler\ VM\ \(overrides\ default-allow-internal\ and\ voyager-web\)
+
+==> Log bucket + sink (re-asserted)
+  gcloud  --project=voyager-prod-ohzkl  --quiet  logging  buckets  create  voyager-crawler-logs  --location=us-east1  --retention-days=30  --description=Voyager\ crawler\ container\ logs\ \(spec\ §9\)
+  gcloud  --project=voyager-prod-ohzkl  --quiet  logging  sinks  create  voyager-crawler-logs  logging.googleapis.com/projects/voyager-prod-ohzkl/locations/us-east1/buckets/voyager-crawler-logs  --log-filter=logName=\"projects/voyager-prod-ohzkl/logs/crawler_docker\"  --exclusion=name=debug\,filter=severity\<INFO
+  gcloud  --project=voyager-prod-ohzkl  --quiet  logging  sinks  update  _Default  --add-exclusion=name=voyager-crawler-logs\,filter=logName=\"projects/voyager-prod-ohzkl/logs/crawler_docker\"
 
 ==> Restore-drill instance template
   gcloud  --project=voyager-prod-ohzkl  --quiet  compute  instance-templates  create  crawler-drill-template  --machine-type=e2-standard-2  --provisioning-model=SPOT  --instance-termination-action=DELETE  --max-run-duration=4h  --image-family=debian-12  --image-project=debian-cloud  --boot-disk-size=100GB  --boot-disk-type=pd-balanced  --network=default  --service-account=crawler-drill@voyager-prod-ohzkl.iam.gserviceaccount.com  --scopes=cloud-platform  --shielded-secure-boot  --shielded-vtpm  --shielded-integrity-monitoring  --metadata=enable-oslogin=TRUE\,block-project-ssh-keys=TRUE  --labels=app=voyager-crawler\,role=restore-drill
@@ -70,7 +75,7 @@ DRY RUN: nothing is called. project=voyager-prod-ohzkl quota project: voyager-pr
 ==> VM voyager-crawler
   gcloud  --project=voyager-prod-ohzkl  --quiet  compute  instances  create  voyager-crawler  --zone=us-east1-b  --machine-type=e2-standard-2  --image-family=debian-12  --image-project=debian-cloud  --boot-disk-size=20GB  --boot-disk-type=pd-balanced  --disk=name=crawler-data\,device-name=crawler-data\,mode=rw\,boot=no\,auto-delete=no  --subnet=default  --private-network-ip=\<crawler-internal-ip\>  --address=\<crawler-external-ip\>  --network-tier=STANDARD  --service-account=crawler-runtime@voyager-prod-ohzkl.iam.gserviceaccount.com  --scopes=cloud-platform  --shielded-secure-boot  --shielded-vtpm  --shielded-integrity-monitoring  --maintenance-policy=MIGRATE  --restart-on-failure  --provisioning-model=STANDARD  --deletion-protection  --labels=app=voyager-crawler  --metadata=enable-oslogin=TRUE\,block-project-ssh-keys=TRUE  --metadata-from-file=startup-script=<root>/deploy/host/first-boot.sh\,crawler-bundle=<work>/bundle.b64
 
-==> Notification channel + alert policies
+==> Notification channel + alert policies (re-asserted)
   gcloud  --project=voyager-prod-ohzkl  --quiet  beta  monitoring  channels  create  --display-name=Voyager\ crawler\ alerts  --type=email  --channel-labels=email_address=alerts@example.invalid  --user-labels=app=voyager-crawler
   gcloud  --project=voyager-prod-ohzkl  --quiet  monitoring  policies  create  --policy-from-file=<work>/backup-age.json
   gcloud  --project=voyager-prod-ohzkl  --quiet  monitoring  policies  create  --policy-from-file=<work>/crawler-down.json
@@ -82,7 +87,7 @@ DRY RUN: nothing is called. project=voyager-prod-ohzkl quota project: voyager-pr
   gcloud  --project=voyager-prod-ohzkl  --quiet  monitoring  policies  create  --policy-from-file=<work>/spool-backpressure.json
   gcloud  --project=voyager-prod-ohzkl  --quiet  monitoring  policies  create  --policy-from-file=<work>/tls-expiry.json
 
-==> Budget
+==> Budget (re-asserted)
   gcloud  billing  budgets  create  --billing-account=010A0B-F39593-14A899  --display-name=voyager-crawler  --budget-amount=9000INR  --calendar-period=month  --filter-projects=projects/voyager-prod-ohzkl  --filter-labels=app=voyager-crawler  --threshold-rule=percent=0.5  --threshold-rule=percent=0.9  --threshold-rule=percent=1.0  --notifications-rule-monitoring-notification-channels=\<channel\>
 
 ==> Done. Manual steps: infrastructure/README.md

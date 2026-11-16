@@ -19,6 +19,7 @@ case "$args" in
   *" billing budgets list "*) exist && echo "billingAccounts/010A0B-F39593-14A899/budgets/b1"; exit 0 ;;
   *" secrets versions list "*) exist && echo "projects/1/secrets/x/versions/1"; exit 0 ;;
   *" projects describe "*) echo 123456789; exit 0 ;;
+  *" sinks describe _Default "*) exist && echo "voyager-crawler-logs"; exit 0 ;;
   *" addresses describe crawler-internal-ip "*"value(address)"*) echo 10.142.0.50; exit 0 ;;
   *" addresses describe crawler-external-ip "*"value(address)"*) echo 34.0.0.7; exit 0 ;;
   *" disks describe "*"value(resourcePolicies)"*)

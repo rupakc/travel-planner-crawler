@@ -44,6 +44,10 @@
 #     VM, OS Login, both static IPs, automatic restart + live migration,
 #     deletion protection; startup-script = deploy/host/first-boot.sh,
 #     metadata crawler-bundle = deploy/ (without tests and ci)
+#   log bucket voyager-crawler-logs (us-east1, 30-day retention) and sink
+#     voyager-crawler-logs: the VM's container logs (Ops Agent log
+#     crawler_docker, first-boot.sh), DEBUG excluded; the _Default sink excludes
+#     them (ingested once)
 #   notification channel "Voyager crawler alerts" (email $CRAWLER_ALERT_EMAIL)
 #   alert policies infrastructure/monitoring/*.json on that channel
 #   budget "voyager-crawler": ₹9,000/month on label app=voyager-crawler, 50/90/100 %
@@ -51,8 +55,11 @@
 # Never: a MIG, a load balancer, NAT, Cloud SQL, any CI identity in GCP
 # (CI signs with Sigstore and pushes to GHCR; the VM pulls), or a change to
 # the travel planner's resources other than the two secret bindings for
-# vm-runtime. Existing resources are not modified, except IAM bindings,
-# custom-role permissions, bucket settings and labels, which are re-asserted.
+# vm-runtime and one exclusion on the project's _Default log sink. Existing
+# resources are not modified, except what is re-asserted on every run: IAM
+# bindings, custom-role permissions, bucket settings and labels, firewall rules
+# (all but direction/action), the log bucket's retention and the sink's filter,
+# the alert channel's email, every alert policy (from its file) and the budget.
 #
 # Every gcloud call passes --project (the local default project is another
 # one); billing calls use the project as their quota project. Needs gcloud's
@@ -89,6 +96,8 @@ INTERNAL_IP_NAME="crawler-internal-ip"
 EXTERNAL_IP_NAME="crawler-external-ip"
 DRILL_TEMPLATE="crawler-drill-template"
 CHANNEL_NAME="Voyager crawler alerts"
+LOG_BUCKET="voyager-crawler-logs"
+LOG_NAME="crawler_docker"
 # The billing account is in INR (docs/research/gcp.md §0): ₹9,000 ≈ $100
 BUDGET_NAME="voyager-crawler"
 BUDGET_AMOUNT="${BUDGET_AMOUNT:-9000INR}"
@@ -349,22 +358,56 @@ disk() {
   fi
 }
 
+# fw_rule NAME ACTION PRIORITY ARGS… — create, or re-assert everything but the
+# direction and action (which gcloud cannot update)
+fw_rule() {
+  local name="$1" action="$2" prio="$3"
+  shift 3
+  if gx compute firewall-rules describe "$name"; then
+    g compute firewall-rules update "$name" --priority="$prio" "$@"
+  else
+    g compute firewall-rules create "$name" --network=default --direction=INGRESS \
+      --action="$action" --priority="$prio" "$@"
+  fi
+}
+
 firewall() {
-  say "Firewall"
-  gx compute firewall-rules describe allow-crawler-api ||
-    g compute firewall-rules create allow-crawler-api --network=default --direction=INGRESS \
-      --action=ALLOW --rules=tcp:8443 --priority=900 \
-      --source-service-accounts="$APP_SA" --target-service-accounts="$RUNTIME_SA" \
-      --description="Voyager app VM to the crawler read API"
-  gx compute firewall-rules describe allow-crawler-iap-ssh ||
-    g compute firewall-rules create allow-crawler-iap-ssh --network=default --direction=INGRESS \
-      --action=ALLOW --rules=tcp:22 --priority=900 --source-ranges="$IAP_RANGE" \
-      --target-service-accounts="$RUNTIME_SA" --description="IAP TCP forwarding (SSH) to the crawler VM"
-  gx compute firewall-rules describe deny-crawler-ingress ||
-    g compute firewall-rules create deny-crawler-ingress --network=default --direction=INGRESS \
-      --action=DENY --rules=all --priority=1000 --source-ranges=0.0.0.0/0 \
-      --target-service-accounts="$RUNTIME_SA" \
-      --description="Nothing else reaches the crawler VM (overrides default-allow-internal and voyager-web)"
+  say "Firewall (re-asserted)"
+  fw_rule allow-crawler-api ALLOW 900 --rules=tcp:8443 \
+    --source-service-accounts="$APP_SA" --target-service-accounts="$RUNTIME_SA" \
+    --description="Voyager app VM to the crawler read API"
+  fw_rule allow-crawler-iap-ssh ALLOW 900 --rules=tcp:22 --source-ranges="$IAP_RANGE" \
+    --target-service-accounts="$RUNTIME_SA" --description="IAP TCP forwarding (SSH) to the crawler VM"
+  fw_rule deny-crawler-ingress DENY 1000 --rules=all --source-ranges=0.0.0.0/0 \
+    --target-service-accounts="$RUNTIME_SA" \
+    --description="Nothing else reaches the crawler VM (overrides default-allow-internal and voyager-web)"
+}
+
+# logs — the §9 crawler log bucket (30-day retention) and a sink routing the
+# VM's container logs (Ops Agent log name crawler_docker, INFO and up: the
+# sink also excludes DEBUG) into it; the _Default sink excludes them, so they
+# are ingested once
+logs() {
+  say "Log bucket + sink (re-asserted)"
+  local dest="logging.googleapis.com/projects/$PROJECT_ID/locations/$REGION/buckets/$LOG_BUCKET"
+  local filter="logName=\"projects/$PROJECT_ID/logs/$LOG_NAME\""
+  if gx logging buckets describe "$LOG_BUCKET" --location="$REGION"; then
+    g logging buckets update "$LOG_BUCKET" --location="$REGION" --retention-days=30 \
+      --description="Voyager crawler container logs (spec §9)"
+  else
+    g logging buckets create "$LOG_BUCKET" --location="$REGION" --retention-days=30 \
+      --description="Voyager crawler container logs (spec §9)"
+  fi
+  if gx logging sinks describe "$LOG_BUCKET"; then
+    g logging sinks update "$LOG_BUCKET" "$dest" --log-filter="$filter"
+  else
+    g logging sinks create "$LOG_BUCKET" "$dest" --log-filter="$filter" \
+      --exclusion=name=debug,filter="severity<INFO"
+  fi
+  PLACEHOLDER=""
+  if [[ "$(gv logging sinks describe _Default --format='value(exclusions.name)')" != *"$LOG_BUCKET"* ]]; then
+    g logging sinks update _Default --add-exclusion=name="$LOG_BUCKET",filter="$filter"
+  fi
 }
 
 drill_template() {
@@ -408,7 +451,7 @@ update_host() {
 }
 
 monitoring() {
-  say "Notification channel + alert policies"
+  say "Notification channel + alert policies (re-asserted)"
   PLACEHOLDER=""
   CHANNEL="$(gv beta monitoring channels list --filter="displayName=\"$CHANNEL_NAME\"" --format='value(name)' | head -n1)"
   if [[ -z "$CHANNEL" ]]; then
@@ -416,25 +459,37 @@ monitoring() {
       --channel-labels=email_address="$CRAWLER_ALERT_EMAIL" --user-labels="$LABELS"
     PLACEHOLDER="<channel>"
     CHANNEL="$(gv beta monitoring channels list --filter="displayName=\"$CHANNEL_NAME\"" --format='value(name)' | head -n1)"
+  else
+    g beta monitoring channels update "$CHANNEL" --update-channel-labels=email_address="$CRAWLER_ALERT_EMAIL" \
+      --update-user-labels="$LABELS"
   fi
-  local f title out
+  local f title out name
   for f in "$ROOT"/infrastructure/monitoring/*.json; do
     title="$(sed -n 's/^  "displayName": "\(.*\)",$/\1/p' "$f" | head -n1)"
-    PLACEHOLDER=""
-    if [[ -n "$(gv monitoring policies list --filter="displayName=\"$title\"" --format='value(name)')" ]]; then
-      continue
-    fi
     out="$WORK/$(basename "$f")"
     sed "s|__CHANNEL__|$CHANNEL|" "$f" >"$out"
-    g monitoring policies create --policy-from-file="$out"
+    PLACEHOLDER=""
+    name="$(gv monitoring policies list --filter="displayName=\"$title\"" --format='value(name)' | head -n1)"
+    if [[ -n "$name" ]]; then
+      # the whole policy from the file: thresholds, conditions and docs follow the repo
+      g monitoring policies update "$name" --policy-from-file="$out"
+    else
+      g monitoring policies create --policy-from-file="$out"
+    fi
   done
 }
 
 budget() {
-  say "Budget"
+  say "Budget (re-asserted)"
   PLACEHOLDER=""
-  if [[ -n "$(value gcloud billing budgets list --billing-account="$BILLING_ACCOUNT" \
-    --filter="displayName=\"$BUDGET_NAME\"" --format='value(name)')" ]]; then
+  local name
+  name="$(value gcloud billing budgets list --billing-account="$BILLING_ACCOUNT" \
+    --filter="displayName=\"$BUDGET_NAME\"" --format='value(name)' | head -n1)"
+  if [[ -n "$name" ]]; then
+    run gcloud billing budgets update "$name" --billing-account="$BILLING_ACCOUNT" \
+      --budget-amount="$BUDGET_AMOUNT" --filter-projects="projects/$PROJECT_ID" --filter-labels="$LABELS" \
+      --clear-threshold-rules --add-threshold-rule=percent=0.5 --add-threshold-rule=percent=0.9 \
+      --add-threshold-rule=percent=1.0 --notifications-rule-monitoring-notification-channels="$CHANNEL"
     return 0
   fi
   run gcloud billing budgets create --billing-account="$BILLING_ACCOUNT" --display-name="$BUDGET_NAME" \
@@ -474,6 +529,7 @@ main() {
   iam
   disk
   firewall
+  logs
   drill_template
   vm
   monitoring

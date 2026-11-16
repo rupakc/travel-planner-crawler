@@ -2,8 +2,10 @@
 
 `bootstrap.sh` creates exactly spec §7 + §17.5 in `voyager-prod-ohzkl` (us-east1),
 next to the travel planner's VM, and nothing else. It is idempotent: a second run
-creates nothing and only re-asserts IAM bindings, custom-role permissions, bucket
-settings and labels. Every `gcloud` call passes `--project` (the local default
+creates nothing and re-asserts IAM bindings, custom-role permissions, bucket settings
+and labels, the firewall rules (all but direction/action), the log bucket's retention
+and sink filter, the alert channel's email (`CRAWLER_ALERT_EMAIL`), every alert policy
+(updated from its file) and the budget. Every `gcloud` call passes `--project` (the local default
 project is a different one).
 
 ```bash
@@ -32,6 +34,7 @@ the reserved internal address instead of letting GCP choose).
 | Secrets | `crawler-pg-password`, `crawler-api-token-voyager`, `crawler-api-tls-key`, `crawler-api-tls-cert` | the first two get random values; the TLS pair is a self-signed P-256 cert for the internal IP, valid 2 years |
 | Firewall | `allow-crawler-api`, `allow-crawler-iap-ssh`, `deny-crawler-ingress` | tcp:8443 from SA `vm-runtime` only; SSH from IAP only; everything else denied (overrides `default-allow-internal`) |
 | Monitoring | channel "Voyager crawler alerts", 9 policies in `monitoring/` | its own email channel, so the app's channel stays quiet |
+| Logs | bucket + sink `voyager-crawler-logs` | us-east1, 30-day retention; the VM's container logs (Ops Agent log `crawler_docker`, INFO and up), excluded from `_Default` so they are ingested once (spec §9) |
 | Budget | `voyager-crawler` | ₹9,000/month on label `app=voyager-crawler`, alerts at 50/90/100 % |
 
 IAM: `crawler-runtime` has `objectAdmin` on `-raw` (purges delete), `objectCreator` +
@@ -56,13 +59,24 @@ after 7 days. `-ops`: `walg/` (base backups + WAL) deleted at 14 days, `batch/` 
 7 days, noncurrent versions at once; soft delete keeps 7 more days, so backups are
 gone within 21 days (the opt-out SLA).
 
+Ops Agent (`deploy/host/first-boot.sh` writes `/etc/google-cloud-ops-agent/config.yaml`):
+host metrics without `agent.googleapis.com/processes/*`, no syslog, only the containers'
+json-file logs with DEBUG/TRACE dropped on the VM.
+
 ## Cost
 
 The LLM's monthly cap defaults to **$30** (`VC_LLM_MONTHLY_USD`, down from the spec's
 $40) until batch prediction is wired (half price) or the 1-year e2-standard-2 commitment
-is bought; with it the whole crawler stays at or under about $100/month even in the
-on-demand weeks. Raise it in `host.local.env` only after one of those, and keep
+is bought. Raise it in `host.local.env` only after one of those, and keep
 `VC_PROJECT_CAP_USD` at least twice the new cap.
+
+Estimate (USD/month, go-live review): e2-standard-2 48.92 on demand (30.82 with the
+1-year commitment), disks + snapshots 13.50, static external IP 3.65, GCS 5–8, LLM ≤ 30
+(cap; embeddings included), logging/monitoring ≈ 1–2 (crawler INFO logs ~1–3 GiB inside
+the project's 50 GiB free tier, no process metrics, custom metrics within the free
+150 MiB), egress ≈ 1. Worst case at the full LLM cap: ≈ $104 on demand (the first 8
+weeks), ≈ $86 committed; typical (LLM spend 15–25): ≈ $90–99 on demand, ≈ $71–81
+committed; with the LLM off (the default): ≈ $74 / $56.
 
 ## Owner's manual steps (spec §15)
 

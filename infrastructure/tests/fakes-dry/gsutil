@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+# Fake gsutil: records the call (a dry run must make none)
+echo "gsutil $*" >>"$CALLS"
+exit 0
