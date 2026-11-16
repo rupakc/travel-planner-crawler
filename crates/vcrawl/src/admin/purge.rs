@@ -4,11 +4,13 @@
 //! crash anywhere is repaired by running the request again (the maintenance role does):
 //!
 //! 1. **index** (SLA 24 h): `RecordSink::tombstone` removes matching records (and observation
-//!    points) from the API and index and records a standing exclusion; → `index_done`.
+//!    points) from the API and index and records a standing exclusion, and matching
+//!    `held_records` rows are deleted; → `index_done`.
 //! 2. **raw** (SLA 7 days): every committed capture the selector names is cut out of its
 //!    segment (`vc-store` purge rewrite: new generation uploaded → one `vc_rewrite_segment`
 //!    transaction → old objects deleted; GCS then drops non-current versions within its 7-day
-//!    soft-delete window), its rows are removed from the segment's text-tier object, and for
+//!    soft-delete window), its lines are removed from the segment's text-tier objects
+//!    (`text/` and `ephemeral/text/`), and for
 //!    `--author` the display name is scrubbed from every stored version, attribution, title,
 //!    excerpt and cached LLM output; → `raw_done`.
 //! 3. **done** (SLA 21 days): once `raw_done_at` is older than the backup/snapshot window
@@ -229,6 +231,10 @@ async fn index_stage(pool: &PgPool, id: i64, r: &Request) -> anyhow::Result<u64>
     let n = vc_index::PgIndex::new(pool.clone())
         .tombstone(&r.selector, r.reason)
         .await?;
+    let held = purge_held(pool, &r.selector).await?;
+    if held > 0 {
+        tracing::info!(purge_id = id, held, "purge: held records dropped");
+    }
     sqlx::query(
         "UPDATE purge_requests SET state = 'index_done', index_done_at = now()
          WHERE id = $1 AND state = 'pending'",
@@ -314,6 +320,39 @@ pub async fn process_pending(
         }
     }
     Ok(out)
+}
+
+/// Deletes the `held_records` rows (reference records waiting for a second source, never
+/// served) that the selector names. Returns the rows deleted.
+pub async fn purge_held(pool: &PgPool, sel: &PurgeSelector) -> anyhow::Result<u64> {
+    let (pred, val) = match sel {
+        PurgeSelector::Url(k) => ("h.provenance->>'url_key' = $1".to_string(), k.to_hex()),
+        PurgeSelector::UrlPrefix(p) => (
+            "starts_with(h.provenance->>'url', $1)".to_string(),
+            p.clone(),
+        ),
+        PurgeSelector::Host(h) => (
+            "lower(substring(h.provenance->>'url' from '^[a-zA-Z][a-zA-Z0-9+.-]*://([^/:?#]+)')) = $1"
+                .to_string(),
+            h.clone(),
+        ),
+        PurgeSelector::Source(s) => ("h.source_id = $1".to_string(), s.0.clone()),
+        PurgeSelector::Author(a) => (
+            "jsonb_path_exists(h.record,
+                 'lax $.** ? (@.author == $a || @.author.name == $a || @.authors == $a)',
+                 jsonb_build_object('a', $1::text))"
+                .to_string(),
+            a.clone(),
+        ),
+        PurgeSelector::Record(_) => return Ok(0),
+    };
+    Ok(sqlx::query(sqlx::AssertSqlSafe(format!(
+        "DELETE FROM held_records h WHERE {pred}"
+    )))
+    .bind(&val)
+    .execute(pool)
+    .await?
+    .rows_affected())
 }
 
 /// One committed capture to cut out.
@@ -430,8 +469,10 @@ pub async fn remove_captures(
             segs += 1;
         }
         finish_rewrite(store, &rw).await?;
+        // Noarchive captures of an archive segment have their text under `ephemeral/text/`.
         let sid: SegmentId = seg.parse()?;
-        purge_text_tier(store, sid, vc_store::paths::is_ephemeral(path), &remove).await?;
+        purge_text_tier(store, sid, false, &remove).await?;
+        purge_text_tier(store, sid, true, &remove).await?;
     }
     Ok((caps, segs))
 }
@@ -534,6 +575,13 @@ pub async fn scrub_author(pool: &PgPool, name: &str) -> anyhow::Result<u64> {
     )
     .bind(&inner)
     .bind(REMOVED)
+    .execute(&mut *tx)
+    .await?
+    .rows_affected();
+    n += sqlx::query(
+        "DELETE FROM held_records WHERE strpos(record::text || provenance::text, $1) > 0",
+    )
+    .bind(&inner)
     .execute(&mut *tx)
     .await?
     .rows_affected();
