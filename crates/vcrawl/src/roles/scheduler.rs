@@ -18,7 +18,9 @@
 //!    the next 24 h, one ordinary page row (`http`/`render`, never an adapter row, so MET
 //!    Norway's `Expires` stands) is made due now. Its claim fetches robots.txt first
 //!    (`robots_due`), which tombstones newly disallowed paths.
-//! 6. **Gauges**: `due_urls`, `parked_keys_ratio`; old raw-bytes counter rows are pruned.
+//! 6. **Gauges**: `due_urls`, `parked_keys_ratio`; old raw-bytes counter rows are pruned, and
+//!    so are adapter resume cursors of rows that left the crawl (retired above) or that
+//!    nobody resumed for [`CURSOR_MAX_AGE_DAYS`].
 //!
 //! The LLM startup probe runs here (once per deploy) when `llm.enabled`.
 
@@ -90,6 +92,8 @@ pub struct PassReport {
     pub robots_refresh: u64,
     /// URLs due now.
     pub due_urls: i64,
+    /// Adapter resume cursors pruned (row left the crawl, or not resumed for 30 days).
+    pub cursors_pruned: u64,
 }
 
 /// The scheduler.
@@ -100,6 +104,9 @@ pub struct Scheduler {
     metrics: Option<Arc<vc_obs::Metrics>>,
     tracker: Option<Arc<vc_obs::ProgressTracker>>,
 }
+
+/// Adapter resume cursors nobody resumed for this long are dropped (the stream starts over).
+pub const CURSOR_MAX_AGE_DAYS: i32 = 30;
 
 fn db(e: sqlx::Error) -> Error {
     Error::Db(e.to_string())
@@ -146,6 +153,9 @@ impl Scheduler {
         };
         r.keys_limited = self.apply_source_limits(specs).await?;
         r.retired = self.retire_disabled().await?;
+        r.cursors_pruned = vc_sources::cursors::PgAdapterCursors::new(self.pool.clone())
+            .prune(CURSOR_MAX_AGE_DAYS)
+            .await?;
         r.robots_refresh = self.schedule_robots_refresh().await?;
         r.due_urls = self.gauges().await?;
         PgRawBytes::new(self.pool.clone(), self.cfg.fetch.daily_raw_bytes_cap)

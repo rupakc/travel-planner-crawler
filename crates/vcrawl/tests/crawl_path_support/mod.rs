@@ -87,6 +87,8 @@ pub fn parts(
         roller,
         sources: Arc::new(Sources::new(specs)),
         adapters: Arc::new(wiring::sources::adapters(&cfg)),
+        resumable: Arc::new(wiring::sources::resumable_adapters()),
+        cursors: Some(vc_sources::cursors::PgAdapterCursors::new(pool.clone())),
         secrets: Arc::new(vc_secrets::EnvSource {
             prefix: "VC_TEST_SECRET_".into(),
         }),

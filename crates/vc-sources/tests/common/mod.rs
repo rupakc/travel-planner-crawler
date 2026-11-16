@@ -512,6 +512,25 @@ impl Harness {
         a.run(&mut ctx).await
     }
 
+    pub async fn run_from(
+        &mut self,
+        a: &dyn vc_sources::adapters::ResumableAdapter,
+        cursor: Option<&str>,
+    ) -> Result<AdapterReport> {
+        let clock: Arc<dyn Clock> = self.clock.clone();
+        let mut ctx = AdapterCtx {
+            permit: &self.claim.permit,
+            client: &self.client,
+            sink: &mut self.sink,
+            frontier: &*self.frontier,
+            source: &self.spec,
+            url: &self.claim.urls[0],
+            secrets: &self.secrets,
+            clock: &*clock,
+        };
+        a.run_from(&mut ctx, cursor).await
+    }
+
     /// Bodies of records with a given payload kind.
     pub fn resources(&self) -> Vec<(String, Bytes)> {
         self.sink

@@ -8,6 +8,7 @@ use vc_config::Config;
 use vc_core::secrets::SecretSource;
 use vc_core::sources::{SourceAdapter, SourceSpec};
 use vc_core::{Result, SourceId};
+use vc_sources::adapters::ResumableAdapter;
 
 /// The loaded source specs, by id.
 #[derive(Debug, Clone, Default)]
@@ -54,6 +55,14 @@ pub fn adapters(cfg: &Config) -> HashMap<&'static str, Arc<dyn SourceAdapter>> {
             let a: Arc<dyn SourceAdapter> = Arc::from(a);
             (a.id(), a)
         })
+        .collect()
+}
+
+/// The built-in adapters that resume a paged stream from a cursor, by id.
+pub fn resumable_adapters() -> HashMap<&'static str, Arc<dyn ResumableAdapter>> {
+    vc_sources::adapters::resumable()
+        .into_iter()
+        .map(|a| (a.id(), a))
         .collect()
 }
 

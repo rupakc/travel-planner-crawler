@@ -6,11 +6,13 @@
 //! - [`adapters`]: the built-in API/dump adapters ([`adapters::REGISTRY`]), each streaming
 //!   through the permit client and writing raw records to the capture sink **before**
 //!   deriving anything (raw first).
+//! - [`cursors`]: resume cursors of [`adapters::ResumableAdapter`]s, kept per leased row in
+//!   `adapter_cursors` (migration 1701), so a restart continues a paged stream.
 //!
-//! No migration of its own yet: the `sources` table comes from `migrations/0002_sources.sql`;
-//! block 17xx stays reserved.
+//! The `sources` table comes from `migrations/0002_sources.sql`.
 
 pub mod adapters;
+pub mod cursors;
 pub mod seed;
 pub mod sha256;
 pub mod spec;
