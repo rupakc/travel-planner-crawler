@@ -164,7 +164,7 @@ crawler email channel. `vcrawl admin status` shows the same on demand.
 | Disks and snapshots | 13.50 |
 | Static IP | 3.65 |
 | GCS (raw, text, ops) | 5–8 |
-| Gemini (extraction, triage, audit) | 15–25, hard cap 40 |
+| Gemini (extraction, triage, audit) | 15–25, hard cap 30 |
 | Embeddings | about 3 |
 | Logging, egress, ops | about 3 |
 | **Total** | **about $75–90** steady state, at most about $105 |

@@ -58,7 +58,7 @@ pub struct LlmConfig {
     pub location: String,
     /// `VC_LLM_DAILY_USD` (upper bound of the dynamic daily cap).
     pub daily_usd: f64,
-    /// `VC_LLM_MONTHLY_USD`.
+    /// `VC_LLM_MONTHLY_USD` (default $30).
     pub monthly_usd: f64,
     /// `VC_PROJECT_CAP_USD`: the project spend cap the owner set in the console. Required when
     /// enabled; the monthly cap must be ≤ 50 % of it.
@@ -101,6 +101,12 @@ pub struct LlmConfig {
     pub batch_bucket: String,
     /// Object prefix for batch jobs inside `batch_bucket` (`<prefix><job id>/…`).
     pub batch_prefix: String,
+    /// Set by [`crate::Config::load`] when the `[llm]` settings were invalid: the LLM was
+    /// forced off (`enabled = false`) instead of refusing to start every role, and this says
+    /// why. Never read from a file or the environment; exported as the
+    /// `crawler_llm_config_invalid` alert metric.
+    #[serde(skip)]
+    pub forced_off: Option<String>,
 }
 
 impl Default for LlmConfig {
@@ -113,7 +119,9 @@ impl Default for LlmConfig {
             gcp_project: "voyager-prod-ohzkl".into(),
             location: "global".into(),
             daily_usd: 1.50,
-            monthly_usd: 40.0,
+            // $30 until batch prediction is wired or a commitment is bought (go-live review;
+            // infrastructure/README.md "Cost").
+            monthly_usd: 30.0,
             project_cap_usd: None,
             shares: PurposeShares::default(),
             max_output_tokens: 400,
@@ -133,6 +141,7 @@ impl Default for LlmConfig {
             embedding_usd_per_1k_chars: 0.000025,
             batch_bucket: "voyager-crawler-ops".into(),
             batch_prefix: "llm-batch/".into(),
+            forced_off: None,
         }
     }
 }

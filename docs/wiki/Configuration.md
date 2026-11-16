@@ -38,10 +38,13 @@ Loading fails (the role does not start) when:
   `0 < min_delay_s ≤ max_delay_s ≤ 3600`, or `frontier.shards` is empty;
 - `fetch.max_redirects > 5` or `render.max_tabs` is not 1–2;
 - an excerpt length is above 300 characters;
-- LLM caps break `0 ≤ daily_usd ≤ monthly_usd`, or the purpose shares do not sum to 1;
-- `llm.enabled` is true and `VC_PROJECT_CAP_USD` is missing, or the monthly cap is above
-  50 % of it;
 - `queue.max_attempts` is 0.
+
+An invalid `[llm]` section does **not** stop the role: the LLM is forced off instead
+(`llm.forced_off` holds the reason, exported as `crawler_llm_config_invalid`, which alerts).
+That covers LLM caps breaking `0 ≤ daily_usd ≤ monthly_usd`, purpose shares that do not
+sum to 1, and `llm.enabled` with `VC_PROJECT_CAP_USD` missing, 0, or below twice the
+monthly cap. `Config::validate()` still rejects all of them.
 
 ## Sections
 
@@ -146,7 +149,7 @@ The User-Agent is a constant in code, not a setting.
 | `model` | `gemini-3.1-flash-lite` | `VC_LLM_MODEL` |
 | `embedding_model`, `embedding_dim`, `embedding_location` | `text-embedding-005`, 768, `us-central1` | |
 | `gcp_project`, `location` | `voyager-prod-ohzkl`, `global` | |
-| `daily_usd`, `monthly_usd` | 1.50, 40.0 | caps |
+| `daily_usd`, `monthly_usd` | 1.50, 30.0 | caps ($30/month until batch prediction is wired or a commitment is bought) |
 | `project_cap_usd` | none | `VC_PROJECT_CAP_USD`, required when enabled |
 | `shares` | extraction 0.70, embedding 0.08, triage 0.08, auditor 0.07, scout 0.04, place 0.03 | |
 | `max_output_tokens`, `max_input_tokens`, `max_chunks` | 400, 1200, 3 | |

@@ -56,6 +56,14 @@ after 7 days. `-ops`: `walg/` (base backups + WAL) deleted at 14 days, `batch/` 
 7 days, noncurrent versions at once; soft delete keeps 7 more days, so backups are
 gone within 21 days (the opt-out SLA).
 
+## Cost
+
+The LLM's monthly cap defaults to **$30** (`VC_LLM_MONTHLY_USD`, down from the spec's
+$40) until batch prediction is wired (half price) or the 1-year e2-standard-2 commitment
+is bought; with it the whole crawler stays at or under about $100/month even in the
+on-demand weeks. Raise it in `host.local.env` only after one of those, and keep
+`VC_PROJECT_CAP_USD` at least twice the new cap.
+
 ## Owner's manual steps (spec §15)
 
 1. **Before the first run**: choose the crawler alert address and export it as
@@ -63,8 +71,9 @@ gone within 21 days (the opt-out SLA).
    verification email if Cloud Monitoring sends one.
 2. **Gemini spend cap**: raise the project's Agent Platform (Vertex) spend cap in the
    console (Billing → Budgets → *Spend cap enforcement*; console-only), to the value
-   from spec §10.3. Then set `VC_PROJECT_CAP_USD` to the matching USD amount: the
-   crawler refuses to start with a monthly LLM cap above 50 % of it (§17.4). Until
+   from spec §10.3. Then set `VC_PROJECT_CAP_USD` to the matching USD amount: with a
+   monthly LLM cap above 50 % of it (or no cap, or 0) the crawler keeps the LLM off
+   and alerts (`crawler_llm_config_invalid`) instead of starting it (§17.4). Until
    then the crawler runs with `VC_LLM_ENABLED=false` (the default).
 3. **Turn the LLM on** (after step 2): on the VM, put `VC_LLM_ENABLED=true` and
    `VC_PROJECT_CAP_USD=…` in `/var/lib/voyager-crawler/deploy/host.local.env`, then
