@@ -46,6 +46,7 @@ url = { workspace = true }
 http = { workspace = true }
 httpdate = { workspace = true }
 crc32c = { workspace = true }
+sha2 = { workspace = true }
 
 [features]
 # Compiles the `fail` failpoints in (the failpoint tests enable it through dev-dependencies).

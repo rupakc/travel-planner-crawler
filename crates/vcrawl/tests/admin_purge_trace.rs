@@ -240,7 +240,12 @@ async fn purge_author_leaves_no_trace_in_held_records_or_text_tier() {
         .await
         .expect("purge");
 
-    assert_eq!(held_keys(&pool).await, vec!["bob".to_string()]);
+    // Only records attributed to the author go; a held record that merely quotes the string
+    // stays (it could be a country or a city of that name; held rows expire within 7 days).
+    assert_eq!(
+        held_keys(&pool).await,
+        vec!["bob".to_string(), "quote".to_string()]
+    );
     let text = tier_text(&store).await;
     assert!(!text.contains("Wanderer"), "{text}");
     assert!(text.contains("Night buses"));
