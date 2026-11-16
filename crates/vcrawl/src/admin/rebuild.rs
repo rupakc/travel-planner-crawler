@@ -69,7 +69,7 @@ pub struct RebuiltSegment {
 
 /// Runs the command.
 pub async fn run(ctx: &Ctx, a: RebuildArgs) -> anyhow::Result<serde_json::Value> {
-    let pool = super::db::connect(&ctx.cfg).await?;
+    let pool = crate::wiring::db::ops_pool(&ctx.cfg, 4).await?;
     let store = vc_store::blob_store_from_config(&ctx.cfg.store).await?;
     let rep = rebuild_captures(&pool, store.as_ref(), &a).await?;
     Ok(serde_json::to_value(rep)?)

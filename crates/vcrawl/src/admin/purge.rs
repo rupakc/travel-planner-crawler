@@ -147,7 +147,7 @@ fn reason_str(r: TombstoneReason) -> &'static str {
 pub async fn run(ctx: &Ctx, a: PurgeArgs) -> anyhow::Result<serde_json::Value> {
     let sel = a.selector.selector()?;
     let reason = parse_reason(&a.reason)?;
-    let pool = super::db::connect(&ctx.cfg).await?;
+    let pool = crate::wiring::db::ops_pool(&ctx.cfg, 4).await?;
     let id = request_purge(&pool, &sel, reason, &a.requested_by).await?;
     let out = if a.index_only {
         run_index_stage(&pool, id).await?

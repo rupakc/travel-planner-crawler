@@ -10,7 +10,6 @@
 //!
 //! Every command prints one JSON document on stdout (ids and counts, never page content).
 
-pub mod db;
 pub mod purge;
 pub mod rebuild;
 pub mod reextract;
@@ -41,7 +40,7 @@ pub enum AdminCmd {
 pub async fn run(ctx: Ctx, cmd: AdminCmd) -> anyhow::Result<()> {
     let out = match cmd {
         AdminCmd::Status => {
-            let pool = db::connect(&ctx.cfg).await?;
+            let pool = crate::wiring::db::ops_pool(&ctx.cfg, 4).await?;
             serde_json::to_value(status::status(&pool).await?)?
         }
         AdminCmd::Source(c) => source::run(&ctx, c).await?,

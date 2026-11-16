@@ -109,7 +109,7 @@ pub async fn run(ctx: &Ctx, cmd: SourceCmd) -> anyhow::Result<serde_json::Value>
         anyhow::ensure!(rep.ok, "source {id} is invalid: {v}");
         return Ok(v);
     }
-    let pool = super::db::connect(&ctx.cfg).await?;
+    let pool = crate::wiring::db::ops_pool(&ctx.cfg, 4).await?;
     Ok(match cmd {
         SourceCmd::Validate { .. } => unreachable!("handled above"),
         SourceCmd::List { proposed: false } => serde_json::to_value(list(&pool).await?)?,
