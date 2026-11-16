@@ -775,7 +775,7 @@ expression: json
     }
   },
   "info": {
-    "description": "Private, internal-only read API of the Voyager crawler. Frozen /v1 contract: additive changes only (docs/Crawler-API.md).",
+    "description": "Private, internal-only read API of the Voyager crawler. Frozen /v1 contract: additive changes only (Crawler-API.md).",
     "license": {
       "identifier": "MIT",
       "name": "MIT"

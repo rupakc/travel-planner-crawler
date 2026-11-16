@@ -1,6 +1,6 @@
 //! # vc-api (Task 12)
 //!
-//! The internal `/v1` read API (spec §5.11, §17.5, §17.9; contract `docs/Crawler-API.md`):
+//! The internal `/v1` read API (spec §5.11, §17.5, §17.9; contract `crates/vc-api/docs/Crawler-API.md`):
 //!
 //! * axum router over the vc-core [`IndexReader`] and [`PlaceResolver`];
 //! * per-client bearer tokens (`<client_id>.<secret>`, argon2id-hashed in `api_clients`) and a
@@ -199,7 +199,7 @@ pub fn metrics_router(state: &ApiState) -> Router {
 #[openapi(
     info(
         title = "Voyager Crawler read API",
-        description = "Private, internal-only read API of the Voyager crawler. Frozen /v1 contract: additive changes only (docs/Crawler-API.md).",
+        description = "Private, internal-only read API of the Voyager crawler. Frozen /v1 contract: additive changes only (Crawler-API.md).",
         license(name = "MIT", identifier = "MIT"),
     ),
     paths(
