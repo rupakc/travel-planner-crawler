@@ -233,7 +233,8 @@ services:
       E2E_MISSING_ROLES: ${E2E_MISSING_ROLES:-}
       E2E_CRASHED_ROLES: ${E2E_CRASHED_ROLES:-}
       E2E_CYCLES: ${E2E_CYCLES:-3}
-      E2E_CYCLE_SECS: ${E2E_CYCLE_SECS:-60}
+      E2E_CYCLE_SECS: ${E2E_CYCLE_SECS:-120}
+      E2E_CYCLE_MIN_SECS: ${E2E_CYCLE_MIN_SECS:-30}
       E2E_DRAIN_SECS: ${E2E_DRAIN_SECS:-60}
     networks: [db, store, web, trapnet, metanet, apinet]
 

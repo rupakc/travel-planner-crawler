@@ -113,17 +113,25 @@ pub fn challenge_parked(log: &RequestLog, park: Option<&ParkRow>, now: DateTime<
                     p.parked_until
                 ));
             }
-            let reason = p.park_reason.clone().unwrap_or_default();
-            if !reason.to_ascii_lowercase().contains("challenge") {
+            // The challenge answers 403: vcrawl parks it as `Challenge` or, for a 401/403
+            // challenge page, `Unauthorized { status }`; both start the same 24 h ladder.
+            // Anything else (server errors, manual, robots) means the page was not the cause.
+            let reason = p
+                .park_reason
+                .clone()
+                .unwrap_or_default()
+                .to_ascii_lowercase();
+            if !(reason.contains("challenge") || reason.contains("unauthorized")) {
                 problems.push(format!(
-                    "{key} park reason is {reason:?}, expected a challenge (detected as such, not as a plain 403)"
+                    "{key} park reason is {reason:?}, expected the challenge (challenge or unauthorized 403)"
                 ));
             }
         }
     }
     Outcome::from_problems(
         format!(
-            "{key} parked for a challenge, {} request(s) in all, none after the challenge",
+            "{key} parked ({}), {} request(s) in all, none after the challenge",
+            park.and_then(|p| p.park_reason.clone()).unwrap_or_default(),
             entries.len()
         ),
         problems,
@@ -254,6 +262,16 @@ pub const CHANGING_PAGES: [&str; 2] = [
     "http://blog.test/posts/hello",
     "http://events.test/events/jazz-night",
 ];
+
+/// Whether every page of [`CHANGING_PAGES`] was served (200) at or after `since`: the end of
+/// a crawl cycle.
+pub fn changing_pages_fetched(log: &RequestLog, since: DateTime<Utc>) -> bool {
+    CHANGING_PAGES.iter().all(|page| {
+        log.entries()
+            .iter()
+            .any(|e| e.url == *page && e.status == 200 && e.started_at >= since)
+    })
+}
 
 /// `version_bump`: a page that changed in cycle 1 got a new record version: ≥ 2 versions of
 /// one record with different data hashes, each from its own capture.
@@ -584,11 +602,13 @@ mod tests {
         );
         let o = challenge_parked(
             &l,
-            Some(&parked("{\"unauthorized\":{\"status\":403}}")),
+            Some(&parked("{\"reason\":\"unauthorized\",\"status\":403}")),
             t(1000),
         );
+        assert!(matches!(o, Outcome::Pass(_)), "{o}");
+        let o = challenge_parked(&l, Some(&parked("{\"reason\":\"server_errors\"}")), t(1000));
         assert!(
-            matches!(&o, Outcome::Fail(m) if m.contains("expected a challenge")),
+            matches!(&o, Outcome::Fail(m) if m.contains("expected the challenge")),
             "{o}"
         );
         let expired = ParkRow {
@@ -724,6 +744,27 @@ mod tests {
             matches!(&o, Outcome::Fail(m) if m.contains("no trap log for 169.254.169.254")),
             "{o}"
         );
+    }
+
+    #[test]
+    fn a_cycle_ends_when_both_changing_pages_were_fetched_in_it() {
+        let l = log(vec![
+            e("blog.test", CHANGING_PAGES[0], 10, 200),
+            e("events.test", CHANGING_PAGES[1], 20, 200),
+        ]);
+        assert!(changing_pages_fetched(&l, t(5)));
+        assert!(
+            !changing_pages_fetched(&l, t(15)),
+            "the blog post was fetched before the cycle"
+        );
+        l.record(e("blog.test", CHANGING_PAGES[0], 30, 304));
+        assert!(
+            !changing_pages_fetched(&l, t(25)),
+            "a 304 or missing fetch does not count"
+        );
+        l.record(e("blog.test", CHANGING_PAGES[0], 40, 200));
+        l.record(e("events.test", CHANGING_PAGES[1], 41, 200));
+        assert!(changing_pages_fetched(&l, t(25)));
     }
 
     fn vr(id: i64, v: i32, hash: u8, cap: &str) -> VersionRow {

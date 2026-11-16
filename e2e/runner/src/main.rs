@@ -65,7 +65,8 @@ async fn run() -> Result<()> {
         .iter()
         .any(|r| roles.missing.contains(*r) || roles.crashed.contains(*r));
     let cycles = num("E2E_CYCLES", 3) as usize;
-    let cycle_secs = num("E2E_CYCLE_SECS", 75);
+    let cycle_secs = num("E2E_CYCLE_SECS", 120);
+    let min_secs = num("E2E_CYCLE_MIN_SECS", 30).min(cycle_secs);
     if crawling {
         for c in 0..cycles {
             web.set_cycle(c).await?;
@@ -74,10 +75,27 @@ async fn run() -> Result<()> {
             } else {
                 0
             };
+            let since = chrono::Utc::now();
             eprintln!(
-                "cycle {c}/{cycles}: fake web at cycle {c}, {moved} URL(s) made due; crawling {cycle_secs} s"
+                "cycle {c}/{cycles}: fake web at cycle {c}, {moved} URL(s) made due; crawling until \
+                 the changing pages are fetched ({min_secs}..{cycle_secs} s)"
             );
-            tokio::time::sleep(Duration::from_secs(cycle_secs)).await;
+            // A cycle ends once both changing pages were fetched in it (so cycle 0 captures the
+            // old content and cycle 1 the new), never before `min_secs`, at most `cycle_secs`.
+            let start = tokio::time::Instant::now();
+            loop {
+                let el = start.elapsed();
+                if el >= Duration::from_secs(cycle_secs) {
+                    eprintln!("cycle {c}: time cap reached");
+                    break;
+                }
+                if el >= Duration::from_secs(min_secs)
+                    && checks::changing_pages_fetched(&web.log().await?, since)
+                {
+                    break;
+                }
+                tokio::time::sleep(Duration::from_secs(2)).await;
+            }
             eprintln!(
                 "cycle {c}: {} request(s) logged so far",
                 web.log().await?.len()

@@ -28,6 +28,39 @@ env:
   CARGO_PROFILE_DEV_OPT_LEVEL: "1"
 
 jobs:
+  runner:
+    name: e2e runner checks
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - name: Install toolchain (rust-toolchain.toml)
+        run: |
+          rustup toolchain install --profile minimal
+          rustup component add rustfmt clippy
+      - uses: Swatinem/rust-cache@d1527c8f67ef9af357290475d4af4b0fab8f12e0 # v2.9.3
+        with:
+          shared-key: e2e-runner
+          workspaces: e2e/runner -> ../../target
+          save-if: ${{ github.ref == 'refs/heads/main' }}
+      - name: Runner lock = root lock (pinned versions, no new packages)
+        run: |
+          # The runner is its own workspace; its lock is derived from the root lock so it
+          # always builds the exact versions main uses, even after a root lock change.
+          cp Cargo.lock e2e/runner/Cargo.lock
+          cargo metadata --format-version 1 --manifest-path e2e/runner/Cargo.toml >/dev/null
+          pkgs() { grep -A1 '^name = ' "$1" | grep -v -- -- | paste - - | sort; }
+          added="$(comm -13 <(pkgs Cargo.lock) <(pkgs e2e/runner/Cargo.lock) | grep -v '"e2e-runner"' || true)"
+          if [ -n "$added" ]; then echo "::error::runner lock adds packages: $added"; exit 1; fi
+      - name: Runner checks (fmt, clippy, unit tests; no Docker)
+        working-directory: e2e/runner
+        run: |
+          cargo fmt -- --check
+          cargo clippy --locked --all-targets -- -D warnings
+          cargo test --locked
+
   e2e:
     name: e2e
     runs-on: ubuntu-latest
@@ -39,7 +72,6 @@ jobs:
       - name: Install toolchain (rust-toolchain.toml)
         run: |
           rustup toolchain install --profile minimal
-          rustup component add rustfmt clippy
           rustc --version
       - uses: Swatinem/rust-cache@d1527c8f67ef9af357290475d4af4b0fab8f12e0 # v2.9.3
         with:
@@ -57,12 +89,6 @@ jobs:
           pkgs() { grep -A1 '^name = ' "$1" | grep -v -- -- | paste - - | sort; }
           added="$(comm -13 <(pkgs Cargo.lock) <(pkgs e2e/runner/Cargo.lock) | grep -v '"e2e-runner"' || true)"
           if [ -n "$added" ]; then echo "::error::runner lock adds packages: $added"; exit 1; fi
-      - name: Runner checks (fmt, clippy, unit tests; no Docker)
-        working-directory: e2e/runner
-        run: |
-          cargo fmt -- --check
-          cargo clippy --locked --all-targets -- -D warnings
-          cargo test --locked
       - name: Build binaries
         run: |
           cargo build --locked -p vcrawl -p testkit --bin vcrawl --bin fake_web --bin fake_gemini
