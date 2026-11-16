@@ -41,7 +41,7 @@ enum Role {
 #[tokio::main]
 async fn main() -> anyhow::Result<()> {
     let cli = Cli::parse();
-    let ctx = Ctx::new(vc_config::Config::load(None)?);
+    let ctx = Ctx::new(vcrawl::wiring::config::load()?);
     match cli.role {
         Role::Scheduler => roles::scheduler::run(ctx).await,
         Role::Fetcher => roles::fetcher::run(ctx).await,

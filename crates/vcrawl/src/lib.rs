@@ -13,5 +13,6 @@ pub mod data;
 pub mod health;
 pub mod migrate;
 pub mod roles;
+pub mod wiring;
 
 pub use ctx::Ctx;
