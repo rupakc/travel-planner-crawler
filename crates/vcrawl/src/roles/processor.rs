@@ -21,8 +21,9 @@ use vc_extract::Extractor;
 
 use crate::Ctx;
 use crate::data::processor::{Processor, ProcessorDeps};
+use crate::data::shutdown;
 use crate::data::text_tier::TextTier;
-use crate::data::{db, shutdown};
+use crate::wiring;
 
 /// Segments written to the extracted-text tier per loop.
 const TEXT_SEGMENTS_PER_TICK: usize = 4;
@@ -34,9 +35,10 @@ const IDLE: Duration = Duration::from_secs(2);
 pub async fn run(ctx: Ctx) -> anyhow::Result<()> {
     let cfg = ctx.cfg.clone();
     let mut stop = shutdown::channel();
-    let secrets = db::secrets(&cfg);
-    let pool = db::pool(&cfg, secrets.as_ref()).await?;
-    let blobs = db::blobs(&cfg).await?;
+    let pool = ctx.pool().await?;
+    let blobs = wiring::store::blob_store(&cfg)
+        .await
+        .context("raw blob store")?;
     let kinds: Arc<dyn KindRegistry> =
         Arc::new(vc_kinds::FileKindRegistry::load(&cfg.kinds).context("kind registry")?);
     let places: Arc<dyn PlaceResolver> =

@@ -13,17 +13,18 @@ use vc_core::extract::PlaceResolver;
 use vc_index::QueryEmbedder;
 
 use crate::Ctx;
-use crate::data::{api, db, embed, shutdown};
+use crate::data::{api, embed, shutdown};
+use crate::wiring;
 
 /// Runs the `api` role until shutdown.
 pub async fn run(ctx: Ctx) -> anyhow::Result<()> {
     let cfg = ctx.cfg.clone();
-    let secrets = db::secrets(&cfg);
+    let secrets = wiring::sources::secrets(&cfg);
     // TLS first: without a certificate there is nothing to serve.
     let tls = vc_api::tls::tls_from_secrets(secrets.as_ref(), &cfg.api)
         .await
         .context("api TLS material")?;
-    let pool = db::pool(&cfg, secrets.as_ref()).await?;
+    let pool = ctx.pool().await?;
     let places: Arc<dyn PlaceResolver> =
         Arc::new(vc_extract::FilePlaceResolver::load(&cfg.extract).context("place data")?);
     let qe: Option<Arc<dyn QueryEmbedder>> = if cfg.llm.enabled {
