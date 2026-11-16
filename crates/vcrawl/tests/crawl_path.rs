@@ -148,6 +148,9 @@ async fn crawl_path_seeds_fetches_robots_first_and_commits_raw_first() {
     assert_raw_first(&pool, store.as_ref()).await;
 }
 
+/// A committed capture as [`captures`] lists it.
+type Cap = (String, String, Option<i16>, Option<String>, String);
+
 /// `(last_captured_at, body_captured_at)` of a URL.
 async fn fetch_times(
     pool: &sqlx::PgPool,
@@ -203,7 +206,7 @@ async fn not_modified_is_a_revisit_of_the_committed_capture() {
     let first = first.expect("C0 is the body capture");
 
     // The primary captures of /p as (capture_id, status, revisit_of_id), oldest first.
-    let page_caps = |caps: Vec<(String, String, Option<i16>, Option<String>, String)>| {
+    let page_caps = |caps: Vec<Cap>| {
         caps.into_iter()
             .filter(|c| c.1 == "primary" && c.4.ends_with("/p"))
             .map(|c| (c.0, c.2, c.3))
