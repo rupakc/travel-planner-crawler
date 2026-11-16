@@ -64,8 +64,9 @@ sources/*.yaml + adapters → scheduler → Postgres frontier (claims, fenced le
 - `testkit/`: `pg()` testcontainer (pgvector/pgvector:pg17, migrated), `FakeClock`,
   in-memory fakes of every trait, frozen `request_log` schema for the politeness oracle.
 - `migrations/`: 0001–0099 P0; blocks frontier 11xx, store 12xx, queue 13xx, llm 14xx,
-  index 15xx, api 16xx, sources 17xx, ops 18xx. Expand-only; `SET lock_timeout = '5s'`
-  first; no FKs into partitioned tables; contract migrations in `migrations/contract/`.
+  index 15xx, api 16xx, sources 17xx, ops 18xx, vcrawl 19xx. Expand-only;
+  `SET lock_timeout = '5s'` first; no FKs into partitioned tables; contract migrations in
+  `migrations/contract/`.
 - `sources/`, `schemas/`, `prompts/`, `kinds.toml`, `policy/`: data, not code.
 
 ## Ownership (parallel agents)
