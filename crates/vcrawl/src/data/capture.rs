@@ -165,6 +165,25 @@ pub async fn load(pool: &PgPool, c: &CaptureRef) -> Result<Option<StoredCapture>
     row.as_ref().map(to_capture).transpose()
 }
 
+/// The committed captures of one segment, ordered by capture id.
+pub async fn of_segment(pool: &PgPool, segment_id: &str) -> Result<Vec<StoredCapture>> {
+    let rows = sqlx::query(
+        "SELECT c.capture_id, c.captured_at, c.epoch, c.orphan_epoch, c.url_key, c.url, c.key,
+                c.source_id, c.role, c.fetch_mode, c.status, c.media_type, c.payload_hash,
+                c.payload_len, c.etag, c.last_modified, c.revisit_of_id, c.revisit_of_at,
+                c.use_signals, c.use_policy_fetch, c.raw_expires_at, c.warc_offset,
+                c.warc_length, s.path
+         FROM captures c JOIN segments s ON s.segment_id = c.segment_id
+         WHERE c.segment_id = $1 AND s.purged_at IS NULL
+         ORDER BY c.capture_id",
+    )
+    .bind(segment_id)
+    .fetch_all(pool)
+    .await
+    .map_err(db)?;
+    rows.iter().map(to_capture).collect()
+}
+
 /// Whether this capture's payload differs from the URL's previous primary capture with a
 /// stored payload (no previous capture → changed). A revisit is never a change.
 pub async fn payload_changed(pool: &PgPool, c: &StoredCapture) -> Result<bool> {
@@ -194,7 +213,7 @@ pub async fn payload_changed(pool: &PgPool, c: &StoredCapture) -> Result<bool> {
 
 /// The payload of a capture's record group: a `response` body or a `resource` block.
 /// `None` for revisits and metadata.
-fn payload_of(records: &[vc_store::warc::WarcRecord]) -> Result<Option<bytes::Bytes>> {
+pub(crate) fn payload_of(records: &[vc_store::warc::WarcRecord]) -> Result<Option<bytes::Bytes>> {
     for r in records {
         match r.warc_type() {
             Some("response") => return Ok(Some(vc_store::warc::parse_http(&r.block)?.body)),

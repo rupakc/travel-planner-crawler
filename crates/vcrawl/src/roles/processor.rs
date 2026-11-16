@@ -4,6 +4,9 @@
 //! The LLM is wired only when `VC_LLM_ENABLED=true`; then the model is probed once at start
 //! (fail loudly when unavailable) and every extraction call reserves through `PgLedger` under
 //! the extraction share. With the LLM off, extraction is structured-only.
+//!
+//! Each loop also writes the extracted-text tier of a few committed segments
+//! ([`crate::data::text_tier`]).
 
 use std::sync::Arc;
 use std::time::Duration;
@@ -17,7 +20,11 @@ use vc_extract::Extractor;
 
 use crate::Ctx;
 use crate::data::processor::{Processor, ProcessorDeps};
+use crate::data::text_tier::TextTier;
 use crate::data::{db, shutdown};
+
+/// Segments written to the extracted-text tier per loop.
+const TEXT_SEGMENTS_PER_TICK: usize = 4;
 
 /// Pause when the queue was empty.
 const IDLE: Duration = Duration::from_secs(2);
@@ -58,6 +65,13 @@ pub async fn run(ctx: Ctx) -> anyhow::Result<()> {
         pool.clone(),
         cfg.index.clone(),
     ));
+    let text = TextTier::new(
+        pool.clone(),
+        blobs.clone(),
+        vc_parse::registry_with(&cfg.parse),
+        vc_parse::limits_from(&cfg.parse),
+        cfg.store.zstd_level,
+    );
     let p = Arc::new(Processor::new(ProcessorDeps {
         pool,
         blobs,
@@ -71,7 +85,7 @@ pub async fn run(ctx: Ctx) -> anyhow::Result<()> {
     }));
     let n = cfg.vcrawl.processor_concurrency.max(1);
     loop {
-        let wait = match p.tick(n).await {
+        let mut wait = match p.tick(n).await {
             Ok(0) => IDLE,
             Ok(_) => Duration::ZERO,
             Err(e) => {
@@ -79,6 +93,13 @@ pub async fn run(ctx: Ctx) -> anyhow::Result<()> {
                 IDLE
             }
         };
+        match text.tick(TEXT_SEGMENTS_PER_TICK).await {
+            Ok(0) => {}
+            Ok(_) => wait = Duration::ZERO,
+            Err(e) => {
+                tracing::warn!(error_class = ?e.class(), error = %e, "text tier tick failed");
+            }
+        }
         if shutdown::sleep_or_stop(&mut stop, wait).await {
             return Ok(());
         }
