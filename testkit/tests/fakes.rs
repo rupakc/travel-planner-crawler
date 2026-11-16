@@ -99,9 +99,12 @@ async fn mem_frontier_reschedule() {
     let k = u.key();
     f.enqueue(&[NewUrl::new(u.clone())]).await.unwrap();
     assert!(
-        !f.reschedule(&CanonicalUrl::parse("https://nope.example/").unwrap().key(), clk.now())
-            .await
-            .unwrap(),
+        !f.reschedule(
+            &CanonicalUrl::parse("https://nope.example/").unwrap().key(),
+            clk.now()
+        )
+        .await
+        .unwrap(),
         "unknown url"
     );
 
