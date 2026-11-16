@@ -33,7 +33,7 @@ use vc_core::{Error, ExtractionRunId, KindId, Result};
 use crate::gate::{Gate, PeerRecord, compare_with_peers, is_high_stakes, source_gate};
 use crate::grounding::{GroundOpts, SourceEvidence, ground};
 use crate::record_key::record_key;
-use crate::structured::{MAPPING_VERSION, flatten, map_object};
+use crate::structured::{MAPPING_VERSION, fit_to_schema, flatten, map_object};
 
 /// The extractor version recorded with every record.
 pub fn extractor_version() -> String {
@@ -287,6 +287,16 @@ impl Extractor {
                 out.report.skip(&kind, Skip::SourceClass);
                 continue;
             }
+            let mut data = data;
+            if def.schema.pointer("/properties/source_url").is_some()
+                && let Some(o) = data.as_object_mut()
+            {
+                o.insert(
+                    "source_url".into(),
+                    Value::String(prov.url.as_str().to_string()),
+                );
+            }
+            fit_to_schema(&mut data, &def.schema);
             cands.push(Candidate {
                 kind,
                 id,
@@ -380,7 +390,7 @@ impl Extractor {
                 continue;
             }
             let place_ids = self.place_ids(def, &data, input).await;
-            let is_nameless = ["name", "title", "headline", "question"].iter().all(|f| {
+            let is_nameless = NAME_FIELDS.iter().all(|f| {
                 data.get(*f)
                     .and_then(Value::as_str)
                     .is_none_or(|s| s.trim().is_empty())
@@ -447,7 +457,7 @@ impl Extractor {
         conflict: bool,
         input: &ExtractInput<'_>,
     ) -> ExtractedRecord {
-        let title = ["name", "title", "headline", "question"]
+        let title = NAME_FIELDS
             .iter()
             .find_map(|f| data.get(*f).and_then(Value::as_str))
             .map(|s| s.trim().chars().take(300).collect::<String>())
@@ -455,6 +465,7 @@ impl Extractor {
         let max = self.cfg.excerpt_chars.min(MAX_EXCERPT_CHARS);
         let excerpt = data
             .get("description")
+            .or_else(|| data.get("summary"))
             .and_then(Value::as_str)
             .or(input.parsed.main_text.as_deref())
             .map(|s| s.split_whitespace().collect::<Vec<_>>().join(" "))
@@ -517,10 +528,12 @@ impl Extractor {
         .or_else(|| s("destination"))
         .or_else(|| s("location"));
         let Some(name) = name else { return vec![] };
-        let near = data.get("geo").and_then(|g| {
-            Some(GeoPoint {
-                lat: g.get("lat")?.as_f64()?,
-                lon: g.get("lon")?.as_f64()?,
+        let near = latlng(data).or_else(|| {
+            data.get("geo").and_then(|g| {
+                Some(GeoPoint {
+                    lat: g.get("lat")?.as_f64()?,
+                    lon: g.get("lon")?.as_f64()?,
+                })
             })
         });
         let q = PlaceQuery {
@@ -736,6 +749,17 @@ impl Extractor {
         }
         Ok(())
     }
+}
+
+/// Fields that name a record (title, record key).
+pub(crate) const NAME_FIELDS: &[&str] =
+    &["name", "title", "headline", "question_title", "question"];
+
+fn latlng(data: &Value) -> Option<GeoPoint> {
+    Some(GeoPoint {
+        lat: data.get("lat")?.as_f64()?,
+        lon: data.get("lng").or_else(|| data.get("lon"))?.as_f64()?,
+    })
 }
 
 /// Title + main text + string values of structured data: what grounding compares against.

@@ -75,11 +75,27 @@ pub struct PeerRecord {
 }
 
 /// Normalised value sets of a record's verbatim fields, per pointer.
+/// Concrete indices are folded into `*`, so `/numbers/0/number` and `/numbers/1/number`
+/// compare as one order-independent set.
 pub fn verbatim_values(kind: &KindDef, data: &Value) -> Vec<(String, BTreeSet<String>)> {
-    kind.verbatim_fields
-        .iter()
-        .map(|ptr| {
-            let mut set = BTreeSet::new();
+    let mut groups: std::collections::BTreeMap<String, BTreeSet<String>> = Default::default();
+    for ptr in &kind.verbatim_fields {
+        let pattern: String = ptr
+            .split('/')
+            .map(|s| {
+                if s.parse::<usize>().is_ok() || s == "-" {
+                    "*"
+                } else {
+                    s
+                }
+            })
+            .collect::<Vec<_>>()
+            .join("/");
+        if !is_fact_pointer(&pattern) {
+            continue;
+        }
+        let set = groups.entry(pattern).or_default();
+        {
             for p in expand_pointer(data, ptr) {
                 let Some(v) = get_path(data, &p) else {
                     continue;
@@ -92,9 +108,23 @@ pub fn verbatim_values(kind: &KindDef, data: &Value) -> Vec<(String, BTreeSet<St
                     set.insert(norm_value(infer_type(&kind.schema, ptr, leaf), leaf));
                 }
             }
-            (ptr.clone(), set)
-        })
-        .collect()
+        }
+    }
+    groups.into_iter().collect()
+}
+
+/// Provenance-like verbatim fields (where a source quotes itself) never count as agreement
+/// or conflict: `source_url`, `as_of`, `evidence`, free-text `text`, page dates.
+fn is_fact_pointer(pattern: &str) -> bool {
+    const NOT_FACTS: &[&str] = &[
+        "source_url",
+        "as_of",
+        "evidence",
+        "text",
+        "published_date",
+        "updated_date",
+    ];
+    !pattern.split('/').any(|seg| NOT_FACTS.contains(&seg))
 }
 
 fn norm_value(ft: FieldType, v: &Value) -> String {
@@ -173,5 +203,65 @@ pub fn compare_with_peers(
     PeerVerdict {
         agreeing_sources: u8::try_from(agree.len() + 1).unwrap_or(u8::MAX),
         conflict,
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use serde_json::json;
+    use vc_core::kinds::KindStorage;
+
+    fn em(ptrs: &[&str]) -> KindDef {
+        KindDef {
+            id: KindId::new("emergency_numbers"),
+            version: 1,
+            schema: json!({"type": "object"}),
+            prompt: String::new(),
+            prompt_hash: String::new(),
+            verbatim_fields: ptrs.iter().map(|s| s.to_string()).collect(),
+            allowed_source_classes: vec![],
+            storage: KindStorage::Record,
+            high_stakes: false,
+            min_reference_agreement: 0,
+        }
+    }
+
+    #[test]
+    fn concrete_indices_compare_as_sets_and_provenance_is_ignored() {
+        let k = em(&[
+            "/numbers/0/number",
+            "/numbers/1/number",
+            "/source_url",
+            "/evidence/0",
+        ]);
+        let a = json!({"numbers": [{"number": "112"}, {"number": "091"}], "source_url": "https://a.example/x", "evidence": ["x"]});
+        let b = json!({"numbers": [{"number": "091"}, {"number": "112"}], "source_url": "https://b.example/y", "evidence": ["y"]});
+        let peer = PeerRecord {
+            source_id: SourceId("b".into()),
+            source_class: SourceClass::Reference,
+            kind: k.id.clone(),
+            place_ids: vec![],
+            data: b,
+        };
+        let v = compare_with_peers(&k, &SourceId("a".into()), &[], &a, &[peer]);
+        assert_eq!(
+            v,
+            PeerVerdict {
+                agreeing_sources: 2,
+                conflict: false
+            }
+        );
+    }
+
+    #[test]
+    fn hard_floor() {
+        let k = em(&[]);
+        assert_eq!(source_gate(&k, SourceClass::Official), Gate::Allowed);
+        assert_eq!(
+            source_gate(&k, SourceClass::Reference),
+            Gate::NeedsAgreement(2)
+        );
+        assert_eq!(source_gate(&k, SourceClass::Editorial), Gate::Denied);
     }
 }

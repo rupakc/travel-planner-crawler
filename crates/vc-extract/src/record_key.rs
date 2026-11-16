@@ -6,8 +6,16 @@ use vc_core::{CanonicalUrl, KindId, RecordKey};
 
 use crate::fold::fold;
 
-const NAME_FIELDS: &[&str] = &["name", "title", "headline", "question"];
-const DATE_FIELDS: &[&str] = &["start_date", "date", "start", "published", "valid_from"];
+use crate::pipeline::NAME_FIELDS;
+const DATE_FIELDS: &[&str] = &[
+    "start_date",
+    "date",
+    "start",
+    "published_date",
+    "published",
+    "asked_date",
+    "valid_from",
+];
 
 fn str_field<'a>(data: &'a Value, fields: &[&str]) -> Option<&'a str> {
     fields
@@ -18,9 +26,12 @@ fn str_field<'a>(data: &'a Value, fields: &[&str]) -> Option<&'a str> {
 }
 
 fn geo_part(data: &Value) -> Option<String> {
-    let g = data.get("geo")?;
+    let g = data.get("geo").unwrap_or(data);
     let lat = g.get("lat").and_then(Value::as_f64)?;
-    let lon = g.get("lon").and_then(Value::as_f64)?;
+    let lon = g
+        .get("lng")
+        .or_else(|| g.get("lon"))
+        .and_then(Value::as_f64)?;
     Some(format!("{lat:.3},{lon:.3}"))
 }
 

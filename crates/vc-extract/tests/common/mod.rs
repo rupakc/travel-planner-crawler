@@ -62,20 +62,33 @@ pub fn geo_schema() -> Value {
 pub fn kinds() -> Arc<MapKinds> {
     use SourceClass::*;
     let mut m = BTreeMap::new();
+    // The real v1 event kind (T7): schema file + kinds.toml policy, `*` expanded as the
+    // vc-kinds loader does.
+    let event_schema: Value = serde_json::from_str(
+        &std::fs::read_to_string(concat!(
+            env!("CARGO_MANIFEST_DIR"),
+            "/../../schemas/event.v1.json"
+        ))
+        .expect("schemas/event.v1.json"),
+    )
+    .expect("event schema");
     let event = kind(
         "event",
-        json!({"$schema": "https://json-schema.org/draft/2020-12/schema", "type": "object",
-          "additionalProperties": false, "required": ["name"],
-          "properties": {
-            "name": {"type": "string", "minLength": 1}, "description": {"type": "string"},
-            "url": {"type": "string", "format": "uri"}, "start_date": {"type": "string"},
-            "end_date": {"type": "string"}, "venue": {"type": "string"}, "address": {"type": "string"},
-            "city": {"type": "string"}, "region": {"type": "string"}, "country": {"type": "string"},
-            "postal_code": {"type": "string"}, "geo": geo_schema(),
-            "price": {"type": ["number", "string"]}, "currency": {"type": "string"},
-            "booking_url": {"type": "string", "format": "uri"}, "organizer": {"type": "string"}}}),
-        &["/start_date", "/end_date", "/url", "/booking_url", "/price"],
-        &[],
+        event_schema,
+        &[
+            "/start_date",
+            "/end_date",
+            "/start_time",
+            "/price/text",
+            "/price/amount",
+            "/ticket_url",
+            "/source_url",
+            "/as_of",
+            "/evidence/0",
+            "/evidence/1",
+            "/evidence/2",
+        ],
+        &[Official, Reference, Editorial, CommercialApi],
         false,
         0,
         KindStorage::Record,

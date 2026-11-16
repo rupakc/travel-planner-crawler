@@ -105,7 +105,7 @@ async fn record_key_stable_across_runs() {
         let mut inp = ExtractInput::new(&pv2, &p2);
         inp.llm_kinds = &kinds;
         r.llm.push_json(
-            json!({"records": [{"name": name, "venue": "Casa Azul", "start_date": "2026-11-21"}]}),
+            json!({"records": [{"name": name, "category": "music", "city": "Lisbon", "country": "Portugal", "venue": "Casa Azul", "start_date": "2026-11-21"}]}),
         );
         let b = r.ex.extract(&inp).await.unwrap();
         (
@@ -142,9 +142,19 @@ async fn structured_data_needs_no_llm() {
     assert_eq!(rec.data["name"], "Jazz Night");
     assert_eq!(rec.data["city"], "Lisbon");
     assert_eq!(
-        rec.data["booking_url"],
+        rec.data["ticket_url"],
         "https://tickets.blueroom-example.pt/e/1"
     );
+    assert_eq!(rec.data["category"], "music");
+    assert_eq!(rec.data["start_date"], "2026-11-20");
+    assert_eq!(rec.data["start_time"], "19:00");
+    assert_eq!(rec.data["price"]["amount"], 25.0);
+    assert_eq!(rec.data["lat"], 38.7167);
+    assert_eq!(
+        rec.data["source_url"],
+        "https://www.blueroom-example.pt/events/jazz"
+    );
+    assert_eq!(rec.data["venue"], "Blue Room");
     assert_eq!(out.report.structured, 1);
     assert_eq!(rec.schema_version, 1);
     assert!(
@@ -173,9 +183,9 @@ async fn unresolved_place_empty_ids() {
     let mut inp = ExtractInput::new(&pv, &p);
     inp.llm_kinds = &kinds;
     r.llm.push_json(json!({"records": [
-        {"name": "Jazz Night", "city": "Lisbon", "start_date": "2026-11-20"},
-        {"name": "Moon Party", "city": "Atlantis", "start_date": "2026-11-21"},
-        {"name": "Mystery", "start_date": "2026-11-21"}
+        {"name": "Jazz Night", "category": "music", "city": "Lisbon", "country": "Portugal", "start_date": "2026-11-20"},
+        {"name": "Moon Party", "category": "music", "city": "Atlantis", "country": "Atlantis", "start_date": "2026-11-21"},
+        {"name": "Mystery", "category": "music", "city": "", "country": "Portugal", "start_date": "2026-11-21"}
     ]}));
     let out = ex.extract(&inp).await.unwrap();
     assert_eq!(out.records.len(), 3);
@@ -190,9 +200,9 @@ async fn unresolved_place_empty_ids() {
     let mut inp = ExtractInput::new(&pv, &p);
     inp.llm_kinds = &kinds;
     r.llm.push_json(json!({"records": [
-        {"name": "A", "city": "Paris", "country": "US", "start_date": "2026-11-20"},
-        {"name": "B", "city": "Paris", "start_date": "2026-11-20"},
-        {"name": "C", "city": "Lisboa", "country": "France", "start_date": "2026-11-20"}
+        {"name": "A", "category": "music", "city": "Paris", "country": "US", "start_date": "2026-11-20"},
+        {"name": "B", "category": "music", "city": "Paris", "country": "", "start_date": "2026-11-20"},
+        {"name": "C", "category": "music", "city": "Lisboa", "country": "France", "start_date": "2026-11-20"}
     ]}));
     let out = ex.extract(&inp).await.unwrap();
     assert_eq!(out.records[0].place_ids, vec![4717560]);
@@ -228,7 +238,7 @@ async fn use_policy_blocks_llm() {
         let mut inp = ExtractInput::new(&pv, &p);
         inp.llm_kinds = &kinds;
         r.llm
-            .push_json(json!({"records": [{"name": "Jazz Night", "start_date": "2026-11-20"}]}));
+            .push_json(json!({"records": [{"name": "Jazz Night", "category": "music", "city": "Lisbon", "country": "Portugal", "start_date": "2026-11-20"}]}));
         let out = r.ex.extract(&inp).await.unwrap();
         assert!(out.records.is_empty());
         assert_eq!(r.llm.calls(), 0);
@@ -255,7 +265,7 @@ async fn use_policy_blocks_llm() {
     let mut inp = ExtractInput::new(&pv, &p);
     inp.llm_kinds = &kinds;
     r.llm
-        .push_json(json!({"records": [{"name": "Jazz Night", "start_date": "2026-11-20"}]}));
+        .push_json(json!({"records": [{"name": "Jazz Night", "category": "music", "city": "Lisbon", "country": "Portugal", "start_date": "2026-11-20"}]}));
     let out = r.ex.extract(&inp).await.unwrap();
     assert_eq!(out.records.len(), 1);
     assert_eq!(out.records[0].use_policy, pv.use_policy);
@@ -384,7 +394,7 @@ async fn long_text_is_chunked_and_capped() {
     inp.llm_kinds = &kinds;
     for _ in 0..5 {
         r.llm
-            .push_json(json!({"records": [{"name": "Jazz Night", "start_date": "2026-11-20"}]}));
+            .push_json(json!({"records": [{"name": "Jazz Night", "category": "music", "city": "Lisbon", "country": "Portugal", "start_date": "2026-11-20"}]}));
     }
     let out = r.ex.extract(&inp).await.unwrap();
     assert_eq!(r.llm.calls(), 3, "≤ 3 chunks");
@@ -418,13 +428,13 @@ async fn repair_fixes_invalid_record_once() {
     let kinds = kinds_of(&["event"]);
     let mut inp = ExtractInput::new(&pv, &p);
     inp.llm_kinds = &kinds;
-    r.llm.push_json(json!({"records": [{"name": "Jazz Night", "start_date": "2026-11-20", "price": "€25", "extra": 1}]}));
+    r.llm.push_json(json!({"records": [{"name": "Jazz Night", "category": "music", "city": "Lisbon", "country": "Portugal", "start_date": "2026-11-20", "price": {"text": "€25", "amount": 25}, "extra": 1}]}));
     r.llm.push_json(
-        json!({"records": [{"name": "Jazz Night", "start_date": "2026-11-20", "price": "€25"}]}),
+        json!({"records": [{"name": "Jazz Night", "category": "music", "city": "Lisbon", "country": "Portugal", "start_date": "2026-11-20", "price": {"text": "€25", "amount": 25}}]}),
     );
     let out = r.ex.extract(&inp).await.unwrap();
     assert_eq!(out.records.len(), 1);
-    assert_eq!(out.records[0].data["price"], "€25");
+    assert_eq!(out.records[0].data["price"]["amount"], 25.0);
     assert_eq!(r.llm.calls(), 2);
     let repair = &r.llm.requests()[1];
     assert!(
@@ -444,7 +454,7 @@ async fn repair_fixes_invalid_record_once() {
         LlmConfig::default(),
     );
     r.llm
-        .push_json(json!({"records": [{"name": "Jazz Night", "extra": 1}]}));
+        .push_json(json!({"records": [{"name": "Jazz Night", "category": "music", "city": "Lisbon", "country": "Portugal", "extra": 1}]}));
     let out = ex.extract(&inp).await.unwrap();
     assert!(out.records.is_empty());
     assert_eq!(r.llm.calls(), 1);
@@ -463,7 +473,7 @@ async fn too_many_records_are_capped() {
     let mut inp = ExtractInput::new(&pv, &p);
     inp.llm_kinds = &kinds;
     let recs: Vec<_> = (0..50)
-        .map(|i| json!({"name": format!("Event {i}")}))
+        .map(|i| json!({"name": format!("Event {i}"), "category": "music", "city": "Lisbon", "country": "Portugal"}))
         .collect();
     r.llm.push_json(json!({"records": recs}));
     let out = r.ex.extract(&inp).await.unwrap();
@@ -517,4 +527,58 @@ async fn structured_kinds_filter_and_source_gate() {
     let mut inp = ExtractInput::new(&pv, &p);
     inp.structured_kinds = &only;
     assert!(r.ex.extract(&inp).await.unwrap().records.is_empty());
+}
+
+#[tokio::test]
+async fn free_price_is_grounded_by_the_word_free() {
+    let r = rig();
+    let p = parsed(
+        "Events",
+        "Christmas market in Lisbon from 1 December 2026. Admission free.",
+    );
+    let pv = prov(
+        "https://www.events-example.com/list",
+        "ev",
+        SourceClass::Editorial,
+    );
+    let kinds = kinds_of(&["event"]);
+    let mut inp = ExtractInput::new(&pv, &p);
+    inp.llm_kinds = &kinds;
+    r.llm.push_json(json!({"records": [
+        {"name": "Christmas market", "category": "market", "city": "Lisbon", "country": "Portugal",
+         "start_date": "2026-12-01", "price": {"text": "free", "amount": 0, "is_free": true}}
+    ]}));
+    let out = r.ex.extract(&inp).await.unwrap();
+    assert_eq!(out.records.len(), 1);
+    assert_eq!(out.records[0].data["price"]["amount"], 0);
+    assert_eq!(out.records[0].data["price"]["is_free"], true);
+    assert_eq!(out.report.fields_dropped, 0);
+}
+
+#[tokio::test]
+async fn the_v1_event_schema_is_used_with_the_records_envelope() {
+    let r = rig();
+    let p = parsed("Events", "Jazz Night in Lisbon on 20 November 2026.");
+    let pv = prov(
+        "https://www.events-example.com/list",
+        "ev",
+        SourceClass::Editorial,
+    );
+    let kinds = kinds_of(&["event"]);
+    let mut inp = ExtractInput::new(&pv, &p);
+    inp.llm_kinds = &kinds;
+    r.llm.push_json(json!({"records": []}));
+    r.ex.extract(&inp).await.unwrap();
+    let schema = r.llm.requests()[0].response_schema.clone().unwrap();
+    assert_eq!(schema["properties"]["records"]["type"], "array");
+    assert_eq!(schema["properties"]["records"]["maxItems"], 20);
+    assert_eq!(
+        schema["properties"]["records"]["items"]["required"],
+        json!(["name", "category", "city", "country"])
+    );
+    assert!(
+        schema["properties"]["records"]["items"]
+            .get("$schema")
+            .is_none()
+    );
 }

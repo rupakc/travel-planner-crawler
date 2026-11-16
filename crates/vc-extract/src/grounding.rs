@@ -86,6 +86,20 @@ static MDY_RE: LazyLock<Regex> = LazyLock::new(|| {
     .expect("mdy regex")
 });
 
+/// Folded words that ground a zero price.
+const FREE_WORDS: &[&str] = &[
+    "free",
+    "gratis",
+    "gratuit",
+    "gratuite",
+    "gratuito",
+    "gratuita",
+    "kostenlos",
+    "no charge",
+    "免费",
+    "無料",
+];
+
 fn month_no(m: &str) -> u32 {
     match &m.to_ascii_lowercase()[..3] {
         "jan" => 1,
@@ -339,13 +353,25 @@ impl SourceEvidence {
         Err(GroundFailure::NotInSource)
     }
 
+    /// Whether the source says something is free ("free", "gratis", "kostenlos", …).
+    pub fn says_free(&self) -> bool {
+        FREE_WORDS
+            .iter()
+            .any(|w| self.folded.contains(&format!(" {w} ")))
+    }
+
     fn check_price(&self, s: &str) -> Result<(), GroundFailure> {
         let toks: Vec<&str> = NUMBER_RE.find_iter(s).map(|m| m.as_str()).collect();
         if toks.is_empty() {
             return self.check_text(s);
         }
         for t in toks {
-            let ok = number_readings(t)
+            let readings = number_readings(t);
+            // `amount: 0` for a page that says "Free" is grounded by the word.
+            if readings.iter().all(|v| *v == 0.0) && self.says_free() {
+                continue;
+            }
+            let ok = readings
                 .iter()
                 .any(|v| self.numbers.iter().any(|n| (n - v).abs() < 0.005));
             if !ok {
@@ -443,14 +469,32 @@ pub fn get_path<'a>(v: &'a Value, path: &[Step]) -> Option<&'a Value> {
     })
 }
 
-/// What to remove when the value at `path` fails: the enclosing array element if the value
-/// lives inside an object inside an array, else the key (or the array element itself).
-pub fn removal_target(path: &[Step]) -> Vec<Step> {
-    if let Some(last_idx) = path.iter().rposition(|s| matches!(s, Step::Index(_))) {
-        // The value is inside an array element (or is one).
-        return path[..=last_idx].to_vec();
+/// What to remove when the value at `path` fails: an element of an array of scalars is
+/// removed alone; a field is removed alone unless its object's schema requires it, in which
+/// case the enclosing array element goes (a number entry without its number is worthless); a
+/// required top-level field is removed and the record then fails validation (dropped).
+pub fn removal_target(schema: &Value, path: &[Step]) -> Vec<Step> {
+    let Some((last, parent)) = path.split_last() else {
+        return path.to_vec();
+    };
+    if let Step::Key(k) = last {
+        let required = schema_at_path(schema, parent)
+            .and_then(|s| s.get("required"))
+            .and_then(Value::as_array)
+            .is_some_and(|r| r.iter().any(|x| x.as_str() == Some(k)));
+        if required && let Some(i) = parent.iter().rposition(|s| matches!(s, Step::Index(_))) {
+            return path[..=i].to_vec();
+        }
     }
     path.to_vec()
+}
+
+/// The sub-schema at a concrete path (through `properties` / `items`).
+pub fn schema_at_path<'a>(schema: &'a Value, path: &[Step]) -> Option<&'a Value> {
+    path.iter().try_fold(schema, |cur, s| match s {
+        Step::Index(_) => cur.get("items"),
+        Step::Key(k) => cur.get("properties")?.get(k.as_str()),
+    })
 }
 
 /// Removes the values at `paths` (deepest/highest index first so indices stay valid).
@@ -639,7 +683,7 @@ pub fn ground(
         |path: &[Step], f: GroundFailure, rep: &mut GroundReport, remove: &mut Vec<Vec<Step>>| {
             rep.dropped += 1;
             rep.failures.push(f);
-            remove.push(removal_target(path));
+            remove.push(removal_target(schema, path));
         };
     for ptr in verbatim_fields {
         for path in expand_pointer(data, ptr) {
@@ -793,6 +837,15 @@ mod tests {
         assert!(e.check(FieldType::Price, &json!(12.5), false).is_ok());
         assert!(e.check(FieldType::Price, &json!("€5"), false).is_err());
         assert!(
+            e.check(FieldType::Price, &json!(0), false).is_err(),
+            "0 needs 'free'"
+        );
+        let f = ev("Admission: Free. Guided tours €8.");
+        assert!(f.check(FieldType::Price, &json!(0), false).is_ok());
+        assert!(f.check(FieldType::Price, &json!(0.0), false).is_ok());
+        assert!(f.check(FieldType::Text, &json!("Free"), false).is_ok());
+        assert!(!ev("Freedom Tower tickets €30.").says_free());
+        assert!(
             e.check(FieldType::Date, &json!("2026-11-15"), false)
                 .is_ok()
         );
@@ -825,11 +878,27 @@ mod tests {
         assert_eq!(paths.len(), 2);
         assert_eq!(expand_pointer(&v, "/numbers/value").len(), 2);
         assert_eq!(expand_pointer(&v, "/numbers/1/value").len(), 1);
-        remove_paths(&mut v, vec![removal_target(&paths[1])]);
+        let schema = json!({"type": "object", "properties": {"numbers": {"type": "array", "items": {
+            "type": "object", "required": ["value"],
+            "properties": {"value": {"type": "string"}, "web": {"type": "string"}}}}}});
+        remove_paths(&mut v, vec![removal_target(&schema, &paths[1])]);
         assert_eq!(
             v,
             json!({"numbers": [{"service": "police", "value": "112"}]})
         );
+        // An optional field goes alone; an element of an array of scalars goes alone.
+        let mut v = json!({"numbers": [{"value": "1", "web": "x"}], "evidence": ["a", "b"]});
+        let t1 = removal_target(
+            &schema,
+            &[
+                Step::Key("numbers".into()),
+                Step::Index(0),
+                Step::Key("web".into()),
+            ],
+        );
+        let t2 = removal_target(&schema, &[Step::Key("evidence".into()), Step::Index(1)]);
+        remove_paths(&mut v, vec![t1, t2]);
+        assert_eq!(v, json!({"numbers": [{"value": "1"}], "evidence": ["a"]}));
     }
 
     #[test]

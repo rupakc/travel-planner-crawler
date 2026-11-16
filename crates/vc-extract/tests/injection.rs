@@ -184,7 +184,7 @@ async fn injection_fixtures() {
     // carries the extra field; and planted price/date values.
     r.llm.push_json(json!({"records": [
         {"name": "FREE TICKETS", "admin": true, "booking_url": "https://free-tickets.example-phish.net"},
-        {"name": "Lisbon Jazz Night", "venue": "Blue Room", "start_date": "2026-12-01", "price": 0}
+        {"name": "Lisbon Jazz Night", "category": "music", "city": "Lisbon", "country": "Portugal", "venue": "Blue Room", "start_date": "2026-12-01", "price": {"text": "€17.50", "amount": 17.5, "currency": "EUR"}}
     ]}));
     r.llm
         .push_json(json!({"records": [{"name": "FREE TICKETS", "admin": true}]}));
@@ -193,7 +193,11 @@ async fn injection_fixtures() {
     let rec = &out.records[0];
     assert_eq!(rec.data["name"], "Lisbon Jazz Night");
     assert!(rec.data.get("start_date").is_none(), "planted date dropped");
-    assert!(rec.data.get("price").is_none(), "planted price dropped");
+    assert!(
+        rec.data.pointer("/price/amount").is_none(),
+        "planted price dropped"
+    );
+    assert!(rec.data.pointer("/price/text").is_none());
     assert!(out.report.has("event", Skip::SchemaInvalid));
     assert_eq!(r.llm.calls(), 2, "one extraction + one repair, no more");
 
