@@ -42,7 +42,7 @@ ok() { PASSES=$((PASSES + 1)); echo "ok   $1"; }
 fail() {
   FAILS=$((FAILS + 1))
   echo "FAIL $1: $2"
-  echo "---- calls"; cat "$CALLS"; echo "----"
+  echo "---- calls"; cat "${CALLS:-/dev/null}"; echo "----"
 }
 has() { grep -qF -- "$1" "$CALLS"; }
 line_of() { grep -nF -- "$1" "$CALLS" | head -n1 | cut -d: -f1; }
@@ -333,7 +333,8 @@ test_compose_wiring() {
   base="$(env -i bash -c ". '$HERE/../host/lib.sh'; echo \$VC_BASE_SERVICES")"
   [[ -n "$roles" ]] || { fail compose_wiring "no roles from lib.sh"; return; }
   for role in $roles; do
-    grep -qF "\"$role:9464\"" "$otel" || { fail compose_wiring "otelcol does not scrape $role"; return; }
+    grep -qE "job_name: $role\$" "$otel" || { fail compose_wiring "otelcol does not scrape $role"; return; }
+    grep -qE "\"($role|[0-9.]+):9464\"" "$otel" || { fail compose_wiring "no :9464 target for $role"; return; }
   done
   # shellcheck disable=SC2016 # the literal collector expression
   grep -qF 'new_name: custom.googleapis.com/crawler/$${1}' "$otel" ||
@@ -349,6 +350,55 @@ test_compose_wiring() {
     grep -qF 'create_host_path: false' <<<"$mig" ||
     { fail compose_wiring "rollback log not mounted read-only into migrate"; return; }
   ok compose_wiring
+}
+
+# The body of one top-level service of compose.yaml.
+compose_service() {
+  awk -v s="  $2:" '$0 == s {on=1; next} on && /^  [a-z]/{on=0} on && /^[a-z]/{on=0} on' "$1"
+}
+
+test_spooling_roles_have_stable_instance() {
+  local compose="$HERE/../compose.yaml" svc body n=0
+  # Every service that spools must keep its spool dir (spool/<role>-<instance>/) across
+  # container recreation: a stable VC_VCRAWL_INSTANCE (or hostname), never the container id.
+  while read -r svc; do
+    body="$(compose_service "$compose" "$svc")"
+    grep -qE 'VC_STORE_SPOOL_DIR|:/spool' <<<"$body" || continue
+    n=$((n + 1))
+    grep -qE '^      VC_VCRAWL_INSTANCE: [a-z][a-z0-9-]+$|^    hostname: [a-z][a-z0-9-]+$' <<<"$body" ||
+      { fail spooling_roles_have_stable_instance "$svc spools without a stable instance name"; return; }
+  done < <(awk '/^services:/{on=1; next} on && /^[a-z]/{on=0} on && /^  [a-z][a-z0-9_-]*:$/{sub(":","",$1); print $1}' "$compose")
+  ((n > 0)) || { fail spooling_roles_have_stable_instance "no spooling service found"; return; }
+  ok spooling_roles_have_stable_instance
+}
+
+test_chromium_outside_interception_off() {
+  local run="$HERE/../chromium/run.sh" f
+  # Traffic Chromium could make outside Fetch interception: DNS prefetch, preconnect /
+  # network prediction, pings, background services.
+  for f in --dns-prefetch-disable '--disable-features=' NetworkPrediction --no-pings \
+    --disable-background-networking --disable-domain-reliability --no-proxy-server; do
+    grep -qF -- "$f" "$run" || { fail chromium_outside_interception_off "run.sh lacks $f"; return; }
+  done
+  ok chromium_outside_interception_off
+}
+
+test_fetcher_metrics_not_on_render_network() {
+  local compose="$HERE/../compose.yaml" otel="$HERE/../otelcol/config.yaml" fetcher chromium addr ip
+  fetcher="$(compose_service "$compose" fetcher)"
+  chromium="$(compose_service "$compose" chromium)"
+  # The fetcher shares the render network with Chromium: its /metrics must not listen there.
+  addr="$(sed -n 's/^      VC_OBS_METRICS_ADDR: *"\{0,1\}\([0-9.]*:9464\)"\{0,1\}$/\1/p' <<<"$fetcher")"
+  [[ -n "$addr" && "$addr" != 0.0.0.0:* ]] ||
+    { fail fetcher_metrics_not_on_render_network "fetcher metrics bound to all interfaces"; return; }
+  ip="${addr%:9464}"
+  grep -qE "ipv4_address: $ip( |\$)" <<<"$fetcher" ||
+    { fail fetcher_metrics_not_on_render_network "metrics address $ip is not the fetcher's pinned address"; return; }
+  grep -qF "\"$addr\"" "$otel" ||
+    { fail fetcher_metrics_not_on_render_network "otelcol does not scrape $addr"; return; }
+  grep -qF 'metrics' <<<"$(grep -E '^    networks:' <<<"$chromium")" &&
+    { fail fetcher_metrics_not_on_render_network "chromium joins the metrics network"; return; }
+  ok fetcher_metrics_not_on_render_network
 }
 
 for t in $(declare -F | awk '{print $3}' | grep '^test_'); do

@@ -8,6 +8,10 @@
 # network: it has no route out, and the fetcher answers every request it makes through CDP
 # Fetch interception, under the page's permit.
 #
+# Nothing should leave outside Fetch interception: DNS prefetch, preconnect/prediction,
+# prerendering, pings and the background services are off (the internal network is the hard
+# guarantee; these flags keep Chromium from even trying). Unknown feature names are ignored.
+#
 # The vc-render integration tests start the pinned image with exactly this script.
 set -eu
 
@@ -19,6 +23,13 @@ exec /headless-shell/headless-shell \
   --disable-gpu \
   --disable-dev-shm-usage \
   --disable-background-networking \
+  --dns-prefetch-disable \
+  --no-pings \
+  --no-proxy-server \
+  --disable-domain-reliability \
+  --disable-client-side-phishing-detection \
+  --disable-breakpad \
+  --disable-features=NetworkPrediction,Prerender2,PreconnectToSearch,OptimizationHints,MediaRouter,Translate,AutofillServerCommunication,CertificateTransparencyComponentUpdater,InterestFeedContentSuggestions \
   --disable-component-update \
   --disable-sync \
   --disable-default-apps \
