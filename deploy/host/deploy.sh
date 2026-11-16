@@ -10,6 +10,8 @@
 #   3. Pull by digest; make sure postgres + chromium run (pinned in compose).
 #   4. `vcrawl migrate` with the NEW image (expand-only: the running image
 #      keeps working on the new schema). Failure → held, nothing rolled.
+#      Then the image's io.voyager-crawler.min-schema label must not be above
+#      the database's schema (highest applied migration); else → held.
 #   5. Roll the roles one at a time (maintenance … api); after each, wait
 #      for its progress-based health check. Unhealthy → every rolled role
 #      goes back to the previous digest, and the new one is held.
@@ -135,6 +137,30 @@ verified() {
 
 label() { docker image inspect -f "{{ index .Config.Labels \"$2\" }}" "$1" 2>/dev/null || true; }
 
+# db_schema → the database's schema: the highest successfully applied expand
+# migration (sqlx's _sqlx_migrations), else the last recorded one
+db_schema() {
+  local v
+  v="$(vc_compose exec -T postgres psql -U vcrawl -d vcrawl -tAc \
+    "SELECT coalesce(max(version), 0) FROM _sqlx_migrations WHERE success" 2>/dev/null |
+    tr -d '[:space:]')" || v=""
+  [[ "$v" =~ ^[0-9]+$ ]] || v="$(cat "$VC_STATE/schema" 2>/dev/null || true)"
+  echo "$v"
+}
+
+# schema_too_new IMAGE → 0 (and a reason on stdout) when IMAGE's min-schema
+# label is above the database's schema; images without the label pass
+schema_too_new() {
+  local min db
+  min="$(label "$1" io.voyager-crawler.min-schema)"
+  db="$(db_schema)"
+  if [[ "$min" =~ ^[0-9]+$ && "$db" =~ ^[0-9]+$ ]] && ((10#$min > 10#$db)); then
+    echo "needs schema $min, the database is at $db"
+    return 0
+  fi
+  return 1
+}
+
 # ── Services ──────────────────────────────────────────────────────────────
 all_services() { echo "$VC_BASE_SERVICES $VC_ROLES"; }
 
@@ -191,9 +217,15 @@ record() {
   printf 'VC_IMAGE=%s\n' "$new" >"$tmp"
   mv -f "$tmp" "$VC_STATE/image.env"
   [[ -n "$prev" ]] && printf '%s\n' "$prev" >"$VC_STATE/previous"
-  local schema
+  # the database never goes back: keep the highest schema seen (a rollback
+  # target's label is lower than what its successor migrated to)
+  local schema old
   schema="$(label "$new" io.voyager-crawler.schema)"
-  [[ -n "$schema" ]] && printf '%s\n' "$schema" >"$VC_STATE/schema"
+  old="$(cat "$VC_STATE/schema" 2>/dev/null || true)"
+  if [[ "$schema" =~ ^[0-9]+$ ]]; then
+    [[ "$old" =~ ^[0-9]+$ ]] && ((10#$old > 10#$schema)) && schema="$old"
+    printf '%s\n' "$schema" >"$VC_STATE/schema"
+  fi
   return 0
 }
 
@@ -241,6 +273,10 @@ deploy_once() {
     hold "$new" "migrate failed"
     exit 1
   fi
+  if why="$(schema_too_new "$ref")"; then
+    hold "$new" "$why"
+    exit 1
+  fi
 
   # shellcheck disable=SC2086 # VC_ROLES is a list
   if ! touched="$(roll_to "$ref" $VC_ROLES)"; then
@@ -257,16 +293,14 @@ deploy_once() {
 }
 
 rollback() {
-  local cur target min schema touched
+  local cur target why touched
   cur="$(current_image)"
   target="$(cat "$VC_STATE/previous" 2>/dev/null || true)"
   [[ -n "$target" && "$target" != "$cur" ]] || die "no previous image to roll back to"
   docker pull -q "$target" >/dev/null || die "pull of $target failed"
   verified "$target" || die "$target no longer verifies: refusing"
-  min="$(label "$target" io.voyager-crawler.min-schema)"
-  schema="$(cat "$VC_STATE/schema" 2>/dev/null || true)"
-  if [[ "$min" =~ ^[0-9]+$ && "$schema" =~ ^[0-9]+$ ]] && ((10#$min > 10#$schema)); then
-    die "$target needs schema $min, the database is at $schema: refusing (§17.6)"
+  if why="$(schema_too_new "$target")"; then
+    die "$target $why: refusing (§17.6)"
   fi
   # shellcheck disable=SC2086 # VC_ROLES is a list
   touched="$(roll_to "$target" $VC_ROLES)" || die "rollback to $target unhealthy at: $touched"

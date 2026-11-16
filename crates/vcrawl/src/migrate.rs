@@ -44,6 +44,18 @@ pub fn schema_version() -> i64 {
     EXPAND.iter().map(|m| m.version).max().unwrap_or(0)
 }
 
+/// The lowest database schema this image runs against (`io.voyager-crawler.min-schema`):
+/// every expand migration it ships, since its queries may use any of them. `deploy.sh` refuses
+/// to run (or roll back to) an image whose min-schema is above the database's.
+pub fn min_schema_version() -> i64 {
+    schema_version()
+}
+
+/// `{"schema": …, "min_schema": …}` (`vcrawl migrate --print-schema`, read at image build time).
+pub fn schema_labels() -> serde_json::Value {
+    serde_json::json!({ "schema": schema_version(), "min_schema": min_schema_version() })
+}
+
 /// Runs the command.
 pub async fn run(ctx: Ctx, contract: bool) -> anyhow::Result<()> {
     let pool = crate::wiring::db::ops_pool(&ctx.cfg, 2).await?;
