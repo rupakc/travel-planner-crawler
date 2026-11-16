@@ -64,6 +64,7 @@ fn maint(pool: &sqlx::PgPool, store: Arc<dyn BlobStore>) -> Maintenance {
         metrics: None,
         partitions_ahead_months: 2,
         agentic: None,
+        ephemeral_days: 30,
     }
 }
 

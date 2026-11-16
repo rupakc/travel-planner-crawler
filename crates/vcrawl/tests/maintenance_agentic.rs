@@ -72,6 +72,7 @@ fn rig(pool: &sqlx::PgPool, store: Arc<MemBlobStore>, enabled: bool) -> Rig {
         metrics: None,
         partitions_ahead_months: 2,
         agentic: Some(agentic),
+        ephemeral_days: 30,
     };
     Rig {
         fake,

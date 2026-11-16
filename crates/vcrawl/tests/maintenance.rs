@@ -23,6 +23,7 @@ fn maint(pool: &sqlx::PgPool, store: Arc<MemBlobStore>) -> (Maintenance, Arc<Met
             metrics: Some(metrics.clone()),
             partitions_ahead_months: 2,
             agentic: None,
+            ephemeral_days: 30,
         },
         metrics,
     )
@@ -275,4 +276,55 @@ fn export_due_after_twelve_months() {
             "record_versions_202509".to_string()
         ]
     );
+}
+
+/// B10: a page whose final use policy (meta robots noarchive, found by the processor) says
+/// `raw: ephemeral` gets an expiry `store.ephemeral_days` after its capture and is cut out of
+/// its (archive) segment once that passes; an archived page is left alone.
+#[tokio::test]
+async fn noarchive_final_policy_routes_the_capture_to_expiry() {
+    let pool = testkit::pg().await;
+    let store = Arc::new(MemBlobStore::new());
+    let (m, _) = maint(&pool, store.clone());
+    let noarchive = meta("https://n.example/page", at(1, 1), None);
+    let archived = meta("https://n.example/other", at(1, 1), None);
+    let (n, a) = (noarchive.capture_ref(), archived.capture_ref());
+    commit_segment(
+        &pool,
+        &store,
+        SegmentId::at(at(1, 1)),
+        false,
+        &[entry(noarchive, "n"), entry(archived, "a")],
+    )
+    .await;
+    let mut p = vc_core::usepolicy::UsePolicy::ALLOW_ALL;
+    p.raw = vc_core::usepolicy::RawUse::Ephemeral;
+    vcrawl::data::capture::set_final_policy(&pool, &n, &p)
+        .await
+        .expect("final policy");
+    vcrawl::data::capture::set_final_policy(&pool, &a, &vc_core::usepolicy::UsePolicy::ALLOW_ALL)
+        .await
+        .expect("final policy");
+
+    // Before the window: routed, nothing cut.
+    assert_eq!(m.expire_ephemeral(at(2, 0)).await.expect("route"), (0, 0));
+    let exp: Option<chrono::DateTime<chrono::Utc>> =
+        sqlx::query_scalar("SELECT raw_expires_at FROM captures WHERE capture_id = $1")
+            .bind(n.capture_id.to_string())
+            .fetch_one(&pool)
+            .await
+            .expect("expiry");
+    assert_eq!(exp, Some(at(1, 1) + Duration::days(30)));
+    // After it: the noarchive capture is gone, the archived one stays.
+    assert_eq!(
+        m.expire_ephemeral(at(1, 1) + Duration::days(31))
+            .await
+            .expect("expire"),
+        (1, 1)
+    );
+    let left: Vec<String> = sqlx::query_scalar("SELECT capture_id FROM captures")
+        .fetch_all(&pool)
+        .await
+        .expect("q");
+    assert_eq!(left, vec![a.capture_id.to_string()]);
 }
