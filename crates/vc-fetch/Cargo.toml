@@ -31,4 +31,5 @@ url = { workspace = true }
 
 [dev-dependencies]
 testkit = { workspace = true }
+vc-policy = { workspace = true }
 wiremock = { workspace = true }

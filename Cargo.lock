@@ -5605,6 +5605,7 @@ dependencies = [
  "url",
  "vc-config",
  "vc-core",
+ "vc-policy",
  "wiremock",
 ]
 

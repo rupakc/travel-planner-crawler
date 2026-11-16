@@ -934,3 +934,129 @@ async fn stream_records_body_end_time() {
     );
     assert_eq!(claim.permit.requests_made(), requests, "no extra request");
 }
+
+// ---- Final-review fixes: credentials across authorities, mixed public/private DNS ----
+
+fn with_auth(mut req: FetchRequest) -> FetchRequest {
+    req.headers.insert(
+        http::header::AUTHORIZATION,
+        HeaderValue::from_static("Bearer s3cret"),
+    );
+    req
+}
+
+#[tokio::test]
+async fn authorization_dropped_on_port_change() {
+    let env = Env::new().await;
+    let other = MockServer::start().await;
+    let target =
+        CanonicalUrl::parse(&format!("http://site.test:{}/b", other.address().port())).unwrap();
+    Mock::given(path("/a"))
+        .respond_with(ResponseTemplate::new(302).insert_header("location", target.as_str()))
+        .mount(&env.server)
+        .await;
+    Mock::given(path("/b"))
+        .respond_with(
+            ResponseTemplate::new(200)
+                .insert_header("content-type", "application/json")
+                .set_body_string("{}"),
+        )
+        .mount(&other)
+        .await;
+    let u = env.url("site.test", "/a");
+    let claim = env.claim(&u, "", &["site.test"]).await;
+    env.frontier
+        .store_robots(
+            &claim.permit,
+            robots_ok(target.origin(), "", env.clock.now()),
+        )
+        .await
+        .unwrap();
+    let ex = env
+        .client
+        .fetch(
+            &claim.permit,
+            with_auth(FetchRequest::get(u, RequestPurpose::Api)),
+        )
+        .await
+        .unwrap();
+    assert_eq!(ex.url, target);
+    let first = env.server.received_requests().await.unwrap();
+    assert_eq!(
+        first[0].headers.get("authorization").unwrap(),
+        "Bearer s3cret"
+    );
+    let second = other.received_requests().await.unwrap();
+    assert_eq!(second.len(), 1);
+    assert!(
+        second[0].headers.get("authorization").is_none(),
+        "credentials leaked to another port"
+    );
+    assert!(ex.request_headers.get("authorization").is_none());
+}
+
+#[tokio::test]
+async fn authorization_kept_on_same_origin_redirect() {
+    let env = Env::new().await;
+    let target = env.url("site.test", "/b");
+    Mock::given(path("/a"))
+        .respond_with(ResponseTemplate::new(302).insert_header("location", target.as_str()))
+        .mount(&env.server)
+        .await;
+    Mock::given(path("/b"))
+        .respond_with(
+            ResponseTemplate::new(200)
+                .insert_header("content-type", "application/json")
+                .set_body_string("{}"),
+        )
+        .mount(&env.server)
+        .await;
+    let u = env.url("site.test", "/a");
+    let claim = env.claim(&u, "", &["site.test"]).await;
+    env.client
+        .fetch(
+            &claim.permit,
+            with_auth(FetchRequest::get(u, RequestPurpose::Api)),
+        )
+        .await
+        .unwrap();
+    let reqs = env.server.received_requests().await.unwrap();
+    assert_eq!(reqs.len(), 2);
+    for r in &reqs {
+        assert_eq!(r.headers.get("authorization").unwrap(), "Bearer s3cret");
+    }
+}
+
+#[tokio::test]
+async fn host_with_public_and_private_addresses_refused() {
+    // The first address is allowed (wiremock on loopback), the second is RFC 1918: the host
+    // is refused before any connection, whichever address would have been pinned.
+    let server = MockServer::start().await;
+    let clock = FakeClock::default();
+    let frontier = Arc::new(MemFrontier::new(Arc::new(clock.clone())));
+    let policy = Arc::new(StubPolicy::loopback_ok());
+    let resolver = StaticResolver::new()
+        .with("mixed.test", IpAddr::from(LOOPBACK))
+        .with("mixed.test", IpAddr::from([10, 0, 0, 5]));
+    let client = ReqwestPermitClient::new(FetchConfig::default(), frontier.clone(), policy)
+        .with_clock(Arc::new(clock.clone()))
+        .with_resolver(Arc::new(resolver));
+    Mock::given(path("/x"))
+        .respond_with(ResponseTemplate::new(200))
+        .mount(&server)
+        .await;
+    let u =
+        CanonicalUrl::parse(&format!("http://mixed.test:{}/x", server.address().port())).unwrap();
+    frontier.enqueue(&[NewUrl::new(u.clone())]).await.unwrap();
+    let claim = frontier.claim(&[0], 1).await.unwrap().unwrap();
+    frontier
+        .store_robots(&claim.permit, robots_ok(u.origin(), "", clock.now()))
+        .await
+        .unwrap();
+    let err = client.fetch(&claim.permit, page(u)).await.unwrap_err();
+    let FetchError::Ssrf(block) = err else {
+        panic!("expected Ssrf, got {err:?}");
+    };
+    assert_eq!(block.ip, IpAddr::from([10, 0, 0, 5]));
+    assert!(server.received_requests().await.unwrap().is_empty());
+}
