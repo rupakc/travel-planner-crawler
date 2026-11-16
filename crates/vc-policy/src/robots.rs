@@ -10,8 +10,8 @@
 //!   rule starts the next group. Lines other than `user-agent`/`allow`/`disallow`/
 //!   `crawl-delay` (sitemaps, unknown keys) never close a group. Rules before the first group
 //!   are ignored.
-//! - A `user-agent` value is the product token up to the first whitespace, compared
-//!   case-insensitively. Every group naming our token is merged; when none does, every `*` group
+//! - A `user-agent` value is the product token up to the first whitespace with any `/version`
+//!   suffix stripped (`VoyagerBot/1.0` names us), compared case-insensitively. Every group naming our token is merged; when none does, every `*` group
 //!   is merged; when there is none, nothing is disallowed.
 //! - Patterns and paths are normalised the same way before matching (non-ASCII bytes and unsafe
 //!   ASCII are percent-encoded, escapes of unreserved characters are decoded and the others
@@ -159,11 +159,7 @@ impl ParsedRobots {
                         current = Some(Group::default());
                         in_agents = true;
                     }
-                    let token = value
-                        .split(|c: char| c.is_ascii_whitespace())
-                        .next()
-                        .unwrap_or("")
-                        .to_ascii_lowercase();
+                    let token = product_token(value);
                     if !token.is_empty()
                         && let Some(g) = current.as_mut()
                     {
@@ -213,7 +209,7 @@ impl ParsedRobots {
 
     /// Whether some group names `agent` explicitly (not via `*`).
     pub fn names_agent(&self, agent: &str) -> bool {
-        let a = agent.to_ascii_lowercase();
+        let a = agent_token(agent);
         !a.is_empty() && self.groups.iter().any(|g| g.agents.contains(&a))
     }
 
@@ -221,7 +217,7 @@ impl ParsedRobots {
     pub fn rules_for(&self, agent: &str) -> AgentRules {
         let explicit = self.names_agent(agent);
         let want = if explicit {
-            agent.to_ascii_lowercase()
+            agent_token(agent)
         } else {
             "*".to_string()
         };
@@ -278,6 +274,24 @@ impl AgentRules {
     }
 }
 
+/// The product token of a `user-agent` value: up to the first whitespace, with a `/version`
+/// suffix stripped, lower-cased. `VoyagerBot/1.0 (+https://…)` → `voyagerbot`, so a group that
+/// names us with a version still applies (erring on the side of obeying).
+fn product_token(value: &str) -> String {
+    let first = value
+        .split(|c: char| c.is_ascii_whitespace())
+        .next()
+        .unwrap_or("");
+    first.split('/').next().unwrap_or("").to_ascii_lowercase()
+}
+
+/// The caller's agent name, lower-cased with any `/version…` suffix stripped. Unlike a
+/// `user-agent` line it is not cut at whitespace, so an invalid agent such as `Foo Bar` matches
+/// no group (Google's `AcceptUserAgentUpToFirstSpace` case).
+fn agent_token(agent: &str) -> String {
+    agent.split('/').next().unwrap_or("").to_ascii_lowercase()
+}
+
 fn hex(b: u8) -> Option<u8> {
     match b {
         b'0'..=b'9' => Some(b - b'0'),
@@ -291,8 +305,8 @@ fn unreserved(b: u8) -> bool {
     b.is_ascii_alphanumeric() || matches!(b, b'-' | b'.' | b'_' | b'~')
 }
 
-/// Normalises a pattern or a path for matching: non-ASCII, control, space and
-/// `" < > \` { }` bytes are percent-encoded; `%XX` escapes of unreserved characters are
+/// Normalises a pattern or a path for matching: non-ASCII, control, space, a `%` that starts
+/// no escape and `" < > \` { }` bytes are percent-encoded; `%XX` escapes of unreserved characters are
 /// decoded and other escapes upper-cased. `*` and `$` are kept. Idempotent.
 pub fn normalize(s: &str) -> String {
     const HEX: &[u8; 16] = b"0123456789ABCDEF";
@@ -316,7 +330,9 @@ pub fn normalize(s: &str) -> String {
             i += 3;
             continue;
         }
-        if c <= 0x20 || c >= 0x7F || matches!(c, b'"' | b'<' | b'>' | b'`' | b'{' | b'}') {
+        // A `%` that does not start an escape is encoded too: kept bare, it could combine with
+        // a decoded escape after it (`%7%39` → `%79`) and a second pass would differ.
+        if c <= 0x20 || c >= 0x7F || matches!(c, b'%' | b'"' | b'<' | b'>' | b'`' | b'{' | b'}') {
             out.push('%');
             out.push(HEX[usize::from(c >> 4)] as char);
             out.push(HEX[usize::from(c & 0xF)] as char);
