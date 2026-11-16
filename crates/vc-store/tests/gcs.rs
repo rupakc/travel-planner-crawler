@@ -89,25 +89,75 @@ async fn gcs_integration() {
     assert_eq!(recs[1].capture_id(), Some(id));
 }
 
-/// `list` and `delete` go through `StorageControl`, which speaks gRPC only; fake-gcs-server
-/// serves the JSON API only (it answers the HTTP/2 preface with 404). Run this against an
-/// emulator with gRPC (or real GCS) by setting `VC_TEST_GCS_ENDPOINT` and
-/// `cargo test -p vc-store --test gcs -- --ignored`.
+/// `list` and `delete` use the JSON API, so they run against fake-gcs-server too.
 #[tokio::test]
-#[ignore = "needs a gRPC-capable GCS endpoint (fake-gcs-server is JSON-only)"]
-async fn gcs_list_delete_grpc() {
+async fn gcs_list_delete() {
     let s = store().await;
     let run = ulid::Ulid::generate();
-    let p = format!("t/{run}/x");
-    let b = Bytes::from_static(b"x");
-    s.put_if_absent(&p, b.clone(), crc32c::crc32c(&b))
-        .await
-        .expect("put");
+    let names = [
+        format!("t/{run}/a"),
+        format!("t/{run}/b/c d+e%f"),
+        format!("t/{run}/b/ü"),
+        format!("t/{run}x/outside"),
+    ];
+    for n in &names {
+        let b = Bytes::from(n.clone().into_bytes());
+        s.put_if_absent(n, b.clone(), crc32c::crc32c(&b))
+            .await
+            .expect("put");
+    }
+    // Prefix filtering, sorted, special characters round-trip.
     assert_eq!(
         s.list(&format!("t/{run}/")).await.expect("list"),
-        vec![p.clone()]
+        names[..3].to_vec()
     );
-    s.delete(&p).await.expect("delete");
-    s.delete(&p).await.expect("delete missing is ok");
-    assert!(matches!(s.get(&p, None).await, Err(Error::NotFound(_))));
+    assert_eq!(
+        s.list(&format!("t/{run}/b/")).await.expect("list b"),
+        names[1..3].to_vec()
+    );
+    assert!(
+        s.list(&format!("t/{run}/none/"))
+            .await
+            .expect("list empty")
+            .is_empty()
+    );
+    // Pagination: one object per page still lists everything.
+    let paged = s.clone().with_list_page_size(1);
+    assert_eq!(
+        paged.list(&format!("t/{run}/")).await.expect("paged"),
+        names[..3].to_vec()
+    );
+
+    // Delete (names needing escapes included); deleting a missing object is fine.
+    s.delete(&names[1]).await.expect("delete");
+    s.delete(&names[1]).await.expect("delete missing is ok");
+    assert!(matches!(
+        s.get(&names[1], None).await,
+        Err(Error::NotFound(_))
+    ));
+    s.delete(&names[2]).await.expect("delete unicode");
+    assert_eq!(
+        s.list(&format!("t/{run}/")).await.expect("list after"),
+        vec![names[0].clone()]
+    );
+    // The neighbour outside the prefix is untouched.
+    assert_eq!(
+        s.get(&names[3], None).await.expect("outside"),
+        Bytes::from(names[3].clone().into_bytes())
+    );
+}
+
+/// A missing bucket is an error for list, not an empty listing.
+#[tokio::test]
+async fn gcs_list_missing_bucket_errors() {
+    let s = GcsBlobStore::new(
+        "vc-no-such-bucket",
+        GcsOptions {
+            endpoint: Some(fake_gcs().endpoint.clone()),
+            anonymous: true,
+        },
+    )
+    .await
+    .expect("client");
+    assert!(matches!(s.list("x/").await, Err(Error::Storage(_))));
 }

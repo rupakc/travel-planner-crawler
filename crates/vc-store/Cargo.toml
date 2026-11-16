@@ -32,6 +32,8 @@ chrono = { workspace = true }
 tracing = { workspace = true }
 thiserror = { workspace = true }
 http = { workspace = true }
+reqwest = { workspace = true }
+url = { workspace = true }
 
 [features]
 # Compiles the `fail` failpoints in (tests enable it through the dev-dependency below).
