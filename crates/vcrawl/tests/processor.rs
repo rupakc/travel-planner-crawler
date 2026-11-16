@@ -365,13 +365,13 @@ async fn reference_numbers_held_until_a_second_source_agrees() {
     };
     assert_eq!((rep.inserted, held, promoted), (0, 1, 0));
     assert_eq!(r.llm.calls(), 1);
-    assert_eq!(r.proc.pending().len(), 1);
+    assert_eq!(r.proc.pending().len().await.unwrap(), 1);
     assert_eq!(count(&r.pool, "SELECT count(*) FROM records").await, 0);
 
     // Redelivery of the same capture keeps one held record.
     r.llm.push_json(numbers());
     r.proc.process(&a).await.unwrap();
-    assert_eq!(r.proc.pending().len(), 1);
+    assert_eq!(r.proc.pending().len().await.unwrap(), 1);
 
     // A second, independent reference source agrees: it is accepted and the held one promoted.
     r.llm.push_json(numbers());
@@ -389,7 +389,7 @@ async fn reference_numbers_held_until_a_second_source_agrees() {
     let o = r.proc.process(&b).await.unwrap();
     let (rep, held, promoted, _, _) = processed(&o);
     assert_eq!((rep.inserted, held, promoted), (1, 0, 1));
-    assert!(r.proc.pending().is_empty());
+    assert!(r.proc.pending().is_empty().await.unwrap());
     let srcs: Vec<(String, bool)> = sqlx::query_as(
         "SELECT source_id, conflict FROM records WHERE kind = 'emergency_numbers' ORDER BY source_id",
     )
@@ -441,7 +441,7 @@ async fn disagreeing_reference_sources_stay_held() {
     let o = r.proc.process(&b).await.unwrap();
     let (rep, held, promoted, _, _) = processed(&o);
     assert_eq!((rep.inserted, held, promoted), (0, 1, 0));
-    assert_eq!(r.proc.pending().len(), 2);
+    assert_eq!(r.proc.pending().len().await.unwrap(), 2);
     assert_eq!(count(&r.pool, "SELECT count(*) FROM records").await, 0);
 }
 

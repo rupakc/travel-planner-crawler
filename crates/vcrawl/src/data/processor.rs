@@ -13,7 +13,8 @@
 //! **High-stakes kinds** (`visa_rule`, `advisory`, `emergency_numbers`): `vc-extract` refuses
 //! them from non-official classes before any model call. `emergency_numbers` from a `reference`
 //! source is held until a second independent official/reference source agrees: held records
-//! are fed back as peers ([`PendingPeers`]) and promoted once agreement is reached.
+//! are fed back as peers ([`PendingPeers`], the shared `held_records` table) and promoted once
+//! agreement is reached, by whichever processor instance sees the agreeing capture.
 
 use std::sync::Arc;
 use std::time::Duration;
@@ -113,9 +114,7 @@ pub struct Processor {
 
 impl std::fmt::Debug for Processor {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        f.debug_struct("Processor")
-            .field("pending", &self.pending.len())
-            .finish_non_exhaustive()
+        f.debug_struct("Processor").finish_non_exhaustive()
     }
 }
 
@@ -130,10 +129,11 @@ impl Processor {
     /// A processor with a 10-minute item lease.
     pub fn new(d: ProcessorDeps) -> Self {
         let sources = SourceCache::new(d.pool.clone());
+        let pending = PendingPeers::new(d.pool.clone());
         Processor {
             d,
             sources,
-            pending: PendingPeers::default(),
+            pending,
             lease: Duration::from_secs(600),
         }
     }
@@ -141,6 +141,12 @@ impl Processor {
     /// Replaces the source cache (tests use a zero TTL).
     pub fn with_sources(mut self, s: SourceCache) -> Self {
         self.sources = s;
+        self
+    }
+
+    /// Replaces the held-record set (tests use other limits).
+    pub fn with_pending(mut self, p: PendingPeers) -> Self {
+        self.pending = p;
         self
     }
 
@@ -265,12 +271,13 @@ impl Processor {
             .collect();
         for r in &out.records {
             self.pending
-                .release(&r.kind, &prov.source_id, &r.record_key)?;
+                .release(&r.kind, &prov.source_id, &r.record_key)
+                .await?;
         }
         let report = self.d.sink.upsert(out.records, &prov).await?;
         let held = out.pending.len();
         for r in out.pending {
-            self.pending.hold(r, prov.clone())?;
+            self.pending.hold(r, prov.clone()).await?;
         }
         let promoted = if accepted_high.is_empty() {
             0
@@ -306,7 +313,8 @@ impl Processor {
         let mut peers = index_peers(&self.d.pool, high, &prov.source_id).await?;
         peers.extend(
             self.pending
-                .of_kinds(high)?
+                .of_kinds(high)
+                .await?
                 .iter()
                 .filter(|h| h.provenance.source_id != prov.source_id)
                 .map(|h| h.as_peer()),
@@ -321,7 +329,7 @@ impl Processor {
             let Some(def) = self.d.kinds.get(kind) else {
                 continue;
             };
-            let held = self.pending.of_kinds(std::slice::from_ref(kind))?;
+            let held = self.pending.of_kinds(std::slice::from_ref(kind)).await?;
             for h in &held {
                 let need = match source_gate(def, h.provenance.source_class) {
                     Gate::NeedsAgreement(n) => n,
@@ -353,7 +361,8 @@ impl Processor {
                 rec.conflict = v.conflict;
                 self.d.sink.upsert(vec![rec], &h.provenance).await?;
                 self.pending
-                    .release(kind, &h.provenance.source_id, &h.record.record_key)?;
+                    .release(kind, &h.provenance.source_id, &h.record.record_key)
+                    .await?;
                 promoted += 1;
             }
         }

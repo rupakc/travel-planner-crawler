@@ -14,7 +14,7 @@ Every agent writes **only** the paths its task owns (spec §17.10, review r5 §(
    Never run `cargo update`. On a lock conflict: take `main`'s `Cargo.lock`, run
    `cargo metadata`, push.
 4. **Migrations** live in reserved blocks: frontier 11xx, store 12xx, queue 13xx, llm 14xx,
-   index 15xx, api 16xx, sources 17xx, ops 18xx. P0 owns 0001–0099. Editable until P3
+   index 15xx, api 16xx, sources 17xx, ops 18xx, vcrawl 19xx. P0 owns 0001–0099. Editable until P3
    (fresh databases only); after the first production deploy they are append-only,
    expand/contract, covered by the N-1 test.
 5. **Test fixtures.** A P1 task may edit its `testkit/src/<crate>_fixtures.rs` (crate name
@@ -56,7 +56,7 @@ different phases; phases do not overlap).
 | T13 | vc-queue, vc-obs, vc-secrets | those crates, `migrations/13xx`, `migrations/18xx` |
 | T14 | testkit full (fake web, fake Gemini, oracles) | `testkit/**` |
 | TD | deploy kit + bootstrap | `deploy/**` (including `deploy/chromium/**`), `infrastructure/**`, `.github/workflows/deploy.yml` |
-| T15 | vcrawl binary | `crates/vcrawl/**`, `migrations/contract/**` |
+| T15 | vcrawl binary | `crates/vcrawl/**`, `migrations/19xx`, `migrations/contract/**` |
 | T16 | E2E in CI | `e2e/**`, `.github/workflows/e2e.yml` |
 | T17 | agentic loops | `crates/vcrawl/src/agentic/**`, `prompts/agentic/**`, `docs/proposals/**` |
 | T18 | provisioning and go-live | `docs/runbooks/**`, `sources/**`, `BOT.md` (egress IP) |
@@ -182,6 +182,7 @@ td .github/workflows/prod-scan.yml
 t15 crates/vcrawl/*
 t15 crates/vc-config/src/sections/vcrawl.rs
 t15 migrations/contract/*
+t15 migrations/19*
 t15 testkit/fixtures/vcrawl/*
 t15 Dockerfile
 t15 .dockerignore
