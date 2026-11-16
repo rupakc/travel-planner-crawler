@@ -26,6 +26,14 @@ use crate::media::{FetchMode, MediaType};
 use crate::url::CanonicalUrl;
 use crate::usepolicy::{UsePolicy, UseSignals};
 
+/// A capture time as every store keeps it: whole microseconds. `Utc::now()` has nanoseconds on
+/// Linux, Postgres rounds them away, and the WARC header, CDXJ, the `capture_ready` payload and
+/// `captures.captured_at` must all hold the same instant (the partition key is matched exactly).
+pub fn capture_time(t: DateTime<Utc>) -> DateTime<Utc> {
+    use chrono::SubsecRound;
+    t.trunc_subsecs(6)
+}
+
 /// GCS prefix for archived WARC segments (`segments/YYYY/MM/DD/<ulid>.warc.zst`).
 pub const PREFIX_SEGMENTS: &str = "segments/";
 /// GCS prefix for `noarchive` / TDM-reserved captures (deleted after 30 days, never Coldline).

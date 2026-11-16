@@ -867,6 +867,7 @@ impl Fetcher {
         u: Option<&LeasedUrl>,
         now: DateTime<Utc>,
     ) -> CaptureMeta {
+        let now = vc_core::store::capture_time(now);
         CaptureMeta {
             capture_id: CaptureId::at(now),
             captured_at: now,

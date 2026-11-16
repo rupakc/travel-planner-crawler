@@ -262,6 +262,9 @@ pub struct Metrics {
     pub backup_restore_age_seconds: FloatGauge,
     /// `crawler_queue_items{kind,state}` (not alerted; for dashboards).
     pub queue_items: Family<Labels, Gauge>,
+    /// `crawler_processor_skipped_total{reason}`: captures the processor acked without
+    /// processing (`missing` should never happen in steady state).
+    pub processor_skipped: Family<Labels, Counter>,
 }
 
 impl Metrics {
@@ -285,6 +288,7 @@ impl Metrics {
         let host_units_failed = IntGauge::default();
         let backup_restore_age_seconds = FloatGauge::default();
         let queue_items = Family::<Labels, Gauge>::default();
+        let processor_skipped = Family::<Labels, Counter>::default();
 
         let help = |name: &str| {
             ALERT_METRICS
@@ -373,6 +377,11 @@ impl Metrics {
             "Work items per kind and state",
             queue_items.clone(),
         );
+        reg.register(
+            "crawler_processor_skipped",
+            "Captures the processor acked without processing, per reason",
+            processor_skipped.clone(),
+        );
 
         Metrics {
             clock,
@@ -396,7 +405,15 @@ impl Metrics {
             host_units_failed,
             backup_restore_age_seconds,
             queue_items,
+            processor_skipped,
         }
+    }
+
+    /// Counts one capture the processor skipped for `reason` (a fixed, low-cardinality name).
+    pub fn processor_skipped(&self, reason: &str) {
+        self.processor_skipped
+            .get_or_create(&vec![("reason".to_string(), reason.to_string())])
+            .inc();
     }
 
     /// Records a heartbeat of `role` now.
@@ -446,6 +463,23 @@ pub const CONTENT_TYPE: &str = prometheus_text::CONTENT_TYPE;
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    #[test]
+    fn processor_skips_are_counted_per_reason() {
+        let m = Metrics::new(Arc::new(vc_core::SystemClock), Duration::from_secs(180));
+        m.processor_skipped("missing");
+        m.processor_skipped("missing");
+        m.processor_skipped("no_source");
+        let text = m.encode();
+        assert!(
+            text.contains("crawler_processor_skipped_total{reason=\"missing\"} 2"),
+            "{text}"
+        );
+        assert!(
+            text.contains("crawler_processor_skipped_total{reason=\"no_source\"} 1"),
+            "{text}"
+        );
+    }
 
     #[test]
     fn unset_gauges_are_not_exported() {
