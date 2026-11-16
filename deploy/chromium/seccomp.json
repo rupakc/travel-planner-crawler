@@ -1530,6 +1530,44 @@
             "name": "writev",
             "action": "SCMP_ACT_ALLOW",
             "args": null
+        },
+        {
+            "names": [
+                "statx",
+                "membarrier",
+                "pidfd_open",
+                "pidfd_send_signal",
+                "pidfd_getfd",
+                "copy_file_range",
+                "epoll_pwait2",
+                "futex_waitv",
+                "mlock2",
+                "pkey_alloc",
+                "pkey_free",
+                "pkey_mprotect",
+                "preadv2",
+                "pwritev2",
+                "close_range",
+                "faccessat2",
+                "fchmodat2",
+                "openat2",
+                "rseq",
+                "personality",
+                "map_shadow_stack",
+                "landlock_create_ruleset",
+                "landlock_add_rule",
+                "landlock_restrict_self"
+            ],
+            "action": "SCMP_ACT_ALLOW",
+            "args": []
+        },
+        {
+            "names": [
+                "clone3"
+            ],
+            "action": "SCMP_ACT_ERRNO",
+            "errnoRet": 38,
+            "args": []
         }
     ]
 }
