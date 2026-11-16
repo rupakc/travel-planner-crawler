@@ -1,0 +1,31 @@
+# E2E source (plan Task 16): the fake web's hostile site. Never deployed.
+id: e2e-hostile
+name: E2E hostile
+category: blogs
+source_class: editorial
+licence:
+  class: facts_only
+  spdx: null
+  attribution: E2E fake web
+  url: null
+method: html
+seeds: [http://hostile.test/, http://hostile.test/guide]
+sitemaps: []
+feeds: []
+adapter: null
+include: []
+exclude: []
+max_depth: 1
+kinds: [article]
+llm_kinds: []
+render: never
+cadence: hourly
+min_delay_s: 5
+daily_budget: 3000
+politeness_key: null
+enabled: true
+needs_key: false
+key_secret: null
+max_retention_days: null
+display_requirements: null
+notes: "Every page is a bot challenge: detect and park, never retry"

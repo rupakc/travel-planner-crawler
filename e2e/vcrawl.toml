@@ -1,0 +1,48 @@
+# vcrawl configuration for the E2E stack (plan Task 16; VC_CONFIG=/e2e/vcrawl.toml).
+# Production defaults everywhere except what points at the fakes or makes cycles short.
+# Politeness settings are NOT relaxed: the 5 s floor, Crawl-delay, parks and the 250 ms
+# sub-resource gap are exactly production's, and the oracle checks them.
+
+[database]
+url = "postgres://vcrawl:e2e@postgres:5432/vcrawl"
+password_secret = "crawler-pg-password"       # also VC_SECRET_CRAWLER_PG_PASSWORD (compose)
+
+[secrets]
+backend = "env"                                # VC_SECRET_* (compose; TLS PEMs from run.sh)
+
+[policy]
+denylist_path = "/e2e/policy/denylist.yaml"
+subresource_allowlist_path = "/e2e/policy/subresource_allowlist.yaml"
+robots_ttl_s = 30                              # the blog's robots.txt changes in cycle 2
+
+[sources]
+dir = "/e2e/sources"
+
+[render]
+enabled = true
+cdp_url = "http://chromium:9222"
+cache_dir = "/tmp/render-cache"
+
+[store]
+spool_dir = "/spool"
+segment_max_age_s = 10                         # seal quickly so captures commit within a cycle
+backend = "gcs"
+gcs_endpoint = "http://fake-gcs:4443"
+gcs_anonymous = true
+raw_bucket = "e2e-raw"
+ops_bucket = "e2e-ops"
+zstd_level = 3
+
+[llm]
+# Off, as in production by default (CLAUDE.md rule 9). fake-gemini runs in the stack for
+# the day extraction is exercised end to end; nothing may reach Vertex from E2E.
+enabled = false
+api_endpoint = "http://fake-gemini:8080"
+batch_bucket = "e2e-batch"
+
+[api]
+bind = "0.0.0.0:8443"
+
+[vcrawl]
+data_dir = "/tmp/vcrawl"
+scheduler_interval_s = 10                      # seed/enqueue/robots refresh within a cycle

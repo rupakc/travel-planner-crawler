@@ -1,0 +1,7 @@
+# Build context of e2e/Dockerfile (the repo root): sources only, plus the prebuilt
+# binaries in e2e/.bin when BINS=prebuilt.
+.git
+target
+e2e/runner/target
+e2e/out
+**/*.profraw
