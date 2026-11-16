@@ -57,6 +57,11 @@ impl RequestLog {
         m
     }
 
+    /// Removes every entry (fake-web reset).
+    pub(crate) fn clear(&self) {
+        self.0.lock().expect("request log lock").clear();
+    }
+
     /// Number of entries.
     pub fn len(&self) -> usize {
         self.0.lock().expect("request log lock").len()

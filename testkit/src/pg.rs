@@ -26,8 +26,8 @@ pub static MIGRATOR: sqlx::migrate::Migrator = sqlx::migrate!("../migrations");
 
 const IMAGE: &str = "pgvector/pgvector";
 const TAG: &str = "pg17";
-const LABEL: &str = "io.voyager.testkit";
-const LABEL_PID: &str = "io.voyager.testkit.pid";
+pub(crate) const LABEL: &str = "io.voyager.testkit";
+pub(crate) const LABEL_PID: &str = "io.voyager.testkit.pid";
 
 struct Server {
     admin: PgConnectOptions,
@@ -91,7 +91,7 @@ fn start_server() -> Server {
 }
 
 /// Removes containers left behind by test processes that no longer exist. Best effort.
-fn reap_orphans() {
+pub(crate) fn reap_orphans() {
     let out = std::process::Command::new("docker")
         .args([
             "ps",
