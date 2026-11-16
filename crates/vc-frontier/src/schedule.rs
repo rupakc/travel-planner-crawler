@@ -130,11 +130,11 @@ pub fn next_key_state(cfg: &FrontierConfig, row: &KeyRow, o: &KeyOutcome) -> Nex
             r.consecutive_5xx = 0;
         }
         KeySignal::RateLimited { retry_after } => {
+            // ×2 back-off on every 429/503; a `Retry-After` only ever lengthens it (a short
+            // one on a repeated 429 must not cancel the back-off already earned). ≤ 24 h.
             let base = delay_ms(cfg, &r).max(1000);
-            let p = match retry_after {
-                Some(ra) => ms(*ra),
-                None => r.penalty_ms.saturating_mul(2).max(base.saturating_mul(2)),
-            };
+            let doubled = r.penalty_ms.saturating_mul(2).max(base.saturating_mul(2));
+            let p = retry_after.map_or(doubled, |ra| ms(ra).max(doubled));
             r.penalty_ms = p.clamp(0, max_backoff);
         }
         KeySignal::ServerErrors { consecutive } => {
@@ -250,5 +250,50 @@ mod tests {
         };
         let s = next_key_state(&c, &small, &KeyOutcome::normal());
         assert_eq!(s.penalty_ms, 0);
+    }
+
+    /// A short `Retry-After` on a repeated 429 never cancels the back-off already earned: the
+    /// penalty is `max(Retry-After, 2 × previous penalty, 2 × delay)`, capped at 24 h.
+    #[test]
+    fn repeated_429_short_retry_after_keeps_doubling() {
+        let c = cfg();
+        let row = KeyRow {
+            min_delay_ms: 5000,
+            penalty_ms: 600_000,
+            ..KeyRow::default()
+        };
+        let mut o = KeyOutcome::normal();
+        o.signal = KeySignal::RateLimited {
+            retry_after: Some(Duration::from_secs(1)),
+        };
+        let s = next_key_state(&c, &row, &o);
+        assert_eq!(
+            s.penalty_ms, 1_200_000,
+            "2 × previous penalty wins over 1 s"
+        );
+        // First 429 with a short Retry-After: at least twice the delay.
+        let fresh = KeyRow {
+            min_delay_ms: 5000,
+            ..KeyRow::default()
+        };
+        assert_eq!(next_key_state(&c, &fresh, &o).penalty_ms, 10_000);
+        // A long Retry-After is honoured as is.
+        o.signal = KeySignal::RateLimited {
+            retry_after: Some(Duration::from_secs(7200)),
+        };
+        assert_eq!(next_key_state(&c, &row, &o).penalty_ms, 7_200_000);
+        // Capped at 24 h, whatever the server says or the ladder reaches.
+        let high = KeyRow {
+            penalty_ms: 20 * 3_600_000,
+            ..row
+        };
+        o.signal = KeySignal::RateLimited {
+            retry_after: Some(Duration::from_secs(1)),
+        };
+        assert_eq!(next_key_state(&c, &high, &o).penalty_ms, 24 * 3_600_000);
+        o.signal = KeySignal::RateLimited {
+            retry_after: Some(Duration::from_secs(40 * 3600)),
+        };
+        assert_eq!(next_key_state(&c, &row, &o).penalty_ms, 24 * 3_600_000);
     }
 }
