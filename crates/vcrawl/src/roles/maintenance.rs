@@ -6,7 +6,7 @@
 //! | job | every | what |
 //! |---|---|---|
 //! | partitions | 6 h | `vc_ensure_partitions(vcrawl.partitions_ahead_months)` |
-//! | purge | 15 min | advances every unfinished `purge_requests` row (index → raw → done) |
+//! | purge | 15 min | deletes leftover `store_garbage` objects; advances every unfinished `purge_requests` row (index → raw → done) |
 //! | ephemeral expiry | 1 h | cuts captures past `raw_expires_at` (noarchive / TDM) out of their segments |
 //! | restore drill | 7 d | rebuilds the newest segments' rows from their CDXJ in memory and compares them with the database; exports `restore_drill_ok` |
 //! | digest | 1 h | writes yesterday's `crawl_digest` row once (parked keys, statuses, yields, spend) |
