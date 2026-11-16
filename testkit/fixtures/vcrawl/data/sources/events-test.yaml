@@ -1,0 +1,33 @@
+id: events-test
+name: Events Test
+category: events
+source_class: editorial
+licence:
+  class: facts_only
+  spdx: null
+  attribution: Events Test
+  url: null
+method: html
+seeds:
+- https://events.example.org/
+sitemaps: []
+feeds: []
+adapter: null
+include: []
+exclude:
+- /private/
+max_depth: 2
+kinds:
+- event
+llm_kinds: []
+render: never
+cadence: daily
+min_delay_s: 5
+daily_budget: 100
+politeness_key: null
+enabled: true
+needs_key: false
+key_secret: null
+max_retention_days: null
+display_requirements: null
+notes: Test fixture.

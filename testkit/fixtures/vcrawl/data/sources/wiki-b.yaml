@@ -1,0 +1,32 @@
+id: wiki-b
+name: Reference wiki-b
+category: reference
+source_class: reference
+licence:
+  class: share_alike
+  spdx: CC-BY-SA-4.0
+  attribution: Reference wiki-b contributors
+  url: https://wiki-b.example.org/licence
+method: html
+seeds:
+- https://wiki-b.example.org/
+sitemaps: []
+feeds: []
+adapter: null
+include: []
+exclude: []
+max_depth: 1
+kinds: []
+llm_kinds:
+- emergency_numbers
+render: never
+cadence: weekly
+min_delay_s: 5
+daily_budget: 100
+politeness_key: null
+enabled: true
+needs_key: false
+key_secret: null
+max_retention_days: null
+display_requirements: null
+notes: Test fixture.

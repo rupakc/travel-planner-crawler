@@ -1,0 +1,33 @@
+id: blog-test
+name: Blog Test
+category: blog
+source_class: editorial
+licence:
+  class: facts_only
+  spdx: null
+  attribution: Blog Test
+  url: null
+method: html
+seeds:
+- https://blog.example.org/
+sitemaps: []
+feeds: []
+adapter: null
+include: []
+exclude: []
+max_depth: 1
+kinds: []
+llm_kinds:
+- visa_rule
+- emergency_numbers
+render: never
+cadence: weekly
+min_delay_s: 5
+daily_budget: 100
+politeness_key: null
+enabled: true
+needs_key: false
+key_secret: null
+max_retention_days: null
+display_requirements: null
+notes: Test fixture.

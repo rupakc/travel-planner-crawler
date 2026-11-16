@@ -9,6 +9,7 @@
 pub mod admin;
 pub mod agentic;
 pub mod ctx;
+pub mod data;
 pub mod health;
 pub mod migrate;
 pub mod roles;
