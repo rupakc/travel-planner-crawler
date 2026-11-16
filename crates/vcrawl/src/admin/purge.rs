@@ -461,6 +461,7 @@ pub async fn remove_captures(
                 record_count: 0,
                 kept: vec![],
                 removed: segment_captures(pool, seg).await?,
+                abandoned: vec![],
             },
             Err(e) => return Err(e.into()),
         };

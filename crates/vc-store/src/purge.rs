@@ -58,7 +58,14 @@ pub struct SegmentRewrite {
     pub kept: Vec<KeptCapture>,
     /// Removed captures.
     pub removed: Vec<CaptureRef>,
+    /// Objects of uncommitted generations this rewrite stepped over (a rewrite that crashed
+    /// before its commit, with another removal set): garbage once this rewrite commits.
+    #[serde(default)]
+    pub abandoned: Vec<String>,
 }
+
+/// How many occupied generations a rewrite steps over before giving up.
+pub const MAX_GENERATION_TRIES: u32 = 16;
 
 /// Rewrites the segment at `path` (CDXJ at `cdxj_path`) without the captures in `remove`, and
 /// uploads the new objects. The database and the old objects are untouched (see the module
@@ -114,15 +121,41 @@ pub async fn rewrite_segment_without(
             record_count: 0,
             kept,
             removed,
+            abandoned: vec![],
         });
     }
-    let generation = rewrite_generation(path) + 1;
-    let (new_path, new_cdxj_path) = segment_paths_gen(segment_id, is_ephemeral(path), generation);
-    let cdxj = cdxj_for(&new_path, &caps, &records)?;
     let crc = crc32c::crc32c(&bytes);
     let n = bytes.len() as u64;
-    upload(store, &new_path, Bytes::from(bytes)).await?;
-    upload(store, &new_cdxj_path, Bytes::from(cdxj)).await?;
+    let bytes = Bytes::from(bytes);
+    let mut abandoned = Vec::new();
+    let mut generation = rewrite_generation(path);
+    let (new_path, new_cdxj_path) = loop {
+        generation += 1;
+        if generation > rewrite_generation(path) + MAX_GENERATION_TRIES {
+            return Err(Error::Conflict(format!(
+                "{path}: {MAX_GENERATION_TRIES} rewrite generations occupied"
+            )));
+        }
+        let (p, c) = segment_paths_gen(segment_id, is_ephemeral(path), generation);
+        // An object already at this generation with other bytes is an uncommitted rewrite
+        // (the committed one is `path`): step over it and report it for deletion.
+        match upload(store, &p, bytes.clone()).await {
+            Ok(_) => {}
+            Err(Error::Conflict(_)) => {
+                abandoned.extend([p, c]);
+                continue;
+            }
+            Err(e) => return Err(e),
+        }
+        let cdxj = cdxj_for(&p, &caps, &records)?;
+        match upload(store, &c, Bytes::from(cdxj)).await {
+            Ok(_) => break (p, c),
+            Err(Error::Conflict(_)) => {
+                abandoned.extend([p, c]);
+            }
+            Err(e) => return Err(e),
+        }
+    };
     tracing::info!(
         segment = %segment_id,
         kept = kept.len(),
@@ -140,6 +173,7 @@ pub async fn rewrite_segment_without(
         record_count,
         kept,
         removed,
+        abandoned,
     })
 }
 

@@ -185,7 +185,9 @@ fn encode_frame(meta: &FrameMeta, warc: &[u8]) -> Result<Vec<u8>> {
 
 #[derive(Debug)]
 struct OpenFile {
-    file: File,
+    /// `None` after a seal renamed the file but could not open its successor: the next append
+    /// opens it, so nothing is ever appended to a sealed file.
+    file: Option<File>,
     bytes: u64,
     first_at: Option<DateTime<Utc>>,
 }
@@ -255,7 +257,7 @@ impl Spool {
             file.sync_all()?;
         }
         Ok(OpenFile {
-            file,
+            file: Some(file),
             bytes: good as u64,
             first_at: entries.first().map(|e| e.meta.captured_at),
         })
@@ -289,27 +291,45 @@ impl Spool {
         } else {
             &mut st.archive
         };
+        if of.file.is_none() {
+            of.file = Some(Self::create_open(&self.dir, ephemeral)?);
+        }
+        let Some(file) = of.file.as_mut() else {
+            return Err(Error::Storage("spool: no open file".into()));
+        };
         let written = (|| -> Result<()> {
-            of.file.write_all(&frame)?;
+            file.write_all(&frame)?;
             fail::fail_point!("spool::before_fsync", |_| Err(Error::Storage(
                 "failpoint spool::before_fsync".into()
             )));
-            of.file.sync_data()?;
+            file.sync_data()?;
             Ok(())
         })();
         if let Err(e) = written {
             // Not acknowledged: cut the partial frame so it can never be published.
-            let _ = of.file.set_len(of.bytes);
-            let _ = of.file.sync_data();
+            let _ = file.set_len(of.bytes);
+            let _ = file.sync_data();
             return Err(e);
         }
         of.bytes += frame.len() as u64;
         of.first_at.get_or_insert(r.meta.captured_at);
+        // The frame is durable from here on: the append is acknowledged whatever happens to
+        // the seal (a full file is sealed again by the next `seal_due`).
         let full = of.bytes >= self.opts.max_bytes;
-        if full {
-            self.seal_locked(&mut st, ephemeral)?;
+        if full && let Err(e) = self.seal_locked(&mut st, ephemeral) {
+            tracing::warn!(error = %e, "spool: seal after append failed; retried by seal_due");
         }
         Ok(r.meta.capture_id)
+    }
+
+    fn create_open(dir: &Path, ephemeral: bool) -> Result<File> {
+        let file = OpenOptions::new()
+            .create(true)
+            .read(true)
+            .append(true)
+            .open(Self::open_path(dir, ephemeral))?;
+        sync_dir(dir)?;
+        Ok(file)
     }
 
     fn seal_locked(&self, st: &mut State, ephemeral: bool) -> Result<Option<SealedSpool>> {
@@ -324,24 +344,25 @@ impl Spool {
         fail::fail_point!("spool::before_seal", |_| Err(Error::Storage(
             "failpoint spool::before_seal".into()
         )));
-        of.file.sync_all()?;
+        if let Some(f) = &of.file {
+            f.sync_all()?;
+        }
         let segment_id = SegmentId::at(self.clock.now());
         let sealed = self
             .dir
             .join(format!("{}-{segment_id}.sealed", class_name(ephemeral)));
         let open = Self::open_path(&self.dir, ephemeral);
         fs::rename(&open, &sealed)?;
-        let file = OpenOptions::new()
-            .create(true)
-            .read(true)
-            .append(true)
-            .open(&open)?;
-        sync_dir(&self.dir)?;
+        // The old handle now names the sealed file: drop it before anything else can fail.
         *of = OpenFile {
-            file,
+            file: None,
             bytes: 0,
             first_at: None,
         };
+        fail::fail_point!("spool::after_rename", |_| Err(Error::Storage(
+            "failpoint spool::after_rename".into()
+        )));
+        of.file = Some(Self::create_open(&self.dir, ephemeral)?);
         Ok(Some(SealedSpool {
             path: sealed,
             segment_id,

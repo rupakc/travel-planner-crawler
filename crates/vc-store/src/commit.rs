@@ -4,9 +4,10 @@
 use async_trait::async_trait;
 use sqlx::PgPool;
 use vc_core::store::{SegmentCommitter, SegmentManifest};
-use vc_core::{Error, Result};
+use vc_core::{Error, Result, SegmentId};
 
 use crate::purge::SegmentRewrite;
+use crate::segment::CommitProbe;
 
 /// Commits segments through `vc_commit_segment(jsonb)`.
 #[derive(Debug, Clone)]
@@ -50,5 +51,16 @@ impl SegmentCommitter for PgSegmentCommitter {
             tracing::debug!(segment = %m.segment_id, "store: segment already committed");
         }
         Ok(())
+    }
+}
+
+#[async_trait]
+impl CommitProbe for PgSegmentCommitter {
+    async fn is_committed(&self, segment: SegmentId) -> Result<bool> {
+        sqlx::query_scalar("SELECT EXISTS (SELECT 1 FROM segments WHERE segment_id = $1)")
+            .bind(segment.to_string())
+            .fetch_one(&self.pool)
+            .await
+            .map_err(db)
     }
 }
