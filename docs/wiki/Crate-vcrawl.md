@@ -6,9 +6,10 @@ implementations rather than only on `vc-core` traits.
 
 Path: `crates/vcrawl`. Dependencies: `clap`, `tokio`, `anyhow`, `sqlx`, `fail`.
 
-> **Status: stub, being wired now (plan Task 15).** Today `vcrawl <role>` loads the
-> configuration and exits with "role … is not wired yet". This page describes the planned
-> behaviour from the plan and the deploy contract.
+> **Status: skeleton, being wired now (plan Task 15).** The module layout exists
+> (`src/roles/<role>.rs`, `src/admin/`, `src/agentic/`, `src/migrate.rs`, `src/health.rs`,
+> shared context in `src/ctx.rs`), but every command still exits with "… is not wired yet".
+> This page describes the planned behaviour from the plan and the deploy contract.
 
 ## Roles (planned)
 
