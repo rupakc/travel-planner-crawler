@@ -1,9 +1,7 @@
-//! # vcrawl (Task 15, stub)
-//!
-//! The single binary: roles `scheduler`, `fetcher`, `processor`, `embedder`, `api`,
-//! `maintenance`, `admin`, `migrate`. Only this crate depends on implementations.
+//! `vcrawl` entry point: parses the CLI and dispatches to a role. See `lib.rs`.
 
 use clap::{Parser, Subcommand};
+use vcrawl::{Ctx, admin, health, migrate, roles};
 
 /// The Voyager crawler.
 #[derive(Debug, Parser)]
@@ -27,12 +25,32 @@ enum Role {
     Api,
     /// Partitions, purge, drills, digest.
     Maintenance,
+    /// Operator commands.
+    #[command(subcommand)]
+    Admin(admin::AdminCmd),
     /// Applies migrations.
-    Migrate,
+    Migrate {
+        /// Apply contract (destructive) migrations.
+        #[arg(long)]
+        contract: bool,
+    },
+    /// Container health check.
+    Health,
 }
 
-fn main() -> anyhow::Result<()> {
+#[tokio::main]
+async fn main() -> anyhow::Result<()> {
     let cli = Cli::parse();
-    let _cfg = vc_config::Config::load(None)?;
-    anyhow::bail!("role {:?} is not wired yet (Task 15)", cli.role)
+    let ctx = Ctx::new(vc_config::Config::load(None)?);
+    match cli.role {
+        Role::Scheduler => roles::scheduler::run(ctx).await,
+        Role::Fetcher => roles::fetcher::run(ctx).await,
+        Role::Processor => roles::processor::run(ctx).await,
+        Role::Embedder => roles::embedder::run(ctx).await,
+        Role::Api => roles::api::run(ctx).await,
+        Role::Maintenance => roles::maintenance::run(ctx).await,
+        Role::Admin(cmd) => admin::run(ctx, cmd).await,
+        Role::Migrate { contract } => migrate::run(ctx, contract).await,
+        Role::Health => health::run(ctx).await,
+    }
 }
