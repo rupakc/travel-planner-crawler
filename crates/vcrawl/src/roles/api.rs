@@ -18,6 +18,7 @@ use crate::wiring;
 
 /// Runs the `api` role until shutdown.
 pub async fn run(ctx: Ctx) -> anyhow::Result<()> {
+    wiring::obs::init_tracing(&ctx, "api");
     let cfg = ctx.cfg.clone();
     let secrets = wiring::sources::secrets(&cfg);
     // TLS first: without a certificate there is nothing to serve.

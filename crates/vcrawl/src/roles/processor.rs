@@ -35,6 +35,7 @@ const IDLE: Duration = Duration::from_secs(2);
 
 /// Runs the `processor` role until shutdown.
 pub async fn run(ctx: Ctx) -> anyhow::Result<()> {
+    wiring::obs::init_tracing(&ctx, "processor");
     let cfg = ctx.cfg.clone();
     let mut stop = shutdown::channel();
     let pool = ctx.pool().await?;
