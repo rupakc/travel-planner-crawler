@@ -202,17 +202,46 @@ pub(crate) async fn append_manifest(
 }
 
 /// Maps a non-2xx status (already spooled) to an error: 401/403 → challenge (the caller
-/// parks the key, never retries with another identity); 404/410 → not found; 429/5xx →
-/// transient.
+/// parks the key, never retries with another identity); 404/410 → not found; 429/503 → rate
+/// limited with the parsed `Retry-After` (the caller backs the key off); other 5xx → server
+/// error (counts toward the key's consecutive-5xx park).
 pub(crate) fn check_status(ex: &Exchange) -> Result<()> {
     let s = ex.status.as_u16();
     match s {
         200..=299 => Ok(()),
         401 | 403 => Err(Error::Fetch(FetchError::Challenge { status: s })),
         404 | 410 => Err(Error::NotFound(format!("http {s}"))),
-        429 | 500..=599 => Err(Error::Fetch(FetchError::Transport(format!("http {s}")))),
+        429 | 503 => Err(Error::Fetch(FetchError::RateLimited {
+            status: s,
+            retry_after: retry_after(ex),
+        })),
+        500..=599 => Err(Error::Fetch(FetchError::ServerError { status: s })),
         _ => Err(Error::Invalid(format!("unexpected http {s}"))),
     }
+}
+
+/// The `Retry-After` of a response (RFC 9110 §10.2.3: delay-seconds or an HTTP-date, relative
+/// to when the response ended; a past date is zero). Anything else is `None`.
+pub(crate) fn retry_after(ex: &Exchange) -> Option<std::time::Duration> {
+    let v = ex.response_headers.get("retry-after")?.to_str().ok()?;
+    parse_retry_after(v, ex.ended_at.max(chrono::Utc::now()))
+}
+
+/// Parses a `Retry-After` value relative to `now`.
+pub(crate) fn parse_retry_after(
+    value: &str,
+    now: chrono::DateTime<chrono::Utc>,
+) -> Option<std::time::Duration> {
+    let v = value.trim();
+    if !v.is_empty() && v.bytes().all(|b| b.is_ascii_digit()) {
+        return v.parse::<u64>().ok().map(std::time::Duration::from_secs);
+    }
+    let at = chrono::DateTime::parse_from_rfc2822(v).ok()?;
+    Some(
+        (at.with_timezone(&chrono::Utc) - now)
+            .to_std()
+            .unwrap_or_default(),
+    )
 }
 
 /// Resolves `path_and_query` against the leased URL's origin (follow-ups never leave the

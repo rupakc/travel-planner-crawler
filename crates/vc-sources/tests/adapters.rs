@@ -1026,6 +1026,55 @@ async fn wikivoyage_truncated_dump_is_incomplete() {
     assert!(m[0]["sha256"].is_null());
 }
 
+/// A dump answered 429/503 is a key-level rate limit with its `Retry-After`; another 5xx a
+/// server error (both after the manifest is spooled).
+#[tokio::test]
+async fn dump_rate_limit_and_server_error_are_typed() {
+    use vc_core::fetch::FetchError;
+    for (reply, want_rl) in [
+        (
+            ResponseTemplate::new(429).insert_header("retry-after", "90"),
+            true,
+        ),
+        (ResponseTemplate::new(500), false),
+    ] {
+        let s = MockServer::start().await;
+        Mock::given(method("GET"))
+            .respond_with(reply)
+            .mount(&s)
+            .await;
+        let mut h = Harness::new(
+            spec("wikivoyage-dump"),
+            "wikivoyage_dump",
+            &format!("{}/wv.xml.bz2", s.uri()),
+            t0(),
+        )
+        .await;
+        let err = h
+            .run(&adapters::wikivoyage_dump::WikivoyageDump::DEFAULT)
+            .await
+            .unwrap_err();
+        if want_rl {
+            assert!(
+                matches!(
+                    err,
+                    Error::Fetch(FetchError::RateLimited {
+                        status: 429,
+                        retry_after: Some(d),
+                    }) if d == Duration::from_secs(90)
+                ),
+                "{err:?}"
+            );
+        } else {
+            assert!(
+                matches!(err, Error::Fetch(FetchError::ServerError { status: 500 })),
+                "{err:?}"
+            );
+        }
+        assert_eq!(h.manifests()[0]["complete"], false);
+    }
+}
+
 #[tokio::test]
 async fn se_travel_dump_parses_fixture() {
     let s = MockServer::start().await;
@@ -1271,6 +1320,58 @@ async fn http_errors_are_spooled_then_reported() {
         .unwrap_err();
     assert_eq!(err.class(), vc_core::ErrorClass::Transient);
     assert_eq!(h.responses()[0].status.as_u16(), 503);
+}
+
+/// 429/503 from an API are a key-level rate limit carrying `Retry-After` (seconds or an
+/// HTTP-date), never a per-URL transport error; another 5xx counts toward the consecutive-5xx
+/// park.
+#[tokio::test]
+async fn rate_limits_and_server_errors_are_typed() {
+    use vc_core::fetch::FetchError;
+    async fn run(reply: ResponseTemplate) -> Error {
+        let s = MockServer::start().await;
+        Mock::given(method("GET"))
+            .respond_with(reply)
+            .mount(&s)
+            .await;
+        let mut h = Harness::new(
+            spec("canada-travel-json"),
+            "canada_advisories",
+            &format!("{}/i.json", s.uri()),
+            t0(),
+        )
+        .await;
+        h.run(&adapters::canada_advisories::CanadaAdvisories)
+            .await
+            .unwrap_err()
+    }
+    match run(ResponseTemplate::new(429).insert_header("retry-after", "120")).await {
+        Error::Fetch(FetchError::RateLimited {
+            status: 429,
+            retry_after: Some(d),
+        }) => assert_eq!(d, Duration::from_secs(120)),
+        other => panic!("429: {other:?}"),
+    }
+    let at = chrono::Utc::now() + chrono::Duration::seconds(600);
+    let date = at.format("%a, %d %b %Y %H:%M:%S GMT").to_string();
+    match run(ResponseTemplate::new(503).insert_header("retry-after", date.as_str())).await {
+        Error::Fetch(FetchError::RateLimited {
+            status: 503,
+            retry_after: Some(d),
+        }) => assert!((590..=600).contains(&d.as_secs()), "{d:?}"),
+        other => panic!("503: {other:?}"),
+    }
+    assert!(matches!(
+        run(ResponseTemplate::new(429).insert_header("retry-after", "soon")).await,
+        Error::Fetch(FetchError::RateLimited {
+            retry_after: None,
+            ..
+        })
+    ));
+    assert!(matches!(
+        run(ResponseTemplate::new(502)).await,
+        Error::Fetch(FetchError::ServerError { status: 502 })
+    ));
 }
 
 #[tokio::test]

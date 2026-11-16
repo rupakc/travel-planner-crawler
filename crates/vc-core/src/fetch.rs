@@ -252,6 +252,22 @@ pub enum FetchError {
     /// Connection / TLS / protocol failure.
     #[error("transport: {0}")]
     Transport(String),
+    /// The server answered 429 or 503 where the caller cannot hand back the exchange (an
+    /// adapter, a render sub-request): back off the key, honouring `Retry-After`.
+    #[error("rate limited (status {status})")]
+    RateLimited {
+        /// The HTTP status (429 or 503).
+        status: u16,
+        /// The parsed `Retry-After`, if any.
+        retry_after: Option<std::time::Duration>,
+    },
+    /// The server answered another 5xx where the caller cannot hand back the exchange: counts
+    /// toward the key's consecutive-5xx park.
+    #[error("server error (status {status})")]
+    ServerError {
+        /// The HTTP status (5xx).
+        status: u16,
+    },
 }
 
 impl FetchError {
@@ -269,9 +285,11 @@ impl FetchError {
             | FetchError::Denied(_)
             | FetchError::Ssrf(_)
             | FetchError::Challenge { .. } => ErrorClass::Policy,
-            FetchError::Timeout | FetchError::Dns(_) | FetchError::Transport(_) => {
-                ErrorClass::Transient
-            }
+            FetchError::Timeout
+            | FetchError::Dns(_)
+            | FetchError::Transport(_)
+            | FetchError::RateLimited { .. }
+            | FetchError::ServerError { .. } => ErrorClass::Transient,
         }
     }
 }

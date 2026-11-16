@@ -272,10 +272,7 @@ async fn challenge_parks_the_key_and_stops() {
     let b = NewUrl::new(url("hostile.test", port, "/b"));
     f.parts().frontier.enqueue(&[a, b]).await.unwrap();
     let r = claimed(f.pass().await.unwrap());
-    assert_eq!(
-        r.signal,
-        Some(KeySignal::Park(ParkReason::Unauthorized { status: 403 }))
-    );
+    assert_eq!(r.signal, Some(KeySignal::Park(ParkReason::Challenge)));
     assert!(r.urls.iter().all(|o| o.result == UrlResult::NotAttempted));
     assert_eq!(
         paths(&web),

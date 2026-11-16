@@ -497,6 +497,12 @@ pub(crate) async fn run_dump(
         return Err(match status {
             401 | 403 => Error::Fetch(FetchError::Challenge { status }),
             404 | 410 => Error::NotFound(format!("http {status}")),
+            429 | 503 => Error::Fetch(FetchError::RateLimited {
+                status,
+                retry_after: header("retry-after")
+                    .and_then(|v| super::common::parse_retry_after(&v, chrono::Utc::now())),
+            }),
+            500..=599 => Error::Fetch(FetchError::ServerError { status }),
             _ => Error::Fetch(FetchError::Transport(format!("http {status}"))),
         });
     }
