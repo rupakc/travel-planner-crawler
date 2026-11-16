@@ -18,7 +18,7 @@ setup() {
   export CALLS="$T/calls" FAKE_STATE="$T/fake" VC_STATE="$T/state" VC_SECRETS_DIR="$T/secrets"
   export VC_OPT="$T/opt" PATH="$HERE/fakes:$PATH" VC_HEALTH_POLL=0 VC_HEALTH_TIMEOUT=5
   unset FAKE_PROD_DIGEST FAKE_RUNNING FAKE_UNHEALTHY_DIGEST FAKE_MIGRATE_RC FAKE_SIGNED \
-    FAKE_LABEL_SCHEMA FAKE_LABEL_MIN_SCHEMA FAKE_PS_A FAKE_LOCKED VC_NOW
+    FAKE_LABEL_SCHEMA FAKE_LABEL_MIN_SCHEMA FAKE_PS_A FAKE_LOCKED VC_NOW FAKE_DB_SCHEMA
   mkdir -p "$VC_STATE" "$VC_SECRETS_DIR" "$FAKE_STATE" "$VC_OPT"
   : >"$CALLS"
   echo "VC_API_BIND=10.142.0.9" >"$VC_STATE/host.env"
@@ -233,6 +233,51 @@ test_manual_rollback_respects_min_schema() {
     { fail manual_rollback_respects_min_schema "rollback failed (rc $rc)"; return; }
   grep -q "^$NEW manual rollback" "$VC_STATE/held" && ok manual_rollback_respects_min_schema ||
     fail manual_rollback_respects_min_schema "rolled-back digest not held"
+}
+
+test_deploy_refuses_min_schema_above_db() {
+  setup
+  running_on "$OLD"
+  # migrate "succeeded" but the database is still below what the image needs
+  export FAKE_PROD_DIGEST="$NEW" FAKE_SIGNED="$NEW" FAKE_LABEL_SCHEMA=1999 \
+    FAKE_LABEL_MIN_SCHEMA=1999 FAKE_DB_SCHEMA=1903
+  bash "$DEPLOY" 2>/dev/null
+  local rc=$?
+  [[ $rc == 1 ]] || { fail deploy_refuses_min_schema_above_db "exit $rc"; return; }
+  has "up -d --no-deps" && { fail deploy_refuses_min_schema_above_db "rolled"; return; }
+  grep -q "^$NEW needs schema 1999, the database is at 1903" "$VC_STATE/held" ||
+    { fail deploy_refuses_min_schema_above_db "not held: $(cat "$VC_STATE/held" 2>/dev/null)"; return; }
+  [[ "$(cat "$VC_STATE/image.env")" == "VC_IMAGE=$IMG@$OLD" ]] ||
+    { fail deploy_refuses_min_schema_above_db "image.env moved"; return; }
+  # once the database is there, the same image deploys
+  sed -i.bak "/^$NEW /d" "$VC_STATE/held"
+  : >"$CALLS"
+  export FAKE_DB_SCHEMA=1999
+  bash "$DEPLOY" 2>/dev/null
+  rc=$?
+  [[ $rc == 0 && "$(cat "$VC_STATE/image.env")" == "VC_IMAGE=$IMG@$NEW" ]] &&
+    ok deploy_refuses_min_schema_above_db || fail deploy_refuses_min_schema_above_db "not deployed (rc $rc)"
+}
+
+test_rollback_checks_the_database_schema() {
+  setup
+  running_on "$NEW"
+  echo "$IMG@$OLD" >"$VC_STATE/previous"
+  # the recorded schema says yes, the database says no: the database wins
+  echo 1300 >"$VC_STATE/schema"
+  export FAKE_SIGNED="$OLD" FAKE_LABEL_MIN_SCHEMA=1206 FAKE_DB_SCHEMA=1205
+  bash "$DEPLOY" --rollback 2>/dev/null
+  local rc=$?
+  [[ $rc == 1 ]] && ! has "up -d --no-deps" ||
+    { fail rollback_checks_the_database_schema "rolled to a too-new image (rc $rc)"; return; }
+  # an allowed rollback keeps the higher recorded schema (the database never goes back)
+  : >"$CALLS"
+  export FAKE_DB_SCHEMA=1300 FAKE_LABEL_SCHEMA=1206
+  bash "$DEPLOY" --rollback 2>/dev/null
+  rc=$?
+  [[ $rc == 0 ]] || { fail rollback_checks_the_database_schema "rollback failed (rc $rc)"; return; }
+  [[ "$(cat "$VC_STATE/schema")" == 1300 ]] && ok rollback_checks_the_database_schema ||
+    fail rollback_checks_the_database_schema "schema went back to $(cat "$VC_STATE/schema")"
 }
 
 test_skips_when_locked() {

@@ -9,6 +9,7 @@
 #                          migrate container's read-only bind source) exists
 #   FAKE_LABEL_<NAME>      value of image label io.voyager-crawler.<name>
 #   FAKE_PS_A              output of `compose ps -a --format …` (watchdog)
+#   FAKE_DB_SCHEMA         what `compose exec postgres psql …` prints (unset → it fails)
 # Per-service images are kept in $FAKE_STATE/<service>.
 set -uo pipefail
 st="${FAKE_STATE:?}"
@@ -59,6 +60,10 @@ if [[ "${1:-}" == compose ]]; then
       fi
       ;;
     restart) ;;
+    exec)
+      [[ "$*" == *psql* && -n "${FAKE_DB_SCHEMA:-}" ]] || exit 2
+      echo "$FAKE_DB_SCHEMA"
+      ;;
   esac
   exit 0
 fi

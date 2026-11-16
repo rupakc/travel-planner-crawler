@@ -48,7 +48,7 @@ jobs:
           ref: ${{ github.event.workflow_run.head_sha || github.sha }}
           persist-credentials: false
 
-      - name: Source commit, schema labels, Dockerfile present?
+      - name: Source commit, Dockerfile present?
         id: src
         env:
           HAS_DOCKERFILE: ${{ hashFiles('Dockerfile') != '' }}
@@ -56,11 +56,6 @@ jobs:
           set -euo pipefail
           echo "sha=$(git rev-parse HEAD)" >>"$GITHUB_OUTPUT"
           echo "build=$HAS_DOCKERFILE" >>"$GITHUB_OUTPUT"
-          # io.voyager-crawler.schema = the highest expand migration shipped;
-          # an image needs at least that schema (deploy.sh --rollback checks it)
-          schema="$(find migrations -maxdepth 1 -name '[0-9]*.sql' 2>/dev/null |
-            sed -E 's|.*/0*([0-9]+)[^/]*$|\1|' | sort -n | tail -n1)"
-          echo "schema=${schema:-0}" >>"$GITHUB_OUTPUT"
           if [[ "$HAS_DOCKERFILE" != true ]]; then
             echo "::notice::no Dockerfile at the repository root yet: nothing to build or promote"
           fi
@@ -73,6 +68,35 @@ jobs:
           registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
+
+      # The schema labels come from the binary itself (migrate::schema_version(),
+      # the migrations embedded at build time), so the image is built once
+      # locally, asked, then pushed with the labels (every layer from cache).
+      - name: Build (local, for the schema labels)
+        if: steps.src.outputs.build == 'true'
+        uses: docker/build-push-action@c3c9e263c25d99ce0380d002d59b67737d91b0dc # v7.4.0
+        with:
+          context: .
+          file: Dockerfile
+          platforms: linux/amd64
+          load: true
+          push: false
+          provenance: false
+          tags: vcrawl:schema-probe
+          cache-from: type=gha,scope=crawler
+          cache-to: type=gha,mode=max,scope=crawler
+
+      - name: Schema labels (vcrawl migrate --print-schema)
+        id: schema
+        if: steps.src.outputs.build == 'true'
+        run: |
+          set -euo pipefail
+          out="$(docker run --rm --network none vcrawl:schema-probe migrate --print-schema)"
+          schema="$(jq -er '.schema' <<<"$out")"
+          min="$(jq -er '.min_schema' <<<"$out")"
+          [[ "$schema" =~ ^[0-9]+$ && "$min" =~ ^[0-9]+$ ]] || { echo "::error::bad schema output: $out"; exit 1; }
+          echo "schema=$schema" >>"$GITHUB_OUTPUT"
+          echo "min_schema=$min" >>"$GITHUB_OUTPUT"
 
       - name: Build and push (sha tag only)
         id: image
@@ -89,10 +113,9 @@ jobs:
             org.opencontainers.image.source=https://github.com/${{ github.repository }}
             org.opencontainers.image.revision=${{ steps.src.outputs.sha }}
             io.voyager-crawler.build=${{ github.run_number }}
-            io.voyager-crawler.schema=${{ steps.src.outputs.schema }}
-            io.voyager-crawler.min-schema=${{ steps.src.outputs.schema }}
+            io.voyager-crawler.schema=${{ steps.schema.outputs.schema }}
+            io.voyager-crawler.min-schema=${{ steps.schema.outputs.min_schema }}
           cache-from: type=gha,scope=crawler
-          cache-to: type=gha,mode=max,scope=crawler
 
       - name: Trivy scan (unfixed ignored; a fixed CRITICAL fails)
         if: steps.src.outputs.build == 'true'

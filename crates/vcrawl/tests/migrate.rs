@@ -475,3 +475,43 @@ async fn record_n_minus_1_query_set() {
     let text = serde_json::to_string_pretty(&set).expect("json") + "\n";
     std::fs::write(fixtures().join(FIXTURE), text).expect("write fixture");
 }
+
+/// `vcrawl migrate --print-schema` (read at image build time for the
+/// `io.voyager-crawler.{schema,min-schema}` labels): the highest expand migration in
+/// `migrations/`, without config or a database.
+#[test]
+fn print_schema_reports_the_highest_expand_migration() {
+    let highest = std::fs::read_dir(repo().join("migrations"))
+        .expect("migrations")
+        .filter_map(|e| e.ok())
+        .filter_map(|e| {
+            let name = e.file_name().to_string_lossy().to_string();
+            let v = name.strip_suffix(".sql")?.split('_').next()?.to_string();
+            v.parse::<i64>().ok()
+        })
+        .max()
+        .expect("at least one migration");
+    assert_eq!(schema_version(), highest);
+    let out = std::process::Command::new(env!("CARGO_BIN_EXE_vcrawl"))
+        .args(["migrate", "--print-schema"])
+        // No database reachable: the command must not need one.
+        .env("VC_DATABASE_URL", "postgres://nobody@127.0.0.1:1/none")
+        .output()
+        .expect("run vcrawl");
+    assert!(
+        out.status.success(),
+        "{}",
+        String::from_utf8_lossy(&out.stderr)
+    );
+    let v: serde_json::Value = serde_json::from_slice(&out.stdout).expect("json");
+    assert_eq!(v["schema"], highest);
+    assert_eq!(v["min_schema"], highest);
+    let bad = std::process::Command::new(env!("CARGO_BIN_EXE_vcrawl"))
+        .args(["migrate", "--print-schema", "--contract"])
+        .output()
+        .expect("run vcrawl");
+    assert!(
+        !bad.status.success(),
+        "--print-schema with --contract is refused"
+    );
+}

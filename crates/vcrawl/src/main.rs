@@ -33,6 +33,10 @@ enum Role {
         /// Apply contract (destructive) migrations.
         #[arg(long)]
         contract: bool,
+        /// Print `{"schema":N,"min_schema":N}` of this image and exit (no database; the
+        /// build reads it for the `io.voyager-crawler.{schema,min-schema}` labels).
+        #[arg(long, conflicts_with = "contract")]
+        print_schema: bool,
     },
     /// Container health check.
     Health,
@@ -41,6 +45,13 @@ enum Role {
 #[tokio::main]
 async fn main() -> anyhow::Result<()> {
     let cli = Cli::parse();
+    if let Role::Migrate {
+        print_schema: true, ..
+    } = cli.role
+    {
+        println!("{}", migrate::schema_labels());
+        return Ok(());
+    }
     let ctx = Ctx::new(vcrawl::wiring::config::load()?);
     match cli.role {
         Role::Scheduler => roles::scheduler::run(ctx).await,
@@ -50,7 +61,7 @@ async fn main() -> anyhow::Result<()> {
         Role::Api => roles::api::run(ctx).await,
         Role::Maintenance => roles::maintenance::run(ctx).await,
         Role::Admin(cmd) => admin::run(ctx, cmd).await,
-        Role::Migrate { contract } => migrate::run(ctx, contract).await,
+        Role::Migrate { contract, .. } => migrate::run(ctx, contract).await,
         Role::Health => health::run(ctx).await,
     }
 }
