@@ -779,3 +779,78 @@ async fn stream_yields_decoded_and_caps() {
         "{err:?}"
     );
 }
+
+#[tokio::test]
+async fn stream_sees_extend_after_open() {
+    // Lease of 10 s; the stream is opened, then the lease is extended and the clock passes the
+    // original deadline: the stream keeps reading (it shares the permit's deadline).
+    let env = Env::with(
+        Duration::from_secs(10),
+        Duration::ZERO,
+        FetchConfig::default(),
+    )
+    .await;
+    Mock::given(path("/dump"))
+        .respond_with(
+            ResponseTemplate::new(200)
+                .insert_header("content-type", "text/csv")
+                .set_body_bytes(vec![b'c'; 64 * 1024]),
+        )
+        .mount(&env.server)
+        .await;
+    let u = env.url("site.test", "/dump");
+    let claim = env.claim(&u, "", &["site.test"]).await;
+    let s = env
+        .client
+        .stream(&claim.permit, page(u.clone()))
+        .await
+        .unwrap();
+    env.frontier
+        .extend(&claim.permit, Duration::from_secs(60))
+        .await
+        .unwrap();
+    env.clock.advance(Duration::from_secs(30));
+    let mut body = s.body;
+    let mut n = 0usize;
+    while let Some(chunk) = body.next().await {
+        n += chunk.expect("extended lease keeps the stream alive").len();
+    }
+    assert_eq!(n, 64 * 1024);
+
+    // Without an extension, passing the deadline still fails closed.
+    let s = env.client.stream(&claim.permit, page(u)).await.unwrap();
+    env.clock.advance(Duration::from_secs(41));
+    let mut body = s.body;
+    let first = body.next().await.expect("an item");
+    assert!(matches!(first, Err(FetchError::Lease(_))), "{first:?}");
+    assert!(body.next().await.is_none());
+}
+
+#[tokio::test]
+async fn stream_records_body_end_time() {
+    let env = Env::new().await;
+    Mock::given(path("/dump"))
+        .respond_with(
+            ResponseTemplate::new(200)
+                .insert_header("content-type", "text/csv")
+                .set_body_bytes(vec![b'c'; 16 * 1024]),
+        )
+        .mount(&env.server)
+        .await;
+    let u = env.url("site.test", "/dump");
+    let claim = env.claim(&u, "", &["site.test"]).await;
+    let s = env.client.stream(&claim.permit, page(u)).await.unwrap();
+    let opened = claim.permit.last_request_end().expect("head recorded");
+    let requests = claim.permit.requests_made();
+    tokio::time::sleep(Duration::from_millis(50)).await;
+    let mut body = s.body;
+    while let Some(chunk) = body.next().await {
+        chunk.unwrap();
+    }
+    let ended = claim.permit.last_request_end().expect("body end recorded");
+    assert!(
+        ended >= opened + Duration::from_millis(50),
+        "body end {ended:?} vs head {opened:?}"
+    );
+    assert_eq!(claim.permit.requests_made(), requests, "no extra request");
+}

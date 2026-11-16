@@ -1102,3 +1102,195 @@ async fn database_failure_fails_closed() {
     );
     assert!(f.complete(c.permit, KeyOutcome::normal()).await.is_err());
 }
+
+// ---------------------------------------------------------------------------------------------
+// reschedule (controller addition)
+// ---------------------------------------------------------------------------------------------
+
+async fn schedule_of(pool: &PgPool, u: &UrlKey) -> (DateTime<Utc>, Option<DateTime<Utc>>) {
+    sqlx::query_as("SELECT next_fetch_at, refetch_at FROM url_state WHERE url_key = $1")
+        .bind(u.as_bytes().as_slice())
+        .fetch_one(pool)
+        .await
+        .expect("url_state row")
+}
+
+fn one(u: UrlKey, result: UrlResult) -> KeyOutcome {
+    KeyOutcome {
+        urls: vec![UrlOutcome { url_key: u, result }],
+        ..KeyOutcome::normal()
+    }
+}
+
+fn close(a: DateTime<Utc>, b: DateTime<Utc>) -> bool {
+    (a - b).num_milliseconds().abs() < 5
+}
+
+#[tokio::test]
+async fn reschedule_due_url_becomes_claimable_at() {
+    let pool = testkit::pg().await;
+    let f = PgFrontier::new(pool.clone(), cfg());
+    let urls = seed(&f, "resched.example.com", 1).await;
+    let c = f.claim(&[0], 5).await.unwrap().expect("claim");
+    let later = Utc::now() + chrono::Duration::days(1);
+    f.complete(c.permit, one(urls[0], UrlResult::Retry { at: later }))
+        .await
+        .unwrap();
+    make_ready(&pool, "example.com").await;
+    assert!(f.claim(&[0], 5).await.unwrap().is_none(), "not due yet");
+
+    let at = Utc::now() - chrono::Duration::seconds(1);
+    assert!(f.reschedule(&urls[0], at).await.unwrap());
+    let (next, pending) = schedule_of(&pool, &urls[0]).await;
+    assert!(close(next, at), "{next} vs {at}");
+    assert_eq!(pending, None);
+    let c = f.claim(&[0], 5).await.unwrap().expect("due again");
+    assert_eq!(c.urls[0].url_key, urls[0]);
+    f.complete(c.permit, KeyOutcome::normal()).await.unwrap();
+
+    // A due URL can also be pushed later.
+    let far = Utc::now() + chrono::Duration::days(3);
+    assert!(f.reschedule(&urls[0], far).await.unwrap());
+    assert!(close(schedule_of(&pool, &urls[0]).await.0, far));
+}
+
+#[tokio::test]
+async fn reschedule_never_bypasses_key_politeness() {
+    let pool = testkit::pg().await;
+    let f = PgFrontier::new(pool.clone(), cfg());
+    let urls = seed(&f, "polite.example.com", 1).await;
+    let c = f.claim(&[0], 5).await.unwrap().expect("claim");
+    f.complete(
+        c.permit,
+        one(
+            urls[0],
+            UrlResult::Retry {
+                at: Utc::now() + chrono::Duration::days(1),
+            },
+        ),
+    )
+    .await
+    .unwrap();
+    sqlx::query(
+        "UPDATE politeness_keys SET next_allowed_at = now() + interval '1 hour' WHERE key = $1",
+    )
+    .bind("example.com")
+    .execute(&pool)
+    .await
+    .unwrap();
+    assert!(f.reschedule(&urls[0], Utc::now()).await.unwrap());
+    assert!(
+        f.claim(&[0], 5).await.unwrap().is_none(),
+        "key delay still applies"
+    );
+    let left = secs_until(
+        &pool,
+        "SELECT extract(epoch FROM next_allowed_at - now())::float8 FROM politeness_keys
+         WHERE key = $1",
+        "example.com",
+    )
+    .await;
+    assert!(left > 3500.0, "key schedule untouched: {left}");
+    f.park(&key("example.com"), ParkReason::Challenge)
+        .await
+        .unwrap();
+    make_ready(&pool, "example.com").await;
+    assert!(
+        f.claim(&[0], 5).await.unwrap().is_none(),
+        "parked key stays parked"
+    );
+}
+
+#[tokio::test]
+async fn reschedule_leased_url_applies_when_it_returns_to_due() {
+    let pool = testkit::pg().await;
+    let f = PgFrontier::new(pool.clone(), cfg());
+    let urls = seed(&f, "leased.example.com", 1).await;
+    let c = f.claim(&[0], 5).await.unwrap().expect("claim");
+    let e = c.permit.epoch().0;
+    let at = Utc::now() + chrono::Duration::minutes(5);
+    assert!(f.reschedule(&urls[0], at).await.unwrap());
+    // The running lease is undisturbed.
+    assert_eq!(state_of(&pool, &urls[0]).await, ("leased".into(), Some(e)));
+    f.check(&c.permit).await.expect("lease still live");
+    // A later reschedule never moves the pending refetch later.
+    assert!(
+        f.reschedule(&urls[0], at + chrono::Duration::hours(1))
+            .await
+            .unwrap()
+    );
+    // Completion schedules a retry in a day; the forced refetch wins.
+    let later = Utc::now() + chrono::Duration::days(1);
+    f.complete(c.permit, one(urls[0], UrlResult::Retry { at: later }))
+        .await
+        .unwrap();
+    assert_eq!(state_of(&pool, &urls[0]).await, ("due".into(), None));
+    let (next, pending) = schedule_of(&pool, &urls[0]).await;
+    assert!(close(next, at), "{next} vs {at}");
+    assert_eq!(pending, None);
+}
+
+#[tokio::test]
+async fn reschedule_fetched_pending_applies_at_commit() {
+    let pool = testkit::pg().await;
+    let f = PgFrontier::new(pool.clone(), cfg());
+    let urls = seed(&f, "pending2.example.com", 1).await;
+    let c = f.claim(&[0], 5).await.unwrap().expect("claim");
+    let e1 = c.permit.epoch().0;
+    let day = Utc::now() + chrono::Duration::days(1);
+    f.mark_fetched(&c.permit, &urls[0], day).await.unwrap();
+    let at = Utc::now() + chrono::Duration::minutes(10);
+    assert!(f.reschedule(&urls[0], at).await.unwrap());
+    assert_eq!(
+        state_of(&pool, &urls[0]).await,
+        ("fetched_pending".into(), Some(e1))
+    );
+    f.complete(c.permit, one(urls[0], UrlResult::Fetched))
+        .await
+        .unwrap();
+    assert_eq!(
+        state_of(&pool, &urls[0]).await,
+        ("fetched_pending".into(), Some(e1))
+    );
+    let manifest = serde_json::json!({
+        "segment_id": "01JSEGMENT0000000000000002",
+        "path": "segments/y.warc.zst", "cdxj_path": "cdxj/y.cdxj", "bytes": 1, "crc32c": 1,
+        "record_count": 1, "created_at": Utc::now(),
+        "captures": [{
+            "capture_id": "01JCAPTURE0000000000000002", "captured_at": Utc::now(),
+            "offset": 0, "length": 1, "warc_record_id": "<urn:uuid:y>",
+            "url_key": urls[0].to_hex(), "url": "https://pending2.example.com/p/0",
+            "key": "example.com", "role": "primary", "fetch_mode": "http", "epoch": e1,
+            "status": 200, "media_type": "html", "use_policy_fetch": {},
+            "next_fetch_at": day,
+            "validators": {"etag": "\"v1\""}
+        }]
+    });
+    let (ok,): (bool,) = sqlx::query_as("SELECT vc_commit_segment($1)")
+        .bind(manifest)
+        .fetch_one(&pool)
+        .await
+        .expect("commit");
+    assert!(ok);
+    assert_eq!(state_of(&pool, &urls[0]).await, ("due".into(), None));
+    let (next, pending) = schedule_of(&pool, &urls[0]).await;
+    assert!(close(next, at), "{next} vs {at}");
+    assert_eq!(pending, None);
+}
+
+#[tokio::test]
+async fn reschedule_unknown_or_terminal_is_noop() {
+    let pool = testkit::pg().await;
+    let f = PgFrontier::new(pool.clone(), cfg());
+    let unknown = url("https://nowhere.example.org/x").key();
+    assert!(!f.reschedule(&unknown, Utc::now()).await.unwrap());
+    let urls = seed(&f, "terminal.example.com", 1).await;
+    let c = f.claim(&[0], 5).await.unwrap().expect("claim");
+    f.complete(c.permit, one(urls[0], UrlResult::Disallowed))
+        .await
+        .unwrap();
+    let before = schedule_of(&pool, &urls[0]).await;
+    assert!(!f.reschedule(&urls[0], Utc::now()).await.unwrap());
+    assert_eq!(state_of(&pool, &urls[0]).await, ("disabled".into(), None));
+    assert_eq!(schedule_of(&pool, &urls[0]).await, before);
+}

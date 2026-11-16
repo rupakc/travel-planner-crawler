@@ -1065,4 +1065,23 @@ impl Frontier for PgFrontier {
         tx.commit().await.map_err(db)?;
         Ok(())
     }
+
+    /// `due` → `next_fetch_at = at`; `leased`/`fetched_pending` → `refetch_at` (applied by the
+    /// `url_state_apply_refetch` trigger, migration 1101, when the URL returns to `due`);
+    /// terminal states and unknown keys → `Ok(false)`. Key politeness is never touched.
+    async fn reschedule(&self, url: &UrlKey, at: DateTime<Utc>) -> Result<bool> {
+        let r = sqlx::query(
+            "UPDATE url_state SET
+                 next_fetch_at = CASE WHEN state = 'due' THEN $2 ELSE next_fetch_at END,
+                 refetch_at = CASE WHEN state = 'due' THEN refetch_at
+                                   ELSE least(coalesce(refetch_at, $2), $2) END
+             WHERE url_key = $1 AND state IN ('due', 'leased', 'fetched_pending')",
+        )
+        .bind(url.as_bytes().as_slice())
+        .bind(at)
+        .execute(&self.pool)
+        .await
+        .map_err(db)?;
+        Ok(r.rows_affected() > 0)
+    }
 }

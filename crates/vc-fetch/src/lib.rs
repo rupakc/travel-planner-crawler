@@ -25,9 +25,10 @@
 //! same cap (up to `max_nested_gzip` layers). The content-type allowlist applies to 2xx
 //! responses. robots.txt bodies are truncated at 500 KiB instead of failing.
 //!
-//! Streams ([`PermitClient::stream`]) check the lease deadline as it was when the stream was
-//! opened before every chunk (fail closed): call `Frontier::extend` **before** streaming a long
-//! dump.
+//! Streams ([`PermitClient::stream`]) check the permit's current lease deadline before every
+//! chunk (fail closed) through a [`vc_core::frontier::DeadlineHandle`], so a `Frontier::extend`
+//! made while a long dump streams is seen; the end of the body is recorded on the permit for
+//! pacing.
 
 mod decode;
 mod resolve;
@@ -49,7 +50,7 @@ use vc_core::fetch::{
     Exchange, FetchError, FetchRequest, LimitedBodyStream, PermitClient, RedirectHop,
     RequestPurpose, ResponseHead,
 };
-use vc_core::frontier::{ClaimPermit, Frontier};
+use vc_core::frontier::{ClaimPermit, DeadlineHandle, Frontier};
 use vc_core::policy::{Policy, RobotsVerdict};
 use vc_core::{CanonicalUrl, Clock, LeaseLost, SystemClock, USER_AGENT};
 
@@ -595,7 +596,7 @@ impl PermitClient for ReqwestPermitClient {
             done: false,
             pending: None,
             clock: self.clock.clone(),
-            deadline: p.deadline().0,
+            deadline: p.deadline_handle(),
             lease_lost: p.lease_lost(LeaseLostReason::Expired),
             read_timeout: own,
         };
@@ -613,9 +614,8 @@ struct StreamState {
     /// An error to yield after the bytes decoded before it.
     pending: Option<FetchError>,
     clock: Arc<dyn Clock>,
-    /// The lease deadline when the stream was opened (fail closed: an `extend` made after
-    /// opening is not seen; extend before calling `stream`).
-    deadline: DateTime<Utc>,
+    /// The permit's shared deadline (sees later extensions) and pacing state (body end).
+    deadline: DeadlineHandle,
     lease_lost: LeaseLost,
     read_timeout: Duration,
 }
@@ -624,6 +624,7 @@ type Item = Result<Bytes, FetchError>;
 
 fn end(mut s: StreamState, e: FetchError) -> Option<(Item, StreamState)> {
     s.done = true;
+    s.deadline.record_request_end(Instant::now());
     Some((Err(e), s))
 }
 
@@ -633,11 +634,10 @@ async fn next_chunk(mut s: StreamState) -> Option<(Item, StreamState)> {
             return end(s, e);
         }
         if s.done {
+            s.deadline.record_request_end(Instant::now());
             return None;
         }
-        let remaining = (s.deadline - s.clock.now())
-            .to_std()
-            .unwrap_or(Duration::ZERO);
+        let remaining = s.deadline.remaining(s.clock.now());
         if remaining.is_zero() {
             let e = FetchError::Lease(s.lease_lost.clone());
             return end(s, e);
@@ -652,6 +652,7 @@ async fn next_chunk(mut s: StreamState) -> Option<(Item, StreamState)> {
             Some(c) => s.dec.push(c),
             None => {
                 s.done = true;
+                s.deadline.record_request_end(Instant::now());
                 s.dec.finish()
             }
         };

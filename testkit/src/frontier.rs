@@ -53,6 +53,23 @@ struct UrlRow {
     validators: Validators,
     payload_hash: Option<PayloadHash>,
     last_capture: Option<CaptureRef>,
+    /// A forced refetch of a leased / fetched_pending URL, applied when it returns to due.
+    refetch_at: Option<DateTime<Utc>>,
+}
+
+impl UrlRow {
+    /// Mirrors the `url_state_apply_refetch` trigger (migration 1101).
+    fn settle_refetch(&mut self) {
+        match self.state {
+            UrlState::Due => {
+                if let Some(r) = self.refetch_at.take() {
+                    self.next_fetch_at = self.next_fetch_at.min(r);
+                }
+            }
+            UrlState::Leased | UrlState::FetchedPending => {}
+            UrlState::Gone | UrlState::Tombstoned | UrlState::Disabled => self.refetch_at = None,
+        }
+    }
 }
 
 #[derive(Debug, Clone)]
@@ -164,6 +181,7 @@ impl MemFrontier {
             if u.state == UrlState::FetchedPending && u.lease_epoch == Some(epoch) {
                 u.state = UrlState::Due;
                 u.lease_epoch = None;
+                u.settle_refetch();
             }
         }
     }
@@ -241,6 +259,7 @@ impl Frontier for MemFrontier {
                 {
                     u.state = UrlState::Due;
                     u.lease_epoch = None;
+                    u.settle_refetch();
                 }
             }
             let mut due: Vec<(UrlKey, f32, DateTime<Utc>)> = g
@@ -387,6 +406,9 @@ impl Frontier for MemFrontier {
                 u.state = UrlState::Due;
                 u.lease_epoch = None;
             }
+            if &u.key == p.key() {
+                u.settle_refetch();
+            }
         }
         let delay =
             chrono::Duration::from_std(p.delay()).unwrap_or_else(|_| chrono::Duration::zero());
@@ -433,6 +455,7 @@ impl Frontier for MemFrontier {
                     validators: Validators::default(),
                     payload_hash: None,
                     last_capture: None,
+                    refetch_at: None,
                 },
             );
             n += 1;
@@ -455,5 +478,20 @@ impl Frontier for MemFrontier {
         self.verify(&g, p)?;
         g.robots.insert(entry.origin.clone(), entry);
         Ok(())
+    }
+
+    async fn reschedule(&self, url: &UrlKey, at: DateTime<Utc>) -> Result<bool> {
+        let mut g = self.lock();
+        let Some(u) = g.urls.get_mut(url) else {
+            return Ok(false);
+        };
+        match u.state {
+            UrlState::Due => u.next_fetch_at = at,
+            UrlState::Leased | UrlState::FetchedPending => {
+                u.refetch_at = Some(u.refetch_at.map_or(at, |r| r.min(at)));
+            }
+            UrlState::Gone | UrlState::Tombstoned | UrlState::Disabled => return Ok(false),
+        }
+        Ok(true)
     }
 }
