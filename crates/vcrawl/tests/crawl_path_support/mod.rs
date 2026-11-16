@@ -17,7 +17,7 @@ use vc_core::store::BlobStore;
 use vc_core::{Clock, SystemClock};
 use vc_fetch::StaticResolver;
 use vc_frontier::PgFrontier;
-use vcrawl::roles::fetcher::{Fetcher, FetcherParts, RobotsTombstoner, SpoolAdoption};
+use vcrawl::roles::fetcher::{Fetcher, FetcherParts, RobotsTombstoner};
 use vcrawl::wiring;
 use vcrawl::wiring::rawcap::PgRawBytes;
 use vcrawl::wiring::sources::Sources;
@@ -69,10 +69,6 @@ pub fn parts(
         clock.clone(),
         Some(Arc::new(r)),
     );
-    let adopt = SpoolAdoption {
-        store: store.clone(),
-        committer: wiring::store::committer(pool.clone()),
-    };
     let (spool, roller) = wiring::store::spool_and_roller(
         &cfg,
         spool_dir.to_path_buf(),
@@ -105,7 +101,6 @@ pub fn parts(
         clock,
         metrics: None,
         tracker: None,
-        adopt: Some(adopt),
         cfg,
     }
 }
