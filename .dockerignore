@@ -1,0 +1,14 @@
+# Build context of the root Dockerfile: sources and runtime data only.
+target/
+**/target/
+.git/
+.github/
+.claude/
+docs/
+e2e/
+infrastructure/
+deploy/
+**/fuzz/artifacts/
+**/fuzz/corpus/
+**/.DS_Store
+*.log
