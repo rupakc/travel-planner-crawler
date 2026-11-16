@@ -21,8 +21,8 @@ use vc_extract::Extractor;
 
 use crate::Ctx;
 use crate::data::processor::{Processor, ProcessorDeps};
-use crate::data::text_tier::TextTier;
 use crate::data::shutdown;
+use crate::data::text_tier::TextTier;
 use crate::wiring;
 
 /// Segments written to the extracted-text tier per loop.
