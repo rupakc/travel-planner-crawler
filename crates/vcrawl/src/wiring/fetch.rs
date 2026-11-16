@@ -51,13 +51,18 @@ pub fn renderer(
     if !cfg.render.enabled {
         return None;
     }
-    Some(Arc::new(ChromiumRenderer::new(
-        cfg.render.clone(),
-        client,
-        frontier,
-        policy,
-        clock,
-    )))
+    // The allowlist's per-host `types` (the `Policy` trait only knows hosts). If the policy
+    // files cannot be read here, no third-party host is allowed (fail closed).
+    let types = VoyagerPolicy::new(cfg.policy.clone()).ok();
+    let filter: vc_render::SubresourceFilter = Arc::new(move |host: &str, kind: &str| {
+        types
+            .as_ref()
+            .is_some_and(|p| p.subresource_allowed(host, kind))
+    });
+    Some(Arc::new(
+        ChromiumRenderer::new(cfg.render.clone(), client, frontier, policy, clock)
+            .with_subresource_filter(filter),
+    ))
 }
 
 /// Maps a render error to the fetch error inside it, if any.

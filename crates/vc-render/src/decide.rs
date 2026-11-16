@@ -10,7 +10,12 @@ use vc_core::frontier::PermitScope;
 use vc_core::policy::Policy;
 use vc_core::render::BlockReason;
 
-use crate::cdp::PausedRequest;
+use crate::cdp::{PausedRequest, ResourceKind};
+
+/// Per-type check for third-party (allowlisted) hosts: `(host, kind)` with `kind` the
+/// lower-case CDP resource type ([`ResourceKind::cdp_name`]). Production passes
+/// `VoyagerPolicy::subresource_allowed`, which reads the allowlist's `types`.
+pub type SubresourceFilter = std::sync::Arc<dyn Fn(&str, &str) -> bool + Send + Sync>;
 
 /// Known tracker / ad hosts (and their subdomains). Blocked even if a source allowlists them.
 pub const TRACKER_HOSTS: &[&str] = &[
@@ -92,15 +97,29 @@ fn ip_literal(host: &str) -> Option<IpAddr> {
         .ok()
 }
 
-/// The synchronous checks, in order: method/scheme, SSRF (IP literals; hostnames are checked on
-/// the pinned IP by the permit client), resource type, trackers, denylist, scope (the page's own
-/// key for the document; the key or the sub-resource allowlist for everything else).
+/// [`precheck_with`] without a per-type filter for third-party hosts.
 pub fn precheck(
     policy: &dyn Policy,
     scope: &PermitScope,
     req: &PausedRequest,
     url: &CanonicalUrl,
     is_document: bool,
+) -> Result<(), Blocked> {
+    precheck_with(policy, scope, req, url, is_document, None)
+}
+
+/// The synchronous checks, in order: method/scheme, SSRF (IP literals; hostnames are checked on
+/// the pinned IP by the permit client), resource type (any document other than the page's own
+/// is refused: iframes and JS/meta-refresh navigations are not fetched), trackers, denylist,
+/// scope (the page's own key for the document; the key, or a sub-resource allowlist host whose
+/// `types` include this request's type per `filter`, for everything else).
+pub fn precheck_with(
+    policy: &dyn Policy,
+    scope: &PermitScope,
+    req: &PausedRequest,
+    url: &CanonicalUrl,
+    is_document: bool,
+    filter: Option<&SubresourceFilter>,
 ) -> Result<(), Blocked> {
     if !req.method.eq_ignore_ascii_case("GET") {
         return Err(Blocked::new(BlockReason::Method));
@@ -110,7 +129,7 @@ pub fn precheck(
             .ssrf_check(url.host(), ip, url.port())
             .map_err(|e| Blocked::with(BlockReason::Ssrf, FetchError::Ssrf(e)))?;
     }
-    if !is_document && !req.kind.allowed() {
+    if !is_document && (!req.kind.allowed() || req.kind == ResourceKind::Document) {
         return Err(Blocked::new(BlockReason::ResourceType));
     }
     if is_tracker(url.host()) {
@@ -122,8 +141,10 @@ pub fn precheck(
             FetchError::Denied(d),
         ));
     }
-    let in_scope =
-        scope.covers(url) || (!is_document && policy.subresource_host_allowed(url.host()));
+    let in_scope = scope.covers(url)
+        || (!is_document
+            && policy.subresource_host_allowed(url.host())
+            && filter.is_none_or(|f| f(url.host(), req.kind.cdp_name())));
     if !in_scope {
         return Err(Blocked::with(
             BlockReason::OutOfScope,

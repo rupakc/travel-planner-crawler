@@ -53,6 +53,22 @@ impl ResourceKind {
         )
     }
 
+    /// The lower-case CDP `Network.ResourceType` name (`script`, `stylesheet`, `xhr`, …), as
+    /// used by the `types` of `policy/subresource_allowlist.yaml`.
+    pub fn cdp_name(self) -> &'static str {
+        match self {
+            ResourceKind::Document => "document",
+            ResourceKind::Stylesheet => "stylesheet",
+            ResourceKind::Script => "script",
+            ResourceKind::Xhr => "xhr",
+            ResourceKind::Fetch => "fetch",
+            ResourceKind::Image => "image",
+            ResourceKind::Media => "media",
+            ResourceKind::Font => "font",
+            ResourceKind::Other => "other",
+        }
+    }
+
     /// Whether a successful response may be served from the shared sub-resource cache
     /// (JS and CSS only; XHR data is always fetched fresh).
     pub fn cacheable(self) -> bool {
