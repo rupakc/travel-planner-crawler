@@ -4,8 +4,9 @@
 //! crash anywhere is repaired by running the request again (the maintenance role does):
 //!
 //! 1. **index** (SLA 24 h): `RecordSink::tombstone` removes matching records (and observation
-//!    points) from the API and index and records a standing exclusion, and matching
-//!    `held_records` rows are deleted; → `index_done`.
+//!    points) from the API and index and records a standing exclusion, matching
+//!    `held_records` rows are deleted, and matching URLs leave the crawl (`url_state` →
+//!    `tombstoned`, which re-discovery never revives); → `index_done`.
 //! 2. **raw** (SLA 7 days): every committed capture the selector names is cut out of its
 //!    segment (`vc-store` purge rewrite: new generation uploaded → one `vc_rewrite_segment`
 //!    transaction → old objects deleted; GCS then drops non-current versions within its 7-day
@@ -13,6 +14,8 @@
 //!    (`text/` and `ephemeral/text/`), and for
 //!    `--author` the display name is scrubbed from every stored version, attribution, title,
 //!    excerpt and cached LLM output; → `raw_done`.
+//!    A crash between a rewrite's commit and the deletion of the old objects is repaired by
+//!    `store_garbage` (listed in the rewrite's transaction, collected on every run).
 //! 3. **done** (SLA 21 days): once `raw_done_at` is older than the backup/snapshot window
 //!    (WAL 14 d, snapshots 7 d) the data is gone from backups too.
 //!
@@ -31,7 +34,10 @@ use sqlx::{PgPool, Row};
 use vc_core::index::{PurgeSelector, RecordSink, TombstoneReason};
 use vc_core::store::BlobStore;
 use vc_core::{CanonicalUrl, CaptureId, CaptureRef, RecordId, SegmentId, SourceId};
-use vc_store::{PgSegmentCommitter, SegmentRewrite, finish_rewrite, rewrite_segment_without};
+use vc_store::{
+    PgSegmentCommitter, SegmentRewrite, collect_garbage, finish_rewrite, record_garbage,
+    rewrite_segment_without,
+};
 
 use crate::Ctx;
 
@@ -235,6 +241,10 @@ async fn index_stage(pool: &PgPool, id: i64, r: &Request) -> anyhow::Result<u64>
     if held > 0 {
         tracing::info!(purge_id = id, held, "purge: held records dropped");
     }
+    let stopped = stop_crawling(pool, &r.selector).await?;
+    if stopped > 0 {
+        tracing::info!(purge_id = id, urls = stopped, "purge: URLs left the crawl");
+    }
     sqlx::query(
         "UPDATE purge_requests SET state = 'index_done', index_done_at = now()
          WHERE id = $1 AND state = 'pending'",
@@ -302,12 +312,44 @@ pub async fn process_purge(
     Ok(out)
 }
 
-/// Advances every unfinished request (the maintenance role).
+/// Puts the URLs a selector names into the terminal `tombstoned` state (a leased one too: its
+/// fetch's completion is fenced on the lease epoch and leaves it alone), so they are never
+/// fetched again; `Frontier::enqueue` keeps an existing row. Returns the URLs changed.
+pub async fn stop_crawling(pool: &PgPool, sel: &PurgeSelector) -> anyhow::Result<u64> {
+    let (pred, val) = match sel {
+        PurgeSelector::Url(k) => ("u.url_key = decode($1, 'hex')".to_string(), k.to_hex()),
+        PurgeSelector::UrlPrefix(p) => ("starts_with(x.url, $1)".to_string(), p.clone()),
+        PurgeSelector::Host(h) => (
+            "lower(substring(x.url from '^[a-zA-Z][a-zA-Z0-9+.-]*://([^/:?#]+)')) = $1".to_string(),
+            h.clone(),
+        ),
+        PurgeSelector::Source(s) => (
+            "(u.source_id = $1 OR x.source_id = $1)".to_string(),
+            s.0.clone(),
+        ),
+        PurgeSelector::Author(_) | PurgeSelector::Record(_) => return Ok(0),
+    };
+    Ok(sqlx::query(sqlx::AssertSqlSafe(format!(
+        "UPDATE url_state u SET state = 'tombstoned', lease_epoch = NULL
+         FROM urls x
+         WHERE x.url_key = u.url_key AND u.state <> 'tombstoned' AND {pred}"
+    )))
+    .bind(&val)
+    .execute(pool)
+    .await?
+    .rows_affected())
+}
+
+/// Advances every unfinished request (the maintenance role), after deleting leftover purge
+/// garbage (old objects of rewrites that crashed before their deletion).
 pub async fn process_pending(
     pool: &PgPool,
     store: &dyn BlobStore,
     now: DateTime<Utc>,
 ) -> anyhow::Result<Vec<PurgeOutcome>> {
+    if let Err(e) = collect_garbage(pool, store).await {
+        tracing::warn!(error = %e, "purge: garbage collection failed; retried later");
+    }
     let ids: Vec<i64> =
         sqlx::query_scalar("SELECT id FROM purge_requests WHERE state <> 'done' ORDER BY id")
             .fetch_all(pool)
@@ -465,16 +507,30 @@ pub async fn remove_captures(
             },
             Err(e) => return Err(e.into()),
         };
+        let sid: SegmentId = seg.parse()?;
         if committer.commit_rewrite(&rw).await? {
             caps += rw.removed.len() as u64;
             segs += 1;
+            fail::fail_point!("purge::after_commit_rewrite", |_| Err(anyhow::anyhow!(
+                "failpoint purge::after_commit_rewrite"
+            )));
+            finish_rewrite(store, &rw).await?;
+        } else {
+            // Another rewrite of this segment committed first: ours is garbage (never live).
+            let ours: Vec<String> = [rw.new_path.clone(), rw.new_cdxj_path.clone()]
+                .into_iter()
+                .flatten()
+                .chain(rw.abandoned.iter().cloned())
+                .collect();
+            if !ours.is_empty() {
+                record_garbage(pool, sid, &ours, "unreferenced").await?;
+            }
         }
-        finish_rewrite(store, &rw).await?;
         // Noarchive captures of an archive segment have their text under `ephemeral/text/`.
-        let sid: SegmentId = seg.parse()?;
         purge_text_tier(store, sid, false, &remove).await?;
         purge_text_tier(store, sid, true, &remove).await?;
     }
+    collect_garbage(pool, store).await?;
     Ok((caps, segs))
 }
 

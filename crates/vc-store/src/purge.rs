@@ -7,7 +7,8 @@
 //!    captures' offsets and deletes the purged capture rows in one transaction (fenced on the old
 //!    path);
 //! 3. [`finish_rewrite`] deletes the old objects (GCS then drops the non-current versions per the
-//!    bucket's soft-delete window).
+//!    bucket's soft-delete window). Step 2 also lists them in `store_garbage` (migration 1904),
+//!    so a crash before step 3 is repaired by [`collect_garbage`] on a later run.
 //!
 //! The kept captures' compressed frames are copied byte for byte (no recompression).
 
@@ -187,4 +188,67 @@ fn segment_id_of(path: &str) -> Result<SegmentId> {
     let file = path.rsplit('/').next().unwrap_or(path);
     let id = file.split('.').next().unwrap_or(file);
     id.parse()
+}
+
+/// Records objects as garbage (deleted by [`collect_garbage`] unless a segment still names
+/// them). For paths outside a committed rewrite, e.g. the objects of a rewrite whose commit lost
+/// the race (`vc_rewrite_segment` returned false).
+pub async fn record_garbage(
+    pool: &sqlx::PgPool,
+    segment: SegmentId,
+    paths: &[String],
+    reason: &str,
+) -> Result<()> {
+    sqlx::query(
+        "INSERT INTO store_garbage (path, segment_id, reason)
+         SELECT p, $2, $3 FROM unnest($1::text[]) AS p
+         ON CONFLICT (path) DO NOTHING",
+    )
+    .bind(paths)
+    .bind(segment.to_string())
+    .bind(reason)
+    .execute(pool)
+    .await
+    .map_err(|e| Error::Db(e.to_string()))?;
+    Ok(())
+}
+
+/// Deletes every `store_garbage` object that no live `segments` row names (a live path is only
+/// unlisted; a purged segment keeps its last path in its row), then its row. Idempotent; a missing object counts as deleted. Returns the
+/// objects deleted.
+pub async fn collect_garbage(pool: &sqlx::PgPool, store: &dyn BlobStore) -> Result<u64> {
+    let db = |e: sqlx::Error| Error::Db(e.to_string());
+    sqlx::query(
+        "DELETE FROM store_garbage g
+         WHERE EXISTS (SELECT 1 FROM segments s
+                       WHERE s.purged_at IS NULL AND (s.path = g.path OR s.cdxj_path = g.path))",
+    )
+    .execute(pool)
+    .await
+    .map_err(db)?;
+    let paths: Vec<String> = sqlx::query_scalar("SELECT path FROM store_garbage ORDER BY path")
+        .fetch_all(pool)
+        .await
+        .map_err(db)?;
+    let mut n = 0;
+    for p in paths {
+        match store.delete(&p).await {
+            Ok(()) => n += 1,
+            Err(Error::NotFound(_)) => {}
+            Err(e) => return Err(e),
+        }
+        sqlx::query(
+            "DELETE FROM store_garbage g WHERE g.path = $1
+               AND NOT EXISTS (SELECT 1 FROM segments s
+                       WHERE s.purged_at IS NULL AND (s.path = g.path OR s.cdxj_path = g.path))",
+        )
+        .bind(&p)
+        .execute(pool)
+        .await
+        .map_err(db)?;
+    }
+    if n > 0 {
+        tracing::info!(objects = n, "store: purge garbage deleted");
+    }
+    Ok(n)
 }
