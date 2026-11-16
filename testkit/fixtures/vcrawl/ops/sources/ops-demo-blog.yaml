@@ -1,0 +1,33 @@
+# vcrawl ops tests: a valid source spec (admin source validate/approve/disable).
+id: ops-demo-blog
+name: Ops Demo Blog
+category: blogs
+source_class: editorial
+licence:
+  class: facts_only
+  spdx: null
+  attribution: Ops Demo Blog
+  url: null
+method: rss
+seeds: []
+sitemaps: []
+feeds:
+- https://ops-demo.example/feed/
+adapter: null
+include: []
+exclude: []
+max_depth: 1
+kinds:
+- article
+llm_kinds: []
+render: never
+cadence: h12
+min_delay_s: 5
+daily_budget: 3000
+politeness_key: null
+enabled: true
+needs_key: false
+key_secret: null
+max_retention_days: null
+display_requirements: null
+notes: test fixture

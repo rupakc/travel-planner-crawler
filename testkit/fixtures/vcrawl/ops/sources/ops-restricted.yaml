@@ -1,0 +1,33 @@
+# vcrawl ops tests: a valid source spec (admin source validate/approve/disable).
+id: ops-restricted
+name: Ops Restricted
+category: blogs
+source_class: editorial
+licence:
+  class: restricted
+  spdx: null
+  attribution: Ops Restricted
+  url: null
+method: rss
+seeds: []
+sitemaps: []
+feeds:
+- https://ops-restricted.example/feed/
+adapter: null
+include: []
+exclude: []
+max_depth: 1
+kinds:
+- article
+llm_kinds: []
+render: never
+cadence: h12
+min_delay_s: 5
+daily_budget: 3000
+politeness_key: null
+enabled: false
+needs_key: false
+key_secret: null
+max_retention_days: null
+display_requirements: null
+notes: test fixture
