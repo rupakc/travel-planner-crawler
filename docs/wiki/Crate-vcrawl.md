@@ -33,8 +33,10 @@ From `deploy/compose.yaml` and `infrastructure/README.md`:
 
 - `ENTRYPOINT ["vcrawl"]`; the role is the compose command.
 - Runs as uid 65532 on a read-only root filesystem.
-- Secrets arrive as files: `VC_DATABASE_PASSWORD_FILE`, `VC_API_TOKEN_FILE`,
-  `VC_API_TLS_KEY_FILE`, `VC_API_TLS_CERT_FILE`.
+- Settings are `VC_<SECTION>_<FIELD>` (vc-config); `crates/vc-config/tests/deploy_env.rs`
+  fails on any other `VC_*` name in `deploy/compose.yaml`. The DB password arrives as a file
+  (`VC_DATABASE_PASSWORD_FILE`); the API TLS key/cert are read by secret name through
+  vc-secrets; client tokens are argon2 hashes in `api_clients`.
 - Image labels `io.voyager-crawler.schema` and `io.voyager-crawler.min-schema` are stamped
   by the deploy workflow from `migrations/`.
 

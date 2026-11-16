@@ -76,8 +76,10 @@ gone within 21 days (the opt-out SLA).
 
 - `ENTRYPOINT ["vcrawl"]`; the role is the compose command; `vcrawl health` exits 0
   when the role is healthy (progress-based); runs as uid 65532 on a read-only root.
-- Secrets arrive as files: `VC_DATABASE_PASSWORD_FILE`, `VC_API_TOKEN_FILE`,
-  `VC_API_TLS_KEY_FILE`, `VC_API_TLS_CERT_FILE` (see `deploy/compose.yaml`).
+- Settings are `VC_<SECTION>_<FIELD>` (vc-config); `crates/vc-config/tests/deploy_env.rs`
+  fails on any other `VC_*` name in `deploy/compose.yaml`. The DB password arrives as a file
+  (`VC_DATABASE_PASSWORD_FILE`); the API TLS key/cert are read by secret name through
+  vc-secrets; client tokens are argon2 hashes in `api_clients` (see `deploy/compose.yaml`).
 - Image labels `io.voyager-crawler.schema` / `min-schema` are stamped by
   `.github/workflows/deploy.yml` from `migrations/`.
 - Metrics the alert policies read (`custom.googleapis.com/crawler/…`, resource

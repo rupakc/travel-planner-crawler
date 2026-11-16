@@ -10,7 +10,9 @@
 //! `VC_LLM_DAILY_USD=1.0`, `VC_DATABASE_URL=postgres://…`, `VC_FRONTIER_SHARDS=[0,1]`. Deeper
 //! nesting uses `__`: `VC_LLM_SHARES__SCOUT=0.05`. Aliases: `VC_PROJECT_CAP_USD` →
 //! `llm.project_cap_usd`. Variables whose section is unknown (e.g. `VC_SECRET_*` for the env
-//! secret backend, `VC_CONFIG`) are ignored. `VC_CONFIG` names the TOML file.
+//! secret backend, `VC_CONFIG`) are ignored, as is every `VC_*_FILE` (a secret file path, see
+//! [`SECRET_FILE_VARS`]). `VC_CONFIG` names the TOML file. [`unmapped_env_keys`] lists the
+//! `VC_*` names no setting reads (a test runs it on `deploy/compose.yaml`).
 //!
 //! Each crate owns one file in [`sections`] (r5 Q16); agents edit only their own.
 
@@ -48,6 +50,11 @@ pub const SECTIONS: &[&str] = &[
 
 /// Env aliases: `VC_<ALIAS>` → key path.
 pub const ALIASES: &[(&str, &str)] = &[("project_cap_usd", "llm.project_cap_usd")];
+
+/// Secret-file variables (prefix `VC_` stripped, lowercase): `VC_<NAME>_FILE` holds the path of
+/// a secret file (`/run/secrets/*`, deploy kit) and is never a setting. Only the ones a
+/// component actually reads are listed; [`unmapped_env_keys`] reports any other `*_FILE`.
+pub const SECRET_FILE_VARS: &[&str] = &["database_password_file"];
 
 /// Configuration errors.
 #[derive(Debug, thiserror::Error)]
@@ -106,11 +113,50 @@ pub fn env_key_path(key: &str) -> Option<String> {
     if let Some((_, path)) = ALIASES.iter().find(|(a, _)| *a == k) {
         return Some((*path).to_string());
     }
+    if k.ends_with("_file") {
+        return None; // a secret file path (see SECRET_FILE_VARS), never a setting
+    }
     let (section, rest) = k.split_once('_')?;
     if rest.is_empty() || !SECTIONS.contains(&section) {
         return None;
     }
     Some(format!("{section}.{}", rest.replace("__", ".")))
+}
+
+/// The `VC_*` names among `keys` that no setting reads: an unknown section (silently ignored by
+/// [`Config::load`]), an unknown field (which makes it fail), or a `*_FILE` not in
+/// [`SECRET_FILE_VARS`]. `VC_CONFIG` and `VC_SECRET_*` (env secret backend) are known;
+/// names without the `VC_` prefix are ignored. Order is preserved.
+pub fn unmapped_env_keys<'a>(keys: impl IntoIterator<Item = &'a str>) -> Vec<String> {
+    let defaults = Figment::from(Serialized::defaults(Config::default()));
+    let mut out = Vec::new();
+    for key in keys {
+        let Some(rest) = key.strip_prefix("VC_") else {
+            continue;
+        };
+        let k = rest.to_ascii_lowercase();
+        if k == "config" || k.starts_with("secret_") || SECRET_FILE_VARS.contains(&k.as_str()) {
+            continue;
+        }
+        let known = env_key_path(&k).is_some_and(|path| {
+            // Set the key to a dummy value: only an unknown field (not a type error) means the
+            // path names no setting. Works for `Option` fields whose default is absent.
+            match defaults
+                .clone()
+                .merge((path.as_str(), ""))
+                .extract::<Config>()
+            {
+                Ok(_) => true,
+                Err(e) => !e
+                    .into_iter()
+                    .any(|e| matches!(e.kind, figment::error::Kind::UnknownField(..))),
+            }
+        });
+        if !known {
+            out.push(key.to_string());
+        }
+    }
+    out
 }
 
 impl Config {

@@ -43,13 +43,20 @@ x-role: &role
     options: { max-size: "20m", max-file: "5" }
   secrets: [pg_password]
   environment: &role-env
+    # Every VC_* name is a vc-config setting (VC_<SECTION>_<FIELD>) or a secret
+    # file listed in vc_config::SECRET_FILE_VARS; crates/vc-config/tests/deploy_env.rs
+    # loads Config with exactly this environment and fails on any other name.
     VC_DATABASE_URL: postgres://vcrawl@postgres:5432/vcrawl
     VC_DATABASE_PASSWORD_FILE: /run/secrets/pg_password
-    VC_GCS_RAW_BUCKET: voyager-crawler-raw
-    VC_GCS_OPS_BUCKET: voyager-crawler-ops
-    VC_GCP_PROJECT: voyager-prod-ohzkl
-    VC_LOG_FORMAT: json
+    VC_STORE_RAW_BUCKET: voyager-crawler-raw
+    VC_STORE_OPS_BUCKET: voyager-crawler-ops
+    VC_LLM_GCP_PROJECT: voyager-prod-ohzkl
+    VC_SECRETS_PROJECT: voyager-prod-ohzkl
+    VC_OBS_LOG_FORMAT: json
     VC_LLM_ENABLED: ${VC_LLM_ENABLED:-false}
+    # The owner's project cap (host.local.env, infrastructure/README.md step 3);
+    # 0 = unset: llm.enabled is refused until it is raised.
+    VC_PROJECT_CAP_USD: ${VC_PROJECT_CAP_USD:-0}
   healthcheck:
     test: ["CMD", "vcrawl", "health"]
     interval: 60s
@@ -157,7 +164,7 @@ services:
     environment:
       <<: *role-env
       VC_RENDER_CDP_URL: http://chromium:9222
-      VC_SPOOL_DIR: /spool
+      VC_STORE_SPOOL_DIR: /spool
     volumes:
       - /var/lib/voyager-crawler/spool:/spool
     depends_on:
@@ -182,10 +189,9 @@ services:
     secrets: [pg_password, api_token_voyager, api_tls_key, api_tls_cert]
     environment:
       <<: *role-env
-      VC_API_LISTEN: 0.0.0.0:8443
-      VC_API_TOKEN_FILE: /run/secrets/api_token_voyager
-      VC_API_TLS_KEY_FILE: /run/secrets/api_tls_key
-      VC_API_TLS_CERT_FILE: /run/secrets/api_tls_cert
+      VC_API_BIND: 0.0.0.0:8443
+      # TLS key/cert are read through vc-secrets by name (api.tls_*_secret);
+      # client tokens are argon2 hashes in api_clients, so no token file.
     # Published on the reserved internal IP only; the firewall admits
     # tcp:8443 from the app VM's service account alone
     ports: ["${VC_API_BIND:?VC_API_BIND is set by first-boot.sh}:8443:8443"]
