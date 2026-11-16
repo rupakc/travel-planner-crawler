@@ -1,0 +1,1 @@
+Voyager Crawler · MIT · [Repository](https://github.com/rupakc/travel-planner-crawler) · [VoyagerBot and opt-out](https://github.com/rupakc/travel-planner-crawler/blob/main/BOT.md) · These pages are generated from `docs/wiki/` in the repository; edit them there, not here.
