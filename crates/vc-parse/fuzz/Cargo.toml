@@ -1,0 +1,44 @@
+# cargo-fuzz targets for vc-parse. Not a workspace member (the empty [workspace] below makes
+# this its own workspace), so `cargo test --workspace` and cargo-deny never build libFuzzer.
+# Run from crates/vc-parse: `cargo +nightly fuzz run fuzz_html -- -max_total_time=60`.
+[package]
+name = "vc-parse-fuzz"
+version = "0.0.0"
+edition = "2024"
+publish = false
+license = "MIT"
+
+[package.metadata]
+cargo-fuzz = true
+
+[workspace]
+
+[dependencies]
+libfuzzer-sys = "0.4"
+chrono = { version = "0.4", default-features = false, features = ["std"] }
+vc-core = { path = "../../vc-core" }
+vc-parse = { path = ".." }
+
+[[bin]]
+name = "fuzz_html"
+path = "fuzz_targets/fuzz_html.rs"
+test = false
+doc = false
+bench = false
+
+[[bin]]
+name = "fuzz_sitemap"
+path = "fuzz_targets/fuzz_sitemap.rs"
+test = false
+doc = false
+bench = false
+
+[[bin]]
+name = "fuzz_feed"
+path = "fuzz_targets/fuzz_feed.rs"
+test = false
+doc = false
+bench = false
+
+[profile.release]
+debug = 1

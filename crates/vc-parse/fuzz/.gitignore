@@ -1,0 +1,6 @@
+target/
+artifacts/
+coverage/
+# Keep the committed seeds, not the corpus libFuzzer grows locally.
+corpus/*/*
+!corpus/*/seed-*
