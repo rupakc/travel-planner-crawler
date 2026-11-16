@@ -183,6 +183,8 @@ t15 crates/vcrawl/*
 t15 crates/vc-config/src/sections/vcrawl.rs
 t15 migrations/contract/*
 t15 testkit/fixtures/vcrawl/*
+t15 Dockerfile
+t15 .dockerignore
 t16 e2e/*
 t16 .github/workflows/e2e.yml
 t17 crates/vcrawl/src/agentic/*
