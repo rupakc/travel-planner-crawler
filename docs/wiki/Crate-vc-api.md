@@ -1,0 +1,44 @@
+# Crate: vc-api
+
+**Purpose.** The internal `/v1` read API for the Voyager backend. An axum router over the
+`IndexReader` and `PlaceResolver` traits. The frozen contract is
+`docs/Crawler-API.md`; a guide is on [Read API](Read-API).
+
+Path: `crates/vc-api`. Dependencies: `axum`, `axum-server` (TLS), `tower-http`, `utoipa`
+(OpenAPI), `argon2`, `sqlx`. Migration block `16xx` (no migration needed: `api_clients` and
+`changes` are in `0010_api.sql`).
+
+## Modules
+
+| Module | What it does |
+|---|---|
+| `handlers` | the endpoints: search, entities, entity by id (301 on merge), record versions, articles, observations, places resolve, changes, sources, stats, openapi, healthz, readyz |
+| `auth` | `Bearer <client_id>.<secret>`; argon2id hashes (`hash_token`, `verify_token`, `split_token`); `ClientStore` (`MemClientStore` for tests, Postgres in `pg`); verified tokens cached 60 s (`CACHE_TTL`) |
+| `ratelimit` | per-client token bucket (600/min default); `429` with `Retry-After` 1–60 s |
+| `shape` | licence shaping on every item: per-client licence classes, UsePolicy, `facts_only` text cut to 300 characters and full-text keys removed |
+| `dto` | the response types (`ItemDto`, `EntityDto`, `ChangeDto`, …) with OpenAPI schemas |
+| `catalog` | sources and stats (cached up to 60 s) |
+| `error` | `{"error", "message"}` bodies and status codes |
+| `tls` | `serve`: TLS from secrets on the API port, plus a separate localhost-only `/metrics` listener |
+| `metrics` | request metrics |
+| `pg` | Postgres-backed client store and catalog |
+
+## Config
+
+`[api]`: bind address, metrics bind (`127.0.0.1:9100`), TLS secret names, rate per minute,
+max page (100), excerpt length (300), request timeout (10 s).
+
+## Tests
+
+- `tests/api.rs`: `unauthenticated_401`, **`openapi_snapshot`** (insta, in
+  `tests/snapshots/api__openapi.snap`), `changes_cursor_no_skips`, `facts_only_excerpt_capped`,
+  `licence_and_provenance_on_every_item`, `redirected_entity_301`,
+  `licence_classes_filtered_per_client`, `use_policy_restricts_served_fields`,
+  `rate_limited_per_client_429`, `metrics_not_on_public_listener`,
+  `places_resolve_and_limits`, `sources_stats_and_probes`.
+- `tests/pg.rs`: the Postgres client store, sources and stats.
+
+## Compatibility rule
+
+Additive only. Update the OpenAPI snapshot and `Crawler-API.md` in the same PR. A breaking
+change needs `/v2` beside `/v1`.

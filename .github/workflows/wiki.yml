@@ -1,0 +1,80 @@
+name: Wiki
+
+# Publishes docs/wiki/ to the GitHub wiki (rupakc/travel-planner-crawler.wiki.git) on every
+# push to main that touches it. docs/wiki/ is the source of truth: pages edited in the wiki
+# UI are overwritten, and pages removed from docs/wiki/ are removed from the wiki.
+# Actions are pinned by commit SHA; the tag is in the comment.
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "docs/wiki/**"
+      - ".github/workflows/wiki.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: wiki
+  cancel-in-progress: false
+
+jobs:
+  publish:
+    name: publish wiki
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Check internal wiki links
+        run: |
+          python3 - <<'EOF'
+          import glob, os, re, sys
+          pages = {os.path.basename(f)[:-3] for f in glob.glob("docs/wiki/*.md")}
+          bad = 0
+          for f in sorted(glob.glob("docs/wiki/*.md")):
+              text = re.sub(r"```.*?```", "", open(f, encoding="utf-8").read(), flags=re.S)
+              for m in re.finditer(r"\]\(([^)\s]+)\)", text):
+                  target = m.group(1)
+                  if re.match(r"(https?:|mailto:|#)", target):
+                      continue
+                  if target.split("#")[0] not in pages:
+                      print(f"::error file={f}::broken wiki link: {target}")
+                      bad += 1
+          sys.exit(1 if bad else 0)
+          EOF
+
+      - name: Clone the wiki repository
+        env:
+          TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          REPO: ${{ github.repository }}
+          SERVER: ${{ github.server_url }}
+        run: |
+          url="https://x-access-token:${TOKEN}@github.com/${REPO}.wiki.git"
+          if ! git ls-remote "$url" >/dev/null 2>&1; then
+            echo "::error::The wiki repository ${REPO}.wiki.git does not exist yet. GitHub creates it only when the first page is saved: open ${SERVER}/${REPO}/wiki, click 'Create the first page', save it (any text), then re-run this workflow."
+            exit 1
+          fi
+          git clone --depth 1 "$url" wiki
+
+      - name: Sync docs/wiki into the wiki
+        run: rsync -a --delete --exclude ".git" docs/wiki/ wiki/
+
+      - name: Commit and push
+        env:
+          SHA: ${{ github.sha }}
+        working-directory: wiki
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          if git diff --cached --quiet; then
+            echo "Wiki already up to date."
+            exit 0
+          fi
+          git commit -m "Sync from ${SHA}"
+          git push origin HEAD
