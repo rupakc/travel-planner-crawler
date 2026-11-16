@@ -15,7 +15,9 @@ use flate2::read::GzDecoder;
 use serde_json::{Value, json};
 use vc_config::ExtractConfig;
 use vc_core::extract::{GeoPoint, PlaceMatch, PlaceQuery, PlaceResolver};
-use vc_core::llm::{BudgetLedger, LlmClient, LlmRequest, Purpose, ThinkingLevel, Usage, Usd};
+use vc_core::llm::{
+    BudgetLedger, LlmClient, LlmError, LlmRequest, Purpose, ThinkingLevel, Usage, Usd,
+};
 use vc_core::{Error, Result};
 
 use crate::fold::fold;
@@ -346,10 +348,20 @@ impl PlaceResolver for LlmPlaceDisambiguator {
             thinking: ThinkingLevel::Off,
         };
         let res = self.llm.generate(&r, req).await;
-        let usage = res
-            .as_ref()
-            .map(|x| x.usage.clone())
-            .unwrap_or_else(|_| Usage::default());
+        // An error that never reached Vertex costs nothing; any other may have been billed.
+        let usage = match &res {
+            Ok(x) => x.usage.clone(),
+            Err(Error::Llm(
+                LlmError::Disabled
+                | LlmError::BudgetExhausted
+                | LlmError::BreakerOpen { .. }
+                | LlmError::RateLimited,
+            )) => Usage::default(),
+            Err(_) => Usage {
+                cost: self.est,
+                ..Usage::default()
+            },
+        };
         let _ = self.ledger.settle(r, usage).await;
         let pick = res.ok().and_then(|x| {
             x.json
