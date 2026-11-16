@@ -163,6 +163,18 @@ impl ClaimPermit {
         self.pace.lock().map(|p| p.requests).unwrap_or(0)
     }
 
+    /// A cheap, cloneable handle sharing this permit's deadline and pacing state. A body
+    /// stream holds it so that a [`Frontier::extend`] made **after** the stream was opened is
+    /// seen by the stream, and so that it can record when the body ended
+    /// ([`DeadlineHandle::record_request_end`]) for pacing. The handle cannot move the deadline
+    /// and cannot make requests: it is not a permit.
+    pub fn deadline_handle(&self) -> DeadlineHandle {
+        DeadlineHandle {
+            deadline_micros: Arc::clone(&self.deadline_micros),
+            pace: Arc::clone(&self.pace),
+        }
+    }
+
     /// The `LeaseLost` error for this permit.
     pub fn lease_lost(&self, reason: crate::error::LeaseLostReason) -> LeaseLost {
         LeaseLost {
@@ -180,6 +192,55 @@ impl std::fmt::Debug for ClaimPermit {
             .field("epoch", &self.epoch)
             .field("deadline", &self.deadline())
             .field("delay", &self.delay)
+            .finish_non_exhaustive()
+    }
+}
+
+/// A read-only view of a [`ClaimPermit`]'s deadline (shared, so lease extensions are visible)
+/// plus the ability to record the end of a request for pacing. Obtained from
+/// [`ClaimPermit::deadline_handle`]; it carries no right to make requests.
+#[derive(Clone)]
+pub struct DeadlineHandle {
+    deadline_micros: Arc<AtomicI64>,
+    pace: Arc<Mutex<PaceState>>,
+}
+
+impl DeadlineHandle {
+    /// The permit's current lease deadline (DB time), including any later extension.
+    pub fn deadline(&self) -> DbTime {
+        let m = self.deadline_micros.load(Ordering::SeqCst);
+        DbTime(DateTime::<Utc>::from_timestamp_micros(m).unwrap_or_default())
+    }
+
+    /// Time left until the deadline, relative to `now` (zero if past).
+    pub fn remaining(&self, now: DateTime<Utc>) -> Duration {
+        (self.deadline().0 - now).to_std().unwrap_or(Duration::ZERO)
+    }
+
+    /// Clamps a timeout to the lease: `min(own, deadline − now)`.
+    pub fn clamp_timeout(&self, own: Duration, now: DateTime<Utc>) -> Duration {
+        own.min(self.remaining(now))
+    }
+
+    /// Records the end of a request body on the permit's pacing state (the permit's
+    /// [`ClaimPermit::last_request_end`] moves to `at`, never backwards). Unlike
+    /// [`ClaimPermit::record_request_end`] it does not count a new request.
+    pub fn record_request_end(&self, at: Instant) {
+        if let Ok(mut p) = self.pace.lock() {
+            p.last_request_end = Some(p.last_request_end.map_or(at, |prev| prev.max(at)));
+        }
+    }
+
+    /// When the last request under the permit ended, if any.
+    pub fn last_request_end(&self) -> Option<Instant> {
+        self.pace.lock().map(|p| p.last_request_end).unwrap_or(None)
+    }
+}
+
+impl std::fmt::Debug for DeadlineHandle {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        f.debug_struct("DeadlineHandle")
+            .field("deadline", &self.deadline())
             .finish_non_exhaustive()
     }
 }
@@ -435,4 +496,22 @@ pub trait Frontier: LeaseCheck + Send + Sync {
     /// Stores a freshly fetched robots.txt entry (the raw response must already be spooled).
     /// Lease-checked: only the permit holder for the origin's key may store it.
     async fn store_robots(&self, p: &ClaimPermit, entry: RobotsEntry) -> Result<()>;
+
+    /// Forces a refetch of one URL no later than `at` (e.g. after an upstream change-feed
+    /// signal). Never bypasses politeness: only the URL's own schedule moves; the key's
+    /// `next_allowed_at`, parking, budget and rate tokens still gate the claim.
+    ///
+    /// * `due`: `next_fetch_at` becomes `at` (earlier or later).
+    /// * `leased` / `fetched_pending`: the running fetch is not disturbed; when the URL next
+    ///   returns to `due` (completion or segment commit), its `next_fetch_at` is at most `at`.
+    /// * `gone` / `tombstoned` / `disabled`, or an unknown key: nothing changes, `Ok(false)`.
+    ///
+    /// Returns whether the URL was rescheduled. The default implementation refuses with
+    /// [`crate::Error::Invalid`] (frontiers that do not support it).
+    async fn reschedule(&self, url: &UrlKey, at: DateTime<Utc>) -> Result<bool> {
+        let _ = (url, at);
+        Err(crate::Error::Invalid(
+            "reschedule is not supported by this frontier".into(),
+        ))
+    }
 }
