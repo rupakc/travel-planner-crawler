@@ -135,6 +135,8 @@ SELECT role, fetch_mode, key, status, count(*) FROM captures GROUP BY 1, 2, 3, 4
 SELECT kind, source_id, state, count(*), max(current_version) FROM records GROUP BY 1, 2, 3 ORDER BY 2, 1;
 SELECT count(*) AS record_versions FROM record_versions;
 SELECT key, state, count(*) FROM url_state GROUP BY 1, 2 ORDER BY 1, 2;
+SELECT us.key, u.url, us.state, us.depth, us.fetch_count, us.last_status, us.next_fetch_at, us.fetch_mode
+  FROM url_state us JOIN urls u USING (url_key) ORDER BY 1, 2;
 SELECT key, delay_ms, crawl_delay_ms, parked_until, park_reason FROM politeness_keys ORDER BY 1;
 SELECT role, instance, last_beat, progress FROM heartbeats ORDER BY 1, 2;
 SQL
