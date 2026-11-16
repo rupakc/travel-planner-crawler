@@ -305,8 +305,8 @@ fn unreserved(b: u8) -> bool {
     b.is_ascii_alphanumeric() || matches!(b, b'-' | b'.' | b'_' | b'~')
 }
 
-/// Normalises a pattern or a path for matching: non-ASCII, control, space and
-/// `" < > \` { }` bytes are percent-encoded; `%XX` escapes of unreserved characters are
+/// Normalises a pattern or a path for matching: non-ASCII, control, space, a `%` that starts
+/// no escape and `" < > \` { }` bytes are percent-encoded; `%XX` escapes of unreserved characters are
 /// decoded and other escapes upper-cased. `*` and `$` are kept. Idempotent.
 pub fn normalize(s: &str) -> String {
     const HEX: &[u8; 16] = b"0123456789ABCDEF";
@@ -330,7 +330,9 @@ pub fn normalize(s: &str) -> String {
             i += 3;
             continue;
         }
-        if c <= 0x20 || c >= 0x7F || matches!(c, b'"' | b'<' | b'>' | b'`' | b'{' | b'}') {
+        // A `%` that does not start an escape is encoded too: kept bare, it could combine with
+        // a decoded escape after it (`%7%39` → `%79`) and a second pass would differ.
+        if c <= 0x20 || c >= 0x7F || matches!(c, b'%' | b'"' | b'<' | b'>' | b'`' | b'{' | b'}') {
             out.push('%');
             out.push(HEX[usize::from(c >> 4)] as char);
             out.push(HEX[usize::from(c & 0xF)] as char);

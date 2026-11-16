@@ -300,6 +300,33 @@ fn voyagerbot_group_with_version_matches_us() {
 }
 
 #[test]
+fn normalize_is_idempotent_with_bare_percent() {
+    // Found by the nightly fuzzer: a bare `%` next to an escape that decodes to a hex digit.
+    for s in [
+        "%7%39",
+        "/a%",
+        "%%0071%737777",
+        "/%zz/%4",
+        "2\u{ff}\u{7}7%\u{0}71%737777%\u{0}71%7%391",
+    ] {
+        let n = robots::normalize(s);
+        assert_eq!(robots::normalize(&n), n, "{s:?}");
+    }
+    assert_eq!(robots::normalize("%7%39"), "%2579");
+    // A bare `%` in a rule and in a path still match each other.
+    assert!(!robots::is_allowed(
+        b"User-agent: *\nDisallow: /a%b\n",
+        "VoyagerBot",
+        "/a%b"
+    ));
+    assert!(!robots::is_allowed(
+        b"User-agent: *\nDisallow: /a%25b\n",
+        "VoyagerBot",
+        "/a%b"
+    ));
+}
+
+#[test]
 fn robots_txt_itself_is_always_allowed_unless_key_blocked() {
     let p = policy();
     let r = ok("User-agent: *\nDisallow: /\n");
