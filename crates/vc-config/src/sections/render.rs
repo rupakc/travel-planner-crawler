@@ -24,8 +24,11 @@ pub struct RenderConfig {
     pub subresource_gap_ms: u64,
     /// Sub-resource cache TTL, hours (24).
     pub subresource_cache_ttl_h: u64,
-    /// Sub-resource cache directory.
+    /// Sub-resource cache directory (reserved: the v1 cache is in memory, see
+    /// `subresource_cache_max_bytes`).
     pub cache_dir: String,
+    /// Max body bytes held by the in-memory, content-addressed sub-resource cache (64 MiB).
+    pub subresource_cache_max_bytes: u64,
     /// Restart the browser after this many renders (leak containment).
     pub restart_after_renders: u32,
 }
@@ -43,6 +46,7 @@ impl Default for RenderConfig {
             subresource_gap_ms: 250,
             subresource_cache_ttl_h: 24,
             cache_dir: "/var/lib/voyager-crawler/render-cache".into(),
+            subresource_cache_max_bytes: 64 * 1024 * 1024,
             restart_after_renders: 200,
         }
     }
