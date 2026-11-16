@@ -113,17 +113,17 @@ pub fn challenge_parked(log: &RequestLog, park: Option<&ParkRow>, now: DateTime<
                     p.parked_until
                 ));
             }
-            // The challenge answers 403: vcrawl parks it as `Challenge` or, for a 401/403
-            // challenge page, `Unauthorized { status }`; both start the same 24 h ladder.
-            // Anything else (server errors, manual, robots) means the page was not the cause.
+            // The challenge answers 403: vcrawl parks a detected challenge as `Challenge`.
+            // Anything else (unauthorized, server errors, manual, robots) means the page was
+            // not recognised as the cause.
             let reason = p
                 .park_reason
                 .clone()
                 .unwrap_or_default()
                 .to_ascii_lowercase();
-            if !(reason.contains("challenge") || reason.contains("unauthorized")) {
+            if !reason.contains("challenge") {
                 problems.push(format!(
-                    "{key} park reason is {reason:?}, expected the challenge (challenge or unauthorized 403)"
+                    "{key} park reason is {reason:?}, expected the challenge"
                 ));
             }
         }
@@ -605,7 +605,10 @@ mod tests {
             Some(&parked("{\"reason\":\"unauthorized\",\"status\":403}")),
             t(1000),
         );
-        assert!(matches!(o, Outcome::Pass(_)), "{o}");
+        assert!(
+            matches!(&o, Outcome::Fail(m) if m.contains("expected the challenge")),
+            "{o}"
+        );
         let o = challenge_parked(&l, Some(&parked("{\"reason\":\"server_errors\"}")), t(1000));
         assert!(
             matches!(&o, Outcome::Fail(m) if m.contains("expected the challenge")),

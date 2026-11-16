@@ -86,18 +86,16 @@ pub const ASSERTIONS: [Spec; 8] = [
 /// Assertions that fail today because of known crawler bugs, with the bugs. An expected
 /// failure does not fail the run, but an expected failure that **passes** does: whoever fixes
 /// the bugs must remove the entry, so the assertion is blocking again.
-pub const XFAIL: &[(&str, &str)] = &[(
-    "polite",
-    "known bugs: (1) Crawl-delay learned from robots.txt is not applied to the rest of the same \
-     claim (crates/vcrawl/src/roles/fetcher.rs: run.crawl_delay only reaches the frontier at \
-     completion; slow.test/ fetched 5 s after a Crawl-delay: 10 robots.txt); (2) render \
-     sub-requests to a third-party key (cdn.test) are paced only within the page's permit, not \
-     against that key's own claims (25-241 ms after cdn.test/robots.txt)",
-)];
+pub const XFAIL: &[(&str, &str)] = &[];
 
 /// Applies [`XFAIL`] to an assertion's outcome.
 pub fn apply_xfail(name: &str, o: Outcome) -> Outcome {
-    let Some((_, why)) = XFAIL.iter().find(|(n, _)| *n == name) else {
+    apply_xfail_in(XFAIL, name, o)
+}
+
+/// [`apply_xfail`] against an explicit list.
+pub fn apply_xfail_in(xfail: &[(&str, &str)], name: &str, o: Outcome) -> Outcome {
+    let Some((_, why)) = xfail.iter().find(|(n, _)| *n == name) else {
         return o;
     };
     match o {
@@ -306,24 +304,26 @@ mod tests {
 
     #[test]
     fn xfail_turns_a_fail_into_xfail_and_a_pass_into_a_fail() {
-        let name = XFAIL[0].0;
-        let o = apply_xfail(name, Outcome::Fail("ShortGap".into()));
+        let list: &[(&str, &str)] = &[("polite", "known bugs: test")];
+        let name = list[0].0;
+        let apply = |n: &str, o| apply_xfail_in(list, n, o);
+        let o = apply(name, Outcome::Fail("ShortGap".into()));
         assert!(
             matches!(&o, Outcome::XFail(m) if m.contains("ShortGap") && m.contains("known bugs"))
         );
         assert!(!o.is_fail());
-        let o = apply_xfail(name, Outcome::Pass("clean".into()));
+        let o = apply(name, Outcome::Pass("clean".into()));
         assert!(
             matches!(&o, Outcome::Fail(m) if m.contains("remove")),
             "{o}"
         );
         assert_eq!(
-            apply_xfail(name, Outcome::Skip("s".into())),
+            apply(name, Outcome::Skip("s".into())),
             Outcome::Skip("s".into())
         );
         // Others are untouched.
         assert_eq!(
-            apply_xfail("raw_first", Outcome::Fail("x".into())),
+            apply("raw_first", Outcome::Fail("x".into())),
             Outcome::Fail("x".into())
         );
         let (_, failed) = summary(&[(name, Outcome::XFail("k".into()))]);
@@ -331,9 +331,9 @@ mod tests {
     }
 
     #[test]
-    fn only_polite_is_expected_to_fail() {
+    fn nothing_is_expected_to_fail() {
         let names: Vec<&str> = XFAIL.iter().map(|(n, _)| *n).collect();
-        assert_eq!(names, ["polite"]);
+        assert!(names.is_empty(), "{names:?}");
         for (n, _) in XFAIL {
             assert!(ASSERTIONS.iter().any(|s| s.name == *n), "unknown {n}");
         }
