@@ -38,6 +38,8 @@ use vc_core::{CaptureRef, Error, ErrorClass, KindId, Result};
 use vc_extract::gate::{compare_with_peers, is_high_stakes};
 use vc_extract::{ExtractInput, Extractor, Gate, PeerRecord, source_gate};
 
+use crate::agentic::AgenticLlm;
+use crate::agentic::triage::{LinkCandidate, PgTriageCache, triage_links};
 use crate::data::capture::{self, CaptureReady, StoredCapture};
 use crate::data::peers::{PendingPeers, index_peers};
 use crate::data::sources::{LoadedSource, SourceCache};
@@ -118,6 +120,7 @@ pub struct Processor {
     d: ProcessorDeps,
     sources: SourceCache,
     pending: PendingPeers,
+    triage: Option<(AgenticLlm, PgTriageCache)>,
     lease: Duration,
 }
 
@@ -143,6 +146,7 @@ impl Processor {
             d,
             sources,
             pending,
+            triage: None,
             lease: Duration::from_secs(600),
         }
     }
@@ -156,6 +160,16 @@ impl Processor {
     /// Replaces the held-record set (tests use other limits).
     pub fn with_pending(mut self, p: PendingPeers) -> Self {
         self.pending = p;
+        self
+    }
+
+    /// Enables link triage (spec §5.7): in-scope page links the heuristics leave uncertain go
+    /// to [`triage_links`] (verdicts cached per URL pattern in `llm_cache`). Wired only when
+    /// the LLM is enabled; a disabled LLM, a refused budget or a failure leaves links undecided,
+    /// and undecided links keep the heuristic default (followed).
+    pub fn with_triage(mut self, llm: AgenticLlm) -> Self {
+        let cache = PgTriageCache::new(self.d.pool.clone());
+        self.triage = Some((llm, cache));
         self
     }
 
@@ -391,6 +405,59 @@ impl Processor {
         Ok(promoted)
     }
 
+    /// Batch indices of uncertain links that triage judged irrelevant (none without triage, with
+    /// the LLM off, or on failure).
+    async fn triage_drop(
+        &self,
+        src: &LoadedSource,
+        parsed: &Parsed,
+        uncertain: &[(usize, &vc_core::parse::Link)],
+    ) -> std::collections::HashSet<usize> {
+        let mut drop = std::collections::HashSet::new();
+        let Some((llm, cache)) = &self.triage else {
+            return drop;
+        };
+        if uncertain.is_empty() || !llm.enabled() {
+            return drop;
+        }
+        let kinds: Vec<String> = kinds_union(&src.spec.kinds, &src.spec.llm_kinds)
+            .iter()
+            .map(|k| k.0.to_string())
+            .collect();
+        let context = parsed.title.clone().unwrap_or_default();
+        let cands: Vec<LinkCandidate> = uncertain
+            .iter()
+            .map(|(_, l)| LinkCandidate {
+                url: l.url.clone(),
+                anchor: l.anchor.clone(),
+                context: context.clone(),
+            })
+            .collect();
+        match triage_links(llm, cache, &kinds, &cands).await {
+            Ok(rep) => {
+                for ((i, _), v) in uncertain.iter().zip(&rep.verdicts) {
+                    if v.as_ref().is_some_and(|v| !v.relevant) {
+                        drop.insert(*i);
+                    }
+                }
+                tracing::debug!(
+                    source = %src.spec.id.0,
+                    links = cands.len(),
+                    patterns = rep.patterns,
+                    cache_hits = rep.cache_hits,
+                    llm_calls = rep.llm_calls,
+                    dropped = drop.len(),
+                    "links triaged"
+                );
+            }
+            Err(e) => {
+                tracing::warn!(error_class = ?e.class(), error = %e,
+                    "link triage failed; links keep the heuristic default");
+            }
+        }
+        drop
+    }
+
     /// Enqueues in-scope links (sitemap and feed entries keep the parent's depth; page links
     /// go one level deeper, up to the source's `max_depth`). `rel=nofollow`, canonical and
     /// alternate links are not followed.
@@ -422,6 +489,7 @@ impl Processor {
             depth.saturating_add(1)
         };
         let mut batch = Vec::new();
+        let mut uncertain = Vec::new();
         for l in &parsed.links {
             if batch.len() >= MAX_LINKS_PER_CAPTURE {
                 break;
@@ -446,7 +514,21 @@ impl Processor {
                 LinkKind::Sitemap => Some(MediaType::Sitemap),
                 _ => None,
             };
+            // Certain: listing entries, and links an explicit include pattern matched. Page
+            // links in scope only by the seed-host fallback are uncertain.
+            if !listing && !follow_listing && src.include.is_empty() {
+                uncertain.push((batch.len(), l));
+            }
             batch.push(n);
+        }
+        let drop = self.triage_drop(src, parsed, &uncertain).await;
+        if !drop.is_empty() {
+            batch = batch
+                .into_iter()
+                .enumerate()
+                .filter(|(i, _)| !drop.contains(i))
+                .map(|(_, n)| n)
+                .collect();
         }
         if batch.is_empty() {
             return Ok(0);
