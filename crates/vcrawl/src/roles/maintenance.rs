@@ -732,7 +732,8 @@ async fn agentic_from_config(
         clock.clone(),
     ));
     let client: Arc<dyn vc_core::llm::LlmClient> = if cfg.llm.enabled {
-        let vertex = vc_llm::VertexClient::new(&cfg.llm, Arc::new(vc_llm::AdcToken::new()), clock)?;
+        let vertex = vc_llm::VertexClient::new(&cfg.llm, Arc::new(vc_llm::AdcToken::new()), clock)?
+            .with_shared_breaker(pool.clone());
         Arc::new(vc_llm::VertexLlm::new(cfg.llm.clone(), vertex).with_cache(pool.clone()))
     } else {
         Arc::new(DisabledLlm)

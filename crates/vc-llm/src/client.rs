@@ -7,13 +7,14 @@
 
 use std::collections::BTreeMap;
 use std::fmt;
-use std::sync::{Arc, Mutex};
+use std::sync::{Arc, Mutex, OnceLock};
 use std::time::{Duration, Instant};
 
 use async_trait::async_trait;
 use chrono::{DateTime, Utc};
 use reqwest::{Method, Url};
 use serde_json::Value;
+use sqlx::PgPool;
 use vc_config::LlmConfig;
 use vc_core::llm::{LlmError, Purpose};
 use vc_core::{Clock, Result};
@@ -95,13 +96,28 @@ impl TokenSource for AdcToken {
     }
 }
 
+/// How often a process re-reads the shared breaker row (only while it is making calls).
+pub const BREAKER_SYNC: chrono::Duration = chrono::Duration::seconds(30);
+
 /// The spend breaker: a Vertex 403/429 that names billing or budget opens it for `breaker_h`
 /// hours; while open, no call reaches the network.
+///
+/// With [`Breaker::share_via`] (every production role) it lives in Postgres too
+/// (`llm_breaker`, migration 1401): a trip is written there, and each process re-reads it at
+/// most every [`BREAKER_SYNC`] before calling, so one role's trip pauses every role, and a
+/// restart remembers it. A local [`Breaker::pause`] (startup probe) is never shared.
 #[derive(Debug)]
 pub struct Breaker {
     until: Mutex<Option<DateTime<Utc>>>,
     hours: u64,
     clock: Arc<dyn Clock>,
+    shared: OnceLock<SharedState>,
+}
+
+#[derive(Debug)]
+struct SharedState {
+    pool: PgPool,
+    synced_at: Mutex<Option<DateTime<Utc>>>,
 }
 
 impl Breaker {
@@ -111,7 +127,21 @@ impl Breaker {
             until: Mutex::new(None),
             hours,
             clock,
+            shared: OnceLock::new(),
         }
+    }
+
+    /// Shares the breaker through `llm_breaker` on `pool` (first call wins).
+    pub fn share_via(&self, pool: PgPool) {
+        let _ = self.shared.set(SharedState {
+            pool,
+            synced_at: Mutex::new(None),
+        });
+    }
+
+    /// Whether the breaker is shared through Postgres.
+    pub fn is_shared(&self) -> bool {
+        self.shared.get().is_some()
     }
 
     /// When the breaker closes, if it is open now.
@@ -120,7 +150,7 @@ impl Breaker {
         g.filter(|u| *u > self.clock.now())
     }
 
-    /// `Err(BreakerOpen)` while open.
+    /// `Err(BreakerOpen)` while open (local state; see [`Breaker::sync`]).
     pub fn check(&self) -> std::result::Result<(), LlmError> {
         match self.open_until() {
             Some(until) => Err(LlmError::BreakerOpen { until }),
@@ -128,13 +158,72 @@ impl Breaker {
         }
     }
 
-    /// Opens the breaker now; returns when it closes.
-    pub fn trip(&self) -> DateTime<Utc> {
-        let until = self.clock.now() + chrono::Duration::hours(self.hours as i64);
+    fn extend(&self, until: DateTime<Utc>) -> DateTime<Utc> {
         let mut g = self.until.lock().expect("breaker lock");
         let until = g.map_or(until, |u| u.max(until));
         *g = Some(until);
         until
+    }
+
+    /// Opens the breaker locally now for `breaker_h`; returns when it closes. Not written to
+    /// Postgres: [`VertexClient::call`] uses [`Breaker::trip_shared`].
+    pub fn trip(&self) -> DateTime<Utc> {
+        self.extend(self.clock.now() + chrono::Duration::hours(self.hours as i64))
+    }
+
+    /// Opens the breaker for this process only, for `pause` (the startup probe's answer to a
+    /// transient failure). Other roles are not affected and nothing is persisted.
+    pub fn pause(&self, pause: chrono::Duration) -> DateTime<Utc> {
+        self.extend(self.clock.now() + pause)
+    }
+
+    /// [`Breaker::trip`], and when shared, records it in `llm_breaker` (a later `open_until`
+    /// never moves back). A database error is logged; the local breaker is open regardless.
+    pub async fn trip_shared(&self, reason: &str) -> DateTime<Utc> {
+        let until = self.trip();
+        if let Some(sh) = self.shared.get() {
+            let r = sqlx::query(
+                "INSERT INTO llm_breaker (id, open_until, reason, updated_at)
+                 VALUES (1, $1, $2, $3)
+                 ON CONFLICT (id) DO UPDATE
+                 SET open_until = GREATEST(llm_breaker.open_until, EXCLUDED.open_until),
+                     reason = EXCLUDED.reason, updated_at = EXCLUDED.updated_at",
+            )
+            .bind(until)
+            .bind(reason)
+            .bind(self.clock.now())
+            .execute(&sh.pool)
+            .await;
+            if let Err(e) = r {
+                tracing::warn!(error = %e, "llm breaker: could not persist the trip");
+            }
+        }
+        until
+    }
+
+    /// Reads the shared row (at most every [`BREAKER_SYNC`]) and adopts a later `open_until`.
+    /// A no-op when not shared; a database error keeps the local state.
+    pub async fn sync(&self) {
+        let Some(sh) = self.shared.get() else { return };
+        let now = self.clock.now();
+        {
+            let mut at = sh.synced_at.lock().expect("breaker sync lock");
+            if at.is_some_and(|t| now - t < BREAKER_SYNC && now >= t) {
+                return;
+            }
+            *at = Some(now);
+        }
+        let row: std::result::Result<Option<DateTime<Utc>>, _> =
+            sqlx::query_scalar("SELECT open_until FROM llm_breaker WHERE id = 1")
+                .fetch_optional(&sh.pool)
+                .await;
+        match row {
+            Ok(Some(until)) if until > now => {
+                self.extend(until);
+            }
+            Ok(_) => {}
+            Err(e) => tracing::debug!(error = %e, "llm breaker: shared row not read"),
+        }
     }
 }
 
@@ -201,6 +290,13 @@ impl VertexClient {
         &self.inner.breaker
     }
 
+    /// Shares the breaker through Postgres (`llm_breaker`), so a billing trip in one role
+    /// pauses every role and survives restarts. Every production role calls it.
+    pub fn with_shared_breaker(self, pool: PgPool) -> Self {
+        self.inner.breaker.share_via(pool);
+        self
+    }
+
     /// Whether calls are enabled at all.
     pub fn enabled(&self) -> bool {
         self.inner.enabled
@@ -252,6 +348,7 @@ impl VertexClient {
         if !self.inner.enabled {
             return Err(LlmError::Disabled);
         }
+        self.inner.breaker.sync().await;
         self.inner.breaker.check()?;
         let url = if query.is_empty() {
             Url::parse(url)
@@ -285,21 +382,26 @@ impl VertexClient {
             return serde_json::from_str(&text)
                 .map_err(|e| LlmError::InvalidResponse(format!("vertex json: {e}")));
         }
-        Err(self.map_status(status, &text))
-    }
-
-    fn map_status(&self, status: u16, body: &str) -> LlmError {
-        if is_billing_error(status, body) {
-            let until = self.inner.breaker.trip();
+        if is_billing_error(status, &text) {
+            let until = self
+                .inner
+                .breaker
+                .trip_shared(&format!("vertex {status} billing/budget"))
+                .await;
             tracing::warn!(status, %until, "vertex billing/budget refusal: breaker open");
-            return LlmError::BreakerOpen { until };
+            return Err(LlmError::BreakerOpen { until });
         }
-        let message = error_message(body);
-        match status {
-            429 => LlmError::RateLimited,
-            404 => LlmError::ModelUnavailable(message),
-            _ => LlmError::Http { status, message },
-        }
+        Err(map_status(status, &text))
+    }
+}
+
+/// A non-2xx Vertex answer that is not a billing/budget refusal.
+fn map_status(status: u16, body: &str) -> LlmError {
+    let message = error_message(body);
+    match status {
+        429 => LlmError::RateLimited,
+        404 => LlmError::ModelUnavailable(message),
+        _ => LlmError::Http { status, message },
     }
 }
 

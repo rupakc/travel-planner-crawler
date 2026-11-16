@@ -12,7 +12,8 @@
 //! - [`VertexBatchRunner`]: batch prediction with JSONL in GCS (prepare → submit → reconcile →
 //!   ingest, 72 h cancel);
 //! - [`VertexClient`]: ADC tokens, error mapping and the 6 h [`Breaker`] on a billing/budget
-//!   403/429.
+//!   403/429, shared by every role through `llm_breaker` (migration 1401) and remembered
+//!   across restarts ([`VertexClient::with_shared_breaker`]).
 //!
 //! With `llm.enabled = false` (the default) every call returns [`LlmError::Disabled`] without
 //! touching the network. Logs carry token counts and cost only, never prompt or page text.
@@ -32,14 +33,14 @@ mod schema;
 pub use batch::{KEY_LABEL, VertexBatchRunner, key_of};
 pub use cache::{CacheKey, LlmCache};
 pub use client::{
-    APP_LABEL, AdcToken, Breaker, CLOUD_PLATFORM_SCOPE, StaticToken, TokenSource, VertexClient,
-    is_billing_error, labels,
+    APP_LABEL, AdcToken, BREAKER_SYNC, Breaker, CLOUD_PLATFORM_SCOPE, StaticToken, TokenSource,
+    VertexClient, is_billing_error, labels,
 };
 pub use crc::crc32c;
 pub use embed::{MAX_TEXTS_PER_REQUEST, VertexEmbedder};
 pub use generate::{
-    ProbeOutcome, TEMPERATURE, VertexLlm, finish_reason, generate_body, parse_response,
-    thinking_config, usage_of,
+    PROBE_PAUSE, ProbeOutcome, TEMPERATURE, VertexLlm, finish_reason, generate_body,
+    parse_response, thinking_config, usage_of,
 };
 pub use ledger::{BudgetRow, PgLedger, remaining_days};
 pub use pricing::{Pricing, thinking_allowance};
