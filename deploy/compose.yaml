@@ -198,7 +198,8 @@ services:
     environment:
       <<: *role-env
       VC_API_BIND: 0.0.0.0:8443
-      # TLS key/cert are read through vc-secrets by name (api.tls_*_secret);
+      # TLS: the matched key/cert pair deploy.sh installed (/run/secrets/api_tls_*,
+      # never a half-rotated one), else Secret Manager by name (api.tls_*_secret);
       # client tokens are argon2 hashes in api_clients, so no token file.
     # Published on the reserved internal IP only; the firewall admits
     # tcp:8443 from the app VM's service account alone

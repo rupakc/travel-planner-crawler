@@ -175,3 +175,35 @@ async fn disambiguation_needs_budget() {
         1
     );
 }
+
+/// Go-live review 11: a call that may have reached Vertex is charged its estimate (a timeout
+/// or 5xx can still be billed); one refused before the network (disabled, breaker, budget,
+/// 429) costs nothing. It used to settle zero for every error.
+#[tokio::test]
+async fn disambiguation_errors_charge_the_estimate_unless_never_sent() {
+    use vc_core::llm::LlmError;
+    let month = "2026-11";
+    let llm = Arc::new(FakeLlm::new());
+    let led = ledger(1.0);
+    let d = LlmPlaceDisambiguator::new(
+        Arc::new(Two),
+        llm.clone(),
+        led.clone(),
+        &ExtractConfig::default(),
+    );
+    llm.push(Err(LlmError::Timeout));
+    assert_eq!(
+        d.resolve(&q("Springfield", None)).await.unwrap()[0].geoname_id,
+        1
+    );
+    let (reserved, spent) = led.totals(month);
+    assert!(
+        spent > Usd::ZERO,
+        "a timeout may be billed: charge the estimate"
+    );
+    assert_eq!(reserved, Usd::ZERO);
+    llm.push(Err(LlmError::RateLimited));
+    d.resolve(&q("Springfield", None)).await.unwrap();
+    assert_eq!(led.totals(month).1, spent, "a 429 never reached the model");
+    assert_eq!(led.open_reservations(), 0);
+}

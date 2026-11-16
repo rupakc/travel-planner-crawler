@@ -655,7 +655,7 @@ impl Extractor {
         };
         let max_chars = ((llm.cfg.max_input_tokens.max(100) as f64) * cpt) as usize;
         let chunks = chunk_text(main, max_chars, llm.cfg.max_chunks.max(1) as usize);
-        let nonce = nonce(input);
+        let nonce = nonce(main);
         let system = format!(
             "{}\n\n## Kind: {}\n{}",
             SYSTEM_PREAMBLE.replace("{nonce}", &nonce),
@@ -802,17 +802,11 @@ fn source_text(p: &Parsed) -> String {
     s
 }
 
-/// A per-capture marker nonce (deterministic, so identical inputs hit `llm_cache`).
-fn nonce(input: &ExtractInput<'_>) -> String {
-    let h = blake3::hash(
-        format!(
-            "{}|{}",
-            input.provenance.url.as_str(),
-            input.provenance.capture.capture_id
-        )
-        .as_bytes(),
-    );
-    hex::encode(&h.as_bytes()[..6])
+/// The marker nonce, from the page text: a recapture with unchanged content builds the same
+/// request and hits `llm_cache` (a per-capture nonce never did). Markers in page text are
+/// defanged, so the nonce need not be secret.
+fn nonce(main: &str) -> String {
+    hex::encode(&blake3::hash(main.as_bytes()).as_bytes()[..6])
 }
 
 /// Neutralises marker look-alikes in page text so the page cannot close the data block.
@@ -902,6 +896,15 @@ mod tests {
         assert!(c.iter().all(|x| x.chars().count() <= 100));
         assert_eq!(chunk_text("a b", 100, 3), vec!["a b".to_string()]);
         assert!(chunk_text("   ", 100, 3).is_empty());
+    }
+
+    /// Go-live review 13: the nonce depends on the content only, so a recrawl of an unchanged
+    /// page sends the identical request (cache hit), and a changed page does not.
+    #[test]
+    fn nonce_follows_content() {
+        assert_eq!(nonce("same page text"), nonce("same page text"));
+        assert_ne!(nonce("same page text"), nonce("same page text!"));
+        assert_eq!(nonce("x").len(), 12);
     }
 
     #[test]
