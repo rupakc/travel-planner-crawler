@@ -92,6 +92,8 @@ pub struct Cap<'a> {
     pub status: Option<u16>,
     pub role: CaptureRole,
     pub media: MediaType,
+    /// A 304 revisit of this capture (no body stored).
+    pub revisit_of: Option<CaptureRef>,
 }
 
 impl<'a> Cap<'a> {
@@ -105,7 +107,40 @@ impl<'a> Cap<'a> {
             status: Some(200),
             role: CaptureRole::Primary,
             media: MediaType::Html,
+            revisit_of: None,
         }
+    }
+
+    /// A 304 revisit of `of` (a WARC `revisit` record, no body).
+    pub fn revisit(url: &'a str, source: &'a str, of: CaptureRef, at: DateTime<Utc>) -> Self {
+        Cap {
+            status: Some(304),
+            revisit_of: Some(of),
+            ..Cap::html(url, source, "", at)
+        }
+    }
+}
+
+fn not_modified(u: &CanonicalUrl, at: DateTime<Utc>) -> vc_core::fetch::Exchange {
+    let mut req = http::HeaderMap::new();
+    req.insert(
+        http::header::USER_AGENT,
+        http::HeaderValue::from_static(vc_core::USER_AGENT),
+    );
+    vc_core::fetch::Exchange {
+        url: u.clone(),
+        redirects: vec![],
+        method: http::Method::GET,
+        request_headers: req,
+        status: http::StatusCode::NOT_MODIFIED,
+        response_headers: http::HeaderMap::new(),
+        body: Bytes::new(),
+        original_encoding: None,
+        truncated: false,
+        peer_ip: None,
+        started_at: at,
+        ended_at: at,
+        purpose: vc_core::fetch::RequestPurpose::Page,
     }
 }
 
@@ -126,22 +161,30 @@ pub async fn commit(pool: &PgPool, blobs: &Arc<MemBlobStore>, c: Cap<'_>) -> Cap
         fetch_mode: FetchMode::Http,
         status: c.status,
         media_type: c.media,
-        payload_hash: Some(vc_store::warc::payload_hash(&body)),
+        payload_hash: c
+            .revisit_of
+            .is_none()
+            .then(|| vc_store::warc::payload_hash(&body)),
         payload_len: body.len() as u64,
         validators: Validators::default(),
-        revisit_of: None,
+        revisit_of: c.revisit_of,
         use_signals: UseSignals::default(),
         use_policy_fetch: UsePolicy::ALLOW_ALL,
         raw_expires_at: None,
         next_fetch_at: None,
     };
     let cref = meta.capture_ref();
-    let rec = SpoolRecord {
-        meta: meta.clone(),
-        payload: SpoolPayload::Resource {
+    let payload = if c.revisit_of.is_some() {
+        SpoolPayload::Revisit(not_modified(&meta.url, c.at))
+    } else {
+        SpoolPayload::Resource {
             content_type: "text/html; charset=utf-8".into(),
             body,
-        },
+        }
+    };
+    let rec = SpoolRecord {
+        meta: meta.clone(),
+        payload,
     };
     let enc = vc_store::warc::encode(&rec).expect("encode");
     let entry = vc_store::SpoolEntry {
@@ -186,6 +229,10 @@ pub struct RigOpts {
     pub frontier: bool,
     /// Wire link triage over the fake LLM: `Some(enabled)`.
     pub triage: Option<bool>,
+    /// Wraps the raw store the processor reads (commits still go to `Rig::blobs`).
+    #[allow(clippy::type_complexity)]
+    pub wrap_blobs:
+        Option<Box<dyn Fn(Arc<MemBlobStore>, PgPool) -> Arc<dyn BlobStore> + Send + Sync>>,
 }
 
 /// A processor over `pool` with the given sources seeded.
@@ -223,9 +270,13 @@ pub async fn rig_on(pool: PgPool, sources: &[&str], o: RigOpts) -> Rig {
         pool: pool.clone(),
         config: vc_config::QueueConfig::default(),
     });
+    let proc_blobs: Arc<dyn BlobStore> = match &o.wrap_blobs {
+        Some(w) => w(blobs.clone(), pool.clone()),
+        None => blobs.clone(),
+    };
     let proc = Processor::new(ProcessorDeps {
         pool: pool.clone(),
-        blobs: blobs.clone(),
+        blobs: proc_blobs,
         queue,
         sink: Arc::new(vc_index::PgIndex::new(pool.clone())),
         kinds,

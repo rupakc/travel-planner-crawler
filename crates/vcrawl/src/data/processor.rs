@@ -249,7 +249,26 @@ impl Processor {
         if !src.spec.licence.class.ingestible() {
             return Ok(Outcome::Skipped(SkipReason::Restricted));
         }
-        let Some(body) = capture::body(pool, &self.d.blobs, &c).await? else {
+        let body = match capture::body(pool, &self.d.blobs, &c).await {
+            // The segment was rewritten (purge) between loading the row and reading the
+            // object: reload the row (new path and offsets) and read once more.
+            Err(Error::NotFound(_)) => {
+                let Some(c2) = capture::load(pool, cref).await? else {
+                    return Ok(Outcome::Skipped(SkipReason::Missing));
+                };
+                match capture::body(pool, &self.d.blobs, &c2).await {
+                    // Still missing: retry later rather than drop the capture.
+                    Err(Error::NotFound(p)) => {
+                        return Err(Error::Storage(format!(
+                            "capture object missing after reload: {p}"
+                        )));
+                    }
+                    r => r?,
+                }
+            }
+            r => r?,
+        };
+        let Some(body) = body else {
             return Ok(Outcome::Skipped(SkipReason::NoBody));
         };
         let payload_changed = capture::payload_changed(pool, &c).await?;
