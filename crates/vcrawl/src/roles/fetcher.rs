@@ -217,7 +217,30 @@ pub struct FetcherParts {
     pub metrics: Option<Arc<vc_obs::Metrics>>,
     /// Progress tracker (optional).
     pub tracker: Option<Arc<vc_obs::ProgressTracker>>,
+    /// Publishing orphaned sibling spools (`None`: not adopted).
+    pub adopt: Option<SpoolAdoption>,
 }
+
+/// What it takes to publish a dead fetcher's spool (data review B1): the instance name, and so
+/// the spool dir, changes on every deploy, so the old dir is never replayed by its owner.
+#[derive(Clone)]
+pub struct SpoolAdoption {
+    /// The raw-bucket blob store.
+    pub store: Arc<dyn vc_core::store::BlobStore>,
+    /// The segment committer (`vc_commit_segment`).
+    pub committer: Arc<dyn vc_core::store::SegmentCommitter>,
+}
+
+/// The lock file every fetcher holds in its own spool dir for its lifetime; a sibling spool
+/// whose lock can be taken belongs to a dead fetcher.
+pub const SPOOL_LOCK: &str = "LOCK";
+
+/// How long a URL may sit in `fetched_pending` before the sweeper returns it to `due` (its
+/// frame is lost). Well above the segment age plus the upload back-pressure window.
+pub const STALE_PENDING_AFTER: Duration = Duration::from_secs(6 * 3600);
+
+/// How often a fetcher runs the stale-pending sweep.
+pub const SWEEP_EVERY: Duration = Duration::from_secs(600);
 
 impl FetcherParts {
     /// The production wiring.
@@ -242,6 +265,10 @@ impl FetcherParts {
             clock.clone(),
         );
         let store = wiring::store::blob_store(&cfg).await?;
+        let adopt = SpoolAdoption {
+            store: store.clone(),
+            committer: wiring::store::committer(pool.clone()),
+        };
         let dir = wiring::store::spool_dir(&cfg, "fetcher", &ctx.instance);
         let (spool, roller) = wiring::store::spool_and_roller(
             &cfg,
@@ -272,6 +299,7 @@ impl FetcherParts {
             clock,
             metrics: Some(ctx.metrics.clone()),
             tracker: Some(ctx.tracker.clone()),
+            adopt: Some(adopt),
             cfg,
         })
     }
@@ -308,6 +336,34 @@ pub struct ClaimReport {
 /// The fetcher.
 pub struct Fetcher {
     p: FetcherParts,
+    /// The lock on this fetcher's own spool dir (held for its lifetime).
+    _own_lock: Option<std::fs::File>,
+    /// When the stale-pending sweep last ran.
+    last_sweep: std::sync::Mutex<Option<std::time::Instant>>,
+}
+
+/// Takes the exclusive lock of a spool dir (`None`: held by a live fetcher, or unavailable).
+fn try_lock_spool(dir: &std::path::Path) -> Option<std::fs::File> {
+    let f = std::fs::OpenOptions::new()
+        .create(true)
+        .truncate(false)
+        .write(true)
+        .open(dir.join(SPOOL_LOCK))
+        .ok()?;
+    f.try_lock().ok()?;
+    Some(f)
+}
+
+fn dir_bytes(dir: &std::path::Path) -> u64 {
+    std::fs::read_dir(dir)
+        .map(|rd| {
+            rd.filter_map(|e| e.ok())
+                .filter_map(|e| e.metadata().ok())
+                .filter(|m| m.is_file())
+                .map(|m| m.len())
+                .sum()
+        })
+        .unwrap_or(0)
 }
 
 /// Per-claim state.
@@ -352,7 +408,99 @@ fn chrono_of(d: Duration) -> chrono::Duration {
 impl Fetcher {
     /// A fetcher over `parts`.
     pub fn new(parts: FetcherParts) -> Self {
-        Fetcher { p: parts }
+        let own_lock = try_lock_spool(parts.spool.dir());
+        if own_lock.is_none() {
+            tracing::warn!(dir = %parts.spool.dir().display(), "fetcher: own spool lock not taken (another live fetcher with this instance name?)");
+        }
+        Fetcher {
+            p: parts,
+            _own_lock: own_lock,
+            last_sweep: std::sync::Mutex::new(None),
+        }
+    }
+
+    /// Sibling `fetcher-*` spool dirs whose owner is dead, each with its lock held.
+    fn orphan_spools(&self) -> Vec<(std::path::PathBuf, std::fs::File)> {
+        let own = self.p.spool.dir();
+        let is_fetcher = |p: &std::path::Path| {
+            p.file_name()
+                .and_then(|n| n.to_str())
+                .is_some_and(|n| n.starts_with("fetcher-"))
+        };
+        let Some(root) = own.parent().filter(|_| is_fetcher(own)) else {
+            return Vec::new();
+        };
+        let Ok(rd) = std::fs::read_dir(root) else {
+            return Vec::new();
+        };
+        rd.filter_map(|e| e.ok())
+            .map(|e| e.path())
+            .filter(|p| p.as_path() != own && p.is_dir() && is_fetcher(p))
+            .filter_map(|p| try_lock_spool(&p).map(|l| (p, l)))
+            .collect()
+    }
+
+    /// Whether workers must pause: the roller's back-pressure, or orphaned spools not yet
+    /// published pushing the spool disk over the threshold.
+    fn backpressure(&self) -> bool {
+        if self.p.roller.should_pause_fetchers() {
+            return true;
+        }
+        if self.p.adopt.is_none() {
+            return false;
+        }
+        let orphaned: u64 = self.orphan_spools().iter().map(|(d, _)| dir_bytes(d)).sum();
+        orphaned > 0
+            && orphaned.saturating_add(self.p.spool.disk_bytes())
+                > self.p.cfg.store.spool_backpressure_bytes
+    }
+
+    /// Publishes every orphaned sibling spool (sealed and open files; replay is idempotent by
+    /// segment id) and removes it once empty. Returns captures committed.
+    async fn adopt_orphans(&self) -> Result<u64> {
+        let Some(a) = &self.p.adopt else {
+            return Ok(0);
+        };
+        let mut n = 0;
+        for (dir, _lock) in self.orphan_spools() {
+            let spool = Spool::open(
+                dir.clone(),
+                vc_store::SpoolOptions::from(&self.p.cfg.store),
+                self.p.clock.clone(),
+            )?;
+            let roller = SegmentRoller::new(
+                spool.clone(),
+                a.store.clone(),
+                a.committer.clone(),
+                self.p.clock.clone(),
+                &self.p.cfg.store,
+            );
+            let ms = roller.flush().await?;
+            let c: u64 = ms.iter().map(|m| m.captures.len() as u64).sum();
+            tracing::info!(dir = %dir.display(), captures = c, "fetcher: adopted an orphaned spool");
+            n += c;
+            if spool.sealed()?.is_empty() && spool.open_entries()?.is_empty() {
+                std::fs::remove_dir_all(&dir)?;
+            }
+        }
+        Ok(n)
+    }
+
+    /// Returns long-stale `fetched_pending` rows to `due` (every [`SWEEP_EVERY`]).
+    async fn sweep_pending(&self) -> Result<u64> {
+        let Some(pool) = &self.p.pool else {
+            return Ok(0);
+        };
+        {
+            let mut last = self.last_sweep.lock().unwrap_or_else(|p| p.into_inner());
+            if last.is_some_and(|t| t.elapsed() < SWEEP_EVERY) {
+                return Ok(0);
+            }
+            *last = Some(std::time::Instant::now());
+        }
+        PgFrontier::new(pool.clone(), self.p.cfg.frontier.clone())
+            .sweep_stale_pending(STALE_PENDING_AFTER)
+            .await
     }
 
     /// The parts.
@@ -416,8 +564,18 @@ impl Fetcher {
 
     /// One roller tick: seal due files, publish everything sealed. Returns captures committed.
     pub async fn tick_roller(&self) -> Result<u64> {
+        let adopted = match self.adopt_orphans().await {
+            Ok(n) => n,
+            Err(e) => {
+                tracing::warn!(error_class = ?e.class(), error = %e, "fetcher: orphan spool adoption failed");
+                0
+            }
+        };
+        if let Err(e) = self.sweep_pending().await {
+            tracing::warn!(error_class = ?e.class(), error = %e, "fetcher: stale-pending sweep failed");
+        }
         let r = self.p.roller.tick().await;
-        self.after_publish(r)
+        Ok(self.after_publish(r)? + adopted)
     }
 
     /// Seals everything and publishes it (shutdown, tests).
@@ -446,7 +604,7 @@ impl Fetcher {
 
     /// One worker pass: claim one key and crawl it.
     pub async fn pass(&self) -> Result<Pass> {
-        if self.p.roller.should_pause_fetchers() {
+        if self.backpressure() {
             tracing::warn!("fetcher: backpressure, pausing");
             return Ok(Pass::Paused);
         }
