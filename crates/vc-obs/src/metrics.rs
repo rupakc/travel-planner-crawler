@@ -142,6 +142,34 @@ pub const ALERT_METRICS: &[AlertMetric] = &[
         [],
         "Days until the API TLS certificate expires"
     ),
+    alert!(
+        "llm_config_invalid",
+        "crawler_llm_config_invalid",
+        Gauge,
+        [],
+        "1 while an invalid [llm] section keeps the LLM forced off"
+    ),
+    alert!(
+        "deploy_drift_seconds",
+        "crawler_deploy_drift_seconds",
+        Gauge,
+        [],
+        "How long the running image has differed from the prod tag (0 when equal)"
+    ),
+    alert!(
+        "host_units_failed",
+        "crawler_host_units_failed",
+        Gauge,
+        [],
+        "Crawler systemd units whose last run failed"
+    ),
+    alert!(
+        "backup_restore_age_seconds",
+        "crawler_backup_restore_age_seconds",
+        Gauge,
+        [],
+        "Age of the last successful light restore drill (base backup restored and queried)"
+    ),
 ];
 
 /// Cloud Monitoring type for an exposed Prometheus family name: `crawler_<x>[_total]` →
@@ -224,6 +252,14 @@ pub struct Metrics {
     pub parked_keys_ratio: FloatGauge,
     /// `crawler_tls_cert_days_left`.
     pub tls_cert_days_left: FloatGauge,
+    /// `crawler_llm_config_invalid` (0/1).
+    pub llm_config_invalid: IntGauge,
+    /// `crawler_deploy_drift_seconds`.
+    pub deploy_drift_seconds: FloatGauge,
+    /// `crawler_host_units_failed`.
+    pub host_units_failed: IntGauge,
+    /// `crawler_backup_restore_age_seconds`.
+    pub backup_restore_age_seconds: FloatGauge,
     /// `crawler_queue_items{kind,state}` (not alerted; for dashboards).
     pub queue_items: Family<Labels, Gauge>,
 }
@@ -244,6 +280,10 @@ impl Metrics {
         let llm_month_spend_ratio = FloatGauge::default();
         let parked_keys_ratio = FloatGauge::default();
         let tls_cert_days_left = FloatGauge::default();
+        let llm_config_invalid = IntGauge::default();
+        let deploy_drift_seconds = FloatGauge::default();
+        let host_units_failed = IntGauge::default();
+        let backup_restore_age_seconds = FloatGauge::default();
         let queue_items = Family::<Labels, Gauge>::default();
 
         let help = |name: &str| {
@@ -309,6 +349,26 @@ impl Metrics {
             tls_cert_days_left.0.clone(),
         );
         reg.register(
+            "crawler_llm_config_invalid",
+            help("crawler_llm_config_invalid"),
+            llm_config_invalid.0.clone(),
+        );
+        reg.register(
+            "crawler_deploy_drift_seconds",
+            help("crawler_deploy_drift_seconds"),
+            deploy_drift_seconds.0.clone(),
+        );
+        reg.register(
+            "crawler_host_units_failed",
+            help("crawler_host_units_failed"),
+            host_units_failed.0.clone(),
+        );
+        reg.register(
+            "crawler_backup_restore_age_seconds",
+            help("crawler_backup_restore_age_seconds"),
+            backup_restore_age_seconds.0.clone(),
+        );
+        reg.register(
             "crawler_queue_items",
             "Work items per kind and state",
             queue_items.clone(),
@@ -331,6 +391,10 @@ impl Metrics {
             llm_month_spend_ratio,
             parked_keys_ratio,
             tls_cert_days_left,
+            llm_config_invalid,
+            deploy_drift_seconds,
+            host_units_failed,
+            backup_restore_age_seconds,
             queue_items,
         }
     }

@@ -6,7 +6,7 @@
     "app": "voyager-crawler"
   },
   "documentation": {
-    "content": "The last restore drill failed (`crawler/restore_drill_ok` = 0), or none succeeded in 8 days. See `journalctl -u voyager-crawler-restore-drill`.",
+    "content": "The last restore drill failed (`crawler/restore_drill_ok` = 0), none succeeded in 8 days, or the weekly light restore drill (wal-g base backup restored into a read-only Postgres, `deploy/host/restore-drill.sh`) has not succeeded in 8 days or never reported. See `journalctl -u voyager-crawler-restore-drill`; run it by hand with `sudo systemctl start voyager-crawler-restore-drill` (also at go-live).",
     "mimeType": "text/markdown"
   },
   "conditions": [
@@ -35,6 +35,40 @@
         "comparison": "COMPARISON_GT",
         "thresholdValue": 691200,
         "duration": "300s",
+        "aggregations": [
+          {
+            "alignmentPeriod": "300s",
+            "perSeriesAligner": "ALIGN_MAX"
+          }
+        ],
+        "trigger": {
+          "count": 1
+        }
+      }
+    },
+    {
+      "displayName": "no successful light restore drill in 8 days",
+      "conditionThreshold": {
+        "filter": "metric.type=\"custom.googleapis.com/crawler/backup_restore_age_seconds\" AND resource.type=\"gce_instance\"",
+        "comparison": "COMPARISON_GT",
+        "thresholdValue": 691200,
+        "duration": "300s",
+        "aggregations": [
+          {
+            "alignmentPeriod": "300s",
+            "perSeriesAligner": "ALIGN_MAX"
+          }
+        ],
+        "trigger": {
+          "count": 1
+        }
+      }
+    },
+    {
+      "displayName": "light restore drill never reported (24 h)",
+      "conditionAbsent": {
+        "filter": "metric.type=\"custom.googleapis.com/crawler/backup_restore_age_seconds\" AND resource.type=\"gce_instance\"",
+        "duration": "86400s",
         "aggregations": [
           {
             "alignmentPeriod": "300s",

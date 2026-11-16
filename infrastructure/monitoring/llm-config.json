@@ -1,0 +1,39 @@
+{
+  "displayName": "voyager-crawler: LLM forced off by an invalid [llm] config",
+  "combiner": "OR",
+  "enabled": true,
+  "userLabels": {
+    "app": "voyager-crawler"
+  },
+  "documentation": {
+    "content": "`VC_LLM_ENABLED=true` but the `[llm]` settings are invalid (e.g. `VC_PROJECT_CAP_USD` missing or 0, or the monthly cap above 50 % of it), so every role started with the LLM **off** instead of refusing to start. Fix `/var/lib/voyager-crawler/deploy/host.local.env` (infrastructure/README.md, owner step 3); each role logs the reason at startup.",
+    "mimeType": "text/markdown"
+  },
+  "conditions": [
+    {
+      "displayName": "llm config invalid",
+      "conditionThreshold": {
+        "filter": "metric.type=\"custom.googleapis.com/crawler/llm_config_invalid\" AND resource.type=\"gce_instance\"",
+        "comparison": "COMPARISON_GT",
+        "thresholdValue": 0,
+        "duration": "0s",
+        "aggregations": [
+          {
+            "alignmentPeriod": "300s",
+            "perSeriesAligner": "ALIGN_MAX"
+          }
+        ],
+        "trigger": {
+          "count": 1
+        }
+      }
+    }
+  ],
+  "notificationChannels": [
+    "__CHANNEL__"
+  ],
+  "alertStrategy": {
+    "autoClose": "86400s"
+  },
+  "severity": "ERROR"
+}

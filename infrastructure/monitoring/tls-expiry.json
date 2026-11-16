@@ -6,7 +6,7 @@
     "app": "voyager-crawler"
   },
   "documentation": {
-    "content": "The crawler API's self-signed certificate expires in under 30 days. Rotate with `infrastructure/bootstrap.sh --rotate-tls` (\u00a717.5).",
+    "content": "The crawler API's self-signed certificate expires in under 30 days. Rotate with `infrastructure/bootstrap.sh --rotate-tls` (\u00a717.5). The expiry is read by `deploy.sh` from the installed certificate (`/run/voyager-crawler/secrets/api_tls_cert`) and exported by the maintenance role; no value for an hour (no certificate installed, `deploy.sh` or maintenance not running) alerts too.",
     "mimeType": "text/markdown"
   },
   "conditions": [
@@ -21,6 +21,22 @@
           {
             "alignmentPeriod": "300s",
             "perSeriesAligner": "ALIGN_MIN"
+          }
+        ],
+        "trigger": {
+          "count": 1
+        }
+      }
+    },
+    {
+      "displayName": "certificate expiry not reported for 1 h",
+      "conditionAbsent": {
+        "filter": "metric.type=\"custom.googleapis.com/crawler/tls_cert_days_left\" AND resource.type=\"gce_instance\"",
+        "duration": "3600s",
+        "aggregations": [
+          {
+            "alignmentPeriod": "300s",
+            "perSeriesAligner": "ALIGN_MAX"
           }
         ],
         "trigger": {
