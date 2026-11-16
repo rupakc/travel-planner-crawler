@@ -64,7 +64,7 @@ async fn agree_b(r: &Rig) -> Outcome {
         &r.pool,
         &r.blobs,
         Cap::html(
-            "https://wiki-b.example.org/spain",
+            "https://wiki-b.example.net/spain",
             "wiki-b",
             &fixture("emergency_b.html"),
             at(5),

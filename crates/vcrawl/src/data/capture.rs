@@ -1,6 +1,6 @@
 //! Committed captures: the `captures` row joined to its segment, and the stored body read back
-//! from the raw store with one range request. Revisits (304s and identical payloads) resolve to
-//! the body of the capture they repeat.
+//! from the raw store with one range request. Revisits (304s and identical payloads) resolve,
+//! through their revisit chain, to the body of the capture they repeat.
 
 use std::sync::Arc;
 
@@ -224,25 +224,42 @@ pub(crate) fn payload_of(records: &[vc_store::warc::WarcRecord]) -> Result<Optio
     Ok(None)
 }
 
-/// Reads the stored body of `c`, following one revisit hop to the repeated capture.
-/// `None` when there is no body (metadata record, or the repeated capture is gone).
+/// Max revisit hops [`body`] follows (a 304 chain grows by one per unchanged fetch while the
+/// frontier points `last_capture_id` at revisits).
+pub const MAX_REVISIT_HOPS: usize = 64;
+
+/// Reads the stored body of `c`, following its revisit chain (R2 → R1 → C0) to the capture
+/// that stored the body: bounded ([`MAX_REVISIT_HOPS`]) and cycle-safe. `None` when there is no
+/// body (metadata record, the chain is broken or loops, or the repeated capture is gone).
 pub async fn body(
     pool: &PgPool,
     blobs: &Arc<dyn BlobStore>,
     c: &StoredCapture,
 ) -> Result<Option<bytes::Bytes>> {
-    let recs = vc_store::read_capture(blobs.as_ref(), &c.segment_path, c.offset, c.length).await?;
-    if let Some(b) = payload_of(&recs)? {
-        return Ok(Some(b));
+    let mut seen = std::collections::HashSet::new();
+    let mut cur = c.clone();
+    for _ in 0..=MAX_REVISIT_HOPS {
+        if !seen.insert(cur.meta.capture_id) {
+            tracing::warn!(capture = %c.meta.capture_id, "revisit chain loops; no body");
+            return Ok(None);
+        }
+        let recs =
+            vc_store::read_capture(blobs.as_ref(), &cur.segment_path, cur.offset, cur.length)
+                .await?;
+        if let Some(b) = payload_of(&recs)? {
+            return Ok(Some(b));
+        }
+        let Some(prev) = &cur.meta.revisit_of else {
+            return Ok(None);
+        };
+        let Some(p) = load(pool, prev).await? else {
+            return Ok(None);
+        };
+        cur = p;
     }
-    let Some(prev) = &c.meta.revisit_of else {
-        return Ok(None);
-    };
-    let Some(p) = load(pool, prev).await? else {
-        return Ok(None);
-    };
-    let recs = vc_store::read_capture(blobs.as_ref(), &p.segment_path, p.offset, p.length).await?;
-    payload_of(&recs)
+    tracing::warn!(capture = %c.meta.capture_id, hops = MAX_REVISIT_HOPS,
+        "revisit chain too long; no body");
+    Ok(None)
 }
 
 /// Records the final use policy of a capture (the meet of fetch-time and body signals).

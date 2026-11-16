@@ -93,6 +93,7 @@ async fn injection_fixtures() {
         source_class: SourceClass::Official,
         kind: KindId::new("emergency_numbers"),
         place_ids: vec![],
+        publisher: None,
         data: json!({"country": "ES", "numbers": [{"service": "all", "value": "112"}, {"service": "police", "value": "091"}, {"service": "gc", "value": "062"}]}),
     }];
     inp.peers = &peers;
@@ -314,6 +315,7 @@ async fn reference_emergency_numbers_accepted_when_two_sources_agree() {
         source_class: SourceClass::Reference,
         kind: KindId::new("emergency_numbers"),
         place_ids: vec![],
+        publisher: None,
         data: json!({"country": "ES", "numbers": [{"service": "police", "value": "091"}, {"service": "emergency", "value": "112"}]}),
     }];
     let mut inp = ExtractInput::new(&pv, &p);

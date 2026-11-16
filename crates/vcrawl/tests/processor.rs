@@ -380,7 +380,7 @@ async fn reference_numbers_held_until_a_second_source_agrees() {
         &r.pool,
         &r.blobs,
         Cap::html(
-            "https://wiki-b.example.org/spain",
+            "https://wiki-b.example.net/spain",
             "wiki-b",
             &fixture("emergency_b.html"),
             at(5),
@@ -432,7 +432,7 @@ async fn disagreeing_reference_sources_stay_held() {
         &r.pool,
         &r.blobs,
         Cap::html(
-            "https://wiki-b.example.org/spain",
+            "https://wiki-b.example.net/spain",
             "wiki-b",
             &fixture("emergency_b.html"),
             at(5),
@@ -497,4 +497,262 @@ async fn unchanged_payload_skips_the_llm() {
     let o = r.proc.process(&a2).await.unwrap();
     assert!(!processed(&o).4, "payload unchanged");
     assert_eq!(r.llm.calls(), 1);
+}
+
+#[tokio::test]
+async fn sources_of_one_publisher_never_agree() {
+    let r = rig(
+        &["wiki-a", "wiki-b"],
+        RigOpts {
+            llm: true,
+            ..RigOpts::default()
+        },
+    )
+    .await;
+    r.llm.push_json(numbers());
+    let a = commit(
+        &r.pool,
+        &r.blobs,
+        Cap::html(
+            "https://wiki-a.example.org/spain",
+            "wiki-a",
+            &fixture("emergency_a.html"),
+            at(0),
+        ),
+    )
+    .await;
+    r.proc.process(&a).await.unwrap();
+    // Another source id, but the same registrable domain: one voice, nothing promoted.
+    r.llm.push_json(numbers());
+    let b = commit(
+        &r.pool,
+        &r.blobs,
+        Cap::html(
+            "https://mirror.example.org/spain",
+            "wiki-b",
+            &fixture("emergency_b.html"),
+            at(5),
+        ),
+    )
+    .await;
+    let o = r.proc.process(&b).await.unwrap();
+    let (rep, held, promoted, _, _) = processed(&o);
+    assert_eq!((rep.inserted, held, promoted), (0, 1, 0));
+    assert_eq!(r.proc.pending().len().await.unwrap(), 2);
+    assert_eq!(count(&r.pool, "SELECT count(*) FROM records").await, 0);
+}
+
+/// Inserts an active official `emergency_numbers` record (country-level) for `country`.
+async fn official_numbers(pool: &sqlx::PgPool, i: i64, country: &str, age_s: i64) {
+    let id: i64 = sqlx::query_scalar(
+        "INSERT INTO records (kind, source_id, url_key, record_key, licence_class, current_version,
+                              current_data_hash, source_class, host, updated_at)
+         VALUES ('emergency_numbers', 'gov-' || $1::text, decode(md5($1::text), 'hex'), 'k', 'facts_only', 1,
+                 '\\x00', 'official', 'gov' || $1::text || '.example', now() - make_interval(secs => $2))
+         RETURNING record_id",
+    )
+    .bind(i)
+    .bind(age_s as f64)
+    .fetch_one(pool)
+    .await
+    .unwrap();
+    sqlx::query(
+        "INSERT INTO record_versions (record_id, version, capture_id, captured_at, data, data_hash,
+                                      kind_schema, extractor_ver, method, licence_class, use_policy)
+         VALUES ($1, 1, 'c', now(), $2, '\\x00', 'emergency_numbers@1', 't', 'llm', 'facts_only', '{}')",
+    )
+    .bind(id)
+    .bind(json!({"country": country, "numbers": [{"number": "112"}]}))
+    .execute(pool)
+    .await
+    .unwrap();
+}
+
+#[tokio::test]
+async fn index_peers_filter_by_place_before_the_limit() {
+    use vc_core::{KindId, SourceId};
+    use vcrawl::data::peers::{MAX_INDEX_PEERS, PeerScope, index_peers};
+    let pool = testkit::pg().await;
+    official_numbers(&pool, 0, "ES", 3600).await;
+    for i in 1..=MAX_INDEX_PEERS + 20 {
+        official_numbers(&pool, i, "FR", 0).await;
+    }
+    let kinds = [KindId::new("emergency_numbers")];
+    let me = SourceId("wiki-a".into());
+    let es = PeerScope::of(&[], &json!({"country_code": "ES"}));
+    let peers = index_peers(&pool, &kinds, &me, &es).await.unwrap();
+    assert_eq!(peers.len(), 1, "the older ES peer is not crowded out");
+    assert_eq!(peers[0].source_id.0, "gov-0");
+    assert_eq!(peers[0].publisher.as_deref(), Some("gov0.example"));
+    // No location at all → no peers.
+    let none = PeerScope::of(&[], &json!({}));
+    assert!(
+        index_peers(&pool, &kinds, &me, &none)
+            .await
+            .unwrap()
+            .is_empty()
+    );
+}
+
+#[tokio::test]
+async fn revisit_chain_resolves_to_the_stored_body() {
+    // C0 200 ← R1 304 ← R2 304: the second unchanged fetch in a row revisits R1 (the URL's
+    // last capture), which has no body itself.
+    let r = rig(&["events-test"], RigOpts::default()).await;
+    let page = fixture("event_v1.html");
+    let c0 = commit(
+        &r.pool,
+        &r.blobs,
+        Cap::html(EVENT_URL, "events-test", &page, at(0)),
+    )
+    .await;
+    let r1 = commit(
+        &r.pool,
+        &r.blobs,
+        Cap::revisit(EVENT_URL, "events-test", c0, at(60)),
+    )
+    .await;
+    let r2 = commit(
+        &r.pool,
+        &r.blobs,
+        Cap::revisit(EVENT_URL, "events-test", r1, at(120)),
+    )
+    .await;
+    let o = r.proc.process(&c0).await.unwrap();
+    assert_eq!(processed(&o).0.inserted, 1);
+    for rv in [r1, r2] {
+        let o = r.proc.process(&rv).await.unwrap();
+        let (rep, _, _, _, changed) = processed(&o);
+        assert!(!changed, "a revisit is never a change");
+        assert_eq!(
+            (rep.inserted, rep.unchanged),
+            (0, 1),
+            "revisit re-sees the record"
+        );
+    }
+}
+
+#[tokio::test]
+async fn revisit_cycle_is_bounded() {
+    // A corrupt chain that loops (R1 → R2 → R1) ends as NoBody instead of spinning.
+    let r = rig(&["events-test"], RigOpts::default()).await;
+    let page = fixture("event_v1.html");
+    let c0 = commit(
+        &r.pool,
+        &r.blobs,
+        Cap::html(EVENT_URL, "events-test", &page, at(0)),
+    )
+    .await;
+    let r1 = commit(
+        &r.pool,
+        &r.blobs,
+        Cap::revisit(EVENT_URL, "events-test", c0, at(60)),
+    )
+    .await;
+    let r2 = commit(
+        &r.pool,
+        &r.blobs,
+        Cap::revisit(EVENT_URL, "events-test", r1, at(120)),
+    )
+    .await;
+    sqlx::query("UPDATE captures SET revisit_of_id = $1, revisit_of_at = $2 WHERE capture_id = $3")
+        .bind(r2.capture_id.to_string())
+        .bind(r2.captured_at)
+        .bind(r1.capture_id.to_string())
+        .execute(&r.pool)
+        .await
+        .unwrap();
+    let o = r.proc.process(&r1).await.unwrap();
+    assert_eq!(o, Outcome::Skipped(SkipReason::NoBody));
+}
+
+/// A raw store whose segment objects "move" under the reader: the first read of each object
+/// rewrites it (new path, `segments.path` switched, old object deleted, as a purge rewrite
+/// does) and answers NotFound; with `vanish`, every read answers NotFound.
+struct MovingStore {
+    inner: std::sync::Arc<testkit::blob::MemBlobStore>,
+    pool: sqlx::PgPool,
+    vanish: bool,
+}
+
+#[async_trait::async_trait]
+impl vc_core::store::BlobStore for MovingStore {
+    async fn put_if_absent(
+        &self,
+        path: &str,
+        bytes: bytes::Bytes,
+        crc32c: u32,
+    ) -> vc_core::Result<vc_core::store::PutOutcome> {
+        self.inner.put_if_absent(path, bytes, crc32c).await
+    }
+    async fn get(
+        &self,
+        path: &str,
+        range: Option<std::ops::Range<u64>>,
+    ) -> vc_core::Result<bytes::Bytes> {
+        if self.vanish {
+            return Err(vc_core::Error::NotFound(path.into()));
+        }
+        if path.ends_with(".r1") {
+            return self.inner.get(path, range).await;
+        }
+        let all = self.inner.get(path, None).await?;
+        let new = format!("{path}.r1");
+        self.inner
+            .put_if_absent(&new, all.clone(), crc32c::crc32c(&all))
+            .await?;
+        sqlx::query("UPDATE segments SET path = $2 WHERE path = $1")
+            .bind(path)
+            .bind(&new)
+            .execute(&self.pool)
+            .await
+            .unwrap();
+        self.inner.delete(path).await?;
+        Err(vc_core::Error::NotFound(path.into()))
+    }
+    async fn delete(&self, path: &str) -> vc_core::Result<()> {
+        self.inner.delete(path).await
+    }
+    async fn list(&self, prefix: &str) -> vc_core::Result<Vec<String>> {
+        self.inner.list(prefix).await
+    }
+}
+
+fn moving(vanish: bool) -> RigOpts {
+    RigOpts {
+        wrap_blobs: Some(Box::new(move |inner, pool| {
+            std::sync::Arc::new(MovingStore {
+                inner,
+                pool,
+                vanish,
+            })
+        })),
+        ..RigOpts::default()
+    }
+}
+
+#[tokio::test]
+async fn capture_read_during_a_segment_rewrite_reloads_and_retries() {
+    let r = rig(&["events-test"], moving(false)).await;
+    let c = commit(
+        &r.pool,
+        &r.blobs,
+        Cap::html(EVENT_URL, "events-test", &fixture("event_v1.html"), at(0)),
+    )
+    .await;
+    let o = r.proc.process(&c).await.unwrap();
+    assert_eq!(processed(&o).0.inserted, 1);
+}
+
+#[tokio::test]
+async fn capture_body_still_missing_after_reload_is_transient() {
+    let r = rig(&["events-test"], moving(true)).await;
+    let c = commit(
+        &r.pool,
+        &r.blobs,
+        Cap::html(EVENT_URL, "events-test", &fixture("event_v1.html"), at(0)),
+    )
+    .await;
+    let e = r.proc.process(&c).await.unwrap_err();
+    assert_eq!(e.class(), vc_core::ErrorClass::Transient, "{e}");
 }

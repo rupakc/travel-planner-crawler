@@ -83,6 +83,17 @@ pub struct PeerRecord {
     pub place_ids: Vec<i64>,
     /// Its data.
     pub data: Value,
+    /// Its publisher (registrable domain of its URL, see [`publisher_of`]). Agreement counts
+    /// independent *publishers*: two sources of one publisher are one voice. `None` (unknown)
+    /// falls back to the source id.
+    #[serde(default)]
+    pub publisher: Option<String>,
+}
+
+/// The publisher of a URL host: its registrable domain (Public Suffix List), so
+/// `wiki-a.example.org` and `wiki-b.example.org` are one publisher.
+pub fn publisher_of(host: &str) -> String {
+    vc_core::PolitenessKey::for_host(host).0
 }
 
 /// Normalised value sets of a record's verbatim fields, per pointer.
@@ -190,21 +201,26 @@ pub struct PeerVerdict {
     pub conflict: bool,
 }
 
-/// Compares a record with peers of the same kind and place from other sources. Only
-/// `official` and `reference` peers count towards agreement.
+/// Compares a record with peers of the same kind and place from other sources and other
+/// publishers (`publisher` is this record's, from [`publisher_of`]). Only `official` and
+/// `reference` peers count towards agreement, once per independent publisher.
 pub fn compare_with_peers(
     kind: &KindDef,
     source: &SourceId,
+    publisher: Option<&str>,
     place_ids: &[i64],
     data: &Value,
     peers: &[PeerRecord],
 ) -> PeerVerdict {
     let mine = verbatim_values(kind, data);
-    let mut agree: BTreeSet<&SourceId> = BTreeSet::new();
+    let mut agree: BTreeSet<String> = BTreeSet::new();
     let mut conflict = false;
     for p in peers {
+        let same_publisher =
+            matches!((publisher, p.publisher.as_deref()), (Some(a), Some(b)) if a == b);
         if p.kind != kind.id
             || &p.source_id == source
+            || same_publisher
             || !same_place(place_ids, data, &p.place_ids, &p.data)
         {
             continue;
@@ -240,7 +256,10 @@ pub fn compare_with_peers(
                 SourceClass::Official | SourceClass::Reference
             )
         {
-            agree.insert(&p.source_id);
+            agree.insert(match &p.publisher {
+                Some(pb) => format!("publisher:{pb}"),
+                None => format!("source:{}", p.source_id.0),
+            });
         }
     }
     PeerVerdict {
@@ -286,8 +305,9 @@ mod tests {
             kind: k.id.clone(),
             place_ids: vec![1],
             data: b,
+            publisher: None,
         };
-        let v = compare_with_peers(&k, &SourceId("a".into()), &[1], &a, &[peer]);
+        let v = compare_with_peers(&k, &SourceId("a".into()), None, &[1], &a, &[peer]);
         assert_eq!(
             v,
             PeerVerdict {
@@ -304,7 +324,56 @@ mod tests {
             kind: KindId::new("emergency_numbers"),
             place_ids: places,
             data,
+            publisher: None,
         }
+    }
+
+    #[test]
+    fn independent_means_another_publisher_not_another_source_id() {
+        let k = em(&["/numbers/*/number"]);
+        let d = json!({"numbers": [{"number": "112"}]});
+        let with_pub = |src: &str, host: &str| PeerRecord {
+            publisher: Some(publisher_of(host)),
+            ..peer(src, SourceClass::Reference, vec![7], d.clone())
+        };
+        let me = publisher_of("wiki-a.example.org");
+        assert_eq!(me, "example.org");
+        // Another source id on the same registrable domain is the same voice.
+        let v = compare_with_peers(
+            &k,
+            &SourceId("a".into()),
+            Some(&me),
+            &[7],
+            &d,
+            &[with_pub("b", "wiki-b.example.org")],
+        );
+        assert_eq!(v.agreeing_sources, 1);
+        // Two peer source ids of one other publisher count once.
+        let v = compare_with_peers(
+            &k,
+            &SourceId("a".into()),
+            Some(&me),
+            &[7],
+            &d,
+            &[
+                with_pub("b", "www.other.example.net"),
+                with_pub("c", "m.other.example.net"),
+            ],
+        );
+        assert_eq!(v.agreeing_sources, 2);
+        // Two publishers: three voices.
+        let v = compare_with_peers(
+            &k,
+            &SourceId("a".into()),
+            Some(&me),
+            &[7],
+            &d,
+            &[
+                with_pub("b", "other.example.net"),
+                with_pub("c", "third.example.com"),
+            ],
+        );
+        assert_eq!(v.agreeing_sources, 3);
     }
 
     #[test]
@@ -322,7 +391,7 @@ mod tests {
             vec![7],
             json!({"numbers": [{"number": "112"}]}),
         );
-        let v = compare_with_peers(&k, &SourceId("a".into()), &[7], &mine, &[p]);
+        let v = compare_with_peers(&k, &SourceId("a".into()), None, &[7], &mine, &[p]);
         assert_eq!(v.agreeing_sources, 1, "peer must cover every fact group");
         assert!(!v.conflict, "a missing group is not a disagreement");
 
@@ -334,7 +403,7 @@ mod tests {
             json!({"numbers": [{"number": "112"}],
                 "embassies": [{"phone": "+34806123456", "website_url": "https://evil.example/e"}]}),
         );
-        let v = compare_with_peers(&k, &SourceId("a".into()), &[7], &mine, &[p]);
+        let v = compare_with_peers(&k, &SourceId("a".into()), None, &[7], &mine, &[p]);
         assert_eq!(v.agreeing_sources, 2);
     }
 
@@ -343,27 +412,27 @@ mod tests {
         let k = em(&["/numbers/*/number"]);
         let d = json!({"numbers": [{"number": "112"}]});
         let p = peer("b", SourceClass::Reference, vec![], d.clone());
-        let v = compare_with_peers(&k, &SourceId("a".into()), &[], &d, &[p]);
+        let v = compare_with_peers(&k, &SourceId("a".into()), None, &[], &d, &[p]);
         assert_eq!(v.agreeing_sources, 1);
         let p = peer("b", SourceClass::Reference, vec![], d.clone());
-        let v = compare_with_peers(&k, &SourceId("a".into()), &[3], &d, &[p]);
+        let v = compare_with_peers(&k, &SourceId("a".into()), None, &[3], &d, &[p]);
         assert_eq!(v.agreeing_sources, 1);
         let p = peer("b", SourceClass::Reference, vec![4], d.clone());
-        let v = compare_with_peers(&k, &SourceId("a".into()), &[3], &d, &[p]);
+        let v = compare_with_peers(&k, &SourceId("a".into()), None, &[3], &d, &[p]);
         assert_eq!(v.agreeing_sources, 1);
 
         // Country-level records (no place id) match on their country only.
         let es = json!({"country": "ES", "numbers": [{"number": "112"}]});
         let p = peer("b", SourceClass::Reference, vec![], es.clone());
-        let v = compare_with_peers(&k, &SourceId("a".into()), &[], &es, &[p]);
+        let v = compare_with_peers(&k, &SourceId("a".into()), None, &[], &es, &[p]);
         assert_eq!(v.agreeing_sources, 2);
         let fr = json!({"country": "FR", "numbers": [{"number": "112"}]});
         let p = peer("b", SourceClass::Reference, vec![], fr);
-        let v = compare_with_peers(&k, &SourceId("a".into()), &[], &es, &[p]);
+        let v = compare_with_peers(&k, &SourceId("a".into()), None, &[], &es, &[p]);
         assert_eq!(v.agreeing_sources, 1);
         // A city-level peer never matches a country-level record.
         let p = peer("b", SourceClass::Reference, vec![3], es.clone());
-        let v = compare_with_peers(&k, &SourceId("a".into()), &[], &es, &[p]);
+        let v = compare_with_peers(&k, &SourceId("a".into()), None, &[], &es, &[p]);
         assert_eq!(v.agreeing_sources, 1);
     }
 
