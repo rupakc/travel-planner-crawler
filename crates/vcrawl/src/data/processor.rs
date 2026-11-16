@@ -198,7 +198,18 @@ impl Processor {
         while let Some(joined) = set.join_next().await {
             let (it, r) = joined.map_err(|e| Error::Invalid(format!("processor task: {e}")))?;
             match r {
-                Ok(_) => self.d.queue.ack(it.id).await?,
+                Ok(o) => {
+                    match &o {
+                        Outcome::Skipped(r) => tracing::debug!(work_id = it.id.0,
+                            reason = ?r, "capture skipped"),
+                        Outcome::Processed { links, .. } => tracing::debug!(
+                            work_id = it.id.0,
+                            count = *links,
+                            "capture processed (links enqueued)"
+                        ),
+                    }
+                    self.d.queue.ack(it.id).await?
+                }
                 Err(e) => match e.class() {
                     ErrorClass::Permanent | ErrorClass::Policy => {
                         tracing::warn!(work_id = it.id.0, error_class = ?e.class(), error = %e,

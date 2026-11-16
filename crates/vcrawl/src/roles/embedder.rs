@@ -10,6 +10,7 @@ use vc_core::Clock;
 use crate::Ctx;
 use crate::data::embed::{EmbedLoop, estimator};
 use crate::data::shutdown;
+use crate::wiring;
 
 /// Pause between passes when there was nothing to do.
 const IDLE: Duration = Duration::from_secs(30);
@@ -18,6 +19,7 @@ const REFUSED: Duration = Duration::from_secs(15 * 60);
 
 /// Runs the `embedder` role until shutdown.
 pub async fn run(ctx: Ctx) -> anyhow::Result<()> {
+    wiring::obs::init_tracing(&ctx, "embedder");
     let cfg = ctx.cfg.clone();
     let mut stop = shutdown::channel();
     if !cfg.llm.enabled {
