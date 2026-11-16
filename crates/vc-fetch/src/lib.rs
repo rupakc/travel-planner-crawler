@@ -275,8 +275,8 @@ impl ReqwestPermitClient {
         for name in RESERVED_HEADERS {
             h.remove(name);
         }
-        if url.host() != req.url.host() {
-            // Credentials are for the requested host only, even within one key.
+        if !same_authority(url, &req.url) {
+            // Credentials are for the requested scheme, host and port only, even within one key.
             h.remove(header::AUTHORIZATION);
         }
         h.insert(header::USER_AGENT, HeaderValue::from_static(USER_AGENT));
@@ -489,6 +489,9 @@ impl ReqwestPermitClient {
                 if redirects.len() >= usize::from(self.config.max_redirects) {
                     return Err(FetchError::TooManyRedirects);
                 }
+                if downgrade_refused(purpose, &url, &next) {
+                    return Err(FetchError::OutOfScope(next));
+                }
                 self.check_redirect(p, &next, purpose)?;
                 redirects.push(RedirectHop {
                     url: url.clone(),
@@ -543,6 +546,19 @@ impl ReqwestPermitClient {
         BodyDecoder::new(o.encoding.as_deref(), o.limit, nested)
             .ok_or_else(|| FetchError::Transport("unsupported content-encoding".into()))
     }
+}
+
+/// Whether two URLs share scheme, host and port (credentials never cross any of them).
+fn same_authority(a: &CanonicalUrl, b: &CanonicalUrl) -> bool {
+    a.as_url().scheme() == b.as_url().scheme() && a.host() == b.host() && a.port() == b.port()
+}
+
+/// An `https` → `http` redirect of an API call (which may carry credentials or tokens in the
+/// URL) is refused as [`FetchError::OutOfScope`] rather than followed in clear text.
+fn downgrade_refused(purpose: RequestPurpose, from: &CanonicalUrl, to: &CanonicalUrl) -> bool {
+    purpose == RequestPurpose::Api
+        && from.as_url().scheme() == "https"
+        && to.as_url().scheme() == "http"
 }
 
 /// Reads the whole body of `o` into `dec`; returns whether it was truncated.
@@ -755,5 +771,54 @@ fn map_reqwest(e: &reqwest::Error) -> FetchError {
         FetchError::Timeout
     } else {
         FetchError::Transport(err_text(e))
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    fn u(s: &str) -> CanonicalUrl {
+        CanonicalUrl::parse(s).unwrap()
+    }
+
+    #[test]
+    fn api_https_to_http_downgrade_refused() {
+        let from = u("https://api.site.test/v1/items");
+        let to = u("http://api.site.test/v1/items");
+        assert!(downgrade_refused(RequestPurpose::Api, &from, &to));
+        assert!(!downgrade_refused(RequestPurpose::Page, &from, &to));
+        assert!(!downgrade_refused(RequestPurpose::Api, &to, &from));
+        assert!(!downgrade_refused(RequestPurpose::Api, &from, &from));
+    }
+
+    #[test]
+    fn authority_includes_scheme_and_port() {
+        let a = u("https://site.test/a");
+        assert!(same_authority(&a, &u("https://site.test/b")));
+        assert!(same_authority(&a, &u("https://site.test:443/b")));
+        assert!(!same_authority(&a, &u("http://site.test/a")));
+        assert!(!same_authority(&a, &u("https://site.test:8443/a")));
+        assert!(!same_authority(&a, &u("https://www.site.test/a")));
+    }
+
+    #[test]
+    fn authorization_dropped_on_scheme_change() {
+        let mut req = FetchRequest::get(u("https://site.test/a"), RequestPurpose::Api);
+        req.headers
+            .insert(header::AUTHORIZATION, HeaderValue::from_static("Bearer t"));
+        let c = ReqwestPermitClient::new(
+            FetchConfig::default(),
+            Arc::new(testkit::MemFrontier::new(Arc::new(SystemClock))),
+            Arc::new(testkit::vc_fetch_fixtures::StubPolicy::default()),
+        );
+        let same = c
+            .request_headers(&req, &u("https://site.test/b"), false)
+            .unwrap();
+        assert!(same.contains_key(header::AUTHORIZATION));
+        for other in ["http://site.test/a", "https://site.test:8443/a"] {
+            let h = c.request_headers(&req, &u(other), false).unwrap();
+            assert!(!h.contains_key(header::AUTHORIZATION), "{other}");
+        }
     }
 }
