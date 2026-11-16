@@ -430,8 +430,10 @@ pub async fn remove_captures(
             segs += 1;
         }
         finish_rewrite(store, &rw).await?;
+        // Noarchive captures of an archive segment have their text under `ephemeral/text/`.
         let sid: SegmentId = seg.parse()?;
-        purge_text_tier(store, sid, vc_store::paths::is_ephemeral(path), &remove).await?;
+        purge_text_tier(store, sid, false, &remove).await?;
+        purge_text_tier(store, sid, true, &remove).await?;
     }
     Ok((caps, segs))
 }

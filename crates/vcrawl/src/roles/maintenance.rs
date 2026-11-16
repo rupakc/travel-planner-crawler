@@ -11,6 +11,11 @@
 //! | restore drill | 7 d | rebuilds the newest segments' rows from their CDXJ in memory and compares them with the database; exports `restore_drill_ok` |
 //! | digest | 1 h | writes yesterday's `crawl_digest` row once (parked keys, statuses, yields, spend) |
 //! | Parquet export | 24 h | stub: lists partitions older than 12 months that are due for export |
+//! | source scout | 7 d | under-covered `(destination, kind)` cells → `agentic::scout` proposals (+ `<data_dir>/proposals/<date>.md`) |
+//! | quality auditor | 7 d | `agentic::auditor` over sampled current versions, page text from the text tier |
+//!
+//! The two agentic jobs run only with an [`Agentic`] bundle and do nothing (no query, no
+//! reservation, no model call) while `llm.enabled` is false.
 //!
 //! Not here, by design: Chromium recycling. The maintenance container has no route to the
 //! `render` network; `vc-render` re-creates its CDP session every `render.restart_after_renders`
@@ -18,6 +23,7 @@
 //! the base backup + WAL) needs the bootstrap's drill template and is not wired yet.
 
 use std::collections::HashMap;
+use std::path::PathBuf;
 use std::sync::Arc;
 use std::time::Duration as StdDuration;
 
@@ -28,8 +34,13 @@ use vc_core::store::BlobStore;
 use vc_core::{Clock, SystemClock};
 use vc_obs::{HeartbeatWriter, Metrics, ProgressTracker};
 
+use vc_core::policy::Policy;
+
 use crate::Ctx;
 use crate::admin::{purge, rebuild};
+use crate::agentic::AgenticLlm;
+use crate::agentic::auditor::{AuditReport, AuditSettings, AuditText, run_auditor};
+use crate::agentic::scout::{ScoutCell, ScoutReport, run_scout, write_proposals_md};
 
 /// Segments checked per restore drill.
 pub const DRILL_SEGMENTS: i64 = 50;
@@ -52,17 +63,23 @@ pub enum Job {
     Digest,
     /// Parquet export (stub).
     ParquetExport,
+    /// Source scout (agentic, propose only).
+    Scout,
+    /// Quality auditor (agentic).
+    Auditor,
 }
 
 impl Job {
     /// All jobs, in run order.
-    pub const ALL: [Job; 6] = [
+    pub const ALL: [Job; 8] = [
         Job::Partitions,
         Job::Purge,
         Job::Ephemeral,
         Job::RestoreDrill,
         Job::Digest,
         Job::ParquetExport,
+        Job::Scout,
+        Job::Auditor,
     ];
 
     /// How often the job runs.
@@ -71,7 +88,7 @@ impl Job {
             Job::Partitions => Duration::hours(6),
             Job::Purge => Duration::minutes(15),
             Job::Ephemeral | Job::Digest => Duration::hours(1),
-            Job::RestoreDrill => Duration::days(7),
+            Job::RestoreDrill | Job::Scout | Job::Auditor => Duration::days(7),
             Job::ParquetExport => Duration::days(1),
         }
     }
@@ -120,6 +137,188 @@ pub struct Maintenance {
     pub metrics: Option<Arc<Metrics>>,
     /// Months of partitions kept ahead.
     pub partitions_ahead_months: u32,
+    /// The agentic loops (scout, auditor); `None` skips them.
+    pub agentic: Option<Agentic>,
+}
+
+/// What the agentic maintenance jobs need.
+#[derive(Clone)]
+pub struct Agentic {
+    /// Model + budget seam (a no-op when the LLM is disabled).
+    pub llm: AgenticLlm,
+    /// Policy (denylist, brand domains) for scout suggestions.
+    pub policy: Arc<dyn Policy>,
+    /// Where `<date>.md` proposal files go.
+    pub proposals_dir: PathBuf,
+    /// Page text for the auditor.
+    pub text: Arc<StoreAuditText>,
+    /// Under-covered cell thresholds.
+    pub cells: CellSettings,
+}
+
+/// Thresholds of the under-covered cell query.
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub struct CellSettings {
+    /// A destination counts once it has this many live records (any kind).
+    pub min_destination_records: i64,
+    /// A `(destination, kind)` cell is under-covered below this many live records.
+    pub min_cell_records: i64,
+    /// Cells per scout run.
+    pub max_cells: i64,
+    /// A cell proposed for within this many days is not asked again.
+    pub recent_days: i32,
+}
+
+impl Default for CellSettings {
+    fn default() -> Self {
+        CellSettings {
+            min_destination_records: 20,
+            min_cell_records: 5,
+            max_cells: 10,
+            recent_days: 90,
+        }
+    }
+}
+
+/// City-scoped kinds the scout looks for sources of (their schemas carry `city` + `country`).
+pub const SCOUT_KINDS: &[&str] = &[
+    "activity",
+    "attraction",
+    "event",
+    "hotel",
+    "tip",
+    "transport_option",
+    "walking_tour",
+];
+
+/// The under-covered `(destination, kind)` cells: destinations (`city, country` of live
+/// current versions) with at least `min_destination_records` records, crossed with
+/// [`SCOUT_KINDS`], where the kind has fewer than `min_cell_records` records and no scout
+/// proposal was made for the cell in the last `recent_days` days. Busiest destinations first.
+pub async fn under_covered_cells(
+    pool: &PgPool,
+    s: &CellSettings,
+) -> anyhow::Result<Vec<ScoutCell>> {
+    let kinds: Vec<String> = SCOUT_KINDS.iter().map(|k| k.to_string()).collect();
+    let rows: Vec<(String, String)> = sqlx::query_as(
+        "WITH cur AS (
+           SELECT r.kind, btrim(v.data->>'city') AS city, btrim(v.data->>'country') AS country
+           FROM records r JOIN record_versions v
+             ON v.record_id = r.record_id AND v.version = r.current_version
+           WHERE r.state IN ('active', 'stale')
+             AND coalesce(btrim(v.data->>'city'), '') <> ''
+             AND coalesce(btrim(v.data->>'country'), '') <> ''),
+         dest AS (SELECT city, country, city || ', ' || country AS name, count(*) AS n
+                  FROM cur GROUP BY city, country HAVING count(*) >= $1),
+         have AS (SELECT city, country, kind, count(*) AS n FROM cur GROUP BY city, country, kind)
+         SELECT d.name, k.kind
+         FROM dest d CROSS JOIN unnest($3::text[]) AS k(kind)
+         LEFT JOIN have h ON h.city = d.city AND h.country = d.country AND h.kind = k.kind
+         WHERE coalesce(h.n, 0) < $2
+           AND NOT EXISTS (SELECT 1 FROM source_candidates c
+                           WHERE c.destination = d.name AND k.kind = ANY(c.kinds)
+                             AND c.created_at > now() - make_interval(days => $5))
+         ORDER BY d.n DESC, coalesce(h.n, 0), d.name, k.kind
+         LIMIT $4",
+    )
+    .bind(s.min_destination_records)
+    .bind(s.min_cell_records)
+    .bind(&kinds)
+    .bind(s.max_cells)
+    .bind(s.recent_days)
+    .fetch_all(pool)
+    .await?;
+    Ok(rows
+        .into_iter()
+        .map(|(destination, kind)| ScoutCell { destination, kind })
+        .collect())
+}
+
+/// [`AuditText`] over the raw store: the capture's row in its segment's text-tier object
+/// (`text/…` or `ephemeral/text/…jsonl.zst`, `{capture_id, main_text}` rows written by the
+/// processor), else the stored body parsed with `vc-parse` (main text). `None` when the capture or its bytes are gone.
+pub struct StoreAuditText {
+    /// Pool.
+    pub pool: PgPool,
+    /// Raw bucket.
+    pub store: Arc<dyn BlobStore>,
+    /// Parsers for the fallback.
+    pub parse: vc_core::parse::HandlerRegistry,
+    /// Parse limits.
+    pub limits: vc_core::parse::Limits,
+}
+
+impl StoreAuditText {
+    /// Over `pool` and `store` with the `[parse]` settings.
+    pub fn new(pool: PgPool, store: Arc<dyn BlobStore>, cfg: &vc_config::ParseConfig) -> Self {
+        StoreAuditText {
+            pool,
+            store,
+            parse: vc_parse::registry_with(cfg),
+            limits: vc_parse::limits_from(cfg),
+        }
+    }
+
+    async fn lookup(&self, capture_id: &str) -> anyhow::Result<Option<String>> {
+        let row: Option<(DateTime<Utc>, Option<String>, String)> = sqlx::query_as(
+            "SELECT captured_at, text_ref, segment_id FROM captures WHERE capture_id = $1 LIMIT 1",
+        )
+        .bind(capture_id)
+        .fetch_optional(&self.pool)
+        .await?;
+        let Some((captured_at, text_ref, segment)) = row else {
+            return Ok(None);
+        };
+        // The tier object of the capture's segment: archive text, or `ephemeral/text/` for
+        // noarchive captures (and an explicit `text_ref` when one is recorded).
+        let mut paths: Vec<String> = text_ref.into_iter().collect();
+        if let Ok(sid) = segment.parse::<vc_core::SegmentId>() {
+            paths.push(vc_store::paths::text_path(sid, false));
+            paths.push(vc_store::paths::text_path(sid, true));
+        }
+        for path in paths {
+            match self.store.get(&path, None).await {
+                Ok(b) => {
+                    let rows: Vec<serde_json::Value> = vc_store::text::decode_text_tier(&b)?;
+                    let hit = rows
+                        .iter()
+                        .find(|r| r["capture_id"] == capture_id)
+                        .and_then(|r| {
+                            r.get("main_text")
+                                .or_else(|| r.get("text"))
+                                .and_then(|t| t.as_str())
+                                .map(str::to_string)
+                        });
+                    if hit.is_some() {
+                        return Ok(hit);
+                    }
+                }
+                Err(vc_core::Error::NotFound(_)) => {}
+                Err(e) => return Err(e.into()),
+            }
+        }
+        let cref = vc_core::CaptureRef {
+            capture_id: capture_id.parse()?,
+            captured_at,
+        };
+        let Some(c) = crate::data::capture::load(&self.pool, &cref).await? else {
+            return Ok(None);
+        };
+        let body = match crate::data::capture::body(&self.pool, &self.store, &c).await {
+            Ok(Some(b)) => b,
+            Ok(None) | Err(vc_core::Error::NotFound(_)) => return Ok(None),
+            Err(e) => return Err(e.into()),
+        };
+        Ok(vc_parse::parse(&self.parse, &c.meta, &body, &self.limits)?.and_then(|p| p.main_text))
+    }
+}
+
+impl AuditText for StoreAuditText {
+    async fn text(&self, capture_id: &str) -> vc_core::Result<Option<String>> {
+        self.lookup(capture_id)
+            .await
+            .map_err(|e| vc_core::Error::Storage(format!("audit text: {e}")))
+    }
 }
 
 impl Maintenance {
@@ -135,6 +334,8 @@ impl Maintenance {
                 Job::RestoreDrill => self.restore_drill(now).await.map(drop),
                 Job::Digest => self.digest_yesterday(now).await.map(drop),
                 Job::ParquetExport => self.parquet_export(now).await.map(drop),
+                Job::Scout => self.scout(now).await.map(drop),
+                Job::Auditor => self.audit().await.map(drop),
             };
             match r {
                 Ok(()) => {
@@ -324,6 +525,53 @@ impl Maintenance {
         Ok((n == 1).then_some(d))
     }
 
+    /// Source scout: under-covered cells → proposals (and a `<date>.md` file when any).
+    /// Nothing happens without an [`Agentic`] bundle or with the LLM disabled.
+    pub async fn scout(&self, now: DateTime<Utc>) -> anyhow::Result<Option<ScoutReport>> {
+        let Some(a) = &self.agentic else {
+            return Ok(None);
+        };
+        if !a.llm.enabled() {
+            return Ok(None);
+        }
+        let cells = under_covered_cells(&self.pool, &a.cells).await?;
+        if cells.is_empty() {
+            return Ok(None);
+        }
+        let rep = run_scout(&a.llm, &self.pool, a.policy.as_ref(), &cells).await?;
+        if !rep.proposals.is_empty() {
+            std::fs::create_dir_all(&a.proposals_dir)?;
+            let path = write_proposals_md(&a.proposals_dir, now.date_naive(), &rep)?;
+            tracing::info!(path = %path.display(), proposals = rep.proposals.len(), "maintenance: scout proposals written");
+        }
+        Ok(Some(rep))
+    }
+
+    /// Quality auditor. Nothing happens without an [`Agentic`] bundle or with the LLM
+    /// disabled.
+    pub async fn audit(&self) -> anyhow::Result<Option<AuditReport>> {
+        let Some(a) = &self.agentic else {
+            return Ok(None);
+        };
+        if !a.llm.enabled() {
+            return Ok(None);
+        }
+        let rep = run_auditor(
+            &a.llm,
+            &self.pool,
+            a.text.as_ref(),
+            &AuditSettings::default(),
+        )
+        .await?;
+        if !rep.below_threshold.is_empty() {
+            tracing::warn!(
+                sources = rep.below_threshold.len(),
+                "maintenance: sources below the audit threshold"
+            );
+        }
+        Ok(Some(rep))
+    }
+
     /// Parquet export (stub): the month partitions of `record_versions`, `captures` and
     /// `observations` older than 12 months. Nothing is exported or detached yet.
     pub async fn parquet_export(&self, now: DateTime<Utc>) -> anyhow::Result<Vec<String>> {
@@ -440,11 +688,13 @@ pub async fn run(ctx: Ctx) -> anyhow::Result<()> {
     tasks.push(tokio::spawn(
         hb.run(StdDuration::from_secs(cfg.obs.heartbeat_s.max(1))),
     ));
+    let agentic = agentic_from_config(&cfg, &pool, &store).await?;
     let m = Maintenance {
         pool,
         store,
         metrics: Some(metrics),
         partitions_ahead_months: cfg.vcrawl.partitions_ahead_months,
+        agentic: Some(agentic),
     };
     let mut sched = Schedule::default();
     let mut tick = tokio::time::interval(StdDuration::from_secs(60));
@@ -465,6 +715,50 @@ pub async fn run(ctx: Ctx) -> anyhow::Result<()> {
     }
     tracing::info!("maintenance: stopped");
     res
+}
+
+/// The production [`Agentic`] bundle: Vertex + `PgLedger` when `llm.enabled`, else a
+/// disabled seam (no client is built, nothing can be called).
+async fn agentic_from_config(
+    cfg: &vc_config::Config,
+    pool: &PgPool,
+    store: &Arc<dyn BlobStore>,
+) -> anyhow::Result<Agentic> {
+    use anyhow::Context as _;
+    let clock: Arc<dyn Clock> = Arc::new(SystemClock);
+    let ledger = Arc::new(vc_llm::PgLedger::new(
+        pool.clone(),
+        cfg.llm.clone(),
+        clock.clone(),
+    ));
+    let client: Arc<dyn vc_core::llm::LlmClient> = if cfg.llm.enabled {
+        let vertex = vc_llm::VertexClient::new(&cfg.llm, Arc::new(vc_llm::AdcToken::new()), clock)?;
+        Arc::new(vc_llm::VertexLlm::new(cfg.llm.clone(), vertex).with_cache(pool.clone()))
+    } else {
+        Arc::new(DisabledLlm)
+    };
+    let policy = vc_policy::VoyagerPolicy::new(cfg.policy.clone()).context("policy")?;
+    Ok(Agentic {
+        llm: AgenticLlm::new(client, ledger, cfg.llm.clone()),
+        policy: Arc::new(policy),
+        proposals_dir: PathBuf::from(&cfg.vcrawl.data_dir).join("proposals"),
+        text: Arc::new(StoreAuditText::new(pool.clone(), store.clone(), &cfg.parse)),
+        cells: CellSettings::default(),
+    })
+}
+
+/// The client used while `llm.enabled = false`: every call is refused as disabled.
+struct DisabledLlm;
+
+#[async_trait::async_trait]
+impl vc_core::llm::LlmClient for DisabledLlm {
+    async fn generate(
+        &self,
+        _r: &vc_core::llm::Reservation,
+        _req: vc_core::llm::LlmRequest,
+    ) -> vc_core::Result<vc_core::llm::LlmResponse> {
+        Err(vc_core::llm::LlmError::Disabled.into())
+    }
 }
 
 async fn shutdown() -> anyhow::Result<()> {

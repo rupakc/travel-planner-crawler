@@ -22,6 +22,7 @@ fn maint(pool: &sqlx::PgPool, store: Arc<MemBlobStore>) -> (Maintenance, Arc<Met
             store,
             metrics: Some(metrics.clone()),
             partitions_ahead_months: 2,
+            agentic: None,
         },
         metrics,
     )
