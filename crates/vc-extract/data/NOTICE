@@ -1,0 +1,17 @@
+Place data for vc-extract's FilePlaceResolver
+=============================================
+
+Contains data from GeoNames (geonames.org), CC BY 4.0
+Licence: https://creativecommons.org/licenses/by/4.0/
+
+places.tsv.gz, admin1.tsv.gz and the folded names of countries.tsv.gz are derived from
+GeoNames (cities1000, admin1CodesASCII, allCountries; snapshots 2026-10-29/30) via
+Voyager's committed place data (rupakc/travel-planner, backend/app/db/data). The data
+is MODIFIED: places filtered (>= 1,000 people, some feature codes dropped), notable
+non-town features kept, names folded to ASCII keys, places ranked, coordinates rounded
+to 4 decimals. GeoNames does not endorse these changes.
+
+Country codes and names (countries.tsv.gz `code`, `name`) come from OurAirports
+(https://ourairports.com/data/), public domain.
+
+Regenerate with: python3 crates/vc-extract/scripts/export_places.py --src <data dir>
