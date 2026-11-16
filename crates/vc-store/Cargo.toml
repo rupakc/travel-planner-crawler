@@ -33,7 +33,12 @@ tracing = { workspace = true }
 thiserror = { workspace = true }
 http = { workspace = true }
 
+[features]
+# Compiles the `fail` failpoints in (tests enable it through the dev-dependency below).
+failpoints = ["fail/failpoints"]
+
 [dev-dependencies]
+fail = { workspace = true, features = ["failpoints"] }
 testkit = { workspace = true }
 proptest = { workspace = true }
 tempfile = { workspace = true }

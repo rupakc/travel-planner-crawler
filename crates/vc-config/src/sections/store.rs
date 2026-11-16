@@ -38,6 +38,10 @@ pub struct StoreConfig {
     pub zstd_level: i32,
     /// Ephemeral (noarchive/TDM) retention, days (30).
     pub ephemeral_days: u32,
+    /// GCS endpoint override (`http://host:port` for fake-gcs-server in E2E); empty = Google.
+    pub gcs_endpoint: String,
+    /// Use anonymous GCS credentials (emulators only); default false = ADC.
+    pub gcs_anonymous: bool,
 }
 
 impl Default for StoreConfig {
@@ -54,6 +58,8 @@ impl Default for StoreConfig {
             upload_failure_pause_s: 900,
             zstd_level: 9,
             ephemeral_days: 30,
+            gcs_endpoint: String::new(),
+            gcs_anonymous: false,
         }
     }
 }

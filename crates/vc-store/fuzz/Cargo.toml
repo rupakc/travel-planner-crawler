@@ -1,0 +1,26 @@
+# cargo-fuzz targets for vc-store (own workspace; not built by the main workspace or CI).
+# Run: cd crates/vc-store/fuzz && cargo +nightly fuzz run fuzz_warc_reader
+[package]
+name = "vc-store-fuzz"
+version = "0.0.0"
+edition = "2024"
+publish = false
+license = "MIT"
+
+[package.metadata]
+cargo-fuzz = true
+
+[workspace]
+members = ["."]
+
+[dependencies]
+libfuzzer-sys = "0.4"
+bytes = "1"
+vc-store = { path = ".." }
+
+[[bin]]
+name = "fuzz_warc_reader"
+path = "fuzz_targets/fuzz_warc_reader.rs"
+test = false
+doc = false
+bench = false
