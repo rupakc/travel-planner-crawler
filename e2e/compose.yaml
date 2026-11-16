@@ -1,0 +1,231 @@
+# The E2E stack (plan Task 16, spec §12): the whole crawler against a scripted "mini
+# internet", run by e2e/run.sh on every PR (.github/workflows/e2e.yml). Never deployed.
+#
+#   bash e2e/run.sh            # builds the image, runs the stack, the cycles and the oracles
+#
+# One image (e2e/Dockerfile, tag vc-e2e:local) holds vcrawl, fake_web, fake_gemini and the
+# runner. Every network is internal: nothing in this stack can reach the internet.
+#
+# Networks:
+#   db       Postgres, the roles, the runner.
+#   web      the fake web, on a public-looking subnet so the SSRF guard treats it as the
+#            internet. Each site's DNS name (and denied.test, which must never be requested)
+#            is an alias of the fake-web container.
+#   trapnet  10.0.0.0/24 with the trap (a second fake_web) on 10.0.0.5, the private IP the
+#            blog redirects to and the SPA's script fetches. The fetchers can route to it, so
+#            only the SSRF guard keeps them out; the runner asserts its log stays empty.
+#   render   Chromium and the fetchers (CDP). Chromium has no other network: every request
+#            it makes is paused and answered by the fetcher (spec §17.1).
+#   store    fake GCS, fake Gemini, the roles, the runner.
+#   apinet   the API and the runner (TLS on 8443, certificate from run.sh's throwaway CA).
+
+name: vc-e2e
+
+x-vcrawl: &vcrawl
+  image: vc-e2e:local
+  entrypoint: ["vcrawl"]
+  restart: "no"
+  init: true
+  read_only: true
+  user: "65532:65532"
+  cap_drop: [ALL]
+  security_opt: ["no-new-privileges:true"]
+  tmpfs: ["/tmp:size=256m,uid=65532,gid=65532"]
+  volumes: ["./:/e2e:ro"]
+  environment: &vcrawl-env
+    VC_CONFIG: /e2e/vcrawl.toml
+    VC_LOG_FORMAT: json
+    VC_SECRET_CRAWLER_PG_PASSWORD: e2e
+    RUST_BACKTRACE: "1"
+  depends_on:
+    postgres: { condition: service_healthy }
+  networks: [db, store]
+
+x-fake: &fake
+  image: vc-e2e:local
+  restart: "no"
+  init: true
+  read_only: true
+  user: "10001:10001"
+  cap_drop: [ALL]
+  security_opt: ["no-new-privileges:true"]
+
+services:
+  postgres:
+    image: pgvector/pgvector:pg17@sha256:b513c48566e4777cd3370451400000c78eda6a08131d68f4c31d4a76f27bd8fd
+    environment:
+      POSTGRES_USER: vcrawl
+      POSTGRES_DB: vcrawl
+      POSTGRES_PASSWORD: e2e
+    tmpfs: ["/var/lib/postgresql/data"]
+    shm_size: 256m
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U vcrawl -d vcrawl"]
+      interval: 2s
+      timeout: 3s
+      retries: 30
+    networks: [db]
+
+  fake-gcs:
+    image: fsouza/fake-gcs-server:1.56.1@sha256:797ce226d62f947c009dc40246b30cfb456b8473d8241407f9d6f2c04e4d69ef
+    command: ["-scheme", "http", "-port", "4443", "-backend", "memory", "-external-url", "http://fake-gcs:4443"]
+    networks: [store]
+
+  fake-web:
+    <<: *fake
+    command: ["fake_web", "--listen", "0.0.0.0:80"]
+    healthcheck:
+      test: ["CMD", "curl", "-fsS", "http://127.0.0.1:80/__admin/health"]
+      interval: 2s
+      timeout: 3s
+      retries: 30
+    networks:
+      web:
+        aliases:
+          - blog.test
+          - attractions.test
+          - events.test
+          - hostile.test
+          - slow.test
+          - visa.immigration.test
+          - cdn.test
+          - denied.test
+
+  trap:
+    <<: *fake
+    command: ["fake_web", "--listen", "0.0.0.0:80"]
+    healthcheck:
+      test: ["CMD", "curl", "-fsS", "http://127.0.0.1:80/__admin/health"]
+      interval: 2s
+      timeout: 3s
+      retries: 30
+    networks:
+      trapnet:
+        ipv4_address: 10.0.0.5
+
+  fake-gemini:
+    <<: *fake
+    command: ["fake_gemini", "--listen", "0.0.0.0:8080", "--gcs-url", "http://fake-gcs:4443", "--buckets", "e2e-batch"]
+    networks: [store]
+
+  chromium:
+    # The production image and entrypoint (deploy/chromium/run.sh: socat in front of
+    # Chrome, which ignores --remote-debugging-address). Sandbox on, non-root, read-only.
+    image: chromedp/headless-shell:158.0.8127.18@sha256:830fa77e0602cb42e5cb2cbd9237ba27b649ad69d5fb82b54713aac8b7ab4f29
+    restart: "no"
+    init: true
+    user: "1000:1000"
+    read_only: true
+    cap_drop: [ALL]
+    security_opt: ["seccomp=../deploy/chromium/seccomp.json", "no-new-privileges:true"]
+    tmpfs: ["/tmp:size=512m,uid=1000,gid=1000"]
+    shm_size: 512m
+    environment: { HOME: /tmp }
+    volumes: ["../deploy/chromium/run.sh:/opt/run.sh:ro"]
+    entrypoint: ["/bin/sh", "/opt/run.sh"]
+    networks: [render]
+
+  migrate:
+    <<: *vcrawl
+    command: ["migrate"]
+    profiles: [tools]
+
+  scheduler:
+    <<: *vcrawl
+    command: ["scheduler"]
+    environment:
+      <<: *vcrawl-env
+      VC_VCRAWL_INSTANCE: scheduler
+    networks: [db, store, web, trapnet]
+
+  fetcher-a:
+    <<: *vcrawl
+    command: ["fetcher"]
+    environment:
+      <<: *vcrawl-env
+      VC_VCRAWL_INSTANCE: fetcher-a
+    tmpfs: ["/tmp:size=256m,uid=65532,gid=65532", "/spool:size=256m,uid=65532,gid=65532"]
+    depends_on:
+      postgres: { condition: service_healthy }
+      chromium: { condition: service_started }
+    networks: [db, store, web, trapnet, render]
+
+  fetcher-b:
+    <<: *vcrawl
+    command: ["fetcher"]
+    environment:
+      <<: *vcrawl-env
+      VC_VCRAWL_INSTANCE: fetcher-b
+    tmpfs: ["/tmp:size=256m,uid=65532,gid=65532", "/spool:size=256m,uid=65532,gid=65532"]
+    depends_on:
+      postgres: { condition: service_healthy }
+      chromium: { condition: service_started }
+    networks: [db, store, web, trapnet, render]
+
+  processor:
+    <<: *vcrawl
+    command: ["processor"]
+    environment:
+      <<: *vcrawl-env
+      VC_VCRAWL_INSTANCE: processor
+
+  maintenance:
+    <<: *vcrawl
+    command: ["maintenance"]
+    environment:
+      <<: *vcrawl-env
+      VC_VCRAWL_INSTANCE: maintenance
+
+  api:
+    <<: *vcrawl
+    command: ["api"]
+    environment:
+      <<: *vcrawl-env
+      VC_VCRAWL_INSTANCE: api
+      VC_SECRET_CRAWLER_API_TLS_CERT: ${E2E_TLS_CERT:?run e2e/run.sh}
+      VC_SECRET_CRAWLER_API_TLS_KEY: ${E2E_TLS_KEY:?run e2e/run.sh}
+    networks: [db, store, apinet]
+
+  runner:
+    image: vc-e2e:local
+    entrypoint: ["e2e-runner"]
+    profiles: [tools]
+    restart: "no"
+    init: true
+    read_only: true
+    user: "65532:65532"
+    cap_drop: [ALL]
+    security_opt: ["no-new-privileges:true"]
+    tmpfs: ["/tmp"]
+    volumes: ["${E2E_OUT:?run e2e/run.sh}:/out"]
+    environment:
+      E2E_DATABASE_URL: postgres://vcrawl:e2e@postgres:5432/vcrawl
+      E2E_FAKE_WEB: http://fake-web
+      E2E_TRAP: http://trap
+      E2E_GCS: http://fake-gcs:4443
+      E2E_BUCKETS: e2e-raw,e2e-ops,e2e-batch
+      E2E_API: https://api:8443
+      E2E_API_CA: /out/ca.pem
+      E2E_API_TOKEN: ${E2E_API_TOKEN:?run e2e/run.sh}
+      E2E_SUMMARY: /out/summary.md
+      E2E_MISSING_ROLES: ${E2E_MISSING_ROLES:-}
+      E2E_CRASHED_ROLES: ${E2E_CRASHED_ROLES:-}
+      E2E_CYCLES: ${E2E_CYCLES:-3}
+      E2E_CYCLE_SECS: ${E2E_CYCLE_SECS:-60}
+      E2E_DRAIN_SECS: ${E2E_DRAIN_SECS:-60}
+    networks: [db, store, web, trapnet, apinet]
+
+networks:
+  db: { internal: true }
+  store: { internal: true }
+  render: { internal: true }
+  apinet: { internal: true }
+  web:
+    internal: true
+    ipam:
+      # Not RFC 1918 / CGNAT / reserved: the SSRF guard must see the fake web as the internet.
+      config: [{ subnet: 11.22.33.0/24 }]
+  trapnet:
+    internal: true
+    ipam:
+      config: [{ subnet: 10.0.0.0/24 }]

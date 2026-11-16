@@ -1,0 +1,44 @@
+# The E2E runner (plan Task 16). Its own workspace so the root workspace stays untouched
+# (root Cargo files are controller-owned); Cargo.lock is the root lock plus this package,
+# so it pins exactly the versions the workspace uses (`--locked` in CI).
+[workspace]
+
+[package]
+name = "e2e-runner"
+version = "0.1.0"
+edition = "2024"
+rust-version = "1.99.0"
+license = "MIT"
+publish = false
+description = "Drives the E2E compose stack through crawl cycles and runs the politeness, raw-first and behaviour assertions."
+
+[lints.rust]
+unsafe_code = "forbid"
+missing_docs = "warn"
+
+[dependencies]
+testkit = { path = "../../testkit" }
+vc-core = { path = "../../crates/vc-core" }
+vc-store = { path = "../../crates/vc-store" }
+vc-api = { path = "../../crates/vc-api" }
+vc-sources = { path = "../../crates/vc-sources" }
+vc-config = { path = "../../crates/vc-config" }
+tokio = { version = "1.54.1", features = ["full"] }
+anyhow = "1.0.104"
+serde = { version = "1.0.229", features = ["derive", "rc"] }
+serde_json = "1.0.154"
+chrono = { version = "0.4.45", default-features = false, features = ["clock", "serde", "std"] }
+url = { version = "2.5.8", features = ["serde"] }
+reqwest = { version = "0.13.5", default-features = false, features = ["rustls", "http2", "gzip", "brotli", "zstd", "deflate", "stream", "charset", "hickory-dns", "json"] }
+sqlx = { version = "0.9.0", default-features = false, features = ["runtime-tokio", "tls-rustls", "postgres", "macros", "migrate", "chrono", "json", "uuid"] }
+
+[dev-dependencies]
+serde_norway = "0.9.42"
+vc-policy = { path = "../../crates/vc-policy" }
+
+# Same as the root workspace's profiles, so both builds share artifacts in one target dir.
+[profile.dev]
+debug = "line-tables-only"
+
+[profile.dev.package."*"]
+debug = false

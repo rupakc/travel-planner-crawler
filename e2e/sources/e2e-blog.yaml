@@ -1,0 +1,31 @@
+# E2E source (plan Task 16): the fake web's blog site. Never deployed.
+id: e2e-blog
+name: E2E blog
+category: blogs
+source_class: editorial
+licence:
+  class: facts_only
+  spdx: null
+  attribution: E2E fake web
+  url: null
+method: rss
+seeds: [http://blog.test/]
+sitemaps: [http://blog.test/sitemap.xml]
+feeds: [http://blog.test/feed.xml]
+adapter: null
+include: []
+exclude: []
+max_depth: 1
+kinds: [article]
+llm_kinds: []
+render: never
+cadence: hourly
+min_delay_s: 5
+daily_budget: 3000
+politeness_key: null
+enabled: true
+needs_key: false
+key_secret: null
+max_retention_days: null
+display_requirements: null
+notes: "RSS, sitemap, a post that changes in cycle 1, robots change in cycle 2, cross-key and private-IP redirects, a denylisted link"

@@ -1,0 +1,31 @@
+# E2E source (plan Task 16): the fake web's events site. Never deployed.
+id: e2e-events
+name: E2E events
+category: events
+source_class: editorial
+licence:
+  class: facts_only
+  spdx: null
+  attribution: E2E fake web
+  url: null
+method: sitemap
+seeds: []
+sitemaps: [http://events.test/sitemap.xml]
+feeds: []
+adapter: null
+include: []
+exclude: []
+max_depth: 1
+kinds: [event]
+llm_kinds: []
+render: never
+cadence: hourly
+min_delay_s: 5
+daily_budget: 3000
+politeness_key: null
+enabled: true
+needs_key: false
+key_secret: null
+max_retention_days: null
+display_requirements: null
+notes: "JSON-LD events; the jazz night date changes in cycle 1"

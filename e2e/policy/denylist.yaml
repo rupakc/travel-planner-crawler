@@ -1,0 +1,8 @@
+# E2E denylist (plan Task 16). The fake web serves only *.test hosts, so the production
+# entries do not matter here; denied.test (linked from the blog) must never be requested
+# (politeness oracle: Denylisted).
+version: 1
+entries:
+  - host: denied.test
+    reason: E2E denylisted host (the blog links to it)
+    source: "sources.md §0"

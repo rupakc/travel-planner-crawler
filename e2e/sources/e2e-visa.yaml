@@ -1,0 +1,31 @@
+# E2E source (plan Task 16): the fake web's visa site. Never deployed.
+id: e2e-visa
+name: E2E visa
+category: visa
+source_class: official
+licence:
+  class: open
+  spdx: CC-BY-4.0
+  attribution: E2E fake web
+  url: null
+method: html
+seeds: [http://visa.immigration.test/]
+sitemaps: []
+feeds: []
+adapter: null
+include: []
+exclude: []
+max_depth: 1
+kinds: [visa_rule]
+llm_kinds: []
+render: never
+cadence: hourly
+min_delay_s: 5
+daily_budget: 3000
+politeness_key: null
+enabled: true
+needs_key: false
+key_secret: null
+max_retention_days: null
+display_requirements: null
+notes: "Official source under key immigration.test; noarchive and noindex pages, a disallowed /admin/"

@@ -1,0 +1,78 @@
+name: E2E
+
+# Plan Task 16: the whole crawler against the scripted fake web (e2e/compose.yaml), two
+# fetchers, a fixed number of crawl cycles, then the politeness, raw-first and behaviour
+# oracles (e2e/runner). Runs on every PR. No secrets, no network beyond the build: every
+# compose network is internal. Assertions whose vcrawl role is not wired yet are skipped
+# with the role's name (Task 15); a crashed role or a broken oracle fails the job.
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: e2e-${{ github.event_name }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+env:
+  CARGO_TERM_COLOR: always
+  CARGO_INCREMENTAL: "0"
+  CARGO_TARGET_DIR: ${{ github.workspace }}/target
+
+jobs:
+  e2e:
+    name: e2e
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - name: Install toolchain (rust-toolchain.toml)
+        run: |
+          rustup toolchain install --profile minimal
+          rustup component add rustfmt clippy
+          rustc --version
+      - uses: Swatinem/rust-cache@d1527c8f67ef9af357290475d4af4b0fab8f12e0 # v2.9.3
+        with:
+          shared-key: e2e
+          workspaces: |
+            . -> target
+            e2e/runner -> ../../target
+          save-if: ${{ github.ref == 'refs/heads/main' }}
+      - name: Runner checks (fmt, clippy, unit tests; no Docker)
+        working-directory: e2e/runner
+        run: |
+          cargo fmt -- --check
+          cargo clippy --locked --all-targets -- -D warnings
+          cargo test --locked
+      - name: Build binaries (release)
+        run: |
+          cargo build --release --locked -p vcrawl -p testkit --bin vcrawl --bin fake_web --bin fake_gemini
+          cargo build --release --locked --manifest-path e2e/runner/Cargo.toml
+          mkdir -p e2e/.bin
+          cp target/release/{vcrawl,fake_web,fake_gemini,e2e-runner} e2e/.bin/
+      - name: Pull images
+        run: docker compose -f e2e/compose.yaml --profile tools pull --quiet postgres fake-gcs chromium
+        env:
+          E2E_OUT: /tmp
+          E2E_TLS_CERT: x
+          E2E_TLS_KEY: x
+          E2E_API_TOKEN: x
+      - name: E2E (crawl cycles + oracles)
+        timeout-minutes: 12
+        env:
+          E2E_BINS: prebuilt
+        run: bash e2e/run.sh
+      - name: Upload logs
+        if: always()
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: e2e-logs
+          path: e2e/out/
+          if-no-files-found: ignore
+          retention-days: 7

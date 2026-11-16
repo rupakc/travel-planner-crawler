@@ -1,0 +1,7 @@
+# E2E sub-resource allowlist (plan Task 16): the SPA's assets come from cdn.test.
+# Images stay blocked whatever the host (the SPA's logo.png must never be requested).
+version: 1
+hosts:
+  - host: cdn.test
+    types: [script, stylesheet, xhr, fetch]
+    reason: the fake web's CDN asset host (SPA JS/CSS)
