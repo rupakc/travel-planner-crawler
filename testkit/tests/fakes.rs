@@ -92,6 +92,78 @@ async fn mem_frontier_extend_moves_permit_deadline() {
 }
 
 #[tokio::test]
+async fn mem_frontier_reschedule() {
+    let (fc, clk) = clock();
+    let f = MemFrontier::new(clk.clone()).with_delay(Duration::ZERO);
+    let u = CanonicalUrl::parse("https://r.example.com/x").unwrap();
+    let k = u.key();
+    f.enqueue(&[NewUrl::new(u.clone())]).await.unwrap();
+    assert!(
+        !f.reschedule(&CanonicalUrl::parse("https://nope.example/").unwrap().key(), clk.now())
+            .await
+            .unwrap(),
+        "unknown url"
+    );
+
+    // Leased: undisturbed until it returns to due, then due no later than `at`.
+    let c = f.claim(&[0], 5).await.unwrap().unwrap();
+    let at = clk.now() + chrono::Duration::minutes(5);
+    assert!(f.reschedule(&k, at).await.unwrap());
+    assert_eq!(f.url_state(&k), Some(UrlState::Leased));
+    f.check(&c.permit).await.unwrap();
+    let mut o = KeyOutcome::normal();
+    o.urls.push(UrlOutcome {
+        url_key: k,
+        result: UrlResult::Retry {
+            at: clk.now() + chrono::Duration::days(1),
+        },
+    });
+    f.complete(c.permit, o).await.unwrap();
+    assert_eq!(f.url_state(&k), Some(UrlState::Due));
+    assert_eq!(f.next_fetch_at(&k), Some(at));
+
+    // Due: moves to `at` (earlier), and the key's own delay still applies.
+    let now_at = clk.now();
+    assert!(f.reschedule(&k, now_at).await.unwrap());
+    assert_eq!(f.next_fetch_at(&k), Some(now_at));
+    let c = f.claim(&[0], 5).await.unwrap().expect("due now");
+
+    // fetched_pending: applied at the commit of its epoch.
+    let day = clk.now() + chrono::Duration::days(1);
+    f.mark_fetched(&c.permit, &k, day).await.unwrap();
+    let epoch = c.permit.epoch();
+    let at2 = clk.now() + chrono::Duration::minutes(1);
+    assert!(f.reschedule(&k, at2).await.unwrap());
+    let mut o = KeyOutcome::normal();
+    o.urls.push(UrlOutcome {
+        url_key: k,
+        result: UrlResult::Fetched,
+    });
+    f.complete(c.permit, o).await.unwrap();
+    assert_eq!(f.url_state(&k), Some(UrlState::FetchedPending));
+    fc.advance(Duration::from_secs(1));
+    let cap = CaptureRef {
+        capture_id: CaptureId::new(),
+        captured_at: clk.now(),
+    };
+    f.commit_capture(&k, epoch, cap, Default::default(), None);
+    assert_eq!(f.url_state(&k), Some(UrlState::Due));
+    assert_eq!(f.next_fetch_at(&k), Some(at2));
+
+    // Terminal states are not revived.
+    fc.advance(Duration::from_secs(120));
+    let c = f.claim(&[0], 5).await.unwrap().expect("due");
+    let mut o = KeyOutcome::normal();
+    o.urls.push(UrlOutcome {
+        url_key: k,
+        result: UrlResult::Disallowed,
+    });
+    f.complete(c.permit, o).await.unwrap();
+    assert!(!f.reschedule(&k, clk.now()).await.unwrap());
+    assert_eq!(f.url_state(&k), Some(UrlState::Disabled));
+}
+
+#[tokio::test]
 async fn mem_blob_store_is_create_only() {
     let s = MemBlobStore::new();
     let b = Bytes::from_static(b"warc");
