@@ -1,0 +1,5 @@
+id,data_type,entity_type,location.country_code,location.subdivision_name,location.municipality,provider,is_official,name,note,feed_contact_email,static_reference,urls.direct_download,urls.authentication_type,urls.authentication_info,urls.api_key_parameter_name,urls.latest,urls.license,location.bounding_box.minimum_latitude,location.bounding_box.maximum_latitude,location.bounding_box.minimum_longitude,location.bounding_box.maximum_longitude,location.bounding_box.extracted_on,status,features,redirect.id,redirect.comment
+mdb-1,gtfs,,FR,Île-de-France,Paris,"Île-de-France Mobilités",True,,"Example row, see README",,,https://example.org/idfm/gtfs.zip,0,,,https://example.org/latest/mdb-1.zip,https://example.org/licence,48.1,49.2,1.4,3.6,2026-01-01T00:00:00+00:00,active,,,
+mdb-2,gtfs_rt,vp,FR,Île-de-France,Paris,"Île-de-France Mobilités",True,,,,mdb-1,https://example.org/idfm/rt,2,,,,,,,,,,active,,,
+mdb-3,gtfs,,US,California,"San Francisco","Example Transit, Inc.",False,,"note with a
+line break",,,https://example.org/sf/gtfs.zip,0,,,,,,,,,,deprecated,,mdb-1,

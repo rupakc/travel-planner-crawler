@@ -1,0 +1,314 @@
+{
+ "analytics_identifier": null,
+ "base_path": "/foreign-travel-advice/france",
+ "content_id": "05a8e85c-5a65-406e-923d-79c04a4433f6",
+ "description": "FCDO travel advice for France. Includes safety and security, insurance, entry requirements and legal differences.",
+ "details": {
+  "alert_status": [],
+  "change_description": "Updated information about demonstrations (‘Warnings and insurance’ page).",
+  "change_history": [
+   {
+    "note": "Updated information about demonstrations (‘Warnings and insurance’ page).",
+    "public_timestamp": "2026-10-22T16:57:33Z"
+   },
+   {
+    "note": "Updated information on local curfews (‘Warnings and insurance’ page)",
+    "public_timestamp": "2026-10-19T17:40:21Z"
+   }
+  ],
+  "country": {
+   "name": "France",
+   "slug": "france",
+   "synonyms": [
+    "Paris",
+    "Corsica"
+   ]
+  },
+  "email_signup_link": "/foreign-travel-advice/france/email-signup",
+  "max_cache_time": 10,
+  "parts": [
+   {
+    "body": "<div class=\"call-to-action\">\n  <h2 id=\"demonstrations\">Demonstrations</h2>\n\n  <p>There is an increased likelihood of demonstrations, political gatherings and marches taking place across France, sometimes at short notice.</p>\n\n  <p>Whilst most demonstrations are peaceful, you should remain aware of your surroundings. Stay away from areas with large crowds or a significant police presence, and follow the advice of police and local authorities.</p>\n\n  <p>Demonstrations may disrupt local transport services and authorities may impose public safety measures, including partial and localised curfews in some areas. Monitor local media for the latest information about measures in your area.</p>",
+    "slug": "warnings-and-insurance",
+    "title": "Warnings and insurance"
+   },
+   {
+    "body": "<p>This information is for people travelling on a full <a href=\"https://www.gov.uk/types-of-british-nationality\">‘British citizen’ passport</a> from the UK. It is based on the UK government’s understanding of the current rules for the most common types of travel. </p>\n\n<p>The authorities in France set and enforce entry rules. If you’re not sure how these requirements apply to you, contact the <a rel=\"external\" href=\"https://uk.ambafrance.org/Contact-Us-24150\">French Embassy in the UK</a>.</p>\n\n<h2 id=\"passport-validity-requirements\">Passport validity requirements</h2>\n\n<p>France follows <a rel=\"external\" href=\"https://europa.eu/youreurope/citizens/travel/entry-exit/non-eu-nationals/index_en.htm\">Schengen area rules</a>. Your passport must:</p>",
+    "slug": "entry-requirements",
+    "title": "Entry requirements"
+   },
+   {
+    "body": "<h2 id=\"terrorism\">Terrorism</h2>\n\n<p>There is a high threat of terrorist attack globally affecting UK interests and British nationals, including from groups and individuals who view the UK and British nationals as targets. Stay aware of your surroundings at all times.</p>\n\n<p>UK Counter Terrorism Policing has information and advice on <a rel=\"external\" href=\"https://www.counterterrorism.police.uk/runhidetell/\">staying safe</a> and what to do in the event of a terrorist attack. Find out <a href=\"https://www.gov.uk/guidance/reduce-your-risk-from-terrorism-while-abroad\">how to reduce your risk from terrorism while abroad</a>.</p>",
+    "slug": "safety-and-security",
+    "title": "Safety and security"
+   },
+   {
+    "body": "<p>Before you travel check that:</p>\n\n<ul>\n  <li>your destination can provide the healthcare you may need</li>\n  <li>you have <a href=\"https://www.gov.uk/guidance/foreign-travel-insurance\">appropriate travel insurance</a> for local treatment or unexpected medical evacuation</li>\n</ul>\n\n<p>This is particularly important if you have a health condition or are pregnant.</p>\n\n<h2 id=\"emergency-medical-number\">Emergency medical number</h2>\n\n<p>Call 112 and ask for an ambulance.</p>\n\n<p>Contact your insurance or medical assistance company quickly if you’re referred to a medical facility for treatment.</p>",
+    "slug": "health",
+    "title": "Health"
+   },
+   {
+    "body": "<p>The Foreign, Commonwealth &amp; Development Office (<abbr title=\"Foreign, Commonwealth &amp; Development Office\">FCDO</abbr>) cannot provide tailored advice for individual trips. Read this travel advice and carry out your own research before deciding whether to travel.</p>\n\n<h2 id=\"emergency-services-in-france\">Emergency services in France</h2>\n\n<p>Telephone 112 (ambulance, fire, police)</p>\n\n<p>Ambulance: 15</p>\n\n<p>Fire: 18</p>\n\n<p>Police: 17</p>\n\n<p>Deaf and hard of hearing emergency number (SMS, chat, video and fax): 114</p>\n\n<h2 id=\"contact-your-travel-provider-and-insurer\">Contact your travel provider and insurer</h2>\n\n<p>Contact your travel provider and your insurer if you are involved in a serious incident or emergency abroad. They will tell you if they can help and what you need to do.</p>",
+    "slug": "getting-help",
+    "title": "Getting help"
+   }
+  ],
+  "reviewed_at": "2026-10-22T16:57:33Z",
+  "updated_at": "2026-10-22T16:57:33Z"
+ },
+ "document_type": "travel_advice",
+ "first_published_at": "2013-03-18T15:33:05+00:00",
+ "links": {
+  "available_translations": [
+   {
+    "api_path": "/api/content/foreign-travel-advice/france",
+    "api_url": "https://www.gov.uk/api/content/foreign-travel-advice/france",
+    "base_path": "/foreign-travel-advice/france",
+    "content_id": "05a8e85c-5a65-406e-923d-79c04a4433f6",
+    "document_type": "travel_advice",
+    "links": {},
+    "locale": "en",
+    "public_updated_at": "2026-10-22T16:57:33Z",
+    "schema_name": "travel_advice",
+    "title": "France travel advice",
+    "web_url": "https://www.gov.uk/foreign-travel-advice/france",
+    "withdrawn": false
+   }
+  ],
+  "ordered_related_items": [
+   {
+    "api_path": "/api/content/guidance/about-foreign-commonwealth-development-office-travel-advice",
+    "api_url": "https://www.gov.uk/api/content/guidance/about-foreign-commonwealth-development-office-travel-advice",
+    "base_path": "/guidance/about-foreign-commonwealth-development-office-travel-advice",
+    "content_id": "dd34d3a4-56bd-4cf5-b821-d76f9d997153",
+    "document_type": "detailed_guide",
+    "links": {},
+    "locale": "en",
+    "public_updated_at": "2026-10-30T16:30:51Z",
+    "schema_name": "detailed_guide",
+    "title": "About Foreign, Commonwealth & Development Office travel advice",
+    "web_url": "https://www.gov.uk/guidance/about-foreign-commonwealth-development-office-travel-advice",
+    "withdrawn": false
+   }
+  ],
+  "organisations": [
+   {
+    "analytics_identifier": "D1315",
+    "api_path": "/api/content/government/organisations/foreign-commonwealth-development-office",
+    "api_url": "https://www.gov.uk/api/content/government/organisations/foreign-commonwealth-development-office",
+    "base_path": "/government/organisations/foreign-commonwealth-development-office",
+    "content_id": "f9fcf3fe-2751-4dca-97ca-becaeceb4b26",
+    "details": {
+     "acronym": "FCDO",
+     "brand": "foreign-commonwealth-development-office",
+     "default_news_image": {
+      "high_resolution_url": "https://assets.publishing.service.gov.uk/media/621e4de4e90e0710be0354d7/s960_fcdo-main-building.jpg",
+      "url": "https://assets.publishing.service.gov.uk/media/621e4de48fa8f5490aff83b4/s300_fcdo-main-building.jpg"
+     },
+     "logo": {
+      "crest": "single-identity",
+      "formatted_title": "Foreign, Commonwealth<br/>&amp; Development Office"
+     },
+     "organisation_govuk_status": {
+      "status": "live",
+      "updated_at": null,
+      "url": null
+     }
+    },
+    "document_type": "organisation",
+    "links": {},
+    "locale": "en",
+    "schema_name": "organisation",
+    "title": "Foreign, Commonwealth & Development Office",
+    "web_url": "https://www.gov.uk/government/organisations/foreign-commonwealth-development-office",
+    "withdrawn": false
+   }
+  ],
+  "parent": [
+   {
+    "api_path": "/api/content/foreign-travel-advice",
+    "api_url": "https://www.gov.uk/api/content/foreign-travel-advice",
+    "base_path": "/foreign-travel-advice",
+    "content_id": "08d48cdd-6b50-43ff-a53b-beab47f4aab0",
+    "document_type": "travel_advice_index",
+    "links": {
+     "parent": [
+      {
+       "api_path": "/api/content/browse/abroad/travel-abroad",
+       "api_url": "https://www.gov.uk/api/content/browse/abroad/travel-abroad",
+       "base_path": "/browse/abroad/travel-abroad",
+       "content_id": "b9849cd6-61a7-42dc-8124-362d2c7d48b0",
+       "description": "Includes the latest travel advice by country, your rights at the airport and getting help abroad",
+       "document_type": "mainstream_browse_page",
+       "links": {
+        "parent": [
+         {
+          "api_path": "/api/content/browse/abroad",
+          "api_url": "https://www.gov.uk/api/content/browse/abroad",
+          "base_path": "/browse/abroad",
+          "content_id": "86eb717a-fb40-42e7-83fa-d031a03880fb",
+          "description": "Includes renewing passports and travel advice by country",
+          "document_type": "mainstream_browse_page",
+          "links": {},
+          "locale": "en",
+          "public_updated_at": "2015-04-08T10:48:43Z",
+          "schema_name": "mainstream_browse_page",
+          "title": "Passports, travel and living abroad",
+          "web_url": "https://www.gov.uk/browse/abroad",
+          "withdrawn": false
+         }
+        ]
+       },
+       "locale": "en",
+       "public_updated_at": "2024-04-17T16:20:10Z",
+       "schema_name": "mainstream_browse_page",
+       "title": "Travel abroad",
+       "web_url": "https://www.gov.uk/browse/abroad/travel-abroad",
+       "withdrawn": false
+      }
+     ]
+    },
+    "locale": "en",
+    "public_updated_at": "2024-08-05T07:23:09Z",
+    "schema_name": "travel_advice_index",
+    "title": "Foreign travel advice",
+    "web_url": "https://www.gov.uk/foreign-travel-advice",
+    "withdrawn": false
+   }
+  ],
+  "primary_publishing_organisation": [
+   {
+    "analytics_identifier": "D1315",
+    "api_path": "/api/content/government/organisations/foreign-commonwealth-development-office",
+    "api_url": "https://www.gov.uk/api/content/government/organisations/foreign-commonwealth-development-office",
+    "base_path": "/government/organisations/foreign-commonwealth-development-office",
+    "content_id": "f9fcf3fe-2751-4dca-97ca-becaeceb4b26",
+    "details": {
+     "acronym": "FCDO",
+     "brand": "foreign-commonwealth-development-office",
+     "default_news_image": {
+      "high_resolution_url": "https://assets.publishing.service.gov.uk/media/621e4de4e90e0710be0354d7/s960_fcdo-main-building.jpg",
+      "url": "https://assets.publishing.service.gov.uk/media/621e4de48fa8f5490aff83b4/s300_fcdo-main-building.jpg"
+     },
+     "logo": {
+      "crest": "single-identity",
+      "formatted_title": "Foreign, Commonwealth<br/>&amp; Development Office"
+     },
+     "organisation_govuk_status": {
+      "status": "live",
+      "updated_at": null,
+      "url": null
+     }
+    },
+    "document_type": "organisation",
+    "links": {},
+    "locale": "en",
+    "schema_name": "organisation",
+    "title": "Foreign, Commonwealth & Development Office",
+    "web_url": "https://www.gov.uk/government/organisations/foreign-commonwealth-development-office",
+    "withdrawn": false
+   }
+  ],
+  "related": [
+   {
+    "api_path": "/api/content/browse/abroad/travel-abroad",
+    "api_url": "https://www.gov.uk/api/content/browse/abroad/travel-abroad",
+    "base_path": "/browse/abroad/travel-abroad",
+    "content_id": "b9849cd6-61a7-42dc-8124-362d2c7d48b0",
+    "description": "Includes the latest travel advice by country, your rights at the airport and getting help abroad",
+    "document_type": "mainstream_browse_page",
+    "links": {},
+    "locale": "en",
+    "public_updated_at": "2024-04-17T16:20:10Z",
+    "schema_name": "mainstream_browse_page",
+    "title": "Travel abroad",
+    "web_url": "https://www.gov.uk/browse/abroad/travel-abroad",
+    "withdrawn": false
+   }
+  ],
+  "taxons": [
+   {
+    "api_path": "/api/content/world/living-in-france",
+    "api_url": "https://www.gov.uk/api/content/world/living-in-france",
+    "base_path": "/world/living-in-france",
+    "content_id": "856e78fe-e2b0-499d-aed3-809c67e8fe3d",
+    "description": "Guidance on your rights after the UK’s exit from the EU, accessing healthcare, getting a document legalised, English-speaking lawyers, how to vote abroad.",
+    "details": {
+     "internal_name": "Living in France",
+     "notes_for_editors": "",
+     "visible_to_departmental_editors": false
+    },
+    "document_type": "taxon",
+    "links": {
+     "parent_taxons": [
+      {
+       "api_path": "/api/content/world/france",
+       "api_url": "https://www.gov.uk/api/content/world/france",
+       "base_path": "/world/france",
+       "content_id": "f1072b1e-2606-4bdc-9a3f-bd50ef5e7030",
+       "description": "Services if you're visiting, studying, working or living in France. Includes information about trading with and doing business in the UK and France, and your rights after the UK’s exit from the EU.",
+       "details": {
+        "internal_name": "UK help and services in France",
+        "notes_for_editors": "",
+        "visible_to_departmental_editors": false
+       },
+       "document_type": "taxon",
+       "links": {
+        "parent_taxons": [
+         {
+          "api_path": "/api/content/world/all",
+          "api_url": "https://www.gov.uk/api/content/world/all",
+          "base_path": "/world/all",
+          "content_id": "91b8ef20-74e7-4552-880c-50e6d73c2ff9",
+          "description": "Help and services in a country",
+          "details": {
+           "internal_name": "Help and services around the world",
+           "notes_for_editors": "",
+           "url_override": "",
+           "visible_to_departmental_editors": false
+          },
+          "document_type": "taxon",
+          "links": {},
+          "locale": "en",
+          "phase": "live",
+          "public_updated_at": "2021-07-09T10:08:54Z",
+          "schema_name": "taxon",
+          "title": "Help and services around the world",
+          "web_url": "https://www.gov.uk/world/all",
+          "withdrawn": false
+         }
+        ]
+       },
+       "locale": "en",
+       "phase": "live",
+       "public_updated_at": "2020-02-28T16:08:07Z",
+       "schema_name": "taxon",
+       "title": "UK help and services in France",
+       "web_url": "https://www.gov.uk/world/france",
+       "withdrawn": false
+      }
+     ]
+    },
+    "locale": "en",
+    "phase": "live",
+    "public_updated_at": "2020-03-03T16:52:33Z",
+    "schema_name": "taxon",
+    "title": "Living in France",
+    "web_url": "https://www.gov.uk/world/living-in-france",
+    "withdrawn": false
+   }
+  ]
+ },
+ "locale": "en",
+ "phase": "live",
+ "public_updated_at": "2026-10-22T17:57:33+01:00",
+ "publishing_app": "travel-advice-publisher",
+ "publishing_request_id": "21-1792688253.179-10.13.21.136-40832",
+ "publishing_scheduled_at": null,
+ "rendering_app": "frontend",
+ "scheduled_publishing_delay_seconds": null,
+ "schema_name": "travel_advice",
+ "title": "France travel advice",
+ "updated_at": "2026-11-12T12:02:10+00:00",
+ "withdrawn_notice": {}
+}

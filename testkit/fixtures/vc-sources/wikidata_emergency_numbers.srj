@@ -1,0 +1,21 @@
+{
+  "head": { "vars": ["country", "countryLabel", "iso2", "number", "numberLabel"] },
+  "results": {
+    "bindings": [
+      {
+        "country": { "type": "uri", "value": "http://www.wikidata.org/entity/Q142" },
+        "countryLabel": { "xml:lang": "en", "type": "literal", "value": "France" },
+        "iso2": { "type": "literal", "value": "FR" },
+        "number": { "type": "uri", "value": "http://www.wikidata.org/entity/Q694046" },
+        "numberLabel": { "xml:lang": "en", "type": "literal", "value": "112" }
+      },
+      {
+        "country": { "type": "uri", "value": "http://www.wikidata.org/entity/Q17" },
+        "countryLabel": { "xml:lang": "en", "type": "literal", "value": "Japan" },
+        "iso2": { "type": "literal", "value": "JP" },
+        "number": { "type": "uri", "value": "http://www.wikidata.org/entity/Q11396830" },
+        "numberLabel": { "xml:lang": "en", "type": "literal", "value": "110" }
+      }
+    ]
+  }
+}

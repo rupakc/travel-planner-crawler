@@ -1,0 +1,175 @@
+{
+ "_links": {
+  "self": {
+   "href": "/discovery/v2/events.json?size=1{&page,sort}",
+   "templated": true
+  },
+  "next": {
+   "href": "/discovery/v2/events.json?page=1&size=1{&sort}",
+   "templated": true
+  }
+ },
+ "_embedded": {
+  "events": [
+   {
+    "name": "WGC Cadillac Championship - Sunday Ticket",
+    "type": "event",
+    "id": "vvG1VZKS5pr1qy",
+    "test": false,
+    "url": "http://ticketmaster.com/event/0E0050681F51BA4C",
+    "locale": "en-us",
+    "images": [
+     {
+      "ratio": "16_9",
+      "url": "http://s1.ticketm.net/dam/a/196/6095e742-64d1-4b15-aeac-c9733c52d196_66341_RETINA_LANDSCAPE_16_9.jpg",
+      "width": 1136,
+      "height": 639,
+      "fallback": false
+     }
+    ],
+    "sales": {
+     "public": {
+      "startDateTime": "2015-10-02T11:00:00Z",
+      "startTBD": false,
+      "endDateTime": "2016-03-06T23:00:00Z"
+     }
+    },
+    "dates": {
+     "start": {
+      "localDate": "2016-03-06",
+      "dateTBD": false,
+      "dateTBA": false,
+      "timeTBA": true,
+      "noSpecificTime": false
+     },
+     "timezone": "America/New_York",
+     "status": {
+      "code": "offsale"
+     }
+    },
+    "classifications": [
+     {
+      "primary": true,
+      "segment": {
+       "id": "KZFzniwnSyZfZ7v7nE",
+       "name": "Sports"
+      },
+      "genre": {
+       "id": "KnvZfZ7vAdt",
+       "name": "Golf"
+      },
+      "subGenre": {
+       "id": "KZazBEonSMnZfZ7vFI7",
+       "name": "PGA Tour"
+      }
+     }
+    ],
+    "promoter": {
+     "id": "682"
+    },
+    "_links": {
+     "self": {
+      "href": "/discovery/v2/events/vvG1VZKS5pr1qy?locale=en-us"
+     },
+     "attractions": [
+      {
+       "href": "/discovery/v2/attractions/K8vZ917uc57?locale=en-us"
+      }
+     ],
+     "venues": [
+      {
+       "href": "/discovery/v2/venues/KovZpZAaEldA?locale=en-us"
+      }
+     ]
+    },
+    "_embedded": {
+     "venues": [
+      {
+       "name": "Trump National Doral",
+       "type": "venue",
+       "id": "KovZpZAaEldA",
+       "test": false,
+       "locale": "en-us",
+       "postalCode": "33178",
+       "timezone": "America/New_York",
+       "city": {
+        "name": "Miami"
+       },
+       "state": {
+        "name": "Florida",
+        "stateCode": "FL"
+       },
+       "country": {
+        "name": "United States Of America",
+        "countryCode": "US"
+       },
+       "address": {
+        "line1": "4400 NW 87th Avenue"
+       },
+       "location": {
+        "longitude": "-80.33854298",
+        "latitude": "25.81260379"
+       },
+       "markets": [
+        {
+         "id": "15"
+        }
+       ],
+       "_links": {
+        "self": {
+         "href": "/discovery/v2/venues/KovZpZAaEldA?locale=en-us"
+        }
+       }
+      }
+     ],
+     "attractions": [
+      {
+       "name": "Cadillac Championship",
+       "type": "attraction",
+       "id": "K8vZ917uc57",
+       "test": false,
+       "locale": "en-us",
+       "images": [
+        {
+         "ratio": "16_9",
+         "url": "http://s1.ticketm.net/dam/a/196/6095e742-64d1-4b15-aeac-c9733c52d196_66341_RETINA_LANDSCAPE_16_9.jpg",
+         "width": 1136,
+         "height": 639,
+         "fallback": false
+        }
+       ],
+       "classifications": [
+        {
+         "primary": true,
+         "segment": {
+          "id": "KZFzniwnSyZfZ7v7nE",
+          "name": "Sports"
+         },
+         "genre": {
+          "id": "KnvZfZ7vAdt",
+          "name": "Golf"
+         },
+         "subGenre": {
+          "id": "KZazBEonSMnZfZ7vFI7",
+          "name": "PGA Tour"
+         }
+        }
+       ],
+       "_links": {
+        "self": {
+         "href": "/discovery/v2/attractions/K8vZ917uc57?locale=en-us"
+        }
+       }
+      }
+     ]
+    }
+   }
+  ]
+ },
+ "page": {
+  "size": 1,
+  "totalElements": 87958,
+  "totalPages": 87958,
+  "number": 0
+ }
+}

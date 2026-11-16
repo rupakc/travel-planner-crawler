@@ -1,0 +1,100 @@
+{
+ "metadata": {
+  "generated": {
+   "timestamp": 1794768016,
+   "date": "2026-11-15 13:40:16"
+  }
+ },
+ "data": {
+  "FR": {
+   "country-id": 92000,
+   "country-iso": "FR",
+   "country-eng": "France",
+   "country-fra": "France",
+   "advisory-state": 1,
+   "date-published": {
+    "timestamp": 1793998558,
+    "date": "2026-11-06 15:55:58",
+    "asp": "2026-11-06T15:55:58.8328828-05:00"
+   },
+   "has-advisory-warning": 0,
+   "has-regional-advisory": 0,
+   "has-content": 1,
+   "recent-updates-type": "Regular text update",
+   "eng": {
+    "name": "France",
+    "url-slug": "france",
+    "friendly-date": "November 6, 2026 15:55 EST",
+    "advisory-text": "Exercise a high degree of caution",
+    "recent-updates": "Safety and security section – updated information on demonstrations and strikes"
+   },
+   "fra": {
+    "name": "France",
+    "url-slug": "france",
+    "friendly-date": "6 novembre 2026 15:55 HNE",
+    "advisory-text": "Faire preuve d’une grande prudence",
+    "recent-updates": "Section Sécurité – mise à jour de l’information sur les manifestations et les grèves"
+   }
+  },
+  "JP": {
+   "country-id": 140000,
+   "country-iso": "JP",
+   "country-eng": "Japan",
+   "country-fra": "Japon",
+   "advisory-state": 0,
+   "date-published": {
+    "timestamp": 1793025557,
+    "date": "2026-10-26 10:39:17",
+    "asp": "2026-10-26T10:39:17.3585798-04:00"
+   },
+   "has-advisory-warning": 0,
+   "has-regional-advisory": 0,
+   "has-content": 1,
+   "recent-updates-type": "Regional advisory removed",
+   "eng": {
+    "name": "Japan",
+    "url-slug": "japan",
+    "friendly-date": "October 26, 2026 10:39 EDT",
+    "advisory-text": "Exercise normal security precautions",
+    "recent-updates": "Risk levels section – removed advisory to avoid non-essential travel to the Ryukyu Islands; Natural disasters and climate section – removed information on Typhoon Champi"
+   },
+   "fra": {
+    "name": "Japon",
+    "url-slug": "japon",
+    "friendly-date": "26 octobre 2026 10:39 HAE",
+    "advisory-text": "Prendre des mesures de sécurité normales",
+    "recent-updates": "Section Niveau de risque – retrait de l’avertissement d’éviter tout voyage non essentiel aux îles Ryukyu; Section Catastrophes naturelles et climat – retrait de l’information sur le  typhon Champi"
+   }
+  },
+  "AF": {
+   "country-id": 1000,
+   "country-iso": "AF",
+   "country-eng": "Afghanistan",
+   "country-fra": "Afghanistan",
+   "advisory-state": 3,
+   "date-published": {
+    "timestamp": 1791975710,
+    "date": "2026-10-14 07:01:50",
+    "asp": "2026-10-14T07:01:50.7595549-04:00"
+   },
+   "has-advisory-warning": 1,
+   "has-regional-advisory": 0,
+   "has-content": 1,
+   "recent-updates-type": "Regular text update",
+   "eng": {
+    "name": "Afghanistan",
+    "url-slug": "afghanistan",
+    "friendly-date": "October 14, 2026 07:01 EDT",
+    "advisory-text": "Avoid all travel",
+    "recent-updates": "Natural disasters and climate section – added information on El Niño"
+   },
+   "fra": {
+    "name": "Afghanistan",
+    "url-slug": "afghanistan",
+    "friendly-date": "14 octobre 2026 07:01 HAE",
+    "advisory-text": "Éviter tout voyage",
+    "recent-updates": "Section Catastrophes naturelles et climat – ajout d’information sur El Niño"
+   }
+  }
+ }
+}
