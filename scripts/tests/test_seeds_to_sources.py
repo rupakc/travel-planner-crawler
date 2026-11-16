@@ -220,3 +220,18 @@ def test_unknown_licence_string_fails_loudly(tmp_path):
     )
     with pytest.raises(s2s.MappingError):
         s2s.generate(seeds, tmp_path / "out", ROOT / "policy" / "denylist.yaml")
+
+
+@pytest.mark.parametrize(
+    "sid,host",
+    [
+        ("wikidata-aviation", "query.wikidata.org"),
+        ("mobility-database", "files.mobilitydatabase.org"),
+        ("nager-date", "date.nager.at"),
+    ],
+)
+def test_robots_disallowed_sources_are_off(generated, sid, host):
+    # Their robots.txt disallows us (every agent): off, with the documented reason.
+    src = generated[sid]
+    assert src["enabled"] is False
+    assert f"robots.txt of {host} disallows" in " ".join(src["notes"].split())

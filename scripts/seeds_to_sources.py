@@ -301,6 +301,24 @@ DISABLED = {
     "ecmwf-open": "GRIB2 forecasts; only useful when self-hosting a forecast model.",
     "se-api": "v1 forums = Stack Exchange data dump only (spec §5.10).",
     "ricksteves-forum": "v1 forums = Stack Exchange data dump only (spec §5.10, GDPR).",
+    # robots.txt disallows these routes for every user agent (checked 2026-11-16); we obey.
+    "wikidata-aviation": (
+        "robots.txt of query.wikidata.org disallows /sparql for all agents (checked 2026-11-16). "
+        "No allowed bulk route: www.wikidata.org disallows /w/api.php and /api/, "
+        "Special:EntityData is per entity only, and the dumps.wikimedia.org JSON dump is too "
+        "large (see wikidata-dump). Airports come from OurAirports."
+    ),
+    "mobility-database": (
+        "robots.txt of files.mobilitydatabase.org disallows / for all agents (checked "
+        "2026-11-16). api.mobilitydatabase.org needs a token and sits behind an auth "
+        "redirect (robots.txt answers 302 to a login); the GitHub catalog "
+        "(MobilityData/mobility-database-catalogs) is one JSON file per feed and "
+        "github.com disallows /*/archive/, so no allowed bulk route without a new adapter."
+    ),
+    "nager-date": (
+        "robots.txt of date.nager.at disallows /api/v for all agents (checked 2026-11-16); "
+        "the data is not published as files."
+    ),
 }
 
 MIN_DELAY = {"cdc-travel": 20, "seat61": 10, "ricksteves-forum": 10}

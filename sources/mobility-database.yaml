@@ -26,9 +26,13 @@ cadence: weekly
 min_delay_s: 5
 daily_budget: 3000
 politeness_key: null
-enabled: true
+enabled: false
 needs_key: false
 key_secret: null
 max_retention_days: null
 display_requirements: null
-notes: API needs free refresh token
+notes: 'API needs free refresh token | Disabled: robots.txt of files.mobilitydatabase.org disallows /
+  for all agents (checked 2026-11-16). api.mobilitydatabase.org needs a token and sits behind an auth
+  redirect (robots.txt answers 302 to a login); the GitHub catalog (MobilityData/mobility-database-catalogs)
+  is one JSON file per feed and github.com disallows /*/archive/, so no allowed bulk route without a new
+  adapter.'
