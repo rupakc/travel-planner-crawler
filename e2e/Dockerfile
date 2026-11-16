@@ -7,7 +7,7 @@
 #                                   # CI: Linux binaries already built into e2e/.bin/
 ARG BINS=build
 
-FROM rust:1.99.0-slim-trixie AS build
+FROM rust:1.100.0-slim-trixie AS build
 WORKDIR /src
 COPY . .
 ENV CARGO_TARGET_DIR=/src/target
