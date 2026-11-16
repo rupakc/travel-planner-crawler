@@ -7,6 +7,8 @@
 //!   (structured first; the LLM only when `VC_LLM_ENABLED` and under the extraction budget) →
 //!   `RecordSink::upsert`; in-scope links → frontier; high-stakes `reference` records that
 //!   await a second agreeing source are held in [`peers::PendingPeers`] (table `held_records`) and fed back as peers.
+//! * [`stale`]: records a newer capture of their page no longer contains become `stale`
+//!   (with provenance and a `changes` row) and are re-activated when they reappear.
 //! * [`embed`]: the embedder loop (`pending_embeddings` → reserve → embed → store) and the
 //!   budgeted [`embed::BudgetQueryEmbedder`] used by search.
 //! * [`api`]: the [`vc_api::ApiState`] over Postgres (`PgIndex`, `PgApiStore`).
@@ -21,3 +23,4 @@ pub mod peers;
 pub mod processor;
 pub mod shutdown;
 pub mod sources;
+pub mod stale;
