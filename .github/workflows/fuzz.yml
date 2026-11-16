@@ -1,0 +1,79 @@
+name: Fuzz
+
+# Nightly cargo-fuzz run of every fuzz target (spec §12): robots (vc-policy), HTML/sitemap/
+# feed (vc-parse) and the WARC reader (vc-store), ~5 min each. Crashes are uploaded as
+# artifacts. Pull requests that touch a fuzz crate or this file run a 60 s smoke instead.
+# Actions are pinned by commit SHA; the tag is in the comment.
+
+on:
+  schedule:
+    - cron: "17 3 * * *"
+  workflow_dispatch:
+    inputs:
+      seconds:
+        description: "Seconds per target"
+        required: false
+        default: "300"
+  pull_request:
+    paths:
+      - ".github/workflows/fuzz.yml"
+      - "crates/*/fuzz/**"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: fuzz-${{ github.event_name }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+env:
+  CARGO_TERM_COLOR: always
+  CARGO_INCREMENTAL: "0"
+  RUST_BACKTRACE: "1"
+  CARGO_FUZZ_VERSION: "0.13.2"
+
+jobs:
+  fuzz:
+    name: fuzz ${{ matrix.crate }}/${{ matrix.target }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - { crate: vc-policy, target: fuzz_robots }
+          - { crate: vc-parse, target: fuzz_html }
+          - { crate: vc-parse, target: fuzz_sitemap }
+          - { crate: vc-parse, target: fuzz_feed }
+          - { crate: vc-store, target: fuzz_warc_reader }
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - name: Install nightly toolchain and cargo-fuzz
+        run: |
+          rustup toolchain install nightly --profile minimal
+          cargo +nightly install cargo-fuzz --version "$CARGO_FUZZ_VERSION" --locked
+          cargo +nightly fuzz --version
+      - name: Pin dependency versions to the workspace lock
+        # A fuzz crate is its own workspace; without a lock of its own, start from the root
+        # one so it fuzzes the same dependency versions the workspace ships.
+        run: |
+          lock="crates/${{ matrix.crate }}/fuzz/Cargo.lock"
+          [ -f "$lock" ] || cp Cargo.lock "$lock"
+      - name: Fuzz
+        working-directory: crates/${{ matrix.crate }}
+        env:
+          SECONDS_PER_TARGET: ${{ github.event_name == 'pull_request' && '60' || inputs.seconds || '300' }}
+        run: |
+          mkdir -p "fuzz/corpus/${{ matrix.target }}"
+          cargo +nightly fuzz run "${{ matrix.target }}" -- \
+            -max_total_time="$SECONDS_PER_TARGET" -rss_limit_mb=2048 -timeout=30
+      - name: Upload crash artifacts
+        if: failure()
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: fuzz-crash-${{ matrix.crate }}-${{ matrix.target }}
+          path: crates/${{ matrix.crate }}/fuzz/artifacts/${{ matrix.target }}/
+          if-no-files-found: ignore
+          retention-days: 30
