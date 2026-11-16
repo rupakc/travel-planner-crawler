@@ -1,0 +1,535 @@
+{
+ "analytics_identifier": null,
+ "base_path": "/foreign-travel-advice",
+ "content_id": "08d48cdd-6b50-43ff-a53b-beab47f4aab0",
+ "description": "Get advice and warnings about travel abroad, including entry requirements, safety and security, health risks and legal differences.",
+ "details": {
+  "email_signup_link": "/foreign-travel-advice/email-signup",
+  "max_cache_time": 10
+ },
+ "document_type": "travel_advice_index",
+ "first_published_at": "2012-12-14T00:00:00+00:00",
+ "links": {
+  "available_translations": [
+   {
+    "api_path": "/api/content/foreign-travel-advice",
+    "api_url": "https://www.gov.uk/api/content/foreign-travel-advice",
+    "base_path": "/foreign-travel-advice",
+    "content_id": "08d48cdd-6b50-43ff-a53b-beab47f4aab0",
+    "document_type": "travel_advice_index",
+    "links": {},
+    "locale": "en",
+    "public_updated_at": "2024-08-05T07:23:09Z",
+    "schema_name": "travel_advice_index",
+    "title": "Foreign travel advice",
+    "web_url": "https://www.gov.uk/foreign-travel-advice",
+    "withdrawn": false
+   }
+  ],
+  "children": [
+   {
+    "api_path": "/api/content/foreign-travel-advice/usa",
+    "api_url": "https://www.gov.uk/api/content/foreign-travel-advice/usa",
+    "base_path": "/foreign-travel-advice/usa",
+    "content_id": "f2cecaae-77ce-4df3-bf27-7783c3975706",
+    "details": {
+     "change_description": "Updated information on air traffic disruptions across the US",
+     "country": {
+      "name": "USA",
+      "slug": "usa",
+      "synonyms": [
+       "United States",
+       "America",
+       "Arctic",
+       "Puerto Rico",
+       "US Virgin Islands",
+       "Florida",
+       "Orlando",
+       "American Samoa",
+       "Guam",
+       "Hawaii"
+      ]
+     }
+    },
+    "document_type": "travel_advice",
+    "links": {},
+    "locale": "en",
+    "public_updated_at": "2026-11-14T02:26:03Z",
+    "schema_name": "travel_advice",
+    "title": "USA travel advice",
+    "web_url": "https://www.gov.uk/foreign-travel-advice/usa",
+    "withdrawn": false
+   },
+   {
+    "api_path": "/api/content/foreign-travel-advice/france",
+    "api_url": "https://www.gov.uk/api/content/foreign-travel-advice/france",
+    "base_path": "/foreign-travel-advice/france",
+    "content_id": "05a8e85c-5a65-406e-923d-79c04a4433f6",
+    "details": {
+     "change_description": "Updated information about demonstrations (‘Warnings and insurance’ page).",
+     "country": {
+      "name": "France",
+      "slug": "france",
+      "synonyms": [
+       "Paris",
+       "Corsica"
+      ]
+     }
+    },
+    "document_type": "travel_advice",
+    "links": {},
+    "locale": "en",
+    "public_updated_at": "2026-10-22T16:57:33Z",
+    "schema_name": "travel_advice",
+    "title": "France travel advice",
+    "web_url": "https://www.gov.uk/foreign-travel-advice/france",
+    "withdrawn": false
+   },
+   {
+    "api_path": "/api/content/foreign-travel-advice/japan",
+    "api_url": "https://www.gov.uk/api/content/foreign-travel-advice/japan",
+    "base_path": "/foreign-travel-advice/japan",
+    "content_id": "8a8de3c7-0b94-4670-87a7-f110d789d3d3",
+    "details": {
+     "change_description": "Addition of information about flooding and heavy rain ('Safety and security' page).",
+     "country": {
+      "name": "Japan",
+      "slug": "japan",
+      "synonyms": []
+     }
+    },
+    "document_type": "travel_advice",
+    "links": {},
+    "locale": "en",
+    "public_updated_at": "2026-08-28T15:22:35Z",
+    "schema_name": "travel_advice",
+    "title": "Japan travel advice",
+    "web_url": "https://www.gov.uk/foreign-travel-advice/japan",
+    "withdrawn": false
+   }
+  ],
+  "document_collections": [
+   {
+    "api_path": "/api/content/government/collections/support-for-british-nationals-abroad",
+    "api_url": "https://www.gov.uk/api/content/government/collections/support-for-british-nationals-abroad",
+    "base_path": "/government/collections/support-for-british-nationals-abroad",
+    "content_id": "aad65646-964d-4f68-ac22-5bc6c8281336",
+    "document_type": "document_collection",
+    "links": {
+     "documents": [
+      {
+       "api_path": "/api/content/foreign-travel-advice",
+       "api_url": "https://www.gov.uk/api/content/foreign-travel-advice",
+       "base_path": "/foreign-travel-advice",
+       "content_id": "08d48cdd-6b50-43ff-a53b-beab47f4aab0",
+       "document_type": "travel_advice_index",
+       "links": {},
+       "locale": "en",
+       "public_updated_at": "2024-08-05T07:23:09Z",
+       "schema_name": "travel_advice_index",
+       "title": "Foreign travel advice",
+       "web_url": "https://www.gov.uk/foreign-travel-advice",
+       "withdrawn": false
+      }
+     ]
+    },
+    "locale": "en",
+    "public_updated_at": "2022-08-30T23:00:00Z",
+    "schema_name": "document_collection",
+    "title": "Support for British nationals abroad",
+    "web_url": "https://www.gov.uk/government/collections/support-for-british-nationals-abroad",
+    "withdrawn": false
+   }
+  ],
+  "mainstream_browse_pages": [
+   {
+    "api_path": "/api/content/browse/abroad/living-abroad",
+    "api_url": "https://www.gov.uk/api/content/browse/abroad/living-abroad",
+    "base_path": "/browse/abroad/living-abroad",
+    "content_id": "bbb8985a-5451-4e9d-a601-8c55853a096c",
+    "description": "Includes tax, State Pension, benefits and UK government services abroad",
+    "document_type": "mainstream_browse_page",
+    "links": {},
+    "locale": "en",
+    "public_updated_at": "2024-04-17T16:20:57Z",
+    "schema_name": "mainstream_browse_page",
+    "title": "Living abroad",
+    "web_url": "https://www.gov.uk/browse/abroad/living-abroad",
+    "withdrawn": false
+   }
+  ],
+  "ordered_related_items": [
+   {
+    "api_path": "/api/content/renew-adult-passport",
+    "api_url": "https://www.gov.uk/api/content/renew-adult-passport",
+    "base_path": "/renew-adult-passport",
+    "content_id": "82248bb1-c4d6-41e0-9494-d98123475626",
+    "document_type": "guide",
+    "links": {
+     "mainstream_browse_pages": [
+      {
+       "api_path": "/api/content/browse/abroad/passports",
+       "api_url": "https://www.gov.uk/api/content/browse/abroad/passports",
+       "base_path": "/browse/abroad/passports",
+       "content_id": "dd842862-e148-4fe3-b363-e57d6a2689aa",
+       "description": "Eligibility, fees, applying, renewing and updating",
+       "document_type": "mainstream_browse_page",
+       "links": {
+        "parent": [
+         {
+          "api_path": "/api/content/browse/abroad",
+          "api_url": "https://www.gov.uk/api/content/browse/abroad",
+          "base_path": "/browse/abroad",
+          "content_id": "86eb717a-fb40-42e7-83fa-d031a03880fb",
+          "description": "Includes renewing passports and travel advice by country",
+          "document_type": "mainstream_browse_page",
+          "links": {},
+          "locale": "en",
+          "public_updated_at": "2015-04-08T10:48:43Z",
+          "schema_name": "mainstream_browse_page",
+          "title": "Passports, travel and living abroad",
+          "web_url": "https://www.gov.uk/browse/abroad",
+          "withdrawn": false
+         }
+        ]
+       },
+       "locale": "en",
+       "public_updated_at": "2026-04-02T09:47:13Z",
+       "schema_name": "mainstream_browse_page",
+       "title": "Passports",
+       "web_url": "https://www.gov.uk/browse/abroad/passports",
+       "withdrawn": false
+      }
+     ]
+    },
+    "locale": "en",
+    "public_updated_at": "2015-01-12T00:01:07Z",
+    "schema_name": "guide",
+    "title": "Renew or replace your adult passport",
+    "web_url": "https://www.gov.uk/renew-adult-passport",
+    "withdrawn": false
+   }
+  ],
+  "organisations": [
+   {
+    "analytics_identifier": "D1315",
+    "api_path": "/api/content/government/organisations/foreign-commonwealth-development-office",
+    "api_url": "https://www.gov.uk/api/content/government/organisations/foreign-commonwealth-development-office",
+    "base_path": "/government/organisations/foreign-commonwealth-development-office",
+    "content_id": "f9fcf3fe-2751-4dca-97ca-becaeceb4b26",
+    "details": {
+     "acronym": "FCDO",
+     "brand": "foreign-commonwealth-development-office",
+     "default_news_image": {
+      "high_resolution_url": "https://assets.publishing.service.gov.uk/media/621e4de4e90e0710be0354d7/s960_fcdo-main-building.jpg",
+      "url": "https://assets.publishing.service.gov.uk/media/621e4de48fa8f5490aff83b4/s300_fcdo-main-building.jpg"
+     },
+     "logo": {
+      "crest": "single-identity",
+      "formatted_title": "Foreign, Commonwealth<br/>&amp; Development Office"
+     },
+     "organisation_govuk_status": {
+      "status": "live",
+      "updated_at": null,
+      "url": null
+     }
+    },
+    "document_type": "organisation",
+    "links": {},
+    "locale": "en",
+    "schema_name": "organisation",
+    "title": "Foreign, Commonwealth & Development Office",
+    "web_url": "https://www.gov.uk/government/organisations/foreign-commonwealth-development-office",
+    "withdrawn": false
+   }
+  ],
+  "parent": [
+   {
+    "api_path": "/api/content/browse/abroad/travel-abroad",
+    "api_url": "https://www.gov.uk/api/content/browse/abroad/travel-abroad",
+    "base_path": "/browse/abroad/travel-abroad",
+    "content_id": "b9849cd6-61a7-42dc-8124-362d2c7d48b0",
+    "description": "Includes the latest travel advice by country, your rights at the airport and getting help abroad",
+    "document_type": "mainstream_browse_page",
+    "links": {
+     "parent": [
+      {
+       "api_path": "/api/content/browse/abroad",
+       "api_url": "https://www.gov.uk/api/content/browse/abroad",
+       "base_path": "/browse/abroad",
+       "content_id": "86eb717a-fb40-42e7-83fa-d031a03880fb",
+       "description": "Includes renewing passports and travel advice by country",
+       "document_type": "mainstream_browse_page",
+       "links": {},
+       "locale": "en",
+       "public_updated_at": "2015-04-08T10:48:43Z",
+       "schema_name": "mainstream_browse_page",
+       "title": "Passports, travel and living abroad",
+       "web_url": "https://www.gov.uk/browse/abroad",
+       "withdrawn": false
+      }
+     ]
+    },
+    "locale": "en",
+    "public_updated_at": "2024-04-17T16:20:10Z",
+    "schema_name": "mainstream_browse_page",
+    "title": "Travel abroad",
+    "web_url": "https://www.gov.uk/browse/abroad/travel-abroad",
+    "withdrawn": false
+   }
+  ],
+  "primary_publishing_organisation": [
+   {
+    "analytics_identifier": "D1315",
+    "api_path": "/api/content/government/organisations/foreign-commonwealth-development-office",
+    "api_url": "https://www.gov.uk/api/content/government/organisations/foreign-commonwealth-development-office",
+    "base_path": "/government/organisations/foreign-commonwealth-development-office",
+    "content_id": "f9fcf3fe-2751-4dca-97ca-becaeceb4b26",
+    "details": {
+     "acronym": "FCDO",
+     "brand": "foreign-commonwealth-development-office",
+     "default_news_image": {
+      "high_resolution_url": "https://assets.publishing.service.gov.uk/media/621e4de4e90e0710be0354d7/s960_fcdo-main-building.jpg",
+      "url": "https://assets.publishing.service.gov.uk/media/621e4de48fa8f5490aff83b4/s300_fcdo-main-building.jpg"
+     },
+     "logo": {
+      "crest": "single-identity",
+      "formatted_title": "Foreign, Commonwealth<br/>&amp; Development Office"
+     },
+     "organisation_govuk_status": {
+      "status": "live",
+      "updated_at": null,
+      "url": null
+     }
+    },
+    "document_type": "organisation",
+    "links": {},
+    "locale": "en",
+    "schema_name": "organisation",
+    "title": "Foreign, Commonwealth & Development Office",
+    "web_url": "https://www.gov.uk/government/organisations/foreign-commonwealth-development-office",
+    "withdrawn": false
+   }
+  ],
+  "related_to_step_navs": [
+   {
+    "api_path": "/api/content/drive-abroad",
+    "api_url": "https://www.gov.uk/api/content/drive-abroad",
+    "base_path": "/drive-abroad",
+    "content_id": "51d1433e-893f-4424-8408-8427c1b6aba1",
+    "details": {
+     "step_by_step_nav": {
+      "steps": [
+       {
+        "contents": [
+         {
+          "contents": [
+           {
+            "href": "/driving-abroad",
+            "text": "Check the rules for using your driving licence abroad"
+           }
+          ],
+          "type": "list"
+         },
+         {
+          "text": "You may need an international driving permit (IDP) to drive outside the UK.",
+          "type": "paragraph"
+         },
+         {
+          "contents": [
+           {
+            "href": "/driving-abroad/international-driving-permit",
+            "text": "Check if you need an IDP"
+           }
+          ],
+          "type": "list"
+         }
+        ],
+        "title": "Check where you can use your licence"
+       },
+       {
+        "contents": [
+         {
+          "contents": [
+           {
+            "context": "£5.50",
+            "href": "https://www.paypoint.com/dvla",
+            "text": "Get an IDP in person from certain shops that have PayPoint"
+           }
+          ],
+          "type": "list"
+         }
+        ],
+        "title": "Apply for an international driving permit (IDP)"
+       },
+       {
+        "contents": [
+         {
+          "contents": [
+           {
+            "href": "/vehicle-insurance/driving-abroad",
+            "text": "Check if your vehicle insurance covers you for the countries you're driving through"
+           }
+          ],
+          "type": "list"
+         },
+         {
+          "text": "Check this with your car hire company if you’re hiring a vehicle.",
+          "type": "paragraph"
+         }
+        ],
+        "title": "Get insurance"
+       },
+       {
+        "contents": [
+         {
+          "contents": [
+           {
+            "href": "/taking-vehicles-out-of-uk/for-less-than-12-months",
+            "text": "Check what documents you need to take a vehicle out of the UK"
+           }
+          ],
+          "type": "list"
+         },
+         {
+          "text": "If you're hiring a car you may need to share your driving licence information with the hire company.",
+          "type": "paragraph"
+         },
+         {
+          "contents": [
+           {
+            "href": "/view-driving-licence",
+            "text": "Get a 'check code' to share your driving licence information"
+           }
+          ],
+          "type": "list"
+         },
+         {
+          "text": "If you got your licence in Northern Ireland, you’ll need to show the rental company your paper counterpart instead.",
+          "type": "paragraph"
+         }
+        ],
+        "title": "Prepare the documents you need to take with you"
+       },
+       {
+        "contents": [
+         {
+          "text": "The rules for driving may be different in the country you're going to. For example, drink-driving rules might be different or you might need to carry extra equipment in your car.",
+          "type": "paragraph"
+         },
+         {
+          "contents": [
+           {
+            "href": "/displaying-number-plates/flags-identifiers-and-stickers",
+            "text": "Check if you need to display a country sticker on your vehicle"
+           },
+           {
+            "href": "/guidance/driving-in-the-eu",
+            "text": "Check what you need to do if you’re driving in the EU, Switzerland, Iceland, Liechtenstein or Norway"
+           },
+           {
+            "href": "/foreign-travel-advice",
+            "text": "Check the travel advice for all countries"
+           }
+          ],
+          "type": "list"
+         },
+         {
+          "text": "When you have your documents, insurance and any extra equipment you need you can drive abroad.",
+          "type": "paragraph"
+         }
+        ],
+        "title": "Check the rules for the country you're travelling to"
+       }
+      ],
+      "title": "Drive abroad: step by step"
+     }
+    },
+    "document_type": "step_by_step_nav",
+    "links": {
+     "pages_related_to_step_nav": [
+      {
+       "api_path": "/api/content/foreign-travel-advice",
+       "api_url": "https://www.gov.uk/api/content/foreign-travel-advice",
+       "base_path": "/foreign-travel-advice",
+       "content_id": "08d48cdd-6b50-43ff-a53b-beab47f4aab0",
+       "document_type": "travel_advice_index",
+       "links": {},
+       "locale": "en",
+       "public_updated_at": "2024-08-05T07:23:09Z",
+       "schema_name": "travel_advice_index",
+       "title": "Foreign travel advice",
+       "web_url": "https://www.gov.uk/foreign-travel-advice",
+       "withdrawn": false
+      }
+     ]
+    },
+    "locale": "en",
+    "public_updated_at": "2024-03-19T14:10:24Z",
+    "schema_name": "step_by_step_nav",
+    "title": "Drive abroad: step by step",
+    "web_url": "https://www.gov.uk/drive-abroad",
+    "withdrawn": false
+   }
+  ],
+  "taxons": [
+   {
+    "api_path": "/api/content/going-and-being-abroad/countries-living-in",
+    "api_url": "https://www.gov.uk/api/content/going-and-being-abroad/countries-living-in",
+    "base_path": "/going-and-being-abroad/countries-living-in",
+    "content_id": "ce9e9802-6138-4fe9-9f33-045ef213be29",
+    "description": "A list of countries that link to content about living in them. ",
+    "details": {
+     "internal_name": "Countries (Living in)",
+     "notes_for_editors": "",
+     "visible_to_departmental_editors": false
+    },
+    "document_type": "taxon",
+    "links": {
+     "parent_taxons": [
+      {
+       "api_path": "/api/content/going-and-being-abroad-old",
+       "api_url": "https://www.gov.uk/api/content/going-and-being-abroad-old",
+       "base_path": "/going-and-being-abroad-old",
+       "content_id": "6e3f3cfb-142a-41f4-a03a-fea504cc1f79",
+       "description": "",
+       "details": {
+        "internal_name": "Going and being abroad (old)",
+        "notes_for_editors": "",
+        "visible_to_departmental_editors": false
+       },
+       "document_type": "taxon",
+       "links": {},
+       "locale": "en",
+       "phase": "alpha",
+       "public_updated_at": "2018-09-03T13:53:06Z",
+       "schema_name": "taxon",
+       "title": "Going and being abroad",
+       "web_url": "https://www.gov.uk/going-and-being-abroad-old",
+       "withdrawn": false
+      }
+     ]
+    },
+    "locale": "en",
+    "phase": "alpha",
+    "public_updated_at": "2018-03-08T14:49:08Z",
+    "schema_name": "taxon",
+    "title": "Countries (Living In)",
+    "web_url": "https://www.gov.uk/going-and-being-abroad/countries-living-in",
+    "withdrawn": false
+   }
+  ]
+ },
+ "locale": "en",
+ "phase": "live",
+ "public_updated_at": "2024-08-05T08:23:09+01:00",
+ "publishing_app": "travel-advice-publisher",
+ "publishing_request_id": "21-1722842590.552-10.13.29.209-698",
+ "publishing_scheduled_at": null,
+ "rendering_app": "frontend",
+ "scheduled_publishing_delay_seconds": null,
+ "schema_name": "travel_advice_index",
+ "title": "Foreign travel advice",
+ "updated_at": "2026-11-14T02:26:05+00:00",
+ "withdrawn_notice": {}
+}
