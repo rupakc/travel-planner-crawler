@@ -89,6 +89,7 @@ async fn run() -> Result<()> {
                     eprintln!("cycle {c}: time cap reached");
                     break;
                 }
+                stack::make_new_due_now(&pool).await?;
                 if el >= Duration::from_secs(min_secs)
                     && checks::changing_pages_fetched(&web.log().await?, since)
                 {

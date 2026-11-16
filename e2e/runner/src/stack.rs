@@ -180,6 +180,19 @@ pub async fn make_due_now(pool: &PgPool) -> Result<u64> {
     Ok(r.rows_affected())
 }
 
+/// Makes never-fetched due URLs due now: newly discovered links (sitemap, feed, page links)
+/// are scheduled ahead in time, and a cycle lasts minutes, not hours. Fetched URLs keep their
+/// recrawl time until the next cycle ([`make_due_now`]).
+pub async fn make_new_due_now(pool: &PgPool) -> Result<u64> {
+    let r = sqlx::query(
+        "UPDATE url_state SET next_fetch_at = now()
+         WHERE state = 'due' AND fetch_count = 0 AND next_fetch_at > now()",
+    )
+    .execute(pool)
+    .await?;
+    Ok(r.rows_affected())
+}
+
 /// Ready or leased work items (the processor's backlog).
 pub async fn backlog(pool: &PgPool) -> Result<i64> {
     let (n,): (i64,) =
