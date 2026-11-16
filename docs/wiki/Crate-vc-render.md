@@ -16,7 +16,7 @@ fetcher role renders URLs whose fetch mode is `render` when `[render] enabled` i
 | `cdp::CdpBrowser`, `cdp::CdpTab` | traits over the browser, so the decision logic is tested with a mock |
 | `ChromiumBrowser` | the production `CdpBrowser` over chromiumoxide: a fresh browser context per render, `Fetch.enable` for every URL pattern, reconnect when the handler stops or after `restart_after_renders` |
 | `decide::precheck` | the pure part: method and scheme, SSRF on IP literals, blocked resource types, trackers (`TRACKER_HOSTS`), denylist, permit scope, and for third-party hosts the allowlisted resource types (a filter hook; production passes `VoyagerPolicy::subresource_allowed`) |
-| `ThirdPartyBorrow` | optional hook, called before a request to another politeness key, that can refuse it (cross-process pacing). On main the fetcher does not use it: it wraps the permit client with `wiring::fetch::third_party_gate`, which borrows the key through `PgFrontier::borrow_subresource` (open PR #81 moves this into the hook) |
+| `ThirdPartyBorrow` | optional hook, called before a request to another politeness key, that can hold or refuse it (cross-process pacing). The fetcher sets it with `wiring::fetch::third_party_borrow`, which borrows the key through `PgFrontier::borrow_subresource`, waits up to 12 s for a busy key and releases it when the request ends |
 | `decide::reason_for` | maps a `FetchError` to a `BlockReason` |
 | `SubresourceCache` | content-addressed (BLAKE3), in memory, TTL 24 h, bounded by bytes; only 200 scripts and stylesheets; looked up after every policy check |
 | `budget_from(config)` | builds the `RenderBudget` |

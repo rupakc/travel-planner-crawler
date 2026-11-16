@@ -259,10 +259,11 @@ impl FetcherParts {
         );
         let renderer = wiring::fetch::renderer(
             &cfg,
-            wiring::fetch::third_party_gate(client.clone(), pg.clone()),
+            client.clone(),
             frontier.clone(),
             policy.clone(),
             clock.clone(),
+            Some(wiring::fetch::third_party_borrow(pg.clone())),
         );
         let store = wiring::store::blob_store(&cfg).await?;
         let adopt = SpoolAdoption {

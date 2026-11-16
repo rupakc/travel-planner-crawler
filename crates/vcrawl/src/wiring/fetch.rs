@@ -8,11 +8,10 @@ use std::time::Duration;
 
 use async_trait::async_trait;
 use vc_config::Config;
+use vc_core::CanonicalUrl;
 use vc_core::Clock;
 use vc_core::PolitenessKey;
-use vc_core::fetch::{
-    Exchange, FetchError, FetchRequest, LimitedBodyStream, PermitClient, RequestPurpose,
-};
+use vc_core::fetch::{FetchError, PermitClient};
 use vc_core::frontier::{ClaimPermit, Frontier};
 use vc_core::policy::Policy;
 use vc_core::render::Renderer;
@@ -20,7 +19,7 @@ use vc_core::{Error, Result};
 use vc_fetch::{ReqwestPermitClient, Resolve};
 use vc_frontier::PgFrontier;
 use vc_policy::VoyagerPolicy;
-use vc_render::ChromiumRenderer;
+use vc_render::{BorrowGuard, ChromiumRenderer, ThirdPartyBorrow};
 
 /// The production policy (loads `policy/denylist.yaml` and the sub-resource allowlist; a
 /// missing file is fatal).
@@ -45,13 +44,15 @@ pub fn permit_client(
     Arc::new(c)
 }
 
-/// The renderer, when `[render] enabled` (otherwise `None`: render rows fall back to HTTP).
+/// The renderer, when `[render] enabled` (otherwise `None`: render rows fall back to HTTP),
+/// with the cross-process third-party hook when given (production: [`third_party_borrow`]).
 pub fn renderer(
     cfg: &Config,
     client: Arc<dyn PermitClient>,
     frontier: Arc<dyn Frontier>,
     policy: Arc<dyn Policy>,
     clock: Arc<dyn Clock>,
+    third_party: Option<Arc<dyn ThirdPartyBorrow>>,
 ) -> Option<Arc<dyn Renderer>> {
     if !cfg.render.enabled {
         return None;
@@ -64,10 +65,12 @@ pub fn renderer(
             .as_ref()
             .is_some_and(|p| p.subresource_allowed(host, kind))
     });
-    Some(Arc::new(
-        ChromiumRenderer::new(cfg.render.clone(), client, frontier, policy, clock)
-            .with_subresource_filter(filter),
-    ))
+    let mut r = ChromiumRenderer::new(cfg.render.clone(), client, frontier, policy, clock)
+        .with_subresource_filter(filter);
+    if let Some(b) = third_party {
+        r = r.with_third_party_borrow(b);
+    }
+    Some(Arc::new(r))
 }
 
 /// Maps a render error to the fetch error inside it, if any.
@@ -78,7 +81,7 @@ pub fn fetch_error_of(e: &Error) -> Option<&FetchError> {
     }
 }
 
-/// Borrowing a third-party key for one render sub-request (see [`third_party_gate`]).
+/// Borrowing a third-party key for one render sub-request (see [`third_party_borrow`]).
 #[async_trait]
 pub trait KeyBorrow: Send + Sync {
     /// Whether `key` may take one request now (and is then held for its delay).
@@ -99,36 +102,41 @@ impl KeyBorrow for PgFrontier {
     }
 }
 
-/// The renderer's permit client: a render sub-request to **another** politeness key (an
-/// allowlisted CDN) first borrows that key through the frontier, so it honours the key's own
+/// The renderer's cross-process hook ([`ChromiumRenderer::with_third_party_borrow`], the one
+/// path for this): a render sub-request to **another** politeness key (an allowlisted CDN)
+/// first borrows that key through the frontier, so it honours the key's own
 /// `next_allowed_at`, parking and in-flight claim across every process, and moves its
-/// `next_allowed_at` on. A refused borrow fails the sub-request at once (the renderer skips
-/// it); nothing waits for the other key.
-pub fn third_party_gate(
-    inner: Arc<dyn PermitClient>,
-    borrow: Arc<dyn KeyBorrow>,
-) -> Arc<dyn PermitClient> {
-    Arc::new(ThirdPartyGate { inner, borrow })
+/// `next_allowed_at` on; when the request ends the key is held for its delay from then. A
+/// refused or failed borrow refuses that sub-request only (the renderer skips it); nothing
+/// waits for the other key. The renderer has already applied its per-host lock and gap.
+pub fn third_party_borrow(borrow: Arc<dyn KeyBorrow>) -> Arc<dyn ThirdPartyBorrow> {
+    Arc::new(FrontierBorrow { borrow })
 }
 
-struct ThirdPartyGate {
-    inner: Arc<dyn PermitClient>,
+struct FrontierBorrow {
     borrow: Arc<dyn KeyBorrow>,
 }
 
-impl ThirdPartyGate {
-    /// `Some(key)`: a third-party key was borrowed (call [`ThirdPartyGate::done`] after).
-    async fn admit(
+#[async_trait]
+impl ThirdPartyBorrow for FrontierBorrow {
+    async fn borrow(
         &self,
-        p: &ClaimPermit,
-        req: &FetchRequest,
-    ) -> Result<Option<PolitenessKey>, FetchError> {
-        let key = req.url.politeness_key();
-        if req.purpose != RequestPurpose::SubResource || key == *p.key() {
-            return Ok(None);
+        permit: &ClaimPermit,
+        url: &CanonicalUrl,
+        deadline: tokio::time::Instant,
+    ) -> std::result::Result<BorrowGuard, FetchError> {
+        let key = url.politeness_key();
+        if key == *permit.key() {
+            return Ok(Box::new(())); // the permit already covers its own key
         }
-        match self.borrow.borrow(&key).await {
-            Ok(true) => Ok(Some(key)),
+        let granted = tokio::time::timeout_at(deadline, self.borrow.borrow(&key))
+            .await
+            .map_err(|_| FetchError::DeadlineExceeded)?;
+        match granted {
+            Ok(true) => Ok(Box::new(Release {
+                key: Some(key),
+                borrow: self.borrow.clone(),
+            })),
             Ok(false) => Err(FetchError::Transport(format!(
                 "third-party key {key} not ready: sub-resource skipped"
             ))),
@@ -140,33 +148,24 @@ impl ThirdPartyGate {
             }
         }
     }
-
-    async fn done(&self, key: Option<PolitenessKey>) {
-        if let Some(k) = key
-            && let Err(e) = self.borrow.done(&k).await
-        {
-            tracing::info!(key = %k, error_class = ?e.class(), "sub-resource release failed");
-        }
-    }
 }
 
-#[async_trait]
-impl PermitClient for ThirdPartyGate {
-    async fn fetch(&self, p: &ClaimPermit, req: FetchRequest) -> Result<Exchange, FetchError> {
-        let borrowed = self.admit(p, &req).await?;
-        let r = self.inner.fetch(p, req).await;
-        self.done(borrowed).await;
-        r
-    }
+/// Dropped when the borrowed sub-request ends: holds the key for its delay from now.
+struct Release {
+    key: Option<PolitenessKey>,
+    borrow: Arc<dyn KeyBorrow>,
+}
 
-    async fn stream(
-        &self,
-        p: &ClaimPermit,
-        req: FetchRequest,
-    ) -> Result<LimitedBodyStream, FetchError> {
-        let borrowed = self.admit(p, &req).await?;
-        let r = self.inner.stream(p, req).await;
-        self.done(borrowed).await;
-        r
+impl Drop for Release {
+    fn drop(&mut self) {
+        let (Some(key), Ok(rt)) = (self.key.take(), tokio::runtime::Handle::try_current()) else {
+            return;
+        };
+        let borrow = self.borrow.clone();
+        rt.spawn(async move {
+            if let Err(e) = borrow.done(&key).await {
+                tracing::info!(key = %key, error_class = ?e.class(), "sub-resource release failed");
+            }
+        });
     }
 }
