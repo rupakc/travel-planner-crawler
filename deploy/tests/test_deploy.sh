@@ -106,6 +106,25 @@ test_migrate_runs_before_roll() {
   ok migrate_runs_before_roll
 }
 
+test_migrate_sees_rollback_log() {
+  setup
+  running_on "$OLD"
+  export FAKE_PROD_DIGEST="$NEW" FAKE_SIGNED="$NEW"
+  # no log yet: deploy.sh creates it (a missing bind source would fail compose)
+  bash "$DEPLOY" 2>/dev/null || { fail migrate_sees_rollback_log "first deploy failed"; return; }
+  has "migrate bind rollbacks 0 lines" || { fail migrate_sees_rollback_log "log not created before migrate"; return; }
+  [[ "$(stat -c %a "$VC_STATE/rollbacks" 2>/dev/null || stat -f %Lp "$VC_STATE/rollbacks")" == 644 ]] ||
+    { fail migrate_sees_rollback_log "log not world-readable (uid 65532 reads it)"; return; }
+  # an existing log is kept as it is
+  setup
+  running_on "$OLD"
+  printf '2026-11-01T00:00:00Z\n2026-11-02T00:00:00Z\n' >"$VC_STATE/rollbacks"
+  export FAKE_PROD_DIGEST="$NEW" FAKE_SIGNED="$NEW"
+  bash "$DEPLOY" 2>/dev/null || { fail migrate_sees_rollback_log "deploy failed"; return; }
+  has "migrate bind rollbacks 2 lines" && ok migrate_sees_rollback_log ||
+    fail migrate_sees_rollback_log "existing log not seen"
+}
+
 test_migrate_failure_rolls_nothing() {
   setup
   running_on "$OLD"
@@ -276,6 +295,14 @@ test_compose_wiring() {
     { fail compose_wiring "otelcol does not rename to custom.googleapis.com/crawler/"; return; }
   grep -qF 'exporters: [googlecloud]' "$otel" || { fail compose_wiring "otelcol exporter"; return; }
   [[ " $base " == *" otelcol "* ]] || { fail compose_wiring "otelcol is not a base service"; return; }
+  # migrate --contract reads <data_dir>/deploy/rollbacks: mounted read-only, never auto-created
+  local mig
+  mig="$(awk '/^  migrate:/{on=1; next} on && /^  [a-z]/{on=0} on' "$compose")"
+  grep -qF 'source: /var/lib/voyager-crawler/deploy/rollbacks' <<<"$mig" &&
+    grep -qF 'target: /var/lib/voyager-crawler/deploy/rollbacks' <<<"$mig" &&
+    grep -qF 'read_only: true' <<<"$mig" &&
+    grep -qF 'create_host_path: false' <<<"$mig" ||
+    { fail compose_wiring "rollback log not mounted read-only into migrate"; return; }
   ok compose_wiring
 }
 
