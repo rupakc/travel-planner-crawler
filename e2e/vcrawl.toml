@@ -4,8 +4,8 @@
 # sub-resource gap are exactly production's, and the oracle checks them.
 
 [database]
-url = "postgres://vcrawl@postgres:5432/vcrawl"
-password_secret = "crawler-pg-password"       # VC_SECRET_CRAWLER_PG_PASSWORD (compose)
+url = "postgres://vcrawl:e2e@postgres:5432/vcrawl"
+password_secret = "crawler-pg-password"       # also VC_SECRET_CRAWLER_PG_PASSWORD (compose)
 
 [secrets]
 backend = "env"                                # VC_SECRET_* (compose; TLS PEMs from run.sh)

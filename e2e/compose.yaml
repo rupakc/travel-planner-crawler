@@ -169,6 +169,13 @@ services:
       <<: *vcrawl-env
       VC_VCRAWL_INSTANCE: processor
 
+  embedder:
+    <<: *vcrawl
+    command: ["embedder"]
+    environment:
+      <<: *vcrawl-env
+      VC_VCRAWL_INSTANCE: embedder
+
   maintenance:
     <<: *vcrawl
     command: ["maintenance"]

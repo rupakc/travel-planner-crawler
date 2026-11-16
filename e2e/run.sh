@@ -19,7 +19,7 @@ dc() { docker compose -f "$here/compose.yaml" "$@"; }
 
 # Role services (compose name -> vcrawl role).
 role_of() { case "$1" in fetcher-*) echo fetcher ;; *) echo "$1" ;; esac; }
-ROLE_SERVICES=(scheduler fetcher-a fetcher-b processor maintenance api)
+ROLE_SERVICES=(scheduler fetcher-a fetcher-b processor embedder maintenance api)
 NOT_WIRED='not wired yet'
 
 log() { printf '[e2e] %s\n' "$*" >&2; }
@@ -44,7 +44,7 @@ openssl req -x509 -newkey ec -pkeyopt ec_paramgen_curve:P-256 -nodes -days 2 \
 openssl req -newkey ec -pkeyopt ec_paramgen_curve:P-256 -nodes -subj /CN=api \
   -keyout "$tls/api.key" -out "$tls/api.csr" 2>/dev/null
 printf 'subjectAltName=DNS:api\nbasicConstraints=CA:FALSE\nextendedKeyUsage=serverAuth\n' >"$tls/ext"
-openssl x509 -req -in "$tls/api.csr" -CA "$out/ca.pem" -CAkey "$tls/ca.key" -CAcreateserial \
+openssl x509 -req -in "$tls/api.csr" -CA "$out/ca.pem" -CAkey "$tls/ca.key" -CAcreateserial -CAserial "$tls/ca.srl" \
   -days 2 -extfile "$tls/ext" -out "$tls/api.pem" 2>/dev/null
 chmod 0644 "$out/ca.pem"
 E2E_TLS_CERT="$(cat "$tls/api.pem")"

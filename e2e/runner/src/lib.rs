@@ -28,11 +28,12 @@ use std::fmt;
 pub use testkit::oracle::{check_polite, check_raw_first};
 
 /// The `vcrawl` roles the stack runs.
-pub const ROLES: [&str; 6] = [
+pub const ROLES: [&str; 7] = [
     "migrate",
     "scheduler",
     "fetcher",
     "processor",
+    "embedder",
     "api",
     "maintenance",
 ];
