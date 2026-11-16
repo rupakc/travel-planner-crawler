@@ -34,8 +34,9 @@ available.
   the network.
 - To turn it on, the owner first raises the project's Gemini spend cap in the console, then
   sets `VC_PROJECT_CAP_USD` to that amount.
-- The crawler **refuses to start** if `llm.enabled` is true and the monthly cap is more than
-  **50 %** of `VC_PROJECT_CAP_USD`, or if `VC_PROJECT_CAP_USD` is missing.
+- The crawler **keeps the LLM off** (and alerts: `crawler_llm_config_invalid`) if
+  `llm.enabled` is true and the monthly cap is more than **50 %** of `VC_PROJECT_CAP_USD`,
+  or if `VC_PROJECT_CAP_USD` is missing or 0. The other roles' work goes on without it.
 - Every Vertex request carries `labels: {app: voyager-crawler, purpose: <purpose>}`, so
   billing can tell crawler spend apart. A separate ₹9,000/month budget alert watches that
   label.
@@ -44,7 +45,7 @@ available.
 
 | Cap | Default | Notes |
 |---|---|---|
-| Monthly (`VC_LLM_MONTHLY_USD`) | $40 | split into the purpose shares above |
+| Monthly (`VC_LLM_MONTHLY_USD`) | $30 | split into the purpose shares above; $30 until batch prediction is wired or a commitment is bought |
 | Daily (`VC_LLM_DAILY_USD`) | $1.50 | upper bound of a **dynamic** daily cap |
 | Dynamic daily cap | `min(daily_usd, 1.5 × remaining month cap ÷ remaining days)` | spreads the month evenly |
 

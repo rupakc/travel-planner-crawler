@@ -173,15 +173,66 @@ impl Config {
     pub fn load(toml_path: Option<&Path>) -> Result<Config, ConfigError> {
         let env_path = std::env::var_os("VC_CONFIG").map(std::path::PathBuf::from);
         let path = toml_path.map(Path::to_path_buf).or(env_path);
-        let cfg: Config = Config::figment(path.as_deref())
+        let mut cfg: Config = Config::figment(path.as_deref())
             .extract()
             .map_err(Box::new)?;
-        cfg.validate()?;
+        cfg.force_llm_off_if_invalid();
+        cfg.validate_without_llm()?;
         Ok(cfg)
     }
 
-    /// Checks ranges and cross-field rules. Startup refuses an invalid config.
+    /// An invalid `[llm]` section must not take every role down (the LLM is optional): when
+    /// [`Config::validate_llm`] fails, the LLM is switched off and `llm.forced_off` says why
+    /// (an alert metric; see vc-obs). Returns whether it was forced off.
+    pub fn force_llm_off_if_invalid(&mut self) -> bool {
+        match self.validate_llm() {
+            Ok(()) => false,
+            Err(e) => {
+                let why = e.to_string();
+                eprintln!("vc-config: {why}: the LLM is OFF until [llm] is fixed");
+                self.llm.enabled = false;
+                self.llm.forced_off = Some(why);
+                true
+            }
+        }
+    }
+
+    /// Checks ranges and cross-field rules. Startup refuses an invalid config ([`Config::load`]
+    /// forces the LLM off instead of failing on the `[llm]` rules).
     pub fn validate(&self) -> Result<(), ConfigError> {
+        self.validate_llm()?;
+        self.validate_without_llm()
+    }
+
+    /// The `[llm]` rules: caps `0 ≤ daily ≤ monthly`, shares summing to 1, and when enabled a
+    /// project cap above zero with the monthly cap at most half of it.
+    pub fn validate_llm(&self) -> Result<(), ConfigError> {
+        let bad = |m: &str| Err(ConfigError::Invalid(m.to_string()));
+        let l = &self.llm;
+        if l.daily_usd < 0.0 || l.monthly_usd < 0.0 || l.daily_usd > l.monthly_usd {
+            return bad("llm caps must satisfy 0 <= daily_usd <= monthly_usd");
+        }
+        if (l.shares.sum() - 1.0).abs() > 1e-6 {
+            return bad("llm.shares must sum to 1");
+        }
+        if l.enabled {
+            match l.project_cap_usd {
+                None => {
+                    return bad("llm.enabled requires VC_PROJECT_CAP_USD (llm.project_cap_usd)");
+                }
+                Some(cap) if cap <= 0.0 => {
+                    return bad("llm.enabled requires VC_PROJECT_CAP_USD above 0");
+                }
+                Some(cap) if l.monthly_usd > 0.5 * cap => {
+                    return bad("llm.monthly_usd must be <= 50% of llm.project_cap_usd");
+                }
+                Some(_) => {}
+            }
+        }
+        Ok(())
+    }
+
+    fn validate_without_llm(&self) -> Result<(), ConfigError> {
         let bad = |m: &str| Err(ConfigError::Invalid(m.to_string()));
         let f = &self.frontier;
         if !(1..=5).contains(&f.max_urls_per_claim) {
@@ -205,24 +256,6 @@ impl Config {
         if self.api.excerpt_chars > 300 || self.extract.excerpt_chars > 300 {
             return bad("excerpts are capped at 300 characters");
         }
-        let l = &self.llm;
-        if l.daily_usd < 0.0 || l.monthly_usd < 0.0 || l.daily_usd > l.monthly_usd {
-            return bad("llm caps must satisfy 0 <= daily_usd <= monthly_usd");
-        }
-        if (l.shares.sum() - 1.0).abs() > 1e-6 {
-            return bad("llm.shares must sum to 1");
-        }
-        if l.enabled {
-            match l.project_cap_usd {
-                None => {
-                    return bad("llm.enabled requires VC_PROJECT_CAP_USD (llm.project_cap_usd)");
-                }
-                Some(cap) if l.monthly_usd > 0.5 * cap => {
-                    return bad("llm.monthly_usd must be <= 50% of llm.project_cap_usd");
-                }
-                Some(_) => {}
-            }
-        }
         if self.queue.max_attempts == 0 {
             return bad("queue.max_attempts must be >= 1");
         }
@@ -243,7 +276,8 @@ mod tests {
         assert!(!c.llm.enabled);
         assert_eq!(c.frontier.max_urls_per_claim, 5);
         assert_eq!(c.llm.model, "gemini-3.1-flash-lite");
-        assert_eq!(c.llm.monthly_usd, 40.0);
+        assert_eq!(c.llm.monthly_usd, 30.0);
+        assert_eq!(c.llm.forced_off, None);
         assert_eq!(c.llm.daily_usd, 1.5);
     }
 
@@ -298,12 +332,48 @@ mod tests {
     fn llm_enabled_requires_project_cap_and_half_rule() {
         Jail::expect_with(|jail| {
             jail.set_env("VC_LLM_ENABLED", "true");
-            assert!(Config::load(None).is_err(), "no project cap");
+            let off = |c: &Config| !c.llm.enabled && c.llm.forced_off.is_some();
+            let c = Config::load(None).expect("loads with the LLM forced off");
+            assert!(off(&c), "no project cap");
+            assert!(c.validate().is_ok(), "forced off is a valid config");
+            jail.set_env("VC_PROJECT_CAP_USD", "50");
+            assert!(off(&Config::load(None).unwrap()), "30 > 50% of 50");
             jail.set_env("VC_PROJECT_CAP_USD", "60");
-            assert!(Config::load(None).is_err(), "40 > 50% of 60");
-            jail.set_env("VC_PROJECT_CAP_USD", "100");
-            let c = Config::load(None).expect("40 <= 50% of 100");
+            let c = Config::load(None).expect("30 <= 50% of 60");
             assert!(c.llm.enabled);
+            assert_eq!(c.llm.forced_off, None);
+            Ok(())
+        });
+    }
+
+    #[test]
+    fn invalid_llm_config_forces_llm_off() {
+        Jail::expect_with(|jail| {
+            // the compose default: enabled with VC_PROJECT_CAP_USD=0
+            jail.set_env("VC_LLM_ENABLED", "true");
+            jail.set_env("VC_PROJECT_CAP_USD", "0");
+            let c = Config::load(None).expect("every role still starts");
+            assert!(!c.llm.enabled);
+            let why = c.llm.forced_off.as_deref().unwrap_or_default();
+            assert!(why.contains("VC_PROJECT_CAP_USD"), "{why}");
+            // a broken [llm] section with the LLM off: still starts, still flagged
+            jail.set_env("VC_LLM_ENABLED", "false");
+            jail.set_env("VC_LLM_DAILY_USD", "99");
+            let c = Config::load(None).expect("starts");
+            assert!(!c.llm.enabled);
+            assert!(
+                c.llm
+                    .forced_off
+                    .as_deref()
+                    .unwrap_or_default()
+                    .contains("daily_usd")
+            );
+            // validate() itself still rejects it
+            assert!(c.validate().is_err());
+            // other sections stay fatal
+            jail.set_env("VC_LLM_DAILY_USD", "1");
+            jail.set_env("VC_FETCH_MAX_REDIRECTS", "9");
+            assert!(Config::load(None).is_err());
             Ok(())
         });
     }
