@@ -127,6 +127,18 @@ for s in "${ROLE_SERVICES[@]}"; do
   fi
 done
 
+# Database state for the logs (counts and errors only: never page content).
+dc exec -T postgres psql -U vcrawl -d vcrawl -X -P pager=off >"$out/db.txt" 2>&1 <<'SQL' || true
+SELECT kind, state, count(*), max(attempts) AS max_attempts, left(max(last_error), 300) AS last_error
+  FROM work_items GROUP BY 1, 2 ORDER BY 1, 2;
+SELECT role, fetch_mode, key, status, count(*) FROM captures GROUP BY 1, 2, 3, 4 ORDER BY 3, 1, 2, 4;
+SELECT kind, source_id, state, count(*), max(current_version) FROM records GROUP BY 1, 2, 3 ORDER BY 2, 1;
+SELECT count(*) AS record_versions FROM record_versions;
+SELECT key, state, count(*) FROM url_state GROUP BY 1, 2 ORDER BY 1, 2;
+SELECT key, delay_ms, crawl_delay_ms, parked_until, park_reason FROM politeness_keys ORDER BY 1;
+SELECT role, instance, last_beat, progress FROM heartbeats ORDER BY 1, 2;
+SQL
+
 curl_admin() { dc --profile tools run --rm --entrypoint curl runner -fsS "$1"; }
 curl_admin http://fake-web/__admin/log >"$out/fake-web.jsonl" 2>/dev/null || true
 curl_admin http://trap/__admin/log >"$out/trap.jsonl" 2>/dev/null || true
