@@ -16,7 +16,8 @@ ARG CARGO_BUILD_JOBS
 RUN --mount=type=cache,target=/usr/local/cargo/registry \
     --mount=type=cache,target=/src/target \
     cargo build ${CARGO_BUILD_JOBS:+-j $CARGO_BUILD_JOBS} --release --locked -p vcrawl -p testkit --bin vcrawl --bin fake_web --bin fake_gemini \
- && cargo build ${CARGO_BUILD_JOBS:+-j $CARGO_BUILD_JOBS} --release --locked --manifest-path e2e/runner/Cargo.toml \
+ && cp Cargo.lock e2e/runner/Cargo.lock \
+ && cargo build ${CARGO_BUILD_JOBS:+-j $CARGO_BUILD_JOBS} --release --manifest-path e2e/runner/Cargo.toml \
  && mkdir -p /out \
  && cp target/release/vcrawl target/release/fake_web target/release/fake_gemini \
        target/release/e2e-runner /out/

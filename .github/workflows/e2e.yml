@@ -44,6 +44,15 @@ jobs:
             . -> target
             e2e/runner -> ../../target
           save-if: ${{ github.ref == 'refs/heads/main' }}
+      - name: Runner lock = root lock (pinned versions, no new packages)
+        run: |
+          # The runner is its own workspace; its lock is derived from the root lock so it
+          # always builds the exact versions main uses, even after a root lock change.
+          cp Cargo.lock e2e/runner/Cargo.lock
+          cargo metadata --format-version 1 --manifest-path e2e/runner/Cargo.toml >/dev/null
+          pkgs() { grep -A1 '^name = ' "$1" | grep -v -- -- | paste - - | sort; }
+          added="$(comm -13 <(pkgs Cargo.lock) <(pkgs e2e/runner/Cargo.lock) | grep -v '"e2e-runner"' || true)"
+          if [ -n "$added" ]; then echo "::error::runner lock adds packages: $added"; exit 1; fi
       - name: Runner checks (fmt, clippy, unit tests; no Docker)
         working-directory: e2e/runner
         run: |

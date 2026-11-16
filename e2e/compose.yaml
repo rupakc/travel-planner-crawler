@@ -34,7 +34,7 @@ x-vcrawl: &vcrawl
   volumes: ["./:/e2e:ro"]
   environment: &vcrawl-env
     VC_CONFIG: /e2e/vcrawl.toml
-    VC_LOG_FORMAT: json
+    VC_OBS_LOG_FORMAT: json
     VC_SECRET_CRAWLER_PG_PASSWORD: e2e
     RUST_BACKTRACE: "1"
   depends_on:

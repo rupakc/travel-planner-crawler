@@ -142,3 +142,35 @@ fn the_e2e_config_loads_with_production_politeness() {
     assert_eq!(cfg.store.gcs_endpoint, "http://fake-gcs:4443");
     assert!(cfg.render.enabled);
 }
+
+#[test]
+fn every_vc_env_key_in_compose_is_a_real_setting() {
+    let c = compose();
+    let mut keys = Vec::new();
+    for (_, svc) in c["services"].as_mapping().expect("services") {
+        env_keys(&svc["environment"], &mut keys);
+    }
+    env_keys(&c["x-vcrawl"]["environment"], &mut keys);
+    assert!(
+        keys.iter().any(|k| k == "VC_VCRAWL_INSTANCE"),
+        "role env not found: {keys:?}"
+    );
+    let bad = vc_config::unmapped_env_keys(keys.iter().map(String::as_str));
+    assert!(
+        bad.is_empty(),
+        "compose.yaml sets VC_* names no setting reads: {bad:?}"
+    );
+}
+
+/// Env keys of a compose `environment` mapping, following `<<` merges if the parser kept them.
+fn env_keys(v: &serde_norway::Value, out: &mut Vec<String>) {
+    if let Some(m) = v.as_mapping() {
+        for (k, val) in m {
+            match k.as_str() {
+                Some("<<") => env_keys(val, out),
+                Some(k) => out.push(k.to_string()),
+                None => {}
+            }
+        }
+    }
+}
