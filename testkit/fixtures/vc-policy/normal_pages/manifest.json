@@ -1,0 +1,13 @@
+{
+  "about": "Ordinary responses that Policy::is_challenge must NOT flag.",
+  "cases": [
+    {"file": "wikivoyage_robots.txt", "status": 200, "headers": {"content-type": "text/plain"}},
+    {"file": "kayak_robots.txt", "status": 200, "headers": {"content-type": "text/plain"}},
+    {"file": "weather_gov_404.html", "status": 404, "headers": {"content-type": "text/html"}},
+    {"file": "moved_301.html", "status": 301, "headers": {"content-type": "text/html", "location": "https://example.org/"}},
+    {"file": "article_mentions_captcha.html", "status": 200, "headers": {"content-type": "text/html", "server": "cloudflare"}},
+    {"file": "newsletter_with_recaptcha.html", "status": 200, "headers": {"content-type": "text/html"}},
+    {"file": "api_response.json", "status": 200, "headers": {"content-type": "application/json", "x-datadome": "protected"}},
+    {"file": "api_response.json", "status": 429, "headers": {"retry-after": "60"}}
+  ]
+}

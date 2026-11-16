@@ -1,0 +1,27 @@
+# cargo-fuzz targets for vc-policy (spec §12). Not a workspace member: run with
+#   cargo +nightly fuzz run fuzz_robots   (from crates/vc-policy)
+# CI runs the same property on every PR as the proptest `fuzz_robots_never_panics`.
+[package]
+name = "vc-policy-fuzz"
+version = "0.0.0"
+edition = "2024"
+publish = false
+license = "MIT"
+
+[package.metadata]
+cargo-fuzz = true
+
+[dependencies]
+libfuzzer-sys = "0.4"
+vc-policy = { path = ".." }
+
+# Keep this crate out of the root workspace.
+[workspace]
+members = ["."]
+
+[[bin]]
+name = "fuzz_robots"
+path = "fuzz_targets/fuzz_robots.rs"
+test = false
+doc = false
+bench = false

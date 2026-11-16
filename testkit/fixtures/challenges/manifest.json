@@ -1,0 +1,23 @@
+{
+  "about": "Bot challenges and interstitials; every entry must be detected by Policy::is_challenge. Real pages were captured by the research for docs/research/robots (answers to an honest VoyagerBot robots.txt request); synthetic ones reproduce the providers' public markers.",
+  "cases": [
+    {"file": "cloudflare_js_flyertalk.html", "status": 403, "headers": {}, "origin": "real", "provider": "cloudflare"},
+    {"file": "cloudflare_js_visitbritain.html", "status": 403, "headers": {}, "origin": "real", "provider": "cloudflare"},
+    {"file": "cloudflare_js_wikitravel.html", "status": 403, "headers": {}, "origin": "real", "provider": "cloudflare"},
+    {"file": "cloudflare_js_flyertalk.html", "status": 200, "headers": {}, "origin": "real", "provider": "cloudflare"},
+    {"file": "cloudflare_block_atlasobscura.html", "status": 403, "headers": {}, "origin": "real", "provider": "cloudflare"},
+    {"file": "empty_body.bin", "status": 403, "headers": {"cf-mitigated": "challenge"}, "origin": "synthetic", "provider": "cloudflare"},
+    {"file": "empty_body.bin", "status": 405, "headers": {"x-amzn-waf-action": "captcha"}, "origin": "synthetic", "provider": "aws_waf"},
+    {"file": "datadome_viator.html", "status": 403, "headers": {}, "origin": "real", "provider": "datadome"},
+    {"file": "datadome_captcha_iframe.html", "status": 200, "headers": {}, "origin": "synthetic", "provider": "datadome"},
+    {"file": "empty_body.bin", "status": 403, "headers": {"x-datadome": "protected"}, "origin": "synthetic", "provider": "datadome"},
+    {"file": "akamai_access_denied.html", "status": 403, "headers": {"server": "AkamaiGHost"}, "origin": "synthetic", "provider": "akamai"},
+    {"file": "akamai_sec_cpt.html", "status": 428, "headers": {}, "origin": "synthetic", "provider": "akamai"},
+    {"file": "imperva_incapsula.html", "status": 200, "headers": {}, "origin": "synthetic", "provider": "imperva"},
+    {"file": "perimeterx_press_hold.html", "status": 403, "headers": {}, "origin": "synthetic", "provider": "perimeterx"},
+    {"file": "recaptcha_interstitial.html", "status": 200, "headers": {}, "origin": "synthetic", "provider": "captcha"},
+    {"file": "recaptcha_interstitial.html", "status": 403, "headers": {}, "origin": "synthetic", "provider": "captcha"},
+    {"file": "hcaptcha_interstitial.html", "status": 200, "headers": {}, "origin": "synthetic", "provider": "captcha"},
+    {"file": "turnstile_managed.html", "status": 200, "headers": {}, "origin": "synthetic", "provider": "captcha"}
+  ]
+}

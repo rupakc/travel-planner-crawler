@@ -13,7 +13,6 @@ workspace = true
 [dependencies]
 vc-core = { workspace = true }
 vc-config = { workspace = true }
-texting_robots = { workspace = true }
 url = { workspace = true }
 psl = { workspace = true }
 regex = { workspace = true }
@@ -26,6 +25,8 @@ chrono = { workspace = true }
 tracing = { workspace = true }
 
 [dev-dependencies]
+# Reference implementation for the differential robots test (tests/robots.rs).
+texting_robots = { workspace = true }
 testkit = { workspace = true }
 proptest = { workspace = true }
 serde_json = { workspace = true }
