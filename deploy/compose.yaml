@@ -197,13 +197,22 @@ services:
     ports: ["${VC_API_BIND:?VC_API_BIND is set by first-boot.sh}:8443:8443"]
     deploy: { resources: { limits: { memory: 512m } } }
 
-  # One-shot, run by deploy.sh before any role rolls (expand-only, §17.6)
+  # One-shot, run by deploy.sh before any role rolls (expand-only, §17.6).
+  # `migrate --contract` (run by hand) refuses while a rollback is listed in
+  # <data_dir>/deploy/rollbacks, so deploy.sh's rollback log is mounted
+  # read-only at that path (deploy.sh creates it before every migrate).
   migrate:
     <<: *role
     command: ["migrate"]
     restart: "no"
     healthcheck: { disable: true }
     profiles: [tools]
+    volumes:
+      - type: bind
+        source: /var/lib/voyager-crawler/deploy/rollbacks
+        target: /var/lib/voyager-crawler/deploy/rollbacks
+        read_only: true
+        bind: { create_host_path: false }
     deploy: { resources: { limits: { memory: 256m } } }
 
 secrets:

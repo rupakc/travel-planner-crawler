@@ -4,7 +4,9 @@
 #   FAKE_PROD_DIGEST       digest the :prod tag resolves to ("" → failure)
 #   FAKE_RUNNING           services `compose ps --services --status running` lists
 #   FAKE_UNHEALTHY_DIGEST  a role whose container runs this digest is "unhealthy"
-#   FAKE_MIGRATE_RC        exit code of `compose run --rm migrate` (default 0)
+#   FAKE_MIGRATE_RC        exit code of `compose run --rm migrate` (default 0);
+#                          the call also logs whether $VC_STATE/rollbacks (the
+#                          migrate container's read-only bind source) exists
 #   FAKE_LABEL_<NAME>      value of image label io.voyager-crawler.<name>
 #   FAKE_PS_A              output of `compose ps -a --format …` (watchdog)
 # Per-service images are kept in $FAKE_STATE/<service>.
@@ -46,7 +48,16 @@ if [[ "${1:-}" == compose ]]; then
         esac
       done
       ;;
-    run) [[ "$*" == *migrate* ]] && exit "${FAKE_MIGRATE_RC:-0}" ;;
+    run)
+      if [[ "$*" == *migrate* ]]; then
+        if [[ -f "${VC_STATE:-}/rollbacks" ]]; then
+          echo "migrate bind rollbacks $(wc -l <"$VC_STATE/rollbacks" | tr -d ' ') lines" >>"$CALLS"
+        else
+          echo "migrate bind rollbacks MISSING" >>"$CALLS"
+        fi
+        exit "${FAKE_MIGRATE_RC:-0}"
+      fi
+      ;;
     restart) ;;
   esac
   exit 0

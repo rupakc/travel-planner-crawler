@@ -178,6 +178,14 @@ roll_to() {
   done
 }
 
+# The rollback log is bind-mounted read-only into the migrate container
+# (compose.yaml), so it must exist (a missing source is an error, never an
+# empty directory Docker would create in its place).
+ensure_rollback_log() {
+  [[ -f "$VC_STATE/rollbacks" ]] || : >>"$VC_STATE/rollbacks"
+  chmod 0644 "$VC_STATE/rollbacks"
+}
+
 record() {
   local new="$1" prev="$2" tmp="$VC_STATE/image.env.new"
   printf 'VC_IMAGE=%s\n' "$new" >"$tmp"
@@ -227,6 +235,7 @@ deploy_once() {
   docker pull -q "$ref" >/dev/null || die "pull of $ref failed (retrying next tick)"
 
   base_up "$ref" || die "postgres is not healthy: not migrating"
+  ensure_rollback_log
   log "migrating with $ref"
   if ! VC_IMAGE="$ref" vc_compose run --rm migrate; then
     hold "$new" "migrate failed"
@@ -263,6 +272,7 @@ rollback() {
   touched="$(roll_to "$target" $VC_ROLES)" || die "rollback to $target unhealthy at: $touched"
   [[ -n "$cur" ]] && hold "${cur##*@}" "manual rollback"
   record "$target" "$cur"
+  ensure_rollback_log
   date -u +%FT%TZ >>"$VC_STATE/rollbacks"
   log "rolled back to $target"
 }
