@@ -46,7 +46,7 @@ pub fn schema_version() -> i64 {
 
 /// Runs the command.
 pub async fn run(ctx: Ctx, contract: bool) -> anyhow::Result<()> {
-    let pool = crate::admin::db::connect_with(&ctx.cfg, 2).await?;
+    let pool = crate::wiring::db::ops_pool(&ctx.cfg, 2).await?;
     let image = image_id();
     if contract {
         let rollbacks =

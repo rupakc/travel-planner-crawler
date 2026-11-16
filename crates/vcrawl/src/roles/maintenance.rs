@@ -652,7 +652,7 @@ pub async fn run(ctx: Ctx) -> anyhow::Result<()> {
     if let Err(e) = vc_obs::init_tracing(&cfg.obs, "maintenance") {
         eprintln!("maintenance: tracing not installed: {e}");
     }
-    let pool = crate::admin::db::connect(&cfg).await?;
+    let pool = crate::wiring::db::ops_pool(&cfg, 4).await?;
     let store = vc_store::blob_store_from_config(&cfg.store).await?;
     let clock: Arc<dyn Clock> = Arc::new(SystemClock);
     let metrics = Arc::new(Metrics::new(

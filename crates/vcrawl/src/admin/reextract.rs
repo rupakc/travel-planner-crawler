@@ -50,7 +50,7 @@ pub struct ReextractReport {
 
 /// Runs the command.
 pub async fn run(ctx: &Ctx, a: ReextractArgs) -> anyhow::Result<serde_json::Value> {
-    let pool = super::db::connect(&ctx.cfg).await?;
+    let pool = crate::wiring::db::ops_pool(&ctx.cfg, 4).await?;
     Ok(serde_json::to_value(reextract(&pool, &a).await?)?)
 }
 

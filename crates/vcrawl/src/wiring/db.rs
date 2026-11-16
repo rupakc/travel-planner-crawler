@@ -43,11 +43,32 @@ pub async fn connect_options(
 
 /// A pool for `[database]`.
 pub async fn connect(cfg: &DatabaseConfig, secrets: Option<&dyn SecretSource>) -> Result<PgPool> {
+    connect_max(cfg, secrets, cfg.max_connections).await
+}
+
+/// Like [`connect`] with an explicit pool size (at least 1).
+pub async fn connect_max(
+    cfg: &DatabaseConfig,
+    secrets: Option<&dyn SecretSource>,
+    max: u32,
+) -> Result<PgPool> {
     let opts = connect_options(cfg, secrets).await?;
     PgPoolOptions::new()
-        .max_connections(cfg.max_connections.max(1))
+        .max_connections(max.max(1))
         .acquire_timeout(Duration::from_secs(30))
         .connect_with(opts)
         .await
         .map_err(|e| Error::Db(format!("connect: {e}")))
+}
+
+/// A small pool for the operations commands (`admin`, `migrate`) and the `maintenance` role:
+/// at most `max` connections and never more than `[database] max_connections`.
+pub async fn ops_pool(cfg: &vc_config::Config, max: u32) -> Result<PgPool> {
+    let secrets = super::sources::secrets(cfg);
+    connect_max(
+        &cfg.database,
+        Some(secrets.as_ref()),
+        max.min(cfg.database.max_connections),
+    )
+    .await
 }
