@@ -56,3 +56,14 @@ fn deadline_handle_records_body_end_without_counting_a_request() {
     h.record_request_end(t0);
     assert_eq!(p.last_request_end(), Some(t1));
 }
+
+/// `raise_delay` only ever raises the per-request delay of a live permit.
+#[test]
+fn raise_delay_only_increases() {
+    let p = permit(1_000);
+    assert_eq!(p.delay(), Duration::from_secs(5));
+    p.raise_delay(Duration::from_secs(2));
+    assert_eq!(p.delay(), Duration::from_secs(5), "never lowered");
+    p.raise_delay(Duration::from_millis(12_500));
+    assert_eq!(p.delay(), Duration::from_millis(12_500));
+}

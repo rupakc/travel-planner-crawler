@@ -23,7 +23,7 @@
 
 use std::sync::Arc;
 use std::sync::Mutex;
-use std::sync::atomic::{AtomicI64, Ordering};
+use std::sync::atomic::{AtomicI64, AtomicU64, Ordering};
 use std::time::{Duration, Instant};
 
 use async_trait::async_trait;
@@ -76,8 +76,12 @@ pub struct ClaimPermit {
     epoch: Epoch,
     deadline_micros: Arc<AtomicI64>,
     scope: Arc<PermitScope>,
-    delay: Duration,
+    delay_micros: Arc<AtomicU64>,
     pace: Arc<Mutex<PaceState>>,
+}
+
+fn micros(d: Duration) -> u64 {
+    u64::try_from(d.as_micros()).unwrap_or(u64::MAX)
 }
 
 impl ClaimPermit {
@@ -95,7 +99,7 @@ impl ClaimPermit {
             epoch,
             deadline_micros: Arc::new(AtomicI64::new(deadline.0.timestamp_micros())),
             scope,
-            delay,
+            delay_micros: Arc::new(AtomicU64::new(micros(delay))),
             pace: Arc::new(Mutex::new(PaceState::default())),
         }
     }
@@ -142,7 +146,13 @@ impl ClaimPermit {
     /// The per-request delay for this key: max(robots crawl-delay, source min delay,
     /// 10 × EWMA latency, penalty), capped at 1 h.
     pub fn delay(&self) -> Duration {
-        self.delay
+        Duration::from_micros(self.delay_micros.load(Ordering::SeqCst))
+    }
+
+    /// Raises the per-request delay for the rest of this claim (e.g. a `Crawl-delay` learned
+    /// from the robots.txt fetched under this permit). Never lowers it, so anyone may call it.
+    pub fn raise_delay(&self, d: Duration) {
+        self.delay_micros.fetch_max(micros(d), Ordering::SeqCst);
     }
 
     /// When the last request under this permit ended (for pacing), if any.
@@ -191,7 +201,7 @@ impl std::fmt::Debug for ClaimPermit {
             .field("key", &self.key)
             .field("epoch", &self.epoch)
             .field("deadline", &self.deadline())
-            .field("delay", &self.delay)
+            .field("delay", &self.delay())
             .finish_non_exhaustive()
     }
 }

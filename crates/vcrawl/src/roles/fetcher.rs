@@ -259,7 +259,7 @@ impl FetcherParts {
         );
         let renderer = wiring::fetch::renderer(
             &cfg,
-            client.clone(),
+            wiring::fetch::third_party_gate(client.clone(), pg.clone()),
             frontier.clone(),
             policy.clone(),
             clock.clone(),
@@ -376,6 +376,9 @@ struct Run<'a> {
     crawl_delay: Option<Duration>,
     summaries: HashMap<OriginKey, RobotsSummary>,
     stop: bool,
+    /// A same-key origin (a redirect hop) whose robots.txt is not cached: fetch it under this
+    /// permit, then retry the URL once.
+    robots_wanted: Option<OriginKey>,
 }
 
 impl Run<'_> {
@@ -647,6 +650,7 @@ impl Fetcher {
             crawl_delay: None,
             summaries: HashMap::new(),
             stop: false,
+            robots_wanted: None,
         };
         for origin in &robots_due {
             match self.refresh_robots(&mut run, origin).await {
@@ -811,6 +815,9 @@ impl Fetcher {
         let summary = self.p.policy.robots_summary(&entry);
         if let Some(d) = summary.crawl_delay {
             run.crawl_delay = Some(run.crawl_delay.map_or(d, |c| c.max(d)));
+            // The rest of this claim (URLs, redirects, sub-requests) is paced by it too.
+            let cap = Duration::from_secs(self.p.cfg.frontier.max_delay_s);
+            p.raise_delay(d.min(cap));
         }
         let blocked = summary.key_blocked
             || matches!(
@@ -929,6 +936,20 @@ impl Fetcher {
     }
 
     async fn fetch_one(&self, run: &mut Run<'_>, u: &LeasedUrl) -> Result<()> {
+        self.fetch_mode(run, u).await?;
+        if let Some(origin) = run.robots_wanted.take() {
+            // A redirect hop on this key reached an origin without cached robots.txt: fetch it
+            // now (same permit, same pacing), then try the URL once more.
+            self.refresh_robots(run, &origin).await?;
+            if !run.stop {
+                self.fetch_mode(run, u).await?;
+            }
+            run.robots_wanted = None;
+        }
+        Ok(())
+    }
+
+    async fn fetch_mode(&self, run: &mut Run<'_>, u: &LeasedUrl) -> Result<()> {
         match &u.fetch_mode {
             FetchMode::Adapter(id) => self.fetch_adapter(run, u, id).await,
             FetchMode::Render if self.p.renderer.is_some() => self.fetch_render(run, u).await,
@@ -1157,9 +1178,22 @@ impl Fetcher {
             | FetchError::Denied(_)
             | FetchError::Ssrf(_)
             | FetchError::OutOfScope(_) => run.result(&u.url_key, UrlResult::Disallowed),
-            FetchError::RobotsUnavailable(_) => {
-                // Fail closed; the next claim lists the origin in `robots_due`.
-                run.result(&u.url_key, self.retry_in(Duration::from_secs(600)));
+            FetchError::RobotsUnavailable(origin) => {
+                let same_key = CanonicalUrl::parse(&format!("{}/robots.txt", origin.0))
+                    .is_ok_and(|r| r.politeness_key() == *run.permit.key());
+                if same_key && !run.summaries.contains_key(&origin) && run.robots_wanted.is_none() {
+                    // Not refreshed in this claim: fetch it first (see `fetch_one`).
+                    run.robots_wanted = Some(origin);
+                    return Ok(());
+                }
+                // Fail closed until that robots.txt can be read again: no sooner than its
+                // cached entry expires (1 h for an unavailable robots.txt), at least 10 min.
+                let floor = now + chrono::Duration::minutes(10);
+                let at = match self.p.frontier.robots(&origin).await {
+                    Ok(Some(e)) => e.expires_at.max(floor),
+                    _ => floor,
+                };
+                run.result(&u.url_key, UrlResult::Retry { at });
             }
             FetchError::TooManyRedirects
             | FetchError::BodyTooLarge { .. }
@@ -1184,6 +1218,7 @@ impl Fetcher {
             Ok(out) => {
                 let now = self.p.clock.now();
                 let mut doc_status = None;
+                let mut doc_retry_after = None;
                 let mut signals = UseSignals::default();
                 for ex in out.exchanges {
                     run.latencies.push(ex.latency());
@@ -1191,6 +1226,7 @@ impl Fetcher {
                         ex.url == u.url || ex.redirects.first().is_some_and(|h| h.url == u.url);
                     if is_doc {
                         doc_status = Some(ex.status.as_u16());
+                        doc_retry_after = vc_fetch::retry_after(&ex.response_headers, now);
                         signals = self.signals_for(run, u, &ex);
                     }
                     let mut meta = self.meta(run.permit, &ex.url, ex.url.key(), Some(u), now);
@@ -1207,6 +1243,28 @@ impl Fetcher {
                 }
                 if !out.blocked.is_empty() {
                     tracing::debug!(blocked = out.blocked.len(), "render: sub-requests refused");
+                }
+                // The page's own status follows the same ladder as an HTTP fetch (the
+                // exchange itself is already spooled as a sub-resource record).
+                match doc_status {
+                    None | Some(200..=299 | 304) => run.answered(),
+                    Some(404 | 410) => {
+                        run.result(&u.url_key, UrlResult::Gone);
+                        return Ok(());
+                    }
+                    Some(429 | 503) => {
+                        self.rate_limited(run, u, doc_retry_after);
+                        return Ok(());
+                    }
+                    Some(500..=599) => {
+                        self.server_error(run, u);
+                        return Ok(());
+                    }
+                    Some(_) => {
+                        let next = self.next_fetch(u, None).await;
+                        run.result(&u.url_key, self.failed(ErrorClass::Permanent, next));
+                        return Ok(());
+                    }
                 }
                 let next = self.next_fetch(u, None).await;
                 let mut meta = self.meta(run.permit, &u.url, u.url_key, Some(u), now);
