@@ -41,8 +41,20 @@ async-trait = { workspace = true }
 serde = { workspace = true }
 regex = { workspace = true }
 bytes = { workspace = true }
+figment = { workspace = true }
+url = { workspace = true }
+http = { workspace = true }
+httpdate = { workspace = true }
+
+[features]
+# Compiles the `fail` failpoints in (the failpoint tests enable it through dev-dependencies).
+failpoints = ["fail/failpoints", "vc-store/failpoints"]
 
 [dev-dependencies]
 testkit = { workspace = true }
 axum = { workspace = true }
+figment = { workspace = true, features = ["test"] }
+fail = { workspace = true, features = ["failpoints"] }
+vc-store = { workspace = true, features = ["failpoints"] }
+tempfile = { workspace = true }
 reqwest = { workspace = true }
