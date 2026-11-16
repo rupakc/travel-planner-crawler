@@ -529,3 +529,152 @@ async fn max_tokens_answer_not_cached() {
         assert!(!r.from_cache);
     }
 }
+
+fn billing_403() -> ResponseTemplate {
+    ResponseTemplate::new(403).set_body_json(json!({"error": {
+        "code": 403,
+        "message": "Billing account for project is over its budget (spend cap).",
+        "status": "PERMISSION_DENIED"
+    }}))
+}
+
+/// Go-live review 3 + 12: the breaker lives in Postgres too. A billing trip in one role (one
+/// client) refuses calls in another role and in a restarted process (new clients on the same
+/// database) without any request, until it closes.
+#[tokio::test]
+async fn breaker_is_shared_across_roles_and_restarts() {
+    let server = MockServer::start().await;
+    Mock::given(any())
+        .respond_with(billing_403())
+        .expect(1)
+        .mount(&server)
+        .await;
+    let pool = testkit::pg().await;
+    let clock = clock_at(2026, 11, 15);
+    let config = cfg(&server.uri());
+    let res = dummy_reservation(Purpose::Extraction);
+
+    let processor = vertex(&config, &clock).with_shared_breaker(pool.clone());
+    assert!(processor.breaker().is_shared());
+    let llm = VertexLlm::new(config.clone(), processor);
+    let e = llm_err(llm.generate(&res, request("a")).await.unwrap_err());
+    let LlmError::BreakerOpen { until } = e else {
+        panic!("expected BreakerOpen, got {e:?}")
+    };
+    let (stored, reason): (chrono::DateTime<chrono::Utc>, String) =
+        sqlx::query_as("SELECT open_until, reason FROM llm_breaker WHERE id = 1")
+            .fetch_one(&pool)
+            .await
+            .unwrap();
+    assert_eq!(stored, until);
+    assert!(reason.contains("403"), "{reason}");
+
+    // Another role (the embedder) and a restarted processor: refused, no request.
+    let embedder = VertexEmbedder::new(
+        config.clone(),
+        vertex(&config, &clock).with_shared_breaker(pool.clone()),
+    );
+    let e = llm_err(embedder.embed(&res, &["x".into()]).await.unwrap_err());
+    assert_eq!(e, LlmError::BreakerOpen { until });
+    let restarted = VertexLlm::new(
+        config.clone(),
+        vertex(&config, &clock).with_shared_breaker(pool.clone()),
+    );
+    let e = llm_err(restarted.generate(&res, request("b")).await.unwrap_err());
+    assert_eq!(e, LlmError::BreakerOpen { until });
+    assert_eq!(server.received_requests().await.unwrap().len(), 1);
+
+    // A later trip never moves the stored time back.
+    let early = vertex(&config, &clock).with_shared_breaker(pool.clone());
+    clock.advance(Duration::from_secs(60));
+    early.breaker().trip_shared("again").await;
+    let (later,): (chrono::DateTime<chrono::Utc>,) =
+        sqlx::query_as("SELECT open_until FROM llm_breaker WHERE id = 1")
+            .fetch_one(&pool)
+            .await
+            .unwrap();
+    assert_eq!(later, until + chrono::Duration::seconds(60));
+
+    // Closed after breaker_h: calls go out again from a fresh process.
+    server.reset().await;
+    Mock::given(method("POST"))
+        .and(path(GEN_PATH))
+        .respond_with(ResponseTemplate::new(200).set_body_json(gen_response(&json!({"name": "x"}))))
+        .expect(1)
+        .mount(&server)
+        .await;
+    clock.advance(Duration::from_secs(6 * 3600));
+    let fresh = VertexLlm::new(
+        config.clone(),
+        vertex(&config, &clock).with_shared_breaker(pool.clone()),
+    );
+    assert!(fresh.generate(&res, request("c")).await.is_ok());
+}
+
+/// Go-live review 3: only a missing model fails the startup probe. A transient failure
+/// (5xx) starts the role with its LLM paused for PROBE_PAUSE in this process only; an open
+/// spend breaker (billing 403) pauses until the breaker closes. Reservations are settled.
+#[tokio::test]
+async fn probe_failure_other_than_missing_model_pauses() {
+    let server = MockServer::start().await;
+    Mock::given(method("POST"))
+        .and(path(GEN_PATH))
+        .respond_with(ResponseTemplate::new(503).set_body_json(json!({"error": {
+            "code": 503, "message": "The service is currently unavailable.",
+            "status": "UNAVAILABLE"}})))
+        .expect(1)
+        .mount(&server)
+        .await;
+    let clock = clock_at(2026, 11, 15);
+    let config = cfg(&server.uri());
+    let v = vertex(&config, &clock);
+    let llm = VertexLlm::new(config.clone(), v.clone());
+    let ledger = testkit::MemLedger::new(dyn_clock(&clock), Usd(1_000_000), Usd(10_000_000));
+    let out = llm.probe(&ledger).await.expect("a 503 is not fatal");
+    let paused_until = clock_now(&clock) + vc_llm::PROBE_PAUSE;
+    assert_eq!(
+        out,
+        ProbeOutcome::Paused {
+            until: paused_until
+        }
+    );
+    assert_eq!(ledger.open_reservations(), 0);
+    // paused: no request goes out
+    let res = dummy_reservation(Purpose::Extraction);
+    let e = llm_err(llm.generate(&res, request("a")).await.unwrap_err());
+    assert_eq!(
+        e,
+        LlmError::BreakerOpen {
+            until: paused_until
+        }
+    );
+    assert_eq!(server.received_requests().await.unwrap().len(), 1);
+    // after the pause, calls go out again
+    server.reset().await;
+    Mock::given(method("POST"))
+        .and(path(GEN_PATH))
+        .respond_with(ResponseTemplate::new(200).set_body_json(gen_response(&json!({"name": "x"}))))
+        .expect(1)
+        .mount(&server)
+        .await;
+    clock.advance(Duration::from_secs(10 * 60 + 1));
+    assert!(llm.generate(&res, request("b")).await.is_ok());
+
+    // A billing refusal at startup: paused until the (6 h) breaker closes, not an error.
+    let billing = MockServer::start().await;
+    Mock::given(any())
+        .respond_with(billing_403())
+        .expect(1)
+        .mount(&billing)
+        .await;
+    let config = cfg(&billing.uri());
+    let llm = VertexLlm::new(config.clone(), vertex(&config, &clock));
+    let out = llm.probe(&ledger).await.expect("billing is not fatal");
+    assert_eq!(
+        out,
+        ProbeOutcome::Paused {
+            until: clock_now(&clock) + chrono::Duration::hours(6)
+        }
+    );
+    assert_eq!(ledger.open_reservations(), 0);
+}

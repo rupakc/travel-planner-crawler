@@ -2,7 +2,9 @@
 //! [`crate::data::processor`] for the pipeline.
 //!
 //! The LLM is wired only when `VC_LLM_ENABLED=true`; then the model is probed once at start
-//! (fail loudly when unavailable) and every extraction call reserves through `PgLedger` under
+//! (fail loudly only when the model does not exist; any other failure starts with the LLM
+//! paused) and the spend breaker is shared through Postgres. Every extraction call reserves
+//! through `PgLedger` under
 //! the extraction share, and uncertain in-scope links are triaged (purpose `triage`). With the
 //! LLM off, extraction is structured-only and every in-scope link keeps the heuristic default.
 //!
@@ -48,9 +50,12 @@ pub async fn run(ctx: Ctx) -> anyhow::Result<()> {
     if cfg.llm.enabled {
         let clock: Arc<dyn Clock> = Arc::new(vc_core::SystemClock);
         let vertex =
-            vc_llm::VertexClient::new(&cfg.llm, Arc::new(vc_llm::AdcToken::new()), clock.clone())?;
+            vc_llm::VertexClient::new(&cfg.llm, Arc::new(vc_llm::AdcToken::new()), clock.clone())?
+                .with_shared_breaker(pool.clone());
         let ledger = Arc::new(vc_llm::PgLedger::new(pool.clone(), cfg.llm.clone(), clock));
         let llm = vc_llm::VertexLlm::new(cfg.llm.clone(), vertex).with_cache(pool.clone());
+        // Only a missing model is fatal; anything else starts with the LLM paused (a crash
+        // loop over a transient Vertex error ends in watchdog reboots).
         let probe = llm.probe(ledger.as_ref()).await.context("llm probe")?;
         tracing::info!(?probe, model = %cfg.llm.model, "llm probe");
         let llm = Arc::new(llm);

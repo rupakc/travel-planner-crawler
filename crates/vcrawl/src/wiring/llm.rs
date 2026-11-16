@@ -1,6 +1,7 @@
 //! The LLM startup probe (spec §17.4): wired **only** when `VC_LLM_ENABLED` / `llm.enabled`
 //! is true. A one-token call under a ledger reservation; an unavailable model fails startup
-//! loudly. With the LLM off nothing is built and nothing touches the network.
+//! loudly, any other failure only pauses the LLM ([`ProbeOutcome::Paused`]). With the LLM off
+//! nothing is built and nothing touches the network.
 
 use std::sync::Arc;
 
@@ -18,7 +19,8 @@ pub async fn probe_if_enabled(
     if !cfg.llm.enabled {
         return Ok(None);
     }
-    let vertex = VertexClient::new(&cfg.llm, Arc::new(AdcToken::new()), clock.clone())?;
+    let vertex = VertexClient::new(&cfg.llm, Arc::new(AdcToken::new()), clock.clone())?
+        .with_shared_breaker(pool.clone());
     let llm = VertexLlm::new(cfg.llm.clone(), vertex);
     let ledger = PgLedger::new(pool.clone(), cfg.llm.clone(), clock);
     let out = llm.probe(&ledger).await?;

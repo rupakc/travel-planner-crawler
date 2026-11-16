@@ -28,7 +28,8 @@ pub async fn run(ctx: Ctx) -> anyhow::Result<()> {
     let pool = ctx.pool().await?;
     let clock: Arc<dyn Clock> = Arc::new(vc_core::SystemClock);
     let vertex =
-        vc_llm::VertexClient::new(&cfg.llm, Arc::new(vc_llm::AdcToken::new()), clock.clone())?;
+        vc_llm::VertexClient::new(&cfg.llm, Arc::new(vc_llm::AdcToken::new()), clock.clone())?
+            .with_shared_breaker(pool.clone());
     let ledger = Arc::new(vc_llm::PgLedger::new(pool.clone(), cfg.llm.clone(), clock));
     let embedder =
         Arc::new(vc_llm::VertexEmbedder::new(cfg.llm.clone(), vertex).with_ledger(ledger.clone()));

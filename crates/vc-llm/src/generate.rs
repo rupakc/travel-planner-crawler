@@ -139,6 +139,10 @@ pub fn parse_response(
     }
 }
 
+/// How long a role keeps its own LLM calls paused after a startup probe that failed for any
+/// reason but a missing model (timeout, 5xx, quota, a database hiccup). Local to the process.
+pub const PROBE_PAUSE: chrono::Duration = chrono::Duration::minutes(10);
+
 /// What the startup probe found.
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub enum ProbeOutcome {
@@ -148,6 +152,14 @@ pub enum ProbeOutcome {
     SkippedDisabled,
     /// The ledger refused the (tiny) reservation: nothing was called.
     SkippedBudget,
+    /// The probe failed for another reason than a missing model: the role starts with its
+    /// LLM calls paused until `until` (the shared spend breaker's time when that was the
+    /// cause, else [`PROBE_PAUSE`] from now, in this process only). A restart loop over a
+    /// transient Vertex error would otherwise end in watchdog reboots.
+    Paused {
+        /// When calls may go out again.
+        until: chrono::DateTime<chrono::Utc>,
+    },
 }
 
 /// Gemini on Vertex AI (REST `generateContent`).
@@ -194,12 +206,33 @@ impl VertexLlm {
             .unwrap_or_else(|| ModelId::new(&self.config.model))
     }
 
-    /// The startup probe: a one-token call under a ledger reservation. A missing model fails
-    /// loudly with [`LlmError::ModelUnavailable`].
+    /// The startup probe: a one-token call under a ledger reservation. Only a missing model
+    /// is fatal ([`LlmError::ModelUnavailable`]); any other failure starts the role with the
+    /// LLM paused ([`ProbeOutcome::Paused`]).
     pub async fn probe(&self, ledger: &dyn BudgetLedger) -> Result<ProbeOutcome> {
         if !self.config.enabled {
             return Ok(ProbeOutcome::SkippedDisabled);
         }
+        match self.probe_once(ledger).await {
+            Ok(o) => Ok(o),
+            Err(e @ vc_core::Error::Llm(LlmError::ModelUnavailable(_))) => Err(e),
+            Err(e) => {
+                let until = match &e {
+                    vc_core::Error::Llm(LlmError::BreakerOpen { until }) => *until,
+                    _ => self.vertex.breaker().pause(PROBE_PAUSE),
+                };
+                tracing::warn!(
+                    error_class = ?e.class(),
+                    error = %e,
+                    %until,
+                    "llm probe failed: starting with the LLM paused"
+                );
+                Ok(ProbeOutcome::Paused { until })
+            }
+        }
+    }
+
+    async fn probe_once(&self, ledger: &dyn BudgetLedger) -> Result<ProbeOutcome> {
         let req = LlmRequest {
             model: None,
             purpose: Purpose::Extraction,
