@@ -4,13 +4,16 @@
 //!   corrupted upload), then checks the crc32c GCS reports. A precondition failure means the
 //!   object exists: identical bytes → [`PutOutcome::AlreadyIdentical`], else
 //!   [`Error::Conflict`].
-//! * Reads and writes use the JSON API (`Storage`); list and delete use `StorageControl`.
+//! * Reads and writes use the `Storage` client; list and delete call the JSON API directly
+//!   with reqwest (`StorageControl` speaks gRPC only, which emulators such as
+//!   fake-gcs-server do not serve), authenticated with the same credentials.
 
 use std::ops::Range;
 
 use async_trait::async_trait;
 use bytes::Bytes;
-use google_cloud_storage::client::{Storage, StorageControl};
+use google_cloud_auth::credentials::{CacheableResource, Credentials};
+use google_cloud_storage::client::Storage;
 use google_cloud_storage::model_ext::ReadRange;
 use vc_core::store::{BlobStore, PutOutcome};
 use vc_core::{Error, Result};
@@ -19,7 +22,11 @@ use vc_core::{Error, Result};
 #[derive(Clone, Debug)]
 pub struct GcsBlobStore {
     storage: Storage,
-    control: StorageControl,
+    http: reqwest::Client,
+    creds: Credentials,
+    /// JSON API base, e.g. `https://storage.googleapis.com`.
+    json_base: String,
+    list_page_size: Option<u32>,
     /// `projects/_/buckets/<name>`.
     bucket_path: String,
     bucket: String,
@@ -53,34 +60,90 @@ fn is_not_found(e: &google_cloud_storage::Error) -> bool {
 impl GcsBlobStore {
     /// A store for `bucket` (a bare bucket name, e.g. `voyager-crawler-raw`).
     pub async fn new(bucket: &str, opts: GcsOptions) -> Result<Self> {
-        let mut sb = Storage::builder();
-        let mut cb = StorageControl::builder();
+        let creds = if opts.anonymous {
+            google_cloud_auth::credentials::anonymous::Builder::new().build()
+        } else {
+            google_cloud_auth::credentials::Builder::default()
+                .build()
+                .map_err(|e| Error::Storage(format!("gcs credentials: {e}")))?
+        };
+        let mut sb = Storage::builder().with_credentials(creds.clone());
         if let Some(ep) = &opts.endpoint {
             sb = sb.with_endpoint(ep.clone());
-            cb = cb.with_endpoint(ep.clone());
-        }
-        if opts.anonymous {
-            sb = sb.with_credentials(
-                google_cloud_auth::credentials::anonymous::Builder::new().build(),
-            );
-            cb = cb.with_credentials(
-                google_cloud_auth::credentials::anonymous::Builder::new().build(),
-            );
         }
         let storage = sb
             .build()
             .await
             .map_err(|e| Error::Storage(format!("gcs client: {e}")))?;
-        let control = cb
+        let http = reqwest::Client::builder()
+            .connect_timeout(std::time::Duration::from_secs(10))
+            .timeout(std::time::Duration::from_secs(60))
             .build()
-            .await
-            .map_err(|e| Error::Storage(format!("gcs control client: {e}")))?;
+            .map_err(|e| Error::Storage(format!("gcs http client: {e}")))?;
+        let json_base = opts
+            .endpoint
+            .clone()
+            .unwrap_or_else(|| DEFAULT_ENDPOINT.to_string())
+            .trim_end_matches('/')
+            .to_string();
         Ok(GcsBlobStore {
             storage,
-            control,
+            http,
+            creds,
+            json_base,
+            list_page_size: None,
             bucket_path: format!("projects/_/buckets/{bucket}"),
             bucket: bucket.to_string(),
         })
+    }
+
+    /// Lists at most `n` objects per JSON API page (tests exercise pagination with it).
+    #[doc(hidden)]
+    pub fn with_list_page_size(mut self, n: u32) -> Self {
+        self.list_page_size = Some(n.max(1));
+        self
+    }
+
+    /// `{base}/storage/v1/b/{bucket}/o[/{object}]`, every segment percent-encoded.
+    fn object_url(&self, object: Option<&str>) -> Result<url::Url> {
+        let mut u = url::Url::parse(&self.json_base)
+            .map_err(|e| Error::Storage(format!("gcs endpoint {}: {e}", self.json_base)))?;
+        {
+            let mut seg = u
+                .path_segments_mut()
+                .map_err(|()| Error::Storage(format!("gcs endpoint {}", self.json_base)))?;
+            seg.pop_if_empty()
+                .extend(["storage", "v1", "b", &self.bucket, "o"]);
+            if let Some(o) = object {
+                seg.push(o);
+            }
+        }
+        Ok(u)
+    }
+
+    /// The auth headers for a JSON API call (none for anonymous credentials).
+    async fn auth_headers(&self) -> Result<http::HeaderMap> {
+        match self
+            .creds
+            .headers(http::Extensions::new())
+            .await
+            .map_err(|e| Error::Storage(format!("gcs credentials: {e}")))?
+        {
+            CacheableResource::New { data, .. } => Ok(data),
+            CacheableResource::NotModified => Ok(http::HeaderMap::new()),
+        }
+    }
+
+    async fn send_json(
+        &self,
+        req: reqwest::RequestBuilder,
+        op: &str,
+        path: &str,
+    ) -> Result<reqwest::Response> {
+        req.headers(self.auth_headers().await?)
+            .send()
+            .await
+            .map_err(|e| Error::Storage(format!("gcs {op} {path}: {e}")))
     }
 
     /// The bucket name.
@@ -167,42 +230,71 @@ impl BlobStore for GcsBlobStore {
     }
 
     async fn delete(&self, path: &str) -> Result<()> {
-        match self
-            .control
-            .delete_object()
-            .set_bucket(&self.bucket_path)
-            .set_object(path)
-            .send()
-            .await
-        {
-            Ok(()) => Ok(()),
-            Err(e) if is_not_found(&e) => Ok(()),
-            Err(e) => Err(storage_err("delete", path, &e)),
+        let url = self.object_url(Some(path))?;
+        let resp = self
+            .send_json(self.http.delete(url), "delete", path)
+            .await?;
+        match resp.status().as_u16() {
+            200..=299 | 404 => Ok(()),
+            s => Err(Error::Storage(format!("gcs delete {path}: HTTP {s}"))),
         }
     }
 
     async fn list(&self, prefix: &str) -> Result<Vec<String>> {
         let mut out = Vec::new();
-        let mut token = String::new();
+        let mut token: Option<String> = None;
         loop {
-            let resp = self
-                .control
-                .list_objects()
-                .set_parent(&self.bucket_path)
-                .set_prefix(prefix)
-                .set_page_token(token.clone())
-                .send()
-                .await
-                .map_err(|e| storage_err("list", prefix, &e))?;
-            out.extend(resp.objects.into_iter().map(|o| o.name));
-            if resp.next_page_token.is_empty() {
-                break;
+            let mut url = self.object_url(None)?;
+            {
+                let mut q = url.query_pairs_mut();
+                q.append_pair("prefix", prefix);
+                q.append_pair("fields", "items(name),nextPageToken");
+                if let Some(n) = self.list_page_size {
+                    q.append_pair("maxResults", &n.to_string());
+                }
+                if let Some(t) = &token {
+                    q.append_pair("pageToken", t);
+                }
             }
-            token = resp.next_page_token;
+            let resp = self.send_json(self.http.get(url), "list", prefix).await?;
+            let status = resp.status();
+            if !status.is_success() {
+                return Err(Error::Storage(format!(
+                    "gcs list {prefix}: HTTP {}",
+                    status.as_u16()
+                )));
+            }
+            let page: ListPage = resp
+                .json()
+                .await
+                .map_err(|e| Error::Storage(format!("gcs list {prefix}: {e}")))?;
+            out.extend(page.items.into_iter().map(|o| o.name));
+            match page.next_page_token {
+                Some(t) if !t.is_empty() => token = Some(t),
+                _ => break,
+            }
         }
         out.sort();
+        out.dedup();
         Ok(out)
     }
+}
+
+/// The public JSON API endpoint.
+const DEFAULT_ENDPOINT: &str = "https://storage.googleapis.com";
+
+#[derive(serde::Deserialize)]
+#[serde(rename_all = "camelCase")]
+struct ListPage {
+    #[serde(default)]
+    items: Vec<ListItem>,
+    #[serde(default)]
+    next_page_token: Option<String>,
+}
+
+#[derive(serde::Deserialize)]
+struct ListItem {
+    name: String,
 }
 
 fn is_failed_precondition(e: &google_cloud_storage::Error) -> bool {
