@@ -334,6 +334,15 @@ impl Run<'_> {
         self.signal = s;
         self.stop = true;
     }
+
+    /// A good answer ends a run of 5xx: the claim no longer reports it, so parks do not
+    /// accumulate across claims.
+    fn answered(&mut self) {
+        self.consecutive_5xx = 0;
+        if matches!(self.signal, KeySignal::ServerErrors { .. }) {
+            self.signal = KeySignal::Normal;
+        }
+    }
 }
 
 fn chrono_of(d: Duration) -> chrono::Duration {
@@ -550,10 +559,14 @@ impl Fetcher {
             .client
             .fetch(p, FetchRequest::get(url.clone(), RequestPurpose::Robots))
             .await;
+        let mut rate_limited = None;
         let (status, http_status, body) = match res {
             Ok(ex) => {
                 let code = ex.status.as_u16();
                 run.latencies.push(ex.latency());
+                if code == 429 || code == 503 {
+                    rate_limited = Some(vc_fetch::retry_after(&ex.response_headers, now));
+                }
                 let st = if self.p.policy.is_challenge(&ex) {
                     RobotsStatus::Challenge
                 } else if ex.status.is_success() {
@@ -616,8 +629,11 @@ impl Fetcher {
             origin: origin.clone(),
             status,
             http_status,
+            last_good: match (&status, &body) {
+                (RobotsStatus::Ok, Some(b)) => Some((b.clone(), now)),
+                _ => None,
+            },
             body,
-            last_good: None,
             fetched_at: now,
             expires_at: now + ttl,
         };
@@ -647,6 +663,10 @@ impl Fetcher {
         if blocked {
             tracing::info!(key = %p.key(), origin = %origin.0, "robots.txt blocks the key: parking");
             run.stop_with(KeySignal::Park(ParkReason::RobotsBlocked));
+        } else if let Some(retry_after) = rate_limited {
+            // robots.txt itself answered 429/503: the whole key backs off.
+            tracing::info!(key = %p.key(), origin = %origin.0, "robots.txt rate limited: backing off");
+            run.stop_with(KeySignal::RateLimited { retry_after });
         }
         Ok(())
     }
@@ -811,7 +831,7 @@ impl Fetcher {
                 );
                 return Ok(());
             };
-            run.consecutive_5xx = 0;
+            run.answered();
             let next = self.next_fetch(u, None).await;
             let signals = self.signals_for(run, u, &ex);
             let mut meta = self.meta(run.permit, &u.url, u.url_key, Some(u), now);
@@ -829,7 +849,7 @@ impl Fetcher {
             return self.spool_primary(run, u, rec, next).await;
         }
         if ex.status.is_success() {
-            run.consecutive_5xx = 0;
+            run.answered();
             let next = self.next_fetch(u, None).await;
             let signals = self.signals_for(run, u, &ex);
             let prefix = &ex.body[..ex.body.len().min(1024)];
@@ -857,30 +877,39 @@ impl Fetcher {
             404 | 410 => run.result(&u.url_key, UrlResult::Gone),
             429 | 503 => {
                 let retry_after = vc_fetch::retry_after(&ex.response_headers, now);
-                run.result(
-                    &u.url_key,
-                    self.retry_in(retry_after.unwrap_or(Duration::from_secs(3600))),
-                );
-                run.stop_with(KeySignal::RateLimited { retry_after });
+                self.rate_limited(run, u, retry_after);
             }
-            500..=599 => {
-                run.consecutive_5xx += 1;
-                run.result(
-                    &u.url_key,
-                    self.failed(ErrorClass::Transient, now + chrono::Duration::hours(1)),
-                );
-                let consecutive = run.consecutive_5xx;
-                run.signal = KeySignal::ServerErrors { consecutive };
-                if consecutive >= self.p.cfg.frontier.server_error_threshold.max(1) {
-                    run.stop = true;
-                }
-            }
+            500..=599 => self.server_error(run, u),
             _ => {
                 let next = self.next_fetch(u, None).await;
                 run.result(&u.url_key, self.failed(ErrorClass::Permanent, next));
             }
         }
         Ok(())
+    }
+
+    /// 429/503: retry the URL after `Retry-After` (else 1 h) and back the whole key off.
+    fn rate_limited(&self, run: &mut Run<'_>, u: &LeasedUrl, retry_after: Option<Duration>) {
+        run.result(
+            &u.url_key,
+            self.retry_in(retry_after.unwrap_or(Duration::from_secs(3600))),
+        );
+        run.stop_with(KeySignal::RateLimited { retry_after });
+    }
+
+    /// Another 5xx: one more toward the key's consecutive-5xx park.
+    fn server_error(&self, run: &mut Run<'_>, u: &LeasedUrl) {
+        let now = self.p.clock.now();
+        run.consecutive_5xx += 1;
+        run.result(
+            &u.url_key,
+            self.failed(ErrorClass::Transient, now + chrono::Duration::hours(1)),
+        );
+        let consecutive = run.consecutive_5xx;
+        run.signal = KeySignal::ServerErrors { consecutive };
+        if consecutive >= self.p.cfg.frontier.server_error_threshold.max(1) {
+            run.stop = true;
+        }
     }
 
     /// Fills the use signals/policy and the ephemeral expiry (noarchive / TDM → `ephemeral/`).
@@ -957,14 +986,15 @@ impl Fetcher {
                 run.result(&u.url_key, self.failed(ErrorClass::Permanent, next));
             }
             FetchError::Challenge { status } => {
-                let reason = if status == 401 || status == 403 {
-                    ParkReason::Unauthorized { status }
-                } else {
-                    ParkReason::Challenge
-                };
+                // The permit client reports a detected challenge (whatever its status) and a
+                // bare 401/403 the same way; both park the key on the same ladder.
                 tracing::info!(key = %run.permit.key(), status, "challenge detected: parking the key");
-                run.stop_with(KeySignal::Park(reason));
+                run.stop_with(KeySignal::Park(ParkReason::Challenge));
             }
+            FetchError::RateLimited { retry_after, .. } => {
+                self.rate_limited(run, u, retry_after);
+            }
+            FetchError::ServerError { .. } => self.server_error(run, u),
             FetchError::RobotsDisallowed(_)
             | FetchError::Denied(_)
             | FetchError::Ssrf(_)
@@ -1102,6 +1132,7 @@ impl Fetcher {
         }
         match res {
             Ok(rep) => {
+                run.answered();
                 // An API's `Expires` (MET Norway's terms): never refetch before it.
                 let expires = sink.seen.iter().filter_map(|s| s.expires).max();
                 if id == FCDO_ADAPTER
