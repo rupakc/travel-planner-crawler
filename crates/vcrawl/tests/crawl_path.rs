@@ -625,7 +625,11 @@ async fn fcdo_change_feed_reschedules_changed_countries() {
         .await
         .unwrap();
     // usa last captured before its feed entry (2026-11-14), georgia after its (2026-11-12).
-    let far = Utc::now() + chrono::Duration::days(30);
+    // Postgres keeps microseconds.
+    let far = chrono::DateTime::from_timestamp_micros(
+        (Utc::now() + chrono::Duration::days(30)).timestamp_micros(),
+    )
+    .unwrap();
     for (u, captured) in [
         (&usa, "2026-11-10T00:00:00Z"),
         (&georgia, "2026-11-13T00:00:00Z"),
