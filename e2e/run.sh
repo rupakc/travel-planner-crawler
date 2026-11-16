@@ -134,6 +134,11 @@ SELECT kind, state, count(*), max(attempts) AS max_attempts, left(max(last_error
 SELECT role, fetch_mode, key, status, count(*) FROM captures GROUP BY 1, 2, 3, 4 ORDER BY 3, 1, 2, 4;
 SELECT kind, source_id, state, count(*), max(current_version) FROM records GROUP BY 1, 2, 3 ORDER BY 2, 1;
 SELECT count(*) AS record_versions FROM record_versions;
+SELECT r.record_id, r.kind, r.record_key, u.url, r.current_version, r.state
+  FROM records r LEFT JOIN urls u USING (url_key) ORDER BY 4, 1;
+SELECT c.url, c.captured_at, c.status, c.fetch_mode, left(encode(c.payload_hash, 'hex'), 12) AS payload,
+       c.revisit_of_id IS NOT NULL AS revisit, c.segment_id
+  FROM captures c WHERE c.role = 'primary' AND c.key IN ('events.test', 'blog.test') ORDER BY 1, 2;
 SELECT key, state, count(*) FROM url_state GROUP BY 1, 2 ORDER BY 1, 2;
 SELECT us.key, u.url, us.state, us.depth, us.fetch_count, us.last_status, us.next_fetch_at, us.fetch_mode
   FROM url_state us JOIN urls u USING (url_key) ORDER BY 1, 2;
