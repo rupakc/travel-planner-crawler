@@ -25,6 +25,13 @@ fn writer(r: &Rig) -> TextTier {
     ))
 }
 
+/// Runs one tick and returns the number written, failing with the per-segment errors (if any).
+async fn written(w: &TextTier) -> usize {
+    let t = w.tick(10).await.expect("claim");
+    assert!(t.is_clean(), "text tier segments failed: {:?}", t.failed);
+    t.written
+}
+
 async fn segment_of(r: &Rig, capture_id: &str) -> String {
     sqlx::query_scalar("SELECT segment_id FROM captures WHERE capture_id = $1")
         .bind(capture_id)
@@ -54,7 +61,7 @@ async fn text_tier_written_per_segment_idempotently() {
     .await;
     let seg = segment_of(&r, &c.capture_id.to_string()).await;
     let w = writer(&r);
-    assert_eq!(w.tick(10).await.unwrap(), 1);
+    assert_eq!(written(&w).await, 1);
 
     // The path the spec gives: text/YYYY/MM/<segment-ULID>.jsonl.zst.
     let path = format!("text/2026/11/{seg}.jsonl.zst");
@@ -85,7 +92,7 @@ async fn text_tier_written_per_segment_idempotently() {
 
     // Nothing left to claim; writing the segment again is a no-op success with equal bytes.
     let before = r.blobs.get(&path, None).await.unwrap();
-    assert_eq!(w.tick(10).await.unwrap(), 0);
+    assert_eq!(written(&w).await, 0);
     w.write_segment(&seg).await.unwrap();
     assert_eq!(r.blobs.get(&path, None).await.unwrap(), before);
     assert_eq!(
@@ -97,7 +104,7 @@ async fn text_tier_written_per_segment_idempotently() {
         1
     );
     // A second instance finds nothing to do either.
-    assert_eq!(writer(&r).tick(10).await.unwrap(), 0);
+    assert_eq!(written(&writer(&r)).await, 0);
 }
 
 #[tokio::test]
@@ -126,7 +133,7 @@ async fn noarchive_capture_goes_to_ephemeral_text_and_errors_are_skipped() {
     );
     gone.status = Some(404);
     let g = commit(&r.pool, &r.blobs, gone).await;
-    assert_eq!(writer(&r).tick(10).await.unwrap(), 2);
+    assert_eq!(written(&writer(&r)).await, 2);
 
     let seg = segment_of(&r, &c.capture_id.to_string()).await;
     let got = rows(&r, &format!("ephemeral/text/2026/11/{seg}.jsonl.zst")).await;
@@ -174,20 +181,48 @@ async fn expired_claim_is_retried() {
         .execute(&r.pool)
         .await
         .unwrap();
-    assert_eq!(writer(&r).tick(10).await.unwrap(), 0, "claim still leased");
+    assert_eq!(written(&writer(&r)).await, 0, "claim still leased");
     sqlx::query("UPDATE text_tier_segments SET claimed_at = now() - interval '1 hour'")
         .execute(&r.pool)
         .await
         .unwrap();
-    assert_eq!(
-        writer(&r).tick(10).await.unwrap(),
-        1,
-        "expired claim retried"
-    );
+    assert_eq!(written(&writer(&r)).await, 1, "expired claim retried");
     assert_eq!(
         rows(&r, &format!("text/2026/11/{seg}.jsonl.zst"))
             .await
             .len(),
         1
+    );
+}
+
+#[tokio::test]
+async fn failed_segment_is_surfaced_not_swallowed() {
+    let r = rig(&["events-test"], RigOpts::default()).await;
+    let c = commit(
+        &r.pool,
+        &r.blobs,
+        Cap::html(
+            "https://events.example.org/e/jazz-night",
+            "events-test",
+            &fixture("event_v1.html"),
+            at(0),
+        ),
+    )
+    .await;
+    let seg = segment_of(&r, &c.capture_id.to_string()).await;
+    let path: String = sqlx::query_scalar("SELECT path FROM segments WHERE segment_id = $1")
+        .bind(&seg)
+        .fetch_one(&r.pool)
+        .await
+        .unwrap();
+    r.blobs.delete(&path).await.unwrap();
+    let t = writer(&r).tick(10).await.unwrap();
+    assert_eq!((t.claimed, t.written), (1, 0));
+    assert_eq!(t.failed.len(), 1);
+    assert_eq!(t.failed[0].0, seg);
+    assert!(
+        matches!(t.failed[0].1, vc_core::Error::NotFound(_)),
+        "{:?}",
+        t.failed
     );
 }

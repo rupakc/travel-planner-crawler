@@ -66,6 +66,24 @@ pub struct TextReport {
     pub ephemeral_rows: usize,
 }
 
+/// What one [`TextTier::tick`] did.
+#[derive(Debug, Default)]
+pub struct TextTick {
+    /// Segments claimed.
+    pub claimed: usize,
+    /// Segments written.
+    pub written: usize,
+    /// Segments that failed (segment id, error); each keeps its claim until the lease runs out.
+    pub failed: Vec<(String, Error)>,
+}
+
+impl TextTick {
+    /// Whether every claimed segment was written.
+    pub fn is_clean(&self) -> bool {
+        self.failed.is_empty()
+    }
+}
+
 /// The text-tier writer.
 pub struct TextTier {
     pool: PgPool,
@@ -110,19 +128,26 @@ impl TextTier {
         self
     }
 
-    /// Claims up to `n` committed segments without a text object and writes them. Returns the
-    /// number written. A failed segment keeps its claim until the lease runs out (then retried).
-    pub async fn tick(&self, n: usize) -> Result<usize> {
+    /// Claims up to `n` committed segments without a text object and writes them. Per-segment
+    /// failures are logged and returned in [`TextTick::failed`] (a failed segment keeps its
+    /// claim until the lease runs out, then is retried); only claiming itself fails the tick.
+    pub async fn tick(&self, n: usize) -> Result<TextTick> {
         let ids = self.claim(n.max(1)).await?;
-        let mut done = 0;
+        let mut t = TextTick {
+            claimed: ids.len(),
+            ..TextTick::default()
+        };
         for id in ids {
             match self.write_segment(&id).await {
-                Ok(_) => done += 1,
-                Err(e) => tracing::warn!(segment = %id, error_class = ?e.class(), error = %e,
-                    "text tier: segment failed; retried after the lease"),
+                Ok(_) => t.written += 1,
+                Err(e) => {
+                    tracing::warn!(segment = %id, error_class = ?e.class(), error = %e,
+                        "text tier: segment failed; retried after the lease");
+                    t.failed.push((id, e));
+                }
             }
         }
-        Ok(done)
+        Ok(t)
     }
 
     async fn claim(&self, n: usize) -> Result<Vec<String>> {
