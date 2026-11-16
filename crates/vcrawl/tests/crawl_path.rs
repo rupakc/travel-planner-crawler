@@ -742,3 +742,148 @@ async fn scheduler_refreshes_stale_robots_and_retires_disabled_sources() {
         "something is due now: no second refresh"
     );
 }
+
+/// An adapter that stops at its page cap leaves a cursor in `adapter_cursors`; a new fetcher
+/// (a restart) continues the stream from it instead of starting over, and the row is due
+/// again soon. A complete run deletes the cursor; the scheduler prunes cursors of rows that
+/// left the crawl.
+#[tokio::test]
+async fn adapter_cursor_survives_a_restart() {
+    use vc_sources::adapters::ResumableAdapter;
+    use vc_sources::adapters::wikidata_sparql::WikidataSparql;
+    let two_rows = serde_json::json!({
+        "head": { "vars": ["x"] },
+        "results": { "bindings": [
+            { "x": { "type": "literal", "value": "1" } },
+            { "x": { "type": "literal", "value": "2" } }
+        ] }
+    });
+    let (web, _srv, port) = start(vec![
+        Site::new("wd", "query.wd.test").route("/sparql", Reply::json(&two_rows)),
+    ])
+    .await;
+    let pool = testkit::pg().await;
+    let row = url("query.wd.test", port, "/sparql");
+    let s = spec(&format!(
+        "id: wd-test\nmethod: api\nadapter: wikidata_sparql\ncadence: monthly\nseeds: [\"{row}\"]\n"
+    ));
+    let cfg = cfg();
+    let fetcher = |dir: &std::path::Path| {
+        let mut p = parts(
+            &cfg,
+            &pool,
+            &["query.wd.test"],
+            vec![s.clone()],
+            dir,
+            Arc::new(MemBlobStore::new()),
+        );
+        let small: Arc<dyn ResumableAdapter> = Arc::new(WikidataSparql {
+            page_size: 2,
+            max_pages: 1,
+        });
+        p.resumable = Arc::new([("wikidata_sparql", small)].into_iter().collect());
+        vcrawl::roles::fetcher::Fetcher::new(p)
+    };
+    let cursor = || async {
+        sqlx::query_scalar::<_, String>("SELECT cursor FROM adapter_cursors WHERE url_key = $1")
+            .bind(row.key().as_bytes().as_slice())
+            .fetch_optional(&pool)
+            .await
+            .unwrap()
+    };
+    let offsets = || -> Vec<String> {
+        web.log()
+            .entries()
+            .into_iter()
+            .filter(|e| e.url.contains("/sparql"))
+            .map(|e| {
+                let u = url::Url::parse(&e.url).unwrap();
+                let q: String = u
+                    .query_pairs()
+                    .find(|(k, _)| k == "query")
+                    .map(|(_, v)| v.into_owned())
+                    .unwrap_or_default();
+                q.split("OFFSET").nth(1).unwrap_or("").trim().to_string()
+            })
+            .collect()
+    };
+
+    let dir1 = tempfile::tempdir().unwrap();
+    let f1 = fetcher(dir1.path());
+    let sched = Scheduler::new(
+        Arc::new(cfg.clone()),
+        pool.clone(),
+        f1.parts().frontier.clone(),
+    );
+    sched.pass(std::slice::from_ref(&s)).await.unwrap();
+    let r = claimed(f1.pass().await.unwrap());
+    assert_eq!(r.urls[0].result, UrlResult::Fetched, "{r:?}");
+    f1.flush().await.unwrap();
+    assert_eq!(cursor().await.as_deref(), Some("emergency_numbers@2"));
+    assert_eq!(offsets(), vec!["0"]);
+    // Due again within RESUME_AFTER, not a month later.
+    let at: chrono::DateTime<Utc> =
+        sqlx::query_scalar("SELECT next_fetch_at FROM url_state WHERE url_key = $1")
+            .bind(row.key().as_bytes().as_slice())
+            .fetch_one(&pool)
+            .await
+            .unwrap();
+    assert!(at <= Utc::now() + chrono::Duration::seconds(65), "{at}");
+    drop(f1);
+
+    // "Restart": a brand-new fetcher, its own spool, the same database.
+    fast_forward(&pool).await;
+    let dir2 = tempfile::tempdir().unwrap();
+    let f2 = fetcher(dir2.path());
+    let r = claimed(f2.pass().await.unwrap());
+    assert_eq!(r.urls[0].result, UrlResult::Fetched, "{r:?}");
+    f2.flush().await.unwrap();
+    assert_eq!(offsets(), vec!["0", "2"], "continued, not restarted");
+    assert_eq!(cursor().await.as_deref(), Some("emergency_numbers@4"));
+
+    // A complete run (no page cap) deletes the cursor. Jump to the last query so the run
+    // fits in one claim: it fetches only that query, then completes.
+    let last = vc_sources::adapters::wikidata_sparql::QUERIES
+        .last()
+        .unwrap()
+        .name;
+    vc_sources::cursors::PgAdapterCursors::new(pool.clone())
+        .save(&row.key(), "wikidata_sparql", &format!("{last}@0"))
+        .await
+        .unwrap();
+    fast_forward(&pool).await;
+    let dir3 = tempfile::tempdir().unwrap();
+    let mut p = parts(
+        &cfg,
+        &pool,
+        &["query.wd.test"],
+        vec![s.clone()],
+        dir3.path(),
+        Arc::new(MemBlobStore::new()),
+    );
+    let big: Arc<dyn ResumableAdapter> = Arc::new(WikidataSparql {
+        page_size: 5,
+        max_pages: 3,
+    });
+    p.resumable = Arc::new([("wikidata_sparql", big)].into_iter().collect());
+    let f3 = vcrawl::roles::fetcher::Fetcher::new(p);
+    let r = claimed(f3.pass().await.unwrap());
+    assert_eq!(r.urls[0].result, UrlResult::Fetched, "{r:?}");
+    f3.flush().await.unwrap();
+    assert_eq!(offsets().len(), 3, "one request: resumed at the last query");
+    assert_eq!(cursor().await, None);
+
+    // The scheduler prunes cursors of rows that left the crawl.
+    vc_sources::cursors::PgAdapterCursors::new(pool.clone())
+        .save(&row.key(), "wikidata_sparql", "emergency_numbers@4")
+        .await
+        .unwrap();
+    sqlx::query("UPDATE url_state SET state = 'disabled' WHERE url_key = $1")
+        .bind(row.key().as_bytes().as_slice())
+        .execute(&pool)
+        .await
+        .unwrap();
+    let rep = sched.pass(std::slice::from_ref(&s)).await.unwrap();
+    assert_eq!(rep.cursors_pruned, 1);
+    assert_eq!(cursor().await, None);
+}

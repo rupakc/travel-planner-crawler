@@ -60,6 +60,8 @@ use vc_core::{
     CanonicalUrl, CaptureId, Clock, Error, ErrorClass, LeaseLostReason, OriginKey, Result, UrlKey,
 };
 use vc_frontier::PgFrontier;
+use vc_sources::adapters::ResumableAdapter;
+use vc_sources::cursors::PgAdapterCursors;
 use vc_store::warc::{LastPayload, dedupe_payload};
 use vc_store::{SegmentRoller, Spool};
 
@@ -197,6 +199,10 @@ pub struct FetcherParts {
     pub sources: Arc<Sources>,
     /// Adapters by id.
     pub adapters: Arc<HashMap<&'static str, Arc<dyn SourceAdapter>>>,
+    /// Adapters that resume a paged stream from a cursor, by id (they win over `adapters`).
+    pub resumable: Arc<HashMap<&'static str, Arc<dyn ResumableAdapter>>>,
+    /// Where resume cursors persist (`None`: every run starts over).
+    pub cursors: Option<PgAdapterCursors>,
     /// Secrets (adapter API keys).
     pub secrets: Arc<dyn SecretSource>,
     /// The daily raw-bytes cap.
@@ -254,6 +260,8 @@ impl FetcherParts {
             roller,
             sources: Arc::new(Sources::load(&cfg)?),
             adapters: Arc::new(wiring::sources::adapters(&cfg)),
+            resumable: Arc::new(wiring::sources::resumable_adapters()),
+            cursors: Some(PgAdapterCursors::new(pool.clone())),
             secrets: wiring::sources::secrets(&cfg),
             raw_bytes: Arc::new(PgRawBytes::new(pool.clone(), cfg.fetch.daily_raw_bytes_cap)),
             tombstoner: Some(RobotsTombstoner {
@@ -1058,6 +1066,18 @@ impl Fetcher {
             leased: u.url_key,
             leased_body: None,
         };
+        let resumable = self.p.resumable.get(id).cloned();
+        let cursor = match (&resumable, &self.p.cursors) {
+            (Some(_), Some(store)) => match store.load(&u.url_key, id).await {
+                Ok(c) => c,
+                Err(e) => {
+                    // Fail open to "start over": a lost cursor costs requests, never politeness.
+                    tracing::warn!(adapter = id, error_class = ?e.class(), "cursor load failed");
+                    None
+                }
+            },
+            _ => None,
+        };
         let res = {
             let mut actx = AdapterCtx {
                 permit: run.permit,
@@ -1069,7 +1089,10 @@ impl Fetcher {
                 secrets: self.p.secrets.as_ref(),
                 clock: self.p.clock.as_ref(),
             };
-            adapter.run(&mut actx).await
+            match &resumable {
+                Some(r) => r.run_from(&mut actx, cursor.as_deref()).await,
+                None => adapter.run(&mut actx).await,
+            }
         };
         for s in &sink.seen {
             run.report.spooled.push(s.id);
@@ -1086,7 +1109,26 @@ impl Fetcher {
                 {
                     self.fcdo_change_feed(u, body).await?;
                 }
-                let next = self.next_fetch(u, expires).await;
+                let mut next = self.next_fetch(u, expires).await;
+                let resume = !rep.complete && rep.cursor.is_some();
+                if resumable.is_some()
+                    && let Some(store) = &self.p.cursors
+                {
+                    let kept = match (rep.complete, rep.cursor.as_deref()) {
+                        (true, _) => store.clear(&u.url_key).await,
+                        (false, Some(c)) => store.save(&u.url_key, id, c).await.map(|_| ()),
+                        (false, None) => Ok(()),
+                    };
+                    if let Err(e) = kept {
+                        tracing::warn!(adapter = id, error_class = ?e.class(), "cursor save failed");
+                    }
+                }
+                if resume {
+                    // The stream stopped at its page cap: continue soon (key politeness and
+                    // budget still apply), never before an `Expires`.
+                    let soon = now + chrono_of(RESUME_AFTER);
+                    next = expires.map_or(soon, |e| e.max(soon)).min(next);
+                }
                 if !sink
                     .seen
                     .iter()
@@ -1105,6 +1147,7 @@ impl Fetcher {
                         "bytes": rep.bytes,
                         "enqueued": rep.enqueued,
                         "complete": rep.complete,
+                        "resumed": cursor.is_some(),
                     });
                     let rec = SpoolRecord {
                         meta,
@@ -1127,6 +1170,9 @@ impl Fetcher {
         }
     }
 }
+
+/// How soon an adapter row whose run stopped at its page cap is due again.
+pub const RESUME_AFTER: Duration = Duration::from_secs(60);
 
 /// The FCDO adapter id (its Atom change feed drives [`Frontier::reschedule`]).
 pub const FCDO_ADAPTER: &str = "fcdo_content_api";

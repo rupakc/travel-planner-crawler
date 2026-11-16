@@ -15,6 +15,8 @@ use async_trait::async_trait;
 use serde::{Deserialize, Serialize};
 use vc_core::media::MediaType;
 use vc_core::sources::{AdapterCtx, AdapterReport, SourceAdapter};
+
+use super::ResumableAdapter;
 use vc_core::{CanonicalUrl, Error, Result};
 
 use super::common::{Fetch, check_status, fetch_raw, json};
@@ -121,6 +123,24 @@ impl SourceAdapter for WikidataSparql {
     }
 
     async fn run(&self, ctx: &mut AdapterCtx<'_>) -> Result<AdapterReport> {
+        self.run_from(ctx, None).await
+    }
+}
+
+/// `(query index, offset)` of a cursor `<query name>@<offset>`, if it names a known query.
+pub fn parse_cursor(cursor: &str) -> Option<(usize, u32)> {
+    let (name, offset) = cursor.rsplit_once('@')?;
+    let i = QUERIES.iter().position(|q| q.name == name)?;
+    Some((i, offset.parse().ok()?))
+}
+
+#[async_trait]
+impl ResumableAdapter for WikidataSparql {
+    async fn run_from(
+        &self,
+        ctx: &mut AdapterCtx<'_>,
+        cursor: Option<&str>,
+    ) -> Result<AdapterReport> {
         let mut rep = AdapterReport::default();
         let opts = Fetch {
             accept: Some("application/sparql-results+json"),
@@ -135,8 +155,9 @@ impl SourceAdapter for WikidataSparql {
             rep.complete = true;
             return Ok(rep);
         }
-        for q in QUERIES {
-            let mut offset = 0;
+        let (first, start) = cursor.and_then(parse_cursor).unwrap_or((0, 0));
+        for (i, q) in QUERIES.iter().enumerate().skip(first) {
+            let mut offset = if i == first { start } else { 0 };
             for page in 0.. {
                 if page >= self.max_pages {
                     rep.cursor = Some(format!("{}@{offset}", q.name));

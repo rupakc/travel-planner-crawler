@@ -13,7 +13,11 @@
 //! adapter "yields": items it validates, counts and fans out from), tested against recorded
 //! fixtures.
 
-use vc_core::sources::SourceAdapter;
+use std::sync::Arc;
+
+use async_trait::async_trait;
+use vc_core::Result;
+use vc_core::sources::{AdapterCtx, AdapterReport, SourceAdapter};
 
 pub(crate) mod common;
 pub(crate) mod csv_filter;
@@ -49,6 +53,30 @@ pub static REGISTRY: &[&dyn SourceAdapter] = &[
     &wikidata_sparql::WikidataSparql::DEFAULT,
     &wikivoyage_dump::WikivoyageDump::DEFAULT,
 ];
+
+/// An adapter whose paged stream can continue where an earlier run stopped.
+///
+/// A run that stops early (page cap) reports `complete: false` and a `cursor`; the caller keeps
+/// it ([`crate::cursors`]) and hands it back to the next run of the same leased row.
+/// [`SourceAdapter::run`] is `run_from(ctx, None)`.
+#[async_trait]
+pub trait ResumableAdapter: SourceAdapter {
+    /// Runs from `cursor` (an earlier report's cursor). `None`, or a cursor this adapter does
+    /// not recognise (or that no longer fits the leased row), starts over.
+    async fn run_from(
+        &self,
+        ctx: &mut AdapterCtx<'_>,
+        cursor: Option<&str>,
+    ) -> Result<AdapterReport>;
+}
+
+/// The built-in adapters that resume, with default settings.
+pub fn resumable() -> Vec<Arc<dyn ResumableAdapter>> {
+    vec![
+        Arc::new(ticketmaster_discovery::TicketmasterDiscovery::DEFAULT),
+        Arc::new(wikidata_sparql::WikidataSparql::DEFAULT),
+    ]
+}
 
 /// The ids of the built-in adapters.
 pub fn ids() -> Vec<&'static str> {

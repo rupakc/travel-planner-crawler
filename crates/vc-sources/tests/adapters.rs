@@ -603,6 +603,51 @@ async fn ticketmaster_page_cap_leaves_a_cursor() {
 }
 
 #[tokio::test]
+async fn ticketmaster_resumes_from_its_cursor() {
+    use adapters::ticketmaster_discovery::{TicketmasterDiscovery, resume_url};
+    let s = tm_server().await;
+    let row = format!("{}/discovery/v2/events.json?size=1", s.uri());
+    let mut h = Harness::new(spec("ticketmaster"), "ticketmaster_discovery", &row, t0()).await;
+    h.secrets
+        .0
+        .insert("crawler-src-ticketmaster-key".into(), TM_KEY.into());
+    let first = h
+        .run_from(&TicketmasterDiscovery { max_pages: 1 }, None)
+        .await
+        .unwrap();
+    let cursor = first.cursor.expect("cursor");
+    // A new run (another process, after a restart) continues at page 1, not page 0.
+    let mut h2 = Harness::new(spec("ticketmaster"), "ticketmaster_discovery", &row, t0()).await;
+    h2.secrets
+        .0
+        .insert("crawler-src-ticketmaster-key".into(), TM_KEY.into());
+    let rep = h2
+        .run_from(&TicketmasterDiscovery::DEFAULT, Some(&cursor))
+        .await
+        .unwrap();
+    assert_eq!((rep.requests, rep.complete, rep.cursor), (1, true, None));
+    let req = h2.client.requested.lock().unwrap()[0].clone();
+    assert!(req.contains("page=1") && req.contains(TM_KEY), "{req}");
+    // Cursors off the row's endpoint (or not a path) start over.
+    let row_url = vc_core::CanonicalUrl::parse(&row).unwrap();
+    assert!(resume_url(&row_url, "/discovery/v2/venues.json?page=3").is_none());
+    assert!(resume_url(&row_url, "https://evil.test/discovery/v2/events.json").is_none());
+    assert!(resume_url(&row_url, "//evil.test/discovery/v2/events.json").is_none());
+    let mut h3 = Harness::new(spec("ticketmaster"), "ticketmaster_discovery", &row, t0()).await;
+    h3.secrets
+        .0
+        .insert("crawler-src-ticketmaster-key".into(), TM_KEY.into());
+    let rep = h3
+        .run_from(
+            &TicketmasterDiscovery::DEFAULT,
+            Some("/discovery/v2/venues.json?page=3"),
+        )
+        .await
+        .unwrap();
+    assert_eq!(rep.requests, 2, "started over");
+}
+
+#[tokio::test]
 async fn ticketmaster_without_key_makes_no_request() {
     let s = tm_server().await;
     let mut h = Harness::new(
@@ -692,6 +737,54 @@ async fn wikidata_sparql_parses_fixture() {
         rep.requests,
         adapters::wikidata_sparql::QUERIES.len() as u32
     );
+}
+
+#[tokio::test]
+async fn wikidata_sparql_resumes_from_its_cursor() {
+    use adapters::wikidata_sparql::{WikidataSparql, parse_cursor};
+    assert_eq!(parse_cursor("emergency_numbers@6"), Some((0, 6)));
+    assert_eq!(parse_cursor("airports@10"), Some((2, 10)));
+    assert_eq!(parse_cursor("gone_query@6"), None);
+    assert_eq!(parse_cursor("airports@x"), None);
+    let s = wikidata_server().await;
+    let a = WikidataSparql {
+        page_size: 2,
+        max_pages: 3,
+    };
+    let mut h = Harness::new(
+        spec("wikidata-aviation"),
+        "wikidata_sparql",
+        &format!("{}/sparql", s.uri()),
+        t0(),
+    )
+    .await;
+    let rep = h.run_from(&a, Some("emergency_numbers@6")).await.unwrap();
+    // Continues at offset 6 (then 8, 10) and stops at the cap again with the next offset.
+    assert_eq!(rep.cursor.as_deref(), Some("emergency_numbers@12"));
+    let q = h.client.requested.lock().unwrap()[0].clone();
+    assert!(q.contains("OFFSET+6") || q.contains("OFFSET%206"), "{q}");
+    // A later query: earlier ones are skipped, the stream completes.
+    let mut h = Harness::new(
+        spec("wikidata-aviation"),
+        "wikidata_sparql",
+        &format!("{}/sparql", s.uri()),
+        t0(),
+    )
+    .await;
+    let last = adapters::wikidata_sparql::QUERIES.last().unwrap().name;
+    let rep = h.run_from(&a, Some(&format!("{last}@0"))).await.unwrap();
+    assert!(rep.complete);
+    assert_eq!(rep.requests, 1);
+    // An unknown cursor starts over (same as no cursor).
+    let mut h = Harness::new(
+        spec("wikidata-aviation"),
+        "wikidata_sparql",
+        &format!("{}/sparql", s.uri()),
+        t0(),
+    )
+    .await;
+    let rep = h.run_from(&a, Some("gone_query@6")).await.unwrap();
+    assert_eq!(rep.cursor.as_deref(), Some("emergency_numbers@6"));
 }
 
 #[tokio::test]

@@ -11,6 +11,8 @@ use async_trait::async_trait;
 use serde::{Deserialize, Serialize};
 use vc_core::media::MediaType;
 use vc_core::sources::{AdapterCtx, AdapterReport, SourceAdapter};
+
+use super::ResumableAdapter;
 use vc_core::{CanonicalUrl, Error, Result};
 
 use super::common::{Fetch, check_status, fetch_raw, json, on_origin};
@@ -257,6 +259,27 @@ impl SourceAdapter for TicketmasterDiscovery {
     }
 
     async fn run(&self, ctx: &mut AdapterCtx<'_>) -> Result<AdapterReport> {
+        self.run_from(ctx, None).await
+    }
+}
+
+/// The page URL a cursor (a redacted path and query on the leased row's origin) points at,
+/// if it stays on the leased row's origin and endpoint path.
+pub fn resume_url(row: &CanonicalUrl, cursor: &str) -> Option<CanonicalUrl> {
+    if !cursor.starts_with('/') {
+        return None;
+    }
+    let u = on_origin(row, cursor).ok()?;
+    (u.as_url().path() == row.as_url().path()).then_some(u)
+}
+
+#[async_trait]
+impl ResumableAdapter for TicketmasterDiscovery {
+    async fn run_from(
+        &self,
+        ctx: &mut AdapterCtx<'_>,
+        cursor: Option<&str>,
+    ) -> Result<AdapterReport> {
         let secret = ctx
             .source
             .key_secret
@@ -270,7 +293,10 @@ impl SourceAdapter for TicketmasterDiscovery {
             hint: Some(MediaType::Json),
             redact: &[KEY_PARAM],
         };
-        let mut next = Some(ctx.url.url.clone());
+        let start = cursor
+            .and_then(|c| resume_url(&ctx.url.url, c))
+            .unwrap_or_else(|| ctx.url.url.clone());
+        let mut next = Some(start);
         let mut pages = 0;
         while let Some(u) = next.take() {
             if pages >= self.max_pages {
