@@ -199,6 +199,32 @@ type RobotsRow = (
 type KeyColumns = (i32, Option<i32>, Option<i32>, i32, i16, i16, bool);
 
 impl PgFrontier {
+    /// Returns `fetched_pending` rows pending for longer than `older_than` to `due` (now):
+    /// their spool frame is lost, so no commit will ever release them. A late commit is still
+    /// applied (validators, capture row) by `vc_commit_segment`; it simply finds nothing to
+    /// flip. Idempotent; any number of processes may run it.
+    pub async fn sweep_stale_pending(&self, older_than: Duration) -> Result<u64> {
+        let secs = i64::try_from(older_than.as_secs()).unwrap_or(i64::MAX);
+        let n = sqlx::query(
+            "UPDATE url_state SET state = 'due', lease_epoch = NULL, pending_since = NULL,
+                                  next_fetch_at = least(next_fetch_at, now())
+             WHERE state = 'fetched_pending'
+               AND coalesce(pending_since, '-infinity') < now() - make_interval(secs => $1)",
+        )
+        .bind(secs as f64)
+        .execute(&self.pool)
+        .await
+        .map_err(|e| Error::Db(e.to_string()))?
+        .rows_affected();
+        if n > 0 {
+            tracing::warn!(
+                urls = n,
+                "frontier: stale fetched_pending rows returned to due"
+            );
+        }
+        Ok(n)
+    }
+
     /// Creates a frontier.
     pub fn new(pool: PgPool, config: FrontierConfig) -> Self {
         let holder = config.holder.clone().unwrap_or_else(|| {
@@ -869,8 +895,24 @@ impl Frontier for PgFrontier {
         .await
         .map_err(unverifiable)?;
         let updated = if current.is_some() {
+            // Wait for a concurrent segment commit holding this row, then look again: if a
+            // primary capture of this epoch is already committed, its commit found the URL
+            // still `leased` and flipped nothing, so go straight to `due` (B7).
+            sqlx::query("SELECT 1 FROM url_state WHERE url_key = $1 FOR UPDATE")
+                .bind(url.as_bytes().as_slice())
+                .execute(&mut *tx)
+                .await
+                .map_err(unverifiable)?;
             sqlx::query(
-                "UPDATE url_state SET state = 'fetched_pending', next_fetch_at = $4
+                "WITH done AS (
+                     SELECT EXISTS (SELECT 1 FROM captures
+                                    WHERE url_key = $1 AND epoch = $3 AND role = 'primary') AS c)
+                 UPDATE url_state SET
+                     state = CASE WHEN done.c THEN 'due' ELSE 'fetched_pending' END,
+                     lease_epoch = CASE WHEN done.c THEN NULL ELSE lease_epoch END,
+                     pending_since = CASE WHEN done.c THEN NULL ELSE now() END,
+                     next_fetch_at = $4
+                 FROM done
                  WHERE url_key = $1 AND key = $2 AND lease_epoch = $3
                    AND state IN ('leased', 'fetched_pending')",
             )
