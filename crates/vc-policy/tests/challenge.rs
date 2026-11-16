@@ -94,3 +94,88 @@ fn markers_beyond_scan_window_are_ignored() {
     body.extend_from_slice(b"/cdn-cgi/challenge-platform/");
     assert!(!p.is_challenge(&exchange(200, &[], &body)));
 }
+
+/// An ordinary Cloudflare-fronted 200 page: Cloudflare injects its "JavaScript detections"
+/// loader, which references `/cdn-cgi/challenge-platform/scripts/jsd/main.js`. Not a challenge.
+fn cloudflare_normal_page() -> String {
+    let filler = "<p>The Louvre is open from 9:00 to 18:00 except Tuesdays.</p>".repeat(400);
+    format!(
+        "<!DOCTYPE html><html lang=\"en\"><head><meta charset=\"utf-8\">\
+         <title>Paris museums: opening hours and tickets | City Guide</title>\
+         <link rel=\"stylesheet\" href=\"/static/site.css\"></head><body>\
+         <h1>Paris museums</h1>{filler}\
+         <script>(function(){{function c(){{var b=a.contentDocument||a.contentWindow.document;\
+         if(b){{var d=b.createElement('script');d.innerHTML=\"window.__CF$cv$params={{r:'8f1c2a3b4d5e6f70',\
+         t:'MTczMTc2MDAwMC4wMDAwMDA='}};var a=document.createElement('script');a.nonce='';\
+         a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';\
+         document.getElementsByTagName('head')[0].appendChild(a);\";\
+         b.getElementsByTagName('head')[0].appendChild(d)}}}}if(document.body){{var a=document.createElement('iframe');\
+         a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';\
+         a.style.visibility='hidden';document.body.appendChild(a);c()}}}})();</script>\
+         </body></html>"
+    )
+}
+
+#[test]
+fn cloudflare_jsd_script_on_normal_page_is_not_a_challenge() {
+    let p = policy();
+    let page = cloudflare_normal_page();
+    assert!(page.contains("/cdn-cgi/challenge-platform/scripts/jsd/main.js"));
+    assert!(!p.is_challenge(&exchange(200, &[], page.as_bytes())));
+    assert_eq!(
+        challenge::detect(&exchange(200, &[], page.as_bytes())),
+        None
+    );
+    // A small page with the loader is still an ordinary page.
+    let small = "<html><head><title>Opening hours</title></head><body>Open daily.\
+                 <script>a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';</script>\
+                 </body></html>";
+    assert!(!p.is_challenge(&exchange(200, &[], small.as_bytes())));
+    // A 404 or 500 with the loader is an error page, not a challenge.
+    assert!(!p.is_challenge(&exchange(404, &[], page.as_bytes())));
+    assert!(!p.is_challenge(&exchange(500, &[], page.as_bytes())));
+}
+
+#[test]
+fn cloudflare_challenge_platform_marker_needs_corroboration() {
+    let p = policy();
+    let page = cloudflare_normal_page();
+    // With a challenge status it is a challenge.
+    assert_eq!(
+        challenge::detect(&exchange(403, &[], page.as_bytes())),
+        Some("cloudflare")
+    );
+    assert_eq!(
+        challenge::detect(&exchange(503, &[], page.as_bytes())),
+        Some("cloudflare")
+    );
+    // With a challenge title on a 200 it is a challenge.
+    let titled = page.replace(
+        "<title>Paris museums: opening hours and tickets | City Guide</title>",
+        "<title>Just a moment...</title>",
+    );
+    assert_eq!(
+        challenge::detect(&exchange(200, &[], titled.as_bytes())),
+        Some("cloudflare")
+    );
+    let verify = page.replace(
+        "<title>Paris museums: opening hours and tickets | City Guide</title>",
+        "<title>Checking your browser before accessing</title>",
+    );
+    assert!(p.is_challenge(&exchange(200, &[], verify.as_bytes())));
+    // With the challenge options object it is a challenge.
+    let opt = format!("{page}<script>window._cf_chl_opt={{cvId:'3'}};</script>");
+    assert!(p.is_challenge(&exchange(200, &[], opt.as_bytes())));
+    // The real challenge pages still are.
+    for f in [
+        "cloudflare_js_flyertalk.html",
+        "cloudflare_js_wikitravel.html",
+    ] {
+        let body = std::fs::read(fx::challenges_dir().join(f)).unwrap();
+        assert_eq!(
+            challenge::detect(&exchange(200, &[], &body)),
+            Some("cloudflare"),
+            "{f}"
+        );
+    }
+}

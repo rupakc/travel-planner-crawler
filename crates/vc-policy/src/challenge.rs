@@ -4,12 +4,15 @@
 //! Signals, strongest first:
 //! 1. headers: `cf-mitigated: challenge` (Cloudflare), `x-amzn-waf-action: captcha|challenge`
 //!    (AWS WAF), `x-datadome` on a 4xx (DataDome);
-//! 2. provider interstitial markers in the body (Cloudflare challenge platform and block page,
+//! 2. provider interstitial markers in the body (Cloudflare challenge options and block page,
 //!    Akamai Bot Manager / edgesuite error, DataDome captcha-delivery, Imperva Incapsula,
 //!    PerimeterX/HUMAN captcha), whatever the status;
 //! 3. a captcha widget (reCAPTCHA, hCaptcha, Turnstile) on a 401/403/429/503, or on a short page
 //!    whose title asks to verify the visitor. A captcha on an ordinary long page (a newsletter
-//!    form) is not a challenge.
+//!    form) is not a challenge;
+//! 4. Cloudflare's [`CF_PLATFORM_MARKER`] only together with a challenge status (403/503) or a
+//!    verification title: ordinary Cloudflare pages load
+//!    `/cdn-cgi/challenge-platform/scripts/jsd/main.js` (JavaScript detections) on a 200.
 //!
 //! Only the first [`SCAN_BYTES`] of the body are looked at, lower-cased.
 
@@ -24,7 +27,6 @@ pub const SHORT_PAGE_BYTES: usize = 16 * 1024;
 
 /// Provider interstitial markers (lower-case substrings), with the provider name.
 pub const PROVIDER_MARKERS: &[(&str, &str)] = &[
-    ("cloudflare", "/cdn-cgi/challenge-platform/"),
     ("cloudflare", "cf_chl_opt"),
     ("cloudflare", "cf-browser-verification"),
     ("cloudflare", "<title>just a moment...</title>"),
@@ -43,6 +45,10 @@ pub const PROVIDER_MARKERS: &[(&str, &str)] = &[
     ("perimeterx", "captcha.px-cdn.net"),
     ("perimeterx", "_pxcaptcha"),
 ];
+
+/// Cloudflare's challenge-platform path. Also referenced by the JavaScript-detections loader on
+/// ordinary pages, so on its own it proves nothing (see [`detect`]).
+pub const CF_PLATFORM_MARKER: &str = "/cdn-cgi/challenge-platform/";
 
 /// Captcha widget markers (lower-case substrings).
 pub const CAPTCHA_MARKERS: &[&str] = &[
@@ -106,6 +112,16 @@ pub fn detect(ex: &Exchange) -> Option<&'static str> {
     if let Some((provider, _)) = PROVIDER_MARKERS.iter().find(|(_, m)| body.contains(m)) {
         return Some(provider);
     }
+    let verify_title =
+        || title(&body).is_some_and(|t| VERIFY_TITLE_WORDS.iter().any(|w| t.contains(w)));
+    if body.contains(CF_PLATFORM_MARKER)
+        && (matches!(
+            status,
+            StatusCode::FORBIDDEN | StatusCode::SERVICE_UNAVAILABLE
+        ) || verify_title())
+    {
+        return Some("cloudflare");
+    }
     if CAPTCHA_MARKERS.iter().any(|m| body.contains(m)) {
         let blocking = matches!(
             status,
@@ -114,8 +130,7 @@ pub fn detect(ex: &Exchange) -> Option<&'static str> {
                 | StatusCode::TOO_MANY_REQUESTS
                 | StatusCode::SERVICE_UNAVAILABLE
         );
-        let short_verify = ex.body.len() <= SHORT_PAGE_BYTES
-            && title(&body).is_some_and(|t| VERIFY_TITLE_WORDS.iter().any(|w| t.contains(w)));
+        let short_verify = ex.body.len() <= SHORT_PAGE_BYTES && verify_title();
         if blocking || short_verify {
             return Some("captcha");
         }
