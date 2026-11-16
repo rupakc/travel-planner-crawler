@@ -9,7 +9,7 @@ use vc_core::Clock;
 
 use crate::Ctx;
 use crate::data::embed::{EmbedLoop, estimator};
-use crate::data::{db, shutdown};
+use crate::data::shutdown;
 
 /// Pause between passes when there was nothing to do.
 const IDLE: Duration = Duration::from_secs(30);
@@ -25,8 +25,7 @@ pub async fn run(ctx: Ctx) -> anyhow::Result<()> {
         while !shutdown::sleep_or_stop(&mut stop, Duration::from_secs(3600)).await {}
         return Ok(());
     }
-    let secrets = db::secrets(&cfg);
-    let pool = db::pool(&cfg, secrets.as_ref()).await?;
+    let pool = ctx.pool().await?;
     let clock: Arc<dyn Clock> = Arc::new(vc_core::SystemClock);
     let vertex =
         vc_llm::VertexClient::new(&cfg.llm, Arc::new(vc_llm::AdcToken::new()), clock.clone())?;

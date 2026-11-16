@@ -19,7 +19,6 @@
 
 pub mod api;
 pub mod capture;
-pub mod db;
 pub mod embed;
 pub mod peers;
 pub mod processor;
