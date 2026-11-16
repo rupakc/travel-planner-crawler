@@ -1,6 +1,6 @@
 //! # vc-api (Task 12)
 //!
-//! The internal `/v1` read API (spec §5.11, §17.5, §17.9; contract `crates/vc-api/docs/Crawler-API.md`):
+//! The internal `/v1` read API (spec §5.11, §17.5, §17.9; contract `docs/Crawler-API.md`):
 //!
 //! * axum router over the vc-core [`IndexReader`] and [`PlaceResolver`];
 //! * per-client bearer tokens (`<client_id>.<secret>`, argon2id-hashed in `api_clients`) and a

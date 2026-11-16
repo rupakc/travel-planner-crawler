@@ -1,4 +1,4 @@
-//! The `/v1` wire format. These types are the frozen contract (`crates/vc-api/docs/Crawler-API.md`,
+//! The `/v1` wire format. These types are the frozen contract (`docs/Crawler-API.md`,
 //! additive changes only); they are converted from the vc-core read model so a change in
 //! vc-core never silently changes the API.
 
