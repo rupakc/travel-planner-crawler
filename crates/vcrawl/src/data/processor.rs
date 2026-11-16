@@ -10,6 +10,10 @@
 //! (capture, extraction run, record key), links are enqueued `ON CONFLICT DO NOTHING`, and a
 //! held record is keyed by (kind, source, record key).
 //!
+//! **Stale records:** after the upsert, this page's records that the capture no longer contains
+//! (where its extraction could have produced them) are marked stale; stale ones it contains
+//! again are re-activated ([`stale::reconcile`]).
+//!
 //! **High-stakes kinds** (`visa_rule`, `advisory`, `emergency_numbers`): `vc-extract` refuses
 //! them from non-official classes before any model call. `emergency_numbers` from a `reference`
 //! source is held until a second independent official/reference source agrees: held records
@@ -37,6 +41,7 @@ use vc_extract::{ExtractInput, Extractor, Gate, PeerRecord, source_gate};
 use crate::data::capture::{self, CaptureReady, StoredCapture};
 use crate::data::peers::{PendingPeers, index_peers};
 use crate::data::sources::{LoadedSource, SourceCache};
+use crate::data::stale::{self, Coverage};
 
 /// Max links enqueued per capture.
 pub const MAX_LINKS_PER_CAPTURE: usize = 1_000;
@@ -77,6 +82,10 @@ pub enum Outcome {
         links: u64,
         /// Whether the payload changed since the URL's previous capture.
         payload_changed: bool,
+        /// This page's records the capture no longer contains, marked stale.
+        staled: u64,
+        /// This page's stale records the capture contains again, re-activated.
+        unstaled: u64,
     },
     /// Nothing to do.
     Skipped(SkipReason),
@@ -262,6 +271,14 @@ impl Processor {
         input.peers = &peers;
         let out = self.d.extractor.extract(&input).await?;
 
+        let coverage = Coverage::of(&src.spec.kinds, &src.spec.llm_kinds, &out);
+        let present: std::collections::HashSet<(String, String)> = out
+            .records
+            .iter()
+            .chain(&out.pending)
+            .filter(|r| r.observation.is_none())
+            .map(|r| (r.kind.0.to_string(), r.record_key.0.clone()))
+            .collect();
         let accepted_high: Vec<KindId> = out
             .records
             .iter()
@@ -284,6 +301,7 @@ impl Processor {
         } else {
             self.promote(&kinds_union(&accepted_high, &[])).await?
         };
+        let st = stale::reconcile(pool, &prov, &present, &coverage).await?;
         tracing::debug!(
             capture = %cref.capture_id,
             source = %prov.source_id.0,
@@ -294,6 +312,8 @@ impl Processor {
             promoted,
             links,
             payload_changed,
+            staled = st.staled,
+            unstaled = st.unstaled,
             "capture processed"
         );
         Ok(Outcome::Processed {
@@ -302,6 +322,8 @@ impl Processor {
             promoted,
             links,
             payload_changed,
+            staled: st.staled,
+            unstaled: st.unstaled,
         })
     }
 

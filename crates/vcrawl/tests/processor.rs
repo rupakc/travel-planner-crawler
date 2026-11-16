@@ -20,6 +20,7 @@ fn processed(o: &Outcome) -> (&vc_core::index::UpsertReport, usize, usize, u64, 
             promoted,
             links,
             payload_changed,
+            ..
         } => (report, *held, *promoted, *links, *payload_changed),
         Outcome::Skipped(r) => panic!("expected processed, got skipped {r:?}"),
     }
