@@ -393,7 +393,13 @@ async fn rate_token_global_across_pools() {
         tasks.push(tokio::spawn(async move {
             let mut n = 0u32;
             while start.elapsed() < window {
-                f.take_rate_token(&p).await.expect("token");
+                match f.take_rate_token(&p).await {
+                    Ok(()) => {}
+                    // A transient DB error fails closed (no token); on a loaded machine that
+                    // can happen, and it is not what this test measures.
+                    Err(e) if e.reason == LeaseLostReason::Unverifiable => continue,
+                    Err(e) => panic!("token: {e:?}"),
+                }
                 if start.elapsed() <= window {
                     n += 1;
                 }

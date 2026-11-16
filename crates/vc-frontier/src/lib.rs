@@ -670,6 +670,13 @@ impl PgFrontier {
     }
 }
 
+/// A lease that could not be verified because of a database error (fail closed). The error is
+/// logged (its message only; never row content).
+fn unverifiable(p: &ClaimPermit, e: &sqlx::Error) -> LeaseLost {
+    tracing::warn!(key = %p.key(), epoch = p.epoch().0, error = %e, "lease unverifiable");
+    p.lease_lost(LeaseLostReason::Unverifiable)
+}
+
 fn hex(b: &[u8]) -> String {
     b.iter().map(|x| format!("{x:02x}")).collect()
 }
@@ -717,7 +724,7 @@ impl LeaseCheck for PgFrontier {
         .bind(p.key().as_str())
         .fetch_optional(&self.pool)
         .await
-        .map_err(|_| p.lease_lost(LeaseLostReason::Unverifiable))?;
+        .map_err(|e| unverifiable(p, &e))?;
         match row {
             Some((e, true, true)) if e == p.epoch().0 => Ok(()),
             Some((e, true, false)) if e == p.epoch().0 => {
@@ -751,7 +758,7 @@ impl Frontier for PgFrontier {
     }
 
     async fn extend(&self, p: &ClaimPermit, by: Duration) -> std::result::Result<(), LeaseLost> {
-        let unverifiable = |_| p.lease_lost(LeaseLostReason::Unverifiable);
+        let unverifiable = |e: sqlx::Error| unverifiable(p, &e);
         let mut tx = self.pool.begin().await.map_err(unverifiable)?;
         let delay: Option<(i32,)> =
             sqlx::query_as("SELECT delay_ms FROM politeness_keys WHERE key = $1 FOR UPDATE")
@@ -792,7 +799,7 @@ impl Frontier for PgFrontier {
     }
 
     async fn take_rate_token(&self, p: &ClaimPermit) -> std::result::Result<(), LeaseLost> {
-        let unverifiable = |_| p.lease_lost(LeaseLostReason::Unverifiable);
+        let unverifiable = |e: sqlx::Error| unverifiable(p, &e);
         let cap = self.config.global_rate_burst.max(1.0);
         let rate = self.config.global_rate_per_s.max(f64::MIN_POSITIVE);
         loop {
@@ -848,7 +855,7 @@ impl Frontier for PgFrontier {
         url: &UrlKey,
         next_fetch_at: DateTime<Utc>,
     ) -> std::result::Result<(), LeaseLost> {
-        let unverifiable = |_| p.lease_lost(LeaseLostReason::Unverifiable);
+        let unverifiable = |e: sqlx::Error| unverifiable(p, &e);
         let mut tx = self.pool.begin().await.map_err(unverifiable)?;
         // Lock the claim row (shared) so a concurrent claim cannot supersede us mid-write. The
         // request already happened inside this epoch's lease, so an expired but not superseded
@@ -900,7 +907,7 @@ impl Frontier for PgFrontier {
                 tracing::info!(key = %p.key(), epoch = p.epoch().0, "stale completion rejected");
                 Err(p.lease_lost(LeaseLostReason::Superseded))
             }
-            Err(_) => Err(p.lease_lost(LeaseLostReason::Unverifiable)),
+            Err(e) => Err(unverifiable(&p, &e)),
         }
     }
 
