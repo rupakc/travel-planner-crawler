@@ -6,7 +6,7 @@
 //! * [`processor`]: one `capture_ready` item → stored body → `vc-parse` → `vc-extract`
 //!   (structured first; the LLM only when `VC_LLM_ENABLED` and under the extraction budget) →
 //!   `RecordSink::upsert`; in-scope links → frontier; high-stakes `reference` records that
-//!   await a second agreeing source are held in [`peers::PendingPeers`] and fed back as peers.
+//!   await a second agreeing source are held in [`peers::PendingPeers`] (table `held_records`) and fed back as peers.
 //! * [`embed`]: the embedder loop (`pending_embeddings` → reserve → embed → store) and the
 //!   budgeted [`embed::BudgetQueryEmbedder`] used by search.
 //! * [`api`]: the [`vc_api::ApiState`] over Postgres (`PgIndex`, `PgApiStore`).

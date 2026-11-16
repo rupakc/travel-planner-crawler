@@ -7,13 +7,13 @@
 //!   captures of the same kind are extracted; once another source agrees, the held record is
 //!   promoted (upserted with its own provenance). Held records are never served.
 //!
-//! The pending set lives in process memory, bounded and expiring: a restart forgets it, and the
-//! next recrawl of either source rebuilds it. (A durable table needs a migration block.)
+//! The held set is the `held_records` table (migration 1901): shared by every processor
+//! instance, kept across restarts, bounded (oldest dropped first) and expiring (7 days by
+//! default; expired rows are ignored and deleted).
 
-use std::collections::HashMap;
-use std::sync::Mutex;
-use std::time::{Duration, Instant};
+use std::time::Duration;
 
+use chrono::{DateTime, Utc};
 use sqlx::PgPool;
 use vc_core::licence::SourceClass;
 use vc_core::records::{ExtractedRecord, Provenance};
@@ -74,7 +74,8 @@ pub struct Held {
     pub record: ExtractedRecord,
     /// Its capture's provenance.
     pub provenance: Provenance,
-    held_at: Instant,
+    /// When it was (last) held.
+    pub held_at: DateTime<Utc>,
 }
 
 impl Held {
@@ -90,93 +91,150 @@ impl Held {
     }
 }
 
-type HeldKey = (KindId, SourceId, RecordKey);
+fn db(e: sqlx::Error) -> Error {
+    Error::Db(e.to_string())
+}
 
-/// Bounded, expiring in-memory set of held records, keyed by (kind, source, record key): a
-/// newer capture of the same record replaces the older one.
-#[derive(Debug)]
+/// The durable, bounded, expiring set of held records (`held_records`), keyed by
+/// (kind, source, record key): a newer capture of the same record replaces the older one, an
+/// older capture never replaces a newer one.
+#[derive(Debug, Clone)]
 pub struct PendingPeers {
+    pool: PgPool,
     ttl: Duration,
-    max: usize,
-    inner: Mutex<HashMap<HeldKey, Held>>,
+    max: i64,
 }
 
-impl Default for PendingPeers {
-    fn default() -> Self {
-        PendingPeers::new(Duration::from_secs(7 * 24 * 3600), 10_000)
-    }
-}
+/// Default expiry of a held record.
+pub const HELD_TTL: Duration = Duration::from_secs(7 * 24 * 3600);
+/// Default bound on held records.
+pub const HELD_MAX: usize = 10_000;
+
+/// `(record, provenance, held_at)`.
+type HeldRow = (serde_json::Value, serde_json::Value, DateTime<Utc>);
 
 impl PendingPeers {
-    /// A set keeping records for `ttl`, at most `max` of them.
-    pub fn new(ttl: Duration, max: usize) -> Self {
+    /// The held set over `pool` with the default expiry and bound.
+    pub fn new(pool: PgPool) -> Self {
+        PendingPeers::with_limits(pool, HELD_TTL, HELD_MAX)
+    }
+
+    /// The held set keeping records for `ttl`, at most `max` of them.
+    pub fn with_limits(pool: PgPool, ttl: Duration, max: usize) -> Self {
         PendingPeers {
+            pool,
             ttl,
-            max: max.max(1),
-            inner: Mutex::new(HashMap::new()),
+            max: i64::try_from(max.max(1)).unwrap_or(i64::MAX),
         }
     }
 
-    fn lock(&self) -> Result<std::sync::MutexGuard<'_, HashMap<HeldKey, Held>>> {
-        self.inner
-            .lock()
-            .map_err(|_| Error::Invalid("pending peers poisoned".into()))
+    fn ttl_ms(&self) -> i64 {
+        i64::try_from(self.ttl.as_millis()).unwrap_or(i64::MAX)
     }
 
-    /// Holds a record (replacing the same record from an older capture).
-    pub fn hold(&self, record: ExtractedRecord, provenance: Provenance) -> Result<()> {
-        let mut g = self.lock()?;
-        let ttl = self.ttl;
-        g.retain(|_, h| h.held_at.elapsed() < ttl);
-        if g.len() >= self.max {
-            // Drop the oldest entry.
-            if let Some(k) = g
-                .iter()
-                .min_by_key(|(_, h)| h.held_at)
-                .map(|(k, _)| k.clone())
-            {
-                g.remove(&k);
-            }
+    /// Holds a record (replacing the same record from an older capture), then drops expired
+    /// records and the oldest ones beyond the bound.
+    pub async fn hold(&self, record: ExtractedRecord, provenance: Provenance) -> Result<()> {
+        let rec = serde_json::to_value(&record)?;
+        let prov = serde_json::to_value(&provenance)?;
+        let mut tx = self.pool.begin().await.map_err(db)?;
+        sqlx::query(
+            "INSERT INTO held_records
+                (kind, source_id, record_key, record, provenance, captured_at, held_at)
+             VALUES ($1, $2, $3, $4, $5, $6, now())
+             ON CONFLICT (kind, source_id, record_key) DO UPDATE SET
+                record = EXCLUDED.record, provenance = EXCLUDED.provenance,
+                captured_at = EXCLUDED.captured_at, held_at = now()
+             WHERE held_records.captured_at <= EXCLUDED.captured_at",
+        )
+        .bind(&*record.kind.0)
+        .bind(&provenance.source_id.0)
+        .bind(&record.record_key.0)
+        .bind(rec)
+        .bind(prov)
+        .bind(provenance.capture.captured_at)
+        .execute(&mut *tx)
+        .await
+        .map_err(db)?;
+        sqlx::query(
+            "DELETE FROM held_records
+             WHERE held_at < now() - make_interval(secs => $1::double precision / 1000)",
+        )
+        .bind(self.ttl_ms())
+        .execute(&mut *tx)
+        .await
+        .map_err(db)?;
+        sqlx::query(
+            "DELETE FROM held_records WHERE (kind, source_id, record_key) IN (
+                SELECT kind, source_id, record_key FROM held_records
+                ORDER BY held_at DESC, kind, source_id, record_key OFFSET $1)",
+        )
+        .bind(self.max)
+        .execute(&mut *tx)
+        .await
+        .map_err(db)?;
+        tx.commit().await.map_err(db)
+    }
+
+    /// Unexpired held records of `kinds`.
+    pub async fn of_kinds(&self, kinds: &[KindId]) -> Result<Vec<Held>> {
+        if kinds.is_empty() {
+            return Ok(Vec::new());
         }
-        let key = (
-            record.kind.clone(),
-            provenance.source_id.clone(),
-            record.record_key.clone(),
-        );
-        g.insert(
-            key,
-            Held {
-                record,
-                provenance,
-                held_at: Instant::now(),
-            },
-        );
-        Ok(())
-    }
-
-    /// Held records of `kinds`.
-    pub fn of_kinds(&self, kinds: &[KindId]) -> Result<Vec<Held>> {
-        let g = self.lock()?;
-        Ok(g.values()
-            .filter(|h| h.held_at.elapsed() < self.ttl && kinds.contains(&h.record.kind))
-            .cloned()
-            .collect())
+        let kinds: Vec<String> = kinds.iter().map(|k| k.0.to_string()).collect();
+        let rows: Vec<HeldRow> = sqlx::query_as(
+            "SELECT record, provenance, held_at FROM held_records
+             WHERE kind = ANY($1)
+               AND held_at >= now() - make_interval(secs => $2::double precision / 1000)
+             ORDER BY held_at, source_id, record_key
+             LIMIT $3",
+        )
+        .bind(&kinds)
+        .bind(self.ttl_ms())
+        .bind(self.max)
+        .fetch_all(&self.pool)
+        .await
+        .map_err(db)?;
+        rows.into_iter()
+            .map(|(r, p, held_at)| {
+                Ok(Held {
+                    record: serde_json::from_value(r)?,
+                    provenance: serde_json::from_value(p)?,
+                    held_at,
+                })
+            })
+            .collect()
     }
 
     /// Forgets a held record (promoted, or superseded by an accepted one).
-    pub fn release(&self, kind: &KindId, source: &SourceId, key: &RecordKey) -> Result<()> {
-        self.lock()?
-            .remove(&(kind.clone(), source.clone(), key.clone()));
+    pub async fn release(&self, kind: &KindId, source: &SourceId, key: &RecordKey) -> Result<()> {
+        sqlx::query(
+            "DELETE FROM held_records WHERE kind = $1 AND source_id = $2 AND record_key = $3",
+        )
+        .bind(&*kind.0)
+        .bind(&source.0)
+        .bind(&key.0)
+        .execute(&self.pool)
+        .await
+        .map_err(db)?;
         Ok(())
     }
 
-    /// Number of held records.
-    pub fn len(&self) -> usize {
-        self.inner.lock().map(|g| g.len()).unwrap_or(0)
+    /// Number of unexpired held records.
+    pub async fn len(&self) -> Result<usize> {
+        let n: i64 = sqlx::query_scalar(
+            "SELECT count(*) FROM held_records
+             WHERE held_at >= now() - make_interval(secs => $1::double precision / 1000)",
+        )
+        .bind(self.ttl_ms())
+        .fetch_one(&self.pool)
+        .await
+        .map_err(db)?;
+        Ok(usize::try_from(n).unwrap_or(0))
     }
 
-    /// Whether nothing is held.
-    pub fn is_empty(&self) -> bool {
-        self.len() == 0
+    /// Whether nothing (unexpired) is held.
+    pub async fn is_empty(&self) -> Result<bool> {
+        Ok(self.len().await? == 0)
     }
 }
