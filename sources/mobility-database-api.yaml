@@ -26,9 +26,12 @@ cadence: weekly
 min_delay_s: 5
 daily_budget: 3000
 politeness_key: null
-enabled: true
+enabled: false
 needs_key: true
 key_secret: crawler-src-mobility-database-api-key
 max_retention_days: null
 display_requirements: null
-notes: null
+notes: 'Disabled: robots.txt of api.mobilitydatabase.org is unreadable: it answers 302 to a Google IAP
+  login page (checked 2026-11-16), so no robots.txt grants VoyagerBot access, and the published API terms
+  do not say automated access by third-party crawlers is allowed. When in doubt, don''t crawl. Re-enable
+  only with a readable robots.txt that allows us.'

@@ -319,6 +319,13 @@ DISABLED = {
         "robots.txt of date.nager.at disallows /api/v for all agents (checked 2026-11-16); "
         "the data is not published as files."
     ),
+    # When in doubt, don't crawl: robots.txt we cannot read is not permission.
+    "mobility-database-api": (
+        "robots.txt of api.mobilitydatabase.org is unreadable: it answers 302 to a Google IAP "
+        "login page (checked 2026-11-16), so no robots.txt grants VoyagerBot access, and the "
+        "published API terms do not say automated access by third-party crawlers is allowed. "
+        "When in doubt, don't crawl. Re-enable only with a readable robots.txt that allows us."
+    ),
 }
 
 MIN_DELAY = {"cdc-travel": 20, "seat61": 10, "ricksteves-forum": 10}
