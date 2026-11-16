@@ -1,13 +1,26 @@
 #!/usr/bin/env bash
 # Fake cosign: records the call; `verify` succeeds only for a reference
 # whose digest is listed in $FAKE_SIGNED and with the pinned identity/issuer.
+# A refusal prints cosign's "no matching signatures" verdict. With
+# FAKE_COSIGN_TRANSIENT=N the first N verify calls fail like a network error.
 echo "cosign $*" >>"$CALLS"
 [[ "${1:-}" == verify ]] || exit 0
+n_file="${FAKE_STATE:?}/cosign-calls"
+n=$(($(cat "$n_file" 2>/dev/null || echo 0) + 1))
+echo "$n" >"$n_file"
+if ((n <= ${FAKE_COSIGN_TRANSIENT:-0})); then
+  echo "Error: GET https://ghcr.io/v2/: dial tcp: lookup ghcr.io: i/o timeout" >&2
+  exit 1
+fi
 ref="${*: -1}"
+refuse() {
+  echo "Error: no matching signatures: none of the expected identities matched what was in the certificate" >&2
+  exit 1
+}
 want_id="https://github.com/rupakc/travel-planner-crawler/.github/workflows/deploy.yml@refs/heads/main"
-[[ "$*" == *"--certificate-identity $want_id "* ]] || exit 1
-[[ "$*" == *"--certificate-oidc-issuer https://token.actions.githubusercontent.com "* ]] || exit 1
+[[ "$*" == *"--certificate-identity $want_id "* ]] || refuse
+[[ "$*" == *"--certificate-oidc-issuer https://token.actions.githubusercontent.com "* ]] || refuse
 for d in ${FAKE_SIGNED:-}; do
   [[ "$ref" == *"@$d" ]] && exit 0
 done
-exit 1
+refuse

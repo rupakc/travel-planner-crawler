@@ -46,3 +46,29 @@ take_lock() {
   exec 9>"$VC_STATE/deploy.lock"
   flock -n 9
 }
+
+# host_beat INSTANCE JSON — upserts heartbeats row ('host', INSTANCE) with
+# last_beat = now() and progress merged with JSON (keys in JSON win, others are
+# kept, e.g. last_ok_at). The maintenance role exports alert metrics from these
+# rows (crates/vc-obs/src/ops.rs). Best effort: logs and returns 1 when Postgres
+# is not reachable, never aborts the caller. Values go in as psql variables
+# (quoted by psql), never spliced into the SQL.
+host_beat() {
+  local instance="$1" json="$2"
+  printf '%s\n' "INSERT INTO heartbeats (role, instance, last_beat, progress)
+VALUES ('host', :'i', now(), :'p'::jsonb)
+ON CONFLICT (role, instance) DO UPDATE
+SET last_beat = now(), progress = heartbeats.progress || EXCLUDED.progress;" |
+    vc_compose exec -T postgres psql -U vcrawl -d vcrawl -q -v ON_ERROR_STOP=1 \
+      -v "i=$instance" -v "p=$json" >/dev/null 2>&1 && return 0
+  log "could not record host heartbeat $instance (Postgres down?)"
+  return 1
+}
+
+# now_epoch — seconds since the epoch ($VC_NOW in tests)
+now_epoch() { echo "${VC_NOW:-$(date +%s)}"; }
+
+# iso_utc EPOCH — 2026-11-16T05:30:00Z (GNU date, else BSD date)
+iso_utc() {
+  date -u -d "@$1" +%FT%TZ 2>/dev/null || date -u -r "$1" +%FT%TZ
+}

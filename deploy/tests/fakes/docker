@@ -10,6 +10,10 @@
 #   FAKE_LABEL_<NAME>      value of image label io.voyager-crawler.<name>
 #   FAKE_PS_A              output of `compose ps -a --format …` (watchdog)
 #   FAKE_DB_SCHEMA         what `compose exec postgres psql …` prints (unset → it fails)
+#   FAKE_MIGRATE_FAILS     the first N `run --rm migrate` calls fail (then FAKE_MIGRATE_RC)
+#   FAKE_BEAT_RC           exit code of a heartbeat upsert (lib.sh host_beat); the call
+#                          is logged as "beat <instance> <json>"
+#   FAKE_DRILL_OUT/RC      output and exit code of the restore-drill container
 # Per-service images are kept in $FAKE_STATE/<service>.
 set -uo pipefail
 st="${FAKE_STATE:?}"
@@ -51,6 +55,10 @@ if [[ "${1:-}" == compose ]]; then
       ;;
     run)
       if [[ "$*" == *migrate* ]]; then
+        mf="$st/migrate-calls"
+        mn=$(($(cat "$mf" 2>/dev/null || echo 0) + 1))
+        echo "$mn" >"$mf"
+        ((mn <= ${FAKE_MIGRATE_FAILS:-0})) && exit 1
         if [[ -f "${VC_STATE:-}/rollbacks" ]]; then
           echo "migrate bind rollbacks $(wc -l <"$VC_STATE/rollbacks" | tr -d ' ') lines" >>"$CALLS"
         else
@@ -61,6 +69,16 @@ if [[ "${1:-}" == compose ]]; then
       ;;
     restart) ;;
     exec)
+      if [[ "$*" == *psql* && "$*" == *" i="* ]]; then
+        sql="$(cat)"
+        [[ "$sql" == *"INSERT INTO heartbeats"* ]] || exit 3
+        i="" p=""
+        for a in "$@"; do
+          case "$a" in i=*) i="${a#i=}" ;; p=*) p="${a#p=}" ;; esac
+        done
+        echo "beat $i $p" >>"$CALLS"
+        exit "${FAKE_BEAT_RC:-0}"
+      fi
       [[ "$*" == *psql* && -n "${FAKE_DB_SCHEMA:-}" ]] || exit 2
       echo "$FAKE_DB_SCHEMA"
       ;;
@@ -75,7 +93,17 @@ case "${1:-} ${2:-}" in
     printf '{"mediaType":"application/vnd.oci.image.index.v1+json","digest":"%s","size":1234}\n' "$FAKE_PROD_DIGEST"
     ;;
   "pull "*) exit 0 ;;
+  "run "*)
+    # the restore-drill container (restore-drill.sh)
+    printf '%s\n' "${FAKE_DRILL_OUT:-}"
+    exit "${FAKE_DRILL_RC:-0}"
+    ;;
+  "rm "*) exit 0 ;;
   "inspect "*)
+    if [[ "$*" == *".Config.Image"* ]]; then
+      echo "${FAKE_PG_IMAGE:-pgvector/pgvector:pg17@sha256:feed}"
+      exit 0
+    fi
     svc="${*: -1}"
     svc="${svc#cid-}"
     img="$(cat "$st/$svc" 2>/dev/null)"

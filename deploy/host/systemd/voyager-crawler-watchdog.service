@@ -1,5 +1,7 @@
 [Unit]
 Description=Voyager Crawler watchdog (restart unhealthy services; reboot after 3 failed restarts in 30 min)
+# A failure is recorded for the crawler_host_units_failed alert
+OnFailure=voyager-crawler-failed@%n.service
 Requires=docker.service
 After=docker.service voyager-crawler.service
 RequiresMountsFor=/var/lib/voyager-crawler
@@ -7,4 +9,6 @@ RequiresMountsFor=/var/lib/voyager-crawler
 [Service]
 Type=oneshot
 ExecStart=/opt/voyager-crawler/host/watchdog.sh
+# Records success (and the last_ok_at the backup/drill age alerts read); never fails the unit
+ExecStartPost=-/opt/voyager-crawler/host/unit-status.sh ok %n
 TimeoutStartSec=10min

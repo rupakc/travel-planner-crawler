@@ -17,8 +17,10 @@ setup() {
   T="$(mktemp -d)"
   export CALLS="$T/calls" FAKE_STATE="$T/fake" VC_STATE="$T/state" VC_SECRETS_DIR="$T/secrets"
   export VC_OPT="$T/opt" PATH="$HERE/fakes:$PATH" VC_HEALTH_POLL=0 VC_HEALTH_TIMEOUT=5
+  export VC_RETRY_SLEEP=0 VC_DATA="$T/data"
   unset FAKE_PROD_DIGEST FAKE_RUNNING FAKE_UNHEALTHY_DIGEST FAKE_MIGRATE_RC FAKE_SIGNED \
-    FAKE_LABEL_SCHEMA FAKE_LABEL_MIN_SCHEMA FAKE_PS_A FAKE_LOCKED VC_NOW FAKE_DB_SCHEMA
+    FAKE_LABEL_SCHEMA FAKE_LABEL_MIN_SCHEMA FAKE_PS_A FAKE_LOCKED VC_NOW FAKE_DB_SCHEMA \
+    FAKE_COSIGN_TRANSIENT FAKE_MIGRATE_FAILS FAKE_BEAT_RC FAKE_DRILL_OUT FAKE_DRILL_RC VC_DRILL_NO_CHOWN
   mkdir -p "$VC_STATE" "$VC_SECRETS_DIR" "$FAKE_STATE" "$VC_OPT"
   : >"$CALLS"
   echo "VC_API_BIND=10.142.0.9" >"$VC_STATE/host.env"
@@ -133,8 +135,74 @@ test_migrate_failure_rolls_nothing() {
   local rc=$?
   [[ $rc == 1 ]] || { fail migrate_failure_rolls_nothing "exit $rc"; return; }
   has "up -d --no-deps" && { fail migrate_failure_rolls_nothing "rolled after a failed migrate"; return; }
-  grep -q "^$NEW migrate failed" "$VC_STATE/held" && ok migrate_failure_rolls_nothing ||
-    fail migrate_failure_rolls_nothing "not held"
+  [[ "$(grep -c 'run --rm migrate' "$CALLS")" == 3 ]] || { fail migrate_failure_rolls_nothing "migrate tries: $(grep -c 'run --rm migrate' "$CALLS")"; return; }
+  # a failed migrate is retried next tick, never held
+  [[ ! -s "$VC_STATE/held" ]] && ok migrate_failure_rolls_nothing ||
+    fail migrate_failure_rolls_nothing "held: $(cat "$VC_STATE/held")"
+}
+
+# Go-live review 8: a transient migrate failure is retried (in the tick, then
+# next tick) and the digest deploys once it passes; it is never held
+test_migrate_transient_failure_is_retried() {
+  setup
+  running_on "$OLD"
+  export FAKE_PROD_DIGEST="$NEW" FAKE_SIGNED="$NEW" FAKE_MIGRATE_FAILS=4
+  bash "$DEPLOY" 2>/dev/null
+  local rc=$?
+  [[ $rc == 1 && ! -s "$VC_STATE/held" ]] || { fail migrate_transient_failure_is_retried "tick 1: rc $rc, held '$(cat "$VC_STATE/held" 2>/dev/null)'"; return; }
+  bash "$DEPLOY" 2>/dev/null
+  rc=$?
+  [[ $rc == 0 && "$(cat "$VC_STATE/image.env")" == "VC_IMAGE=$IMG@$NEW" ]] &&
+    ok migrate_transient_failure_is_retried || fail migrate_transient_failure_is_retried "tick 2 rc $rc"
+}
+
+# Go-live review 8: only cosign's "no matching signatures" holds a digest; a
+# registry/network failure is retried and never held
+test_cosign_transient_failure_is_retried() {
+  setup
+  running_on "$OLD"
+  export FAKE_PROD_DIGEST="$NEW" FAKE_SIGNED="$NEW" FAKE_COSIGN_TRANSIENT=5
+  bash "$DEPLOY" 2>/dev/null
+  local rc=$?
+  [[ $rc == 1 ]] || { fail cosign_transient_failure_is_retried "tick 1 exit $rc, want 1"; return; }
+  [[ "$(grep -c 'cosign verify' "$CALLS")" == 3 ]] || { fail cosign_transient_failure_is_retried "tries: $(grep -c 'cosign verify' "$CALLS")"; return; }
+  [[ ! -s "$VC_STATE/held" ]] || { fail cosign_transient_failure_is_retried "held: $(cat "$VC_STATE/held")"; return; }
+  has pull && { fail cosign_transient_failure_is_retried "pulled an unverified image"; return; }
+  # next tick: two more transient failures, then verified → deployed
+  bash "$DEPLOY" 2>/dev/null
+  rc=$?
+  [[ $rc == 0 && "$(cat "$VC_STATE/image.env")" == "VC_IMAGE=$IMG@$NEW" ]] &&
+    ok cosign_transient_failure_is_retried || fail cosign_transient_failure_is_retried "tick 2 rc $rc"
+}
+
+# Go-live review 8: every tick reports running vs prod (+ since when they
+# differ, kept across ticks) and the API certificate's expiry
+test_deploy_reports_drift_and_tls() {
+  setup
+  running_on "$OLD"
+  printf '[req]\ndistinguished_name = dn\nprompt = no\n[dn]\nCN = t\n' >"$T/ssl.cnf"
+  openssl req -x509 -config "$T/ssl.cnf" -newkey rsa:2048 -nodes -days 400 \
+    -keyout "$T/k.pem" -out "$VC_SECRETS_DIR/api_tls_cert" >/dev/null 2>&1 ||
+    { fail deploy_reports_drift_and_tls "openssl"; return; }
+  local end
+  end="$(openssl x509 -enddate -noout -in "$VC_SECRETS_DIR/api_tls_cert" | sed 's/^notAfter=//')"
+  export FAKE_PROD_DIGEST="$NEW" FAKE_SIGNED="$NEW" FAKE_COSIGN_TRANSIENT=99
+  VC_NOW=1000 bash "$DEPLOY" 2>/dev/null
+  VC_NOW=5000 bash "$DEPLOY" 2>/dev/null
+  local want="beat deploy {\"running\": \"$OLD\", \"prod\": \"$NEW\", \"drift_since\": \"1970-01-01T00:16:40Z\", \"tls_not_after\": \"$end\"}"
+  [[ "$(grep -cxF -- "$want" "$CALLS")" == 2 ]] ||
+    { fail deploy_reports_drift_and_tls "drift beats: $(grep '^beat deploy' "$CALLS")"; return; }
+  # deployed: no drift any more
+  : >"$CALLS"
+  export FAKE_COSIGN_TRANSIENT=0
+  VC_NOW=6000 bash "$DEPLOY" 2>/dev/null || { fail deploy_reports_drift_and_tls "deploy failed"; return; }
+  grep -qxF -- "beat deploy {\"running\": \"$NEW\", \"prod\": \"$NEW\", \"drift_since\": null, \"tls_not_after\": \"$end\"}" "$CALLS" ||
+    { fail deploy_reports_drift_and_tls "no clean beat after deploy: $(grep '^beat' "$CALLS")"; return; }
+  [[ ! -e "$VC_STATE/drift-since" ]] || { fail deploy_reports_drift_and_tls "drift marker kept"; return; }
+  # Postgres down: the deploy itself is unaffected
+  : >"$CALLS"
+  FAKE_BEAT_RC=1 bash "$DEPLOY" 2>/dev/null && ok deploy_reports_drift_and_tls ||
+    fail deploy_reports_drift_and_tls "a failed heartbeat failed the tick"
 }
 
 test_rollback_on_unhealthy() {
@@ -427,6 +495,72 @@ test_docker_waits_for_data_disk() {
   awk '/^main\(\)/{on=1} on' "$HERE/../host/first-boot.sh" | grep -A1 '^  mount_data_disk$' |
     grep -q '^  docker_waits_for_data_disk$' && ok docker_waits_for_data_disk ||
     fail docker_waits_for_data_disk "not called after mount_data_disk"
+}
+
+# Go-live review 4: the drill unit runs restore-drill.sh (the image's
+# maintenance subcommand takes no arguments); every crawler unit reports
+# success and failure for the alert metrics
+test_units_report_outcomes() {
+  local d="$HERE/../host/systemd" u
+  grep -qx 'ExecStart=/opt/voyager-crawler/host/restore-drill.sh' "$d/voyager-crawler-restore-drill.service" ||
+    { fail units_report_outcomes "restore-drill unit does not run restore-drill.sh"; return; }
+  grep -q 'restore-drill --light' "$d"/*.service && { fail units_report_outcomes "unit still calls maintenance restore-drill --light"; return; }
+  for u in "$d"/voyager-crawler*.service; do
+    [[ "$u" == *failed@* ]] && continue
+    grep -qx 'OnFailure=voyager-crawler-failed@%n.service' "$u" ||
+      { fail units_report_outcomes "$(basename "$u") has no OnFailure="; return; }
+    grep -qx 'ExecStartPost=-/opt/voyager-crawler/host/unit-status.sh ok %n' "$u" ||
+      { fail units_report_outcomes "$(basename "$u") does not record success"; return; }
+  done
+  grep -qx 'ExecStart=/opt/voyager-crawler/host/unit-status.sh failed %i' "$d/voyager-crawler-failed@.service" &&
+    ok units_report_outcomes || fail units_report_outcomes "failure unit"
+}
+
+test_unit_status_records_outcomes() {
+  setup
+  running_on "$OLD"
+  local us="$HERE/../host/unit-status.sh"
+  VC_NOW=86400 bash "$us" ok voyager-crawler-basebackup.service 2>/dev/null
+  VC_NOW=90000 bash "$us" failed voyager-crawler-restore-drill.service 2>/dev/null
+  grep -qxF 'beat unit:voyager-crawler-basebackup.service {"failed": false, "last_ok_at": "1970-01-02T00:00:00Z"}' "$CALLS" &&
+    grep -qxF 'beat unit:voyager-crawler-restore-drill.service {"failed": true, "failed_at": "1970-01-02T01:00:00Z"}' "$CALLS" ||
+    { fail unit_status_records_outcomes "$(grep '^beat' "$CALLS")"; return; }
+  # never fails the unit, never records a foreign name
+  : >"$CALLS"
+  FAKE_BEAT_RC=1 bash "$us" ok voyager-crawler-deploy.service 2>/dev/null || { fail unit_status_records_outcomes "exit on a DB error"; return; }
+  bash "$us" ok "x'; DROP TABLE heartbeats; --" 2>/dev/null || { fail unit_status_records_outcomes "exit on a bad name"; return; }
+  grep -q "DROP" "$CALLS" && { fail unit_status_records_outcomes "recorded a foreign name"; return; }
+  ok unit_status_records_outcomes
+}
+
+test_restore_drill() {
+  local drill="$HERE/../host/restore-drill.sh"
+  setup
+  running_on "$OLD"
+  mkdir -p "$VC_DATA/pgdata"
+  echo x >"$VC_DATA/pgdata/PG_VERSION"
+  export VC_DRILL_NO_CHOWN=1 FAKE_DRILL_OUT=$'restored\nDRILL_RESULT migrations=19 segments=4'
+  bash "$drill" 2>"$T/err" || { fail restore_drill "ok drill exit $?: $(cat "$T/err")"; return; }
+  local run
+  run="$(grep '^run ' "$CALLS")"
+  for want in "--network voyager-crawler_pgbackup" "--user 999:999" "$VC_DATA/restore-drill:/drill" \
+    "$VC_OPT/postgres/walg.env" "$VC_OPT/host/restore-drill-inner.sh:/drill-inner.sh:ro" \
+    "pgvector/pgvector:pg17@sha256:feed /drill-inner.sh"; do
+    [[ "$run" == *"$want"* ]] || { fail restore_drill "container lacks '$want': $run"; return; }
+  done
+  [[ "$run" == *"$VC_DATA/pgdata"* || "$run" == *"--network voyager-crawler_db"* ]] &&
+    { fail restore_drill "the drill container can reach the live database"; return; }
+  [[ ! -e "$VC_DATA/restore-drill" ]] || { fail restore_drill "scratch left behind"; return; }
+  # a failed restore, or a restore without migrations, fails the unit and cleans up
+  FAKE_DRILL_RC=1 bash "$drill" 2>/dev/null && { fail restore_drill "failed restore exit 0"; return; }
+  [[ ! -e "$VC_DATA/restore-drill" ]] || { fail restore_drill "scratch left after a failure"; return; }
+  FAKE_DRILL_OUT="DRILL_RESULT migrations=0 segments=0" bash "$drill" 2>/dev/null &&
+    { fail restore_drill "empty restore exit 0"; return; }
+  # the inner script never archives and starts read-only
+  local inner="$HERE/../host/restore-drill-inner.sh"
+  grep -qF 'archive_mode=off' "$inner" && grep -qF 'standby.signal' "$inner" &&
+    grep -qF 'default_transaction_read_only=on' "$inner" && grep -qF "wal-g backup-fetch \"\$D\" LATEST" "$inner" &&
+    ok restore_drill || fail restore_drill "inner script settings"
 }
 
 for t in $(declare -F | awk '{print $3}' | grep '^test_'); do
