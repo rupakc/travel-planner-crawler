@@ -258,6 +258,48 @@ fn voyagerbot_group_beats_star_and_is_case_insensitive() {
 }
 
 #[test]
+fn voyagerbot_group_with_version_matches_us() {
+    // `User-agent: VoyagerBot/1.0` names our product token: the version is stripped and the
+    // group applies (erring on the side of obeying), in any case.
+    let p = policy();
+    for ua in [
+        "VoyagerBot/1.0",
+        "voyagerbot/2",
+        "VOYAGERBOT/0.1.0 (+https://x)",
+    ] {
+        let body = format!("User-agent: *\nAllow: /\n\nUser-agent: {ua}\nDisallow: /private\n");
+        let r = ok(&body);
+        assert_eq!(
+            p.robots_verdict(&r, &url("https://example.com/private/x")),
+            RobotsVerdict::Disallowed,
+            "{ua}"
+        );
+        assert!(
+            ParsedRobots::parse(body.as_bytes()).names_agent("VoyagerBot"),
+            "{ua}"
+        );
+        assert!(
+            !robots::is_allowed(body.as_bytes(), "VoyagerBot", "/private"),
+            "{ua}"
+        );
+        assert!(
+            robots::is_allowed(body.as_bytes(), "VoyagerBot", "/public"),
+            "{ua}"
+        );
+    }
+    // Our own full UA string as the agent argument resolves to the same group.
+    let body = b"User-agent: VoyagerBot/1.0\nDisallow: /\n";
+    assert!(!robots::is_allowed(
+        body,
+        "VoyagerBot/1.0 (+https://example.com/bot)",
+        "/a"
+    ));
+    // A different product that merely starts with our name does not match.
+    let body = b"User-agent: VoyagerBotX/1.0\nDisallow: /\n";
+    assert!(robots::is_allowed(body, "VoyagerBot", "/a"));
+}
+
+#[test]
 fn robots_txt_itself_is_always_allowed_unless_key_blocked() {
     let p = policy();
     let r = ok("User-agent: *\nDisallow: /\n");
