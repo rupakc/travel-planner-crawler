@@ -1,23 +1,23 @@
 //! The overall daily raw-bytes cap (spec §5.2: default 3 GB/day), enforced **across
 //! processes** with a counter row in Postgres.
 //!
-//! The counter lives in the `rate_bucket` table (migration 0003, "global token bucket(s)") as
-//! one row per UTC day named `raw_bytes:YYYY-MM-DD` (`tokens` = decoded bytes spooled that day,
-//! `capacity` = the cap). No migration is needed and the frontier's `global` row is never
-//! touched (its statements all filter `name = 'global'`). The day is DB time, like every other
-//! politeness clock. Old day rows are pruned by [`PgRawBytes::prune`] (scheduler pass).
+//! The counter is table `raw_bytes_daily` (migration 1801): one row per UTC day (DB time, like
+//! every other politeness clock), `bytes` = decoded bytes spooled that day. Every add is one
+//! atomic upsert, so concurrent fetchers never lose an increment. Old days are pruned by
+//! [`PgRawBytes::prune`] (scheduler pass), together with the `raw_bytes:YYYY-MM-DD` rows the
+//! first image kept in `rate_bucket` (1801 carried their totals over).
 
 use async_trait::async_trait;
 use sqlx::PgPool;
 use vc_core::{Error, Result};
 
-/// Name prefix of the per-day counter rows.
-pub const ROW_PREFIX: &str = "raw_bytes:";
+/// Name prefix of the legacy per-day rows in `rate_bucket` (pruned only).
+pub const LEGACY_ROW_PREFIX: &str = "raw_bytes:";
 
-/// Today's row name, in SQL (DB time).
-macro_rules! day_name {
+/// Today, in SQL (DB time, UTC).
+macro_rules! today {
     () => {
-        "('raw_bytes:' || to_char(now() AT TIME ZONE 'UTC', 'YYYY-MM-DD'))"
+        "(now() AT TIME ZONE 'UTC')::date"
     };
 }
 
@@ -41,9 +41,12 @@ fn db(e: sqlx::Error) -> Error {
     Error::Db(e.to_string())
 }
 
-fn f64_of(n: u64) -> f64 {
-    // Exact below 2^53 bytes (8 PB): far above any daily cap.
-    n as f64
+fn i64_of(n: u64) -> i64 {
+    i64::try_from(n).unwrap_or(i64::MAX)
+}
+
+fn u64_of(n: i64) -> u64 {
+    u64::try_from(n).unwrap_or(0)
 }
 
 impl PgRawBytes {
@@ -54,26 +57,34 @@ impl PgRawBytes {
 
     /// Today's total (DB time).
     pub async fn today(&self) -> Result<u64> {
-        let v: Option<(f64,)> = sqlx::query_as(concat!(
-            "SELECT tokens FROM rate_bucket WHERE name = ",
-            day_name!()
+        let v: Option<i64> = sqlx::query_scalar(concat!(
+            "SELECT bytes FROM raw_bytes_daily WHERE day = ",
+            today!()
         ))
         .fetch_optional(&self.pool)
         .await
         .map_err(db)?;
-        Ok(v.map(|(t,)| t.max(0.0) as u64).unwrap_or(0))
+        Ok(v.map_or(0, u64_of))
     }
 
-    /// Deletes the counter rows of earlier days. Returns the number removed.
+    /// Deletes the counters of earlier days (and the legacy `rate_bucket` rows of earlier
+    /// days). Returns the number of rows removed.
     pub async fn prune(&self) -> Result<u64> {
-        let r = sqlx::query(concat!(
-            "DELETE FROM rate_bucket WHERE name LIKE 'raw\\_bytes:%' AND name < ",
-            day_name!()
+        let new = sqlx::query(concat!(
+            "DELETE FROM raw_bytes_daily WHERE day < ",
+            today!()
         ))
         .execute(&self.pool)
         .await
         .map_err(db)?;
-        Ok(r.rows_affected())
+        let legacy = sqlx::query(
+            "DELETE FROM rate_bucket WHERE name LIKE 'raw\\_bytes:%'
+             AND name < ('raw_bytes:' || to_char(now() AT TIME ZONE 'UTC', 'YYYY-MM-DD'))",
+        )
+        .execute(&self.pool)
+        .await
+        .map_err(db)?;
+        Ok(new.rows_affected() + legacy.rows_affected())
     }
 }
 
@@ -87,21 +98,19 @@ impl RawBytesBudget for PgRawBytes {
     }
 
     async fn add(&self, bytes: u64) -> Result<u64> {
-        let (t,): (f64,) = sqlx::query_as(concat!(
-            "INSERT INTO rate_bucket (name, tokens, capacity, refill_per_s, updated_at) VALUES (",
-            day_name!(),
-            ", $1, $2, 1, clock_timestamp())
-             ON CONFLICT (name) DO UPDATE
-             SET tokens = rate_bucket.tokens + EXCLUDED.tokens,
-                 capacity = EXCLUDED.capacity,
+        let t: i64 = sqlx::query_scalar(concat!(
+            "INSERT INTO raw_bytes_daily (day, bytes, updated_at) VALUES (",
+            today!(),
+            ", $1, clock_timestamp())
+             ON CONFLICT (day) DO UPDATE
+             SET bytes = least(raw_bytes_daily.bytes::numeric + EXCLUDED.bytes, 9223372036854775807)::bigint,
                  updated_at = clock_timestamp()
-             RETURNING tokens"
+             RETURNING bytes"
         ))
-        .bind(f64_of(bytes))
-        .bind(f64_of(self.cap))
+        .bind(i64_of(bytes))
         .fetch_one(&self.pool)
         .await
         .map_err(db)?;
-        Ok(t.max(0.0) as u64)
+        Ok(u64_of(t))
     }
 }
