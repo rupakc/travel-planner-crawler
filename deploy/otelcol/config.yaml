@@ -1,0 +1,91 @@
+# OpenTelemetry Collector (contrib) for the crawler's own metrics (spec §6, §11).
+#
+# Why not the Ops Agent: its Prometheus receiver always writes
+# prometheus.googleapis.com/<name>/<kind>, and the alert policies in
+# infrastructure/monitoring/ (and vc-obs's naming rule) read
+# custom.googleapis.com/crawler/<x>. The Ops Agent stays on the host for host
+# metrics (agent.googleapis.com/disk/..., the disk-usage alert) and logs.
+#
+# Pipeline: scrape every role's /metrics on :9464 → keep only crawler_* →
+# rename crawler_<x>[_total] → custom.googleapis.com/crawler/<x> (the vc-obs
+# rule, `cloud_monitoring_type`) → Cloud Monitoring as the gce_instance
+# resource, with credentials from the metadata server (the VM's runtime SA has
+# roles/monitoring.metricWriter). The role is kept as the metric label
+# `service_name` (the scrape job is the role), so roles never collide.
+# `$$` is the collector's escape for a literal `$`.
+
+receivers:
+  prometheus:
+    config:
+      scrape_configs:
+        - job_name: scheduler
+          scrape_interval: 60s
+          static_configs: [{ targets: ["scheduler:9464"] }]
+        - job_name: maintenance
+          scrape_interval: 60s
+          static_configs: [{ targets: ["maintenance:9464"] }]
+        - job_name: fetcher
+          scrape_interval: 60s
+          static_configs: [{ targets: ["fetcher:9464"] }]
+        - job_name: processor
+          scrape_interval: 60s
+          static_configs: [{ targets: ["processor:9464"] }]
+        - job_name: embedder
+          scrape_interval: 60s
+          static_configs: [{ targets: ["embedder:9464"] }]
+        - job_name: api
+          scrape_interval: 60s
+          static_configs: [{ targets: ["api:9464"] }]
+
+processors:
+  memory_limiter:
+    check_interval: 5s
+    limit_mib: 96
+    spike_limit_mib: 24
+  filter/crawler:
+    error_mode: ignore
+    metrics:
+      metric:
+        - 'not IsMatch(name, "^crawler_")'
+  metrics_transform/cloud-type:
+    transforms:
+      - include: ^crawler_(.+?)(_total)?$
+        match_type: regexp
+        action: update
+        new_name: custom.googleapis.com/crawler/$${1}
+  resourcedetection:
+    detectors: [gcp]
+    timeout: 10s
+    override: true
+  batch:
+    timeout: 10s
+
+exporters:
+  googlecloud:
+    project: voyager-prod-ohzkl
+    metric:
+      # Names that already carry a domain (custom.googleapis.com/...) are used
+      # as-is; this prefix only marks anything that slipped through the rename.
+      prefix: custom.googleapis.com/crawler-unmapped/
+      resource_filters:
+        - prefix: service.name
+    sending_queue:
+      enabled: true
+      queue_size: 100
+
+extensions:
+  health_check:
+    endpoint: 0.0.0.0:13133
+
+service:
+  extensions: [health_check]
+  telemetry:
+    logs:
+      level: warn
+    metrics:
+      level: none
+  pipelines:
+    metrics:
+      receivers: [prometheus]
+      processors: [memory_limiter, filter/crawler, metrics_transform/cloud-type, resourcedetection, batch]
+      exporters: [googlecloud]

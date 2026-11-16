@@ -85,7 +85,10 @@ gone within 21 days (the opt-out SLA).
   `due_urls`, `backpressure` (0/1), `wal_archive_age_seconds`,
   `base_backup_age_seconds`, `restore_drill_ok` (0/1), `restore_drill_age_seconds`,
   `llm_month_spend_ratio`, `parked_keys_ratio`, `tls_cert_days_left`. Disk usage
-  comes from the Ops Agent.
+  comes from the Ops Agent. The role metrics reach Cloud Monitoring through the
+  `otelcol` compose service (`deploy/otelcol/config.yaml`): it scrapes each role's
+  `:9464` and renames `crawler_<x>[_total]` to `custom.googleapis.com/crawler/<x>`; the
+  Ops Agent's Prometheus receiver cannot, as it always writes `prometheus.googleapis.com`.
 
 ## Tests
 

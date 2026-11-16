@@ -24,7 +24,7 @@
 #             only, through vc-frontier permits) the web.
 #   pgbackup  Postgres alone: wal-g's route to gs://voyager-crawler-ops. No
 #             other container shares it, and no port is published on it.
-# Memory limits: §6 without egress (removed by §17.1): 7.06 GB of 8 GB.
+# Memory limits: §6 without egress (removed by §17.1) plus otelcol: 7.19 GB of 8 GB.
 
 name: voyager-crawler
 
@@ -106,18 +106,12 @@ services:
     tmpfs: ["/tmp:size=512m", "/home/chromium:size=64m,uid=1000,gid=1000"]
     shm_size: 512m
     environment: { HOME: /home/chromium }
-    entrypoint: ["/headless-shell/headless-shell"]
-    command:
-      - --headless
-      - --remote-debugging-address=0.0.0.0
-      - --remote-debugging-port=9222
-      - --disable-gpu
-      - --disable-dev-shm-usage
-      - --disable-background-networking
-      - --disable-component-update
-      - --disable-sync
-      - --no-first-run
-      - --user-data-dir=/tmp/profile
+    # deploy/chromium/run.sh (the script the vc-render tests start the same
+    # image with): Chromium's DevTools on 127.0.0.1:9223, socat forwards :9222
+    # (current headless-shell builds ignore --remote-debugging-address).
+    entrypoint: ["/bin/sh", "/opt/voyager-crawler/chromium/run.sh"]
+    volumes:
+      - /opt/voyager-crawler/chromium/run.sh:/opt/voyager-crawler/chromium/run.sh:ro
     # No health check of its own: a broken Chromium fails the fetcher's
     # progress health (renders stop completing), and the watchdog restarts it
     deploy:
@@ -126,6 +120,26 @@ services:
       driver: json-file
       options: { max-size: "5m", max-file: "2" }
     networks: [render]
+
+  otelcol:
+    # OpenTelemetry Collector contrib 0.164.0, pinned by digest. Scrapes every
+    # role's :9464 and writes custom.googleapis.com/crawler/* to Cloud
+    # Monitoring (deploy/otelcol/config.yaml says why the Ops Agent cannot).
+    # Credentials: the metadata server (egress network).
+    image: otel/opentelemetry-collector-contrib:0.164.0@sha256:340c9ca6a36617084c6661bdc4f0fe92b7cda5a805d61673ec8db375fddc522b
+    restart: unless-stopped
+    read_only: true
+    cap_drop: [ALL]
+    security_opt: ["no-new-privileges:true"]
+    command: ["--config=/etc/otelcol/config.yaml"]
+    volumes:
+      - /opt/voyager-crawler/otelcol/config.yaml:/etc/otelcol/config.yaml:ro
+    deploy:
+      resources: { limits: { memory: 128m } }
+    logging:
+      driver: json-file
+      options: { max-size: "5m", max-file: "2" }
+    networks: [egress]
 
   scheduler:
     <<: *role

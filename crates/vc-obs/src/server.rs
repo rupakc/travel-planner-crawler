@@ -1,5 +1,5 @@
 //! A tiny HTTP/1.1 endpoint inside each role's container: `GET /metrics` (Prometheus text, for
-//! the Ops Agent) and `GET /healthz` (200 healthy / 503 stalled, for `vcrawl health`).
+//! the `otelcol` scraper) and `GET /healthz` (200 healthy / 503 stalled, for `vcrawl health`).
 //! Read-only, no request bodies, 8 KiB header cap, 5 s read timeout, `Connection: close`.
 
 use std::net::SocketAddr;

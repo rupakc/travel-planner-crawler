@@ -1,4 +1,5 @@
-//! Prometheus metrics, scraped by the Ops Agent and forwarded to Cloud Monitoring.
+//! Prometheus metrics, scraped by the `otelcol` compose service (`deploy/otelcol/`) and
+//! forwarded to Cloud Monitoring.
 //!
 //! The metrics the alert policies in `infrastructure/monitoring/` read are listed in
 //! [`ALERT_METRICS`]. Naming rule: Cloud Monitoring type `custom.googleapis.com/crawler/<x>` ⇔

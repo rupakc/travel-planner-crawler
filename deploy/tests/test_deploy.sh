@@ -33,7 +33,7 @@ setup() {
 running_on() {
   echo "VC_IMAGE=$IMG@$1" >"$VC_STATE/image.env"
   local s
-  for s in postgres chromium maintenance scheduler processor embedder fetcher api; do
+  for s in postgres chromium otelcol maintenance scheduler processor embedder fetcher api; do
     echo "$IMG@$1" >"$FAKE_STATE/$s"
   done
 }
@@ -180,7 +180,7 @@ test_idempotent_when_digest_unchanged() {
   [[ "$(cat "$VC_STATE/image.env")" == "VC_IMAGE=$IMG@$OLD" ]] || { fail idempotent_when_digest_unchanged "image.env changed"; return; }
   # a stopped service is started again, still without pull or cosign
   : >"$CALLS"
-  FAKE_RUNNING="postgres chromium maintenance scheduler processor embedder api" bash "$DEPLOY" 2>/dev/null
+  FAKE_RUNNING="postgres chromium otelcol maintenance scheduler processor embedder api" bash "$DEPLOY" 2>/dev/null
   { has cosign || has pull; } && { fail idempotent_when_digest_unchanged "pulled/verified to restart"; return; }
   has "up -d --no-recreate fetcher" || { fail idempotent_when_digest_unchanged "stopped fetcher not started"; return; }
   ok idempotent_when_digest_unchanged
@@ -255,6 +255,28 @@ test_watchdog_idle_while_deploying() {
   export FAKE_PS_A=$'fetcher running unhealthy\n' FAKE_LOCKED=1
   bash "$WATCHDOG" 2>/dev/null
   has restart && fail watchdog_idle_while_deploying "acted during a deploy" || ok watchdog_idle_while_deploying
+}
+
+test_compose_wiring() {
+  local compose="$HERE/../compose.yaml" otel="$HERE/../otelcol/config.yaml" role roles base
+  # Chromium starts through deploy/chromium/run.sh (the script vc-render's tests use)
+  grep -qF 'entrypoint: ["/bin/sh", "/opt/voyager-crawler/chromium/run.sh"]' "$compose" ||
+    { fail compose_wiring "chromium entrypoint is not run.sh"; return; }
+  grep -qF '/opt/voyager-crawler/chromium/run.sh:/opt/voyager-crawler/chromium/run.sh:ro' "$compose" ||
+    { fail compose_wiring "run.sh not mounted read-only"; return; }
+  # otelcol scrapes every role's :9464 and writes custom.googleapis.com/crawler/*
+  roles="$(env -i bash -c ". '$HERE/../host/lib.sh'; echo \$VC_ROLES")"
+  base="$(env -i bash -c ". '$HERE/../host/lib.sh'; echo \$VC_BASE_SERVICES")"
+  [[ -n "$roles" ]] || { fail compose_wiring "no roles from lib.sh"; return; }
+  for role in $roles; do
+    grep -qF "\"$role:9464\"" "$otel" || { fail compose_wiring "otelcol does not scrape $role"; return; }
+  done
+  # shellcheck disable=SC2016 # the literal collector expression
+  grep -qF 'new_name: custom.googleapis.com/crawler/$${1}' "$otel" ||
+    { fail compose_wiring "otelcol does not rename to custom.googleapis.com/crawler/"; return; }
+  grep -qF 'exporters: [googlecloud]' "$otel" || { fail compose_wiring "otelcol exporter"; return; }
+  [[ " $base " == *" otelcol "* ]] || { fail compose_wiring "otelcol is not a base service"; return; }
+  ok compose_wiring
 }
 
 for t in $(declare -F | awk '{print $3}' | grep '^test_'); do
