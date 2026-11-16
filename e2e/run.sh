@@ -71,7 +71,7 @@ crashed=()
 prepare_args=()
 if mig="$(dc --profile tools run --rm migrate 2>&1)"; then
   log "vcrawl migrate: ok"
-elif grep -q "$NOT_WIRED" <<<"$mig"; then
+elif grep -qF "$NOT_WIRED" <<<"$mig"; then
   log "vcrawl migrate: not wired yet; the runner applies the migrations"
   missing+=(migrate)
   prepare_args+=(--migrate)
@@ -93,7 +93,10 @@ classify() {
   id="$(dc ps -a -q "$1")"
   state="$(docker inspect -f '{{.State.Status}}' "$id")"
   if [[ "$state" == running ]]; then echo running; return; fi
-  if docker logs "$id" 2>&1 | grep -q "$NOT_WIRED"; then echo not_wired; else echo crashed; fi
+  # Capture first: `docker logs | grep -q` loses to SIGPIPE under pipefail.
+  local logs
+  logs="$(docker logs "$id" 2>&1 || true)"
+  if grep -qF "$NOT_WIRED" <<<"$logs"; then echo not_wired; else echo crashed; fi
 }
 
 sleep "${E2E_ROLE_SETTLE_SECS:-20}"

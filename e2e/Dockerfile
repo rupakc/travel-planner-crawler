@@ -35,4 +35,14 @@ RUN apt-get update \
  && apt-get install -y --no-install-recommends ca-certificates curl \
  && rm -rf /var/lib/apt/lists/*
 COPY --from=bins / /usr/local/bin/
+# Runtime data under /app, the working directory, exactly as the production image (root
+# Dockerfile) lays it out; e2e/vcrawl.toml points sources and policy at /e2e instead.
+WORKDIR /app
+COPY policy/ /app/policy/
+COPY sources/ /app/sources/
+COPY schemas/ /app/schemas/
+COPY prompts/ /app/prompts/
+COPY migrations/ /app/migrations/
+COPY kinds.toml /app/kinds.toml
+COPY crates/vc-extract/data/ /app/data/
 USER 65532:65532
