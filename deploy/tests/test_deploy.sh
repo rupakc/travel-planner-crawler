@@ -563,6 +563,29 @@ test_restore_drill() {
     ok restore_drill || fail restore_drill "inner script settings"
 }
 
+# Go-live review 7: the Ops Agent drops per-process metrics, ships only the
+# containers' logs (no syslog), DEBUG dropped; restarted only on a change
+test_ops_agent_config() {
+  setup
+  mkdir -p "$T/bin" "$T/ops"
+  printf '#!/usr/bin/env bash\necho "systemctl $*" >>"%s"\n' "$CALLS" >"$T/bin/systemctl"
+  chmod +x "$T/bin/systemctl"
+  PATH="$T/bin:$PATH" VC_OPS_AGENT_DIR="$T/ops" VC_FIRST_BOOT_FUNCTIONS_ONLY=1 bash -c \
+    ". '$HERE/../host/first-boot.sh'; configure_ops_agent; configure_ops_agent" ||
+    { fail ops_agent_config "function failed"; return; }
+  local c="$T/ops/config.yaml" want
+  for want in '        - agent.googleapis.com/processes/*' '        processors: [drop_process_metrics]' \
+    '        - /var/lib/docker/containers/*/*-json.log' '        receivers: []' \
+    '        - jsonPayload.level =~ "(?i)^(debug|trace)$"' \
+    '        processors: [docker_envelope, role_json, drop_debug, severity]'; do
+    grep -qxF -- "$want" "$c" || { fail ops_agent_config "config lacks: $want"; return; }
+  done
+  [[ "$(grep -c 'systemctl restart google-cloud-ops-agent' "$CALLS")" == 1 ]] ||
+    { fail ops_agent_config "restarts: $(grep -c restart "$CALLS")"; return; }
+  awk '/^main\(\)/{on=1} on' "$HERE/../host/first-boot.sh" | grep -q '^  configure_ops_agent$' &&
+    ok ops_agent_config || fail ops_agent_config "main does not configure the Ops Agent"
+}
+
 for t in $(declare -F | awk '{print $3}' | grep '^test_'); do
   "$t"
 done

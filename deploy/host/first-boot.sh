@@ -24,6 +24,7 @@ OPT=/opt/voyager-crawler
 DATA=/var/lib/voyager-crawler
 DISK=/dev/disk/by-id/google-crawler-data
 SYSTEMD_DIR="${VC_SYSTEMD_DIR:-/etc/systemd/system}"
+OPS_AGENT_DIR="${VC_OPS_AGENT_DIR:-/etc/google-cloud-ops-agent}"
 COSIGN_VERSION=v2.4.1
 COSIGN_SHA256=8b24b946dd5809c6bd93de08033bcf6bc0ed7d336b7785787c080f574b89249b
 WALG_VERSION=v3.0.9
@@ -135,6 +136,65 @@ mount_data_disk() {
   install -d -m 0700 "$DATA/deploy"
 }
 
+# configure_ops_agent — the Ops Agent's own config (cost, go-live review 7):
+#   metrics: host metrics for the disk alert, without the per-process series
+#     (agent.googleapis.com/processes/*, the bulk of its billable samples);
+#   logs: only the containers' json-file logs (no syslog), parsed (Docker's
+#     envelope, then the role's JSON line), DEBUG/TRACE dropped on the VM, as
+#     log crawler_docker (bootstrap.sh routes it to the 30-day crawler bucket).
+# Restarts the agent only when the file changed.
+configure_ops_agent() {
+  local want
+  want='# Written by first-boot.sh (deploy/host): see configure_ops_agent
+metrics:
+  processors:
+    drop_process_metrics:
+      type: exclude_metrics
+      metrics_pattern:
+        - agent.googleapis.com/processes/*
+  service:
+    pipelines:
+      default_pipeline:
+        receivers: [hostmetrics]
+        processors: [drop_process_metrics]
+logging:
+  receivers:
+    crawler_docker:
+      type: files
+      include_paths:
+        - /var/lib/docker/containers/*/*-json.log
+      record_log_file_path: false
+  processors:
+    docker_envelope:
+      type: parse_json
+      time_key: time
+      time_format: "%Y-%m-%dT%H:%M:%S.%LZ"
+    role_json:
+      type: parse_json
+      field: jsonPayload.log
+    drop_debug:
+      type: exclude_logs
+      match_any:
+        - jsonPayload.level =~ "(?i)^(debug|trace)$"
+    severity:
+      type: modify_fields
+      fields:
+        severity:
+          move_from: jsonPayload.level
+  service:
+    pipelines:
+      default_pipeline:
+        receivers: []
+      crawler_docker:
+        receivers: [crawler_docker]
+        processors: [docker_envelope, role_json, drop_debug, severity]'
+  install -d "$OPS_AGENT_DIR"
+  if [[ "$(cat "$OPS_AGENT_DIR/config.yaml" 2>/dev/null)" != "$want" ]]; then
+    printf '%s\n' "$want" >"$OPS_AGENT_DIR/config.yaml"
+    systemctl restart google-cloud-ops-agent || log "Ops Agent restart failed"
+  fi
+}
+
 # docker_waits_for_data_disk — docker.service needs the data disk mounted
 # (fstab has `nofail`, so a missing disk would otherwise let Docker start
 # the stack on the boot disk's empty /var/lib/voyager-crawler)
@@ -187,6 +247,7 @@ install_units() {
 
 main() {
   install_packages
+  configure_ops_agent
   configure_docker
   mount_data_disk
   docker_waits_for_data_disk

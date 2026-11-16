@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+# Fake openssl: records the call (a dry run must make none)
+echo "openssl $*" >>"$CALLS"
+exit 0

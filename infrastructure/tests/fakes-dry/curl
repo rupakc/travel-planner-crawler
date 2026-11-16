@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+# Fake curl: records the call (a dry run must make none)
+echo "curl $*" >>"$CALLS"
+exit 0
