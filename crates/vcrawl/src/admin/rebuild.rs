@@ -10,6 +10,10 @@
 //! * Rows are inserted with the same column mapping as `vc_commit_segment`, `ON CONFLICT DO
 //!   NOTHING`, without touching `url_state` or the work queue: rebuilt rows are history, not
 //!   new captures.
+//! * Purges are honoured: objects listed in `store_garbage` (old generations a crash left
+//!   behind) are skipped, a segment whose row is purged or names another generation gets no
+//!   capture rows from this object, and captures matching a standing exclusion (`tombstones`:
+//!   url, url_prefix, host, source) are never inserted, even after a restore lost the rest.
 //! * Columns the processor sets later (`use_policy_final`, `text_ref`) are not in the CDXJ and
 //!   stay NULL; `committed_at` / `rewritten_at` are the rebuild time.
 
@@ -54,6 +58,9 @@ pub struct RebuildReport {
     pub superseded_generations: u64,
     /// CDXJ files whose segment object is gone (purged): skipped.
     pub missing_objects: Vec<String>,
+    /// Segments skipped because a purge made their object obsolete (`store_garbage`, a purged
+    /// row, or a row naming another generation).
+    pub purged_skipped: Vec<String>,
     /// Verify mode: differences between the bucket and the database.
     pub mismatches: Vec<String>,
 }
@@ -188,6 +195,10 @@ pub async fn rebuild_captures(
             continue;
         };
         rep.segments_seen += 1;
+        if obsolete(pool, &seg).await? {
+            rep.purged_skipped.push(seg.manifest.path.clone());
+            continue;
+        }
         if a.verify {
             rep.mismatches.extend(diff_segment(pool, &seg).await?);
         } else if a.dry_run {
@@ -205,6 +216,22 @@ pub async fn rebuild_captures(
         "rebuild-captures done"
     );
     Ok(rep)
+}
+
+/// Whether a purge made this object obsolete: it is listed as garbage, or the segment's row is
+/// purged or points at another generation.
+async fn obsolete(pool: &PgPool, seg: &RebuiltSegment) -> anyhow::Result<bool> {
+    let m = &seg.manifest;
+    Ok(sqlx::query_scalar(
+        "SELECT EXISTS (SELECT 1 FROM store_garbage WHERE path = $2 OR path = $3)
+             OR EXISTS (SELECT 1 FROM segments WHERE segment_id = $1
+                        AND (purged_at IS NOT NULL OR path <> $2))",
+    )
+    .bind(m.segment_id.to_string())
+    .bind(&m.path)
+    .bind(&m.cdxj_path)
+    .fetch_one(pool)
+    .await?)
 }
 
 /// Inserts one segment and its captures (one transaction). Returns `(segments, captures)`
@@ -247,6 +274,13 @@ pub async fn insert_segment(pool: &PgPool, seg: &RebuiltSegment) -> anyhow::Resu
                 coalesce(c->'use_signals', '{}'::jsonb), c->'use_policy_fetch',
                 (c->>'raw_expires_at')::timestamptz
          FROM jsonb_array_elements(coalesce($1->'captures', '[]'::jsonb)) AS x(c)
+         WHERE NOT EXISTS (
+             SELECT 1 FROM tombstones t
+             WHERE (t.selector_type = 'url' AND t.selector = c->>'url_key')
+                OR (t.selector_type = 'url_prefix' AND starts_with(c->>'url', t.selector))
+                OR (t.selector_type = 'host' AND t.selector = lower(substring(c->>'url'
+                        from '^[a-zA-Z][a-zA-Z0-9+.-]*://([^/:?#]+)')))
+                OR (t.selector_type = 'source' AND t.selector = c->>'source_id'))
          ON CONFLICT DO NOTHING",
     )
     .bind(&m)

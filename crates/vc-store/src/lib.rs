@@ -47,7 +47,9 @@ use vc_core::store::BlobStore;
 pub use crate::commit::PgSegmentCommitter;
 pub use crate::fs::FsBlobStore;
 pub use crate::gcs::{GcsBlobStore, GcsOptions};
-pub use crate::purge::{SegmentRewrite, finish_rewrite, rewrite_segment_without};
+pub use crate::purge::{
+    SegmentRewrite, collect_garbage, finish_rewrite, record_garbage, rewrite_segment_without,
+};
 pub use crate::segment::{
     BuiltSegment, CommitProbe, SegmentRoller, build_segment, read_capture, read_cdxj, read_segment,
 };
