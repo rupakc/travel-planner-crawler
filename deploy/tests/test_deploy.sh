@@ -401,6 +401,34 @@ test_fetcher_metrics_not_on_render_network() {
   ok fetcher_metrics_not_on_render_network
 }
 
+# wal-g must not overwrite archived WAL: a retried archive_command of an
+# already uploaded segment exits 0 instead of wedging archiving
+test_walg_prevents_wal_overwrite() {
+  local env="$HERE/../postgres/walg.env"
+  grep -qx 'WALG_PREVENT_WAL_OVERWRITE=true' "$env" && ok walg_prevents_wal_overwrite ||
+    fail walg_prevents_wal_overwrite "WALG_PREVENT_WAL_OVERWRITE=true missing in walg.env"
+}
+
+# docker.service waits for the data disk (first-boot.sh's drop-in), once
+test_docker_waits_for_data_disk() {
+  setup
+  mkdir -p "$T/bin" "$T/systemd"
+  printf '#!/usr/bin/env bash\necho "systemctl $*" >>"%s"\n' "$CALLS" >"$T/bin/systemctl"
+  chmod +x "$T/bin/systemctl"
+  local conf="$T/systemd/docker.service.d/10-voyager-crawler-data.conf"
+  PATH="$T/bin:$PATH" VC_SYSTEMD_DIR="$T/systemd" VC_FIRST_BOOT_FUNCTIONS_ONLY=1 bash -c \
+    ". '$HERE/../host/first-boot.sh'; docker_waits_for_data_disk; docker_waits_for_data_disk" ||
+    { fail docker_waits_for_data_disk "function failed"; return; }
+  grep -qx 'RequiresMountsFor=/var/lib/voyager-crawler' "$conf" 2>/dev/null && grep -qx '\[Unit\]' "$conf" ||
+    { fail docker_waits_for_data_disk "drop-in missing or wrong: $(cat "$conf" 2>/dev/null)"; return; }
+  [[ "$(grep -c 'systemctl daemon-reload' "$CALLS")" == 1 ]] ||
+    { fail docker_waits_for_data_disk "daemon-reload count $(grep -c 'systemctl daemon-reload' "$CALLS")"; return; }
+  # main installs it right after mounting the disk
+  awk '/^main\(\)/{on=1} on' "$HERE/../host/first-boot.sh" | grep -A1 '^  mount_data_disk$' |
+    grep -q '^  docker_waits_for_data_disk$' && ok docker_waits_for_data_disk ||
+    fail docker_waits_for_data_disk "not called after mount_data_disk"
+}
+
 for t in $(declare -F | awk '{print $3}' | grep '^test_'); do
   "$t"
 done

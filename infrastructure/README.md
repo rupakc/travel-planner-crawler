@@ -36,11 +36,19 @@ the reserved internal address instead of letting GCP choose).
 
 IAM: `crawler-runtime` has `objectAdmin` on `-raw` (purges delete), `objectCreator` +
 `objectViewer` on `-ops` (it can't delete backups; the lifecycle does), `logWriter`,
-`metricWriter`, `voyagerCrawlerVertex`, the conditional `voyagerCrawlerDrill`,
-`serviceAccountUser` on `crawler-drill` only, and `secretAccessor` on the four
-`crawler-*` secrets. `vm-runtime` (the app) gets `secretAccessor` on
-`crawler-api-token-voyager` and `crawler-api-tls-cert` only. The Vertex AI service
-agent gets `objectUser` on `-ops` (batch prediction I/O under `batch/`).
+`metricWriter`, `voyagerCrawlerVertex` and `secretAccessor` on the four `crawler-*`
+secrets. `vm-runtime` (the app) gets `secretAccessor` on `crawler-api-token-voyager`
+and `crawler-api-tls-cert` only. **Not granted yet:** the conditional
+`voyagerCrawlerDrill` binding and `serviceAccountUser` on `crawler-drill` (they arrive
+with the monthly Spot restore drill, which is not wired; the role, the account and the
+template exist so that change is one binding), and any Vertex AI service-agent access
+to `-ops` (batch prediction is not wired; when it is, `objectUser` conditioned on
+`objects/batch/`).
+
+Backups: wal-g runs with `WALG_PREVENT_WAL_OVERWRITE=true` (`deploy/postgres/walg.env`).
+`crawler-runtime` cannot overwrite objects on `-ops`, so a retried `archive_command` for
+a segment that already reached GCS must not try to: wal-g compares the stored object,
+exits 0 when it is identical and fails loudly when it differs.
 
 Bucket lifecycle (§17.7): `-raw`: `segments/` → Coldline at 90 days, `ephemeral/`
 deleted at 30 days, `cdxj/` and `text/` stay Standard, noncurrent versions deleted

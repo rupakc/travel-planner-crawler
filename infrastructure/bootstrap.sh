@@ -21,10 +21,11 @@
 #     access, public access prevention, versioning, soft delete 7 d, lifecycle
 #     per §17.7 (infrastructure/gcs/*-lifecycle.json)
 #   IAM: crawler-runtime objectAdmin on -raw, objectCreator + objectViewer on
-#     -ops, logWriter, metricWriter, the two custom roles, secretAccessor on
+#     -ops, logWriter, metricWriter, voyagerCrawlerVertex, secretAccessor on
 #     each crawler-* secret; vm-runtime secretAccessor on
-#     crawler-api-token-voyager and crawler-api-tls-cert only; the Vertex AI
-#     service agent objectUser on -ops (batch prediction I/O)
+#     crawler-api-token-voyager and crawler-api-tls-cert only. Not yet (until
+#     the Spot drill and batch prediction are wired): voyagerCrawlerDrill on
+#     crawler-runtime, and the Vertex AI service agent on -ops
 #   secrets crawler-pg-password, crawler-api-token-voyager (random values
 #     generated when they have no version), crawler-api-tls-key,
 #     crawler-api-tls-cert (a self-signed P-256 certificate for the static
@@ -314,19 +315,9 @@ iam() {
   project_binding "$DRILL_SA" roles/logging.logWriter
   project_binding "$DRILL_SA" roles/monitoring.metricWriter
 
-  local p="projects/$PROJECT_ID/zones/$ZONE"
-  cat >"$WORK/drill-condition.json" <<EOF
-{
-  "title": "crawler-drill-only",
-  "description": "Only instances and disks named crawler-drill-*, from the drill template",
-  "expression": "(resource.type == \"compute.googleapis.com/Instance\" && resource.name.startsWith(\"$p/instances/crawler-drill-\")) || (resource.type == \"compute.googleapis.com/Disk\" && resource.name.startsWith(\"$p/disks/crawler-drill-\")) || (resource.type == \"compute.googleapis.com/InstanceTemplate\" && resource.name.endsWith(\"/instanceTemplates/$DRILL_TEMPLATE\")) || (resource.type != \"compute.googleapis.com/Instance\" && resource.type != \"compute.googleapis.com/Disk\" && resource.type != \"compute.googleapis.com/InstanceTemplate\")"
-}
-EOF
-  g projects add-iam-policy-binding "$PROJECT_ID" --member="serviceAccount:$RUNTIME_SA" \
-    --role="projects/$PROJECT_ID/roles/$DRILL_ROLE" --condition-from-file="$WORK/drill-condition.json" >/dev/null
-  # crawler-runtime may launch the drill VM as crawler-drill (and nothing else)
-  g iam service-accounts add-iam-policy-binding "$DRILL_SA" --member="serviceAccount:$RUNTIME_SA" \
-    --role=roles/iam.serviceAccountUser >/dev/null
+  # Not yet: the conditional voyagerCrawlerDrill binding and serviceAccountUser
+  # on crawler-drill. They let the VM create instances, so they arrive with the
+  # monthly Spot restore drill that uses them, not before (go-live review).
 
   for s in "${SECRETS[@]}"; do
     g secrets add-iam-policy-binding "$s" --member="serviceAccount:$RUNTIME_SA" \
@@ -337,14 +328,8 @@ EOF
   g secrets add-iam-policy-binding crawler-api-tls-cert --member="serviceAccount:$APP_SA" \
     --role=roles/secretmanager.secretAccessor >/dev/null
 
-  # Vertex batch prediction reads its input and writes its output in -ops/batch/
-  g beta services identity create --service=aiplatform.googleapis.com >/dev/null
-  PLACEHOLDER="<project-number>"
-  local num
-  num="$(gv projects describe "$PROJECT_ID" --format='value(projectNumber)')"
-  g storage buckets add-iam-policy-binding "gs://$OPS_BUCKET" \
-    --member="serviceAccount:service-$num@gcp-sa-aiplatform.iam.gserviceaccount.com" \
-    --role=roles/storage.objectUser >/dev/null
+  # No Vertex AI service-agent binding on -ops: batch prediction is not wired.
+  # When it is, grant roles/storage.objectUser conditioned on objects/batch/.
 }
 
 disk() {
