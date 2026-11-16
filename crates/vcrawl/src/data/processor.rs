@@ -239,6 +239,9 @@ impl Processor {
         let Some(c) = capture::load(pool, cref).await? else {
             return Ok(Outcome::Skipped(SkipReason::Missing));
         };
+        // The committed (microsecond) reference, not the payload's nanosecond one.
+        let stored_ref = c.meta.capture_ref();
+        let cref = &stored_ref;
         if c.meta.role != CaptureRole::Primary {
             return Ok(Outcome::Skipped(SkipReason::NotPrimary));
         }

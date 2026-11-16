@@ -756,3 +756,36 @@ async fn capture_body_still_missing_after_reload_is_transient() {
     let e = r.proc.process(&c).await.unwrap_err();
     assert_eq!(e.class(), vc_core::ErrorClass::Transient, "{e}");
 }
+/// A fetcher stamps `captured_at` with `Utc::now()` (nanoseconds on Linux). Postgres keeps
+/// microseconds, rounding, while the `capture_ready` payload carries the original nanosecond
+/// string; the capture must still be found and processed (it was silently skipped as
+/// `Missing` whenever the sub-microsecond part rounded up: the E2E flake).
+#[tokio::test]
+async fn nanosecond_captured_at_is_still_processed() {
+    let r = rig(&["events-test"], RigOpts::default()).await;
+    for (i, ns) in [123_456_789_u32, 123_456_499, 999_999_999, 500]
+        .into_iter()
+        .enumerate()
+    {
+        let url = format!("{EVENT_URL}-{i}");
+        let t = at(i as i64) + chrono::Duration::nanoseconds(i64::from(ns));
+        let cref = commit(
+            &r.pool,
+            &r.blobs,
+            Cap::html(&url, "events-test", &fixture("event_v1.html"), t),
+        )
+        .await;
+        let o = r.proc.process(&cref).await.unwrap();
+        let (report, ..) = processed(&o);
+        assert_eq!(report.inserted, 1, "{ns} ns: {o:?}");
+        let pol: i64 = count(
+            &r.pool,
+            &format!(
+                "SELECT count(*) FROM captures WHERE capture_id = '{}' AND use_policy_final IS NOT NULL",
+                cref.capture_id
+            ),
+        )
+        .await;
+        assert_eq!(pol, 1, "{ns} ns: final use policy recorded");
+    }
+}
