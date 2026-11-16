@@ -185,42 +185,49 @@ fn contains(hay: &[u8], needle: &[u8]) -> bool {
     !needle.is_empty() && hay.windows(needle.len()).any(|w| w == needle)
 }
 
-/// `private_ip_blocked`: the trap server on [`sites::PRIVATE_IP`] (reachable from the
-/// fetcher's network) saw no request at all, while the crawl did reach both things that try
-/// it: the SPA script's `fetch('http://10.0.0.5/internal')` and the blog's redirect to it.
-pub fn private_ip_blocked(log: &RequestLog, trap: &RequestLog) -> Outcome {
-    let mut problems: Vec<String> = trap
-        .entries()
-        .iter()
-        .map(|e| {
-            format!(
-                "the private IP {} was requested: {} (UA {:?}) at {}",
-                sites::PRIVATE_IP,
-                e.url,
-                e.ua,
-                e.started_at
-            )
-        })
-        .collect();
+/// `private_ip_blocked`: the traps on [`sites::PRIVATE_IP`] and [`sites::METADATA_IP`]
+/// (both reachable from the fetcher's networks) saw no request at all, while the crawl did
+/// reach what tries them: the SPA script's `fetch`es of both and the blog's redirect to the
+/// private IP.
+///
+/// `traps`: `(ip, that trap's request log)`.
+pub fn private_ip_blocked(log: &RequestLog, traps: &[(&str, RequestLog)]) -> Outcome {
+    let mut problems = Vec::new();
+    for (ip, trap) in traps {
+        for e in trap.entries() {
+            problems.push(format!(
+                "{ip} was requested: {} (UA {:?}) at {}",
+                e.url, e.ua, e.started_at
+            ));
+        }
+    }
+    for ip in [sites::PRIVATE_IP, sites::METADATA_IP] {
+        if !traps.iter().any(|(t, _)| *t == ip) {
+            problems.push(format!(
+                "no trap log for {ip}: the check would prove nothing"
+            ));
+        }
+    }
     let script = requested(log, sites::CDN, "/js/app.js")
         .iter()
         .any(|e| e.status == 200);
     let redirect = !requested(log, sites::BLOG, "/go/internal").is_empty();
     if !script && !redirect {
         problems.push(
-            "neither the SPA script nor the blog's /go/internal redirect was fetched: nothing tried the private IP"
+            "neither the SPA script nor the blog's /go/internal redirect was fetched: nothing tried the traps"
                 .into(),
         );
     }
-    let tried: Vec<&str> = [(script, "SPA script fetch"), (redirect, "redirect")]
+    let tried: Vec<&str> = [(script, "SPA script fetches"), (redirect, "redirect")]
         .iter()
         .filter(|(b, _)| *b)
         .map(|(_, s)| *s)
         .collect();
+    let ips: Vec<&str> = traps.iter().map(|(ip, _)| *ip).collect();
     Outcome::from_problems(
         format!(
-            "trap at {} saw nothing; exercised by: {}",
-            sites::PRIVATE_IP,
+            "traps at {} saw nothing; exercised by: {}",
+            ips.join(", "),
             tried.join(", ")
         ),
         problems,
@@ -660,9 +667,16 @@ mod tests {
         );
     }
 
+    fn empty_traps() -> Vec<(&'static str, RequestLog)> {
+        vec![
+            (sites::PRIVATE_IP, RequestLog::new()),
+            (sites::METADATA_IP, RequestLog::new()),
+        ]
+    }
+
     #[test]
-    fn private_ip_blocked_passes_an_empty_trap_when_exercised() {
-        let o = private_ip_blocked(&spa_log(), &RequestLog::new());
+    fn private_ip_blocked_passes_empty_traps_when_exercised() {
+        let o = private_ip_blocked(&spa_log(), &empty_traps());
         assert!(
             matches!(&o, Outcome::Pass(m) if m.contains("SPA script")),
             "{o}"
@@ -671,26 +685,45 @@ mod tests {
 
     #[test]
     fn private_ip_blocked_fails_any_trap_request() {
-        let trap = log(vec![e("10.0.0.5", "http://10.0.0.5/internal", 5, 404)]);
-        let o = private_ip_blocked(&spa_log(), &trap);
+        let mut traps = empty_traps();
+        traps[0].1 = log(vec![e("10.0.0.5", "http://10.0.0.5/internal", 5, 404)]);
+        let o = private_ip_blocked(&spa_log(), &traps);
         assert!(
             matches!(&o, Outcome::Fail(m) if m.contains("10.0.0.5/internal")),
+            "{o}"
+        );
+        let mut traps = empty_traps();
+        traps[1].1 = log(vec![e(
+            "169.254.169.254",
+            "http://169.254.169.254/computeMetadata/v1/",
+            5,
+            404,
+        )]);
+        let o = private_ip_blocked(&spa_log(), &traps);
+        assert!(
+            matches!(&o, Outcome::Fail(m) if m.contains("computeMetadata")),
             "{o}"
         );
     }
 
     #[test]
     fn private_ip_blocked_is_not_vacuous() {
-        let o = private_ip_blocked(&RequestLog::new(), &RequestLog::new());
+        let o = private_ip_blocked(&RequestLog::new(), &empty_traps());
         assert!(
             matches!(&o, Outcome::Fail(m) if m.contains("nothing tried")),
             "{o}"
         );
         let l = log(vec![e("blog.test", "http://blog.test/go/internal", 0, 302)]);
         assert!(matches!(
-            private_ip_blocked(&l, &RequestLog::new()),
+            private_ip_blocked(&l, &empty_traps()),
             Outcome::Pass(_)
         ));
+        let only_one = vec![(sites::PRIVATE_IP, RequestLog::new())];
+        let o = private_ip_blocked(&spa_log(), &only_one);
+        assert!(
+            matches!(&o, Outcome::Fail(m) if m.contains("no trap log for 169.254.169.254")),
+            "{o}"
+        );
     }
 
     fn vr(id: i64, v: i32, hash: u8, cap: &str) -> VersionRow {

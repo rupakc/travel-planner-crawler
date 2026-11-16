@@ -14,6 +14,8 @@
 #   trapnet  10.0.0.0/24 with the trap (a second fake_web) on 10.0.0.5, the private IP the
 #            blog redirects to and the SPA's script fetches. The fetchers can route to it, so
 #            only the SSRF guard keeps them out; the runner asserts its log stays empty.
+#   metanet  169.254.169.0/24 with a second trap on 169.254.169.254, the metadata server
+#            address the SPA's script fetches. Same rule: its log must stay empty.
 #   render   Chromium and the fetchers (CDP). Chromium has no other network: every request
 #            it makes is paused and answered by the fetcher (spec §17.1).
 #   store    fake GCS, fake Gemini, the roles, the runner.
@@ -103,6 +105,18 @@ services:
       trapnet:
         ipv4_address: 10.0.0.5
 
+  trap-metadata:
+    <<: *fake
+    command: ["fake_web", "--listen", "0.0.0.0:80"]
+    healthcheck:
+      test: ["CMD", "curl", "-fsS", "http://127.0.0.1:80/__admin/health"]
+      interval: 2s
+      timeout: 3s
+      retries: 30
+    networks:
+      metanet:
+        ipv4_address: 169.254.169.254
+
   fake-gemini:
     <<: *fake
     command: ["fake_gemini", "--listen", "0.0.0.0:8080", "--gcs-url", "http://fake-gcs:4443", "--buckets", "e2e-batch"]
@@ -136,7 +150,7 @@ services:
     environment:
       <<: *vcrawl-env
       VC_VCRAWL_INSTANCE: scheduler
-    networks: [db, store, web, trapnet]
+    networks: [db, store, web, trapnet, metanet]
 
   fetcher-a:
     <<: *vcrawl
@@ -148,7 +162,7 @@ services:
     depends_on:
       postgres: { condition: service_healthy }
       chromium: { condition: service_started }
-    networks: [db, store, web, trapnet, render]
+    networks: [db, store, web, trapnet, metanet, render]
 
   fetcher-b:
     <<: *vcrawl
@@ -160,7 +174,7 @@ services:
     depends_on:
       postgres: { condition: service_healthy }
       chromium: { condition: service_started }
-    networks: [db, store, web, trapnet, render]
+    networks: [db, store, web, trapnet, metanet, render]
 
   processor:
     <<: *vcrawl
@@ -209,6 +223,7 @@ services:
       E2E_DATABASE_URL: postgres://vcrawl:e2e@postgres:5432/vcrawl
       E2E_FAKE_WEB: http://fake-web
       E2E_TRAP: http://trap
+      E2E_TRAP_METADATA: http://trap-metadata
       E2E_GCS: http://fake-gcs:4443
       E2E_BUCKETS: e2e-raw,e2e-ops,e2e-batch
       E2E_API: https://api:8443
@@ -220,7 +235,7 @@ services:
       E2E_CYCLES: ${E2E_CYCLES:-3}
       E2E_CYCLE_SECS: ${E2E_CYCLE_SECS:-60}
       E2E_DRAIN_SECS: ${E2E_DRAIN_SECS:-60}
-    networks: [db, store, web, trapnet, apinet]
+    networks: [db, store, web, trapnet, metanet, apinet]
 
 networks:
   db: { internal: true }
@@ -236,3 +251,7 @@ networks:
     internal: true
     ipam:
       config: [{ subnet: 10.0.0.0/24 }]
+  metanet:
+    internal: true
+    ipam:
+      config: [{ subnet: 169.254.169.0/24 }]

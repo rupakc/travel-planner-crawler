@@ -61,7 +61,7 @@ trap cleanup EXIT
 
 # --- infrastructure ------------------------------------------------------------------------
 log "starting postgres, fakes and chromium"
-dc up -d --wait --wait-timeout 120 postgres fake-web trap
+dc up -d --wait --wait-timeout 120 postgres fake-web trap trap-metadata
 dc up -d fake-gcs fake-gemini chromium
 
 missing=()
@@ -130,6 +130,7 @@ done
 curl_admin() { dc --profile tools run --rm --entrypoint curl runner -fsS "$1"; }
 curl_admin http://fake-web/__admin/log >"$out/fake-web.jsonl" 2>/dev/null || true
 curl_admin http://trap/__admin/log >"$out/trap.jsonl" 2>/dev/null || true
+curl_admin http://trap-metadata/__admin/log >"$out/trap-metadata.jsonl" 2>/dev/null || true
 
 if [[ -f "$out/summary.md" ]]; then
   cat "$out/summary.md"

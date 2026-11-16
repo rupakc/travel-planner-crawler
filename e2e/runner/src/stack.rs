@@ -22,6 +22,8 @@ pub struct Env {
     pub fake_web: String,
     /// `E2E_TRAP` (admin base URL of the private-IP trap).
     pub trap: String,
+    /// `E2E_TRAP_METADATA` (admin base URL of the metadata-IP trap).
+    pub trap_metadata: String,
     /// `E2E_GCS` (fake-gcs-server base URL).
     pub gcs: String,
     /// `E2E_BUCKETS` (comma-separated; the first is the raw bucket).
@@ -45,6 +47,7 @@ impl Env {
             database_url: var("E2E_DATABASE_URL")?,
             fake_web: var("E2E_FAKE_WEB")?.trim_end_matches('/').into(),
             trap: var("E2E_TRAP")?.trim_end_matches('/').into(),
+            trap_metadata: var("E2E_TRAP_METADATA")?.trim_end_matches('/').into(),
             gcs: var("E2E_GCS")?.trim_end_matches('/').into(),
             buckets: var("E2E_BUCKETS")?
                 .split(',')

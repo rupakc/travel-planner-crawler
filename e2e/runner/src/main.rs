@@ -59,6 +59,7 @@ async fn run() -> Result<()> {
     let pool = stack::pg(&env.database_url).await?;
     let web = FakeWebAdmin::new(&env.fake_web);
     let trap = FakeWebAdmin::new(&env.trap);
+    let trap_meta = FakeWebAdmin::new(&env.trap_metadata);
 
     let crawling = !["scheduler", "fetcher"]
         .iter()
@@ -102,7 +103,7 @@ async fn run() -> Result<()> {
     for spec in ASSERTIONS {
         let outcome = match roles.gate(&spec) {
             Some(o) => o,
-            None => evaluate(spec.name, &env, &pool, &web, &trap)
+            None => evaluate(spec.name, &env, &pool, &web, &[&trap, &trap_meta])
                 .await
                 .unwrap_or_else(|e| Outcome::Fail(format!("could not gather evidence: {e:#}"))),
         };
@@ -124,7 +125,7 @@ async fn evaluate(
     env: &Env,
     pool: &sqlx::PgPool,
     web: &FakeWebAdmin,
-    trap: &FakeWebAdmin,
+    traps: &[&FakeWebAdmin; 2],
 ) -> Result<Outcome> {
     Ok(match name {
         "polite" => checks::polite(&web.log().await?, &web.snapshot().await?),
@@ -150,7 +151,13 @@ async fn evaluate(
             let bodies = stack::render_captures(pool, &store, sites::SPA).await?;
             checks::spa_rendered(&web.log().await?, &bodies)
         }
-        "private_ip_blocked" => checks::private_ip_blocked(&web.log().await?, &trap.log().await?),
+        "private_ip_blocked" => checks::private_ip_blocked(
+            &web.log().await?,
+            &[
+                (sites::PRIVATE_IP, traps[0].log().await?),
+                (sites::METADATA_IP, traps[1].log().await?),
+            ],
+        ),
         "two_fetchers" => checks::two_fetchers(&stack::fetcher_instances(pool).await?),
         other => Outcome::Fail(format!("unknown assertion {other}")),
     })

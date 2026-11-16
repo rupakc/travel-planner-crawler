@@ -41,6 +41,10 @@ fn the_trap_sits_on_the_sites_private_ip_and_fetchers_can_route_to_it() {
         service(&c, "trap")["networks"]["trapnet"]["ipv4_address"].as_str(),
         Some(sites::PRIVATE_IP)
     );
+    assert_eq!(
+        service(&c, "trap-metadata")["networks"]["metanet"]["ipv4_address"].as_str(),
+        Some(sites::METADATA_IP)
+    );
     for f in ["fetcher-a", "fetcher-b"] {
         let nets: Vec<&str> = service(&c, f)["networks"]
             .as_sequence()
@@ -48,7 +52,7 @@ fn the_trap_sits_on_the_sites_private_ip_and_fetchers_can_route_to_it() {
             .iter()
             .map(|v| v.as_str().unwrap())
             .collect();
-        for n in ["trapnet", "web", "render", "db", "store"] {
+        for n in ["trapnet", "metanet", "web", "render", "db", "store"] {
             assert!(nets.contains(&n), "{f} is not on {n}");
         }
     }
