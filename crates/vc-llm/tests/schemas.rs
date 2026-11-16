@@ -39,7 +39,10 @@ fn check(node: &Value, at: &str) {
         .as_object()
         .unwrap_or_else(|| panic!("{at}: not an object"));
     for (k, v) in obj {
-        assert!(ALLOWED.contains(&k.as_str()), "{at}: keyword {k} not allowed");
+        assert!(
+            ALLOWED.contains(&k.as_str()),
+            "{at}: keyword {k} not allowed"
+        );
         match k.as_str() {
             "type" => assert!(
                 v.as_str().is_some_and(|t| TYPES.contains(&t)),
@@ -82,8 +85,18 @@ fn every_kind_schema_converts_to_vertex_subset() {
         check(&v, &name);
         assert_eq!(v["type"], "OBJECT", "{name}: top level is an object");
         let text = v.to_string();
-        for banned in ["$schema", "$id", "$ref", "$defs", "additionalProperties", "pattern"] {
-            assert!(!text.contains(&format!("\"{banned}\"")), "{name}: {banned} left");
+        for banned in [
+            "$schema",
+            "$id",
+            "$ref",
+            "$defs",
+            "additionalProperties",
+            "pattern",
+        ] {
+            assert!(
+                !text.contains(&format!("\"{banned}\"")),
+                "{name}: {banned} left"
+            );
         }
         n += 1;
     }
