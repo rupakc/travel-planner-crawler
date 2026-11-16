@@ -2,7 +2,7 @@
 
 **Purpose.** The internal `/v1` read API for the Voyager backend. An axum router over the
 `IndexReader` and `PlaceResolver` traits. The frozen contract is
-`crates/vc-api/docs/Crawler-API.md`; a guide is on [Read API](Read-API).
+`docs/Crawler-API.md`; a guide is on [Read API](Read-API).
 
 Path: `crates/vc-api`. Dependencies: `axum`, `axum-server` (TLS), `tower-http`, `utoipa`
 (OpenAPI), `argon2`, `sqlx`. Migration block `16xx` (no migration needed: `api_clients` and

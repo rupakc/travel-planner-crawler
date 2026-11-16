@@ -2,7 +2,7 @@
 
 The crawler serves its data to the Voyager backend through a private, read-only HTTP API
 under `/v1`. The full, frozen contract is
-[`crates/vc-api/docs/Crawler-API.md`](https://github.com/rupakc/travel-planner-crawler/blob/main/crates/vc-api/docs/Crawler-API.md);
+[`docs/Crawler-API.md`](https://github.com/rupakc/travel-planner-crawler/blob/main/docs/Crawler-API.md);
 this page is a short guide.
 
 ## Who can reach it

@@ -35,8 +35,10 @@ For the requested URL and each redirect hop:
 - robots.txt bodies are truncated at 500 KiB instead of failing.
 - Conditional GET: a 304 is returned as such, so the caller writes a revisit.
 
-**Streams** (`PermitClient::stream`, for dumps) check the deadline before every chunk.
-Callers must `Frontier::extend` before streaming a long dump.
+**Streams** (`PermitClient::stream`, for dumps) hold the permit's `DeadlineHandle`: they
+check the current deadline before every chunk, see a `Frontier::extend` made after the
+stream opened, and record when the body ended for pacing. The handle cannot move the
+deadline or make requests.
 
 ## Key items
 

@@ -20,6 +20,7 @@ Path: `crates/vc-frontier`. Dependency: `sqlx`. Migration block `11xx` (tables a
 | `complete(permit, outcome)` | applies URL results, updates EWMA, delay, back-off or park; releases the lease; schedules the key |
 | `enqueue(batch)` | batched `INSERT … ON CONFLICT DO NOTHING`, sorted to avoid deadlocks; creates missing keys and origins |
 | `park(key, reason)` | the park ladder |
+| `reschedule(url, at)` | forces a refetch of one URL no later than `at` (for example after an upstream change signal); only the URL's own schedule moves, so the key's delay, parks, budget and rate tokens still apply (trigger in migration `1101`) |
 | `robots(origin)`, `store_robots(permit, entry)` | the robots.txt cache; storing is lease-checked |
 | `schedule::delay_ms`, `ewma`, `park_for`, `next_key_state` | pure scheduling math |
 | `estimator::change_rate`, `next_interval` | the Cho and Garcia-Molina change-rate estimator |
