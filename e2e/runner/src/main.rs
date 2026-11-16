@@ -90,9 +90,13 @@ async fn run() -> Result<()> {
                     break;
                 }
                 stack::make_new_due_now(&pool).await?;
-                // The last cycle (robots change) only needs its minimum time.
+                // A cycle ends once both changing pages were fetched in it, captured, and the
+                // processor has drained (so the new content is a version before the next
+                // cycle). The last cycle (robots change) waits for the same, so the final
+                // captures are processed before the assertions.
                 if el >= Duration::from_secs(min_secs)
-                    && (c + 1 == cycles || checks::changing_pages_fetched(&web.log().await?, since))
+                    && checks::changing_pages_fetched(&web.log().await?, since)
+                    && stack::changing_pages_processed(&pool, since).await?
                 {
                     break;
                 }
@@ -160,7 +164,13 @@ async fn evaluate(
             let (c, s, rv) = stack::raw_counts(pool).await?;
             checks::raw_first(&v, c, s, rv)
         }
-        "version_bump" => checks::version_bump(&stack::changing_versions(pool).await?),
+        "version_bump" => match checks::version_bump(&stack::changing_versions(pool).await?) {
+            Outcome::Fail(m) => {
+                let diag = stack::changing_pages_diagnostic(pool).await?;
+                Outcome::Fail(format!("{m}\n    {}", diag.join("\n    ")))
+            }
+            o => o,
+        },
         "api_provenance" => checks::api_provenance(&stack::api_evidence(env).await?),
         "challenge_parked" => checks::challenge_parked(
             &web.log().await?,

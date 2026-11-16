@@ -193,6 +193,68 @@ pub async fn make_new_due_now(pool: &PgPool) -> Result<u64> {
     Ok(r.rows_affected())
 }
 
+/// Whether every changing page has a committed primary capture at or after `since` and the
+/// processor has nothing pending: the cycle's new content is captured **and** processed.
+pub async fn changing_pages_processed(
+    pool: &PgPool,
+    since: chrono::DateTime<chrono::Utc>,
+) -> Result<bool> {
+    let urls: Vec<String> = CHANGING_PAGES.iter().map(|s| s.to_string()).collect();
+    let (n,): (i64,) = sqlx::query_as(
+        "SELECT count(DISTINCT url) FROM captures
+         WHERE role = 'primary' AND url = ANY($1) AND captured_at >= $2",
+    )
+    .bind(&urls)
+    .bind(since)
+    .fetch_one(pool)
+    .await?;
+    Ok(n == i64::try_from(urls.len())? && backlog(pool).await? == 0)
+}
+
+/// `(url, captured_at, status, payload hash prefix, revisit, versions built)`.
+type CaptureDiag = (
+    String,
+    chrono::DateTime<chrono::Utc>,
+    Option<i16>,
+    Option<String>,
+    bool,
+    i64,
+);
+
+/// Per changing page: its primary captures and the record versions built from them (URLs,
+/// times, hashes and states only), for a `version_bump` failure.
+pub async fn changing_pages_diagnostic(pool: &PgPool) -> Result<Vec<String>> {
+    let urls: Vec<String> = CHANGING_PAGES.iter().map(|s| s.to_string()).collect();
+    let rows: Vec<CaptureDiag> = sqlx::query_as(
+        "SELECT c.url, c.captured_at, c.status, left(encode(c.payload_hash, 'hex'), 12),
+                    c.revisit_of_id IS NOT NULL,
+                    (SELECT count(*) FROM record_versions rv
+                      WHERE rv.capture_id = c.capture_id AND rv.captured_at = c.captured_at)
+             FROM captures c WHERE c.role = 'primary' AND c.url = ANY($1) ORDER BY 1, 2",
+    )
+    .bind(&urls)
+    .fetch_all(pool)
+    .await?;
+    let mut out: Vec<String> = rows
+        .into_iter()
+        .map(|(u, at, st, h, rev, nv)| {
+            format!(
+                "capture {u} at {at} status {st:?} payload {h:?} revisit {rev} -> {nv} version(s)"
+            )
+        })
+        .collect();
+    let items: Vec<(String, String, i64, Option<String>)> = sqlx::query_as(
+        "SELECT kind, state, count(*), left(max(last_error), 200) FROM work_items
+         GROUP BY 1, 2 ORDER BY 1, 2",
+    )
+    .fetch_all(pool)
+    .await?;
+    for (k, st, n, err) in items {
+        out.push(format!("work_items {k} {st}: {n} (last error {err:?})"));
+    }
+    Ok(out)
+}
+
 /// Ready or leased work items (the processor's backlog).
 pub async fn backlog(pool: &PgPool) -> Result<i64> {
     let (n,): (i64,) =
