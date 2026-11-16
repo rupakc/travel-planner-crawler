@@ -462,8 +462,18 @@ async fn raw_stage(
 ) -> anyhow::Result<(u64, u64)> {
     let doomed = match sel {
         // The scope fixed at the index stage (the scrubbed data no longer names the author).
+        // Plus the dump chunks that hold the author's posts.
         PurgeSelector::Author(a) => {
-            author::captures(pool, &author::scope(pool, id, a).await?).await?
+            let mut d = author::captures(pool, &author::scope(pool, id, a).await?).await?;
+            for x in author::dump_captures(pool, store, a).await? {
+                if !d
+                    .iter()
+                    .any(|y| y.capture.capture_id == x.capture.capture_id)
+                {
+                    d.push(x);
+                }
+            }
+            d
         }
         sel => match captures_for(pool, sel).await? {
             Some(d) => d,

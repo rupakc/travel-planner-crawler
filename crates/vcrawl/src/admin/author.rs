@@ -20,7 +20,9 @@
 //!   matched records is touched (a city or another user sharing the string stays).
 //! * **Raw scope:** the captures that produced a version of a matched record, plus every capture
 //!   of the records' URLs and of those captures' URLs, so a later capture that only re-saw
-//!   (touched) a record is cut out as well (for a dump that is every dump capture).
+//!   (touched) a record is cut out as well; plus every output chunk of an author-keeping dump
+//!   adapter ([`AUTHOR_DUMP_ADAPTERS`]) that holds a post attributed to the author (found by
+//!   reading the chunk: the extracted records of such dumps carry no author at all).
 
 use std::collections::BTreeSet;
 
@@ -32,6 +34,9 @@ use vc_core::RecordId;
 use vc_core::index::{PurgeSelector, RecordSink, TombstoneReason};
 
 use super::purge::{DoomedCapture, REMOVED};
+
+/// Dump adapters whose output keeps post authors (as the `attribution.author` of each post).
+pub const AUTHOR_DUMP_ADAPTERS: &[&str] = &["adapter:se_travel_dump"];
 
 /// Prefix of a hashed author selector.
 pub const HASH_PREFIX: &str = "sha256:";
@@ -110,15 +115,25 @@ impl Matcher {
         sha256_hex(s) == self.hex
     }
 
+    /// The object is a post by the author: its `author` (or `author.name`) is the author, or
+    /// its `attribution` names them (the dump shape).
     fn attributed(&self, m: &serde_json::Map<String, Value>) -> bool {
-        match m.get("author") {
+        let named = |v: Option<&Value>| match v {
             Some(Value::String(s)) => self.is(s),
             Some(Value::Object(o)) => o
                 .get("name")
                 .and_then(Value::as_str)
                 .is_some_and(|s| self.is(s)),
             _ => false,
-        }
+        };
+        named(m.get("author"))
+            || matches!(m.get("attribution"), Some(Value::Object(a)) if named(a.get("author")))
+    }
+
+    /// Whether `v` holds anything attributed to the author (see [`Self::redact_data`]).
+    pub fn mentions(&self, v: &Value) -> bool {
+        let mut c = v.clone();
+        self.redact_data(&mut c)
     }
 
     /// Redacts the author's posts in `v`: every string of an object attributed to the author
@@ -360,6 +375,55 @@ pub async fn captures(pool: &PgPool, sc: &AuthorScope) -> anyhow::Result<Vec<Doo
             })
         })
         .collect()
+}
+
+/// The output chunks of author-keeping dump adapters that hold a post attributed to the author
+/// (each chunk is read once per run; a chunk whose object is gone is skipped).
+pub async fn dump_captures(
+    pool: &PgPool,
+    store: &dyn vc_core::store::BlobStore,
+    author: &str,
+) -> anyhow::Result<Vec<DoomedCapture>> {
+    let m = Matcher::new(author);
+    let rows = sqlx::query(
+        "SELECT c.capture_id, c.captured_at, s.segment_id, s.path, s.cdxj_path,
+                c.warc_offset, c.warc_length
+         FROM captures c JOIN segments s ON s.segment_id = c.segment_id
+         WHERE s.purged_at IS NULL AND c.fetch_mode = ANY($1)
+         ORDER BY s.segment_id, c.capture_id",
+    )
+    .bind(AUTHOR_DUMP_ADAPTERS)
+    .fetch_all(pool)
+    .await?;
+    let mut out = Vec::new();
+    for r in rows {
+        let path: String = r.get("path");
+        let (off, len): (i64, i64) = (r.get("warc_offset"), r.get("warc_length"));
+        let recs =
+            match vc_store::read_capture(store, &path, u64::try_from(off)?, u64::try_from(len)?)
+                .await
+            {
+                Ok(recs) => recs,
+                Err(vc_core::Error::NotFound(_)) => continue,
+                Err(e) => return Err(e.into()),
+            };
+        let hit = recs.iter().any(|w| {
+            w.warc_type() == Some("resource")
+                && serde_json::from_slice::<Value>(&w.block).is_ok_and(|v| m.mentions(&v))
+        });
+        if hit {
+            out.push(DoomedCapture {
+                capture: vc_core::CaptureRef {
+                    capture_id: r.get::<String, _>("capture_id").parse()?,
+                    captured_at: r.get("captured_at"),
+                },
+                segment_id: r.get("segment_id"),
+                path,
+                cdxj_path: r.get("cdxj_path"),
+            });
+        }
+    }
+    Ok(out)
 }
 
 /// Scrubs the author from the matched records (and only them), their observations, held

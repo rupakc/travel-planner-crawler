@@ -355,3 +355,61 @@ async fn reingested_dump_leaves_no_trace_of_a_purged_author() {
     .expect("records");
     assert_eq!(served, vec!["22".to_string()]);
 }
+
+/// B3: the extracted records of a forum dump carry no author, so the author's posts live only
+/// in the dump's output chunks (`attribution.author` per post). The chunks holding them are cut
+/// (with their text-tier rows); chunks without them stay.
+#[tokio::test]
+async fn author_purge_cuts_the_dump_chunks_holding_the_authors_posts() {
+    let pool = testkit::pg().await;
+    let store = MemBlobStore::new();
+    let dump_url =
+        "https://archive.org/download/stackexchange/travel.stackexchange.com.7z/Posts.xml";
+    let chunk = |hour: u32| {
+        let mut m = cap(dump_url, 8, hour);
+        m.fetch_mode = "adapter:se_travel_dump".parse().expect("mode");
+        m
+    };
+    let post = |id: u32, author: &str| {
+        serde_json::json!({
+            "id": id, "post_type": "answer", "body_html": "<p>stay in Wadi Musa</p>",
+            "attribution": {"author": author, "author_url": format!("https://travel.stackexchange.com/users/{id}")},
+        })
+    };
+    let (with, without) = (chunk(1), chunk(2));
+    let keep = without.capture_id;
+    commit_segment(
+        &pool,
+        &store,
+        SegmentId::at(at(8, 1)),
+        false,
+        &[
+            entry(
+                with,
+                &serde_json::json!([post(1, "Bob"), post(2, JORDAN)]).to_string(),
+            ),
+            entry(
+                without,
+                &serde_json::json!([post(3, "Bob"), post(4, "Jordanson")]).to_string(),
+            ),
+        ],
+    )
+    .await;
+    let id = request_purge(
+        &pool,
+        &PurgeSelector::Author(JORDAN.into()),
+        TombstoneReason::OptOut,
+        "t",
+    )
+    .await
+    .expect("request");
+    let out = process_purge(&pool, &store, id, at(9, 0))
+        .await
+        .expect("purge");
+    assert_eq!(out.captures_removed, 1, "{out:?}");
+    let caps: Vec<String> = sqlx::query_scalar("SELECT capture_id FROM captures")
+        .fetch_all(&pool)
+        .await
+        .expect("caps");
+    assert_eq!(caps, vec![keep.to_string()]);
+}
