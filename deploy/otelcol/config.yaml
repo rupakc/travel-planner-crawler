@@ -26,7 +26,8 @@ receivers:
           static_configs: [{ targets: ["maintenance:9464"] }]
         - job_name: fetcher
           scrape_interval: 60s
-          static_configs: [{ targets: ["fetcher:9464"] }]
+          # Bound to its metrics-network address only (deploy/compose.yaml).
+          static_configs: [{ targets: ["192.168.250.2:9464"] }]
         - job_name: processor
           scrape_interval: 60s
           static_configs: [{ targets: ["processor:9464"] }]

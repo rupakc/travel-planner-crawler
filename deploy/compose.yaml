@@ -146,7 +146,7 @@ services:
     logging:
       driver: json-file
       options: { max-size: "5m", max-file: "2" }
-    networks: [egress]
+    networks: [egress, metrics]
 
   scheduler:
     <<: *role
@@ -165,13 +165,21 @@ services:
       <<: *role-env
       VC_RENDER_CDP_URL: http://chromium:9222
       VC_STORE_SPOOL_DIR: /spool
+      # Stable instance: the spool dir (spool/fetcher-<instance>/) survives recreation.
+      VC_VCRAWL_INSTANCE: fetcher-a
+      # /metrics + /healthz only on the metrics network, never on `render` (Chromium).
+      VC_OBS_METRICS_ADDR: 192.168.250.2:9464
     volumes:
       - /var/lib/voyager-crawler/spool:/spool
     depends_on:
       postgres: { condition: service_healthy }
       chromium: { condition: service_started }
     deploy: { resources: { limits: { memory: 512m } } }
-    networks: [db, egress, render]
+    networks:
+      db: {}
+      egress: {}
+      render: {}
+      metrics: { ipv4_address: 192.168.250.2 }
 
   processor:
     <<: *role
@@ -227,5 +235,10 @@ secrets:
 networks:
   db: { internal: true }
   render: { internal: true }
+  # otelcol ↔ fetcher metrics only (the fetcher's /metrics is bound to its address here so
+  # the render network, which Chromium shares, cannot reach it).
+  metrics:
+    internal: true
+    ipam: { config: [{ subnet: 192.168.250.0/29 }] }
   egress: {}
   pgbackup: {}
