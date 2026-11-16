@@ -14,7 +14,10 @@
 //! 3. One `vc_commit_segment(jsonb)` transaction makes the captures visible and moves the
 //!    `url_state` validators (monotonic on `captured_at`).
 //! 4. Only then is the sealed spool file deleted. On start, [`SegmentRoller::tick`] replays every
-//!    sealed file; steps 2–3 are idempotent by segment id.
+//!    sealed file; steps 2–3 are idempotent by segment id, and with a [`CommitProbe`] a file
+//!    whose segment is already committed is deleted without uploading anything (a purge may
+//!    have rewritten the segment since). A file that fails on its own (damaged, conflicting
+//!    object) is skipped and quarantined after [`segment::QUARANTINE_AFTER`] tries.
 //!
 //! Until step 3 nothing derived from a capture is visible and the frontier keeps the **old**
 //! validators, so a crash can never produce a 304 for a body that is not stored.
@@ -22,7 +25,7 @@
 //! ## Failpoints
 //!
 //! With the `failpoints` feature (on in this crate's tests): `spool::before_fsync`,
-//! `spool::before_seal`, `segment::before_upload`, `segment::after_upload`,
+//! `spool::before_seal`, `spool::after_rename`, `segment::before_upload`, `segment::after_upload`,
 //! `segment::before_commit`, `segment::after_commit`.
 
 pub mod cdxj;
@@ -46,7 +49,7 @@ pub use crate::fs::FsBlobStore;
 pub use crate::gcs::{GcsBlobStore, GcsOptions};
 pub use crate::purge::{SegmentRewrite, finish_rewrite, rewrite_segment_without};
 pub use crate::segment::{
-    BuiltSegment, SegmentRoller, build_segment, read_capture, read_cdxj, read_segment,
+    BuiltSegment, CommitProbe, SegmentRoller, build_segment, read_capture, read_cdxj, read_segment,
 };
 pub use crate::spool::{SealedSpool, Spool, SpoolEntry, SpoolOptions};
 

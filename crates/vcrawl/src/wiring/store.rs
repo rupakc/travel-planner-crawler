@@ -29,20 +29,24 @@ pub fn spool_dir(cfg: &Config, role: &str, instance: &str) -> PathBuf {
     PathBuf::from(&cfg.store.spool_dir).join(format!("{role}-{safe}"))
 }
 
-/// Opens this instance's spool (truncating torn tails) and builds its roller.
+/// Opens this instance's spool (truncating torn tails) and builds its roller. The committer
+/// is also the roller's commit probe, so a replayed sealed file of a committed segment is
+/// never uploaded again.
 pub fn spool_and_roller(
     cfg: &Config,
     dir: PathBuf,
     store: Arc<dyn BlobStore>,
-    committer: Arc<dyn SegmentCommitter>,
+    committer: Arc<PgSegmentCommitter>,
     clock: Arc<dyn Clock>,
 ) -> Result<(Spool, Arc<SegmentRoller>)> {
     let spool = Spool::open(dir, SpoolOptions::from(&cfg.store), clock.clone())?;
-    let roller = SegmentRoller::new(spool.clone(), store, committer, clock, &cfg.store);
+    let c: Arc<dyn SegmentCommitter> = committer.clone();
+    let roller =
+        SegmentRoller::new(spool.clone(), store, c, clock, &cfg.store).with_commit_probe(committer);
     Ok((spool, Arc::new(roller)))
 }
 
 /// The production committer (`vc_commit_segment`).
-pub fn committer(pool: PgPool) -> Arc<dyn SegmentCommitter> {
+pub fn committer(pool: PgPool) -> Arc<PgSegmentCommitter> {
     Arc::new(PgSegmentCommitter::new(pool))
 }
