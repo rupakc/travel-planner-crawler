@@ -65,6 +65,8 @@ pub struct VoyagerPolicy {
     pub config: PolicyConfig,
     deny: DenyMatcher,
     subresource_hosts: Vec<String>,
+    /// Allowed CDP resource types (lower-case) per allowlisted host.
+    subresource_types: HashMap<String, Vec<String>>,
     memo: Memo,
 }
 
@@ -96,10 +98,23 @@ impl VoyagerPolicy {
             return Err(invalid("subresource allowlist", "version must be 1"));
         }
         let subresource_hosts = allow.hosts.iter().map(|h| norm_host(&h.host)).collect();
+        let subresource_types = allow
+            .hosts
+            .iter()
+            .map(|h| {
+                let types = h
+                    .types
+                    .iter()
+                    .map(|t| t.trim().to_ascii_lowercase())
+                    .collect();
+                (norm_host(&h.host), types)
+            })
+            .collect();
         Ok(VoyagerPolicy {
             config,
             deny,
             subresource_hosts,
+            subresource_types,
             memo: Memo::default(),
         })
     }
@@ -151,6 +166,18 @@ impl VoyagerPolicy {
             .ai_bot_tokens
             .iter()
             .any(|t| p.names_agent(t) && p.rules_for(t).blocks_root())
+    }
+
+    /// Whether a render may load a sub-resource of CDP type `kind` (`script`, `stylesheet`,
+    /// `xhr`, `fetch`…, case-insensitive) from the third-party `host`: the host is on
+    /// `policy/subresource_allowlist.yaml` with that type in its `types`, and not denylisted.
+    pub fn subresource_allowed(&self, host: &str, kind: &str) -> bool {
+        let h = norm_host(host);
+        let kind = kind.trim().to_ascii_lowercase();
+        self.subresource_types
+            .get(&h)
+            .is_some_and(|types| types.contains(&kind))
+            && !self.deny.host_denied(&h)
     }
 
     /// Whether a bare host is covered by a host-wide (no `path_prefix`) denylist entry.

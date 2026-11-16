@@ -191,3 +191,21 @@ fn host_denied_ignores_path_entries() {
     assert!(!p.host_denied("www.google.com"));
     assert!(!p.host_denied("developers.booking.com"));
 }
+
+#[test]
+fn subresource_types_enforced() {
+    let p = policy();
+    assert!(p.subresource_allowed("cdnjs.cloudflare.com", "script"));
+    assert!(p.subresource_allowed("CDNJS.cloudflare.com.", "Stylesheet"));
+    assert!(p.subresource_allowed("cdn.jsdelivr.net", "xhr"));
+    assert!(!p.subresource_allowed("cdnjs.cloudflare.com", "image"));
+    assert!(!p.subresource_allowed("cdnjs.cloudflare.com", "document"));
+    assert!(p.subresource_allowed("ajax.googleapis.com", "script"));
+    assert!(!p.subresource_allowed("ajax.googleapis.com", "xhr"));
+    assert!(!p.subresource_allowed("ajax.googleapis.com", "fetch"));
+    assert!(p.subresource_allowed("fonts.googleapis.com", "stylesheet"));
+    assert!(!p.subresource_allowed("fonts.googleapis.com", "script"));
+    assert!(!p.subresource_allowed("fonts.gstatic.com", "font"));
+    assert!(!p.subresource_allowed("evil.cdnjs.cloudflare.com", "script"));
+    assert!(!p.subresource_allowed("www.booking.com", "script"));
+}
