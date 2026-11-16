@@ -9,6 +9,8 @@
 //!   await a second agreeing source are held in [`peers::PendingPeers`] (table `held_records`) and fed back as peers.
 //! * [`stale`]: records a newer capture of their page no longer contains become `stale`
 //!   (with provenance and a `changes` row) and are re-activated when they reappear.
+//! * [`text_tier`]: per committed segment, `text/YYYY/MM/<segment>.jsonl.zst` with each
+//!   capture's main text and structured data (create-if-absent, claimed per segment).
 //! * [`embed`]: the embedder loop (`pending_embeddings` → reserve → embed → store) and the
 //!   budgeted [`embed::BudgetQueryEmbedder`] used by search.
 //! * [`api`]: the [`vc_api::ApiState`] over Postgres (`PgIndex`, `PgApiStore`).
@@ -24,3 +26,4 @@ pub mod processor;
 pub mod shutdown;
 pub mod sources;
 pub mod stale;
+pub mod text_tier;
