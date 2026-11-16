@@ -108,8 +108,18 @@ pub async fn run(ctx: Ctx) -> anyhow::Result<()> {
             }
         };
         match text.tick(TEXT_SEGMENTS_PER_TICK).await {
-            Ok(0) => {}
-            Ok(_) => wait = Duration::ZERO,
+            Ok(t) => {
+                if t.written > 0 {
+                    wait = Duration::ZERO;
+                }
+                if !t.is_clean() {
+                    tracing::warn!(
+                        failed = t.failed.len(),
+                        written = t.written,
+                        "text tier tick had failed segments"
+                    );
+                }
+            }
             Err(e) => {
                 tracing::warn!(error_class = ?e.class(), error = %e, "text tier tick failed");
             }
