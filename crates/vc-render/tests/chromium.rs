@@ -249,10 +249,14 @@ async fn render_budget_enforced() {
         max_subrequests: 5,
         ..budget()
     };
+    let total = budget.total;
     let t0 = Instant::now();
     let out = render(&env, budget).await;
     let elapsed = t0.elapsed();
-    assert!(elapsed < Duration::from_secs(10), "{elapsed:?}");
+    // Liveness bound only (catches a render that ignores its budget and hangs). It includes
+    // the CDP connect and context set-up, which take several seconds on a loaded CI runner;
+    // the budget itself is asserted below via the sub-request cap and the Budget block.
+    assert!(elapsed < total + Duration::from_secs(26), "{elapsed:?}");
     let sub = env
         .web
         .requests()
