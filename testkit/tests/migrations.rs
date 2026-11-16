@@ -1,6 +1,6 @@
 //! Migration tests against a real pgvector/pgvector:pg17 (Task 0A, Step 2).
 
-use chrono::{DateTime, Duration, Utc};
+use chrono::{DateTime, Duration, SubsecRound, Utc};
 use sqlx::{PgPool, Row};
 use vc_core::frontier::Validators;
 use vc_core::media::{FetchMode, MediaType};
@@ -337,7 +337,8 @@ async fn commit_points_url_state_at_the_last_body_capture() {
     let pool = testkit::pg().await;
     let url = CanonicalUrl::parse("https://example.com/body").unwrap();
     seed_url(&pool, &url, 1).await;
-    let t = Utc::now() - Duration::minutes(30);
+    // Whole microseconds, as Postgres stores them (the bound and the JSON paths round alike).
+    let t = (Utc::now() - Duration::minutes(30)).trunc_subsecs(6);
     let to_us = |t: DateTime<Utc>| t.timestamp_micros();
 
     let c0 = manifest(&url, t, 1, "\"v1\"", 1);
@@ -409,7 +410,8 @@ async fn body_capture_backfill_resolves_revisit_chains() {
     let b = CanonicalUrl::parse("https://example.com/broken").unwrap();
     seed_url(&pool, &a, 1).await;
     seed_url(&pool, &b, 1).await;
-    let t = Utc::now() - Duration::minutes(30);
+    // Whole microseconds, as Postgres stores them (the bound and the JSON paths round alike).
+    let t = (Utc::now() - Duration::minutes(30)).trunc_subsecs(6);
     let c0 = manifest(&a, t, 1, "\"v1\"", 1);
     let r1 = revisit(
         manifest(&a, t + Duration::minutes(1), 2, "\"v1\"", 1),
