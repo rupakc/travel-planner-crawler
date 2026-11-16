@@ -30,7 +30,9 @@ fi
 ref="$IMAGE@$DIGEST"
 cosign sign --yes "$ref"
 cosign verify --certificate-identity "$CERT_IDENTITY" --certificate-oidc-issuer "$CERT_ISSUER" "$ref" >/dev/null
-docker buildx imagetools create --tag "$IMAGE:prod" "$ref"
+# --prefer-index=false: carbon-copy the signed manifest; the default wraps a
+# single manifest in a new index, so :prod would get an unsigned digest.
+docker buildx imagetools create --prefer-index=false --tag "$IMAGE:prod" "$ref"
 got="$(prod_digest)"
 [[ "$got" == "$DIGEST" ]] || { echo "::error::$IMAGE:prod is $got, expected $DIGEST"; exit 1; }
 echo "- \`$ref\` signed and promoted to \`prod\` (the VM deploys it within about 2 minutes)" >>"$summary"
