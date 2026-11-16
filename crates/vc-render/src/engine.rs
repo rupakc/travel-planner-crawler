@@ -7,7 +7,7 @@
 
 use std::collections::{HashMap, HashSet};
 use std::future::Future;
-use std::sync::Arc;
+use std::sync::{Arc, LazyLock};
 
 use bytes::Bytes;
 use tokio::sync::mpsc::UnboundedReceiver;
@@ -20,9 +20,41 @@ use vc_core::policy::{Policy, RobotsVerdict};
 use vc_core::render::{BlockReason, RenderBudget, RenderOutcome};
 use vc_core::{CanonicalUrl, Clock, Error, OriginKey, PolitenessKey, Result, USER_AGENT};
 
+use crate::ThirdPartyBorrow;
 use crate::cache::SubresourceCache;
 use crate::cdp::{CdpBrowser, CdpError, CdpTab, Fulfilment, PausedRequest, ResourceKind};
-use crate::decide::{self, Blocked};
+use crate::decide::{self, Blocked, SubresourceFilter};
+
+/// The last request end per third-party host, one lock per host, shared by every render in the
+/// process (both tabs of a fetcher, and every renderer instance): third-party CDNs are not
+/// covered by any permit, so this is what keeps concurrent renders from hitting one at once.
+/// Only allowlisted hosts ever get here, so the map stays small.
+type HostSlot = Arc<tokio::sync::Mutex<Option<Instant>>>;
+static THIRD_PARTY: LazyLock<std::sync::Mutex<HashMap<String, HostSlot>>> =
+    LazyLock::new(Default::default);
+
+/// `Retry-After` (RFC 9110 §10.2.3): delay-seconds, or an HTTP-date relative to `now` (a past
+/// date gives zero). Anything else is `None`.
+pub(crate) fn parse_retry_after(
+    value: &str,
+    now: chrono::DateTime<chrono::Utc>,
+) -> Option<std::time::Duration> {
+    let v = value.trim();
+    if !v.is_empty() && v.bytes().all(|b| b.is_ascii_digit()) {
+        return v.parse::<u64>().ok().map(std::time::Duration::from_secs);
+    }
+    let at = chrono::DateTime::parse_from_rfc2822(v).ok()?;
+    Some(
+        (at.with_timezone(&chrono::Utc) - now)
+            .to_std()
+            .unwrap_or(std::time::Duration::ZERO),
+    )
+}
+
+fn third_party_slot(host: &str) -> HostSlot {
+    let mut m = THIRD_PARTY.lock().unwrap_or_else(|p| p.into_inner());
+    m.entry(host.to_ascii_lowercase()).or_default().clone()
+}
 
 /// At most this many scrolls to the bottom (stops early once the page stops growing).
 const MAX_SCROLLS: u32 = 5;
@@ -49,6 +81,8 @@ pub(crate) struct Deps {
     pub policy: Arc<dyn Policy>,
     pub clock: Arc<dyn Clock>,
     pub cache: Arc<SubresourceCache>,
+    pub filter: Option<SubresourceFilter>,
+    pub borrow: Option<Arc<dyn ThirdPartyBorrow>>,
 }
 
 pub(crate) fn cdp_error(e: CdpError) -> Error {
@@ -320,9 +354,14 @@ impl Run<'_> {
             self.doc_done |= is_doc;
             return Ok(());
         }
-        if let Err(b) =
-            decide::precheck(&*self.deps.policy, self.permit.scope(), &req, &url, is_doc)
-        {
+        if let Err(b) = decide::precheck_with(
+            &*self.deps.policy,
+            self.permit.scope(),
+            &req,
+            &url,
+            is_doc,
+            self.deps.filter.as_ref(),
+        ) {
             return self.refuse(&req, url, is_doc, b).await;
         }
         if let Err(b) = self.robots(&url).await {
@@ -375,8 +414,43 @@ impl Run<'_> {
             fr.max_body_bytes = self.budget.max_bytes - self.bytes;
             self.subrequests += 1;
         }
-        let res = self.deps.client.fetch(self.permit, fr).await;
-        self.last_end.insert(key, Instant::now());
+        // Third-party host: one request at a time per host in this process, `subresource_gap`
+        // apart, then the optional cross-process borrow.
+        let third_party = !is_doc && !self.permit.scope().covers(&url);
+        let mut host_slot = None;
+        if third_party {
+            let slot = third_party_slot(url.host());
+            let Ok(g) = tokio::time::timeout_at(self.deadline, slot.lock_owned()).await else {
+                self.subrequests -= 1;
+                return self.refuse(&req, url, is_doc, budget_block).await;
+            };
+            if let Some(last) = *g {
+                let at = last + self.budget.subresource_gap;
+                if at >= self.deadline {
+                    self.subrequests -= 1;
+                    return self.refuse(&req, url, is_doc, budget_block).await;
+                }
+                sleep_until(at).await;
+            }
+            host_slot = Some(g);
+        }
+        let borrowed = match (&self.deps.borrow, third_party) {
+            (Some(b), true) => b.borrow(self.permit, &url, self.deadline).await.map(Some),
+            _ => Ok(None),
+        };
+        let res = match borrowed {
+            Ok(guard) => {
+                let r = self.deps.client.fetch(self.permit, fr).await;
+                drop(guard);
+                r
+            }
+            Err(e) => Err(e),
+        };
+        let ended = Instant::now();
+        if let Some(mut g) = host_slot {
+            *g = Some(ended);
+        }
+        self.last_end.insert(key, ended);
 
         let ex = match res {
             Ok(ex) => ex,
@@ -404,8 +478,9 @@ impl Run<'_> {
             }
         };
 
-        // A challenge, 401 or 403 under the page's key: detect → park (never retried). From an
-        // allowlisted third party it only fails that sub-request.
+        // A challenge, 401 or 403 under the page's key: detect → park (never retried); a 429 or
+        // 503 there: stop and let the caller back the key off. From an allowlisted third party
+        // either only fails that sub-request.
         let status = ex.status.as_u16();
         if status == 401 || status == 403 || self.deps.policy.is_challenge(&ex) {
             let in_scope = self.permit.scope().covers(&ex.url);
@@ -414,6 +489,32 @@ impl Run<'_> {
                 self.fail(&req.id, &BlockReason::FetchFailed).await;
                 return Err(Error::Fetch(FetchError::Challenge { status }));
             }
+            return self
+                .refuse(
+                    &req,
+                    url,
+                    false,
+                    Blocked {
+                        reason: BlockReason::FetchFailed,
+                        error: None,
+                    },
+                )
+                .await;
+        }
+        if status == 429 || status == 503 {
+            if self.permit.scope().covers(&ex.url) {
+                self.fail(&req.id, &BlockReason::FetchFailed).await;
+                let retry_after = ex
+                    .response_headers
+                    .get(http::header::RETRY_AFTER)
+                    .and_then(|v| v.to_str().ok())
+                    .and_then(|v| parse_retry_after(v, self.deps.clock.now()));
+                return Err(Error::Fetch(FetchError::RateLimited {
+                    status,
+                    retry_after,
+                }));
+            }
+            self.exchanges.push(ex);
             return self
                 .refuse(
                     &req,
@@ -455,5 +556,32 @@ impl Run<'_> {
         self.exchanges.push(ex);
         self.doc_done |= is_doc;
         Ok(())
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use chrono::TimeZone;
+
+    #[test]
+    fn retry_after_seconds_and_dates() {
+        let now = chrono::Utc
+            .with_ymd_and_hms(2026, 11, 16, 12, 0, 0)
+            .unwrap();
+        assert_eq!(
+            parse_retry_after("120", now),
+            Some(std::time::Duration::from_secs(120))
+        );
+        assert_eq!(
+            parse_retry_after("Mon, 16 Nov 2026 12:01:00 GMT", now),
+            Some(std::time::Duration::from_secs(60))
+        );
+        assert_eq!(
+            parse_retry_after("Mon, 16 Nov 2026 11:00:00 GMT", now),
+            Some(std::time::Duration::ZERO)
+        );
+        assert_eq!(parse_retry_after("soon", now), None);
+        assert_eq!(parse_retry_after("-5", now), None);
     }
 }

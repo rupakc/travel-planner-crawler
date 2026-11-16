@@ -735,3 +735,310 @@ async fn render_bounded_by_lease_deadline() {
     let _ = r.render(&p, &u(PAGE), budget).await;
     assert!(t0.elapsed() < Duration::from_secs(6), "{:?}", t0.elapsed());
 }
+
+// ---- Final-review fixes: rate limits, extra documents, allowlist types, third-party pacing ----
+
+#[tokio::test]
+async fn in_scope_subrequest_429_is_fatal_with_retry_after() {
+    let env = Env::new();
+    let script = spa(&env);
+    env.web.respond(
+        "https://spa.example.com/api/items.json",
+        429,
+        &[("retry-after", "120"), ("content-type", "text/plain")],
+        "slow down",
+    );
+    let (out, browser) = render_with(&env, script, fast_budget()).await;
+    let err = out.unwrap_err();
+    assert!(
+        matches!(
+            err,
+            Error::Fetch(FetchError::RateLimited { status: 429, retry_after: Some(d) })
+                if d == Duration::from_secs(120)
+        ),
+        "{err:?}"
+    );
+    // Nothing after the 429; the request was failed in the browser.
+    assert_eq!(env.web.urls().len(), 3);
+    assert!(
+        browser
+            .log()
+            .failed
+            .iter()
+            .any(|(u, _)| u == "https://spa.example.com/api/items.json")
+    );
+    assert_eq!(browser.log().tabs_closed, 1);
+}
+
+#[tokio::test]
+async fn in_scope_503_and_document_429_are_fatal() {
+    let env = Env::new();
+    let script = spa(&env);
+    env.web.respond(
+        "https://spa.example.com/app.js",
+        503,
+        &[("retry-after", "Wed, 21 Oct 2037 07:28:00 GMT")],
+        "maintenance",
+    );
+    let (out, _) = render_with(&env, script, fast_budget()).await;
+    let err = out.unwrap_err();
+    assert!(
+        matches!(
+            err,
+            Error::Fetch(FetchError::RateLimited { status: 503, retry_after: Some(d) })
+                if d > Duration::from_secs(3600)
+        ),
+        "{err:?}"
+    );
+
+    let env = Env::new();
+    let script = spa(&env);
+    env.web.respond(PAGE, 429, &[], "too many");
+    let (out, _) = render_with(&env, script, fast_budget()).await;
+    let err = out.unwrap_err();
+    assert!(
+        matches!(
+            err,
+            Error::Fetch(FetchError::RateLimited {
+                status: 429,
+                retry_after: None
+            })
+        ),
+        "{err:?}"
+    );
+    assert_eq!(env.web.urls().len(), 1);
+}
+
+#[tokio::test]
+async fn third_party_429_only_fails_that_subrequest() {
+    let env = Env::new();
+    let script = spa(&env).load(
+        PAGE,
+        vec![
+            req("https://cdn.allowed.test/lib.js", K::Script),
+            req("https://spa.example.com/app.js", K::Script),
+        ],
+    );
+    env.frontier.allow_all("https://cdn.allowed.test/");
+    env.web
+        .respond("https://cdn.allowed.test/lib.js", 429, &[], "later");
+    let (out, _) = render_with(&env, script, fast_budget()).await;
+    let out = out.unwrap();
+    assert_eq!(
+        blocked_reason(&out, "https://cdn.allowed.test/lib.js"),
+        Some(BlockReason::FetchFailed)
+    );
+    assert!(String::from_utf8_lossy(&out.dom_html).contains("Louvre"));
+}
+
+#[tokio::test]
+async fn extra_documents_refused() {
+    // An iframe and a JS navigation to same-key pages, and a third-party iframe: none is
+    // fetched (they would otherwise go out at the sub-resource gap).
+    let env = Env::new();
+    let script = spa(&env).load(
+        PAGE,
+        vec![
+            req("https://spa.example.com/frame.html", K::Document),
+            req("https://cdn.allowed.test/embed.html", K::Document),
+            req("https://spa.example.com/app.js", K::Script),
+        ],
+    );
+    env.frontier.allow_all("https://cdn.allowed.test/");
+    env.web
+        .page("https://spa.example.com/frame.html", "text/html", "frame");
+    env.web
+        .page("https://cdn.allowed.test/embed.html", "text/html", "embed");
+    let (out, _) = render_with(&env, script, fast_budget()).await;
+    let out = out.unwrap();
+    for x in [
+        "https://spa.example.com/frame.html",
+        "https://cdn.allowed.test/embed.html",
+    ] {
+        assert_eq!(
+            blocked_reason(&out, x),
+            Some(BlockReason::ResourceType),
+            "{x}"
+        );
+        assert_eq!(env.web.count(x), 0, "{x}");
+    }
+    assert!(String::from_utf8_lossy(&out.dom_html).contains("Louvre"));
+}
+
+#[tokio::test]
+async fn document_navigation_after_load_refused() {
+    // A meta refresh / location.assign back to the page itself after it loaded.
+    let env = Env::new();
+    let script = spa(&env).load(
+        "https://spa.example.com/api/items.json",
+        vec![req(PAGE, K::Document)],
+    );
+    let (out, _) = render_with(&env, script, fast_budget()).await;
+    let out = out.unwrap();
+    assert_eq!(env.web.count(PAGE), 1);
+    assert_eq!(blocked_reason(&out, PAGE), Some(BlockReason::ResourceType));
+}
+
+#[tokio::test]
+async fn allowlisted_host_types_enforced() {
+    let env = Env::new();
+    let script = spa(&env).load(
+        PAGE,
+        vec![
+            req("https://cdn.allowed.test/lib.js", K::Script),
+            req("https://cdn.allowed.test/data.json", K::Xhr),
+            req("https://spa.example.com/app.js", K::Script),
+        ],
+    );
+    env.frontier.allow_all("https://cdn.allowed.test/");
+    env.web.page(
+        "https://cdn.allowed.test/lib.js",
+        "application/javascript",
+        "1",
+    );
+    env.web.page(
+        "https://cdn.allowed.test/data.json",
+        "application/json",
+        "{}",
+    );
+    let browser = MockBrowser::new(script);
+    let r = env
+        .renderer(RenderConfig::default(), browser)
+        .with_subresource_filter(Arc::new(|host: &str, kind: &str| {
+            host == "cdn.allowed.test" && kind == "script"
+        }));
+    let p = env.frontier.permit(PAGE).await;
+    let out = r.render(&p, &u(PAGE), fast_budget()).await.unwrap();
+    assert_eq!(env.web.count("https://cdn.allowed.test/lib.js"), 1);
+    assert_eq!(env.web.count("https://cdn.allowed.test/data.json"), 0);
+    assert_eq!(
+        blocked_reason(&out, "https://cdn.allowed.test/data.json"),
+        Some(BlockReason::OutOfScope)
+    );
+    // The page's own key is never subject to the third-party filter.
+    assert_eq!(env.web.count("https://spa.example.com/api/items.json"), 1);
+}
+
+#[test]
+fn resource_kind_cdp_names() {
+    assert_eq!(K::Script.cdp_name(), "script");
+    assert_eq!(K::Stylesheet.cdp_name(), "stylesheet");
+    assert_eq!(K::Xhr.cdp_name(), "xhr");
+    assert_eq!(K::Fetch.cdp_name(), "fetch");
+    assert_eq!(K::Document.cdp_name(), "document");
+}
+
+const PAGE2: &str = "https://other.example.net/";
+
+/// A page on another key that loads one third-party JSON (never cached).
+fn other_site(env: &Env, cdn: &str) -> Script {
+    env.frontier.allow_all(PAGE2);
+    env.web.page(PAGE2, "text/html", "<html>other</html>");
+    env.web.page(cdn, "application/json", "{}");
+    Script::default().load(PAGE2, vec![req(cdn, K::Xhr)])
+}
+
+#[tokio::test]
+async fn third_party_host_serialised_across_concurrent_renders() {
+    let env = Env::new();
+    env.frontier.allow_all("https://cdn.allowed.test/");
+    let a = "https://cdn.allowed.test/serial-a.json";
+    let b = "https://cdn.allowed.test/serial-b.json";
+    env.frontier.allow_all(PAGE);
+    env.web.page(PAGE, "text/html", "<html>one</html>");
+    env.web.page(a, "application/json", "{}");
+    let s1 = Script::default().load(PAGE, vec![req(a, K::Xhr)]);
+    let s2 = other_site(&env, b);
+    let budget = RenderBudget {
+        subresource_gap: Duration::from_millis(300),
+        ..fast_budget()
+    };
+    let config = RenderConfig {
+        max_tabs: 2,
+        ..RenderConfig::default()
+    };
+    // Two renderers in one process (e.g. two fetcher tasks) share the per-host gate.
+    let r1 = env.renderer(config.clone(), MockBrowser::new(s1));
+    let r2 = env.renderer(config, MockBrowser::new(s2));
+    let p1 = env.frontier.permit(PAGE).await;
+    let p2 = env.frontier.permit(PAGE2).await;
+    let (u1, u2) = (u(PAGE), u(PAGE2));
+    let (o1, o2) = tokio::join!(
+        r1.render(&p1, &u1, budget.clone()),
+        r2.render(&p2, &u2, budget.clone())
+    );
+    o1.unwrap();
+    o2.unwrap();
+    let at = |x: &str| {
+        let c = u(x).as_str().to_string();
+        env.web
+            .requests()
+            .into_iter()
+            .find(|l| l.url == c)
+            .unwrap()
+            .at
+    };
+    let (ta, tb) = (at(a), at(b));
+    let gap = if ta > tb { ta - tb } else { tb - ta };
+    assert!(gap >= Duration::from_millis(280), "{gap:?}");
+}
+
+#[derive(Default)]
+struct RecordingBorrow {
+    calls: std::sync::Mutex<Vec<String>>,
+    refuse: bool,
+}
+
+#[async_trait::async_trait]
+impl vc_render::ThirdPartyBorrow for RecordingBorrow {
+    async fn borrow(
+        &self,
+        _p: &vc_core::frontier::ClaimPermit,
+        url: &vc_core::CanonicalUrl,
+        _deadline: tokio::time::Instant,
+    ) -> Result<vc_render::BorrowGuard, FetchError> {
+        self.calls.lock().unwrap().push(url.as_str().to_string());
+        if self.refuse {
+            return Err(FetchError::Transport("third-party key busy".into()));
+        }
+        Ok(Box::new(()))
+    }
+}
+
+#[tokio::test]
+async fn third_party_borrow_hook_called_and_can_refuse() {
+    for refuse in [false, true] {
+        let env = Env::new();
+        let lib = "https://cdn.allowed.test/hooked.js";
+        let script = spa(&env).load(
+            PAGE,
+            vec![
+                req(lib, K::Script),
+                req("https://spa.example.com/app.js", K::Script),
+            ],
+        );
+        env.frontier.allow_all("https://cdn.allowed.test/");
+        env.web.page(lib, "application/javascript", "1");
+        let hook = Arc::new(RecordingBorrow {
+            refuse,
+            ..RecordingBorrow::default()
+        });
+        let r = env
+            .renderer(RenderConfig::default(), MockBrowser::new(script))
+            .with_third_party_borrow(hook.clone());
+        let p = env.frontier.permit(PAGE).await;
+        let out = r.render(&p, &u(PAGE), fast_budget()).await.unwrap();
+        // Only the third-party request goes through the hook.
+        assert_eq!(
+            *hook.calls.lock().unwrap(),
+            vec![u(lib).as_str().to_string()]
+        );
+        if refuse {
+            assert_eq!(env.web.count(lib), 0);
+            assert_eq!(blocked_reason(&out, lib), Some(BlockReason::FetchFailed));
+        } else {
+            assert_eq!(env.web.count(lib), 1);
+        }
+        assert!(String::from_utf8_lossy(&out.dom_html).contains("Louvre"));
+    }
+}

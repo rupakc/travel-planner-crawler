@@ -22,8 +22,15 @@
 //! [`SubresourceCache`] (TTL 24 h) after the policy checks.
 //!
 //! **Detect → park:** a challenge, 401 or 403 on the page's own key aborts the render with
-//! [`FetchError::Challenge`] (the caller parks the key; nothing is retried). A lost lease aborts
-//! with a lease error. A refused or failed document is an error of the render (e.g.
+//! [`FetchError::Challenge`] (the caller parks the key; nothing is retried). A 429 or 503 on
+//! the page's own key aborts with [`FetchError::RateLimited`] (status and parsed
+//! `Retry-After`), so the caller backs the key off. From an allowlisted third party, all of these only fail that
+//! sub-request. A lost lease aborts with a lease error.
+//!
+//! Only the page's own document is loaded as a document: iframes and JS/meta-refresh
+//! navigations are refused ([`BlockReason::ResourceType`]). Third-party hosts are paced
+//! process-wide: one request at a time per host across every render in the process, at least
+//! `subresource_gap` apart, plus an optional cross-process [`ThirdPartyBorrow`] hook. A refused or failed document is an error of the render (e.g.
 //! [`FetchError::CrossKeyRedirect`], which the caller enqueues).
 //!
 //! The browser side sits behind the [`cdp`] traits so the decision logic is tested with a mock;
@@ -51,7 +58,28 @@ use vc_core::{CanonicalUrl, Clock, Error, Result};
 
 pub use cache::SubresourceCache;
 pub use chromium::ChromiumBrowser;
+pub use decide::SubresourceFilter;
 pub use vc_core::render::BlockReason;
+
+/// Held for the duration of one third-party sub-request; dropping it releases the borrow.
+pub type BorrowGuard = Box<dyn Send + Sync>;
+
+/// Cross-process pacing for third-party (allowlisted, outside the permit's key) hosts, e.g. a
+/// frontier-backed borrow on the third party's politeness key. Called before each third-party
+/// sub-request, after this process's per-host lock and gap; the returned guard is dropped when
+/// the request ends. An error refuses that sub-request only (reason from the error, usually
+/// [`BlockReason::FetchFailed`]); a [`FetchError::Lease`] or [`FetchError::DeadlineExceeded`]
+/// ends the render like a failed fetch would.
+#[async_trait]
+pub trait ThirdPartyBorrow: Send + Sync {
+    /// Borrows `url`'s host for one request, waiting at most until `deadline`.
+    async fn borrow(
+        &self,
+        permit: &ClaimPermit,
+        url: &CanonicalUrl,
+        deadline: tokio::time::Instant,
+    ) -> std::result::Result<BorrowGuard, FetchError>;
+}
 
 /// The production renderer.
 #[derive(Clone)]
@@ -112,10 +140,26 @@ impl ChromiumRenderer {
                 policy,
                 clock,
                 cache,
+                filter: None,
+                borrow: None,
             },
             browser,
             tabs,
         }
+    }
+
+    /// Enforces the allowlist's per-host `types`: a third-party request is in scope only if
+    /// `filter(host, kind)` (production: `VoyagerPolicy::subresource_allowed`). Without a
+    /// filter every allowlisted host may serve every allowed type.
+    pub fn with_subresource_filter(mut self, filter: SubresourceFilter) -> Self {
+        self.deps.filter = Some(filter);
+        self
+    }
+
+    /// Adds a cross-process borrow hook for third-party sub-requests (see [`ThirdPartyBorrow`]).
+    pub fn with_third_party_borrow(mut self, borrow: Arc<dyn ThirdPartyBorrow>) -> Self {
+        self.deps.borrow = Some(borrow);
+        self
     }
 
     /// The default budget from the config (the caller adds the source's expand selectors).
