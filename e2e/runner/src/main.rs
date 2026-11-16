@@ -127,6 +127,7 @@ async fn run() -> Result<()> {
                 .await
                 .unwrap_or_else(|e| Outcome::Fail(format!("could not gather evidence: {e:#}"))),
         };
+        let outcome = e2e_runner::apply_xfail(spec.name, outcome);
         println!("{:<20} {outcome}", spec.name);
         results.push((spec.name, outcome));
     }
