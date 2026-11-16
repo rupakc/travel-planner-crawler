@@ -7,42 +7,40 @@ to-do list of URLs, the work queue, the records) and **GCS** (the raw pages).
 ## Diagram
 
 ```mermaid
-flowchart LR
-  subgraph WEB["Public web"]
-    SITES["Websites, feeds, sitemaps, APIs, dumps"]
-  end
+flowchart TB
+  SITES["Public web: sites, feeds, sitemaps, APIs, dumps"]
   subgraph VM["Crawler VM, docker compose"]
+    direction TB
+    GATE{"Politeness gate: permit, robots, denylist, SSRF, rate token"}
     SCH["scheduler"]
     FET["fetcher"]
-    GATE{"Politeness gate: permit, robots, denylist, SSRF, rate token"}
-    CHR["Chromium, no network of its own"]
+    CHR["Chromium, no network"]
+    PG[("Postgres 17 + pgvector: frontier, queue, records, index")]
     PRO["processor"]
     EMB["embedder"]
-    API["api, /v1 on internal IP"]
     MNT["maintenance"]
-    PG[("Postgres 17 + pgvector")]
+    API["api: /v1 on internal IP"]
   end
   GCS[("GCS: WARC segments, CDXJ, text tier")]
   GEM["Gemini on Vertex AI, budgeted"]
   VOY["Voyager backend"]
 
-  SCH -->|"enqueue URLs"| PG
-  FET -->|"claim a key, lease URLs"| PG
-  FET --> GATE
   GATE -->|"HTTPS as VoyagerBot"| SITES
+  FET --> GATE
   CHR <-->|"CDP Fetch interception"| FET
-  FET -->|"spool, then segment upload"| GCS
-  FET -->|"one commit transaction"| PG
-  PG -->|"capture_ready work"| PRO
-  PRO -->|"read raw and text"| GCS
+  SCH -->|"enqueue URLs"| PG
+  FET <-->|"claim, lease, commit"| PG
+  FET -->|"WARC segments"| GCS
+  PG -->|"capture_ready"| PRO
+  PRO -->|"records, entities"| PG
+  PRO -->|"read raw"| GCS
   PRO -->|"extract"| GEM
-  PRO -->|"records, versions, entities"| PG
   EMB -->|"embed"| GEM
   EMB -->|"vectors"| PG
+  MNT -->|"partitions, purge"| PG
+  MNT -->|"rewrites"| GCS
   API -->|"hybrid search"| PG
-  VOY -->|"GET /v1 with token over TLS"| API
-  MNT -->|"partitions, purge, drills"| PG
-  MNT -->|"purge rewrites"| GCS
+  VOY -->|"GET /v1, token, TLS"| API
 ```
 
 The **politeness gate** is not a separate service. It is a set of checks that every request
