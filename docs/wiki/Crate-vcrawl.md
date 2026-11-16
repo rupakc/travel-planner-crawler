@@ -6,10 +6,12 @@ implementations rather than only on `vc-core` traits.
 
 Path: `crates/vcrawl`. Dependencies: `clap`, `tokio`, `anyhow`, `sqlx`, `fail`.
 
-> **Status: skeleton, being wired now (plan Task 15).** The module layout exists
-> (`src/roles/<role>.rs`, `src/admin/`, `src/agentic/`, `src/migrate.rs`, `src/health.rs`,
-> shared context in `src/ctx.rs`), but every command still exits with "… is not wired yet".
-> This page describes the planned behaviour from the plan and the deploy contract.
+> **Status: being wired now (plan Task 15).** Layout: `src/roles/<role>.rs`, `src/admin/`,
+> `src/agentic/`, `src/migrate.rs`, `src/health.rs`, shared context in `src/ctx.rs`. The
+> data-path roles `processor`, `embedder` and `api` are wired and tested
+> (`tests/processor.rs`, `tests/embedder.rs`, `tests/api.rs`). `scheduler`, `fetcher`,
+> `maintenance`, `admin`, `migrate` and `health` still exit with "… is not wired yet". The
+> table below is the planned behaviour from the plan and the deploy contract.
 
 ## Roles (planned)
 

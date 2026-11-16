@@ -88,7 +88,7 @@ How it fits together: [Architecture](https://github.com/rupakc/travel-planner-cr
 | Design (spec v3) and implementation plan | Done |
 | Library crates `vc-*`, migrations, testkit with fakes and oracles | Done, tested in CI |
 | Deploy kit and GCP bootstrap | Done, tested with fakes |
-| `vcrawl` binary (wiring the roles) | In progress: every role currently exits with "not wired yet" |
+| `vcrawl` binary (wiring the roles) | In progress: `processor`, `embedder` and `api` are wired; `scheduler`, `fetcher`, `maintenance`, `admin` and `migrate` are not yet |
 | End-to-end test in CI | Not started |
 | Agentic loops (link triage, source scout, quality auditor) | Not started |
 | Provisioning and go-live | Not started; the LLM stays off until the owner raises the project cap |

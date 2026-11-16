@@ -71,7 +71,7 @@ More detail: [Architecture](Architecture) and [How a Page Gets Crawled](How-a-Pa
 | Design (spec v3) and plan | Done |
 | Library crates (`vc-*`), migrations, testkit with fakes and oracles | Done, tested in CI |
 | Deploy kit (`deploy/`) and GCP bootstrap (`infrastructure/`) | Done, tested with fakes |
-| `vcrawl` binary: wiring the roles together | **In progress.** Today every role exits with "not wired yet" |
+| `vcrawl` binary: wiring the roles together | **In progress.** `processor`, `embedder` and `api` are wired; `scheduler`, `fetcher`, `maintenance`, `admin`, `migrate` and `health` still exit with "not wired yet" |
 | End-to-end test in CI (fake internet, two fetchers) | Not started |
 | Agentic loops (link triage, source scout, quality auditor) | Not started |
 | Provisioning and go-live on GCP | Not started |

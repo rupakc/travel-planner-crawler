@@ -64,8 +64,9 @@ network: the fetcher answers each of its requests itself. See
 
 Postgres gets 3 GB and Chromium 1.5 GB. The total is about 7 GB of the VM's 8 GB.
 
-> **Status:** the roles are designed and every library they need is built and tested, but
-> `crates/vcrawl` is still a stub. Running any role today prints "role … is not wired yet".
+> **Status:** every library the roles need is built and tested. In `crates/vcrawl`, the
+> `processor`, `embedder` and `api` roles are wired; `scheduler`, `fetcher`, `maintenance`,
+> `admin` and `migrate` still print "… is not wired yet".
 > See [vcrawl](Crate-vcrawl).
 
 ## Crates: a star graph

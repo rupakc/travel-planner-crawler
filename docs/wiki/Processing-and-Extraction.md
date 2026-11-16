@@ -9,8 +9,8 @@ Processing turns a committed capture into clean, versioned **records**. It runs 
 - Work payloads hold ids only, never page content.
 
 > **Status:** every step below is built and tested in `vc-parse`, `vc-kinds`, `vc-extract`,
-> `vc-llm` and `vc-index`. The `processor` loop that calls them is part of the `vcrawl`
-> wiring in progress.
+> `vc-llm` and `vc-index`. The `processor` role in `vcrawl` that runs them is wired and
+> tested; captures reach it only once the `fetcher` is wired.
 
 ## Pipeline
 
