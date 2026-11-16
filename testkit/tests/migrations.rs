@@ -11,11 +11,20 @@ use vc_core::{CanonicalUrl, CaptureId, Epoch, PayloadHash, SegmentId};
 #[tokio::test]
 async fn migrations_apply_on_empty_db() {
     let pool = testkit::pg().await;
-    let applied: i64 = sqlx::query_scalar("SELECT count(*) FROM _sqlx_migrations WHERE success")
+    // P0 owns 0001..0011; P1 crates add their own blocks (11xx..18xx), so check the P0 set
+    // is fully applied rather than an exact total.
+    let p0: i64 = sqlx::query_scalar(
+        "SELECT count(*) FROM _sqlx_migrations WHERE success AND version BETWEEN 1 AND 99",
+    )
+    .fetch_one(&pool)
+    .await
+    .unwrap();
+    assert_eq!(p0, 11);
+    let failed: i64 = sqlx::query_scalar("SELECT count(*) FROM _sqlx_migrations WHERE NOT success")
         .fetch_one(&pool)
         .await
         .unwrap();
-    assert_eq!(applied, 11);
+    assert_eq!(failed, 0);
     for t in [
         "sources",
         "source_candidates",
