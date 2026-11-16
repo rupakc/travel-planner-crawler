@@ -148,8 +148,24 @@ async fn crawl_path_seeds_fetches_robots_first_and_commits_raw_first() {
     assert_raw_first(&pool, store.as_ref()).await;
 }
 
+/// `(last_captured_at, body_captured_at)` of a URL.
+async fn fetch_times(
+    pool: &sqlx::PgPool,
+    u: &vc_core::CanonicalUrl,
+) -> (Option<chrono::DateTime<Utc>>, Option<chrono::DateTime<Utc>>) {
+    sqlx::query_as("SELECT last_captured_at, body_captured_at FROM url_state WHERE url_key = $1")
+        .bind(u.key().as_bytes().as_slice())
+        .fetch_one(pool)
+        .await
+        .unwrap()
+}
+
 /// A 304 is spooled as a `revisit` of the last **committed** capture: url_state keeps the
 /// stored body's hash; the revisit points at a capture that exists.
+/// B5 (migration 1103): `url_state.last_capture_id` only moves for captures that hold a body.
+/// After C0 200, R1 304, R2 304 (and an identical-payload 200, a dedupe revisit) the URL still
+/// points at C0, every revisit refers to C0 directly (one hop), the conditional headers are
+/// still sent, and `last_captured_at` keeps tracking the last fetch. A changed body moves it.
 #[tokio::test]
 async fn not_modified_is_a_revisit_of_the_committed_capture() {
     let (web, _srv, port) = start(vec![Site::new("blog", "blog.test").route_cycles(
@@ -157,6 +173,9 @@ async fn not_modified_is_a_revisit_of_the_committed_capture() {
         vec![
             Some(Reply::html("<p>v1</p>").header("etag", "\"v1\"")),
             Some(Reply::status(304).header("etag", "\"v1\"")),
+            Some(Reply::status(304).header("etag", "\"v1\"")),
+            Some(Reply::html("<p>v1</p>").header("etag", "\"v1b\"")),
+            Some(Reply::html("<p>v2</p>").header("etag", "\"v2\"")),
         ],
     )])
     .await;
@@ -181,23 +200,84 @@ async fn not_modified_is_a_revisit_of_the_committed_capture() {
     claimed(f.pass().await.unwrap());
     f.flush().await.unwrap();
     let (_, _, first, hash1) = url_state(&pool, &page).await;
+    let first = first.expect("C0 is the body capture");
 
-    fast_forward(&pool).await;
-    web.set_cycle(1);
-    let r = claimed(f.pass().await.unwrap());
-    assert_eq!(r.urls[0].result, UrlResult::Fetched);
-    f.flush().await.unwrap();
-    let caps = captures(&pool).await;
-    let revisit = caps
+    // The primary captures of /p as (capture_id, status, revisit_of_id), oldest first.
+    let page_caps = |caps: Vec<(String, String, Option<i16>, Option<String>, String)>| {
+        caps.into_iter()
+            .filter(|c| c.1 == "primary" && c.4.ends_with("/p"))
+            .map(|c| (c.0, c.2, c.3))
+            .collect::<Vec<_>>()
+    };
+    for cycle in 1..=3 {
+        fast_forward(&pool).await;
+        web.set_cycle(cycle);
+        let r = claimed(f.pass().await.unwrap());
+        assert_eq!(r.urls[0].result, UrlResult::Fetched, "cycle {cycle}");
+        f.flush().await.unwrap();
+        let caps = page_caps(captures(&pool).await);
+        assert_eq!(caps.len(), cycle + 1);
+        let latest = caps.last().unwrap();
+        let want_status = if cycle == 3 { 200 } else { 304 };
+        assert_eq!(latest.1, Some(want_status), "cycle {cycle}");
+        assert_eq!(
+            latest.2.as_deref(),
+            Some(first.as_str()),
+            "cycle {cycle}: the revisit refers to C0's body directly"
+        );
+        let (state, etag, last, hash) = url_state(&pool, &page).await;
+        assert_eq!(state, "due");
+        assert_eq!(hash, hash1, "the stored body's hash is kept");
+        assert_eq!(
+            last.as_deref(),
+            Some(first.as_str()),
+            "cycle {cycle}: url_state still points at C0's body"
+        );
+        let want_etag = if cycle == 3 { "\"v1b\"" } else { "\"v1\"" };
+        assert_eq!(etag.as_deref(), Some(want_etag), "validators still refresh");
+        let (fetched, body) = fetch_times(&pool, &page).await;
+        assert!(
+            fetched > body,
+            "last_captured_at is the last fetch, not the body"
+        );
+    }
+
+    // R2 (the second 304) was a conditional request, built from the validators that survive.
+    let (path, offset, length): (String, i64, i64) = sqlx::query_as(
+        "SELECT s.path, c.warc_offset, c.warc_length FROM captures c
+         JOIN segments s ON s.segment_id = c.segment_id
+         WHERE c.capture_id = $1",
+    )
+    .bind(&page_caps(captures(&pool).await)[2].0)
+    .fetch_one(&pool)
+    .await
+    .unwrap();
+    let recs = vc_store::read_capture(store.as_ref(), &path, offset as u64, length as u64)
+        .await
+        .unwrap();
+    let req = recs
         .iter()
-        .find(|c| c.2 == Some(304))
-        .expect("a 304 capture");
-    assert_eq!(revisit.3, first, "revisit of the committed capture");
-    let (state, etag, last, hash2) = url_state(&pool, &page).await;
-    assert_eq!(state, "due");
-    assert_eq!(etag.as_deref(), Some("\"v1\""));
-    assert_eq!(hash2, hash1, "the stored body's hash is kept");
-    assert_eq!(last.as_deref(), Some(revisit.0.as_str()));
+        .find(|r| r.warc_type() == Some("request"))
+        .expect("R2's request record");
+    let req = String::from_utf8_lossy(&req.block).to_ascii_lowercase();
+    assert!(
+        req.contains("if-none-match: \"v1\""),
+        "R2 sent If-None-Match: {req}"
+    );
+
+    // A changed body is a new body capture: the pointer moves.
+    fast_forward(&pool).await;
+    web.set_cycle(4);
+    claimed(f.pass().await.unwrap());
+    f.flush().await.unwrap();
+    let caps = page_caps(captures(&pool).await);
+    let c4 = caps.last().unwrap();
+    assert_eq!((c4.1, c4.2.as_deref()), (Some(200), None));
+    let (_, _, last, hash) = url_state(&pool, &page).await;
+    assert_eq!(last.as_deref(), Some(c4.0.as_str()));
+    assert_ne!(hash, hash1);
+    let (fetched, body) = fetch_times(&pool, &page).await;
+    assert_eq!(fetched, body);
     assert_raw_first(&pool, store.as_ref()).await;
 }
 

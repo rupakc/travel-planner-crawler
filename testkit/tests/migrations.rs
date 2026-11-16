@@ -295,3 +295,179 @@ async fn enqueue_dedupes_pending_items() {
     let c: Option<i64> = sqlx::query_scalar(q).fetch_one(&pool).await.unwrap();
     assert!(c.is_some(), "a done item does not block a new one");
 }
+
+/// `m` turned into a revisit of `of` (a 304, or an identical-payload `status`), carrying
+/// `etag` and C0's payload hash.
+fn revisit(mut m: SegmentManifest, of: &SegmentManifest, status: u16) -> SegmentManifest {
+    let c0 = &of.captures[0].meta;
+    let meta = &mut m.captures[0].meta;
+    meta.status = Some(status);
+    meta.payload_hash = c0.payload_hash;
+    meta.revisit_of = Some(c0.capture_ref());
+    m
+}
+
+/// `(last_capture_id, body_captured_at, last_captured_at, etag, fetch_count)` of a URL.
+async fn pointers(
+    pool: &PgPool,
+    url: &CanonicalUrl,
+) -> (
+    Option<String>,
+    Option<DateTime<Utc>>,
+    Option<DateTime<Utc>>,
+    Option<String>,
+    i32,
+) {
+    let r = sqlx::query(
+        "SELECT last_capture_id, body_captured_at, last_captured_at, etag, fetch_count
+         FROM url_state WHERE url_key = $1",
+    )
+    .bind(url.key().as_bytes().as_slice())
+    .fetch_one(pool)
+    .await
+    .unwrap();
+    (r.get(0), r.get(1), r.get(2), r.get(3), r.get(4))
+}
+
+/// B5 (1103): after C0 200, R1 304, R2 304 and an identical-payload 200 (a dedupe revisit),
+/// url_state still points at C0's body; validators and the fetch clock keep moving. A 2xx
+/// without a payload hash is not a body either; a new body moves the pointer.
+#[tokio::test]
+async fn commit_points_url_state_at_the_last_body_capture() {
+    let pool = testkit::pg().await;
+    let url = CanonicalUrl::parse("https://example.com/body").unwrap();
+    seed_url(&pool, &url, 1).await;
+    let t = Utc::now() - Duration::minutes(30);
+    let to_us = |t: DateTime<Utc>| t.timestamp_micros();
+
+    let c0 = manifest(&url, t, 1, "\"v1\"", 1);
+    assert!(commit(&pool, &c0).await);
+    let c0_id = c0.captures[0].meta.capture_id.to_string();
+    let (id, body_at, last_at, _, _) = pointers(&pool, &url).await;
+    assert_eq!(id.as_deref(), Some(c0_id.as_str()));
+    assert_eq!(body_at.map(to_us), Some(to_us(t)));
+    assert_eq!(last_at, body_at);
+
+    let steps = [(1, 304, "\"v1\""), (2, 304, "\"v1\""), (3, 200, "\"v1b\"")];
+    for (i, status, etag) in steps {
+        let at = t + Duration::minutes(i);
+        let r = revisit(manifest(&url, at, 1 + i, etag, 9), &c0, status);
+        assert!(commit(&pool, &r).await);
+        let (id, body_at, last_at, et, n) = pointers(&pool, &url).await;
+        assert_eq!(id.as_deref(), Some(c0_id.as_str()), "step {i}: still C0");
+        assert_eq!(body_at.map(to_us), Some(to_us(t)), "step {i}");
+        assert_eq!(last_at.map(to_us), Some(to_us(at)), "step {i}: last fetch");
+        assert_eq!(et.as_deref(), Some(etag), "step {i}: validators refresh");
+        assert_eq!(n, 1 + i as i32);
+    }
+    let ph: Option<Vec<u8>> = sqlx::query_scalar("SELECT payload_hash FROM url_state")
+        .fetch_one(&pool)
+        .await
+        .unwrap();
+    assert_eq!(ph, Some(vec![1; 32]), "C0's payload hash is kept");
+
+    // A 2xx primary without a payload hash holds no body: the pointer stays.
+    let mut nohash = manifest(&url, t + Duration::minutes(4), 5, "\"v1c\"", 4);
+    nohash.captures[0].meta.payload_hash = None;
+    assert!(commit(&pool, &nohash).await);
+    assert_eq!(
+        pointers(&pool, &url).await.0.as_deref(),
+        Some(c0_id.as_str())
+    );
+
+    // A new body moves it (with its own timestamp).
+    let at = t + Duration::minutes(5);
+    let c5 = manifest(&url, at, 6, "\"v2\"", 2);
+    assert!(commit(&pool, &c5).await);
+    let (id, body_at, last_at, _, _) = pointers(&pool, &url).await;
+    assert_eq!(id, Some(c5.captures[0].meta.capture_id.to_string()));
+    assert_eq!(body_at.map(to_us), Some(to_us(at)));
+    assert_eq!(last_at, body_at);
+
+    // A late, older body never moves it back (monotonic guard).
+    let late = manifest(&url, t + Duration::seconds(30), 7, "\"old\"", 7);
+    assert!(commit(&pool, &late).await);
+    assert_eq!(
+        pointers(&pool, &url).await.0,
+        Some(c5.captures[0].meta.capture_id.to_string())
+    );
+
+    // Releasing the pointer (vc_rewrite_segment) clears its timestamp too.
+    sqlx::query("UPDATE url_state SET last_capture_id = NULL")
+        .execute(&pool)
+        .await
+        .unwrap();
+    assert_eq!(pointers(&pool, &url).await.1, None);
+}
+
+/// B5 (1103) backfill: a pointer left at the end of an old revisit chain (R2 -> R1 -> C0) is
+/// resolved to C0; a chain that cannot be resolved keeps its pointer and timestamp.
+#[tokio::test]
+async fn body_capture_backfill_resolves_revisit_chains() {
+    let pool = testkit::pg().await;
+    let a = CanonicalUrl::parse("https://example.com/chain").unwrap();
+    let b = CanonicalUrl::parse("https://example.com/broken").unwrap();
+    seed_url(&pool, &a, 1).await;
+    seed_url(&pool, &b, 1).await;
+    let t = Utc::now() - Duration::minutes(30);
+    let c0 = manifest(&a, t, 1, "\"v1\"", 1);
+    let r1 = revisit(
+        manifest(&a, t + Duration::minutes(1), 2, "\"v1\"", 1),
+        &c0,
+        304,
+    );
+    let r2 = revisit(
+        manifest(&a, t + Duration::minutes(2), 3, "\"v1\"", 1),
+        &r1,
+        304,
+    );
+    for m in [&c0, &r1, &r2] {
+        assert!(commit(&pool, m).await);
+    }
+    let orphan = manifest(&b, t, 1, "\"x\"", 5);
+    let rb = revisit(
+        manifest(&b, t + Duration::minutes(1), 2, "\"x\"", 5),
+        &orphan,
+        304,
+    );
+    assert!(
+        commit(&pool, &rb).await,
+        "a revisit of a capture never committed"
+    );
+
+    // Back to the pre-1103 shape: the pointer moved with every primary capture.
+    for q in [
+        "DROP TRIGGER url_state_clear_body_ref ON url_state",
+        "DROP FUNCTION vc_url_state_clear_body_ref()",
+        "ALTER TABLE url_state DROP COLUMN body_captured_at",
+        "DELETE FROM _sqlx_migrations WHERE version = 1103",
+    ] {
+        sqlx::query(q).execute(&pool).await.unwrap();
+    }
+    for (u, m) in [(&a, &r2), (&b, &rb)] {
+        sqlx::query(
+            "UPDATE url_state SET last_capture_id = $2, last_captured_at = $3
+             WHERE url_key = $1",
+        )
+        .bind(u.key().as_bytes().as_slice())
+        .bind(m.captures[0].meta.capture_id.to_string())
+        .bind(m.captures[0].meta.captured_at)
+        .execute(&pool)
+        .await
+        .unwrap();
+    }
+    testkit::MIGRATOR.run(&pool).await.unwrap();
+
+    let to_us = |t: Option<DateTime<Utc>>| t.map(|t| t.timestamp_micros());
+    let (id, body_at, last_at, _, _) = pointers(&pool, &a).await;
+    assert_eq!(id, Some(c0.captures[0].meta.capture_id.to_string()));
+    assert_eq!(to_us(body_at), Some(t.timestamp_micros()));
+    assert_eq!(
+        to_us(last_at),
+        Some((t + Duration::minutes(2)).timestamp_micros()),
+        "the fetch clock is untouched"
+    );
+    let (id, body_at, last_at, _, _) = pointers(&pool, &b).await;
+    assert_eq!(id, Some(rb.captures[0].meta.capture_id.to_string()));
+    assert_eq!(body_at, last_at);
+}
