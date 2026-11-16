@@ -199,6 +199,65 @@ type RobotsRow = (
 type KeyColumns = (i32, Option<i32>, Option<i32>, i32, i16, i16, bool);
 
 impl PgFrontier {
+    /// Borrows a third-party key for one render sub-request made under another key's permit:
+    /// granted only when that key is ready (`next_allowed_at` passed, not parked, no claim in
+    /// flight), and then its `next_allowed_at` moves on by its own delay, exactly as if it had
+    /// been claimed. A key never seen before is created with the default limits. Shared by
+    /// every process through Postgres. `false`: skip the sub-resource.
+    pub async fn borrow_subresource(&self, key: &PolitenessKey) -> Result<bool> {
+        let mut tx = self.pool.begin().await.map_err(db)?;
+        sqlx::query(
+            "INSERT INTO politeness_keys (key, min_delay_ms, delay_ms, budget_day)
+             VALUES ($1, $2, $2, $3) ON CONFLICT (key) DO NOTHING",
+        )
+        .bind(key.as_str())
+        .bind(self.min_delay_ms())
+        .bind(i32::try_from(self.config.daily_budget).unwrap_or(i32::MAX))
+        .execute(&mut *tx)
+        .await
+        .map_err(db)?;
+        let granted = sqlx::query(
+            "UPDATE politeness_keys k
+             SET next_allowed_at = now() + make_interval(
+                     secs => greatest(k.delay_ms, k.min_delay_ms, $2)::float8 / 1000.0),
+                 updated_at = now()
+             WHERE k.key = $1
+               AND k.enabled
+               AND k.next_allowed_at <= now()
+               AND (k.parked_until IS NULL OR k.parked_until <= now())
+               AND NOT EXISTS (SELECT 1 FROM claims c
+                               WHERE c.key = k.key AND c.completed_at IS NULL
+                                 AND c.deadline > now())",
+        )
+        .bind(key.as_str())
+        .bind(self.min_delay_ms())
+        .execute(&mut *tx)
+        .await
+        .map_err(db)?
+        .rows_affected()
+            == 1;
+        tx.commit().await.map_err(db)?;
+        Ok(granted)
+    }
+
+    /// Ends a borrowed sub-request ([`PgFrontier::borrow_subresource`]): the key's
+    /// `next_allowed_at` is at least its delay after the request **ended** (a slow response
+    /// must not shorten the gap). Never moves it earlier.
+    pub async fn subresource_done(&self, key: &PolitenessKey) -> Result<()> {
+        sqlx::query(
+            "UPDATE politeness_keys k
+             SET next_allowed_at = greatest(k.next_allowed_at, now() + make_interval(
+                     secs => greatest(k.delay_ms, k.min_delay_ms, $2)::float8 / 1000.0))
+             WHERE k.key = $1",
+        )
+        .bind(key.as_str())
+        .bind(self.min_delay_ms())
+        .execute(&self.pool)
+        .await
+        .map_err(db)?;
+        Ok(())
+    }
+
     /// Returns `fetched_pending` rows pending for longer than `older_than` to `due` (now):
     /// their spool frame is lost, so no commit will ever release them. A late commit is still
     /// applied (validators, capture row) by `vc_commit_segment`; it simply finds nothing to
