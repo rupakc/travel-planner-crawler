@@ -90,8 +90,9 @@ async fn run() -> Result<()> {
                     break;
                 }
                 stack::make_new_due_now(&pool).await?;
+                // The last cycle (robots change) only needs its minimum time.
                 if el >= Duration::from_secs(min_secs)
-                    && checks::changing_pages_fetched(&web.log().await?, since)
+                    && (c + 1 == cycles || checks::changing_pages_fetched(&web.log().await?, since))
                 {
                     break;
                 }
