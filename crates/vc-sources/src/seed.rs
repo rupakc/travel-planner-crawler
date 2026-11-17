@@ -30,7 +30,10 @@ pub fn spec_hash(spec: &SourceSpec) -> Result<String> {
 
 /// Upserts every spec into `sources` (one transaction). A row is rewritten only when its
 /// `spec_hash` changed. With `disable_missing`, rows whose id is not in `specs` are set
-/// `enabled = false` (never deleted: records keep their provenance).
+/// `enabled = false` (never deleted: records keep their provenance). An admin decision
+/// (`sources.enabled_override`, set by `vcrawl admin source disable|approve`) is never written
+/// here and wins over the spec's `enabled` on every rewrite; a non-ingestible licence still
+/// keeps the row disabled.
 pub async fn seed_sources(
     pool: &PgPool,
     specs: &[SourceSpec],
@@ -63,7 +66,9 @@ pub async fn seed_sources(
                name = EXCLUDED.name, category = EXCLUDED.category,
                source_class = EXCLUDED.source_class, licence_class = EXCLUDED.licence_class,
                licence = EXCLUDED.licence, method = EXCLUDED.method,
-               politeness_key = EXCLUDED.politeness_key, enabled = EXCLUDED.enabled,
+               politeness_key = EXCLUDED.politeness_key,
+               enabled = CASE WHEN sources.enabled_override IS NULL THEN EXCLUDED.enabled
+                              ELSE sources.enabled_override AND $12 END,
                spec = EXCLUDED.spec, spec_hash = EXCLUDED.spec_hash, updated_at = now()",
         )
         .bind(&s.id.0)
@@ -77,6 +82,7 @@ pub async fn seed_sources(
         .bind(s.enabled && s.licence.class.ingestible())
         .bind(serde_json::to_value(s)?)
         .bind(&hash)
+        .bind(s.licence.class.ingestible())
         .execute(&mut *tx)
         .await
         .map_err(db)?;

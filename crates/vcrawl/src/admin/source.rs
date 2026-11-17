@@ -12,7 +12,9 @@
 //!   runs this: nothing is crawled because of a proposal before that PR merges.
 //! * `disable <id>`: stops scheduling a source (`sources.enabled = false`; records keep their
 //!   provenance) and parks its due URLs (`url_state.state = 'disabled'`); `approve` resumes
-//!   them. A re-seed with an unchanged spec keeps it disabled.
+//!   them. Both record the decision in `sources.enabled_override`, which re-seeding never
+//!   overwrites: a disabled source stays disabled when its spec changes, an approved one stays
+//!   enabled (unless its licence becomes restricted).
 
 use std::path::Path;
 
@@ -80,6 +82,8 @@ pub struct SourceRow {
     pub source_class: String,
     /// Method.
     pub method: String,
+    /// The admin decision that wins over the spec (`None`: the spec's `enabled`).
+    pub enabled_override: Option<bool>,
 }
 
 /// One open scout proposal.
@@ -154,7 +158,8 @@ fn report(id: &str, v: Validation) -> ValidateReport {
 /// Every source in the database, by id.
 pub async fn list(pool: &PgPool) -> anyhow::Result<Vec<SourceRow>> {
     let rows = sqlx::query(
-        "SELECT source_id, enabled, licence_class, source_class, method FROM sources
+        "SELECT source_id, enabled, licence_class, source_class, method, enabled_override
+         FROM sources
          ORDER BY source_id",
     )
     .fetch_all(pool)
@@ -167,6 +172,7 @@ pub async fn list(pool: &PgPool) -> anyhow::Result<Vec<SourceRow>> {
             licence_class: r.get("licence_class"),
             source_class: r.get("source_class"),
             method: r.get("method"),
+            enabled_override: r.get("enabled_override"),
         })
         .collect())
 }
@@ -222,10 +228,13 @@ pub async fn approve(pool: &PgPool, id: &str, by: &str) -> anyhow::Result<serde_
         v.errors.join("; ")
     );
     let mut tx = pool.begin().await?;
-    sqlx::query("UPDATE sources SET enabled = true, updated_at = now() WHERE source_id = $1")
-        .bind(id)
-        .execute(&mut *tx)
-        .await?;
+    sqlx::query(
+        "UPDATE sources SET enabled = true, enabled_override = true, updated_at = now()
+         WHERE source_id = $1",
+    )
+    .bind(id)
+    .execute(&mut *tx)
+    .await?;
     let urls = sqlx::query(
         "UPDATE url_state SET state = 'due' WHERE source_id = $1 AND state = 'disabled'",
     )
@@ -290,12 +299,14 @@ pub fn draft_id(host: &str) -> String {
 /// claimed). Leased and pending URLs finish normally. Returns the URLs parked.
 pub async fn disable(pool: &PgPool, id: &str) -> anyhow::Result<u64> {
     let mut tx = pool.begin().await?;
-    let n =
-        sqlx::query("UPDATE sources SET enabled = false, updated_at = now() WHERE source_id = $1")
-            .bind(id)
-            .execute(&mut *tx)
-            .await?
-            .rows_affected();
+    let n = sqlx::query(
+        "UPDATE sources SET enabled = false, enabled_override = false, updated_at = now()
+             WHERE source_id = $1",
+    )
+    .bind(id)
+    .execute(&mut *tx)
+    .await?
+    .rows_affected();
     anyhow::ensure!(n == 1, "source {id} is not in the database");
     let urls = sqlx::query(
         "UPDATE url_state SET state = 'disabled' WHERE source_id = $1 AND state = 'due'",

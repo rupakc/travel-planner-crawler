@@ -567,6 +567,7 @@ AI must never be starved, so:
 
    Nothing re-enables a key by itself; undo with `enabled = true`.
 4. **Stop one source**: `vcadm source disable <id>`; undo with `vcadm source approve <id>`.
+   The decision survives deploys and spec changes (`enabled_override` in `source list`).
 5. **Back to the ramp**: add `VC_VCRAWL_SOURCE_ALLOWLIST=/app/sources/ramp-1.txt` to
    `/var/lib/voyager-crawler/deploy/host.local.env`, then
    `sudo google_metadata_script_runner startup && sudo systemctl restart voyager-crawler`.

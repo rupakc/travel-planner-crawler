@@ -159,8 +159,16 @@ impl Scheduler {
             .iter()
             .cloned()
             .partition(|s| allowlist.as_ref().is_none_or(|a| a.contains(&s.id.0)));
+        let sources = vc_sources::seed_sources(&self.pool, specs, true).await?;
+        // A source an admin disabled keeps its spec's `enabled: true`: never seed it (else
+        // new seed rows would be claimable until `retire_disabled` below).
+        let off = self.disabled_ids().await?;
+        let crawled: Vec<SourceSpec> = crawled
+            .into_iter()
+            .filter(|s| !off.contains(&s.id.0))
+            .collect();
         let mut r = PassReport {
-            sources: vc_sources::seed_sources(&self.pool, specs, true).await?,
+            sources,
             enqueued: vc_sources::seed_frontier(self.frontier.as_ref(), &crawled).await?,
             held_by_allowlist: held.iter().filter(|s| s.enabled).count() as u64,
             ..PassReport::default()
@@ -215,6 +223,16 @@ impl Scheduler {
             n += res.rows_affected();
         }
         Ok(n)
+    }
+
+    /// Ids of sources disabled in the database (admin decision, licence or missing spec).
+    async fn disabled_ids(&self) -> Result<std::collections::HashSet<String>> {
+        let ids: Vec<String> =
+            sqlx::query_scalar("SELECT source_id FROM sources WHERE NOT enabled")
+                .fetch_all(&self.pool)
+                .await
+                .map_err(db)?;
+        Ok(ids.into_iter().collect())
     }
 
     /// Due rows of disabled sources leave the crawl.

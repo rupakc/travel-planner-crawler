@@ -185,7 +185,11 @@ draft YAML for a pull request, and nothing is crawled before that PR merges.
 
 To stop a source at runtime, `vcrawl admin source disable <id>` stops scheduling it and
 parks its due URLs; `admin source approve <id>` resumes it (refused for `restricted`
-licences). See
+licences). Both decisions are kept in `sources.enabled_override`, which the scheduler's
+re-seed never overwrites: a disabled source stays disabled when its YAML changes (and gets no
+new seed rows), an approved one stays enabled even if its YAML says `enabled: false`, unless
+its licence becomes `restricted`. `admin source list` shows the override (`null` = the YAML
+decides). See
 [Agentic Loops](Agentic-Loops).
 
 The research behind the catalogue (robots checks, terms, licences) is in `docs/research/`.
