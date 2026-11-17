@@ -277,10 +277,30 @@ async fn approve_candidate(pool: &PgPool, id: i64, by: &str) -> anyhow::Result<s
             "kinds": kinds,
             "cadence": "TODO",
             "enabled": false,
+            "relevance": draft_relevance(&row.get::<serde_json::Value, _>("checks")),
             "scout_checks": row.get::<serde_json::Value, _>("checks"),
             "destination": row.get::<Option<String>, _>("destination"),
         }
     }))
+}
+
+/// The `relevance` block of a draft spec: placeholders a person must replace (the validator
+/// rejects a spec without real sections and a `why`), seeded with the scout's reason.
+fn draft_relevance(checks: &serde_json::Value) -> serde_json::Value {
+    let why = match checks
+        .get("reason")
+        .and_then(serde_json::Value::as_str)
+        .filter(|r| !r.trim().is_empty())
+    {
+        Some(r) => format!("TODO (rewrite the scout's reason): {r}"),
+        None => "TODO: one sentence: what traveller-facing data it gives which section".into(),
+    };
+    serde_json::json!({
+        "sections": ["TODO: the app section(s) it serves (flights, weather, hotels, activities, \
+                      places, walking_tours, events, visa, sim, tips, emergency_card, \
+                      getting_around, forex, packing, itinerary)"],
+        "why": why,
+    })
 }
 
 /// A source id derived from a host (`www.Example.co.uk` → `example-co-uk`).

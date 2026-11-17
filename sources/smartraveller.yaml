@@ -37,3 +37,9 @@ key_secret: null
 max_retention_days: null
 display_requirements: null
 notes: timed out to honest UA 2026-11-15; retry politely, never evade
+relevance:
+  sections:
+  - visa
+  - tips
+  why: Official Australian travel advice per country (entry rules, safety, local laws) for Visa and Travel
+    tips.

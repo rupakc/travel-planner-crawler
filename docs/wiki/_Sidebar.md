@@ -13,6 +13,7 @@
 - [Processing and Extraction](Processing-and-Extraction)
 - [Data Model](Data-Model)
 - [Sources and Licences](Sources-and-Licences)
+- [Sources (registry)](Sources)
 - [Gemini and Budgets](Gemini-and-Budgets)
 - [Read API](Read-API)
 - [Agentic Loops](Agentic-Loops)

@@ -29,3 +29,6 @@ key_secret: null
 max_retention_days: null
 display_requirements: null
 notes: "JSON-LD events; the jazz night date changes in cycle 1"
+relevance:
+  sections: [events]
+  why: Test fixture data for the events section of the app.

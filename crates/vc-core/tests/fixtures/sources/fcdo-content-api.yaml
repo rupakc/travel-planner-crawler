@@ -40,3 +40,6 @@ max_retention_days: null
 display_requirements: null
 notes: 'entry reqs, safety, laws, emergency | URL template: https://www.gov.uk/api/content/foreign-travel-advice/{country}
   | Research cadence: on_change.'
+relevance:
+  sections: [visa]
+  why: Test fixture data for the visa section of the app.

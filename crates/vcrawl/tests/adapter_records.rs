@@ -125,9 +125,9 @@ async fn records_of(r: &Rig, kind: &str, source: &str) -> Vec<serde_json::Value>
 }
 
 #[test]
-fn ramp_lists_the_ten_sources() {
+fn ramp_lists_the_eight_sources() {
     let ids = ramp();
-    assert_eq!(ids.len(), 10, "{ids:?}");
+    assert_eq!(ids.len(), 8, "{ids:?}");
 }
 
 #[tokio::test]
@@ -370,43 +370,11 @@ async fn feeds_and_pages_enqueue_their_links() {
     };
     assert!(links > 0, "atom entries enqueued");
 
-    // State Department advisory RSS (structure of TAsTWs.xml).
-    let rss = r#"<?xml version="1.0" encoding="UTF-8"?>
-<rss version="2.0"><channel><title>Travel Advisories</title>
-<link>https://travel.state.gov</link><description>x</description>
-<item><title>France - Level 2: Exercise Increased Caution</title>
-<link>https://travel.state.gov/content/travel/en/traveladvisories/traveladvisories/france-travel-advisory.html</link>
-<pubDate>Wed, 22 Oct 2026 20:00:00 -0400</pubDate></item>
-</channel></rss>"#;
-    let o = run(
-        &r,
-        Cap {
-            media: MediaType::Rss,
-            ..Cap::html(
-                "https://travel.state.gov/_res/rss/TAsTWs.xml",
-                "state-dept-advisories-rss",
-                rss,
-                at(1),
-            )
-        },
-    )
-    .await;
-    let Outcome::Processed { links, .. } = o else {
-        panic!("rss: {o:?}")
-    };
-    assert!(links > 0, "rss items enqueued");
-
     // HTML index pages (LLM off: links only, no records).
-    for (url, src) in [
-        (
-            "https://travel.state.gov/content/travel/en/international-travel/International-Travel-Country-Information-Pages.html",
-            "state-dept-country-pages",
-        ),
-        (
-            "https://wwwnc.cdc.gov/travel/destinations/list",
-            "cdc-travel",
-        ),
-    ] {
+    for (url, src) in [(
+        "https://wwwnc.cdc.gov/travel/destinations/list",
+        "cdc-travel",
+    )] {
         let host = url.split('/').take(3).collect::<Vec<_>>().join("/");
         let html = format!(
             "<html><head><title>Index</title></head><body><main><h1>Destinations</h1>\

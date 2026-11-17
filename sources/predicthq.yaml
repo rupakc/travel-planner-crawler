@@ -32,3 +32,7 @@ key_secret: crawler-src-predicthq-key
 max_retention_days: null
 display_requirements: null
 notes: 'only if paid | Disabled: Paid only; the free plan has no API access. | Research cadence: never.'
+relevance:
+  sections:
+  - events
+  why: Events and public holidays worldwide for the Events section; paid only, so off.

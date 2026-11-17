@@ -32,3 +32,7 @@ key_secret: null
 max_retention_days: null
 display_requirements: null
 notes: null
+relevance:
+  sections:
+  - forex
+  why: Daily ECB-based exchange rates through a simple API, for the Forex section.

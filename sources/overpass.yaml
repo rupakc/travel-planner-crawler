@@ -33,3 +33,9 @@ key_secret: null
 max_retention_days: null
 display_requirements: null
 notes: shared infra, was at capacity; small queries, 1 concurrent, or self-host
+relevance:
+  sections:
+  - hotels
+  - places
+  why: Targeted OpenStreetMap lookups of hotels and sights around a destination, for Hotels and Places
+    to see.

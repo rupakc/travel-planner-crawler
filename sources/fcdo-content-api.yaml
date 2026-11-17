@@ -40,3 +40,10 @@ max_retention_days: null
 display_requirements: null
 notes: 'entry reqs, safety, laws, emergency | URL template: https://www.gov.uk/api/content/foreign-travel-advice/{country}
   | Research cadence: on_change.'
+relevance:
+  sections:
+  - visa
+  - emergency_card
+  - tips
+  why: Official UK travel advice per country (entry rules, safety, local laws, emergency numbers) for
+    Visa, Emergency card and Travel tips.

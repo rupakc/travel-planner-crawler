@@ -33,3 +33,7 @@ key_secret: null
 max_retention_days: null
 display_requirements: null
 notes: also runways/countries CSVs
+relevance:
+  sections:
+  - flights
+  why: Every airport with its codes, location and type, for the Flights section.

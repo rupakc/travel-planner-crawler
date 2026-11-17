@@ -32,3 +32,8 @@ key_secret: null
 max_retention_days: null
 display_requirements: null
 notes: RSS verified 2026-11-15; site is bot-walled, use feed only
+relevance:
+  sections:
+  - places
+  why: Atlas Obscura stories about unusual sights and hidden places, for Places to see (headline, link
+    and a short excerpt only).

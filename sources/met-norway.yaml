@@ -32,3 +32,7 @@ key_secret: null
 max_retention_days: null
 display_requirements: null
 notes: identifying UA mandatory; honour Expires
+relevance:
+  sections:
+  - weather
+  why: Weather forecasts for any location worldwide, for the Weather section.

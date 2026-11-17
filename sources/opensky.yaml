@@ -34,3 +34,7 @@ max_retention_days: null
 display_requirements: null
 notes: 'flight status only | Disabled: restricted licence (non-commercial or unknown), not ingested in
   v1 (spec §5.9).'
+relevance:
+  sections:
+  - flights
+  why: Flight positions and schedules for the Flights section; restricted terms, so off.

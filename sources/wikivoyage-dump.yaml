@@ -47,3 +47,15 @@ key_secret: null
 max_retention_days: null
 display_requirements: null
 notes: See/Do/Eat/Sleep/Get around/Connect/Stay safe/Respect; site crawl-delay 5, use dump
+relevance:
+  sections:
+  - places
+  - activities
+  - hotels
+  - tips
+  - getting_around
+  - sim
+  - packing
+  - walking_tours
+  why: Wikivoyage destination guides (sights, things to do, where to stay, getting around, SIM and tips)
+    for those app sections.

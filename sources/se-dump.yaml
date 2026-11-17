@@ -33,3 +33,8 @@ max_retention_days: null
 display_requirements: null
 notes: 'travel.stackexchange.com.7z; 2025-06-30 dump watermarked; no training use | Research cadence:
   semiannual.'
+relevance:
+  sections:
+  - tips
+  why: Travel Stack Exchange questions and answers (transit, border, money and practical problems) for
+    Travel tips.

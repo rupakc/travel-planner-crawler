@@ -33,3 +33,7 @@ key_secret: crawler-src-travelpayouts-key
 max_retention_days: null
 display_requirements: null
 notes: 'cached cheapest fares | Disabled: Live fares are a non-goal (spec §2).'
+relevance:
+  sections:
+  - flights
+  why: Cached flight prices for the Flights section; live fares are a non-goal, so off.

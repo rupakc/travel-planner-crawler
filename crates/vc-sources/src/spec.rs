@@ -139,6 +139,8 @@ pub fn validate(spec: &SourceSpec, opts: &ValidateOpts<'_>) -> Validation {
     if spec.licence.attribution.trim().is_empty() {
         v.errors.push("licence.attribution is empty".into());
     }
+    // Relevance: the app sections it serves and why; news/blogs must be travel-focused.
+    v.errors.extend(crate::relevance::check(spec));
     if spec.licence.class == LicenceClass::Restricted && spec.enabled {
         v.errors
             .push("restricted licence: the source must be enabled: false".into());

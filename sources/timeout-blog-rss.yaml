@@ -32,3 +32,8 @@ key_secret: null
 max_retention_days: null
 display_requirements: null
 notes: robots explicitly allows
+relevance:
+  sections:
+  - events
+  - activities
+  why: Time Out city articles (what's on, things to do, new openings) for Events and Activities.

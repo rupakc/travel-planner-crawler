@@ -91,6 +91,7 @@ python3 -m pytest -q scripts/tests     # sources/policy/schema generator
 bash scripts/check-ownership.sh --self-test
 bash scripts/check-ownership.sh --base origin/main      # your branch vs main
 python3 scripts/seeds_to_sources.py    # regenerate seed-derived sources/*.yaml
+python3 scripts/sources_doc.py         # regenerate docs/SOURCES.md + docs/wiki/Sources.md
 shellcheck -x $(git ls-files '*.sh')
 ```
 
@@ -101,6 +102,12 @@ Toolchain `1.99.0` (`rust-toolchain.toml`), edition 2024. TDD: failing test firs
 - **New source:** skill `add-source` (agent `source-onboarder`). `sources/<id>.yaml` valid
   against `schemas/source.schema.json`; enums are snake_case; `restricted` → `enabled: false`;
   seed-derived sources are changed in `scripts/seeds_to_sources.py` tables.
+  **Relevant and pertinent sites only** (owner rule, 2026-11-17): every source states which
+  app section(s) it serves and why (required `relevance: {sections, why}`, closed section
+  list; `vc_sources::relevance` rejects a missing/empty one, and news/blog feeds that are not
+  travel-focused); no non-travel sites; the owner approves every addition. Scout proposals
+  are never auto-approved. Regenerate `docs/SOURCES.md` with `python3 scripts/sources_doc.py`
+  (CI checks it is current).
 - **New API/dump:** `impl SourceAdapter` in `crates/vc-sources/src/adapters/`, register in
   `adapters::REGISTRY`, recorded wiremock fixture.
 - **New kind:** skill `add-kind`: `schemas/<kind>.v1.json` + `prompts/<kind>.md` +

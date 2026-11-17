@@ -29,3 +29,6 @@ key_secret: null
 max_retention_days: null
 display_requirements: null
 notes: "Official source under key immigration.test; noarchive and noindex pages, a disallowed /admin/"
+relevance:
+  sections: [visa]
+  why: Test fixture data for the visa section of the app.

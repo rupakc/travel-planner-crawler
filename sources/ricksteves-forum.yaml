@@ -33,3 +33,8 @@ max_retention_days: null
 display_requirements: null
 notes: '<=1 req/10 s, summaries+link only, no RSS | Disabled: v1 forums = Stack Exchange data dump only
   (spec §5.10, GDPR).'
+relevance:
+  sections:
+  - tips
+  why: Traveller questions and answers about trips in Europe, for Travel tips; v1 uses only the Stack
+    Exchange dump, so off.

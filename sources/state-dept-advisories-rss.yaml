@@ -26,9 +26,14 @@ cadence: h6
 min_delay_s: 5
 daily_budget: 3000
 politeness_key: null
-enabled: true
+enabled: false
 needs_key: false
 key_secret: null
 max_retention_days: null
 display_requirements: null
-notes: null
+notes: 'Disabled: travel.state.gov answers 403 to VoyagerBot''s robots.txt (bot wall) — do not crawl'
+relevance:
+  sections:
+  - visa
+  why: US travel advisory changes per country for the Visa section; travel.state.gov blocks our bot, so
+    off.

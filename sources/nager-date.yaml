@@ -33,3 +33,9 @@ max_retention_days: null
 display_requirements: Credit Nager.Date with a link.
 notes: 'URL template: https://date.nager.at/api/v3/PublicHolidays/{year}/{cc} | Disabled: robots.txt of
   date.nager.at disallows /api/v for all agents (checked 2026-11-16); the data is not published as files.'
+relevance:
+  sections:
+  - events
+  - itinerary
+  why: Public holidays per country (closures and crowds) for Events and the itinerary; robots.txt disallows
+    us, so off.

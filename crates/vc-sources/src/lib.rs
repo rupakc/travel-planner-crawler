@@ -6,6 +6,7 @@
 //! - [`adapters`]: the built-in API/dump adapters ([`adapters::REGISTRY`]), each streaming
 //!   through the permit client and writing raw records to the capture sink **before**
 //!   deriving anything (raw first).
+//! - [`relevance`]: the relevance gate (app sections + why; news/blogs travel-focused).
 //! - [`cursors`]: resume cursors of [`adapters::ResumableAdapter`]s, kept per leased row in
 //!   `adapter_cursors` (migration 1701), so a restart continues a paged stream.
 //!
@@ -13,6 +14,7 @@
 
 pub mod adapters;
 pub mod cursors;
+pub mod relevance;
 pub mod seed;
 pub mod sha256;
 pub mod spec;

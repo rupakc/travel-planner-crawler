@@ -36,3 +36,7 @@ key_secret: null
 max_retention_days: null
 display_requirements: null
 notes: facts+link, prices labelled observed
+relevance:
+  sections:
+  - sim
+  why: eSIM plans and prices per country compared across providers, for the SIM cards section.

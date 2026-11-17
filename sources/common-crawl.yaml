@@ -31,3 +31,10 @@ key_secret: null
 max_retention_days: null
 display_requirements: null
 notes: latest CC-MAIN-2026-43; URL discovery
+relevance:
+  sections:
+  - places
+  - activities
+  - tips
+  why: Index of a public web crawl, used only to discover travel pages (sights, things to do, advice)
+    for Places to see, Activities and Travel tips.

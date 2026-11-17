@@ -1,7 +1,7 @@
 # E2E source (plan Task 16): the fake web's blog site. Never deployed.
 id: e2e-blog
 name: E2E blog
-category: blogs
+category: tips
 source_class: editorial
 licence:
   class: facts_only
@@ -29,3 +29,6 @@ key_secret: null
 max_retention_days: null
 display_requirements: null
 notes: "RSS, sitemap, a post that changes in cycle 1, robots change in cycle 2, cross-key and private-IP redirects, a denylisted link"
+relevance:
+  sections: [tips]
+  why: Test fixture data for the tips section of the app.

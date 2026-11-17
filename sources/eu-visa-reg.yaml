@@ -33,3 +33,7 @@ key_secret: null
 max_retention_days: null
 display_requirements: null
 notes: plus ETIAS page travel-europe.europa.eu
+relevance:
+  sections:
+  - visa
+  why: The EU's official lists of nationalities that need a visa for the Schengen area, for the Visa section.

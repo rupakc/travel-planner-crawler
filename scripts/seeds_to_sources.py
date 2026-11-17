@@ -160,6 +160,7 @@ OFFICIAL = {
     "state-dept-advisories-rss", "state-dept-country-pages", "canada-travel-json",
     "eu-visa-reg", "smartraveller", "cdc-travel", "who-ith", "usembassy-list",
     "ecb-eurofxref", "fred-h10", "boc-valet", "imf-fx", "unesco-whc",
+    "liveriga",  # Riga's municipal tourism portal
 }
 COMMERCIAL_API = {
     "duffel", "travelpayouts", "booking-demand-api", "viator-partner", "gyg-partner",
@@ -170,6 +171,9 @@ COMMUNITY = {"se-dump", "se-api", "ricksteves-forum"}
 EDITORIAL = {
     "timeout-news-sitemap", "timeout-blog-rss", "freetour", "guruwalk", "esimdb",
     "seat61", "lonelyplanet-sitemaps",
+    # Venue and travel-guide sites (added 2026-11-17, owner request).
+    "brokenships", "torvehallerne", "mathallen-oslo", "noma", "alchemist", "rub-og-stub",
+    "culturetrip",
 }
 
 
@@ -244,6 +248,8 @@ KINDS_OVERRIDE = {
     "nager-date": ["event"],
     "inside-airbnb": ["place"],
     "common-crawl": [],
+    "liveriga": ["place", "attraction", "activity", "event", "tip"],
+    "culturetrip": ["article", "place", "attraction"],
 }
 # LLM extraction is for unstructured text only; adapters/feeds produce structured data.
 LLM_KINDS_OVERRIDE = {
@@ -263,6 +269,11 @@ LLM_KINDS_OVERRIDE = {
                         "packing_hint", "walking_tour"],
 }
 LLM_KINDS_BY_CATEGORY = {"blogs": ["tip"]}
+# Venue pages: facts about the place itself (opening hours, tickets) for the LLM to extract.
+LLM_KINDS_OVERRIDE["brokenships"] = ["attraction"]
+for _sid in ("torvehallerne", "mathallen-oslo", "noma", "alchemist", "rub-og-stub"):
+    LLM_KINDS_OVERRIDE[_sid] = ["activity", "attraction"]
+LLM_KINDS_OVERRIDE["liveriga"] = ["attraction", "activity", "event", "tip"]
 
 # Built-in adapters (plan Task 10).
 ADAPTERS = {
@@ -285,6 +296,10 @@ SEED_URL_OVERRIDE = {
     "fcdo-content-api": "https://www.gov.uk/api/content/foreign-travel-advice",
     "nager-date": "https://date.nager.at/api/v3/AvailableCountries",
 }
+
+STATE_DEPT_403 = (
+    "travel.state.gov answers 403 to VoyagerBot's robots.txt (bot wall) — do not crawl"
+)
 
 # Allowed by research but off in v1, with the reason (restricted ones are automatic).
 DISABLED = {
@@ -326,9 +341,216 @@ DISABLED = {
         "published API terms do not say automated access by third-party crawlers is allowed. "
         "When in doubt, don't crawl. Re-enable only with a readable robots.txt that allows us."
     ),
+    "culturetrip": (
+        "robots.txt answers, but the sitemap and every page time out for an honest bot "
+        "(tested from a laptop and from the prod VM 2026-11-17) — effectively a bot wall; do "
+        "not retry another way; owner asked for it — re-test only with a plain request."
+    ),
+    # Bot wall: never retry with another identity (CLAUDE.md hard rule 2).
+    "state-dept-advisories-rss": STATE_DEPT_403,
+    "state-dept-country-pages": STATE_DEPT_403,
 }
 
+# ---------------------------------------------------------------------------------------
+# Relevance: the Voyager app sections each source feeds and why (owner rule 2026-11-17:
+# "only add relevant and pertinent sites"). Every seed needs an entry; vc-sources validate
+# rejects a spec without one. `why` is one plain sentence about traveller-facing data.
+# ---------------------------------------------------------------------------------------
+SECTIONS = (
+    "flights", "weather", "hotels", "activities", "places", "walking_tours", "events", "visa",
+    "sim", "tips", "emergency_card", "getting_around", "forex", "packing", "itinerary",
+)
+MIN_WHY_CHARS = 20
+
+
+def _blog(sections: list[str], what: str) -> tuple[list[str], str]:
+    return sections, f"{what} (headline, link and a short excerpt only)."
+
+
+_DEST_BLOG = ["tips", "places"]
+_DEST_BLOG_WHY = "Travel blog posts with destination guides and practical trip advice, for Travel tips and Places to see"
+_POINTS_BLOG = ["flights", "hotels", "tips"]
+_NEWS = ["tips", "places"]
+
+
+def _news(name: str) -> tuple[list[str], str]:
+    return _blog(_NEWS, f"{name} travel-section articles (destination features, openings, travel disruptions) for Travel tips and Places to see")
+
+
+RELEVANCE: dict[str, tuple[list[str], str]] = {
+    # --- flights ---
+    "bts-t100": (["flights"], "Which airlines fly which US routes and how often (US DOT traffic data), for the Flights section's route list."),
+    "duffel": (["flights"], "Live flight offers for the Flights section; live fares are a non-goal, so off."),
+    "openflights": (["flights"], "Airline routes between airports for the Flights section; stale since 2014, so off."),
+    "opensky": (["flights"], "Flight positions and schedules for the Flights section; restricted terms, so off."),
+    "ourairports": (["flights"], "Every airport with its codes, location and type, for the Flights section."),
+    "travelpayouts": (["flights"], "Cached flight prices for the Flights section; live fares are a non-goal, so off."),
+    "wikidata-aviation": (["flights", "emergency_card"], "Airlines, airports and emergency numbers from Wikidata for Flights and the Emergency card; robots.txt disallows us, so off."),
+    "enwiki-dump": (["places", "flights", "emergency_card", "packing"], "Facts from English Wikipedia: places, airport destination tables, emergency numbers and plug and voltage types, for Places to see, Flights, the Emergency card and the Packing list."),
+    # --- weather ---
+    "ecmwf-open": (["weather"], "Global weather forecasts (GRIB2 files) for the Weather section; needs a self-hosted forecast model, so off."),
+    "ghcn": (["weather"], "Long-term daily weather records and climate normals per station, for the Weather section's what-to-expect by month."),
+    "met-norway": (["weather"], "Weather forecasts for any location worldwide, for the Weather section."),
+    "meteostat": (["weather"], "Historical weather and climate data per station for the Weather section; non-commercial licence, so off."),
+    "nws": (["weather"], "US weather forecasts and alerts for the Weather section."),
+    "open-meteo": (["weather"], "Weather forecasts and climate data for the Weather section; non-commercial free API, so off."),
+    # --- hotels / places ---
+    "booking-demand-api": (["hotels"], "Hotel listings and prices for the Hotels section; needs a partner contract, so off."),
+    "fsq-os-places": (["hotels", "places"], "Open points of interest (hotels, sights, restaurants) with names and coordinates, for Hotels and Places to see."),
+    "liveriga": (["places", "activities", "events", "tips"], "Riga's official tourism portal: sights, things to do, events and visitor advice, for Places to see, Activities, Events and Travel tips."),
+    "brokenships": (["places"], "Opening hours, tickets and visitor information for the Museum of Broken Relationships in Zagreb, for Places to see."),
+    "torvehallerne": (["places", "activities"], "Stalls, opening hours and visitor information for the Torvehallerne food market in Copenhagen, for Places to see and Activities."),
+    "mathallen-oslo": (["places", "activities"], "Vendors, opening hours and visitor information for the Mathallen food hall in Oslo, for Places to see and Activities."),
+    "noma": (["activities", "places"], "Opening dates, seasons and booking information for Noma, a destination restaurant in Copenhagen, for Activities and Places to see."),
+    "alchemist": (["activities", "places"], "Opening dates and booking information for Alchemist, a destination restaurant in Copenhagen, for Activities and Places to see."),
+    "rub-og-stub": (["activities", "places"], "Opening hours, menus and booking information for Rub & Stub, a social restaurant in Copenhagen, for Activities and Places to see."),
+    "culturetrip": (["places", "activities", "tips"], "Culture Trip destination guides (title and link only) for Places to see, Activities and Travel tips; every page times out for our bot, so off."),
+    "inside-airbnb": (["hotels"], "Short-stay rental accommodation by city and neighbourhood (where listings are, typical prices), for the Hotels section."),
+    "osm-geofabrik": (["hotels", "places", "getting_around"], "OpenStreetMap hotels, sights and transit stops per region, for Hotels, Places to see and Local transportation."),
+    "overpass": (["hotels", "places"], "Targeted OpenStreetMap lookups of hotels and sights around a destination, for Hotels and Places to see."),
+    "overture-places": (["hotels", "places"], "Open points of interest (hotels, sights) with names and coordinates, for Hotels and Places to see."),
+    "unesco-whc": (["places"], "UNESCO World Heritage Sites with descriptions and locations for Places to see; licence unverified, so off."),
+    "wikidata-dump": (["places"], "Facts about places and sights from Wikidata for Places to see; the full dump is too large, so off."),
+    "wikipedia-geosearch": (["places"], "Wikipedia articles about sights near a destination (names, coordinates, summaries), for Places to see."),
+    "wikivoyage-dump": (["places", "activities", "hotels", "tips", "getting_around", "sim", "packing", "walking_tours"], "Wikivoyage destination guides (sights, things to do, where to stay, getting around, SIM and tips) for those app sections."),
+    "common-crawl": (["places", "activities", "tips"], "Index of a public web crawl, used only to discover travel pages (sights, things to do, advice) for Places to see, Activities and Travel tips."),
+    # --- activities / walking tours / events ---
+    "gyg-partner": (["activities"], "Bookable tours and activities with prices, for the Activities section; needs affiliate approval, so off."),
+    "opentripmap": (["places", "activities"], "Tourist attractions with names, categories and coordinates, for Places to see and Activities."),
+    "viator-partner": (["activities"], "Bookable tours and activities with prices, for the Activities section; needs affiliate approval, so off."),
+    "freetour": (["walking_tours"], "Free tip-based walking tours by city with meeting points, for the Free walking tours section."),
+    "guruwalk": (["walking_tours"], "Free tip-based walking tours by city with times and meeting points, for the Free walking tours section."),
+    "eventbrite-api": (["events"], "Public events by organiser and venue (dates, venues, links), for the Events section."),
+    "nager-date": (["events", "itinerary"], "Public holidays per country (closures and crowds) for Events and the itinerary; robots.txt disallows us, so off."),
+    "paris-quefaire": (["events", "activities"], "Official Paris city events and things to do with dates and venues, for Events and Activities."),
+    "predicthq": (["events"], "Events and public holidays worldwide for the Events section; paid only, so off."),
+    "seatgeek": (["events"], "Concerts, sports and theatre events with dates and venues, for the Events section."),
+    "ticketmaster": (["events"], "Concerts, sports and theatre events with dates, venues and ticket links, for the Events section."),
+    "timeout-blog-rss": (["events", "activities"], "Time Out city articles (what's on, things to do, new openings) for Events and Activities."),
+    "timeout-news-sitemap": (["events", "activities"], "Time Out city news pages (events, openings, things to do) for Events and Activities."),
+    # --- visa / advisories / emergency card ---
+    "canada-travel-json": (["visa", "emergency_card"], "Official Canadian travel advice per country (entry rules, safety level, emergency contacts) for Visa and the Emergency card."),
+    "eu-visa-reg": (["visa"], "The EU's official lists of nationalities that need a visa for the Schengen area, for the Visa section."),
+    "fcdo-atom": (["visa"], "Change feed of the UK's travel advice per country, so the Visa section's entry and safety advice stays current."),
+    "fcdo-content-api": (["visa", "emergency_card", "tips"], "Official UK travel advice per country (entry rules, safety, local laws, emergency numbers) for Visa, Emergency card and Travel tips."),
+    "gov-uk-check-visa": (["visa"], "Official UK rules on which nationalities need a visa to visit the UK, for the Visa section."),
+    "passport-index-dataset": (["visa"], "Visa requirements by passport, only as a cross-check for the Visa section; provenance unclear, so off."),
+    "smartraveller": (["visa", "tips"], "Official Australian travel advice per country (entry rules, safety, local laws) for Visa and Travel tips."),
+    "state-dept-advisories-api": (["visa"], "Official US travel advisory level and summary per country, for the Visa section's safety advice."),
+    "state-dept-advisories-rss": (["visa"], "US travel advisory changes per country for the Visa section; travel.state.gov blocks our bot, so off."),
+    "state-dept-country-pages": (["visa", "emergency_card"], "US entry rules and embassy contacts per country for Visa and the Emergency card; travel.state.gov blocks our bot, so off."),
+    "usembassy-list": (["emergency_card"], "US embassy and consulate addresses and phone numbers per country, for the Emergency card."),
+    # --- health tips / packing ---
+    "cdc-travel": (["tips", "packing"], "Official health advice per destination (vaccines, medicines, health risks) for Travel tips and the Packing list."),
+    "who-ith": (["tips", "packing"], "WHO health advice for travellers (vaccines, health risks) for Travel tips and the Packing list; licence restricted, so off."),
+    # --- SIM ---
+    "airalo-partner": (["sim"], "eSIM data plans and prices per country for the SIM cards section; needs partner approval, so off."),
+    "esimdb": (["sim"], "eSIM plans and prices per country compared across providers, for the SIM cards section."),
+    # --- getting around ---
+    "gbfs-systems": (["getting_around"], "The list of bike- and scooter-share systems by city, for the Local transportation section."),
+    "mobility-database": (["getting_around"], "Catalogue of public-transit (GTFS) feeds by city for Local transportation; robots.txt disallows us, so off."),
+    "mobility-database-api": (["getting_around"], "Catalogue of public-transit (GTFS) feeds by city for Local transportation; robots.txt is unreadable, so off."),
+    "seat61": (["getting_around"], "How to travel by train and ferry between cities and countries, for Local transportation."),
+    "transitland": (["getting_around"], "Public-transit operators and their routes and stops by city, for Local transportation."),
+    # --- forex ---
+    "boc-valet": (["forex"], "Daily Bank of Canada exchange rates for the Forex section."),
+    "ecb-eurofxref": (["forex"], "Daily European Central Bank euro exchange rates for the Forex section."),
+    "er-api-open": (["forex"], "Daily exchange rates for about 160 currencies for the Forex section."),
+    "frankfurter": (["forex"], "Daily ECB-based exchange rates through a simple API, for the Forex section."),
+    "fred-h10": (["forex"], "US Federal Reserve daily exchange rates (H.10 release) for the Forex section."),
+    "imf-fx": (["forex"], "IMF monthly representative exchange rates for the Forex section; terms restricted, so off."),
+    # --- forums ---
+    "ricksteves-forum": (["tips"], "Traveller questions and answers about trips in Europe, for Travel tips; v1 uses only the Stack Exchange dump, so off."),
+    "se-api": (["tips"], "Travel Stack Exchange questions and answers for Travel tips; v1 uses the data dump instead, so off."),
+    "se-dump": (["tips"], "Travel Stack Exchange questions and answers (transit, border, money and practical problems) for Travel tips."),
+    # --- travel news (travel sections and travel publications only) ---
+    "lonelyplanet-sitemaps": _blog(["places", "tips"], "Lonely Planet destination articles for Places to see and Travel tips"),
+    "news-atlasobscura": _blog(["places"], "Atlas Obscura stories about unusual sights and hidden places, for Places to see"),
+    "news-bbc": _news("BBC Travel"),
+    "news-cnbc": _news("CNBC Travel"),
+    "news-cnn": _news("CNN Travel"),
+    "news-cntraveler": _news("Condé Nast Traveler (US)"),
+    "news-cntraveller": _news("Condé Nast Traveller (UK)"),
+    "news-euronews": _news("Euronews Travel"),
+    "news-guardian": _news("The Guardian Travel"),
+    "news-independent": _news("The Independent Travel"),
+    "news-nyt": _news("New York Times Travel"),
+    "news-smithsonian": _news("Smithsonian Travel"),
+    "news-telegraph": _news("The Telegraph Travel"),
+    "news-thetravel": _news("TheTravel"),
+    "news-travelmag": _news("Travel-Mag"),
+    "news-wanderlust": _news("Wanderlust (UK)"),
+    "news-skift": _blog(["flights", "tips"], "Skift travel news (airline, route, airport and travel-rule changes) for Flights and Travel tips"),
+    "news-traveldailynews": _blog(["flights", "tips"], "TravelDailyNews articles (airline, route, airport and travel-rule changes) for Flights and Travel tips"),
+    "news-simpleflying": _blog(["flights", "tips"], "Simple Flying aviation news (new routes, airline and airport changes) for Flights and Travel tips"),
+    # --- travel blogs ---
+    "blog-adventurouskate": _blog(_DEST_BLOG, "Solo and women's travel guides from Adventurous Kate, for Travel tips and Places to see"),
+    "blog-alexinwanderland": _blog(_DEST_BLOG, _DEST_BLOG_WHY),
+    "blog-atlasandboots": _blog(["activities", "places", "tips"], "Hiking and outdoor adventure guides from Atlas & Boots, for Activities, Places to see and Travel tips"),
+    "blog-bemytravelmuse": _blog(_DEST_BLOG, "Solo travel guides and itineraries from Be My Travel Muse, for Travel tips and Places to see"),
+    "blog-dangerousbusiness": _blog(_DEST_BLOG, _DEST_BLOG_WHY),
+    "blog-earthtrekkers": _blog(["itinerary", "activities", "places"], "Detailed trip itineraries and hikes from Earth Trekkers, for the itinerary, Activities and Places to see"),
+    "blog-everythingeverywhere": _blog(_DEST_BLOG, _DEST_BLOG_WHY),
+    "blog-goatsontheroad": _blog(_DEST_BLOG, "Budget and long-term travel guides from Goats on the Road, for Travel tips and Places to see"),
+    "blog-headforpoints": _blog(_POINTS_BLOG, "Airline, airport-lounge and hotel reviews and booking tips from Head for Points, for Flights, Hotels and Travel tips"),
+    "blog-heartmybackpack": _blog(_DEST_BLOG, _DEST_BLOG_WHY),
+    "blog-hoponworld": _blog(_DEST_BLOG, _DEST_BLOG_WHY),
+    "blog-legalnomads": _blog(["tips", "places"], "Food-focused travel guides and practical advice (including dietary needs) from Legal Nomads, for Travel tips and Places to see"),
+    "blog-lostwithpurpose": _blog(_DEST_BLOG, "Off-the-beaten-path destination guides from Lost With Purpose, for Travel tips and Places to see"),
+    "blog-matadornetwork": _blog(_DEST_BLOG, "Destination features and travel advice from Matador Network, for Travel tips and Places to see"),
+    "blog-migrationology": _blog(["tips", "activities"], "Street-food and local-food travel guides from Migrationology, for Travel tips and Activities"),
+    "blog-neverendingfootsteps": _blog(_DEST_BLOG, _DEST_BLOG_WHY),
+    "blog-nomadasaurus": _blog(["activities", "places", "tips"], "Adventure and overland travel guides from Nomadasaurus, for Activities, Places to see and Travel tips"),
+    "blog-nomadicmatt": _blog(_DEST_BLOG, "Budget travel guides and money-saving advice from Nomadic Matt, for Travel tips and Places to see"),
+    "blog-onemileatatime": _blog(_POINTS_BLOG, "Airline, airport and hotel reviews and booking tips from One Mile at a Time, for Flights, Hotels and Travel tips"),
+    "blog-saltinourhair": _blog(_DEST_BLOG, _DEST_BLOG_WHY),
+    "blog-theblondeabroad": _blog(_DEST_BLOG, _DEST_BLOG_WHY),
+    "blog-theplanetd": _blog(_DEST_BLOG, _DEST_BLOG_WHY),
+    "blog-thepointsguy": _blog(_POINTS_BLOG, "Airline and hotel reviews and booking tips from The Points Guy, for Flights, Hotels and Travel tips"),
+    "blog-travelsofadam": _blog(_DEST_BLOG, "City guides (including LGBTQ travel) from Travels of Adam, for Travel tips and Places to see"),
+    "blog-twowanderingsoles": _blog(_DEST_BLOG, _DEST_BLOG_WHY),
+    "blog-uncorneredmarket": _blog(_DEST_BLOG, _DEST_BLOG_WHY),
+    "blog-viewfromthewing": _blog(_POINTS_BLOG, "Airline and hotel news and booking tips from View from the Wing, for Flights, Hotels and Travel tips"),
+    "blog-wanderlustcrew": _blog(_DEST_BLOG, _DEST_BLOG_WHY),
+    "blog-wildjunket": _blog(_DEST_BLOG, "Adventure travel guides from Wild Junket, for Travel tips and Places to see"),
+    "blog-worldofwanderlust": _blog(_DEST_BLOG, _DEST_BLOG_WHY),
+    "blog-thequantumexplorer": _blog(["places", "activities", "tips"], "European city guides (Malta, Zagreb, Oslo, Copenhagen, Prague and more) from the Quantum Explorer travel blog, for Places to see, Activities and Travel tips"),
+    "blog-ytravelblog": _blog(_DEST_BLOG, "Family travel guides from Y Travel Blog, for Travel tips and Places to see"),
+}
+
+
+def relevance(sid: str) -> dict:
+    """The `relevance:` block for a seed; a seed without one fails generation."""
+    if sid not in RELEVANCE:
+        raise MappingError(
+            f"{sid}: no RELEVANCE entry; name the app section(s) it serves and why"
+        )
+    sections, why = RELEVANCE[sid]
+    bad = [s for s in sections if s not in SECTIONS]
+    if not sections or bad or len(set(sections)) != len(sections):
+        raise MappingError(f"{sid}: bad relevance sections {sections}")
+    if len(why.strip()) < MIN_WHY_CHARS or "\n" in why:
+        raise MappingError(f"{sid}: relevance why must be one sentence of >= {MIN_WHY_CHARS} chars")
+    return {"sections": list(sections), "why": why}
+
+
 MIN_DELAY = {"cdc-travel": 20, "seat61": 10, "ricksteves-forum": 10}
+
+# Small single-venue sites (added 2026-11-17): one page deep, a small daily budget, and the
+# sitemap the site publishes. Each stays on its own host (no includes = seed host only).
+_VENUES = ("brokenships", "torvehallerne", "mathallen-oslo", "noma", "alchemist", "rub-og-stub")
+MAX_DEPTH = {sid: 1 for sid in _VENUES} | {"liveriga": 2}
+DAILY_BUDGET = {sid: 100 for sid in _VENUES} | {"liveriga": 500}
+EXTRA_SITEMAPS = {
+    "blog-thequantumexplorer": ["https://thequantumexplorer.org/sitemap.xml"],
+    "brokenships": ["https://brokenships.com/sitemap.xml"],
+    "torvehallerne": ["https://torvehallernekbh.dk/sitemap_index.xml"],
+    "mathallen-oslo": ["https://mathallenoslo.no/sitemap_index.xml"],
+    "noma": ["https://noma.dk/sitemap.xml"],
+    "alchemist": ["https://alchemist.dk/sitemap_index.xml"],
+}
+# English pages of Live Riga only (the include also pins the host).
+INCLUDE = {"liveriga": [r"^https://www\.liveriga\.com/en/"]}
 
 EXCLUDE = {
     "freetour": [r"^/company/", r"^/booking/", r"^/review/", r"^/account/"],
@@ -437,7 +659,8 @@ def build_spec(seed: dict) -> dict:
         notes.append(f"Research cadence: {seed['cadence']}.")
 
     needs_key = bool(seed["needs_key"])
-    max_depth = {"rss": 1, "sitemap": 1, "html": 2}.get(method, 0)
+    max_depth = MAX_DEPTH.get(sid, {"rss": 1, "sitemap": 1, "html": 2}.get(method, 0))
+    sitemaps.extend(u for u in EXTRA_SITEMAPS.get(sid, []) if u not in sitemaps)
 
     spec: dict = {
         "id": sid,
@@ -450,7 +673,7 @@ def build_spec(seed: dict) -> dict:
         "sitemaps": sitemaps,
         "feeds": feeds,
         "adapter": ADAPTERS.get(sid),
-        "include": [],
+        "include": INCLUDE.get(sid, []),
         "exclude": EXCLUDE.get(sid, []),
         "max_depth": max_depth,
         "kinds": list(kinds),
@@ -458,7 +681,7 @@ def build_spec(seed: dict) -> dict:
         "render": "never",
         "cadence": CADENCE[seed["cadence"]],
         "min_delay_s": MIN_DELAY.get(sid, 5),
-        "daily_budget": 3000,
+        "daily_budget": DAILY_BUDGET.get(sid, 3000),
         "politeness_key": None,
         "enabled": enabled,
         "needs_key": needs_key,
@@ -466,6 +689,7 @@ def build_spec(seed: dict) -> dict:
         "max_retention_days": MAX_RETENTION_DAYS.get(sid),
         "display_requirements": DISPLAY_REQUIREMENTS.get(sid),
         "notes": " | ".join(notes) or None,
+        "relevance": relevance(sid),
     }
     return spec
 
@@ -479,7 +703,9 @@ def generate(seeds_path: Path, out_dir: Path, denylist_path: Path) -> list[Path]
         if not seed["allowed"]:
             continue
         spec = build_spec(seed)
-        for u in spec["seeds"] + spec["sitemaps"] + spec["feeds"]:
+        # A disabled source may name a denylisted host (it is never fetched); vc-sources
+        # validate applies the same rule.
+        for u in (spec["seeds"] + spec["sitemaps"] + spec["feeds"]) if spec["enabled"] else []:
             hit = denied(u, deny)
             if hit:
                 raise MappingError(f"{spec['id']}: {u} is denylisted ({hit['reason']})")

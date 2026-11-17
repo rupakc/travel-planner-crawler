@@ -32,3 +32,7 @@ key_secret: crawler-src-airalo-partner-key
 max_retention_days: null
 display_requirements: null
 notes: 'Disabled: Needs partner approval (not granted).'
+relevance:
+  sections:
+  - sim
+  why: eSIM data plans and prices per country for the SIM cards section; needs partner approval, so off.

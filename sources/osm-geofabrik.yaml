@@ -35,3 +35,10 @@ key_secret: null
 max_retention_days: null
 display_requirements: null
 notes: hotels, attractions, transit; shared
+relevance:
+  sections:
+  - hotels
+  - places
+  - getting_around
+  why: OpenStreetMap hotels, sights and transit stops per region, for Hotels, Places to see and Local
+    transportation.

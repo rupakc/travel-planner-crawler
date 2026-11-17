@@ -32,3 +32,8 @@ key_secret: null
 max_retention_days: null
 display_requirements: null
 notes: change feed driving refetch
+relevance:
+  sections:
+  - visa
+  why: Change feed of the UK's travel advice per country, so the Visa section's entry and safety advice
+    stays current.

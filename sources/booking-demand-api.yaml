@@ -33,3 +33,7 @@ key_secret: crawler-src-booking-demand-api-key
 max_retention_days: null
 display_requirements: null
 notes: 'approval required | Disabled: Hotel prices are a non-goal; needs a partner contract.'
+relevance:
+  sections:
+  - hotels
+  why: Hotel listings and prices for the Hotels section; needs a partner contract, so off.

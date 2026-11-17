@@ -33,3 +33,8 @@ key_secret: crawler-src-viator-partner-key
 max_retention_days: null
 display_requirements: null
 notes: 'Disabled: Needs affiliate approval (not granted).'
+relevance:
+  sections:
+  - activities
+  why: Bookable tours and activities with prices, for the Activities section; needs affiliate approval,
+    so off.

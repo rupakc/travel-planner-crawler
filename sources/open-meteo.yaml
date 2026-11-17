@@ -33,3 +33,7 @@ max_retention_days: null
 display_requirements: null
 notes: 'commercial => subscription or self-host (AGPLv3) | Disabled: restricted licence (non-commercial
   or unknown), not ingested in v1 (spec §5.9). | Research cadence: hourly_cache.'
+relevance:
+  sections:
+  - weather
+  why: Weather forecasts and climate data for the Weather section; non-commercial free API, so off.

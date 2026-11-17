@@ -32,3 +32,7 @@ key_secret: crawler-src-seatgeek-key
 max_retention_days: 30
 display_requirements: SeatGeek attribution per the platform terms.
 notes: verify current availability
+relevance:
+  sections:
+  - events
+  why: Concerts, sports and theatre events with dates and venues, for the Events section.

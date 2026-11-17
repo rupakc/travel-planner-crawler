@@ -32,3 +32,8 @@ key_secret: null
 max_retention_days: null
 display_requirements: null
 notes: neighbourhood context only
+relevance:
+  sections:
+  - hotels
+  why: Short-stay rental accommodation by city and neighbourhood (where listings are, typical prices),
+    for the Hotels section.
