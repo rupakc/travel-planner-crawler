@@ -25,7 +25,8 @@ use vc_core::{CanonicalUrl, OriginKey};
 ///   IPv4-mapped IPv6 are blocked. Ports are not checked (wiremock uses random ports).
 /// * Denylist: exact hosts added with [`StubPolicy::deny_host`].
 /// * Challenge: a `cf-mitigated: challenge` header or a body containing `cf-challenge`.
-/// * Robots: prefix match of `Disallow:` lines; `Unauthorized`/`Challenge` → `KeyBlocked`;
+/// * Robots: prefix match of `Disallow:` lines; `Unauthorized` → `Disallowed` (that origin
+///   only); `Challenge` → `KeyBlocked`;
 ///   `Unavailable` → `Unavailable`; `NotFound` → allowed.
 #[derive(Debug, Default)]
 pub struct StubPolicy {
@@ -115,7 +116,8 @@ impl Policy for StubPolicy {
                 crawl_delay: None,
                 ai_reserved: false,
             },
-            RobotsStatus::Unauthorized | RobotsStatus::Challenge => RobotsVerdict::KeyBlocked,
+            RobotsStatus::Unauthorized => RobotsVerdict::Disallowed,
+            RobotsStatus::Challenge => RobotsVerdict::KeyBlocked,
             RobotsStatus::Unavailable => RobotsVerdict::Unavailable,
             RobotsStatus::Ok => {
                 let body = r.body.as_deref().unwrap_or_default();
@@ -146,10 +148,7 @@ impl Policy for StubPolicy {
 
     fn robots_summary(&self, r: &RobotsEntry) -> RobotsSummary {
         RobotsSummary {
-            key_blocked: matches!(
-                r.status,
-                RobotsStatus::Unauthorized | RobotsStatus::Challenge
-            ),
+            key_blocked: r.status == RobotsStatus::Challenge,
             ..RobotsSummary::default()
         }
     }

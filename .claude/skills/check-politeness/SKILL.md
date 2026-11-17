@@ -42,6 +42,6 @@ Spawn the `politeness-auditor` agent with the branch or PR number. It returns PA
 
 ## 3. Tests that must stay green and unweakened
 
-`vc-policy::robots_refresh_tombstones`, `robots_401_403_blocks_key`, `challenge_fixtures_detected`, `ssrf_blocks_all_listed_ranges`; `vc-fetch::redirect_cross_key_enqueued`, `redirect_to_private_ip_blocked`, `ua_is_exact_constant`, `lost_lease_aborts_before_request`; `vc-frontier::rate_token_global_across_pools`, `delay_respects_crawl_delay`; render `subrequest_to_private_ip_blocked`, `third_party_not_allowlisted_failed`; the E2E politeness oracle (skill `run-e2e`).
+`vc-policy::robots_refresh_tombstones`, `robots_401_403_disallows_the_origin_not_the_key`, `robots_challenge_blocks_key`, `challenge_fixtures_detected`, `ssrf_blocks_all_listed_ranges`; `vc-fetch::redirect_cross_key_enqueued`, `redirect_to_private_ip_blocked`, `ua_is_exact_constant`, `lost_lease_aborts_before_request`; `vc-frontier::rate_token_global_across_pools`, `delay_respects_crawl_delay`; render `subrequest_to_private_ip_blocked`, `third_party_not_allowlisted_failed`; the E2E politeness oracle (skill `run-e2e`).
 
 ## 4. Fill the PR template checklist honestly. Any FAIL blocks the merge.

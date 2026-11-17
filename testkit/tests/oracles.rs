@@ -243,17 +243,39 @@ fn robots_404_allows_all_and_5xx_disallows_all() {
     assert_eq!(kinds(&l, &s503), vec![ViolationKind::Disallowed]);
 }
 
+/// robots.txt 401/403 blocks its own origin for good (robots.txt included); another host of the
+/// key with its own robots.txt is still crawlable, and the refusal does not park the key.
 #[test]
-fn robots_401_403_or_challenge_blocks_the_whole_key() {
+fn robots_401_403_blocks_its_origin_only() {
     for status in [401, 403] {
-        let s = PolicySnapshot::new().robots_served("http://blog.test", t(100), status, "");
+        let s = PolicySnapshot::new()
+            .robots_served("http://blog.test", t(100), status, "")
+            .robots_served("http://www.blog.test", t(5_200), 404, "");
+        // The other host of the key: polite.
         let l = log(vec![
             entry("http://blog.test/robots.txt", 0, 100, status),
-            entry("http://www.blog.test/robots.txt", 5_100, 5_200, 200),
+            entry("http://www.blog.test/robots.txt", 5_100, 5_200, 404),
+            entry("http://www.blog.test/x", 10_200, 10_300, 200),
         ]);
-        let k = kinds(&l, &s);
-        assert!(k.contains(&ViolationKind::KeyBlocked), "{status}: {k:?}");
+        assert_eq!(check_polite(&l, &s), vec![], "{status}");
+        // The refusing origin: any later request, a page or robots.txt again, is a violation.
+        for later in ["http://blog.test/x", "http://blog.test/robots.txt"] {
+            let l = log(vec![
+                entry("http://blog.test/robots.txt", 0, 100, status),
+                entry(later, 5_100, 5_200, 200),
+            ]);
+            let k = kinds(&l, &s);
+            assert!(
+                k.contains(&ViolationKind::OriginBlocked),
+                "{status} {later}: {k:?}"
+            );
+        }
     }
+}
+
+/// A challenge on robots.txt blocks every host of the key.
+#[test]
+fn robots_challenge_blocks_the_whole_key() {
     let s = PolicySnapshot::new().robots_challenge("http://blog.test", t(100));
     let l = log(vec![
         entry("http://blog.test/robots.txt", 0, 100, 200),

@@ -25,8 +25,9 @@ agent and the `check-politeness` skill review diffs against them.
    mints one; `clippy.toml` `disallowed-methods` enforces it) **plus a lease check and a
    global DB rate token per request** (`PermitClient::pace`). That includes robots.txt,
    sitemaps, feeds, adapters, render sub-requests, admin validate and scout checks.
-4. **robots.txt per RFC 9309, stricter:** 401/403/challenge on robots → whole key
-   do-not-crawl; 5xx → disallow; `VoyagerBot` group else `*`; AI-bot block → AI
+4. **robots.txt per RFC 9309, stricter:** 401/403 on robots → that origin do-not-crawl
+   (robots.txt speaks for its own origin; other hosts of the key keep their own robots.txt);
+   a challenge on robots → whole key do-not-crawl; 5xx → disallow; `VoyagerBot` group else `*`; AI-bot block → AI
    reservation. Crawl-delay, X-Robots-Tag, meta robots, TDM, Content-Signal are honoured
    via the UsePolicy matrix (spec §5.2), which can only restrict (meet).
 5. **Delay per key** = max(Crawl-delay, `min_delay_s` ≥ 5 s, 10 × EWMA, penalty) ≤ 1 h;

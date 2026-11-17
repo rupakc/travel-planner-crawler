@@ -25,7 +25,9 @@ pub enum RobotsStatus {
     Ok,
     /// 404/410 (and other 4xx except 401/403/429): allow all.
     NotFound,
-    /// 401/403: the whole key is do-not-crawl (our stricter rule).
+    /// 401/403: this origin is do-not-crawl (our stricter rule; RFC 9309 would allow all).
+    /// Like robots.txt itself it speaks for its own origin only: other hosts of the key keep
+    /// their own robots.txt.
     Unauthorized,
     /// The robots.txt response was a challenge page: the whole key is do-not-crawl.
     Challenge,
@@ -72,7 +74,7 @@ pub enum RobotsVerdict {
     },
     /// This path is disallowed.
     Disallowed,
-    /// The whole politeness key is do-not-crawl (401/403 or challenge on robots.txt): park it.
+    /// The whole politeness key is do-not-crawl (a challenge page on robots.txt): park it.
     KeyBlocked,
     /// robots.txt is temporarily unavailable (5xx/network) and there is no usable last good
     /// copy: treat as disallowed, retry later.
@@ -95,7 +97,7 @@ pub struct RobotsSummary {
     pub sitemaps: Vec<Url>,
     /// The site blocks the major AI crawlers but allows `*` (AI reservation).
     pub ai_reserved: bool,
-    /// The whole key must be blocked (401/403/challenge).
+    /// The whole key must be blocked (a challenge page on robots.txt).
     pub key_blocked: bool,
 }
 

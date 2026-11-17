@@ -13,9 +13,14 @@
 //! * **Disallowed** — a path disallowed by the robots.txt most recently served to the crawler
 //!   for that origin (`VoyagerBot` group, else `*`; 5xx/429 → everything disallowed). The
 //!   oracle uses its own robots parser (`texting_robots`), independent of `vc-policy`.
-//! * **KeyBlocked** — any request to a key after its robots.txt answered 401/403 or a challenge.
-//! * **AfterPark** — a request inside a back-off window: a challenge or a 401/403 parks the key
-//!   for [`PolicySnapshot::park_ms`] (24 h); a scripted [`Backoff`] (e.g. `Retry-After`) too.
+//! * **KeyBlocked** — any request to a key after a robots.txt of the key answered with a
+//!   challenge.
+//! * **OriginBlocked** — any request to an origin (its robots.txt included) after its robots.txt
+//!   answered 401/403. robots.txt speaks for its own origin (RFC 9309 §2.3), so other hosts of
+//!   the key stay governed by their own robots.txt.
+//! * **AfterPark** — a request inside a back-off window: a challenge or a 401/403 on anything but
+//!   robots.txt parks the key for [`PolicySnapshot::park_ms`] (24 h); a scripted [`Backoff`]
+//!   (e.g. `Retry-After`) too.
 //! * **Denylisted** — a request to a denylisted host (`host`, its subdomains, or `brand.*`).
 //! * **WrongUserAgent** — anything other than the one honest UA.
 //!
@@ -228,8 +233,10 @@ pub enum ViolationKind {
     NoRobots,
     /// Path disallowed by the robots.txt in effect.
     Disallowed,
-    /// The key is do-not-crawl (robots 401/403/challenge).
+    /// The key is do-not-crawl (a challenge on robots.txt).
     KeyBlocked,
+    /// The origin is do-not-crawl (robots.txt answered 401/403).
+    OriginBlocked,
     /// Inside a park / back-off window.
     AfterPark,
     /// Denylisted host.
@@ -306,6 +313,7 @@ enum RobotsState {
     AllowAll,
     DisallowAll(u16),
     KeyBlocked(&'static str),
+    OriginBlocked(u16),
     Rules(Box<texting_robots::Robot>),
 }
 
@@ -319,7 +327,7 @@ fn robots_state(r: &RobotsServed) -> RobotsState {
             // An unparseable body: be strict.
             Err(_) => RobotsState::DisallowAll(r.status),
         },
-        401 | 403 => RobotsState::KeyBlocked("unauthorized"),
+        401 | 403 => RobotsState::OriginBlocked(r.status),
         429 | 500..=599 => RobotsState::DisallowAll(r.status),
         // 3xx left unresolved by the crawler, 404/410 and other 4xx: allow all.
         _ => RobotsState::AllowAll,
@@ -339,6 +347,14 @@ pub fn check_polite(log: &RequestLog, snap: &PolicySnapshot) -> Vec<Violation> {
             .copied()
     };
 
+    // Origin blocks from robots 401/403: (origin, since, status), never ending.
+    let origin_blocks: Vec<(&str, DateTime<Utc>, u16)> = robots
+        .iter()
+        .filter_map(|r| match robots_state(r) {
+            RobotsState::OriginBlocked(st) => Some((r.origin.as_str(), r.at, st)),
+            _ => None,
+        })
+        .collect();
     // Key blocks from robots, as back-off windows that never end.
     let mut windows: Vec<Backoff> = snap.backoffs.clone();
     for r in &robots {
@@ -358,9 +374,10 @@ pub fn check_polite(log: &RequestLog, snap: &PolicySnapshot) -> Vec<Violation> {
         let min_delay = rules.min_delay_ms.unwrap_or(snap.default_min_delay_ms);
         let mut key_windows: Vec<Backoff> =
             windows.iter().filter(|w| w.key == key).cloned().collect();
-        // 401/403 on any response parks the key (detect → park).
+        // 401/403 on any response but robots.txt parks the key (detect → park); on robots.txt it
+        // blocks that origin for good (`origin_blocks`).
         for e in &entries {
-            if matches!(e.status, 401 | 403) {
+            if matches!(e.status, 401 | 403) && !Url::parse(&e.url).is_ok_and(|u| is_robots(&u)) {
                 key_windows.push(Backoff {
                     key: key.clone(),
                     from: e.ended_at,
@@ -434,6 +451,15 @@ pub fn check_polite(log: &RequestLog, snap: &PolicySnapshot) -> Vec<Violation> {
                 .iter()
                 .any(|p| u.path().starts_with(p.as_str()));
             let origin = u.origin().ascii_serialization();
+            if let Some((_, since, st)) = origin_blocks
+                .iter()
+                .find(|(o, since, _)| *o == origin && e.started_at > *since)
+            {
+                push(
+                    ViolationKind::OriginBlocked,
+                    format!("robots.txt answered {st} at {}", since.to_rfc3339()),
+                );
+            }
             let in_effect = robots_for(&origin, e.started_at);
             let crawl_delay_ms = in_effect
                 .and_then(|r| match robots_state(r) {
@@ -465,7 +491,9 @@ pub fn check_polite(log: &RequestLog, snap: &PolicySnapshot) -> Vec<Violation> {
                     ),
                     None => {}
                     Some(r) => match robots_state(r) {
-                        RobotsState::AllowAll | RobotsState::KeyBlocked(_) => {}
+                        RobotsState::AllowAll
+                        | RobotsState::KeyBlocked(_)
+                        | RobotsState::OriginBlocked(_) => {}
                         RobotsState::DisallowAll(st) => push(
                             ViolationKind::Disallowed,
                             format!("robots.txt answered {st}: everything is disallowed"),

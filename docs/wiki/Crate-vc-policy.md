@@ -25,8 +25,9 @@ wired; every role that fetches or renders builds one `VoyagerPolicy`.
 
 ## Rules it encodes
 
-- robots.txt: 2xx parse (first 500 KiB, lines up to 16 KiB); 404/410 allow all; 401, 403 or
-  a challenge block the whole key; 5xx or network error disallow all, and after 30 days use
+- robots.txt: 2xx parse (first 500 KiB, lines up to 16 KiB); 404/410 allow all; 401 or 403
+  disallow every path of that origin (other hosts of the key keep their own robots.txt);
+  a challenge blocks the whole key; 5xx or network error disallow all, and after 30 days use
   the last good copy. Crawl-delay is capped at 1 hour. robots.txt itself is always allowed
   unless the key is blocked.
 - AI-bot block (GPTBot, ClaudeBot, CCBot, Google-Extended) with `*` allowed: AI reservation.

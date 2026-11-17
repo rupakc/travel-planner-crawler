@@ -60,7 +60,8 @@ impl Policy for FakePolicy {
                 crawl_delay: None,
                 ai_reserved: false,
             },
-            RobotsStatus::Unauthorized | RobotsStatus::Challenge => RobotsVerdict::KeyBlocked,
+            RobotsStatus::Unauthorized => RobotsVerdict::Disallowed,
+            RobotsStatus::Challenge => RobotsVerdict::KeyBlocked,
             RobotsStatus::Unavailable => RobotsVerdict::Unavailable,
         }
     }
