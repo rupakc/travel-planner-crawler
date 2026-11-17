@@ -7,7 +7,7 @@
 //! |---|---|---|
 //! | partitions | 6 h | `vc_ensure_partitions(vcrawl.partitions_ahead_months)` |
 //! | purge | 15 min | deletes leftover `store_garbage` objects; advances every unfinished `purge_requests` row (index → raw → done) |
-//! | ephemeral expiry | 1 h | cuts captures past `raw_expires_at` (noarchive / TDM) out of their segments |
+//! | ephemeral expiry | 1 h | gives captures whose final use policy is `raw: ephemeral` (page-level noarchive) a `raw_expires_at` of `captured_at + store.ephemeral_days`, then cuts captures past `raw_expires_at` (noarchive / TDM) out of their segments |
 //! | restore drill | 7 d | rebuilds the newest segments' rows from their CDXJ in memory and compares them with the database; exports `restore_drill_ok` |
 //! | digest | 1 h | writes yesterday's `crawl_digest` row once (parked keys, statuses, yields, spend) |
 //! | Parquet export | 24 h | stub: lists partitions older than 12 months that are due for export |
@@ -139,6 +139,8 @@ pub struct Maintenance {
     pub partitions_ahead_months: u32,
     /// The agentic loops (scout, auditor); `None` skips them.
     pub agentic: Option<Agentic>,
+    /// Days a noarchive capture's raw bytes are kept (`store.ephemeral_days`).
+    pub ephemeral_days: u32,
 }
 
 /// What the agentic maintenance jobs need.
@@ -370,6 +372,13 @@ impl Maintenance {
     /// Cuts every capture whose `raw_expires_at` has passed out of its segment (a fully expired
     /// segment is dropped, its objects deleted). Returns `(captures, segments)`.
     pub async fn expire_ephemeral(&self, now: DateTime<Utc>) -> anyhow::Result<(u64, u64)> {
+        let routed = self.route_noarchive().await?;
+        if routed > 0 {
+            tracing::info!(
+                captures = routed,
+                "maintenance: noarchive captures routed to expiry"
+            );
+        }
         let rows: Vec<(String, DateTime<Utc>, String, String, String)> = sqlx::query_as(
             "SELECT c.capture_id, c.captured_at, s.segment_id, s.path, s.cdxj_path
              FROM captures c JOIN segments s ON s.segment_id = c.segment_id
@@ -404,6 +413,21 @@ impl Maintenance {
             "maintenance: ephemeral raw expired"
         );
         Ok(r)
+    }
+
+    /// A capture whose final use policy (set by the processor; page-level meta robots
+    /// `noarchive` only shows up there) says `raw: ephemeral` but that was spooled as an archive
+    /// capture gets `raw_expires_at = captured_at + ephemeral_days` (never later than one it
+    /// already has). Returns the captures routed.
+    pub async fn route_noarchive(&self) -> anyhow::Result<u64> {
+        Ok(sqlx::query(
+            "UPDATE captures SET raw_expires_at = captured_at + make_interval(days => $1)
+             WHERE raw_expires_at IS NULL AND use_policy_final->>'raw' = 'ephemeral'",
+        )
+        .bind(i32::try_from(self.ephemeral_days).unwrap_or(30))
+        .execute(&self.pool)
+        .await?
+        .rows_affected())
     }
 
     /// Rebuilds the newest segments' rows from their CDXJ (in memory) and compares them with
@@ -699,6 +723,7 @@ pub async fn run(ctx: Ctx) -> anyhow::Result<()> {
         metrics: Some(metrics),
         partitions_ahead_months: cfg.vcrawl.partitions_ahead_months,
         agentic: Some(agentic),
+        ephemeral_days: cfg.store.ephemeral_days,
     };
     let mut sched = Schedule::default();
     let mut tick = tokio::time::interval(StdDuration::from_secs(60));
