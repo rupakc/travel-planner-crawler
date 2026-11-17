@@ -6,7 +6,7 @@ crate that depends on implementations rather than only on `vc-core` traits.
 
 Path: `crates/vcrawl`. Dependencies: every `vc-*` crate, `clap`, `tokio`, `anyhow`, `sqlx`,
 `fail`. Feature `failpoints` compiles the crash-injection points in (tests only). Migration
-block `19xx` (also `1801`, `1904`–`1906`; see [Data Model](Data-Model)).
+block `19xx` (also `1801`, `1904`–`1907`; see [Data Model](Data-Model)).
 
 **Status:** every role is wired and tested, and the end-to-end suite runs them all together
 in CI (see [Testing](Testing)). Not done yet: batch prediction (no role submits Vertex batch
@@ -35,7 +35,7 @@ Data-path roles share the `Ctx` pool. `admin`, `migrate` and `maintenance` use
 |---|---|
 | `vcrawl scheduler` | every `scheduler_interval_s` (300 s): load and upsert `sources/*.yaml` (missing ones are disabled, never deleted); enqueue seeds, feeds, sitemaps and `adapter:<id>` rows; apply source limits (`min_delay_s` only raises a key's delay, `daily_budget` only lowers its budget); retire rows of disabled sources; make one page row due for origins whose robots.txt expired; export `due_urls` and `parked_keys_ratio`; prune old raw-byte counters and adapter cursors. Runs the LLM startup probe once when the LLM is on |
 | `vcrawl fetcher` | the claim loop, `fetcher_concurrency` (16) workers. Per claim: robots.txt first for due origins (a `Crawl-delay` found there raises the permit delay at once); each leased URL by `http`, `render` or `adapter:<id>`; spool and fsync; `mark_fetched`; complete with a key signal. Cross-key redirects are enqueued, never followed; a challenge, 401 or 403 parks the key; 429/503 back the key off. A same-key redirect to an origin without cached robots.txt fetches it under the same permit. Also runs the segment roller (replay on start, then every `roller_tick_s`), the daily raw-bytes cap (shared through Postgres), resumable adapter cursors, and the sweeper that returns `fetched_pending` rows older than 6 h to `due` |
-| `vcrawl processor` | `capture_ready` items to records: parse, final UsePolicy, in-scope links to the frontier (uncertain ones triaged by the LLM when it is on), extract, upsert; held `reference` records for high-stakes kinds (`held_records`); stale reconciliation; writes the extracted-text tier per committed segment. A capture it cannot find or attribute is acked as skipped, logged at WARN and counted in `crawler_processor_skipped_total{reason}` (`missing`, `no_source`). Serves `/metrics` and writes a heartbeat |
+| `vcrawl processor` | `capture_ready` items to records: parse, final UsePolicy, in-scope links to the frontier (uncertain ones triaged by the LLM when it is on), extract, upsert; held `reference` records for high-stakes kinds (`held_records`); stale reconciliation; writes the extracted-text tier per committed segment; with `render.enabled`, re-queues `render: auto` pages flagged `needs_render` in render mode (once per content hash). A capture it cannot find or attribute is acked as skipped, logged at WARN and counted in `crawler_processor_skipped_total{reason}` (`missing`, `no_source`). Serves `/metrics` and writes a heartbeat |
 | `vcrawl embedder` | embeds current, embeddable records under the embedding budget; idles when the LLM is off (still serving `/metrics` and writing a heartbeat) |
 | `vcrawl api` | the `/v1` API over TLS; search gets the vector leg only with the LLM on, each query embedding reserved through the budget. Serves the crawler's `/metrics` on `obs.metrics_addr` and writes a heartbeat; vc-api's request counters stay on localhost |
 | `vcrawl maintenance` | the scheduled jobs below |
@@ -126,6 +126,7 @@ All in `crates/vcrawl/tests/`, on a real Postgres with testkit fakes:
 | `fetcher_politeness.rs` | Crawl-delay learned mid-claim, adapter and robots 429/503, 5xx runs, challenge parks, the render page status ladder, same-key redirect robots, third-party key borrow |
 | `failpoints.rs` | the failpoint suite: a crash at each raw-store step, then a restart; `no_lost_no_duplicate_no_orphan_304` |
 | `processor.rs`, `data2_held.rs`, `data2_stale.rs`, `data2_text.rs`, `data2_triage.rs` | records, held records, stale records, the text tier, link triage |
+| `render_requeue.rs` | `render: auto` pages flagged `needs_render` re-queued in render mode under normal politeness, once per content hash |
 | `embedder.rs`, `api.rs` | embeddings and the API role |
 | `maintenance.rs`, `maintenance_agentic.rs`, `obs_jobs.rs` | maintenance jobs, scout and auditor, ops gauges |
 | `admin.rs`, `admin_purge_trace.rs`, `purge_author.rs`, `purge_hygiene.rs` | admin commands (`rebuild_captures_from_cdxj_equivalent`), purge traces, the scoped author purge, purge and expiry hygiene |

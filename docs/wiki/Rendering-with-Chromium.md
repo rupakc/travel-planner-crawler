@@ -12,8 +12,14 @@ Each source sets `render: never | auto | always`.
 - `never`: plain HTTP only (most sources).
 - `always`: every page of the source is rendered.
 - `auto`: the HTML parser flags a page as `needs_render` when it has less than 200
-  characters of main text or looks like an empty single-page-app shell. The design is to
-  queue that URL again in `render` mode, under a new claim; this step is not wired yet.
+  characters of main text or looks like an empty single-page-app shell. The processor then
+  switches that URL to `render` mode and makes it due now (if a fetch of it is running, right
+  after it, through `refetch_at`). The render is an ordinary frontier claim, so the key's
+  delay, budget, parking and robots.txt all apply. It happens at most once per content
+  hash (`url_state.render_requested_hash`, migration 1907) and only for a URL still in
+  `http` mode, so a repeated or redelivered capture never re-queues. The URL stays a render
+  URL afterwards. The processor does this only when `render.enabled` is on; with rendering
+  off the fetcher would just fetch the same shell over HTTP.
 
 Rendering is off by default (`render.enabled = false`), and production does not turn it
 on yet ([Configuration](Configuration)).
@@ -175,9 +181,9 @@ The rendered page's own status follows the same ladder as a plain fetch:
 | other non-2xx | permanent failure for that URL |
 
 > **Status:** the fetcher renders URLs queued in `render` mode (the seeds of `always`
-> sources, and links and redirects found from them), with the third-party borrow above.
-> Tested with a mock CDP and against the pinned headless-shell image. Not done yet:
-> re-queueing an `auto` page that the parser flags `needs_render`. Rendering is still off in
-> production (`render.enabled = false`).
+> sources, links and redirects found from them, and `auto` pages the parser flagged
+> `needs_render`), with the third-party borrow above. Tested with a mock CDP and against the
+> pinned headless-shell image; the `auto` re-queue in `crates/vcrawl/tests/render_requeue.rs`.
+> Rendering is still off in production (`render.enabled = false`).
 
 Code: [vc-render](Crate-vc-render).

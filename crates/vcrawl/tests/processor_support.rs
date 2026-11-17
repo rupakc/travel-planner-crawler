@@ -94,6 +94,8 @@ pub struct Cap<'a> {
     pub media: MediaType,
     /// A 304 revisit of this capture (no body stored).
     pub revisit_of: Option<CaptureRef>,
+    /// How it was fetched.
+    pub fetch_mode: FetchMode,
 }
 
 impl<'a> Cap<'a> {
@@ -108,6 +110,7 @@ impl<'a> Cap<'a> {
             role: CaptureRole::Primary,
             media: MediaType::Html,
             revisit_of: None,
+            fetch_mode: FetchMode::Http,
         }
     }
 
@@ -158,7 +161,7 @@ pub async fn commit(pool: &PgPool, blobs: &Arc<MemBlobStore>, c: Cap<'_>) -> Cap
         url,
         source_id: c.source.map(|s| SourceId(s.into())),
         role: c.role,
-        fetch_mode: FetchMode::Http,
+        fetch_mode: c.fetch_mode.clone(),
         status: c.status,
         media_type: c.media,
         payload_hash: c
@@ -229,6 +232,8 @@ pub struct RigOpts {
     pub frontier: bool,
     /// Wire link triage over the fake LLM: `Some(enabled)`.
     pub triage: Option<bool>,
+    /// Re-queue `needs_render` pages of `render: auto` sources (`render.enabled`).
+    pub render_requeue: bool,
     /// Wraps the raw store the processor reads (commits still go to `Rig::blobs`).
     #[allow(clippy::type_complexity)]
     pub wrap_blobs:
@@ -288,7 +293,8 @@ pub async fn rig_on(pool: PgPool, sources: &[&str], o: RigOpts) -> Rig {
     .with_sources(SourceCache::with_ttl(
         pool.clone(),
         std::time::Duration::ZERO,
-    ));
+    ))
+    .with_render_requeue(o.render_requeue);
     let proc = match o.triage {
         Some(enabled) => proc.with_triage(vcrawl::agentic::AgenticLlm::new(
             llm.clone(),
