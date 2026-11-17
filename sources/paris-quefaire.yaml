@@ -32,3 +32,8 @@ key_secret: null
 max_retention_days: null
 display_requirements: null
 notes: model for city open-data event feeds
+relevance:
+  sections:
+  - events
+  - activities
+  why: Official Paris city events and things to do with dates and venues, for Events and Activities.

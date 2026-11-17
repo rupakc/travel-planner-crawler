@@ -127,11 +127,11 @@ mod tests {
     }
 
     #[test]
-    fn the_repository_ramp_file_lists_ten_existing_sources() {
+    fn the_repository_ramp_file_lists_eight_existing_sources() {
         let dir = concat!(env!("CARGO_MANIFEST_DIR"), "/../../sources");
         let text = std::fs::read_to_string(format!("{dir}/ramp-1.txt")).unwrap();
         let ids = SourceAllowlist::parse(&text);
-        assert_eq!(ids.len(), 10, "{ids:?}");
+        assert_eq!(ids.len(), 8, "{ids:?}");
         for id in &ids {
             assert!(
                 Path::new(&format!("{dir}/{id}.yaml")).exists(),

@@ -34,3 +34,10 @@ key_secret: null
 max_retention_days: null
 display_requirements: null
 notes: RSS verified 2026-11-15
+relevance:
+  sections:
+  - flights
+  - hotels
+  - tips
+  why: Airline, airport-lounge and hotel reviews and booking tips from Head for Points, for Flights, Hotels
+    and Travel tips (headline, link and a short excerpt only).

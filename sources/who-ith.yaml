@@ -34,3 +34,9 @@ max_retention_days: null
 display_requirements: null
 notes: 'non-commercial | Disabled: restricted licence (non-commercial or unknown), not ingested in v1
   (spec §5.9).'
+relevance:
+  sections:
+  - tips
+  - packing
+  why: WHO health advice for travellers (vaccines, health risks) for Travel tips and the Packing list;
+    licence restricted, so off.

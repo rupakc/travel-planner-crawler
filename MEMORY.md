@@ -102,3 +102,8 @@ plan = `docs/superpowers/plans/2026-11-15-voyager-crawler.md`, r1–r5 = `docs/r
   (crates/vc-sources/src/adapters/records.rs, crates/vcrawl/tests/adapter_records.rs)
 - 2026-11-17: the permit client pins the first IPv4 address of a host (AAAA came first and the
   VM has no IPv6 route: every dual-stack host failed). (crates/vc-fetch/src/lib.rs, #107)
+- 2026-11-17: owner rule "only relevant and pertinent sites": every source spec needs
+  `relevance {sections, why}` (closed app-section list); enabled news/blog feeds must be
+  travel-focused; the owner approves additions; registry `docs/SOURCES.md` is generated and
+  CI-checked. travel.state.gov denylisted (403 bot wall; cadataapi.state.gov unaffected).
+  (crates/vc-sources/src/relevance.rs, scripts/sources_doc.py)

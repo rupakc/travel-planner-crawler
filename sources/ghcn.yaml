@@ -32,3 +32,8 @@ key_secret: null
 max_retention_days: null
 display_requirements: null
 notes: climate normals for packing
+relevance:
+  sections:
+  - weather
+  why: Long-term daily weather records and climate normals per station, for the Weather section's what-to-expect
+    by month.

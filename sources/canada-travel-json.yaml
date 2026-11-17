@@ -35,3 +35,9 @@ key_secret: null
 max_retention_days: null
 display_requirements: null
 notes: per-country cta-cap-{ISO}-eng.json
+relevance:
+  sections:
+  - visa
+  - emergency_card
+  why: Official Canadian travel advice per country (entry rules, safety level, emergency contacts) for
+    Visa and the Emergency card.

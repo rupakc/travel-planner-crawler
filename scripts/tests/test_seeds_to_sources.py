@@ -60,6 +60,8 @@ def test_disallowed_seeds_produce_no_file(generated):
 
 def test_no_file_host_is_denylisted(generated):
     for sid, spec in generated.items():
+        if not spec["enabled"]:
+            continue  # disabled sources are never fetched (vc-sources validate: same rule)
         for url in spec["seeds"] + spec["sitemaps"] + spec["feeds"]:
             assert s2s.denied(url, DENYLIST) is None, f"{sid}: {url} is denylisted"
 
@@ -93,6 +95,8 @@ def test_denylist_matches_brand_domains_and_paths(url):
         "https://www.lonelyplanet.com/sitemaps/google-news/sitemap.xml",
         "https://api.stackexchange.com/2.3/questions",
         "https://www.eventbriteapi.com/v3/",
+        "https://cadataapi.state.gov/api/TravelAdvisories",
+        "https://www.state.gov/",
     ],
 )
 def test_denylist_does_not_overmatch(url):
@@ -246,3 +250,130 @@ def test_unreadable_robots_source_is_off(generated):
     assert "When in doubt, don't crawl" in notes
     committed = yaml.safe_load((ROOT / "sources" / "mobility-database-api.yaml").read_text())
     assert committed["enabled"] is False
+
+
+# --- relevance (owner rule 2026-11-17: only relevant and pertinent sites) ---------------
+
+def test_every_spec_has_relevance_with_known_sections(generated):
+    for sid, spec in generated.items():
+        rel = spec["relevance"]
+        assert rel["sections"], sid
+        assert set(rel["sections"]) <= set(s2s.SECTIONS), sid
+        assert len(rel["why"].strip()) >= s2s.MIN_WHY_CHARS, sid
+        assert "\n" not in rel["why"], sid
+    committed = {p.stem: yaml.safe_load(p.read_text()) for p in (ROOT / "sources").glob("*.yaml")}
+    for sid, spec in committed.items():
+        assert spec.get("relevance"), f"{sid}: relevance missing"
+
+
+def test_sections_match_the_rust_enum():
+    rust = (ROOT / "crates" / "vc-core" / "src" / "sources.rs").read_text()
+    for s in s2s.SECTIONS:
+        assert f'=> "{s}"' in rust, s
+    enum = SCHEMA["properties"]["relevance"]["properties"]["sections"]["items"]["enum"]
+    assert list(enum) == list(s2s.SECTIONS)
+
+
+def test_relevance_table_has_no_stale_ids():
+    assert set(s2s.RELEVANCE) == {s["id"] for s in ALLOWED}
+
+
+def _seed(**kw):
+    seed = {
+        "id": "mystery", "category": "blogs", "name": "Mystery",
+        "url": "https://mystery.example/travel/feed/", "method": "rss",
+        "license": "copyright", "cadence": "daily", "needs_key": False,
+        "allowed": True, "notes": "",
+    }
+    seed.update(kw)
+    return seed
+
+
+def test_seed_without_relevance_fails_loudly(tmp_path):
+    seeds = tmp_path / "seeds.yaml"
+    seeds.write_text(yaml.safe_dump({"seeds": [_seed()]}))
+    with pytest.raises(s2s.MappingError, match="RELEVANCE"):
+        s2s.generate(seeds, tmp_path / "out", ROOT / "policy" / "denylist.yaml")
+
+
+@pytest.mark.parametrize(
+    "rel",
+    [([], "A perfectly long reason sentence."), (["nightlife"], "A perfectly long reason sentence."),
+     (["tips"], "too short"), (["tips", "tips"], "A perfectly long reason sentence.")],
+)
+def test_bad_relevance_fails(monkeypatch, rel):
+    monkeypatch.setitem(s2s.RELEVANCE, "mystery", rel)
+    with pytest.raises(s2s.MappingError):
+        s2s.build_spec(_seed())
+
+
+def test_schema_requires_relevance(generated):
+    v = _validator()
+    spec = dict(generated["met-norway"])
+    del spec["relevance"]
+    assert list(v.iter_errors(spec)), "relevance is required"
+    for bad in ({"sections": [], "why": "x" * 30}, {"sections": ["nightlife"], "why": "x" * 30},
+                {"sections": ["weather"], "why": "short"}, {"sections": ["weather"], "why": "x" * 30, "extra": 1}):
+        spec["relevance"] = bad
+        assert list(v.iter_errors(spec)), bad
+
+
+def test_travel_state_gov_sources_are_off_and_denylisted(generated):
+    for sid in ("state-dept-advisories-rss", "state-dept-country-pages"):
+        spec = generated[sid]
+        assert spec["enabled"] is False, sid
+        assert "travel.state.gov answers 403 to VoyagerBot's robots.txt (bot wall)" in " ".join(spec["notes"].split())
+        for url in spec["seeds"] + spec["feeds"]:
+            assert s2s.denied(url, DENYLIST) is not None, url
+    # The advisories API is a sibling host, not a subdomain: still allowed and enabled.
+    api = generated["state-dept-advisories-api"]
+    assert api["enabled"] is True
+    assert all(s2s.denied(u, DENYLIST) is None for u in api["seeds"])
+
+
+VENUES = ("brokenships", "torvehallerne", "mathallen-oslo", "noma", "alchemist", "rub-og-stub")
+
+
+def test_owner_added_sources_2026_11_17(generated):
+    added = ("blog-thequantumexplorer", "liveriga", *VENUES)
+    for sid in added:
+        spec = generated[sid]
+        assert spec["enabled"] is True, sid
+        assert spec["licence"]["class"] == "facts_only", sid
+        assert spec["min_delay_s"] >= 5, sid
+        # Each stays on its own host: every URL it lists shares the seed host.
+        urls = spec["seeds"] + spec["sitemaps"] + spec["feeds"]
+        assert len({u.split("/")[2] for u in urls}) == 1, (sid, urls)
+    for sid in VENUES:
+        spec = generated[sid]
+        assert spec["method"] == "html" and spec["max_depth"] == 1, sid
+        assert spec["cadence"] == "monthly" and spec["daily_budget"] <= 100, sid
+        assert spec["source_class"] == "editorial" and not spec["include"], sid
+    riga = generated["liveriga"]
+    assert riga["source_class"] == "official" and riga["max_depth"] == 2
+    assert riga["include"] == [r"^https://www\.liveriga\.com/en/"]
+    blog = generated["blog-thequantumexplorer"]
+    assert blog["sitemaps"] == ["https://thequantumexplorer.org/sitemap.xml"]
+    ct = generated["culturetrip"]
+    assert ct["enabled"] is False and ct["licence"]["class"] == "facts_only"
+    assert "effectively a bot wall" in " ".join(ct["notes"].split())
+    assert s2s.denied(ct["sitemaps"][0], DENYLIST) is None, "no denylist entry for culturetrip"
+
+
+def test_owner_kept_sources_stay_enabled(generated):
+    # Owner decision 2026-11-17: these stay on, each with a relevance entry.
+    for sid in ("common-crawl", "enwiki-dump", "inside-airbnb", "news-skift",
+                "news-traveldailynews", "news-simpleflying"):
+        assert generated[sid]["enabled"] is True, sid
+        assert generated[sid]["relevance"]["sections"], sid
+
+
+def test_disabled_source_may_name_a_denylisted_host(tmp_path, monkeypatch):
+    monkeypatch.setitem(s2s.RELEVANCE, "mystery", (["tips"], "A perfectly long reason sentence."))
+    monkeypatch.setitem(s2s.DISABLED, "mystery", "test")
+    seeds = tmp_path / "seeds.yaml"
+    seeds.write_text(yaml.safe_dump({"seeds": [_seed(url="https://www.booking.com/feed/")]}))
+    s2s.generate(seeds, tmp_path / "out", ROOT / "policy" / "denylist.yaml")
+    monkeypatch.delitem(s2s.DISABLED, "mystery")
+    with pytest.raises(s2s.MappingError, match="denylisted"):
+        s2s.generate(seeds, tmp_path / "out2", ROOT / "policy" / "denylist.yaml")

@@ -92,6 +92,97 @@ impl Cadence {
     }
 }
 
+/// A section of the Voyager app a source feeds (`relevance.sections`). Closed list: a source
+/// that serves none of these is not pertinent to trip planning and is not added.
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, PartialOrd, Ord, Serialize, Deserialize)]
+#[serde(rename_all = "snake_case")]
+pub enum AppSection {
+    /// Flights (airports, routes).
+    Flights,
+    /// Weather.
+    Weather,
+    /// Hotels and places to stay.
+    Hotels,
+    /// Activities.
+    Activities,
+    /// Places to see.
+    Places,
+    /// Free walking tours.
+    WalkingTours,
+    /// Events.
+    Events,
+    /// Visa and entry rules, travel advisories.
+    Visa,
+    /// SIM cards and eSIMs.
+    Sim,
+    /// Travel tips.
+    Tips,
+    /// Emergency card (numbers, embassies).
+    EmergencyCard,
+    /// Local transportation (getting around).
+    GettingAround,
+    /// Forex (exchange rates).
+    Forex,
+    /// Packing list.
+    Packing,
+    /// Day-by-day itinerary.
+    Itinerary,
+}
+
+impl AppSection {
+    /// Every section, in app order.
+    pub const ALL: [AppSection; 15] = [
+        AppSection::Flights,
+        AppSection::Weather,
+        AppSection::Hotels,
+        AppSection::Activities,
+        AppSection::Places,
+        AppSection::WalkingTours,
+        AppSection::Events,
+        AppSection::Visa,
+        AppSection::Sim,
+        AppSection::Tips,
+        AppSection::EmergencyCard,
+        AppSection::GettingAround,
+        AppSection::Forex,
+        AppSection::Packing,
+        AppSection::Itinerary,
+    ];
+
+    /// The snake_case spelling used in `sources/*.yaml`.
+    pub fn as_str(&self) -> &'static str {
+        match self {
+            AppSection::Flights => "flights",
+            AppSection::Weather => "weather",
+            AppSection::Hotels => "hotels",
+            AppSection::Activities => "activities",
+            AppSection::Places => "places",
+            AppSection::WalkingTours => "walking_tours",
+            AppSection::Events => "events",
+            AppSection::Visa => "visa",
+            AppSection::Sim => "sim",
+            AppSection::Tips => "tips",
+            AppSection::EmergencyCard => "emergency_card",
+            AppSection::GettingAround => "getting_around",
+            AppSection::Forex => "forex",
+            AppSection::Packing => "packing",
+            AppSection::Itinerary => "itinerary",
+        }
+    }
+}
+
+/// Why a source is pertinent to trip planning (`relevance:` in the spec). Required for every
+/// source: `vc_sources::validate` rejects a spec without it. It is optional in serde only so
+/// specs stored before the field existed still deserialize.
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
+pub struct Relevance {
+    /// The app sections the source feeds (at least one).
+    pub sections: Vec<AppSection>,
+    /// One plain sentence: what traveller-facing data it gives which section.
+    pub why: String,
+}
+
 fn default_max_depth() -> u8 {
     2
 }
@@ -107,6 +198,7 @@ fn default_true() -> bool {
 
 /// A source (`sources/<id>.yaml`). Required: `id`, `name`, `category`, `source_class`,
 /// `licence` (`class`, `attribution`), `method`, `cadence`; everything else has a default.
+/// `relevance` is required as well, by validation (`vc_sources::validate`), not by serde.
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 #[serde(deny_unknown_fields)]
 pub struct SourceSpec {
@@ -181,6 +273,9 @@ pub struct SourceSpec {
     /// Notes.
     #[serde(default)]
     pub notes: Option<String>,
+    /// The app sections the source serves and why (required by `vc_sources::validate`).
+    #[serde(default)]
+    pub relevance: Option<Relevance>,
 }
 
 /// What an adapter run did.

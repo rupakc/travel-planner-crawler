@@ -76,7 +76,7 @@ on (§12) is a separate owner decision.
    for id in $RAMP; do ./target/debug/vcrawl admin source validate "$id" | jq -c '{id, ok, warnings}'; done
    ```
 
-   Expected: ten lines, each `"ok":true`, `"warnings":[]`.
+   Expected: eight lines, each `"ok":true`, `"warnings":[]`.
 4. Choose the alert address (a mailbox someone reads daily) and keep it out of shell
    history:
 
@@ -158,7 +158,7 @@ address that already exists.
 ## 3. Provision (the real run) and confirm the alert channel
 
 Once the VM exists it boots and **deploys on its own within minutes**, fetcher included.
-That is safe: a fresh install crawls only the ten ramp sources (§5).
+That is safe: a fresh install crawls only the eight ramp sources (§5).
 
 1. Run it:
 
@@ -243,7 +243,7 @@ That is safe: a fresh install crawls only the ten ramp sources (§5).
    `scheduler`, `fetcher`, `processor`, `embedder`, `api`) running, the roles and postgres
    `healthy`.
 
-## 5. Ramp 1: only ten sources crawl
+## 5. Ramp 1: only eight sources crawl
 
 `VC_VCRAWL_SOURCE_ALLOWLIST` (`[vcrawl] source_allowlist`) names `sources/ramp-1.txt` in the
 image. While it is set, the scheduler upserts every source spec but seeds the frontier and

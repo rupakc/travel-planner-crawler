@@ -32,3 +32,7 @@ key_secret: crawler-src-fred-h10-key
 max_retention_days: null
 display_requirements: Credit FRED, Federal Reserve Bank of St. Louis; no implied endorsement.
 notes: null
+relevance:
+  sections:
+  - forex
+  why: US Federal Reserve daily exchange rates (H.10 release) for the Forex section.

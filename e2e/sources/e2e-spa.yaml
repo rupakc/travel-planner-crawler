@@ -29,3 +29,6 @@ key_secret: null
 max_retention_days: null
 display_requirements: null
 notes: "Needs rendering; its script fetches a private IP and the metadata server (both must be blocked)"
+relevance:
+  sections: [places]
+  why: Test fixture data for the places section of the app.

@@ -32,3 +32,7 @@ key_secret: crawler-src-ticketmaster-key
 max_retention_days: 30
 display_requirements: Ticketmaster branding and deep links per the Discovery API terms.
 notes: 5000/day, 2-5 rps; cache 6-24 h
+relevance:
+  sections:
+  - events
+  why: Concerts, sports and theatre events with dates, venues and ticket links, for the Events section.

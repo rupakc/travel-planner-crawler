@@ -36,3 +36,8 @@ notes: 'API needs free refresh token | Disabled: robots.txt of files.mobilitydat
   redirect (robots.txt answers 302 to a login); the GitHub catalog (MobilityData/mobility-database-catalogs)
   is one JSON file per feed and github.com disallows /*/archive/, so no allowed bulk route without a new
   adapter.'
+relevance:
+  sections:
+  - getting_around
+  why: Catalogue of public-transit (GTFS) feeds by city for Local transportation; robots.txt disallows
+    us, so off.

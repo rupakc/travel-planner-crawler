@@ -35,3 +35,8 @@ notes: 'Disabled: robots.txt of api.mobilitydatabase.org is unreadable: it answe
   login page (checked 2026-11-16), so no robots.txt grants VoyagerBot access, and the published API terms
   do not say automated access by third-party crawlers is allowed. When in doubt, don''t crawl. Re-enable
   only with a readable robots.txt that allows us.'
+relevance:
+  sections:
+  - getting_around
+  why: Catalogue of public-transit (GTFS) feeds by city for Local transportation; robots.txt is unreadable,
+    so off.

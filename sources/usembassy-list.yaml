@@ -33,3 +33,7 @@ key_secret: null
 max_retention_days: null
 display_requirements: null
 notes: null
+relevance:
+  sections:
+  - emergency_card
+  why: US embassy and consulate addresses and phone numbers per country, for the Emergency card.

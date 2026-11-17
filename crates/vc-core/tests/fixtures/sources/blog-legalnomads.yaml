@@ -34,3 +34,6 @@ key_secret: null
 max_retention_days: null
 display_requirements: null
 notes: RSS verified 2026-11-15
+relevance:
+  sections: [tips]
+  why: Test fixture data for the tips section of the app.

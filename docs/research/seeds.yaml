@@ -1451,3 +1451,94 @@ seeds:
     needs_key: false
     allowed: false
     notes: "do not evade"
+  # Added 2026-11-17 at the owner's request (robots.txt checked with the VoyagerBot UA).
+  - id: blog-thequantumexplorer
+    category: "blogs"
+    name: "Quantum Explorer – Tales of Travel & More"
+    url: "https://thequantumexplorer.org/feed/"
+    method: "rss"
+    license: "Copyright; headline+link+excerpt only"
+    cadence: "weekly"
+    needs_key: false
+    allowed: true
+    notes: "robots allows * (checked 2026-11-17); European city guides (2020)"
+  - id: liveriga
+    category: "places"
+    name: "Live Riga (official Riga tourism portal)"
+    url: "https://www.liveriga.com/en/"
+    method: "html"
+    license: "copyright; robots allows"
+    cadence: "weekly"
+    needs_key: false
+    allowed: true
+    notes: "robots allows * (checked 2026-11-17); no sitemap in robots"
+  - id: brokenships
+    category: "places"
+    name: "Museum of Broken Relationships (Zagreb)"
+    url: "https://brokenships.com/"
+    method: "html"
+    license: "copyright; robots allows"
+    cadence: "monthly"
+    needs_key: false
+    allowed: true
+    notes: "robots allows * (checked 2026-11-17)"
+  - id: torvehallerne
+    category: "activities"
+    name: "Torvehallerne food market (Copenhagen)"
+    url: "https://torvehallernekbh.dk/"
+    method: "html"
+    license: "copyright; robots allows"
+    cadence: "monthly"
+    needs_key: false
+    allowed: true
+    notes: "robots allows * (checked 2026-11-17)"
+  - id: mathallen-oslo
+    category: "activities"
+    name: "Mathallen food hall (Oslo)"
+    url: "https://mathallenoslo.no/"
+    method: "html"
+    license: "copyright; robots allows"
+    cadence: "monthly"
+    needs_key: false
+    allowed: true
+    notes: "robots allows * (checked 2026-11-17)"
+  - id: noma
+    category: "activities"
+    name: "Noma restaurant (Copenhagen)"
+    url: "https://noma.dk/"
+    method: "html"
+    license: "copyright; robots allows"
+    cadence: "monthly"
+    needs_key: false
+    allowed: true
+    notes: "robots allows * (checked 2026-11-17)"
+  - id: alchemist
+    category: "activities"
+    name: "Alchemist restaurant (Copenhagen)"
+    url: "https://alchemist.dk/"
+    method: "html"
+    license: "copyright; robots allows"
+    cadence: "monthly"
+    needs_key: false
+    allowed: true
+    notes: "robots allows * (checked 2026-11-17)"
+  - id: rub-og-stub
+    category: "activities"
+    name: "Rub & Stub restaurant (Copenhagen)"
+    url: "https://www.spisrubogstub.dk/"
+    method: "html"
+    license: "copyright; robots allows"
+    cadence: "monthly"
+    needs_key: false
+    allowed: true
+    notes: "robots allows * (checked 2026-11-17)"
+  - id: culturetrip
+    category: "places"
+    name: "Culture Trip"
+    url: "https://theculturetrip.com/sitemap.xml"
+    method: "sitemap"
+    license: "copyright; robots allows"
+    cadence: "weekly"
+    needs_key: false
+    allowed: true
+    notes: "robots allows * except /checkout; blocks AI-training bots (AI reservation: title + link only)"

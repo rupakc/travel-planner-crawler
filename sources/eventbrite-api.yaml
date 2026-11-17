@@ -32,3 +32,7 @@ key_secret: crawler-src-eventbrite-api-key
 max_retention_days: 30
 display_requirements: Eventbrite branding and event links per the API terms.
 notes: curated organiser list only
+relevance:
+  sections:
+  - events
+  why: Public events by organiser and venue (dates, venues, links), for the Events section.

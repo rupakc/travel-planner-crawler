@@ -33,3 +33,8 @@ key_secret: null
 max_retention_days: null
 display_requirements: null
 notes: US routes/fare samples
+relevance:
+  sections:
+  - flights
+  why: Which airlines fly which US routes and how often (US DOT traffic data), for the Flights section's
+    route list.

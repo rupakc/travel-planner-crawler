@@ -120,6 +120,11 @@ entries:
   - host: bucketlistly.blog
     reason: feed answers 403 to an honest bot; do not evade
     source: seed:blocked-bucketlistly
+  # travel.state.gov only: the advisories API on cadataapi.state.gov is a separate host and
+  # stays allowed (hosts match themselves and their subdomains, never siblings).
+  - host: travel.state.gov
+    reason: robots.txt answers 403 to an honest bot (bot wall); do not crawl
+    source: seed:state-dept-country-pages
   # --- brand domains of denied organisations (review r3 #8) ----------------------------
   - host: hotels.com
     reason: Expedia Group brand; same ToS as Expedia

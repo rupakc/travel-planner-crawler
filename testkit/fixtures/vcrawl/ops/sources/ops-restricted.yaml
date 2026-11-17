@@ -31,3 +31,6 @@ key_secret: null
 max_retention_days: null
 display_requirements: null
 notes: test fixture
+relevance:
+  sections: [tips]
+  why: Test fixture data for the tips section of the app.

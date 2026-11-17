@@ -549,6 +549,14 @@ async fn admin_source_approve_scout_proposal() {
     assert_eq!(v["status"], "approved");
     assert_eq!(v["draft_spec"]["id"], "laos-guide-example");
     assert_eq!(v["draft_spec"]["enabled"], false, "a draft never crawls");
+    // The draft asks for the relevance block a person must fill (sections + why).
+    let rel = &v["draft_spec"]["relevance"];
+    assert!(
+        rel["sections"][0]
+            .as_str()
+            .is_some_and(|s| s.starts_with("TODO"))
+    );
+    assert!(rel["why"].as_str().is_some_and(|s| s.starts_with("TODO")));
     let (status, by): (String, String) =
         sqlx::query_as("SELECT status, decided_by FROM source_candidates WHERE candidate_id = $1")
             .bind(cid)

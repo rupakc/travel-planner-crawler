@@ -33,3 +33,8 @@ max_retention_days: null
 display_requirements: null
 notes: 'GRIB2; only if self-hosting | Disabled: GRIB2 forecasts; only useful when self-hosting a forecast
   model. | Research cadence: 4x_daily.'
+relevance:
+  sections:
+  - weather
+  why: Global weather forecasts (GRIB2 files) for the Weather section; needs a self-hosted forecast model,
+    so off.

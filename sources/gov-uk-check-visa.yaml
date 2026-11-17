@@ -32,3 +32,7 @@ key_secret: null
 max_retention_days: null
 display_requirements: null
 notes: null
+relevance:
+  sections:
+  - visa
+  why: Official UK rules on which nationalities need a visa to visit the UK, for the Visa section.

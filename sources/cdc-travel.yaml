@@ -35,3 +35,9 @@ key_secret: null
 max_retention_days: null
 display_requirements: null
 notes: 'robots Crawl-delay: 20'
+relevance:
+  sections:
+  - tips
+  - packing
+  why: Official health advice per destination (vaccines, medicines, health risks) for Travel tips and
+    the Packing list.

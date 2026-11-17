@@ -32,3 +32,8 @@ max_retention_days: null
 display_requirements: null
 notes: 'secondary cross-check only | Disabled: restricted licence (non-commercial or unknown), not ingested
   in v1 (spec §5.9).'
+relevance:
+  sections:
+  - visa
+  why: Visa requirements by passport, only as a cross-check for the Visa section; provenance unclear,
+    so off.

@@ -33,3 +33,9 @@ key_secret: crawler-src-fsq-os-places-key
 max_retention_days: null
 display_requirements: null
 notes: HF gated / Iceberg token; attribution Foursquare Labs
+relevance:
+  sections:
+  - hotels
+  - places
+  why: Open points of interest (hotels, sights, restaurants) with names and coordinates, for Hotels and
+    Places to see.

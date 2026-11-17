@@ -32,3 +32,6 @@ key_secret: crawler-src-airalo-partner-key
 max_retention_days: null
 display_requirements: null
 notes: 'Disabled: Needs partner approval (not granted).'
+relevance:
+  sections: [sim]
+  why: Test fixture data for the sim section of the app.

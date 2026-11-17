@@ -8,7 +8,8 @@ fn spec(id: &str, extra: &str) -> SourceSpec {
     vc_sources::parse_spec(&format!(
         "id: {id}\nname: test\ncategory: test\nsource_class: official\n\
          licence: {{class: open, attribution: test}}\nmethod: html\ncadence: daily\n\
-         seeds: [\"https://{id}.example/\"]\n{extra}"
+         seeds: [\"https://{id}.example/\"]\n\
+         relevance: {{sections: [visa], why: Test advice for the Visa section of the app.}}\n{extra}"
     ))
     .expect("spec")
 }

@@ -5,7 +5,7 @@
   "description": "One crawl source (sources/<id>.yaml). Mirrors vc-core SourceSpec (serde, deny_unknown_fields, enums snake_case). Plan Task 0A is the authority for the field list; spec §5.9 and §17.8 for the classes.",
   "type": "object",
   "additionalProperties": false,
-  "required": ["id", "name", "category", "source_class", "licence", "method", "cadence"],
+  "required": ["id", "name", "category", "source_class", "licence", "method", "cadence", "relevance"],
   "properties": {
     "id": {
       "description": "Stable source id; equals the file name without .yaml.",
@@ -72,7 +72,24 @@
     },
     "max_retention_days": { "type": ["integer", "null"], "minimum": 1 },
     "display_requirements": { "type": ["string", "null"] },
-    "notes": { "type": ["string", "null"] }
+    "notes": { "type": ["string", "null"] },
+    "relevance": {
+      "description": "Why the source is pertinent to trip planning: the Voyager app section(s) it feeds and one plain sentence on what traveller-facing data it gives them. Required (vc_sources::validate rejects a spec without it). Enabled news and blog sources must also be travel-focused (vc_sources::relevance).",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["sections", "why"],
+      "properties": {
+        "sections": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "enum": ["flights", "weather", "hotels", "activities", "places", "walking_tours", "events", "visa", "sim", "tips", "emergency_card", "getting_around", "forex", "packing", "itinerary"]
+          }
+        },
+        "why": { "type": "string", "minLength": 20, "pattern": "^[^\\n\\r]*\\S[^\\n\\r]*$" }
+      }
+    }
   },
   "allOf": [
     {

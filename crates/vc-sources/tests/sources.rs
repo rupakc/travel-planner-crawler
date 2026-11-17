@@ -59,9 +59,10 @@ fn all_sources_yaml_load_and_validate() {
 
 fn base() -> vc_core::sources::SourceSpec {
     vc_sources::parse_spec(
-        "id: test-src\nname: Test\ncategory: blogs\nsource_class: editorial\n\
+        "id: test-src\nname: Test\ncategory: tips\nsource_class: editorial\n\
          licence: {class: facts_only, attribution: Test}\nmethod: rss\n\
-         feeds: [https://example.org/feed]\ncadence: daily\n",
+         feeds: [https://example.org/travel/feed]\ncadence: daily\n\
+         relevance: {sections: [tips], why: Travel tips from a test feed for the Tips section.}\n",
     )
     .unwrap()
 }
@@ -77,6 +78,126 @@ fn errors(s: &vc_core::sources::SourceSpec) -> Vec<String> {
         },
     )
     .errors
+}
+
+#[test]
+fn relevance_is_required_and_checked() {
+    use vc_core::sources::AppSection;
+    assert!(errors(&base()).is_empty());
+
+    let mut s = base();
+    s.relevance = None;
+    assert!(
+        errors(&s)[0].contains("relevance is missing"),
+        "{:?}",
+        errors(&s)
+    );
+    s.enabled = false;
+    assert!(
+        errors(&s)[0].contains("relevance is missing"),
+        "disabled sources need it too"
+    );
+
+    let mut s = base();
+    s.relevance.as_mut().unwrap().sections.clear();
+    assert!(errors(&s)[0].contains("sections is empty"));
+    let mut s = base();
+    s.relevance.as_mut().unwrap().sections = vec![AppSection::Tips, AppSection::Tips];
+    assert!(errors(&s)[0].contains("duplicate tips"));
+    let mut s = base();
+    s.relevance.as_mut().unwrap().why = "  too short   ".into();
+    assert!(errors(&s)[0].contains("too short"));
+    let mut s = base();
+    s.relevance.as_mut().unwrap().why = "Line one is long enough\nand line two".into();
+    assert!(errors(&s)[0].contains("one line"));
+
+    // Sections are a closed list; unknown spellings do not parse.
+    assert!(
+        vc_sources::parse_spec(
+            "id: test-src\nname: T\ncategory: x\nsource_class: reference\n\
+             licence: {class: open, attribution: T}\nmethod: html\ncadence: daily\n\
+             relevance: {sections: [nightlife], why: Nightlife listings for travellers here.}\n"
+        )
+        .is_err()
+    );
+    assert!(
+        vc_sources::parse_spec(
+            "id: test-src\nname: T\ncategory: x\nsource_class: reference\n\
+             licence: {class: open, attribution: T}\nmethod: html\ncadence: daily\n\
+             relevance: {sections: [tips], why: Tips for travellers from this site., extra: 1}\n"
+        )
+        .is_err(),
+        "relevance is strict"
+    );
+}
+
+#[test]
+fn news_and_blog_feeds_must_be_travel_focused() {
+    let feed = |category: &str, url: &str| {
+        let mut s = base();
+        s.category = category.into();
+        s.feeds = vec![url.parse().unwrap()];
+        s
+    };
+    for (cat, url) in [
+        ("news", "https://www.cnn.com/rss/edition.rss"),
+        ("news", "https://www.example-news.com/world/feed"),
+        ("blogs", "https://my-cooking-blog.example/feed/"),
+        (
+            "news",
+            "https://www.cnbc.com/id/100003114/device/rss/rss.html",
+        ),
+    ] {
+        let e = errors(&feed(cat, url));
+        assert!(
+            e.iter().any(|e| e.contains("not travel-focused")),
+            "{url}: {e:?}"
+        );
+    }
+    for (cat, url) in [
+        ("news", "http://rss.cnn.com/rss/edition_travel.rss"),
+        (
+            "news",
+            "https://www.euronews.com/rss?level=vertical&name=travel",
+        ),
+        (
+            "news",
+            "https://rss.nytimes.com/services/xml/rss/nyt/Travel.xml",
+        ),
+        (
+            "news",
+            "https://www.cnbc.com/id/10000739/device/rss/rss.html",
+        ),
+        ("news", "https://www.wanderlust.co.uk/rss"),
+        ("blogs", "https://www.nomadicmatt.com/feed/"),
+        ("events", "https://www.cnn.com/rss/edition.rss"),
+    ] {
+        let e = errors(&feed(cat, url));
+        assert!(e.is_empty(), "{url}: {e:?}");
+    }
+    // A disabled feed is never fetched: the gate does not apply.
+    let mut s = feed("news", "https://www.cnn.com/rss/edition.rss");
+    s.enabled = false;
+    assert!(errors(&s).is_empty());
+}
+
+#[test]
+fn travel_state_gov_is_denied_but_the_advisories_api_is_not() {
+    let dl = vc_sources::load_denylist(&repo_root().join("policy/denylist.yaml")).unwrap();
+    let url = |u: &str| vc_core::CanonicalUrl::parse(u).unwrap();
+    assert!(
+        vc_sources::deny_match(&dl, &url("https://travel.state.gov/_res/rss/TAsTWs.xml")).is_some()
+    );
+    for ok in [
+        "https://cadataapi.state.gov/api/TravelAdvisories",
+        "https://www.state.gov/",
+    ] {
+        assert!(vc_sources::deny_match(&dl, &url(ok)).is_none(), "{ok}");
+    }
+    let specs = vc_sources::load_dir(&repo_root().join("sources")).unwrap();
+    let on = |id: &str| specs.iter().find(|s| s.id.0 == id).unwrap().enabled;
+    assert!(!on("state-dept-advisories-rss") && !on("state-dept-country-pages"));
+    assert!(on("state-dept-advisories-api"));
 }
 
 #[test]

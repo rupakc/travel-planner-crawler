@@ -34,3 +34,7 @@ max_retention_days: null
 display_requirements: null
 notes: 'live offers; verify pricing | Disabled: Live fares are a non-goal; they stay on SerpAPI in the
   app (spec §2).'
+relevance:
+  sections:
+  - flights
+  why: Live flight offers for the Flights section; live fares are a non-goal, so off.

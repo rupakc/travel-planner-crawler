@@ -32,3 +32,7 @@ key_secret: null
 max_retention_days: null
 display_requirements: null
 notes: US only; UA with contact
+relevance:
+  sections:
+  - weather
+  why: US weather forecasts and alerts for the Weather section.

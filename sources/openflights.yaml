@@ -34,3 +34,7 @@ max_retention_days: null
 display_requirements: null
 notes: 'stale since 2014; fallback only | Disabled: Stale since 2014; fallback only. | Research cadence:
   never.'
+relevance:
+  sections:
+  - flights
+  why: Airline routes between airports for the Flights section; stale since 2014, so off.

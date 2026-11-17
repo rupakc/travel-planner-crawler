@@ -32,3 +32,9 @@ key_secret: null
 max_retention_days: null
 display_requirements: null
 notes: RSS verified 2026-11-15
+relevance:
+  sections:
+  - tips
+  - places
+  why: TheTravel travel-section articles (destination features, openings, travel disruptions) for Travel
+    tips and Places to see (headline, link and a short excerpt only).

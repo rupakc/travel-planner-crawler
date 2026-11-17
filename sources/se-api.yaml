@@ -32,3 +32,8 @@ key_secret: null
 max_retention_days: null
 display_requirements: null
 notes: '300/day anon, 10k with key | Disabled: v1 forums = Stack Exchange data dump only (spec §5.10).'
+relevance:
+  sections:
+  - tips
+  why: Travel Stack Exchange questions and answers for Travel tips; v1 uses the data dump instead, so
+    off.

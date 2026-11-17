@@ -33,3 +33,8 @@ key_secret: crawler-src-opentripmap-key
 max_retention_days: null
 display_requirements: Credit OpenTripMap and © OpenStreetMap contributors.
 notes: free key; cache 30 d
+relevance:
+  sections:
+  - places
+  - activities
+  why: Tourist attractions with names, categories and coordinates, for Places to see and Activities.

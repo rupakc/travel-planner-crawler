@@ -36,3 +36,7 @@ max_retention_days: null
 display_requirements: null
 notes: 'POIs, P2852 emergency, P2853 plugs, P2884 voltage | Disabled: Full dump too large; Wikidata is
   queried via SPARQL (spec §5.10).'
+relevance:
+  sections:
+  - places
+  why: Facts about places and sights from Wikidata for Places to see; the full dump is too large, so off.

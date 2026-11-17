@@ -32,3 +32,7 @@ key_secret: null
 max_retention_days: null
 display_requirements: null
 notes: 'Disabled: restricted licence (non-commercial or unknown), not ingested in v1 (spec §5.9).'
+relevance:
+  sections:
+  - forex
+  why: IMF monthly representative exchange rates for the Forex section; terms restricted, so off.
