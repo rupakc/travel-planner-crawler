@@ -23,6 +23,8 @@ mkdir -p "$st"
 
 if [[ "${1:-}" == compose ]]; then
   echo "compose VC_IMAGE=${VC_IMAGE:-} ${*:2}" >>"$CALLS"
+  # like compose.yaml's ${VC_IMAGE:?}: no image, no compose at all
+  [[ -n "${VC_IMAGE:-}" ]] || { echo "required variable VC_IMAGE is missing a value" >&2; exit 1; }
   shift
   # drop compose's own options
   while [[ $# -gt 0 ]]; do

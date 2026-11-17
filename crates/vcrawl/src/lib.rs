@@ -18,3 +18,20 @@ pub mod run;
 pub mod wiring;
 
 pub use ctx::Ctx;
+
+/// Selects aws-lc-rs as the process-wide rustls crypto provider. Dependencies enable
+/// both `ring` and `aws-lc-rs`, and rustls refuses to guess: without this every TLS
+/// client (GCS, Secret Manager, Vertex) panics on first use. Idempotent.
+pub fn install_crypto_provider() {
+    let _ = rustls::crypto::aws_lc_rs::default_provider().install_default();
+}
+
+#[cfg(test)]
+mod crypto_provider_tests {
+    #[test]
+    fn crypto_provider_is_installed() {
+        super::install_crypto_provider();
+        assert!(rustls::crypto::CryptoProvider::get_default().is_some());
+        super::install_crypto_provider(); // second call is a no-op
+    }
+}
