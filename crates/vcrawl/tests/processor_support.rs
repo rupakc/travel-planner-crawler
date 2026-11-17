@@ -96,6 +96,8 @@ pub struct Cap<'a> {
     pub revisit_of: Option<CaptureRef>,
     /// How it was fetched.
     pub fetch_mode: FetchMode,
+    /// Store a WARC `response` (an API exchange) instead of a `resource` record.
+    pub response: bool,
 }
 
 impl<'a> Cap<'a> {
@@ -111,6 +113,7 @@ impl<'a> Cap<'a> {
             media: MediaType::Html,
             revisit_of: None,
             fetch_mode: FetchMode::Http,
+            response: false,
         }
     }
 
@@ -122,6 +125,19 @@ impl<'a> Cap<'a> {
             ..Cap::html(url, source, "", at)
         }
     }
+}
+
+fn exchange(
+    u: &CanonicalUrl,
+    at: DateTime<Utc>,
+    status: http::StatusCode,
+    body: Bytes,
+) -> vc_core::fetch::Exchange {
+    let mut x = not_modified(u, at);
+    x.status = status;
+    x.body = body;
+    x.purpose = vc_core::fetch::RequestPurpose::Api;
+    x
 }
 
 fn not_modified(u: &CanonicalUrl, at: DateTime<Utc>) -> vc_core::fetch::Exchange {
@@ -179,6 +195,9 @@ pub async fn commit(pool: &PgPool, blobs: &Arc<MemBlobStore>, c: Cap<'_>) -> Cap
     let cref = meta.capture_ref();
     let payload = if c.revisit_of.is_some() {
         SpoolPayload::Revisit(not_modified(&meta.url, c.at))
+    } else if c.response {
+        let status = http::StatusCode::from_u16(c.status.unwrap_or(200)).expect("status");
+        SpoolPayload::Response(exchange(&meta.url, c.at, status, body))
     } else {
         SpoolPayload::Resource {
             content_type: "text/html; charset=utf-8".into(),
@@ -232,6 +251,9 @@ pub struct RigOpts {
     pub frontier: bool,
     /// Wire link triage over the fake LLM: `Some(enabled)`.
     pub triage: Option<bool>,
+    /// The real GeoNames place data (`crates/vc-extract/data`) and its country names instead
+    /// of the one-city fixture.
+    pub real_places: bool,
     /// Re-queue `needs_render` pages of `render: auto` sources (`render.enabled`).
     pub render_requeue: bool,
     /// Wraps the raw store the processor reads (commits still go to `Rig::blobs`).
@@ -253,8 +275,22 @@ pub async fn rig_on(pool: PgPool, sources: &[&str], o: RigOpts) -> Rig {
         Usd::from_dollars(10.0),
     ));
     let kinds = kinds();
-    let mut ex =
-        Extractor::new(kinds.clone(), ExtractConfig::default()).with_places(Arc::new(places()));
+    let place_data = if o.real_places {
+        let d = root().join("crates/vc-extract/data");
+        let f = |n: &str| std::fs::File::open(d.join(n)).expect("place data");
+        FilePlaceResolver::from_gz_readers(
+            f("places.tsv.gz"),
+            f("countries.tsv.gz"),
+            f("admin1.tsv.gz"),
+        )
+        .expect("place data")
+    } else {
+        places()
+    };
+    let names = place_data.country_names();
+    let mut ex = Extractor::new(kinds.clone(), ExtractConfig::default())
+        .with_places(Arc::new(place_data))
+        .with_country_names(names);
     if o.llm {
         ex = ex.with_llm(
             llm.clone(),

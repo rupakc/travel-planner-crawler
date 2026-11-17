@@ -45,9 +45,12 @@ pub async fn run(ctx: Ctx) -> anyhow::Result<()> {
         .context("raw blob store")?;
     let kinds: Arc<dyn KindRegistry> =
         Arc::new(vc_kinds::FileKindRegistry::load(&cfg.kinds).context("kind registry")?);
-    let places: Arc<dyn PlaceResolver> =
-        Arc::new(vc_extract::FilePlaceResolver::load(&cfg.extract).context("place data")?);
-    let mut extractor = Extractor::new(kinds.clone(), cfg.extract.clone()).with_places(places);
+    let place_file = vc_extract::FilePlaceResolver::load(&cfg.extract).context("place data")?;
+    let country_names = place_file.country_names();
+    let places: Arc<dyn PlaceResolver> = Arc::new(place_file);
+    let mut extractor = Extractor::new(kinds.clone(), cfg.extract.clone())
+        .with_places(places)
+        .with_country_names(country_names);
     let mut triage = None;
     if cfg.llm.enabled {
         let clock: Arc<dyn Clock> = Arc::new(vc_core::SystemClock);

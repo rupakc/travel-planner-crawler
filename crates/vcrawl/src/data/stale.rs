@@ -54,6 +54,16 @@ const DROPPED: &[Skip] = &[
 ];
 
 impl Coverage {
+    /// Nothing is evidence: no record is staled. For one batch of a dump (every batch shares
+    /// the dump's URL, so a record missing from this one is in another) and for adapter output
+    /// that did not parse.
+    pub fn none() -> Self {
+        Coverage {
+            nothing: true,
+            ..Coverage::default()
+        }
+    }
+
     /// The coverage of one extraction with the source's `structured_kinds` (empty = any) and
     /// `llm_kinds`.
     pub fn of(structured_kinds: &[KindId], llm_kinds: &[KindId], out: &ExtractOutput) -> Self {

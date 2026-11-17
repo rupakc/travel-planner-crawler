@@ -7,6 +7,7 @@
 //! | `purge --url\|--url-prefix\|--host\|--author\|--source\|--record` | [`purge`] |
 //! | `rebuild-captures [--dry-run\|--verify]` | [`rebuild`] |
 //! | `reextract --kind` | [`reextract`] |
+//! | `reprocess --source` | [`reprocess`] |
 //! | `client add\|list\|revoke` | [`client`] |
 //!
 //! Every command prints one JSON document on stdout (ids and counts, never page content).
@@ -16,6 +17,7 @@ pub mod client;
 pub mod purge;
 pub mod rebuild;
 pub mod reextract;
+pub mod reprocess;
 pub mod source;
 pub mod status;
 
@@ -37,6 +39,8 @@ pub enum AdminCmd {
     RebuildCaptures(rebuild::RebuildArgs),
     /// Queue re-extraction of every capture that produced records of a kind.
     Reextract(reextract::ReextractArgs),
+    /// Hand a source's committed captures back to the processor (after a processor fix).
+    Reprocess(reprocess::ReprocessArgs),
     /// Read-API clients: register (token from Secret Manager or stdin), list, revoke.
     #[command(subcommand)]
     Client(client::ClientCmd),
@@ -53,6 +57,7 @@ pub async fn run(ctx: Ctx, cmd: AdminCmd) -> anyhow::Result<()> {
         AdminCmd::Purge(a) => purge::run(&ctx, a).await?,
         AdminCmd::RebuildCaptures(a) => rebuild::run(&ctx, a).await?,
         AdminCmd::Reextract(a) => reextract::run(&ctx, a).await?,
+        AdminCmd::Reprocess(a) => reprocess::run(&ctx, a).await?,
         AdminCmd::Client(c) => client::run(&ctx, c).await?,
     };
     println!("{}", serde_json::to_string_pretty(&out)?);

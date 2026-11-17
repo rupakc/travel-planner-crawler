@@ -19,5 +19,5 @@ pub mod record_key;
 pub mod structured;
 
 pub use gate::{Gate, PeerRecord, source_gate};
-pub use pipeline::{ExtractInput, ExtractOutput, ExtractReport, Extractor, Skip};
+pub use pipeline::{AdapterRecord, ExtractInput, ExtractOutput, ExtractReport, Extractor, Skip};
 pub use places::{FilePlaceResolver, GEONAMES_ATTRIBUTION, LlmPlaceDisambiguator};

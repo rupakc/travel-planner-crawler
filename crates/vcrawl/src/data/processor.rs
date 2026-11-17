@@ -45,7 +45,7 @@ use vc_core::store::{BlobStore, CaptureRole};
 use vc_core::usepolicy::UsePolicy;
 use vc_core::{CaptureRef, Error, ErrorClass, KindId, Result};
 use vc_extract::gate::{compare_with_peers, is_high_stakes, publisher_of};
-use vc_extract::{ExtractInput, Extractor, Gate, PeerRecord, source_gate};
+use vc_extract::{AdapterRecord, ExtractInput, Extractor, Gate, PeerRecord, source_gate};
 
 use crate::agentic::AgenticLlm;
 use crate::agentic::triage::{LinkCandidate, PgTriageCache, triage_links};
@@ -352,9 +352,29 @@ impl Processor {
             return Ok(Outcome::Skipped(SkipReason::NoBody));
         };
         let payload_changed = capture::payload_changed(pool, &c).await?;
-        let Some(parsed) = vc_parse::parse(&self.d.handlers, &c.meta, &body, &self.d.limits)?
-        else {
-            return Ok(Outcome::Skipped(SkipReason::NoHandler));
+        // Adapter output (an API response or a dump batch) is read by the adapter's own record
+        // mapping; the content handler (if the media type has one) still supplies links and
+        // body signals, and a capture with a mapping never needs one (e.g. the ECB's XML).
+        let adapter = adapter_records(&c, &body);
+        let parsed = match vc_parse::parse(&self.d.handlers, &c.meta, &body, &self.d.limits) {
+            Ok(Some(p)) => p,
+            Ok(None) if adapter.is_some() => Parsed::default(),
+            Ok(None) => return Ok(Outcome::Skipped(SkipReason::NoHandler)),
+            Err(e) if adapter.is_some() => {
+                tracing::debug!(capture = %cref.capture_id, error_class = ?e.class(),
+                    "content handler failed on adapter output; adapter records only");
+                Parsed::default()
+            }
+            Err(e) => return Err(e),
+        };
+        let (adapter_recs, adapter_ok) = match adapter {
+            Some(Ok(r)) => (r, true),
+            Some(Err(e)) => {
+                tracing::warn!(capture = %cref.capture_id, source = %src.spec.id.0,
+                    error_class = ?e.class(), "adapter output did not parse; no adapter records");
+                (Vec::new(), false)
+            }
+            None => (Vec::new(), true),
         };
         let final_policy = c
             .meta
@@ -383,6 +403,7 @@ impl Processor {
         let peers = self.peers(&high, &prov).await?;
         let mut input = ExtractInput::new(&prov, &parsed);
         input.structured_kinds = &src.spec.kinds;
+        input.adapter_records = &adapter_recs;
         input.llm_kinds = &src.spec.llm_kinds;
         input.payload_changed = payload_changed;
         input.peers = &peers;
@@ -390,7 +411,15 @@ impl Processor {
         self.check_index_peers(&mut out, &high, &prov, &peers)
             .await?;
 
-        let coverage = Coverage::of(&src.spec.kinds, &src.spec.llm_kinds, &out);
+        // A dump batch (status-less `resource`) shares its URL with the other batches, so
+        // absence from it is no evidence.
+        let dump_batch =
+            matches!(c.meta.fetch_mode, FetchMode::Adapter(_)) && c.meta.status.is_none();
+        let coverage = if dump_batch || !adapter_ok {
+            Coverage::none()
+        } else {
+            Coverage::of(&src.spec.kinds, &src.spec.llm_kinds, &out)
+        };
         let present: std::collections::HashSet<(String, String)> = out
             .records
             .iter()
@@ -752,4 +781,23 @@ impl Processor {
         }
         frontier.enqueue(&batch).await
     }
+}
+
+/// The adapter records of an adapter capture (`None`: not an adapter capture, or the adapter
+/// has no record mapping).
+fn adapter_records(c: &StoredCapture, body: &[u8]) -> Option<Result<Vec<AdapterRecord>>> {
+    let FetchMode::Adapter(id) = &c.meta.fetch_mode else {
+        return None;
+    };
+    let items = vc_sources::adapters::records::records(id, &c.meta.url, body)?;
+    Some(items.map(|v| {
+        v.into_iter()
+            .map(|i| AdapterRecord {
+                kind: KindId::new(i.kind),
+                id: i.id,
+                series_key: i.series_key,
+                data: i.data,
+            })
+            .collect()
+    }))
 }

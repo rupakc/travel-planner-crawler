@@ -5877,6 +5877,7 @@ dependencies = [
  "async-trait",
  "axum",
  "bytes",
+ "bzip2",
  "chrono",
  "clap",
  "crc32c",

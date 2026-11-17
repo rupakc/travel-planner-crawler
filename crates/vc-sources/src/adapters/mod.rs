@@ -30,6 +30,7 @@ pub mod met_norway;
 pub mod mobility_database_catalog;
 pub mod nager_holidays;
 pub mod ourairports_csv;
+pub mod records;
 pub mod se_travel_dump;
 pub mod state_dept_advisories;
 pub mod ticketmaster_discovery;

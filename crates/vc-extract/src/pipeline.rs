@@ -138,6 +138,22 @@ pub struct ExtractOutput {
     pub report: ExtractReport,
 }
 
+/// A record a source adapter's parser produced from the capture (spec §5.7 step 2: free
+/// extraction, no LLM). It goes through the same fit, validation, grounding, source-class
+/// gate, place resolution and keying as structured data, with method `adapter`.
+#[derive(Debug, Clone, PartialEq)]
+pub struct AdapterRecord {
+    /// Kind.
+    pub kind: KindId,
+    /// Stable id within the source (record key input).
+    pub id: Option<String>,
+    /// Observation series key (observation kinds; default `<kind>:<record key>`).
+    pub series_key: Option<String>,
+    /// Fields of the kind's schema. A missing `country` is filled from `country_code`, and a
+    /// missing code from the place resolver (name near `lat`/`lng`).
+    pub data: Value,
+}
+
 /// One capture to extract.
 #[derive(Debug, Clone)]
 pub struct ExtractInput<'a> {
@@ -147,6 +163,8 @@ pub struct ExtractInput<'a> {
     pub parsed: &'a Parsed,
     /// Kinds the source produces by structured extraction (empty = any mapped kind).
     pub structured_kinds: &'a [KindId],
+    /// Records from the source adapter's parser (adapter captures only).
+    pub adapter_records: &'a [AdapterRecord],
     /// Kinds the LLM may extract from this source (`SourceSpec::llm_kinds`).
     pub llm_kinds: &'a [KindId],
     /// Whether the payload changed since the last extraction (LLM runs only then).
@@ -166,6 +184,7 @@ impl<'a> ExtractInput<'a> {
             provenance,
             parsed,
             structured_kinds: &[],
+            adapter_records: &[],
             llm_kinds: &[],
             payload_changed: true,
             country_hint: None,
@@ -186,6 +205,7 @@ pub struct Extractor {
     kinds: Arc<dyn KindRegistry>,
     cfg: ExtractConfig,
     places: Option<Arc<dyn PlaceResolver>>,
+    country_names: Arc<HashMap<String, String>>,
     llm: Option<LlmDeps>,
     validators: Mutex<HashMap<String, Arc<Validator>>>,
 }
@@ -203,6 +223,7 @@ impl std::fmt::Debug for Extractor {
 struct Candidate {
     kind: KindId,
     id: Option<String>,
+    series_key: Option<String>,
     data: Value,
     method: ExtractionMethod,
     model: Option<vc_core::ModelId>,
@@ -215,6 +236,7 @@ impl Extractor {
             kinds,
             cfg,
             places: None,
+            country_names: Arc::new(HashMap::new()),
             llm: None,
             validators: Mutex::new(HashMap::new()),
         }
@@ -223,6 +245,13 @@ impl Extractor {
     /// Adds place resolution.
     pub fn with_places(mut self, places: Arc<dyn PlaceResolver>) -> Self {
         self.places = Some(places);
+        self
+    }
+
+    /// ISO 3166-1 alpha-2 code → English country name, for adapter records that carry only a
+    /// code ([`crate::FilePlaceResolver::country_names`]).
+    pub fn with_country_names(mut self, names: HashMap<String, String>) -> Self {
+        self.country_names = Arc::new(names);
         self
     }
 
@@ -300,8 +329,44 @@ impl Extractor {
             cands.push(Candidate {
                 kind,
                 id,
+                series_key: None,
                 data,
                 method: ExtractionMethod::Structured,
+                model: None,
+            });
+        }
+
+        // 1b. The source adapter's own parser (free).
+        for r in input.adapter_records {
+            if !input.structured_kinds.is_empty() && !input.structured_kinds.contains(&r.kind) {
+                continue;
+            }
+            let Some(def) = self.kinds.get(&r.kind) else {
+                out.report.skip(&r.kind, Skip::UnknownKind);
+                continue;
+            };
+            if source_gate(def, prov.source_class) == Gate::Denied {
+                out.report.skip(&r.kind, Skip::SourceClass);
+                continue;
+            }
+            let mut data = r.data.clone();
+            self.fill_country(&mut data, input).await;
+            if def.schema.pointer("/properties/source_url").is_some()
+                && let Some(o) = data.as_object_mut()
+                && !o.get("source_url").is_some_and(Value::is_string)
+            {
+                o.insert(
+                    "source_url".into(),
+                    Value::String(prov.url.as_str().to_string()),
+                );
+            }
+            fit_to_schema(&mut data, &def.schema);
+            cands.push(Candidate {
+                kind: r.kind.clone(),
+                id: r.id.clone(),
+                series_key: r.series_key.clone(),
+                data,
+                method: ExtractionMethod::Adapter,
                 model: None,
             });
         }
@@ -480,10 +545,14 @@ impl Extractor {
             .map(|s| s.chars().take(max).collect::<String>())
             .filter(|s| !s.is_empty());
         let observation = (def.storage == KindStorage::Observation).then(|| ObservationPoint {
-            series_key: data
-                .get("series_key")
-                .and_then(Value::as_str)
-                .map(str::to_string)
+            series_key: c
+                .series_key
+                .clone()
+                .or_else(|| {
+                    data.get("series_key")
+                        .and_then(Value::as_str)
+                        .map(str::to_string)
+                })
                 .unwrap_or_else(|| format!("{}:{}", def.id, key.0)),
             observed_at: ["observed_at", "date", "as_of"]
                 .iter()
@@ -513,6 +582,51 @@ impl Extractor {
                 run_id: input.run_id,
             },
             observation,
+        }
+    }
+
+    /// Adapter records: a missing `country_code` from the place resolver (the record's name
+    /// near its coordinates), then a missing `country` from the code.
+    async fn fill_country(&self, data: &mut Value, input: &ExtractInput<'_>) {
+        let Some(o) = data.as_object_mut() else {
+            return;
+        };
+        let has = |o: &serde_json::Map<String, Value>, f: &str| {
+            o.get(f)
+                .and_then(Value::as_str)
+                .is_some_and(|s| !s.trim().is_empty())
+        };
+        if !has(o, "country_code")
+            && !has(o, "country")
+            && let (Some(res), Some(name), Some(lat), Some(lon)) = (
+                &self.places,
+                o.get("name").and_then(Value::as_str),
+                o.get("lat").and_then(Value::as_f64),
+                o.get("lng").and_then(Value::as_f64),
+            )
+        {
+            let q = PlaceQuery {
+                name: name.to_string(),
+                country: None,
+                near: Some(GeoPoint { lat, lon }),
+                lang: input.parsed.lang.clone(),
+            };
+            match res.resolve(&q).await {
+                Ok(m) => {
+                    if let Some(m) = m.first().filter(|m| m.score >= self.cfg.place_min_score) {
+                        o.insert("country_code".into(), Value::String(m.country.clone()));
+                    }
+                }
+                Err(e) => tracing::warn!(error_class = ?e.class(), "place resolution failed"),
+            }
+        }
+        if !has(o, "country")
+            && let Some(name) = o
+                .get("country_code")
+                .and_then(Value::as_str)
+                .and_then(|c| self.country_names.get(&c.trim().to_ascii_uppercase()))
+        {
+            o.insert("country".into(), Value::String(name.clone()));
         }
     }
 
@@ -698,6 +812,7 @@ impl Extractor {
                     cands.push(Candidate {
                         kind: def.id.clone(),
                         id: None,
+                        series_key: None,
                         data: r,
                         method: ExtractionMethod::Llm,
                         model: model.clone(),
@@ -747,6 +862,7 @@ impl Extractor {
                     cands.push(Candidate {
                         kind: def.id.clone(),
                         id: None,
+                        series_key: None,
                         data: r,
                         method: ExtractionMethod::Llm,
                         model: Some(resp.model.clone()),
