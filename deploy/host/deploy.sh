@@ -20,7 +20,7 @@
 #      landed after 1906), so the highest number alone proves nothing. Images
 #      without that label fall back to io.voyager-crawler.min-schema ≤ the
 #      database's highest applied migration.
-#   5. Roll the roles one at a time (maintenance … api); after each, wait
+#   5. Roll the vcrawl services one at a time (VC_ROLES); after each, wait
 #      for its progress-based health check. Unhealthy → every rolled role
 #      goes back to the previous digest, and the new one is held.
 #   6. Success: image.env names the new digest; the old one becomes the
@@ -120,9 +120,9 @@ refresh_secrets() {
     fi
   done <<<"$SECRET_MAP"
   ((ok)) && touch "$VC_STATE/secrets.stamp"
-  if ((changed)) && [[ -n "$(current_image)" ]] && [[ -n "$(vc_compose ps -q api 2>/dev/null)" ]]; then
-    log "TLS certificate changed: recreating api"
-    vc_compose up -d --no-deps --force-recreate api || log "api recreate failed"
+  if ((changed)) && [[ -n "$(current_image)" ]] && [[ -n "$(vc_compose ps -q "$VC_API_SERVICE" 2>/dev/null)" ]]; then
+    log "TLS certificate changed: recreating $VC_API_SERVICE"
+    vc_compose up -d --no-deps --force-recreate "$VC_API_SERVICE" || log "$VC_API_SERVICE recreate failed"
   fi
   return 0
 }

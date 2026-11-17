@@ -41,11 +41,14 @@ reads.
 | `VC_LLM_ENABLED` | every role | from `host.local.env`, default `false` | turn the LLM on |
 | `VC_PROJECT_CAP_USD` | every role | from `host.local.env`, default `0` | the project's Gemini spend cap; 0 keeps the LLM off |
 | `VC_LLM_MONTHLY_USD` | every role | from `host.local.env`, default `30` | `llm.monthly_usd`, the crawler's monthly LLM cap; at most 50 % of `VC_PROJECT_CAP_USD` |
-| `VC_RENDER_CDP_URL` | fetcher | `http://chromium:9222` | Chromium DevTools address |
-| `VC_STORE_SPOOL_DIR` | fetcher | `/spool` | spool mount |
-| `VC_VCRAWL_INSTANCE` | fetcher | `fetcher-a` | stable name, so the fetcher's spool subfolder survives a container rebuild |
-| `VC_OBS_METRICS_ADDR` | fetcher | `192.168.250.2:9464` | `/metrics` only on the internal `metrics` network ([Security](Security)) |
-| `VC_API_BIND` | api | `0.0.0.0:8443` inside the container | `api.bind`. The host's own `VC_API_BIND` (the VM's internal IP, from `host.env`) is a compose variable: the port is published only on that IP |
+| `VC_RENDER_CDP_URL` | vcrawl | `http://chromium:9222` | Chromium DevTools address |
+| `VC_STORE_SPOOL_DIR` | vcrawl | `/spool` | spool mount |
+| `VC_VCRAWL_INSTANCE` | vcrawl | `vcrawl` | stable name, so the fetcher's spool subfolder survives a container rebuild |
+| `VC_VCRAWL_FETCHER_CONCURRENCY`, `VC_VCRAWL_PROCESSOR_CONCURRENCY` | vcrawl | `8`, `2` | sized for the 4 GB VM |
+| `VC_OBS_METRICS_ADDR` | vcrawl | `192.168.250.2:9464` | `/metrics` only on the internal `metrics` network ([Security](Security)) |
+| `VC_API_BIND` | vcrawl | `0.0.0.0:8443` inside the container | `api.bind`. The host's own `VC_API_BIND` (the VM's internal IP, from `host.env`) is a compose variable: the port is published only on that IP |
+
+The one `vcrawl` container runs `vcrawl run` (every role in one process).
 
 Owner overrides go in `/var/lib/voyager-crawler/deploy/host.local.env` on the VM.
 `first-boot.sh` copies them into `host.env` on every boot. `VC_LLM_ENABLED`,
@@ -83,7 +86,7 @@ The User-Agent is a constant in code, not a setting.
 |---|---|---|
 | `url` | `postgres://vcrawl@localhost:5432/vcrawl` | connection URL without the password |
 | `password_secret` | `crawler-pg-password` | Secret Manager name of the password |
-| `max_connections` | 10 | pool size per process |
+| `max_connections` | 10 | pool size of a role run alone (`vcrawl fetcher`, …); `vcrawl run` sizes its one pool from the roles instead (`vcrawl.run_pool_max`) |
 | `statement_timeout_ms` | 30000 | per session |
 | `lock_timeout_ms` | 5000 | per session |
 
@@ -134,13 +137,13 @@ The User-Agent is a constant in code, not a setting.
 |---|---|---|
 | `enabled` | false | |
 | `cdp_url` | `http://chromium:9222` | headless-shell on the internal network |
-| `max_tabs` | 2 | |
+| `max_tabs` | 1 | concurrent renders (1–2); one on the 4 GB VM |
 | `budget_s`, `max_subrequests`, `max_bytes` | 90, 60, 20 MiB | per render |
 | `network_idle_ms` | 1000 | no paused request for this long = network idle |
 | `subresource_gap_ms` | 250 | the **sub-resource gap**: minimum time between two sub-requests (scripts, stylesheets) of one render to the same host. Applied inside the permit client's `admit`, never longer than the key's page delay; the next page still waits the full delay |
 | `subresource_cache_ttl_h`, `subresource_cache_max_bytes` | 24, 64 MiB | in-memory cache |
 | `cache_dir` | `/var/lib/voyager-crawler/render-cache` | reserved |
-| `restart_after_renders` | 200 | leak containment |
+| `restart_after_renders` | 50 | leak containment: a new CDP session after this many renders (each render has its own browser context, disposed afterwards) |
 
 ### `[store]`
 
@@ -282,6 +285,8 @@ Settings of the `vcrawl` binary itself (its roles and admin commands).
 | `recrawl_min_s` | 3600 | shortest recrawl interval (the source cadence is the longest) |
 | `recrawl_default_s` | 604800 (7 days) | recrawl interval without a source or with `on_demand` cadence |
 | `health_timeout_s` | 5 | per-dependency timeout of `vcrawl health` |
+| `shutdown_grace_s` | 25 | `vcrawl run`: time a SIGTERM leaves the roles to finish (fetches in flight end, the spool is flushed, leases are released) before the rest is aborted; compose's `stop_grace_period` is 30 s |
+| `run_pool_max` | 0 | `vcrawl run`: size of the one shared pool; 0 = the roles' sum (scheduler 2, fetcher 2 + concurrency/2, processor 1 + concurrency, embedder 1, api 4, maintenance 3: 19 in production) |
 | `source_allowlist` | unset | go-live ramp: a file of source ids (`#` comments; relative to `sources.dir`). The scheduler seeds only those, the fetcher fetches nothing for other sources' URLs (released for an hour). A fresh VM sets `VC_VCRAWL_SOURCE_ALLOWLIST=/app/sources/ramp-1.txt` once in `host.local.env`; unreadable = fail closed |
 
 Code: [vc-config](Crate-vc-config).

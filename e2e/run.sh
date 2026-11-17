@@ -17,9 +17,18 @@ export E2E_OUT="$out"
 export COMPOSE_PROJECT_NAME="${COMPOSE_PROJECT_NAME:-vc-e2e}"
 dc() { docker compose -f "$here/compose.yaml" "$@"; }
 
-# Role services (compose name -> vcrawl role).
-role_of() { case "$1" in fetcher-*) echo fetcher ;; *) echo "$1" ;; esac; }
-ROLE_SERVICES=(scheduler fetcher-a fetcher-b processor embedder maintenance api)
+# Role services (compose name -> the vcrawl roles it runs, `vcrawl run --roles …`).
+role_of() {
+  case "$1" in
+    fetcher-*) echo fetcher ;;
+    vcrawl) echo scheduler processor embedder maintenance api ;;
+    *) echo "$1" ;;
+  esac
+}
+ROLE_SERVICES=(vcrawl fetcher-a fetcher-b)
+# Total peak memory of the production-equivalent containers (e2e/mem-sampler.sh): the
+# 4 GB Spot VM keeps 0.8 GB for the host.
+MEM_LIMIT_BYTES="${E2E_MEM_LIMIT_BYTES:-3200000000}"
 NOT_WIRED='not wired yet'
 
 log() { printf '[e2e] %s\n' "$*" >&2; }
@@ -27,6 +36,7 @@ log() { printf '[e2e] %s\n' "$*" >&2; }
 # shellcheck disable=SC2329 # invoked by the EXIT trap
 cleanup() {
   local rc=$?
+  [[ -n "${sampler_pid:-}" ]] && kill "$sampler_pid" 2>/dev/null
   dc logs --no-color --timestamps >"$out/compose.log" 2>&1 || true
   if [[ "${E2E_KEEP:-0}" != 1 ]]; then
     dc --profile tools down -v --remove-orphans >/dev/null 2>&1 || true
@@ -58,6 +68,11 @@ log "building vc-e2e:local (BINS=${E2E_BINS:-build})"
 docker build -q -f "$here/Dockerfile" --build-arg "BINS=${E2E_BINS:-build}" ${CARGO_BUILD_JOBS:+--build-arg "CARGO_BUILD_JOBS=$CARGO_BUILD_JOBS"} -t vc-e2e:local "$root" >/dev/null
 
 trap cleanup EXIT
+bash "$here/mem-sampler.sh" self-test >/dev/null
+
+# --- memory sampler (docker stats every 2 s, until the oracles are done) ------------------
+bash "$here/mem-sampler.sh" sample "$out/mem.tsv" "$COMPOSE_PROJECT_NAME" &
+sampler_pid=$!
 
 # --- infrastructure ------------------------------------------------------------------------
 log "starting postgres, fakes and chromium"
@@ -102,10 +117,11 @@ classify() {
 sleep "${E2E_ROLE_SETTLE_SECS:-20}"
 for s in "${ROLE_SERVICES[@]}"; do
   r="$(role_of "$s")"
+  # shellcheck disable=SC2206 # a service runs a list of roles
   case "$(classify "$s")" in
     running) log "role $s: running" ;;
-    not_wired) log "role $s: not wired yet (Task 15)"; missing+=("$r") ;;
-    crashed) log "role $s: CRASHED"; crashed+=("$r") ;;
+    not_wired) log "role $s: not wired yet (Task 15)"; missing+=($r) ;;
+    crashed) log "role $s: CRASHED"; crashed+=($r) ;;
   esac
 done
 
@@ -121,7 +137,7 @@ dc --profile tools run --rm runner run || rc=$?
 
 # A role that died during the run is a failure even if every assertion held.
 for s in "${ROLE_SERVICES[@]}"; do
-  if [[ "$(classify "$s")" == crashed ]] && ! grep -qw "$(role_of "$s")" <<<"$E2E_CRASHED_ROLES"; then
+  if [[ "$(classify "$s")" == crashed ]] && ! grep -qw "$(role_of "$s" | cut -d' ' -f1)" <<<"$E2E_CRASHED_ROLES"; then
     log "role $s exited during the run"
     rc=1
   fi
@@ -151,11 +167,27 @@ curl_admin http://fake-web/__admin/log >"$out/fake-web.jsonl" 2>/dev/null || tru
 curl_admin http://trap/__admin/log >"$out/trap.jsonl" 2>/dev/null || true
 curl_admin http://trap-metadata/__admin/log >"$out/trap-metadata.jsonl" 2>/dev/null || true
 
+# --- memory: peak per container and in total (fails the run over MEM_LIMIT_BYTES) ---------
+kill "$sampler_pid" 2>/dev/null || true
+wait "$sampler_pid" 2>/dev/null || true
+sampler_pid=""
+mem_rc=0
+bash "$here/mem-sampler.sh" report "$out/mem.tsv" "$MEM_LIMIT_BYTES" >"$out/memory.md" || mem_rc=$?
+if ((mem_rc != 0)); then
+  log "memory: total peak over $MEM_LIMIT_BYTES bytes, or no samples (e2e/out/memory.md)"
+  rc=1
+fi
+cat "$out/memory.md" >&2
+
 if [[ -f "$out/summary.md" ]]; then
   cat "$out/summary.md"
-  if [[ -n "${GITHUB_STEP_SUMMARY:-}" ]]; then
-    { echo "### E2E"; cat "$out/summary.md"; } >>"$GITHUB_STEP_SUMMARY"
-  fi
+fi
+if [[ -n "${GITHUB_STEP_SUMMARY:-}" ]]; then
+  {
+    [[ -f "$out/summary.md" ]] && { echo "### E2E"; cat "$out/summary.md"; }
+    echo "### Peak memory (docker stats every 2 s; Spot e2-medium budget)"
+    cat "$out/memory.md"
+  } >>"$GITHUB_STEP_SUMMARY"
 fi
 log "done (exit $rc); logs in $out"
 exit "$rc"

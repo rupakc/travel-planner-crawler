@@ -1,7 +1,8 @@
 # Architecture
 
-The crawler is **one Rust binary, `vcrawl`, run as several processes** ("roles") on one VM.
-The roles never talk to each other directly. They share state through **Postgres** (the
+The crawler is **one Rust binary, `vcrawl`**, whose jobs ("roles") run as tasks of **one
+process** (`vcrawl run`, one container) on one small VM; each role can also run alone
+(`vcrawl fetcher`, …). The roles never talk to each other directly. They share state through **Postgres** (the
 to-do list of URLs, the work queue, the records) and **GCS** (the raw pages).
 
 ## Diagram
@@ -54,20 +55,29 @@ network: the fetcher answers each of its requests itself. See
 
 ## Roles
 
-| Role | Job | Memory limit | Main crates |
-|---|---|---|---|
-| `scheduler` | Turns sources into URLs: seeds, sitemaps, feeds, adapter rows. Applies source limits, retires rows of disabled sources, refreshes expired robots.txt. Runs the LLM startup probe when the LLM is on. | 256 MB | vc-sources, vc-frontier |
-| `fetcher` | The claim loop: claim a site, fetch robots.txt first, fetch its leased URLs politely, render when needed, run API and dump adapters, write raw records to the spool, commit segments. | 512 MB | vc-frontier, vc-fetch, vc-render, vc-store |
-| `processor` | Turns committed captures into records: parse, structured data, LLM extraction, grounding checks, place resolution, index, extracted-text tier. Enqueues found links (with [link triage](Agentic-Loops) when the LLM is on). | 768 MB | vc-parse, vc-extract, vc-kinds, vc-llm, vc-index |
-| `embedder` | Adds vector embeddings for current records. | 256 MB | vc-llm, vc-index |
-| `api` | The private `/v1` read API for Voyager. | 512 MB | vc-api, vc-index |
-| `maintenance` | Partitions, purges, ephemeral expiry, weekly restore drill, daily digest, weekly [source scout and quality auditor](Agentic-Loops). | 256 MB | vc-store, vc-index, vc-sources |
-| `admin` | Command-line tools: `status`, `source` (list, validate, approve), `purge`, `rebuild-captures`, `reextract`. | n/a | all |
-| `migrate` | Applies expand-only migrations before a deploy rolls the roles. `--contract` runs destructive ones by hand; `--print-schema` gives the image's schema labels. | 256 MB | sqlx migrations |
-| `health` | The container health check: exits 0 when the role in this container is making progress. | n/a | vc-obs |
+| Role | Job | Main crates |
+|---|---|---|
+| `scheduler` | Turns sources into URLs: seeds, sitemaps, feeds, adapter rows. Applies source limits, retires rows of disabled sources, refreshes expired robots.txt. Runs the LLM startup probe when the LLM is on. | vc-sources, vc-frontier |
+| `fetcher` | The claim loop: claim a site, fetch robots.txt first, fetch its leased URLs politely, render when needed, run API and dump adapters, write raw records to the spool, commit segments. | vc-frontier, vc-fetch, vc-render, vc-store |
+| `processor` | Turns committed captures into records: parse, structured data, LLM extraction, grounding checks, place resolution, index, extracted-text tier. Enqueues found links (with [link triage](Agentic-Loops) when the LLM is on). | vc-parse, vc-extract, vc-kinds, vc-llm, vc-index |
+| `embedder` | Adds vector embeddings for current records. | vc-llm, vc-index |
+| `api` | The private `/v1` read API for Voyager. | vc-api, vc-index |
+| `maintenance` | Partitions, purges, ephemeral expiry, weekly restore drill, daily digest, weekly [source scout and quality auditor](Agentic-Loops). | vc-store, vc-index, vc-sources |
+| `admin` | Command-line tools: `status`, `source` (list, validate, approve), `purge`, `rebuild-captures`, `reextract`. | all |
+| `migrate` | Applies expand-only migrations before a deploy rolls `vcrawl`. `--contract` runs destructive ones by hand; `--print-schema` gives the image's schema labels. | sqlx migrations |
+| `health` | The container health check: exits 0 when every role in this container is up and making progress. | vc-obs |
 
-Postgres gets 3 GB, Chromium 1.5 GB and the metrics collector (`otelcol`) 128 MB. The total
-is about 7.2 GB of the VM's 8 GB.
+**`vcrawl run`** (the production command) runs the six long-running roles in one process:
+one tokio runtime, one Postgres pool sized for the roles (about 19 connections), one
+`/metrics` + `/healthz` listener with a heartbeat per role (`crawler_heartbeat{role}`). A
+failed role is restarted inside the process with a backoff while `/healthz` reports it down;
+SIGTERM stops everything within 25 s (fetches in flight finish, the spool is flushed, leases
+are released).
+
+Memory (Spot e2-medium, 4 GB, plus a 2 GB swap file as a safety net only): Postgres
+1152 MiB, Chromium 768 MiB, `vcrawl` 1 GiB, the metrics collector (`otelcol`) 96 MiB and the
+one-shot `migrate` 128 MiB, 3.3 GB in all. The E2E job measures the peak and fails above
+3.2 GB ([Testing](Testing)).
 
 > **Status:** every role is wired (plan Task 15), and the end-to-end test runs them all in
 > CI ([Testing](Testing)). See [vcrawl](Crate-vcrawl) for what is still open.
@@ -83,37 +93,33 @@ flowchart LR
     CHR["chromium"]
   end
   subgraph metrics["metrics (internal, 192.168.250.0/29)"]
-    FM["fetcher /metrics + /healthz"]
+    FM["vcrawl /metrics + /healthz"]
   end
   subgraph db["db (internal)"]
     PG[("postgres")]
   end
-  ROLES["scheduler, processor, embedder, api, maintenance"]
-  FET["fetcher"]
+  VC["vcrawl run: every role"]
   OTL["otelcol"]
   OUT["egress: GCS, Vertex, metadata server, the web (fetcher only, with a permit)"]
 
-  CHR <-->|"CDP"| FET
-  FET --- FM
+  CHR <-->|"CDP"| VC
+  VC --- FM
   OTL -->|"scrape :9464"| FM
-  OTL -->|"scrape :9464 on egress"| ROLES
-  FET --> PG
-  ROLES --> PG
-  FET --> OUT
-  ROLES --> OUT
+  VC --> PG
+  VC --> OUT
   OTL --> OUT
   PG -->|"wal-g backups, pgbackup network"| OUT
 ```
 
 | Network | Members | Why |
 |---|---|---|
-| `db` | Postgres and every role | Database access; no route out. |
-| `render` | Chromium and the fetcher | Chromium can only talk to the fetcher, which answers each of its requests under the page's permit. |
-| `metrics` | the fetcher and `otelcol` | The fetcher binds `/metrics` and `/healthz` here only, so Chromium (on `render`) cannot reach them. |
-| `egress` | every role, `otelcol` | GCS, Vertex AI, the metadata server; only the fetcher reaches crawl targets, and only through permits. |
+| `db` | Postgres and `vcrawl` | Database access; no route out. |
+| `render` | Chromium and `vcrawl` | Chromium can only talk to the fetcher, which answers each of its requests under the page's permit. |
+| `metrics` | `vcrawl` and `otelcol` | `vcrawl` binds `/metrics` and `/healthz` here only, so Chromium (on `render`) cannot reach them. |
+| `egress` | `vcrawl`, `otelcol` | GCS, Vertex AI, the metadata server; only the fetcher reaches crawl targets, and only through permits. |
 | `pgbackup` | Postgres alone | wal-g's route to the ops bucket. |
 
-`otelcol` (OpenTelemetry Collector) scrapes each role's `/metrics` every 60 s (every role serves it on `:9464`; a compose test checks each scrape target against the role's listener), keeps only
+`otelcol` (OpenTelemetry Collector) scrapes `vcrawl`'s `/metrics` every 60 s (`:9464`, every role's series; a compose test checks the scrape target against the listener), keeps only
 `crawler_*` series and writes them to Cloud Monitoring as `custom.googleapis.com/crawler/*`.
 The Ops Agent on the host sends host metrics and container logs. See
 [Operations and Deploy](Operations-and-Deploy).

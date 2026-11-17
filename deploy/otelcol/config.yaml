@@ -6,43 +6,36 @@
 # custom.googleapis.com/crawler/<x>. The Ops Agent stays on the host for host
 # metrics (agent.googleapis.com/disk/..., the disk-usage alert) and logs.
 #
-# Pipeline: scrape every role's /metrics on :9464 → keep only crawler_* →
+# Why keep a collector at all (≈ 40–60 MB) when vcrawl is one process: writing
+# Cloud Monitoring from vcrawl would need a new exporter, its auth and its
+# retry queue in the crawler binary; the collector already does that, pinned
+# and memory-limited, and keeps credentials for Monitoring out of vcrawl.
+#
+# Pipeline: scrape vcrawl's /metrics on :9464 → keep only crawler_* →
 # rename crawler_<x>[_total] → custom.googleapis.com/crawler/<x> (the vc-obs
 # rule, `cloud_monitoring_type`) → Cloud Monitoring as the gce_instance
 # resource, with credentials from the metadata server (the VM's runtime SA has
-# roles/monitoring.metricWriter). The role is kept as the metric label
-# `service_name` (the scrape job is the role), so roles never collide.
+# roles/monitoring.metricWriter). Every series carries the role it is about
+# as a label where it matters (crawler_heartbeat{role}); the scrape job
+# (`vcrawl`) becomes the label `service_name`.
 # `$$` is the collector's escape for a literal `$`.
 
 receivers:
   prometheus:
     config:
       scrape_configs:
-        - job_name: scheduler
+        # One process runs every role (`vcrawl run`); each series keeps its `role` label
+        # (crawler_heartbeat{role="fetcher"}, …). Bound to its metrics-network address
+        # only (deploy/compose.yaml), never to the render network Chromium shares.
+        - job_name: vcrawl
           scrape_interval: 60s
-          static_configs: [{ targets: ["scheduler:9464"] }]
-        - job_name: maintenance
-          scrape_interval: 60s
-          static_configs: [{ targets: ["maintenance:9464"] }]
-        - job_name: fetcher
-          scrape_interval: 60s
-          # Bound to its metrics-network address only (deploy/compose.yaml).
           static_configs: [{ targets: ["192.168.250.2:9464"] }]
-        - job_name: processor
-          scrape_interval: 60s
-          static_configs: [{ targets: ["processor:9464"] }]
-        - job_name: embedder
-          scrape_interval: 60s
-          static_configs: [{ targets: ["embedder:9464"] }]
-        - job_name: api
-          scrape_interval: 60s
-          static_configs: [{ targets: ["api:9464"] }]
 
 processors:
   memory_limiter:
     check_interval: 5s
-    limit_mib: 96
-    spike_limit_mib: 24
+    limit_mib: 64                 # container limit 96m (deploy/compose.yaml)
+    spike_limit_mib: 16
   filter/crawler:
     error_mode: ignore
     metrics:
