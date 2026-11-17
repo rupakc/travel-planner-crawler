@@ -591,6 +591,22 @@ test_otelcol_targets_have_listeners() {
 # single-process topology vcrawl runs the api (`vcrawl run`, all roles), publishes 8443 on
 # the host, and that /healthz is the whole process's health (crates/vcrawl/src/roles/api.rs).
 # shutdown.sh stops it with `-t 25`: vcrawl's grace must end before that.
+# A pinned ipv4_address must sit outside the network's dynamic ip_range, or a
+# container that starts first can take it ("Address already in use" on the real
+# first boot: otelcol got 192.168.250.2 before vcrawl).
+test_pinned_ips_outside_dynamic_range() {
+  local compose="$HERE/../compose.yaml" pinned range
+  pinned="$(grep -oE 'ipv4_address: [0-9.]+' "$compose" | awk '{print $2}' | sort -u)"
+  [[ -n "$pinned" ]] || { ok pinned_ips_outside_dynamic_range; return; }
+  for ip in $pinned; do
+    range="$(grep -E "subnet: ${ip%.*}\.[0-9]+/" "$compose" | grep -oE 'ip_range: [0-9./]+' | awk '{print $2}')"
+    [[ -n "$range" ]] || { fail pinned_ips_outside_dynamic_range "$ip: its network has no ip_range"; return; }
+    python3 -c 'import ipaddress,sys; sys.exit(ipaddress.ip_address(sys.argv[1]) in ipaddress.ip_network(sys.argv[2]))' "$ip" "$range" ||
+      { fail pinned_ips_outside_dynamic_range "$ip lies inside ip_range $range"; return; }
+  done
+  ok pinned_ips_outside_dynamic_range
+}
+
 test_api_healthz_on_host_8443() {
   local compose="$HERE/../compose.yaml" vc grace stop_t
   vc="$(compose_service "$compose" vcrawl)"
