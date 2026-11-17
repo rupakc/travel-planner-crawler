@@ -183,3 +183,247 @@ async fn maintenance_serves_metrics() {
     let task = tokio::spawn(vcrawl::roles::maintenance::run(ctx));
     assert_serves_metrics("maintenance", addr, &pool, task).await;
 }
+
+/// The API's TLS pair (vc-api's fixtures) in `<tmp>/tls`.
+fn tls_dir(tmp: &Path) -> PathBuf {
+    let tls = tmp.join("tls");
+    std::fs::create_dir_all(&tls).unwrap();
+    let fixtures = root().join("crates/vc-api/tests/fixtures/tls");
+    std::fs::copy(fixtures.join("a.crt"), tls.join(vc_api::tls::CERT_FILE)).unwrap();
+    std::fs::copy(fixtures.join("a.key"), tls.join(vc_api::tls::KEY_FILE)).unwrap();
+    tls
+}
+
+/// Scrapes `addr/metrics` until every role in `roles` has a fresh heartbeat series.
+async fn wait_for_heartbeats(addr: SocketAddr, roles: &[&str]) {
+    let start = Instant::now();
+    let mut last = String::new();
+    loop {
+        if let Ok((200, body)) = vc_obs::server::get(addr, "/metrics").await {
+            if roles
+                .iter()
+                .all(|r| body.contains(&format!("crawler_heartbeat{{role=\"{r}\"}} 1")))
+            {
+                return;
+            }
+            last = body;
+        }
+        assert!(
+            start.elapsed() < Duration::from_secs(90),
+            "not every heartbeat of {roles:?} on {addr}/metrics; last body:\n{last}"
+        );
+        tokio::time::sleep(Duration::from_millis(200)).await;
+    }
+}
+
+const ALL_ROLES: [&str; 6] = [
+    "scheduler",
+    "fetcher",
+    "processor",
+    "embedder",
+    "api",
+    "maintenance",
+];
+
+#[tokio::test]
+async fn run_starts_every_role_in_one_process_and_each_writes_its_heartbeat() {
+    let (tmp, pool, ctx, addr) = setup("run").await;
+    let opts = vcrawl::run::RunOptions {
+        tls_dir: tls_dir(tmp.path()),
+        ..Default::default()
+    };
+    let (tx, rx) = tokio::sync::watch::channel(false);
+    let task = tokio::spawn(vcrawl::run::run_until(
+        ctx,
+        vcrawl::run::RoleName::ALL.to_vec(),
+        opts,
+        rx,
+    ));
+    // One listener for the whole process: every role's heartbeat on the same /metrics.
+    wait_for_heartbeats(addr, &ALL_ROLES).await;
+    let (status, body) = vc_obs::server::get(addr, "/healthz")
+        .await
+        .expect("/healthz");
+    assert_eq!(status, 200, "{body}");
+    let h: serde_json::Value = serde_json::from_str(&body).expect("health json");
+    assert_eq!(h["healthy"], true);
+    for r in ALL_ROLES {
+        assert_eq!(h["roles"][r]["up"], true, "{r}: {body}");
+    }
+    // One heartbeat row per role, all for this instance.
+    let rows: Vec<(String,)> =
+        sqlx::query_as("SELECT role FROM heartbeats WHERE instance = 'run-test' ORDER BY 1")
+            .fetch_all(&pool)
+            .await
+            .unwrap();
+    let mut want: Vec<&str> = ALL_ROLES.to_vec();
+    want.sort_unstable();
+    assert_eq!(
+        rows.iter().map(|r| r.0.as_str()).collect::<Vec<_>>(),
+        want,
+        "heartbeat rows"
+    );
+    // A shutdown ends every role within the grace period.
+    let t = Instant::now();
+    tx.send(true).unwrap();
+    tokio::time::timeout(Duration::from_secs(30), task)
+        .await
+        .expect("run stops within the grace period")
+        .expect("task")
+        .expect("clean stop");
+    assert!(t.elapsed() < Duration::from_secs(26), "{:?}", t.elapsed());
+    assert!(
+        vc_obs::server::get(addr, "/metrics").await.is_err(),
+        "the listener is closed after shutdown"
+    );
+}
+
+#[tokio::test]
+async fn run_keeps_the_other_roles_up_when_one_fails_and_reports_it() {
+    let (tmp, _pool, ctx, addr) = setup("run").await;
+    // No TLS pair: the api role fails closed (and is retried); the others keep running.
+    let opts = vcrawl::run::RunOptions {
+        tls_dir: tmp.path().join("no-tls"),
+        backoff: Duration::from_millis(200),
+        max_backoff: Duration::from_secs(1),
+    };
+    let (tx, rx) = tokio::sync::watch::channel(false);
+    let task = tokio::spawn(vcrawl::run::run_until(
+        ctx,
+        vcrawl::run::parse_roles("scheduler,api").unwrap(),
+        opts,
+        rx,
+    ));
+    wait_for_heartbeats(addr, &["scheduler"]).await;
+    let start = Instant::now();
+    let body = loop {
+        let (status, body) = vc_obs::server::get(addr, "/healthz")
+            .await
+            .expect("/healthz");
+        let h: serde_json::Value = serde_json::from_str(&body).expect("json");
+        if status == 503 && h["roles"]["api"]["up"] == false {
+            break body;
+        }
+        assert!(start.elapsed() < Duration::from_secs(30), "{status} {body}");
+        tokio::time::sleep(Duration::from_millis(100)).await;
+    };
+    let h: serde_json::Value = serde_json::from_str(&body).unwrap();
+    assert_eq!(h["healthy"], false);
+    assert_eq!(h["roles"]["scheduler"]["up"], true, "{body}");
+    let metrics = vc_obs::server::get(addr, "/metrics").await.unwrap().1;
+    assert!(
+        !metrics.contains("crawler_heartbeat{role=\"api\"}"),
+        "{metrics}"
+    );
+    tx.send(true).unwrap();
+    tokio::time::timeout(Duration::from_secs(30), task)
+        .await
+        .expect("stops")
+        .expect("task")
+        .expect("clean stop");
+}
+
+/// `vcrawl run` as a real process: it serves every chosen role, and SIGTERM ends it with exit
+/// code 0 well inside compose's 30 s `stop_grace_period`.
+#[tokio::test]
+async fn the_binary_stops_cleanly_on_sigterm() {
+    let (pool, opts) = testkit::pg_with_url().await;
+    let tmp = tempfile::tempdir().expect("tempdir");
+    let (c, addr) = cfg(tmp.path(), &opts, "sigterm-test");
+    let r = root();
+    let p = |rel: &str| r.join(rel).display().to_string();
+    // `VC_*_FILE` names secret files, so the place-data paths go through a TOML file.
+    let toml = tmp.path().join("vcrawl.toml");
+    std::fs::write(
+        &toml,
+        format!(
+            "[extract]\nplaces_file = {:?}\ncountries_file = {:?}\nadmin1_file = {:?}\n",
+            p("crates/vc-extract/data/places.tsv.gz"),
+            p("crates/vc-extract/data/countries.tsv.gz"),
+            p("crates/vc-extract/data/admin1.tsv.gz"),
+        ),
+    )
+    .unwrap();
+    let log = tmp.path().join("vcrawl.log");
+    let mut cmd = std::process::Command::new(env!("CARGO_BIN_EXE_vcrawl"));
+    cmd.args([
+        "run",
+        "--roles",
+        "scheduler,fetcher,processor,embedder,maintenance",
+    ])
+    .env_clear()
+    .env("PATH", std::env::var("PATH").unwrap_or_default())
+    .env("VC_DATABASE_URL", &c.database.url)
+    .env("VC_DATABASE_PASSWORD_SECRET", "")
+    .env("VC_SECRETS_BACKEND", "env")
+    .env("VC_OBS_METRICS_ADDR", addr.to_string())
+    .env("VC_OBS_HEARTBEAT_S", "1")
+    .env("VC_OBS_LOG_FORMAT", "pretty")
+    .env("VC_VCRAWL_INSTANCE", "sigterm-test")
+    .env("VC_VCRAWL_DATA_DIR", &c.vcrawl.data_dir)
+    .env("VC_STORE_BACKEND", "fs")
+    .env("VC_STORE_FS_ROOT", &c.store.fs_root)
+    .env("VC_STORE_SPOOL_DIR", &c.store.spool_dir)
+    .env("VC_RENDER_ENABLED", "false")
+    .env("VC_RENDER_CACHE_DIR", &c.render.cache_dir)
+    .env("VC_SOURCES_DIR", &c.sources.dir)
+    .env("VC_POLICY_DENYLIST_PATH", p("policy/denylist.yaml"))
+    .env(
+        "VC_POLICY_SUBRESOURCE_ALLOWLIST_PATH",
+        p("policy/subresource_allowlist.yaml"),
+    )
+    .env("VC_KINDS_KINDS_TOML", p("kinds.toml"))
+    .env("VC_KINDS_SCHEMAS_DIR", p("schemas"))
+    .env("VC_KINDS_PROMPTS_DIR", p("prompts"))
+    .env("VC_CONFIG", &toml)
+    .stdout(std::fs::File::create(&log).expect("log file"))
+    .stderr(std::process::Stdio::piped());
+    let mut child = cmd.spawn().expect("spawn vcrawl run");
+    let roles = [
+        "scheduler",
+        "fetcher",
+        "processor",
+        "embedder",
+        "maintenance",
+    ];
+    let up = tokio::time::timeout(Duration::from_secs(90), wait_for_heartbeats(addr, &roles)).await;
+    if up.is_err() {
+        let _ = child.kill();
+        let out = child.wait_with_output().expect("output");
+        panic!(
+            "vcrawl run did not come up:\n{}\n{}",
+            String::from_utf8_lossy(&out.stderr),
+            std::fs::read_to_string(&log).unwrap_or_default()
+        );
+    }
+    let (beats,): (i64,) =
+        sqlx::query_as("SELECT count(*) FROM heartbeats WHERE instance = 'sigterm-test'")
+            .fetch_one(&pool)
+            .await
+            .unwrap();
+    assert_eq!(beats, 5, "one heartbeat row per role");
+    let t = Instant::now();
+    let kill = std::process::Command::new("kill")
+        .args(["-TERM", &child.id().to_string()])
+        .status()
+        .expect("kill");
+    assert!(kill.success());
+    let status = loop {
+        if let Some(s) = child.try_wait().expect("try_wait") {
+            break s;
+        }
+        assert!(
+            t.elapsed() < Duration::from_secs(25),
+            "vcrawl run still running 25 s after SIGTERM"
+        );
+        tokio::time::sleep(Duration::from_millis(100)).await;
+    };
+    let mut err = String::new();
+    if let Some(mut e) = child.stderr.take() {
+        use std::io::Read;
+        let _ = e.read_to_string(&mut err);
+    }
+    let out = std::fs::read_to_string(&log).unwrap_or_default();
+    assert!(status.success(), "exit {status:?}; stderr:\n{err}\n{out}");
+    assert!(out.contains("vcrawl run: stopped"), "log:\n{out}");
+}

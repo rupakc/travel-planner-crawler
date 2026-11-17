@@ -1,7 +1,7 @@
 //! `vcrawl` entry point: parses the CLI and dispatches to a role. See `lib.rs`.
 
 use clap::{Parser, Subcommand};
-use vcrawl::{Ctx, admin, health, migrate, roles};
+use vcrawl::{Ctx, admin, health, migrate, roles, run};
 
 /// The Voyager crawler.
 #[derive(Debug, Parser)]
@@ -13,6 +13,14 @@ struct Cli {
 
 #[derive(Debug, Subcommand)]
 enum Role {
+    /// Several roles as tasks of one process: one runtime, one DB pool, one /metrics +
+    /// /healthz listener (the small-VM deployment).
+    Run {
+        /// Comma-separated roles (scheduler, fetcher, processor, embedder, api, maintenance).
+        #[arg(long, value_parser = run::parse_roles,
+              default_value = "scheduler,fetcher,processor,embedder,api,maintenance")]
+        roles: std::vec::Vec<run::RoleName>,
+    },
     /// Sources → seeds/sitemaps/feeds → enqueue; recrawl; robots refresh.
     Scheduler,
     /// The claim loop.
@@ -55,6 +63,7 @@ async fn main() -> anyhow::Result<()> {
     }
     let ctx = Ctx::new(vcrawl::wiring::config::load()?);
     match cli.role {
+        Role::Run { roles } => run::run(ctx, roles).await,
         Role::Scheduler => roles::scheduler::run(ctx).await,
         Role::Fetcher => roles::fetcher::run(ctx).await,
         Role::Processor => roles::processor::run(ctx).await,

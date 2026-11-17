@@ -10,7 +10,7 @@ pub struct RenderConfig {
     pub enabled: bool,
     /// CDP endpoint of the headless-shell container (internal `render` network only).
     pub cdp_url: String,
-    /// Max concurrent tabs (2).
+    /// Max concurrent tabs (1: the 4 GB VM renders one page at a time).
     pub max_tabs: u32,
     /// Render budget, seconds (90).
     pub budget_s: u64,
@@ -29,7 +29,8 @@ pub struct RenderConfig {
     pub cache_dir: String,
     /// Max body bytes held by the in-memory, content-addressed sub-resource cache (64 MiB).
     pub subresource_cache_max_bytes: u64,
-    /// Restart the browser after this many renders (leak containment).
+    /// Re-establish the CDP session after this many renders (leak containment, 50; each render
+    /// already gets its own browser context, disposed afterwards).
     pub restart_after_renders: u32,
 }
 
@@ -38,7 +39,7 @@ impl Default for RenderConfig {
         RenderConfig {
             enabled: false,
             cdp_url: "http://chromium:9222".into(),
-            max_tabs: 2,
+            max_tabs: 1,
             budget_s: 90,
             max_subrequests: 60,
             max_bytes: 20 * 1024 * 1024,
@@ -47,7 +48,7 @@ impl Default for RenderConfig {
             subresource_cache_ttl_h: 24,
             cache_dir: "/var/lib/voyager-crawler/render-cache".into(),
             subresource_cache_max_bytes: 64 * 1024 * 1024,
-            restart_after_renders: 200,
+            restart_after_renders: 50,
         }
     }
 }

@@ -34,7 +34,6 @@ use std::sync::Arc;
 use std::time::Duration;
 
 use sqlx::PgPool;
-use tokio::sync::watch;
 use vc_config::Config;
 use vc_core::frontier::Frontier;
 use vc_core::sources::SourceSpec;
@@ -54,11 +53,7 @@ pub async fn run(ctx: Ctx) -> anyhow::Result<()> {
     let s = Scheduler::new(ctx.cfg.clone(), pool.clone(), frontier)
         .with_metrics(ctx.metrics.clone(), ctx.tracker.clone());
     let _obs = wiring::obs::start(&ctx, "scheduler", pool).await?;
-    let (tx, mut rx) = watch::channel(false);
-    tokio::spawn(async move {
-        super::fetcher::shutdown_signal().await;
-        let _ = tx.send(true);
-    });
+    let mut rx = ctx.stop();
     let every = Duration::from_secs(ctx.cfg.vcrawl.scheduler_interval_s.max(1));
     while !*rx.borrow() {
         match s.pass_from_dir().await {

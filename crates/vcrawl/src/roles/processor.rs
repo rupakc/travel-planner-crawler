@@ -37,7 +37,7 @@ const IDLE: Duration = Duration::from_secs(2);
 pub async fn run(ctx: Ctx) -> anyhow::Result<()> {
     wiring::obs::init_tracing(&ctx, "processor");
     let cfg = ctx.cfg.clone();
-    let mut stop = shutdown::channel();
+    let mut stop = ctx.stop();
     let pool = ctx.pool().await?;
     let _obs = wiring::obs::start(&ctx, "processor", pool.clone()).await?;
     let blobs = wiring::store::blob_store(&cfg)
