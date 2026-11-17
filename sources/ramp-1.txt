@@ -1,0 +1,26 @@
+# Go-live ramp, step 1 (plan Task 18; docs/runbooks/go-live.md §6).
+#
+# The only sources crawled for the first 24 hours. Everything else stays disabled in the
+# database (`vcrawl admin source disable`) until the ramp passes. The loader has no ramp
+# field: this file is read by the runbook's shell loops, never by vcrawl (the scheduler
+# loads only *.yaml from this directory).
+#
+# Format: one source id per line (= sources/<id>.yaml); `#` starts a comment.
+# Each line says why the source is in the first ten. Chosen to be stable, low-volume,
+# clearly permitted (official or open-data licence, robots allows us, no bot wall seen in
+# research), and to cover every fetch path: adapter dump, adapter API, RSS, HTML with a
+# robots Crawl-delay, and one large dump. About seven politeness keys in all (state.gov and
+# www.gov.uk each serve several of the ten).
+#
+# Every id here must pass `vcrawl admin source validate <id>`.
+
+ecb-eurofxref              # forex: one small XML a day from the ECB, free reuse with attribution; exercises the ecb_fx dump adapter
+canada-travel-json         # visa/advisory/emergency: one official Global Affairs Canada JSON a day (OGL-Canada); canada_advisories adapter
+state-dept-advisories-api  # advisory: one public-domain JSON array of every US advisory every 6 h; state_dept_advisories adapter
+state-dept-advisories-rss  # advisory: the State Dept advisory RSS (public domain), depth 1; exercises the feed path on key state.gov
+state-dept-country-pages   # visa/advisory/emergency: official HTML country pages, weekly, depth 2 (robots allows); same key as the two above
+fcdo-atom                  # advisory: GOV.UK's hourly Atom change feed (OGL v3), built for polling; key www.gov.uk
+fcdo-content-api           # visa/advisory/emergency: GOV.UK Content API, one JSON per country (OGL v3), driven by the Atom feed; same key
+cdc-travel                 # tips/packing: CDC destination pages (public domain), weekly; robots Crawl-delay 20 tests delay handling
+ourairports                # airports: one public-domain CSV a week from GitHub Pages; ourairports_csv adapter
+wikivoyage-dump            # places/activities/tips: the monthly Wikivoyage dump (CC BY-SA, share_alike path): a few requests a month, in the 02-05 UTC dump window
