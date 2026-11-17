@@ -126,7 +126,7 @@ UPDATE url_state u SET state = 'leased', lease_epoch = $3
 FROM pick
 WHERE u.url_key = pick.url_key
 RETURNING u.url_key, u.priority, u.next_fetch_at, u.depth, u.expect, u.fetch_mode, u.source_id,
-          u.etag, u.last_modified, u.payload_hash, u.last_capture_id, u.last_captured_at";
+          u.etag, u.last_modified, u.payload_hash, u.last_capture_id, u.body_captured_at";
 
 /// Lease check + one global token + the key's daily request count, in one statement.
 const TAKE_TOKEN: &str = "
