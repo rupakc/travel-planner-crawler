@@ -282,5 +282,6 @@ Settings of the `vcrawl` binary itself (its roles and admin commands).
 | `recrawl_min_s` | 3600 | shortest recrawl interval (the source cadence is the longest) |
 | `recrawl_default_s` | 604800 (7 days) | recrawl interval without a source or with `on_demand` cadence |
 | `health_timeout_s` | 5 | per-dependency timeout of `vcrawl health` |
+| `source_allowlist` | unset | go-live ramp: a file of source ids (`#` comments; relative to `sources.dir`). The scheduler seeds only those, the fetcher fetches nothing for other sources' URLs (released for an hour). A fresh VM sets `VC_VCRAWL_SOURCE_ALLOWLIST=/app/sources/ramp-1.txt` once in `host.local.env`; unreadable = fail closed |
 
 Code: [vc-config](Crate-vc-config).

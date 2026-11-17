@@ -61,6 +61,10 @@ x-role: &role
     # at most 50 % of VC_PROJECT_CAP_USD. Every role gets it, so all of them validate
     # [llm] alike; the default is llm.monthly_usd's.
     VC_LLM_MONTHLY_USD: ${VC_LLM_MONTHLY_USD:-30}
+    # Go-live ramp (docs/runbooks/go-live.md §3): first-boot.sh puts
+    # VC_VCRAWL_SOURCE_ALLOWLIST=/app/sources/ramp-1.txt in host.local.env on a
+    # fresh install; only those sources are seeded and fetched. Empty = all.
+    VC_VCRAWL_SOURCE_ALLOWLIST: ${VC_VCRAWL_SOURCE_ALLOWLIST:-}
   healthcheck:
     test: ["CMD", "vcrawl", "health"]
     interval: 60s

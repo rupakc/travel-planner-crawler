@@ -22,6 +22,11 @@
 //!    so are adapter resume cursors of rows that left the crawl (retired above) or that
 //!    nobody resumed for [`CURSOR_MAX_AGE_DAYS`].
 //!
+//! **Ramp** (`vcrawl.source_allowlist`, go-live.md §3): when set, steps 2 and 3 cover only the
+//! allowlisted sources. Every spec is still upserted (the catalogue stays complete), but no
+//! other source gets frontier rows or key limits. A configured but unreadable allowlist fails
+//! the pass before anything is written.
+//!
 //! The LLM startup probe runs here (once per deploy) when `llm.enabled`.
 
 use std::collections::BTreeMap;
@@ -64,6 +69,7 @@ pub async fn run(ctx: Ctx) -> anyhow::Result<()> {
                 enqueued = r.enqueued,
                 keys_limited = r.keys_limited,
                 retired = r.retired,
+                held_by_allowlist = r.held_by_allowlist,
                 robots_refresh = r.robots_refresh,
                 "scheduler pass"
             ),
@@ -94,6 +100,8 @@ pub struct PassReport {
     pub due_urls: i64,
     /// Adapter resume cursors pruned (row left the crawl, or not resumed for 30 days).
     pub cursors_pruned: u64,
+    /// Enabled sources not seeded because `vcrawl.source_allowlist` leaves them out.
+    pub held_by_allowlist: u64,
 }
 
 /// The scheduler.
@@ -143,15 +151,21 @@ impl Scheduler {
 
     /// One pass over `specs` (module docs).
     pub async fn pass(&self, specs: &[SourceSpec]) -> Result<PassReport> {
+        let allowlist = crate::wiring::allowlist::SourceAllowlist::load(&self.cfg)?;
         if let Some(t) = &self.tracker {
             t.set_work_due(true);
         }
+        let (crawled, held): (Vec<SourceSpec>, Vec<SourceSpec>) = specs
+            .iter()
+            .cloned()
+            .partition(|s| allowlist.as_ref().is_none_or(|a| a.contains(&s.id.0)));
         let mut r = PassReport {
             sources: vc_sources::seed_sources(&self.pool, specs, true).await?,
-            enqueued: vc_sources::seed_frontier(self.frontier.as_ref(), specs).await?,
+            enqueued: vc_sources::seed_frontier(self.frontier.as_ref(), &crawled).await?,
+            held_by_allowlist: held.iter().filter(|s| s.enabled).count() as u64,
             ..PassReport::default()
         };
-        r.keys_limited = self.apply_source_limits(specs).await?;
+        r.keys_limited = self.apply_source_limits(&crawled).await?;
         r.retired = self.retire_disabled().await?;
         r.cursors_pruned = vc_sources::cursors::PgAdapterCursors::new(self.pool.clone())
             .prune(CURSOR_MAX_AGE_DAYS)

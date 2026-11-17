@@ -34,7 +34,7 @@ on (§12) is a separate owner decision.
 
   ```bash
   RAMP="$(sed 's/#.*//' sources/ramp-1.txt | awk 'NF {print $1}')"      # laptop
-  RAMP="$(sed 's/#.*//' /tmp/vc-sources/ramp-1.txt | awk 'NF {print $1}')"  # VM, after §6.1
+  RAMP="$(sed 's/#.*//' /tmp/vc-sources/ramp-1.txt | awk 'NF {print $1}')"  # VM, after §6.1 (the image's copy)
   ```
 
 - Never write the alert address, tokens or keys into the repository, a commit message or an
@@ -103,10 +103,39 @@ on (§12) is a separate owner decision.
    - the channel line has `email_address=<your address>` (check it is spelled right);
    - the budget is `9000INR` with thresholds 0.5/0.9/1.0.
 
-## 2. Provision (the real run) and confirm the alert channel
+## 2. Publish the egress IP in BOT.md (before any crawl)
+
+BOT.md promises the address is published before the first crawl, and the User-Agent links
+to BOT.md on `main`. The VM crawls (the ramp sources only, §5) within minutes of being
+created, so reserve the address and merge this PR **before** §3. bootstrap reuses an
+address that already exists.
+
+1. Reserve the external address (the same command bootstrap would run):
+
+   ```bash
+   gcloud compute addresses describe crawler-external-ip --region=us-east1 --project=voyager-prod-ohzkl >/dev/null 2>&1 ||
+     gcloud compute addresses create crawler-external-ip --region=us-east1 --network-tier=STANDARD --project=voyager-prod-ohzkl
+   gcloud compute addresses describe crawler-external-ip --region=us-east1 --project=voyager-prod-ohzkl --format='value(address)'
+   ```
+
+   Expected: a public IPv4 address.
+2. On a branch (`agent/t18-…` or a controller branch), replace `<egress-ip>` in `BOT.md`
+   with that address, and `crawler-contact@<domain>` with the real contact address if the
+   owner has chosen it (it must be a working mailbox: site owners will write to it). Open
+   the PR, wait for green, squash-merge.
+3. Check the published page:
+
+   ```bash
+   gh api repos/rupakc/travel-planner-crawler/contents/BOT.md --jq .content | base64 -d | grep -n 'Egress IP'
+   ```
+
+   Expected: the line shows the address from step 1. Wait for that merge's `deploy.yml`
+   run to finish (`completed success`) so the first deploy already ships it.
+
+## 3. Provision (the real run) and confirm the alert channel
 
 Once the VM exists it boots and **deploys on its own within minutes**, fetcher included.
-Read §3 before you start this step and keep a second terminal ready.
+That is safe: a fresh install crawls only the ten ramp sources (§5).
 
 1. Run it:
 
@@ -116,16 +145,15 @@ Read §3 before you start this step and keep a second terminal ready.
 
    Expected: exit 0, the same 16 sections as the dry run, `==> Done.` last. A second run
    must create nothing (you may run it again later to re-assert IAM and policies).
-2. As soon as `==> VM voyager-crawler` has printed, do §3 in the second terminal.
-3. Note the two IPs:
+2. Note the two IPs:
 
    ```bash
    gcloud compute addresses describe crawler-external-ip --region=us-east1 --project=voyager-prod-ohzkl --format='value(address)'
    gcloud compute addresses describe crawler-internal-ip --region=us-east1 --project=voyager-prod-ohzkl --format='value(address)'
    ```
 
-   Expected: a public IPv4 address, and a `10.142.0.x` address.
-4. Confirm the alert channel:
+   Expected: the address from §2.1 (the one in BOT.md), and a `10.142.0.x` address.
+3. Confirm the alert channel:
 
    ```bash
    gcloud beta monitoring channels list --project=voyager-prod-ohzkl \
@@ -140,49 +168,8 @@ Read §3 before you start this step and keep a second terminal ready.
    Cloud Monitoring sent you, then re-run). 12 policies, all enabled. In the console
    (Monitoring → Alerting → Edit notification channels → Voyager crawler alerts) use
    **Send test notification** and check that the email arrives.
-5. Open the BOT.md PR now (§5), so it is merged before the fetcher starts in §6.
 
-## 3. Hold the fetcher during first boot
-
-The first deploy must not start the fetcher: on its first pass the scheduler would enqueue
-every enabled source (94 of them), not the ten of the ramp. The deployer rolls only the
-roles in `VC_ROLES`, and starts missing services only from that list, so a systemd
-drop-in that leaves the fetcher out keeps it from ever being created.
-
-1. SSH in as soon as the VM answers (retry until it does; first boot spends several
-   minutes installing Docker and the Ops Agent before it installs the units):
-
-   ```bash
-   sudo install -d /etc/systemd/system/voyager-crawler-deploy.service.d
-   printf '[Service]\nEnvironment="VC_ROLES=maintenance scheduler processor embedder api"\n' |
-     sudo tee /etc/systemd/system/voyager-crawler-deploy.service.d/10-ramp-hold.conf
-   sudo systemctl daemon-reload
-   systemctl show voyager-crawler-deploy.service -p Environment
-   ```
-
-   Expected: `Environment=VC_ROLES=maintenance scheduler processor embedder api`.
-2. Check that you were in time:
-
-   ```bash
-   systemctl show voyager-crawler-deploy.service -p ExecMainStartTimestamp
-   sudo docker ps -a --filter label=com.docker.compose.service=fetcher --format '{{.Names}} {{.Status}}'
-   ```
-
-   Expected: the timestamp is empty or later than the drop-in, and **no fetcher
-   container**. If a fetcher container exists, you were too late: stop it at once and
-   keep it stopped (the deploy timer and the watchdog would restart it):
-
-   ```bash
-   sudo systemctl stop voyager-crawler-deploy.timer voyager-crawler-watchdog.timer
-   sudo "$VC" stop fetcher
-   ```
-
-   then continue with §4 and start the two timers again at the end of §6.
-3. Until §6 is finished: do not reboot the VM and do not restart
-   `voyager-crawler.service`. Its `ExecStart` is a plain `compose up`, which creates every
-   service, the fetcher included.
-
-## 4. First boot and the first deploy (LLM off)
+## 4. First boot and the first deploy (LLM off, ramp on)
 
 1. Follow first boot, then the deployer:
 
@@ -191,101 +178,69 @@ drop-in that leaves the fetcher out keeps it from ever being created.
    sudo journalctl -u voyager-crawler-deploy.service -f      # until "deployed ghcr.io/rupakc/voyager-crawler@sha256:… (previous: none)"
    ```
 
-   Expected in the deploy log, in order: `verifying …`, `pulling …`, `migrating with …`,
-   `rolling maintenance → …`, `rolling scheduler → …`, `rolling processor → …`,
-   `rolling embedder → …`, `rolling api → …`, `deployed …`. No `HELD` line. If a digest is
-   held, see incident.md (deploy drift).
-2. The LLM is off and the project cap unset:
+   Expected: first boot logs `fresh install: crawling only the ramp sources
+   (/app/sources/ramp-1.txt)`. In the deploy log, in order: `verifying …`, `pulling …`,
+   `migrating with …`, `rolling maintenance → …`, `rolling scheduler → …`,
+   `rolling fetcher → …`, `rolling processor → …`, `rolling embedder → …`,
+   `rolling api → …`, `deployed …`. No `HELD` line. If a digest is held, see incident.md
+   (deploy drift).
+2. The ramp is on, the LLM is off and the project cap unset:
 
    ```bash
-   sudo test ! -e /var/lib/voyager-crawler/deploy/host.local.env && echo "no host.local.env"
-   sudo "$VC" config | grep -E 'VC_LLM_ENABLED|VC_PROJECT_CAP_USD' | sort -u
+   sudo cat /var/lib/voyager-crawler/deploy/host.local.env
+   sudo "$VC" config | grep -E 'VC_LLM_ENABLED|VC_PROJECT_CAP_USD|VC_VCRAWL_SOURCE_ALLOWLIST' | sort -u
    ```
 
-   Expected: `no host.local.env`; `VC_LLM_ENABLED: "false"` and `VC_PROJECT_CAP_USD: "0"`.
+   Expected: `host.local.env` holds only the two comment lines and
+   `VC_VCRAWL_SOURCE_ALLOWLIST=/app/sources/ramp-1.txt`; the config shows that value,
+   `VC_LLM_ENABLED: "false"` and `VC_PROJECT_CAP_USD: "0"`.
 3. Services:
 
    ```bash
    sudo "$VC" ps --format '{{.Service}} {{.State}} {{.Health}}'
    ```
 
-   Expected: `postgres`, `chromium`, `otelcol`, `maintenance`, `scheduler`, `processor`,
-   `embedder`, `api` running, the five roles and postgres `healthy`; **no `fetcher`**.
+   Expected: `postgres`, `chromium`, `otelcol` and the six roles (`maintenance`,
+   `scheduler`, `fetcher`, `processor`, `embedder`, `api`) running, the roles and postgres
+   `healthy`.
 
-## 5. Publish the egress IP in BOT.md (before any crawl)
+## 5. Ramp 1: only ten sources crawl
 
-BOT.md promises the address is published before the first crawl, and the User-Agent
-links to BOT.md on `main`, so this PR must be merged before §6.4.
+`VC_VCRAWL_SOURCE_ALLOWLIST` (`[vcrawl] source_allowlist`) names `sources/ramp-1.txt` in the
+image. While it is set, the scheduler upserts every source spec but seeds the frontier and
+applies key limits **only** for the listed sources, and the fetcher never requests anything
+for a URL of another source: it releases it for an hour (not even its robots.txt is
+fetched). Deploys, reboots and `sources/` changes during the ramp cannot widen it. A set but
+unreadable file stops the scheduler's pass and the fetcher (fail closed).
 
-1. On a branch (`agent/t18-…` or a controller branch), replace `<egress-ip>` in `BOT.md`
-   with the external IP from §2.3, and `crawler-contact@<domain>` with the real contact
-   address if the owner has chosen it (it must be a working mailbox: site owners will
-   write to it). Open the PR, wait for green, squash-merge.
-2. Check the published page:
-
-   ```bash
-   gh api repos/rupakc/travel-planner-crawler/contents/BOT.md --jq .content | base64 -d | grep -n 'Egress IP'
-   ```
-
-   Expected: the line shows the address from §2.3.
-3. The address the VM really uses for egress is that one:
-
-   ```bash
-   curl -s -H 'Metadata-Flavor: Google' \
-     http://metadata.google.internal/computeMetadata/v1/instance/network-interfaces/0/access-configs/0/external-ip; echo   # VM
-   ```
-
-   Expected: the same address. (The merge builds a new image; it deploys with the fetcher
-   still held, which is fine.)
-
-## 6. Ramp 1: hold every source but ten, then release the fetcher
-
-1. Wait for the scheduler's first pass and copy the image's source specs to the VM:
+1. Wait for the scheduler's first pass:
 
    ```bash
    sudo "$VC" logs scheduler 2>&1 | grep -m1 '"scheduler pass"'
-   sudo rm -rf /tmp/vc-sources && sudo docker cp "$(sudo "$VC" ps -q scheduler)":/app/sources /tmp/vc-sources
-   ls /tmp/vc-sources/*.yaml | wc -l
-   vcadm source list | jq 'length'
+   sudo "$VC" logs fetcher 2>&1 | grep -m1 'source allowlist active'
    ```
 
    Expected: a `scheduler pass` line with `sources_inserted` equal to the number of
-   `*.yaml` files (117 at the time of writing), and the same number from `source list`.
-2. Disable every enabled source that is not in the ramp:
+   `*.yaml` files (117 at the time of writing) and `held_by_allowlist` = the enabled
+   sources outside the ramp (84 at the time of writing); the fetcher line shows
+   `sources: 10`.
+## 6. Check the ramp
+
+1. Copy the image's specs (for `RAMP`) and check that the frontier holds only ramp sources:
 
    ```bash
+   sudo rm -rf /tmp/vc-sources && sudo docker cp "$(sudo "$VC" ps -q scheduler)":/app/sources /tmp/vc-sources
    RAMP="$(sed 's/#.*//' /tmp/vc-sources/ramp-1.txt | awk 'NF {print $1}')"
-   for id in $(vcadm source list | jq -r '.[] | select(.enabled) | .source_id'); do
-     grep -qx "$id" <<<"$RAMP" || vcadm source disable "$id" | jq -c '{source_id, urls_disabled}'
-   done
+   psqlc -At -c "SELECT DISTINCT source_id FROM url_state ORDER BY 1" | diff - <(sort <<<"$RAMP") && echo "ramp only"
    ```
 
-   Expected: one line per disabled source (84 at the time of writing).
-3. Check the hold:
-
-   ```bash
-   vcadm source list | jq -r '.[] | select(.enabled) | .source_id' | sort | diff - <(sort <<<"$RAMP") && echo "ramp only"
-   psqlc -c "SELECT s.source_id, count(*) FROM url_state u JOIN sources s USING (source_id)
-             WHERE u.state = 'due' AND NOT s.enabled GROUP BY 1"
-   ```
-
-   Expected: `ramp only`; the query returns `(0 rows)`.
-4. Release the fetcher (only once §5 is merged):
-
-   ```bash
-   sudo rm /etc/systemd/system/voyager-crawler-deploy.service.d/10-ramp-hold.conf
-   sudo systemctl daemon-reload
-   sudo systemctl start voyager-crawler-deploy.timer voyager-crawler-watchdog.timer   # if §3.2 stopped them
-   sudo systemctl start voyager-crawler-deploy.service
-   sudo journalctl -u voyager-crawler-deploy.service -n 20 --no-pager
-   ```
-
-   Expected: `up to date (sha256:…); starting stopped services: fetcher`, then
-   `sudo "$VC" ps fetcher` shows it `healthy` within about 3 minutes.
-5. **While the ramp lasts, a deploy whose image changes a disabled source's spec
-   re-enables that source** (the scheduler rewrites the row when the spec hash changes).
-   Don't merge changes under `sources/` until §11, and after every deploy during the ramp
-   re-run the check in step 3; if it fails, re-run step 2.
+   Expected: `ramp only` (a ramp source with nothing enqueued yet shows as a `>` line; that
+   is fine during the first minutes, re-run after the next pass).
+2. The fetcher came up healthy within about 3 minutes of its roll (`sudo "$VC" ps fetcher`);
+   that is when the ramp clock (§10) starts.
+3. During the ramp, `sources/` changes may merge and deploy as usual: the allowlist keeps
+   them out of the crawl, and admin decisions (`vcadm source disable|approve`) survive a
+   changed spec. To shrink the ramp, `vcadm source disable <id>`; to stop it, §13.
 
 ## 7. Verify the VM
 
@@ -310,7 +265,8 @@ links to BOT.md on `main`, so this PR must be merged before §6.4.
    ```
 
    Expected: all nine services running and the six roles `healthy`; six `… ok` lines;
-   `sources.enabled` = 10; a heartbeat per role, each a few seconds old, and
+   `sources.enabled` = the enabled specs (94 at the time of writing: the ramp is the
+   allowlist, not this count); a heartbeat per role, each a few seconds old, and
    `host/deploy`.
 3. The API answers on the internal IP (on the VM; the firewall admits only the app VM from
    outside):
@@ -395,7 +351,7 @@ backups that cannot be restored are not backups (incident.md, restore drill).
 
 ## 9. Alert test-fire
 
-The channel test in §2.4 proves email delivery. This proves the whole path: Postgres →
+The channel test in §3.3 proves email delivery. This proves the whole path: Postgres →
 maintenance role → otelcol → Cloud Monitoring → policy → email, using the "host unit keeps
 failing" policy (fires after 30 minutes).
 
@@ -418,13 +374,13 @@ failing" policy (fires after 30 minutes).
    Expected: the metric goes back to 0 and the incident closes (a "resolved" email)
    within about 10 minutes.
 
-No email within 45 minutes: check the channel (§2.4), that the metric moved (if not, the
+No email within 45 minutes: check the channel (§3.3), that the metric moved (if not, the
 maintenance role or otelcol is the problem: incident.md, crawler down), and the policy's
 notification channel in the console.
 
 ## 10. The 24-hour ramp watch
 
-Start the clock when the fetcher went healthy (§6.4). Look at least at +1 h, +4 h, +12 h
+Start the clock when the fetcher went healthy (§6.2). Look at least at +1 h, +4 h, +12 h
 and +24 h. Make sure the 24 hours include a 02:00–05:00 UTC dump window (Wikivoyage).
 
 **Dashboards** (Cloud Monitoring → Metrics Explorer, resource `gce_instance`; or one custom
@@ -469,12 +425,13 @@ psqlc -c "SELECT key, count(*) AS requests, round(min(gap)::numeric, 1) AS min_g
 # 4. robots.txt as each origin answered it
 psqlc -c "SELECT origin, robots_state, robots_http_status, robots_fetched_at FROM origins ORDER BY robots_state, origin"
 
-# 5. Sites fetched that no enabled source points at (must be empty during the ramp)
-psqlc -c "SELECT key, role, count(*) FROM captures
-          WHERE captured_at > now() - interval '24 hours'
-            AND key NOT IN (SELECT DISTINCT u.key FROM url_state u JOIN sources s USING (source_id)
-                            WHERE s.enabled)
-          GROUP BY 1, 2"
+# 5. Sites fetched that no ramp source points at (must be empty during the ramp)
+psqlc -v ramp="{$(paste -sd, <<<"$RAMP")}" <<'SQL'
+SELECT key, role, count(*) FROM captures
+WHERE captured_at > now() - interval '24 hours'
+  AND key NOT IN (SELECT DISTINCT key FROM url_state WHERE source_id = ANY(:'ramp'::text[]))
+GROUP BY 1, 2;
+SQL
 
 # 6. Progress: captures and records
 vcadm status | jq '{urls, queue, segments, records}'
@@ -498,38 +455,37 @@ commands):
 capture (query 2, or `SELECT source_id, count(*) FROM captures GROUP BY 1`); records
 growing (`records` in `vcadm status`); base backup and drill green.
 
-## 11. Enable all sources
+## 11. Enable all sources (end the ramp)
 
-1. Only after §10 passed. Copy the specs again if a deploy happened since §6.1, then
-   re-enable every source whose spec says `enabled: true` (restricted and deliberately
-   disabled specs say `false` and stay off):
+1. Only after §10 passed. Remove the allowlist line, keep the rest of `host.local.env`,
+   and restart:
 
    ```bash
-   sudo rm -rf /tmp/vc-sources && sudo docker cp "$(sudo "$VC" ps -q scheduler)":/app/sources /tmp/vc-sources
-   for f in /tmp/vc-sources/*.yaml; do
-     id="$(basename "$f" .yaml)"
-     grep -qx 'enabled: true' "$f" || continue
-     vcadm source list | jq -e --arg id "$id" '.[] | select(.source_id == $id and .enabled)' >/dev/null && continue
-     vcadm source approve "$id" | jq -c '{source_id, urls_resumed}'
-   done
+   sudo sed -i '/^VC_VCRAWL_SOURCE_ALLOWLIST=/d' /var/lib/voyager-crawler/deploy/host.local.env
+   sudo google_metadata_script_runner startup     # rewrites host.env from host.local.env
+   sudo systemctl restart voyager-crawler
+   sudo grep -c '^VC_VCRAWL_SOURCE_ALLOWLIST=' /var/lib/voyager-crawler/deploy/host.local.env
+   sudo "$VC" config | grep VC_VCRAWL_SOURCE_ALLOWLIST | sort -u
    ```
 
-   Expected: one line per source (84 at the time of writing). An `approve` that fails
-   prints the reason (restricted licence, spec no longer valid): leave that source off and
-   open an issue.
-2. Check:
+   Expected: `0`; the line stays gone (first boot adds it only once per data disk);
+   the config shows `VC_VCRAWL_SOURCE_ALLOWLIST: ""` for every role. Sources you disabled
+   during the ramp stay disabled.
+2. Check (after the next scheduler pass, at most 5 minutes):
 
    ```bash
+   sudo "$VC" logs scheduler --since 10m 2>&1 | grep '"scheduler pass"' | tail -1
    vcadm source list | jq '[.[] | select(.enabled)] | length'
-   grep -lx 'enabled: true' /tmp/vc-sources/*.yaml | wc -l
+   psqlc -At -c "SELECT count(DISTINCT source_id) FROM url_state"
    ```
 
-   Expected: the two numbers are equal (94 at the time of writing).
+   Expected: `held_by_allowlist` 0 and `enqueued` > 0 in the pass; the enabled count (94
+   at the time of writing) and, after a pass or two, about as many sources in the frontier
+   (api/dump sources without an adapter have no rows).
 3. Watch another 24 hours with §10's dashboards, queries and thresholds. Two differences:
    query 5 no longer applies, and with about 100 sites a `parked_keys_ratio` up to 0.05
    (a few sites that refuse bots) is normal: each parked site is handled by disabling its
    source, never by retrying. The alert fires at 0.25.
-4. The ramp is over: `sources/` changes may merge again.
 
 ## 12. Switch the LLM on (owner decision, not part of the ramp)
 
@@ -546,7 +502,7 @@ AI must never be starved, so:
 
    ```bash
    printf 'VC_LLM_ENABLED=true\nVC_PROJECT_CAP_USD=%s\n' "<CAP>" |
-     sudo tee /var/lib/voyager-crawler/deploy/host.local.env
+     sudo tee -a /var/lib/voyager-crawler/deploy/host.local.env     # append: keep the other lines
    sudo google_metadata_script_runner startup     # rewrites host.env from host.local.env
    sudo systemctl restart voyager-crawler
    sudo "$VC" config | grep -E 'VC_LLM_ENABLED|VC_PROJECT_CAP_USD' | sort -u
@@ -595,7 +551,10 @@ AI must never be starved, so:
 
    Nothing re-enables a key by itself; undo with `enabled = true`.
 4. **Stop one source**: `vcadm source disable <id>`; undo with `vcadm source approve <id>`.
-5. **Back to the ramp**: re-run §6.2.
+5. **Back to the ramp**: add `VC_VCRAWL_SOURCE_ALLOWLIST=/app/sources/ramp-1.txt` to
+   `/var/lib/voyager-crawler/deploy/host.local.env`, then
+   `sudo google_metadata_script_runner startup && sudo systemctl restart voyager-crawler`.
+   The fetcher at once stops fetching other sources' URLs (each is released for an hour).
 6. **Whole stack down**:
    `sudo systemctl stop voyager-crawler-deploy.timer voyager-crawler-watchdog.timer voyager-crawler.service`.
    Data stays on the data disk; `sudo systemctl start voyager-crawler.service` and the two

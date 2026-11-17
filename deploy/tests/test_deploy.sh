@@ -557,6 +557,37 @@ test_docker_waits_for_data_disk() {
     fail docker_waits_for_data_disk "not called after mount_data_disk"
 }
 
+# Go-live ramp: a fresh install writes the ramp-1 allowlist into
+# host.local.env once (host.env picks it up, compose hands it to every role);
+# a deleted line stays deleted, and a disk with a database is never ramped
+test_ramp_default_on_fresh_install() {
+  setup
+  local fb="$HERE/../host/first-boot.sh" compose="$HERE/../compose.yaml" d="$T/data/deploy" path
+  path="$(sed -n 's/^RAMP_ALLOWLIST=//p' "$fb")"
+  [[ "$path" == /app/sources/* && -f "$HERE/../../sources/${path#/app/sources/}" ]] ||
+    { fail ramp_default_on_fresh_install "RAMP_ALLOWLIST '$path' is not a file in sources/"; return; }
+  grep -qx 'COPY sources/ /app/sources/' "$HERE/../../Dockerfile" ||
+    { fail ramp_default_on_fresh_install "the image does not ship sources/ at /app/sources"; return; }
+  grep -qE '^    VC_VCRAWL_SOURCE_ALLOWLIST: \$\{VC_VCRAWL_SOURCE_ALLOWLIST:-\}$' "$compose" ||
+    { fail ramp_default_on_fresh_install "compose does not pass VC_VCRAWL_SOURCE_ALLOWLIST to the roles"; return; }
+  run_ramp() { VC_FIRST_BOOT_FUNCTIONS_ONLY=1 bash -c ". '$fb'; logger() { :; }; ramp_default '$T/data'" 2>/dev/null; }
+  run_ramp && run_ramp || { fail ramp_default_on_fresh_install "ramp_default failed"; return; }
+  [[ "$(grep -c "^VC_VCRAWL_SOURCE_ALLOWLIST=$path\$" "$d/host.local.env")" == 1 ]] ||
+    { fail ramp_default_on_fresh_install "fresh install: $(cat "$d/host.local.env" 2>&1)"; return; }
+  # the operator lifts the ramp: the next boot does not put it back
+  sed -i.bak '/^VC_VCRAWL_SOURCE_ALLOWLIST=/d' "$d/host.local.env"
+  run_ramp
+  grep -q '^VC_VCRAWL_SOURCE_ALLOWLIST=' "$d/host.local.env" &&
+    { fail ramp_default_on_fresh_install "ramp re-added after the operator removed it"; return; }
+  # an existing database (no marker yet): left alone
+  rm -rf "$T/data" && mkdir -p "$T/data/pgdata" && echo 17 >"$T/data/pgdata/PG_VERSION"
+  run_ramp
+  grep -qs '^VC_VCRAWL_SOURCE_ALLOWLIST=' "$d/host.local.env" &&
+    { fail ramp_default_on_fresh_install "an existing install was put on the ramp"; return; }
+  [[ -e "$d/.ramp-default" ]] && ok ramp_default_on_fresh_install ||
+    fail ramp_default_on_fresh_install "no marker on an existing install"
+}
+
 # Go-live review 4: the drill unit runs restore-drill.sh (the image's
 # maintenance subcommand takes no arguments); every crawler unit reports
 # success and failure for the alert metrics

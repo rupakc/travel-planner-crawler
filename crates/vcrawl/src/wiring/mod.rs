@@ -5,6 +5,7 @@
 //! Every role builds what it needs from [`crate::Ctx`] with these functions; nothing here
 //! starts work on its own.
 
+pub mod allowlist;
 pub mod config;
 pub mod db;
 pub mod fetch;
