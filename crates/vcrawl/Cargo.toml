@@ -12,6 +12,7 @@ description = "The Voyager crawler binary: roles, admin CLI and migrate."
 workspace = true
 
 [dependencies]
+rustls = { workspace = true }
 vc-core = { workspace = true }
 vc-config = { workspace = true }
 vc-policy = { workspace = true }

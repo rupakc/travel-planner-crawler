@@ -53,6 +53,7 @@ enum Role {
 
 #[tokio::main]
 async fn main() -> anyhow::Result<()> {
+    vcrawl::install_crypto_provider();
     let cli = Cli::parse();
     if let Role::Migrate {
         print_schema: true, ..
