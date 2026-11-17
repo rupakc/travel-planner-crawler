@@ -1360,6 +1360,25 @@ impl Fetcher {
             );
             return Ok(());
         };
+        // Purged authors stay out of an author-keeping dump (loaded per run).
+        let adapter = match wiring::sources::adapter_for_run(
+            &self.p.cfg,
+            self.p.pool.as_ref(),
+            id,
+            adapter,
+        )
+        .await
+        {
+            Ok(a) => a,
+            Err(e) => {
+                tracing::warn!(adapter = id, error_class = ?e.class(), "adapter exclusions not loaded");
+                run.result(
+                    &u.url_key,
+                    self.failed(e.class(), now + chrono::Duration::hours(1)),
+                );
+                return Ok(());
+            }
+        };
         let mut sink = RecordingSink {
             inner: self.p.spool.clone(),
             seen: Vec::new(),

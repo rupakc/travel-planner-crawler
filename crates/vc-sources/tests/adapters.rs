@@ -1126,6 +1126,58 @@ async fn se_travel_dump_parses_fixture() {
     );
 }
 
+/// A purged author (excluded by the sha256 of the name, as `tombstones` stores it) is dropped
+/// from a re-ingested dump before anything is spooled; other posts stay.
+#[tokio::test]
+async fn se_travel_dump_drops_excluded_authors() {
+    use adapters::se_travel_dump::{SeTravelDump, author_digest};
+    let s = MockServer::start().await;
+    serve(&s, "/Posts.xml", fixture("se_travel_posts.xml"), "text/xml").await;
+    let run = |a: SeTravelDump| {
+        let uri = s.uri();
+        async move {
+            let mut h = Harness::new(
+                spec("se-dump"),
+                "se_travel_dump",
+                &format!("{uri}/Posts.xml"),
+                t0(),
+            )
+            .await;
+            let rep = h.run(&a).await.unwrap();
+            assert!(rep.complete);
+            let posts: Vec<serde_json::Value> =
+                serde_json::from_slice(&h.resources()[0].1).unwrap();
+            posts
+        }
+    };
+    let all = run(SeTravelDump::DEFAULT).await;
+    let author = |p: &serde_json::Value| p["attribution"]["author"].as_str().unwrap().to_string();
+    let gone = author(&all[1]);
+    let kept = run(SeTravelDump::DEFAULT
+        .with_excluded_authors([format!("sha256:{}", author_digest(&gone)), "ab".repeat(32)]))
+    .await;
+    assert_eq!(kept.len(), all.len() - 1, "{kept:?}");
+    assert!(kept.iter().all(|p| author(p) != gone));
+    let raw = serde_json::to_string(&kept).unwrap();
+    assert!(
+        !raw.contains(&gone),
+        "the purged author's name is in the output"
+    );
+    // No exclusions: unchanged.
+    assert_eq!(
+        run(SeTravelDump::DEFAULT.with_excluded_authors(Vec::<String>::new())).await,
+        all
+    );
+}
+
+#[test]
+fn se_author_digest_is_lowercase_sha256_hex() {
+    assert_eq!(
+        adapters::se_travel_dump::author_digest("abc"),
+        "ba7816bf8f01cfea414140de5dae2223b00361a396177a9cb410ff61f20015ad"
+    );
+}
+
 #[tokio::test]
 async fn se_travel_dump_writes_raw_first() {
     let s = MockServer::start().await;
