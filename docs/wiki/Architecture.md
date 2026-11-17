@@ -113,7 +113,7 @@ flowchart LR
 | `egress` | every role, `otelcol` | GCS, Vertex AI, the metadata server; only the fetcher reaches crawl targets, and only through permits. |
 | `pgbackup` | Postgres alone | wal-g's route to the ops bucket. |
 
-`otelcol` (OpenTelemetry Collector) scrapes every role's `/metrics` every 60 s, keeps only
+`otelcol` (OpenTelemetry Collector) scrapes each role's `/metrics` every 60 s (today the embedder serves none and the api's is localhost-only, so those two scrapes are empty), keeps only
 `crawler_*` series and writes them to Cloud Monitoring as `custom.googleapis.com/crawler/*`.
 The Ops Agent on the host sends host metrics and container logs. See
 [Operations and Deploy](Operations-and-Deploy).

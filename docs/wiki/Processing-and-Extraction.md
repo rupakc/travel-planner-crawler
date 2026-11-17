@@ -56,6 +56,8 @@ record. The processor follows that chain (at most 64 hops, cycle-safe) to the st
 If a purge rewrote the segment while it was reading, it reloads the capture row and tries
 once more; if the body is still missing, the item is retried later instead of dropped.
 
+**Finding the capture.** Capture times are stamped in whole microseconds (`vc_core::store::capture_time`), so the WARC header, CDXJ, the `capture_ready` payload and `captures.captured_at` hold the same instant. For captures stored before that fix, the lookup by `(capture_id, captured_at)` allows 1 microsecond of difference, then uses the stored value. A capture that still cannot be found (`missing`) or has no known source (`no_source`) is acknowledged as skipped, logged at WARN and counted in `crawler_processor_skipped_total{reason}`. It is never dropped silently.
+
 Safety limits: XML with a DTD is refused (no entity expansion); the DOM is pruned to depth
 256 and 200,000 nodes before anything walks it; main text is capped at 1 MiB, links at
 5,000, sitemap entries at 50,000; CPU time per capture is capped at 5 s. **Simhash** (a

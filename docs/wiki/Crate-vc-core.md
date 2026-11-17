@@ -17,7 +17,7 @@ Path: `crates/vc-core`. Main dependencies: `url`, `psl`, `blake3`, `ulid`, `chro
 | `frontier` | `Frontier`, `LeaseCheck`, `ClaimPermit`, `Claim`, outcomes | [vc-frontier](Crate-vc-frontier) |
 | `fetch` | `PermitClient`, `FetchRequest`, `Exchange`, `FetchError` | [vc-fetch](Crate-vc-fetch) |
 | `render` | `Renderer`, `RenderBudget`, `BlockReason`, `RenderOutcome` | [vc-render](Crate-vc-render) |
-| `store` | `BlobStore`, `CaptureSink`, `SegmentCommitter`, `SpoolRecord`, `SegmentManifest` | [vc-store](Crate-vc-store) |
+| `store` | `BlobStore`, `CaptureSink`, `SegmentCommitter`, `SpoolRecord`, `SegmentManifest`, `capture_time` (truncates a capture time to whole microseconds, as Postgres stores it) | [vc-store](Crate-vc-store) |
 | `parse` | `ContentHandler`, `HandlerRegistry`, `Parsed`, `Link`, `Limits` | [vc-parse](Crate-vc-parse) |
 | `kinds` | `KindRegistry`, `KindDef`, `KindStorage` | [vc-kinds](Crate-vc-kinds) |
 | `llm` | `LlmClient`, `Embedder`, `BudgetLedger`, `BatchRunner`, `Purpose`, `Usd` | [vc-llm](Crate-vc-llm) |

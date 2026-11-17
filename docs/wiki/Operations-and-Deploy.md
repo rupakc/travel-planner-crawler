@@ -71,12 +71,14 @@ flowchart LR
   end
   FET["fetcher"] --- CHR
   FET --- OTEL
-  ROLES["scheduler, processor, embedder, api, maintenance"] -->|"/metrics :9464 on egress"| OTEL
+  ROLES["scheduler, processor, maintenance"] -->|"/metrics :9464 on egress"| OTEL
   FET --> DB[("postgres (db, internal)")]
   ROLES --> DB
   DB -->|"pgbackup: wal-g"| GCS[("GCS ops bucket")]
   OTEL -->|"egress"| CM["Cloud Monitoring"]
 ```
+
+The embedder and api log but are not scraped yet: the embedder serves no `/metrics` and writes no heartbeat, and the api's `/metrics` listens on localhost only.
 
 The fetcher's spool lives under `spool/fetcher-<instance>/`. The fixed instance name
 (`VC_VCRAWL_INSTANCE=fetcher-a`) keeps that path when the container is recreated.
@@ -183,7 +185,7 @@ One loop ticks every minute. Each job runs on its own interval and is
 |---|---|---|
 | Partitions | 6 h | `vc_ensure_partitions`: monthly partitions 2 months ahead |
 | Purge | 15 min | the purge pipeline (tombstone, segment rewrite, text tier, attribution scrub); see [Storage and Raw Data](Storage-and-Raw-Data) |
-| Ephemeral expiry | 1 h | drops expired ephemeral raw data |
+| Ephemeral expiry | 1 h | gives page-level `noarchive` captures an expiry, then drops expired ephemeral raw data |
 | Digest | 1 h | writes yesterday's `crawl_digest` once |
 | Parquet export | 1 day | lists partitions older than 12 months (stub) |
 | Restore drill | 7 days | the equivalence drill above |

@@ -40,6 +40,8 @@ Bucket `voyager-crawler-raw`:
 `<id>` is the segment's ULID (a sortable unique id). A purge rewrite adds a generation:
 `<id>.r<N>.warc.zst`.
 
+A page-level meta robots `noarchive` is only known after parsing, so its capture may sit in a normal segment. The processor records it in `captures.use_policy_final` (`raw: ephemeral`); the hourly expiry job then sets `raw_expires_at = captured_at + store.ephemeral_days` and cuts the capture out when it expires (migration 1906).
+
 Bucket lifecycle:
 
 | Rule | Effect |
@@ -65,7 +67,7 @@ input/output (kept 7 days). The crawler can write there but not delete; the life
 | 2. Mark fetched | The URL moves to `fetched_pending`. Validators are not touched. If the segment was already committed (the roller can be faster than the worker), the URL goes straight back to `due`. | The spool replay finishes it; the sweeper (below) frees it if not. |
 | 3. Seal | At 128 MiB or 600 s the spool file is sealed. Its segment id and content are now fixed. | Replayed on start. |
 | 4. Upload | The segment is built deterministically and uploaded with `ifGenerationMatch=0` (create only if absent), then its CDXJ. | Retry: an identical object is success; a different one is a conflict. A replayed file whose segment is already committed is deleted without uploading, so purged bytes never come back. |
-| 5. Commit | `vc_commit_segment(jsonb)`: one transaction inserts the `segments` row and the `captures` rows, updates `url_state` validators **only if this capture is newer** (`last_captured_at < captured_at`), and enqueues `capture_ready`. | Idempotent by segment id: a repeat is a no-op. |
+| 5. Commit | Capture times are whole microseconds (`capture_time`), so every copy of the time matches the stored one. `vc_commit_segment(jsonb)`: one transaction inserts the `segments` row and the `captures` rows, updates `url_state` validators **only if this capture is newer** (`last_captured_at < captured_at`), and enqueues `capture_ready`. | Idempotent by segment id: a repeat is a no-op. |
 | 6. Delete | The sealed spool file is removed. | — |
 
 Why this order matters:

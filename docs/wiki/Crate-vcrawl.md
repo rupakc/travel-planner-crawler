@@ -6,7 +6,7 @@ crate that depends on implementations rather than only on `vc-core` traits.
 
 Path: `crates/vcrawl`. Dependencies: every `vc-*` crate, `clap`, `tokio`, `anyhow`, `sqlx`,
 `fail`. Feature `failpoints` compiles the crash-injection points in (tests only). Migration
-block `19xx` (also `1801`, `1904`, `1905`; see [Data Model](Data-Model)).
+block `19xx` (also `1801`, `1904`–`1906`; see [Data Model](Data-Model)).
 
 **Status:** every role is wired and tested, and the end-to-end suite runs them all together
 in CI (see [Testing](Testing)). Not done yet: batch prediction (no role submits Vertex batch
@@ -35,7 +35,7 @@ Data-path roles share the `Ctx` pool. `admin`, `migrate` and `maintenance` use
 |---|---|
 | `vcrawl scheduler` | every `scheduler_interval_s` (300 s): load and upsert `sources/*.yaml` (missing ones are disabled, never deleted); enqueue seeds, feeds, sitemaps and `adapter:<id>` rows; apply source limits (`min_delay_s` only raises a key's delay, `daily_budget` only lowers its budget); retire rows of disabled sources; make one page row due for origins whose robots.txt expired; export `due_urls` and `parked_keys_ratio`; prune old raw-byte counters and adapter cursors. Runs the LLM startup probe once when the LLM is on |
 | `vcrawl fetcher` | the claim loop, `fetcher_concurrency` (16) workers. Per claim: robots.txt first for due origins (a `Crawl-delay` found there raises the permit delay at once); each leased URL by `http`, `render` or `adapter:<id>`; spool and fsync; `mark_fetched`; complete with a key signal. Cross-key redirects are enqueued, never followed; a challenge, 401 or 403 parks the key; 429/503 back the key off. A same-key redirect to an origin without cached robots.txt fetches it under the same permit. Also runs the segment roller (replay on start, then every `roller_tick_s`), the daily raw-bytes cap (shared through Postgres), resumable adapter cursors, and the sweeper that returns `fetched_pending` rows older than 6 h to `due` |
-| `vcrawl processor` | `capture_ready` items to records: parse, final UsePolicy, in-scope links to the frontier (uncertain ones triaged by the LLM when it is on), extract, upsert; held `reference` records for high-stakes kinds (`held_records`); stale reconciliation; writes the extracted-text tier per committed segment |
+| `vcrawl processor` | `capture_ready` items to records: parse, final UsePolicy, in-scope links to the frontier (uncertain ones triaged by the LLM when it is on), extract, upsert; held `reference` records for high-stakes kinds (`held_records`); stale reconciliation; writes the extracted-text tier per committed segment. A capture it cannot find or attribute is acked as skipped, logged at WARN and counted in `crawler_processor_skipped_total{reason}` (`missing`, `no_source`). Serves `/metrics` and writes a heartbeat |
 | `vcrawl embedder` | embeds current, embeddable records under the embedding budget; idles when the LLM is off |
 | `vcrawl api` | the `/v1` API over TLS; search gets the vector leg only with the LLM on, each query embedding reserved through the budget |
 | `vcrawl maintenance` | the scheduled jobs below |
@@ -51,7 +51,7 @@ Each job is idempotent, so a restart only repeats safe work.
 |---|---|---|
 | partitions | 6 h | keep `partitions_ahead_months` (2) monthly partitions created ahead |
 | purge | 15 min | delete leftover `store_garbage` objects; advance every unfinished `purge_requests` row (index, raw, done) |
-| ephemeral expiry | 1 h | cut captures past `raw_expires_at` (noarchive, TDM) out of their segments |
+| ephemeral expiry | 1 h | first give every capture whose final use policy says `raw: ephemeral` (page-level meta robots `noarchive`, known only after parsing) and has no expiry `raw_expires_at = captured_at + store.ephemeral_days` (migration 1906 indexes those captures); then cut captures past `raw_expires_at` out of their segments |
 | restore drill | 7 d | rebuild the newest 50 segments' rows from their CDXJ in memory and compare with the database; exports `restore_drill_ok` |
 | digest | 1 h | write yesterday's `crawl_digest` row once |
 | Parquet export | 24 h | stub: lists partitions older than 12 months |

@@ -32,6 +32,7 @@ and kinds.
 | vcrawl | `1903_text_tier` | `text_tier_segments`: which segments have an extracted-text object |
 | vcrawl | `1904_purge_garbage` | `store_garbage`; `vc_rewrite_segment` also releases validators of removed captures |
 | vcrawl | `1905_purge_author_scope` | `purge_requests.scope`; author names stored only as `sha256:<hex>` |
+| vcrawl | `1906_noarchive_expiry` | partial index over captures whose final use policy is `raw: ephemeral` and that have no `raw_expires_at` yet |
 
 ### Tables added after go-live
 

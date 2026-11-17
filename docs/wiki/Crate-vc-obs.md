@@ -4,7 +4,7 @@
 metrics, progress-based health and a heartbeat.
 
 Path: `crates/vc-obs`. Dependencies: `tracing`, `tracing-subscriber`, `prometheus-client`,
-`sqlx`. Status: wired; every role serves `/metrics` and `/healthz` and writes a heartbeat.
+`sqlx`. Status: wired. Every role logs. The scheduler, fetcher, processor and maintenance roles also serve `/metrics` and `/healthz` and write a heartbeat. The embedder does not serve `/metrics` or write a heartbeat yet, and the api serves `/metrics` on localhost only, so otelcol's `embedder:9464` and `api:9464` scrape jobs find nothing today.
 
 ## Modules
 
