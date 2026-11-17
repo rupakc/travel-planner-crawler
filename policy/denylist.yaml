@@ -345,13 +345,13 @@ entries:
     reason: robots.txt redirects to a gambling site (domain hijacked or lapsed); never crawl
     source: research 2026-11-17 food-events-ideas (conflicts)
   # --- Travel safety / scam sources not added (vetted 2026-11-17) ----------------------
-  - host: www.worldpackers.com
+  - host: worldpackers.com
     reason: robots.txt/pages answer 403 to an honest bot, 2026-11-17
     source: research 2026-11-17 scam-safety SKIP
-  - host: www.moneycrashers.com
+  - host: moneycrashers.com
     reason: robots.txt/pages answer 403 to an honest bot, 2026-11-17
     source: research 2026-11-17 scam-safety SKIP
-  - host: www.eurochange.co.uk
+  - host: eurochange.co.uk
     reason: robots.txt/pages answer 403 to an honest bot, 2026-11-17
     source: research 2026-11-17 scam-safety SKIP
   - host: travelersunited.org

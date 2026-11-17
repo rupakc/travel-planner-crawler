@@ -73,12 +73,17 @@ impl LoadedSource {
         if !self.owns(url) {
             return false;
         }
+        // A pattern may be written against the full URL (`^https://host/blog/`) or against
+        // the path (`^/booking/`): a rule matches when it matches either, so path-style
+        // excludes in the specs actually exclude.
         let s = url.as_str();
-        if self.exclude.iter().any(|r| r.is_match(s)) {
+        let pq = url.path_and_query();
+        let hit = |r: &Regex| r.is_match(s) || r.is_match(&pq);
+        if self.exclude.iter().any(hit) {
             return false;
         }
         if !self.include.is_empty() {
-            return self.include.iter().any(|r| r.is_match(s));
+            return self.include.iter().any(hit);
         }
         let h = url.host();
         self.hosts.iter().any(|x| x.eq_ignore_ascii_case(h))
