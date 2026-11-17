@@ -40,6 +40,7 @@ reads.
 | `VC_OBS_LOG_FORMAT` | every role | `json` | log format |
 | `VC_LLM_ENABLED` | every role | from `host.local.env`, default `false` | turn the LLM on |
 | `VC_PROJECT_CAP_USD` | every role | from `host.local.env`, default `0` | the project's Gemini spend cap; 0 keeps the LLM off |
+| `VC_LLM_MONTHLY_USD` | every role | from `host.local.env`, default `30` | `llm.monthly_usd`, the crawler's monthly LLM cap; at most 50 % of `VC_PROJECT_CAP_USD` |
 | `VC_RENDER_CDP_URL` | fetcher | `http://chromium:9222` | Chromium DevTools address |
 | `VC_STORE_SPOOL_DIR` | fetcher | `/spool` | spool mount |
 | `VC_VCRAWL_INSTANCE` | fetcher | `fetcher-a` | stable name, so the fetcher's spool subfolder survives a container rebuild |
@@ -47,9 +48,10 @@ reads.
 | `VC_API_BIND` | api | `0.0.0.0:8443` inside the container | `api.bind`. The host's own `VC_API_BIND` (the VM's internal IP, from `host.env`) is a compose variable: the port is published only on that IP |
 
 Owner overrides go in `/var/lib/voyager-crawler/deploy/host.local.env` on the VM.
-`first-boot.sh` copies them into `host.env` on every boot. Only `VC_LLM_ENABLED` and
-`VC_PROJECT_CAP_USD` are forwarded from there to the roles today; to change another setting
-(for example `VC_LLM_MONTHLY_USD`), add it to the role environment in `deploy/compose.yaml`.
+`first-boot.sh` copies them into `host.env` on every boot. `VC_LLM_ENABLED`,
+`VC_PROJECT_CAP_USD` and `VC_LLM_MONTHLY_USD` are forwarded from there to every role (the
+shared role environment in `deploy/compose.yaml`, checked by `deploy_env.rs`); to change
+another setting (for example `VC_LLM_DAILY_USD`), add it to that environment first.
 
 Rendering stays off in production: compose does not set `VC_RENDER_ENABLED`, so
 `render.enabled` keeps its default `false`.

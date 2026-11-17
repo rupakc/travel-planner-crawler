@@ -34,10 +34,13 @@ The first 8 weeks run on demand.
 | `llm.daily_usd` | $1.50 | Daily slice of the monthly cap. |
 | `VC_PROJECT_CAP_USD` | 0 (unset) | The project's Vertex spend cap in USD. Keep it at least **twice** the monthly LLM cap. With the LLM cap above 50 % of it, or with it unset, the LLM stays off and the `crawler_llm_config_invalid` alert fires ([forced_off](Glossary)). |
 
-Raise the LLM cap only after batch prediction is wired or the commitment is bought.
-Note: `deploy/compose.yaml` passes only `VC_LLM_ENABLED` and `VC_PROJECT_CAP_USD` to the
-roles today, so `VC_LLM_MONTHLY_USD` in `host.local.env` has no effect and the $30 default
-applies. See [Configuration](Configuration) and [Gemini and Budgets](Gemini-and-Budgets).
+Raise the LLM cap only after batch prediction is wired or the commitment is bought: put
+`VC_LLM_MONTHLY_USD=…` in `/var/lib/voyager-crawler/deploy/host.local.env` (with
+`VC_PROJECT_CAP_USD` at least twice as high) and restart the service; `deploy/compose.yaml`
+passes it to every role, and without it the $30 default applies. The daily cap
+(`VC_LLM_DAILY_USD`, $1.50) is not forwarded, so it still bounds each day: a monthly cap
+above about $45 is only reachable after that is forwarded too. See
+[Configuration](Configuration) and [Gemini and Budgets](Gemini-and-Budgets).
 
 ## Guard rails
 

@@ -49,6 +49,7 @@ fn compose_environment_is_complete_and_known() {
         "VC_STORE_RAW_BUCKET",
         "VC_STORE_SPOOL_DIR",
         "VC_API_BIND",
+        "VC_LLM_MONTHLY_USD",
     ] {
         assert!(
             env.contains_key(want),
@@ -81,8 +82,91 @@ fn compose_environment_loads() {
         assert_eq!(c.api.bind, env["VC_API_BIND"]);
         assert!(!c.llm.enabled);
         assert_eq!(c.llm.project_cap_usd, Some(0.0));
+        // The owner's monthly cap reaches the roles; unset, it is the setting's own default.
+        assert_eq!(env["VC_LLM_MONTHLY_USD"], "30");
+        assert_eq!(
+            c.llm.monthly_usd,
+            vc_config::LlmConfig::default().monthly_usd
+        );
         Ok(())
     });
+}
+
+/// The top-level services of `deploy/compose.yaml`: (name, body lines).
+fn compose_services() -> Vec<(String, Vec<String>)> {
+    let path = concat!(env!("CARGO_MANIFEST_DIR"), "/../../deploy/compose.yaml");
+    let text = std::fs::read_to_string(path).expect("deploy/compose.yaml");
+    let mut out: Vec<(String, Vec<String>)> = Vec::new();
+    let mut on = false;
+    for line in text.lines() {
+        if !line.starts_with(' ') && !line.is_empty() && !line.starts_with('#') {
+            on = line == "services:";
+            continue;
+        }
+        if !on {
+            continue;
+        }
+        if let Some(name) = line
+            .strip_prefix("  ")
+            .and_then(|l| l.strip_suffix(':'))
+            .filter(|n| !n.starts_with(' ') && !n.starts_with('#'))
+        {
+            out.push((name.to_string(), Vec::new()));
+        } else if let Some((_, body)) = out.last_mut() {
+            body.push(line.to_string());
+        }
+    }
+    out
+}
+
+#[test]
+fn every_role_gets_the_owner_llm_settings() {
+    // A role that sets its own `environment:` must merge the shared role environment, or
+    // the owner's VC_LLM_ENABLED / VC_PROJECT_CAP_USD / VC_LLM_MONTHLY_USD never reach it
+    // (host.local.env, infrastructure/README.md).
+    let services = compose_services();
+    let roles: Vec<_> = services
+        .iter()
+        .filter(|(_, b)| b.iter().any(|l| l.trim() == "<<: *role"))
+        .collect();
+    for want in [
+        "scheduler",
+        "fetcher",
+        "processor",
+        "embedder",
+        "api",
+        "maintenance",
+    ] {
+        assert!(
+            roles.iter().any(|(n, _)| n == want),
+            "{want} is not a role service"
+        );
+    }
+    for (name, body) in roles {
+        if body.iter().any(|l| l.trim() == "environment:") {
+            assert!(
+                body.iter().any(|l| l.trim() == "<<: *role-env"),
+                "{name} overrides environment without <<: *role-env"
+            );
+        }
+    }
+    // …and those three live in that shared environment (the `x-role` anchor).
+    let path = concat!(env!("CARGO_MANIFEST_DIR"), "/../../deploy/compose.yaml");
+    let text = std::fs::read_to_string(path).expect("deploy/compose.yaml");
+    let anchor: Vec<&str> = text
+        .lines()
+        .skip_while(|l| !l.starts_with("x-role:"))
+        .skip(1)
+        .take_while(|l| l.is_empty() || l.starts_with(' '))
+        .collect();
+    for k in ["VC_LLM_ENABLED", "VC_PROJECT_CAP_USD", "VC_LLM_MONTHLY_USD"] {
+        assert!(
+            anchor
+                .iter()
+                .any(|l| l.trim_start().starts_with(&format!("{k}: ${{{k}:-"))),
+            "{k} is not passed from host.local.env in the shared role environment"
+        );
+    }
 }
 
 #[test]

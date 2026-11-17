@@ -57,6 +57,10 @@ x-role: &role
     # The owner's project cap (host.local.env, infrastructure/README.md step 3);
     # 0 = unset: llm.enabled is refused until it is raised.
     VC_PROJECT_CAP_USD: ${VC_PROJECT_CAP_USD:-0}
+    # The crawler's monthly LLM cap (host.local.env; infrastructure/README.md "Cost"),
+    # at most 50 % of VC_PROJECT_CAP_USD. Every role gets it, so all of them validate
+    # [llm] alike; the default is llm.monthly_usd's.
+    VC_LLM_MONTHLY_USD: ${VC_LLM_MONTHLY_USD:-30}
   healthcheck:
     test: ["CMD", "vcrawl", "health"]
     interval: 60s
