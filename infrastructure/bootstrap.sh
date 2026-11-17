@@ -137,7 +137,7 @@ LOG_BUCKET="voyager-crawler-logs"
 LOG_NAME="crawler_docker"
 # The billing account is in INR (docs/research/gcp.md §0): ₹9,000 ≈ $100
 BUDGET_NAME="voyager-crawler"
-BUDGET_AMOUNT="${BUDGET_AMOUNT:-9000INR}"
+BUDGET_AMOUNT="${BUDGET_AMOUNT:-3000INR}"
 IAP_RANGE="35.235.240.0/20"
 SECRETS=(crawler-pg-password crawler-api-token-voyager crawler-api-tls-key crawler-api-tls-cert)
 VERTEX_ROLE="voyagerCrawlerVertex"

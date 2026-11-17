@@ -100,6 +100,6 @@ DRY RUN: nothing is called. project=voyager-prod-ohzkl quota project: voyager-pr
   gcloud  --project=voyager-prod-ohzkl  --quiet  monitoring  policies  create  --policy-from-file=<work>/tls-expiry.json
 
 ==> Budget (re-asserted)
-  gcloud  billing  budgets  create  --billing-account=010A0B-F39593-14A899  --display-name=voyager-crawler  --budget-amount=9000INR  --calendar-period=month  --filter-projects=projects/voyager-prod-ohzkl  --filter-labels=app=voyager-crawler  --threshold-rule=percent=0.5  --threshold-rule=percent=0.9  --threshold-rule=percent=1.0  --notifications-rule-monitoring-notification-channels=\<channel\>
+  gcloud  billing  budgets  create  --billing-account=010A0B-F39593-14A899  --display-name=voyager-crawler  --budget-amount=3000INR  --calendar-period=month  --filter-projects=projects/voyager-prod-ohzkl  --filter-labels=app=voyager-crawler  --threshold-rule=percent=0.5  --threshold-rule=percent=0.9  --threshold-rule=percent=1.0  --notifications-rule-monitoring-notification-channels=\<channel\>
 
 ==> Done. Manual steps: infrastructure/README.md

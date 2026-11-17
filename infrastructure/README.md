@@ -22,7 +22,7 @@ keeps the one it has (a new group starts on Spot), so a later plain run never fl
 
 Needs `gcloud` with the `beta` component (`gcloud components install beta`) and
 `openssl`. Overrides: `PROJECT_ID`, `BILLING_ACCOUNT`, `REGION`, `ZONE`, `VM` (the
-instance name), `MIG`, `MACHINE_TYPE` (`e2-medium`), `HEALTH_PORT` (`8443`), `BUDGET_AMOUNT` (account currency, default `9000INR`), `CRAWLER_INTERNAL_IP` (pick
+instance name), `MIG`, `MACHINE_TYPE` (`e2-medium`), `HEALTH_PORT` (`8443`), `BUDGET_AMOUNT` (account currency, default `3000INR`), `CRAWLER_INTERNAL_IP` (pick
 the reserved internal address instead of letting GCP choose).
 
 ## What it creates
