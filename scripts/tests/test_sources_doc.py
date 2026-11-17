@@ -44,3 +44,18 @@ def test_section_titles_cover_every_section():
     import seeds_to_sources as s2s
 
     assert list(sources_doc.SECTION_TITLES) == list(s2s.SECTIONS)
+
+
+def test_needs_a_licence_or_key_section():
+    text = (ROOT / "docs" / "SOURCES.md").read_text()
+    assert "## Needs a licence or API key" in text
+    section = text.split("## Needs a licence or API key", 1)[1]
+    for e in sources_doc.load_licence_only():
+        assert e["name"] in section, e["name"]
+    for name in ("IATA Timatic", "TravelDoc", "Rome2Rio"):
+        assert name in section, name
+    for p in (ROOT / "sources").glob("*.yaml"):
+        spec = yaml.safe_load(p.read_text())
+        if spec.get("needs_key") and not spec.get("enabled", True):
+            sid = spec["id"]
+            assert f"| `{sid}` |" in section, spec["id"]

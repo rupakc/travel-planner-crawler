@@ -27,12 +27,13 @@ cadence: quarterly
 min_delay_s: 5
 daily_budget: 3000
 politeness_key: null
-enabled: true
+enabled: false
 needs_key: false
 key_secret: null
 max_retention_days: null
 display_requirements: null
-notes: null
+notes: 'Disabled: robots.txt of www.usembassy.gov (and fr.usembassy.gov) answers 403 to VoyagerBot (verified
+  2026-11-17): bot wall, do not crawl; usembassy.gov is denylisted.'
 relevance:
   sections:
   - emergency_card

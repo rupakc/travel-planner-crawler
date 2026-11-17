@@ -32,7 +32,8 @@ key_secret: null
 max_retention_days: null
 display_requirements: null
 notes: 'commercial => subscription or self-host (AGPLv3) | Disabled: restricted licence (non-commercial
-  or unknown), not ingested in v1 (spec §5.9). | Research cadence: hourly_cache.'
+  or unknown), not ingested in v1 (spec §5.9). | Also: Free API is non-commercial; replaced by MET Norway
+  (spec §5.9, §17.8). | Research cadence: hourly_cache.'
 relevance:
   sections:
   - weather

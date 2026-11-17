@@ -22,6 +22,7 @@ import yaml
 
 ROOT = Path(__file__).resolve().parents[1]
 OUTPUTS = (ROOT / "docs" / "SOURCES.md", ROOT / "docs" / "wiki" / "Sources.md")
+LICENCE_ONLY = ROOT / "docs" / "research" / "licence_only.yaml"
 
 # App section -> heading, in the order the Voyager app shows them.
 SECTION_TITLES = {
@@ -68,7 +69,37 @@ def _cell(s: str) -> str:
     return " ".join(str(s).split()).replace("|", "\\|")
 
 
-def render(specs: list[dict]) -> str:
+def load_licence_only(path: Path = LICENCE_ONLY) -> list[dict]:
+    if not Path(path).exists():
+        return []
+    return (yaml.safe_load(Path(path).read_text()) or {}).get("entries", [])
+
+
+def needs_access(specs: list[dict], licence_only: list[dict]) -> list[str]:
+    """The "Needs a licence or API key" section: off sources with needs_key (their notes say
+    where to register) and the licence-only products that have no crawlable spec."""
+    keyed = sorted((s for s in specs if s.get("needs_key") and not s.get("enabled", True)),
+                   key=lambda s: s["id"])
+    if not keyed and not licence_only:
+        return []
+    lines = ["## Needs a licence or API key", "",
+             "Off until the owner registers a key, signs an agreement or buys a licence. The",
+             "source's notes say where to sign up and what it costs.", "",
+             "| Source | Website | Sections | Access route and cost |", "|---|---|---|---|"]
+    for s in keyed:
+        lines.append("| `{}` | {} | {} | {} |".format(
+            s["id"], ", ".join(f"`{h}`" for h in hosts(s)) or "-",
+            ", ".join(s["relevance"]["sections"]),
+            _cell((s.get("notes") or "").split("Disabled: ", 1)[-1])))
+    for e in licence_only:
+        lines.append("| {} (no spec) | {} | {} | {} |".format(
+            _cell(e["name"]), _cell(e["host"]), ", ".join(e.get("sections", [])),
+            _cell(f"{e['route']} Cost: {e['cost']}")))
+    lines.append("")
+    return lines
+
+
+def render(specs: list[dict], licence_only: list[dict] | None = None) -> str:
     on = sum(1 for s in specs if s.get("enabled", True))
     lines = [
         "# Sources",
@@ -111,6 +142,7 @@ def render(specs: list[dict]) -> str:
                 )
             )
         lines.append("")
+    lines += needs_access(specs, licence_only if licence_only is not None else load_licence_only())
     missing = sorted(s["id"] for s in specs if not s.get("relevance"))
     if missing:
         lines += ["## Missing relevance", "", *(f"- `{m}`" for m in missing), ""]

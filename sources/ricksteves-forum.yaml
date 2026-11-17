@@ -31,8 +31,10 @@ needs_key: false
 key_secret: null
 max_retention_days: null
 display_requirements: null
-notes: '<=1 req/10 s, summaries+link only, no RSS | Disabled: v1 forums = Stack Exchange data dump only
-  (spec §5.10, GDPR).'
+notes: '<=1 req/10 s, summaries+link only, no RSS | Disabled: Rick Steves'' terms (https://ricksteves.com/about-us/terms-of-service,
+  read 2026-11-17) ban ''any robot, spider, crawler, scraper or other automated means or interface not
+  provided by us to access the Services''; ricksteves.com is denylisted. (Also: v1 forums = Stack Exchange
+  data dump only, spec §5.10, GDPR.)'
 relevance:
   sections:
   - tips

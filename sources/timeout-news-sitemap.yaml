@@ -28,12 +28,15 @@ cadence: daily
 min_delay_s: 5
 daily_budget: 3000
 politeness_key: null
-enabled: true
+enabled: false
 needs_key: false
 key_secret: null
 max_retention_days: null
 display_requirements: null
-notes: link-only discovery
+notes: 'link-only discovery | Disabled: Time Out''s terms of use (https://www.timeout.com/terms-of-use,
+  11.4, read 2026-11-17) say it ''does not permit the use of the Content on any artificial intelligence
+  (AI) or machine learning platform ... including ... retrieval-augmented generation'' without prior written
+  approval; timeout.com is denylisted until Time Out approves.'
 relevance:
   sections:
   - events

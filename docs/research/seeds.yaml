@@ -1542,3 +1542,1556 @@ seeds:
     needs_key: false
     allowed: true
     notes: "robots allows * except /checkout; blocks AI-training bots (AI reservation: title + link only)"
+  # --- Batch 2 (research 2026-11-17: transport, visa, customs, embassies, events, tourism
+  # boards). Per-source tables (relevance, scope, budgets, off reasons) live in
+  # scripts/seeds_to_sources.py under 'Batch 2'.
+  - id: gtfs-de
+    category: getting_around
+    name: GTFS.DE Germany (long-distance, regional, local)
+    url: https://download.gtfs.de/germany/fv_free/latest.zip
+    method: dump
+    license: CC BY 4.0
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'gtfs.de robots allows (only /imprint, /contact disallowed); download.gtfs.de/robots.txt answers
+      403 (checked 2026-11-17). Licence: CC BY 4.0, source ''NeTEx Datensatz, DELFI e.V.'''
+  - id: ovapi-gtfs-nl
+    category: getting_around
+    name: OVapi GTFS Netherlands (all operators)
+    url: https://gtfs.ovapi.nl/nl/gtfs-nl.zip
+    method: dump
+    license: CC0 (NDOV Loket, verify in feed)
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: robots.txt 404 (allowed). NDOV Loket open data, CC0 for most KV1-derived data; confirm the README
+      in the zip.
+  - id: transport-data-gouv
+    category: getting_around
+    name: transport.data.gouv.fr (France national access point)
+    url: https://transport.data.gouv.fr/api/datasets?type=public-transit
+    method: api
+    license: Licence Ouverte 2.0 or ODbL per dataset
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'robots ok: disallows /backoffice, /validation, /login, /resources/conversions; sitemap /sitemap.txt.
+      Public JSON API, no key.'
+  - id: opentransportdata-swiss
+    category: getting_around
+    name: opentransportdata.swiss GTFS (Swiss national timetable)
+    url: https://data.opentransportdata.swiss/dataset/timetable-2026-gtfs2020
+    method: dump
+    license: ODMCH terms of use
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'robots ok for * (Crawl-delay 60 and /dataset?* only for named SEO bots; never query /dataset?*).
+      Terms: ''File-based data needs no registration''; ''The URL opentransportdata.swiss must be cited
+      as the source for raw data'' (5.1).'
+  - id: tfnsw-opendata
+    category: getting_around
+    name: Transport for NSW Open Data (GTFS)
+    url: https://api.transport.nsw.gov.au/v1/publictransport/timetables/complete/gtfs
+    method: api
+    license: CC BY 4.0
+    cadence: weekly
+    needs_key: true
+    allowed: true
+    notes: 'Portal robots ok (Drupal asset rules only); api.transport.nsw.gov.au/robots.txt answers 500
+      (checked 2026-11-17). CC BY 4.0; free API key (Authorization: apikey).'
+  - id: vic-gtfs
+    category: getting_around
+    name: Transport Victoria GTFS schedule
+    url: https://opendata.transport.vic.gov.au/dataset/gtfs-schedule
+    method: dump
+    license: CC BY 4.0
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: robots ok (faceted queries disallowed); sitemap. CC BY 4.0, CKAN download without a key.
+  - id: translink-seq-gtfs
+    category: getting_around
+    name: Translink SEQ GTFS (Queensland)
+    url: https://gtfsrt.api.translink.com.au/GTFS/SEQ_GTFS.zip
+    method: dump
+    license: CC BY 4.0
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: translink.com.au robots ok; gtfsrt.api.translink.com.au/robots.txt 404 (allowed, checked 2026-11-17).
+      CC BY 4.0, Queensland Government.
+  - id: sfbay-511
+    category: getting_around
+    name: 511 SF Bay regional GTFS
+    url: https://api.511.org/transit/datafeeds?operator_id=RG
+    method: api
+    license: 511 SF Bay open data terms
+    cadence: weekly
+    needs_key: true
+    allowed: true
+    notes: 511.org robots ok. 'acknowledgement of 511.org as the data provider is required'; 60 requests
+      per hour by default.
+  - id: tfl-unified-api
+    category: getting_around
+    name: TfL Unified API (London)
+    url: https://api.tfl.gov.uk/Line/Mode/tube,dlr,overground,elizabeth-line,bus/Status
+    method: api
+    license: TfL Transport Data Service licence (OGL v2 based)
+    cadence: daily
+    needs_key: true
+    allowed: true
+    notes: api.tfl.gov.uk robots 404 (allowed); tfl.gov.uk disallows journey-planner results. 'Powered by
+      TfL Open Data'; about 500 requests/min.
+  - id: entur-gtfs
+    category: getting_around
+    name: Entur Norway national GTFS
+    url: https://storage.googleapis.com/marduk-production/outbound/gtfs/rb_norway-aggregated-gtfs.zip
+    method: dump
+    license: NLOD 2.0
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'storage.googleapis.com/robots.txt 404 (allowed, checked 2026-11-17). NLOD: ''use them for commercial
+      purposes''; credit ''Data made available by Entur''; send ET-Client-Name.'
+  - id: trafiklab-gtfs-sverige
+    category: getting_around
+    name: Trafiklab GTFS Sverige 2
+    url: https://opendata.samtrafiken.se/gtfs-sweden/sweden.zip
+    method: api
+    license: CC0 / CC BY 4.0 per feed
+    cadence: weekly
+    needs_key: true
+    allowed: true
+    notes: trafiklab.se robots ok (allow all). Free key; CC0 or CC BY 4.0 per feed.
+  - id: digitransit
+    category: getting_around
+    name: Digitransit Finland GTFS
+    url: https://api.digitransit.fi/routing-data/v3/finland/gtfs.zip
+    method: api
+    license: CC BY 4.0
+    cadence: weekly
+    needs_key: true
+    allowed: true
+    notes: digitransit.fi robots 404. 'requires registration and use of API keys'; data CC BY 4.0.
+  - id: lta-datamall
+    category: getting_around
+    name: LTA DataMall (Singapore)
+    url: https://datamall2.mytransport.sg/ltaodataservice/BusRoutes
+    method: api
+    license: Singapore Open Data Licence 1.0
+    cadence: weekly
+    needs_key: true
+    allowed: true
+    notes: datamall.lta.gov.sg Crawl-delay 1; datamall2.mytransport.sg/robots.txt 404 (allowed, checked
+      2026-11-17). 'whether commercially or non-commercially'; notice 'Contains information from {dataset}'.
+  - id: hk-td-gtfs
+    category: getting_around
+    name: Hong Kong Transport Department GTFS
+    url: https://static.data.gov.hk/td/pt-headway-en/gtfs.zip
+    method: dump
+    license: DATA.GOV.HK terms (attribution)
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'data.gov.hk robots 404; static.data.gov.hk/robots.txt answers 403 AccessDenied (checked 2026-11-17).
+      DATA.GOV.HK: ''reproduce ... for both commercial and non-commercial purposes on a free-of-charge basis''.'
+  - id: delhi-otd
+    category: getting_around
+    name: Delhi Open Transit Data
+    url: https://otd.delhi.gov.in/data/static/
+    method: api
+    license: GODL-India
+    cadence: weekly
+    needs_key: true
+    allowed: true
+    notes: robots 404 (allowed). Free key; GODL-India. Low priority.
+  - id: auckland-gtfs
+    category: getting_around
+    name: Auckland Transport GTFS
+    url: https://gtfs.at.govt.nz/gtfs.zip
+    method: dump
+    license: CC BY 4.0
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: gtfs.at.govt.nz/robots.txt 404 (allowed, checked 2026-11-17). CC BY 4.0; static GTFS needs no
+      key.
+  - id: mta-gtfs
+    category: getting_around
+    name: MTA New York GTFS
+    url: https://rrgtfsfeeds.s3.amazonaws.com/gtfs_subway.zip
+    method: dump
+    license: MTA developer data terms (not yet read)
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: www.mta.info/robots.txt 200, * disallows only admin/search/user paths (checked 2026-11-17); rrgtfsfeeds
+      S3 host not checked.
+  - id: mobility-catalogs
+    category: getting_around
+    name: MobilityData feed catalogue (GitHub)
+    url: https://raw.githubusercontent.com/MobilityData/mobility-database-catalogs/main/catalogs/sources/gtfs/schedule/
+    method: dump
+    license: CC0 metadata; per-feed licences
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: GitHub raw (as gbfs-systems). 'All metadata generated by MobilityData is licensed under CC0 1.0';
+      'Content within the feeds is licensed by their respective data owners'.
+  - id: delfi-opendata-oepnv
+    category: getting_around
+    name: DELFI opendata-oepnv.de (Germany, official GTFS)
+    url: https://www.opendata-oepnv.de/
+    method: dump
+    license: CC BY 4.0
+    cadence: weekly
+    needs_key: true
+    allowed: true
+    notes: robots 404. Download needs an account (login); CC BY 4.0. gtfs-de carries the same DELFI data.
+  - id: odpt-japan
+    category: getting_around
+    name: ODPT Japan public transport open data
+    url: https://api.odpt.org/api/v4/
+    method: api
+    license: ODPT licences (per operator)
+    cadence: weekly
+    needs_key: true
+    allowed: true
+    notes: api.odpt.org robots 404; developer.odpt.org ok. ODPT basic licence (CC BY 4.0-like) plus a 'limited'
+      licence for some operators (JR East, Tokyo Metro).
+  - id: spain-nap
+    category: getting_around
+    name: Spain national access point (nap.transportes.gob.es)
+    url: https://nap.transportes.gob.es/
+    method: dump
+    license: Registration portal; licence per dataset
+    cadence: weekly
+    needs_key: true
+    allowed: true
+    notes: robots 404. Downloads need a registered account; the site is a JavaScript SPA.
+  - id: eu-etias-ees
+    category: visa
+    name: EU ETIAS and EES official site
+    url: https://travel-europe.europa.eu/en/etias
+    method: html
+    license: CC BY 4.0
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'robots 404 (allowed). europa.eu: content ''licensed under the Creative Commons Attribution 4.0
+      International (CC BY 4.0) licence''. React SPA, so rendered.'
+  - id: eu-home-visa-policy
+    category: visa
+    name: EU DG HOME visa policy (Schengen lists)
+    url: https://home-affairs.ec.europa.eu/sitemap.xml
+    method: sitemap
+    license: CC BY 4.0
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: robots ok; sitemap /sitemap.xml. CC BY 4.0 (Commission Decision 2011/833/EU reuse policy).
+  - id: au-homeaffairs-visas
+    category: visa
+    name: Australia Home Affairs visa listing (ETA, eVisitor)
+    url: https://immi.homeaffairs.gov.au/visas/getting-a-visa/visa-listing
+    method: html
+    license: CC BY 4.0 (government notice, verify)
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: robots ok (/help-text/, /sitesearch? disallowed). Commonwealth CC BY 4.0 with exceptions; the
+      copyright page answered 404/403 and was not quoted.
+  - id: ircc-entry-requirements
+    category: visa
+    name: IRCC entry requirements by country (Canada)
+    url: https://www.canada.ca/en/immigration-refugees-citizenship/services/visit-canada/entry-requirements-country.html
+    method: html
+    license: Canada.ca terms (facts only; commercial redistribution needs permission)
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'robots ok (search and menu disallowed). Canada.ca terms: reproduction ''for non-commercial purposes''
+      allowed; ''may not reproduce ... for the purposes of commercial redistribution'' without permission.
+      Facts and links only.'
+  - id: india-evisa
+    category: visa
+    name: Indian e-Visa (eligible countries and types)
+    url: https://indianvisaonline.gov.in/evisa/tvoa.html
+    method: html
+    license: Government site; terms unverified
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'robots 404 (allowed). GIGW government site; the terms page was not readable. Blocker was: terms
+      page not readable. Terms unconfirmed; owner accepted for non-commercial use 2026-11-17.'
+  - id: nia-china-visa-free
+    category: visa
+    name: China NIA visa-free transit and entry
+    url: https://en.nia.gov.cn/
+    method: html
+    license: Government site; terms unverified
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'www.nia.gov.cn and en.nia.gov.cn robots.txt 404 (nginx; allowed, checked 2026-11-17). Terms
+      not found. Blocker was: terms not found. Terms unconfirmed; owner accepted for non-commercial use
+      2026-11-17.'
+  - id: uae-visa-uae
+    category: visa
+    name: 'UAE government portal: visas'
+    url: https://u.ae/en/information-and-services/visa-and-emirates-id
+    method: html
+    license: Government site; terms unverified
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'robots 404 (allowed). The terms URL answered 404. Blocker was: terms URL answered 404. Terms
+      unconfirmed; owner accepted for non-commercial use 2026-11-17.'
+  - id: thai-evisa
+    category: visa
+    name: Thailand e-Visa
+    url: https://www.thaievisa.go.th/sitemap.xml
+    method: sitemap
+    license: Government site; terms unverified
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'robots ok (application paths disallowed); sitemap. Terms page is JavaScript-rendered. Blocker
+      was: terms page is JavaScript-rendered; render and quote it first. Terms unconfirmed; owner accepted
+      for non-commercial use 2026-11-17.'
+  - id: korea-keta
+    category: visa
+    name: Korea K-ETA (eligible countries)
+    url: https://www.k-eta.go.kr/portal/guide/viewetaalification.do
+    method: html
+    license: KOGL (type per page unconfirmed)
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'robots has only a Googlebot group, so * is allowed. KOGL type varies by page. Blocker was: KOGL
+      type per page not confirmed (types 2-4 restrict commercial use or changes). Terms unconfirmed; owner
+      accepted for non-commercial use 2026-11-17.'
+  - id: korea-visa-portal
+    category: visa
+    name: Korea Visa Portal (visa-free entry)
+    url: https://www.visa.go.kr/openPage.do?MENU_ID=10102
+    method: html
+    license: KOGL (type per page unconfirmed)
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'robots has only a Googlebot group, so * is allowed. KOGL type varies. Blocker was: KOGL type
+      per page not confirmed (types 2-4 restrict commercial use or changes). Terms unconfirmed; owner accepted
+      for non-commercial use 2026-11-17.'
+  - id: nz-immigration
+    category: visa
+    name: Immigration New Zealand (NZeTA, visa waiver)
+    url: https://www.immigration.govt.nz/sitemap.xml
+    method: sitemap
+    license: CC BY 3.0 NZ
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: robots ok (/_visa-search/, /_search/ disallowed); sitemap. 'Creative Commons Attribution (CC-BY)
+      3.0 New Zealand Licence'; logos and third-party material excluded.
+  - id: cbp-travel
+    category: visa
+    name: US CBP travel (Visa Waiver Program, ESTA, customs)
+    url: https://www.cbp.gov/travel/international-visitors/visa-waiver-program
+    method: html
+    license: US public domain
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: robots ok (Drupal asset rules). US federal work, public domain (17 USC 105).
+  - id: brazil-mre-visas
+    category: visa
+    name: Brazil MRE visa regime table
+    url: https://www.gov.br/mre/pt-br/assuntos/portal-consular/vistos/quadro-geral-de-regime-de-vistos-para-a-entrada-de-estrangeiros-no-brasil
+    method: html
+    license: Government site; terms unverified
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'robots ok (path-specific disallows only); sitemap .gz. gov.br content licence not confirmed.
+      Blocker was: gov.br content licence not confirmed. Terms unconfirmed; owner accepted for non-commercial
+      use 2026-11-17.'
+  - id: vietnam-evisa
+    category: visa
+    name: Vietnam e-Visa
+    url: https://evisa.gov.vn/sitemap.xml
+    method: sitemap
+    license: Government site; terms unverified
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'robots ok (allow /); sitemap. Terms page is JavaScript-only. Blocker was: terms page is JavaScript-only.
+      Terms unconfirmed; owner accepted for non-commercial use 2026-11-17.'
+  - id: malaysia-imi-visa
+    category: visa
+    name: 'Malaysia Immigration: visa requirement by country'
+    url: https://www.imi.gov.my/index.php/perkhidmatan-utama/pas-lawatan/visa/keperluan-visa-mengikut-negara/
+    method: html
+    license: Government site; terms unverified
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'robots.txt has no User-agent line (''Disallow: /wp*'' only): invalid, treated as allow; avoid
+      /wp* anyway. Terms not read. Blocker was: terms not read. Terms unconfirmed; owner accepted for non-commercial
+      use 2026-11-17.'
+  - id: enwiki-visa-requirements
+    category: visa
+    name: Wikipedia 'Visa requirements for X citizens' tables
+    url: https://dumps.wikimedia.org/enwiki/latest/
+    method: dump
+    license: CC BY-SA 4.0
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: Existing enwiki dump; titles 'Visa requirements for * citizens' (about 199 articles). No new
+      host.
+  - id: eu-customs-travellers
+    category: tips
+    name: 'EU Taxation and Customs Union: travellers'
+    url: https://taxation-customs.ec.europa.eu/sitemap.xml
+    method: sitemap
+    license: CC BY 4.0
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: robots ok; sitemap. 'licensed under the Creative Commons Attribution 4.0 International (CC BY
+      4.0)'.
+  - id: eu-food-pets-travel
+    category: tips
+    name: 'EU DG SANTE: pets and personal food imports'
+    url: https://food.ec.europa.eu/sitemap.xml
+    method: sitemap
+    license: CC BY 4.0
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: robots ok; sitemap. Same Commission reuse policy (CC BY 4.0).
+  - id: govuk-customs
+    category: tips
+    name: 'GOV.UK: bringing goods, cash, food and pets into the UK'
+    url: https://www.gov.uk/bringing-goods-into-uk-personal-use
+    method: html
+    license: OGL v3.0
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: robots ok, Crawl-delay 10. 'All content is available under the Open Government Licence v3.0,
+      except where otherwise stated'. Research proposed the Content API (/api/content/<slug>); the HTML
+      guide pages carry the same text and need no new adapter.
+  - id: aphis-pet-travel
+    category: tips
+    name: USDA APHIS Pet Travel
+    url: https://www.aphis.usda.gov/pet-travel
+    method: html
+    license: US public domain
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: robots ok. US federal work, public domain.
+  - id: abf-travellers
+    category: tips
+    name: 'Australian Border Force: travellers'
+    url: https://www.abf.gov.au/entering-and-leaving-australia/can-you-bring-it-in
+    method: html
+    license: Government site; terms unverified
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'robots ok (/sitesearch? only). Commonwealth CC BY 4.0 (standard notice; the copyright URL answered
+      404, not quoted). Blocker was: ABF copyright notice answered 404; quote it before enabling. Terms
+      unconfirmed; owner accepted for non-commercial use 2026-11-17.'
+  - id: cbsa-travellers
+    category: tips
+    name: 'CBSA (Canada): travellers'
+    url: https://www.cbsa-asfc.gc.ca/travel-voyage/menu-eng.html
+    method: html
+    license: Canada.ca terms (facts only; commercial redistribution needs permission)
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'robots ok (traveller pages under /travel-voyage/ not disallowed). Canada.ca terms: non-commercial
+      reproduction; facts and links only.'
+  - id: cfia-travellers
+    category: tips
+    name: 'CFIA (Canada): food, plants and pets for travellers'
+    url: https://inspection.canada.ca/en/importing-food-plants-animals/travellers
+    method: html
+    license: Canada.ca terms (facts only; commercial redistribution needs permission)
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: robots.txt 200, empty (allow all). Canada.ca terms; facts and links only.
+  - id: japan-customs-passengers
+    category: tips
+    name: 'Japan Customs: passengers'
+    url: https://www.customs.go.jp/sitemap_00.xml
+    method: sitemap
+    license: PDL 1.0 (Japan)
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'robots ok (allow all); sitemap /sitemap_00.xml. ''Public Data License (Version 1.0: PDL1.0)
+      applies unless any rights are indicated'' (CC BY 4.0-compatible).'
+  - id: japan-maff-aqs
+    category: tips
+    name: MAFF Animal Quarantine Service (Japan)
+    url: https://www.maff.go.jp/aqs/english/
+    method: html
+    license: Government of Japan Standard Terms of Use 2.0
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: robots ok (procurement paths only). Government of Japan Standard Terms of Use 2.0 (CC BY 4.0-compatible).
+  - id: sg-customs-travellers
+    category: tips
+    name: 'Singapore Customs: travellers'
+    url: https://www.customs.gov.sg/sitemap.xml
+    method: sitemap
+    license: Tourism board copyright; facts only
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'robots ok (/search disallowed). ''no part of The Website may be reproduced or reused for any
+      commercial purposes whatsoever'' without permission; no ban on automated access. Owner decision 2026-11-17:
+      Voyager is a free, non-commercial app, so the ban on commercial reuse does not apply; facts and links
+      only.'
+  - id: dubai-customs-passengers
+    category: tips
+    name: 'Dubai Customs: passengers'
+    url: https://www.dubaicustoms.gov.ae/en/
+    method: html
+    license: Government site; terms unverified
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'robots ok (allows /en/, /ar/, /Pages/*.aspx). Disclaimer page JavaScript-only. Blocker was:
+      disclaimer page is JavaScript-only. Terms unconfirmed; owner accepted for non-commercial use 2026-11-17.'
+  - id: cbic-baggage
+    category: tips
+    name: 'CBIC (India): baggage and travellers'
+    url: https://www.cbic.gov.in/sitemap.xml
+    method: sitemap
+    license: Government site; terms unverified
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'robots ok (API and admin only); sitemap. GIGW site; copyright page JavaScript-only; incomplete
+      TLS chain. Blocker was: copyright page is JavaScript-only (and the TLS chain is incomplete: check
+      vc''s TLS validation). Terms unconfirmed; owner accepted for non-commercial use 2026-11-17.'
+  - id: nz-customs-travellers
+    category: tips
+    name: 'New Zealand Customs: travellers'
+    url: https://www.customs.govt.nz/sitemap/
+    method: sitemap
+    license: Government site; terms unverified
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'robots ok (CMS paths only); sitemap /sitemap/. NZ Crown copyright CC BY (the copyright URL guessed
+      answered 404). Blocker was: NZ Customs copyright notice not quoted (guessed URL answered 404). Terms
+      unconfirmed; owner accepted for non-commercial use 2026-11-17.'
+  - id: hk-customs-travellers
+    category: tips
+    name: 'Hong Kong Customs: travellers'
+    url: https://www.customs.gov.hk/en/passenger_clearance/
+    method: html
+    license: Government site; terms unverified
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'robots 404 (allowed). The ''Important notices'' page timed out. Blocker was: HK Government ''Important
+      notices'' page timed out. Terms unconfirmed; owner accepted for non-commercial use 2026-11-17.'
+  - id: korea-customs-travellers
+    category: tips
+    name: 'Korea Customs Service: travellers'
+    url: https://www.customs.go.kr/english/
+    method: html
+    license: KOGL (type per page unconfirmed)
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'robots has only named-engine groups (Googlebot, Yeti, Daum, Bing), so * is allowed; avoid /search/
+      and /*/na/ntt/. Blocker was: KOGL type per page not confirmed (types 2-4 restrict commercial use or
+      changes). Terms unconfirmed; owner accepted for non-commercial use 2026-11-17.'
+  - id: govuk-world-orgs
+    category: emergency_card
+    name: UK FCDO embassies, high commissions and consulates (GOV.UK)
+    url: https://www.gov.uk/api/search.json?filter_format=worldwide_organisation&count=1000&fields=title,link
+    method: api
+    license: OGL v3.0
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'robots: * disallows only /*/print$ and /search/all*, so /api/ is allowed; same key as fcdo-content-api.
+      ''published under the Open Government Licence (OGL)''.'
+  - id: govuk-medical-lists
+    category: emergency_card
+    name: FCDO doctors and medical facilities worldwide list
+    url: https://www.gov.uk/api/content/government/collections/doctors-and-medical-facilities-worldwide-list
+    method: api
+    license: OGL v3.0
+    cadence: quarterly
+    needs_key: false
+    allowed: true
+    notes: Same host and robots as govuk-world-orgs. Lists are 'for information only'; keep each list's
+      Updated date as as_of.
+  - id: canada-offices-json
+    category: emergency_card
+    name: 'Global Affairs Canada: consular offices abroad (open data)'
+    url: https://data.international.gc.ca/travel-voyage/opendata-offices-list-alpha-eng.json
+    method: api
+    license: Open Government Licence - Canada
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: robots 404 (allowed); same host as canada-travel-json. open.canada.ca dataset 6661f0f8, OGL-Canada.
+  - id: mfat-embassies
+    category: emergency_card
+    name: NZ MFAT embassies and high commissions
+    url: https://www.mfat.govt.nz/en/embassies
+    method: html
+    license: CC BY 4.0
+    cadence: quarterly
+    needs_key: false
+    allowed: true
+    notes: 'robots: * disallows only /admin, /dev, /Security, site search and change pages. ''Website copyright
+      statement is licensed under the Creative Commons Attribution 4.0 International licence... free to
+      copy, distribute and adapt the work, as long as you attribute the work to the Crown''.'
+  - id: freewalkingtour-com
+    category: walking_tours
+    name: FreeWalkingTour.com (Walkative)
+    url: https://freewalkingtour.com/tour-sitemap.xml
+    method: sitemap
+    license: robots allows tour pages; ToS not verified
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'robots: * disallows only /xmlrpc.php and *?redirect_to; no AI-bot blocks. Terms of Service cover
+      tips, bookings and lateness only; no clause on scraping, robots or automated access.'
+  - id: neweuropetours
+    category: walking_tours
+    name: SANDEMANs NEW Europe
+    url: https://www.neweuropetours.eu/tours-sitemap.xml
+    method: sitemap
+    license: robots allows tour pages; ToS not verified
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'robots: * disallows only /wp/wp-admin/; no AI-bot blocks. Terms and Conditions (/terms-and-conditions/)
+      cover bookings, refunds and liability; no clause on scraping or automated access.'
+  - id: eurostat-prices
+    category: tips
+    name: Eurostat price level indices (PPP)
+    url: https://ec.europa.eu/eurostat/api/dissemination/statistics/1.0/data/prc_ppp_ind?format=JSON
+    method: api
+    license: CC BY 4.0
+    cadence: yearly
+    needs_key: false
+    allowed: true
+    notes: 'robots: * disallows the old /eurostat/SDMX/diss-web/rest/ and search paths, not /eurostat/api/.
+      ''Reuse ... for commercial or non-commercial purposes is authorised provided the source is acknowledged.'''
+  - id: worldbank-wdi-bulk
+    category: tips
+    name: World Bank WDI bulk CSV (price level ratio, PPP)
+    url: https://databank.worldbank.org/data/download/WDI_CSV.zip
+    method: dump
+    license: CC BY 4.0
+    cadence: quarterly
+    needs_key: false
+    allowed: true
+    notes: databank robots.txt redirects to an error page (missing, allowed). api.worldbank.org robots answers
+      502 (disallow); data.worldbank.org 403 and datacatalogfiles 401 (do-not-crawl). Download URL from
+      public docs, not fetched. 'licenses datasets under the Creative Commons Attribution 4.0'.
+  - id: datagovhk
+    category: places
+    name: DATA.GOV.HK (museums, facilities and events)
+    url: https://data.gov.hk/en-data/dataset
+    method: api
+    license: DATA.GOV.HK terms (attribution)
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: robots 404 (allowed). 'You are allowed to browse, download, distribute, reproduce... the Data
+      for both commercial and non-commercial purposes on a free-of-charge basis' with the source identified.
+  - id: auswaertiges-amt-opendata
+    category: emergency_card
+    name: Auswärtiges Amt OpenData interface (German missions, travel advice)
+    url: https://www.auswaertiges-amt.de/opendata
+    method: api
+    license: Auswärtiges Amt OpenData conditions
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'robots: * allows (only /includes, /WEB-INF, /static/appdata). Free reuse on condition the information
+      is taken over complete, kept current and clearly attributed to the Auswärtiges Amt.'
+  - id: healthsites-io
+    category: emergency_card
+    name: healthsites.io (global health facilities)
+    url: https://healthsites.io/api/v3/facilities/
+    method: api
+    license: ODbL 1.0
+    cadence: monthly
+    needs_key: true
+    allowed: true
+    notes: 'robots: * Allow /, but Content-Signal search=yes,ai-train=no,use=reference and ClaudeBot/GPTBot/CCBot/Google-Extended
+      blocked (AI reservation: title and link only). ODbL, mostly OSM-derived.'
+  - id: datatourisme-fr
+    category: events
+    name: DATAtourisme (France national tourism open data)
+    url: https://diffuseur.datatourisme.fr/
+    method: dump
+    license: Licence Ouverte 2.0
+    cadence: daily
+    needs_key: true
+    allowed: true
+    notes: 'diffuseur robots 200, no Disallow. Data.gouv.fr: ''Licence Ouverte / Open Licence 2.0 (Etalab)''.
+      Personal ''flux'' export built per account. One source says the platform closes in 2027 (unconfirmed).'
+  - id: hel-linkedevents
+    category: events
+    name: Helsinki Linked Events API
+    url: https://api.hel.fi/linkedevents/v1/event/?start=today
+    method: api
+    license: CC BY 4.0
+    cadence: 6h
+    needs_key: false
+    allowed: true
+    notes: 'api.hel.fi/robots.txt answers 301 to dev.hel.fi, which timed out (research 2026-11-17): disallow
+      until readable. ''unless otherwise stated, the data is licensed using CC BY 4.0''; event_only images
+      only with their event.'
+  - id: bcn-opendata-agenda
+    category: events
+    name: Open Data BCN cultural agenda (Barcelona)
+    url: https://opendata-ajuntament.barcelona.cat/data/api/3/action/package_show?id=agenda-cultural
+    method: api
+    license: CC BY 4.0
+    cadence: daily
+    needs_key: false
+    allowed: true
+    notes: robots 200, Crawl-delay 10, 43 Disallows (none on /data/api). Most datasets CC BY 4.0; third-party
+      datasets are CC BY-ND (ingest CC BY only).
+  - id: madrid-agenda
+    category: events
+    name: 'Madrid open data: cultural activities, next 100 days'
+    url: https://datos.madrid.es/egob/catalogo/206974-0-agenda-eventos-culturales-100.json
+    method: api
+    license: Madrid open data (attribution)
+    cadence: daily
+    needs_key: false
+    allowed: true
+    notes: 'robots 200, Crawl-delay 10, 34 Disallows (/egob/catalogo not among them). Credit ''Origen de
+      los datos: Ayuntamiento de Madrid'' and keep the update date.'
+  - id: toronto-events
+    category: events
+    name: City of Toronto Festivals and Events
+    url: https://ckan0.cf.opendata.inter.prod-toronto.ca/api/3/action/package_show?id=festivals-events
+    method: api
+    license: OGL-Toronto
+    cadence: daily
+    needs_key: false
+    allowed: true
+    notes: 'open.toronto.ca robots 200; ckan0 host robots.txt 200, Allow: /api/ (checked 2026-11-17). ''Contains
+      information licensed under the Open Government Licence – Toronto''.'
+  - id: nyc-parks-events
+    category: events
+    name: NYC Parks events listing (NYC Open Data)
+    url: https://data.cityofnewyork.us/resource/fudw-fgrp.json
+    method: api
+    license: NYC Open Data terms
+    cadence: daily
+    needs_key: false
+    allowed: true
+    notes: robots 200, Crawl-delay 1, 54 Disallows (/resource not among them). 'there are no restrictions
+      on the use of Open Data' (search snippet).
+  - id: korea-tourapi
+    category: events
+    name: Korea Tourism Organization TourAPI 4.0 (English)
+    url: https://apis.data.go.kr/B551011/EngService2/areaBasedList2
+    method: api
+    license: KOGL (type per page unconfirmed)
+    cadence: daily
+    needs_key: true
+    allowed: true
+    notes: api.visitkorea.or.kr and data.go.kr robots allow; apis.data.go.kr/robots.txt answers 400 (an
+      API error body, checked 2026-11-17; 4xx = allowed under RFC 9309). Some TourAPI entries are marked
+      use-restricted on data.go.kr.
+  - id: taiwan-tourism-od
+    category: events
+    name: Taiwan Tourism Administration open data
+    url: https://media.taiwan.net.tw/XMLReleaseALL_public/activity_C_f.json
+    method: dump
+    license: OGDL-Taiwan 1.0
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: media.taiwan.net.tw robots 404 (allow); data.gov.tw robots answered 500 (disallow); eng.taiwan.net.tw
+      serves an HTML noindex page as robots.txt (do not crawl). 'available free of charge, nonexclusive';
+      images need permission.
+  - id: failte-ireland-od
+    category: places
+    name: Fáilte Ireland Open Data API
+    url: https://failteireland.developer.azure-api.net/
+    method: api
+    license: CC BY 4.0
+    cadence: weekly
+    needs_key: true
+    allowed: true
+    notes: failteireland.developer.azure-api.net/robots.txt 404 (checked 2026-11-17); data.failteireland.ie
+      robots.txt timed out in research. Data 'Creative Commons Attribution 4.0' (search snippet).
+  - id: nps-site
+    category: places
+    name: US National Park Service (nps.gov)
+    url: https://www.nps.gov/sitemap/tours.xml
+    method: sitemap
+    license: US public domain
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: robots 200, 4 Disallows, no AI block. 'NPS-created material ... is generally considered in the
+      public domain'; credit NPS.
+  - id: ridb
+    category: activities
+    name: Recreation Information Database (Recreation.gov)
+    url: https://ridb.recreation.gov/api/v1/recareas
+    method: api
+    license: US government data (Recreation.gov)
+    cadence: weekly
+    needs_key: true
+    allowed: true
+    notes: 'robots 200, Crawl-delay 10, 2 Disallows. ''there''s no need to contact us before incorporating
+      Recreation.gov data into your system''. Credit ''Data Source: Recreation.gov''.'
+  - id: openholidays
+    category: events
+    name: OpenHolidays API (public and school holidays)
+    url: https://openholidaysapi.org/PublicHolidays
+    method: api
+    license: ODbL 1.0
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: robots 404 (allow). No terms on the site; data reported as ODbL and code as AGPL. share_alike,
+      never merged.
+  - id: stockholm-open-api
+    category: events
+    name: Visit Stockholm Open API
+    url: https://api.visitstockholm.com/
+    method: api
+    license: CC BY 4.0
+    cadence: daily
+    needs_key: false
+    allowed: true
+    notes: www.visitstockholm.com robots 200; api.visitstockholm.com/robots.txt 200, * disallows /admin/,
+      /cms/ (checked 2026-11-17). 'Texts ... via the website or the API are under CC BY 4.0' (credit Stockholm
+      Business Region AB).
+  - id: germany-kg
+    category: events
+    name: German National Tourist Board Knowledge Graph
+    url: https://open-data-germany.org/
+    method: api
+    license: Open per item (CC0/CC BY; CC BY-SA kept apart)
+    cadence: weekly
+    needs_key: true
+    allowed: true
+    notes: robots 200, no Disallow. No site-wide licence; each KG item carries its own licence (unverified).
+      Ingest only CC0/CC BY items; CC BY-SA separately.
+  - id: edinburgh-festivals-api
+    category: events
+    name: Edinburgh Festivals Listings API
+    url: https://api.edinburghfestivalcity.com/events
+    method: api
+    license: Edinburgh Festivals Listings API Licence v2.0
+    cadence: daily
+    needs_key: true
+    allowed: true
+    notes: 'robots 200, 2 Disallows. API Licence v2.0: commercial use allowed, attribution ''courtesy of''
+      plus a link, refresh at least every 24 h, no redistribution of dumps. Fringe needs approval.'
+  - id: openagenda-api
+    category: events
+    name: OpenAgenda (open-licence agendas only)
+    url: https://api.openagenda.com/v2/agendas
+    method: api
+    license: Licence Ouverte 2.0
+    cadence: daily
+    needs_key: true
+    allowed: true
+    notes: openagenda.com robots 200; api.openagenda.com/robots.txt answers 301 to developers.openagenda.com
+      (not followed, checked 2026-11-17). OpenAgenda's CGU not found; only agendas whose data.gouv.fr record
+      states Licence Ouverte.
+  - id: visitscotland
+    category: itinerary
+    name: VisitScotland
+    url: https://www.visitscotland.com/global-cms-sitemap.xml
+    method: sitemap
+    license: Tourism board copyright; facts only
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'robots 200, 12 Disallows (*/data/*, */user*), no AI block. AUP: ''not to reproduce, duplicate,
+      copy or re-sell any part of our site''; no clause on robots or AI.'
+  - id: visitgreece
+    category: itinerary
+    name: Visit Greece (GNTO)
+    url: https://www.visitgreece.gr/sitemap/events-0.xml
+    method: sitemap
+    license: Tourism board copyright; facts only
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: robots 200, 11 Disallows. 'you are not allowed to reproduce the whole or part of this work in
+      any way' (no robots clause).
+  - id: visitcalifornia
+    category: itinerary
+    name: Visit California
+    url: https://www.visitcalifornia.com/sitemap-d8.xml
+    method: sitemap
+    license: Tourism board copyright; facts only
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'robots 200, Crawl-delay 5, 37 Disallows (locale and search paths). Terms: no clause on robots,
+      scraping or AI.'
+  - id: nyctourism
+    category: itinerary
+    name: New York City Tourism + Conventions
+    url: https://www.nyctourism.com/server-sitemap.xml
+    method: sitemap
+    license: Tourism board copyright; facts only
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: robots 200, 6 Disallows (*.json, favourites). 'you may not reproduce, modify, copy, republish
+      ...'; must not 'disrupt, overwhelm ... the Service'. No robots ban.
+  - id: wien-info
+    category: events
+    name: WienTourismus (Vienna Tourist Board)
+    url: https://www.wien.info/service-sitemap-b2c-en-sitemap1.xml.gz
+    method: sitemap
+    license: Tourism board copyright; facts only
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'robots 200, 3 Disallows. §6.2: copying or public use of content needs the Board''s prior authorisation;
+      no automated-access clause.'
+  - id: visitqatar
+    category: events
+    name: Visit Qatar (Qatar Tourism)
+    url: https://visitqatar.com/intl-en/sitemap.xml
+    method: sitemap
+    license: Tourism board copyright; facts only
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: robots 200, 5 Disallows. 'reproduce any Content ... without our express written permission' is
+      prohibited; no robots clause.
+  - id: gotokyo
+    category: places
+    name: GO TOKYO (Tokyo Convention & Visitors Bureau)
+    url: https://www.gotokyo.org/sitemap.xml
+    method: sitemap
+    license: Tourism board copyright; facts only
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'robots 200, 1 Disallow. Copyright: use ''through duplication, reproduction ... distribution''
+      without permission is prohibited; no robots clause.'
+  - id: australia-com
+    category: itinerary
+    name: Tourism Australia (australia.com)
+    url: https://www.australia.com/en/sitemap.xml
+    method: sitemap
+    license: Tourism board copyright; facts only
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'robots 200, 25 Disallows (non-English locales, */atdw/*, pdf). §4(a)(iii): must not ''reproduce
+      any Content ... without our express written permission''; no robots clause.'
+  - id: france-fr
+    category: itinerary
+    name: France.fr (Atout France)
+    url: https://www.france.fr/sitemap.xml
+    method: sitemap
+    license: Tourism board copyright; facts only
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: robots 200, 2 Disallows; the sitemap answered 301 (enqueued, not followed inline). 'toute reproduction
+      ... partielle ou intégrale' forbidden without written permission; no robots or TDM clause.
+  - id: gaultmillau
+    category: activities
+    name: Gault&Millau
+    url: https://www.gaultmillau.com/sitemap/global.xml
+    method: sitemap
+    license: Tourism board copyright; facts only
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'robots 200, no Disallow, no AI block. CGU: ''must request prior authorization ... for any reproduction,
+      publication or copy''; no robots clause. Only the current-year news sitemap.'
+  - id: discoverireland
+    category: events
+    name: Discover Ireland (Fáilte Ireland)
+    url: https://www.discoverireland.ie/sitemap.xml
+    method: sitemap
+    license: Tourism board copyright; facts only
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: robots 200, 1 Disallow. 'may not use any information ... other than for information purposes';
+      no robots clause.
+  - id: iamsterdam
+    category: events
+    name: I amsterdam (amsterdam&partners)
+    url: https://www.iamsterdam.com/sitemap/events.xml
+    method: sitemap
+    license: Tourism board copyright; facts only
+    cadence: daily
+    needs_key: false
+    allowed: true
+    notes: robots 200, 3 Disallows; blocks only Bytespider. 'copying of (part of) the Website is not permitted
+      without explicit written permission'; no robots clause.
+  - id: incredibleindia
+    category: places
+    name: Incredible India (Ministry of Tourism)
+    url: https://www.incredibleindia.gov.in/sitemap.xml
+    method: sitemap
+    license: Tourism board copyright; facts only
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: robots 200, 1 Disallow. Must not 'sell, reproduce, publish, distribute' without authorisation;
+      no robots clause.
+  - id: melbourne-whatson
+    category: events
+    name: What's On Melbourne (City of Melbourne)
+    url: https://whatson.melbourne.vic.gov.au/sitemap.xml.gz
+    method: sitemap
+    license: Tourism board copyright; facts only
+    cadence: daily
+    needs_key: false
+    allowed: true
+    notes: robots 200, 1 Disallow; publishes /llms.txt. 'no part may be reproduced or reused for any commercial
+      purposes'; no robots clause.
+  - id: spain-info
+    category: itinerary
+    name: Spain.info (Turespaña)
+    url: https://www.spain.info/export/sitemap_en.xml
+    method: sitemap
+    license: Tourism board copyright; facts only
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: robots 200, 23 Disallows (query params). 'Use of this information is authorised provided the
+      source is quoted'; commercial reuse prohibited (facts and links only).
+  - id: experienceoman
+    category: places
+    name: Experience Oman (Ministry of Heritage & Tourism)
+    url: https://experienceoman.om/sitemap.xml
+    method: sitemap
+    license: Tourism board copyright; facts only
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: robots 200, no Disallow. 'You may not copy, reproduce, republish ... or distribute in any manner';
+      no robots or AI clause.
+  - id: argentina-travel
+    category: places
+    name: Argentina.travel (INPROTUR)
+    url: https://www.argentina.travel/
+    method: html
+    license: Tourism board copyright; facts only
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: robots 200, no Disallow; /sitemap.xml answered 404. No robots clause; photos need permission
+      before reuse.
+  - id: visitlisboa
+    category: events
+    name: Visit Lisboa (Turismo de Lisboa)
+    url: https://www.visitlisboa.com/en/events
+    method: html
+    license: Tourism board copyright; facts only
+    cadence: daily
+    needs_key: false
+    allowed: true
+    notes: robots 200, no Disallow. 'ATL reserves the right to file for legal action against ... any copy,
+      reproduction'; no robots clause.
+  - id: visitphilly
+    category: events
+    name: Visit Philadelphia
+    url: https://www.visitphilly.com/events/
+    method: html
+    license: Tourism board copyright; facts only
+    cadence: daily
+    needs_key: false
+    allowed: true
+    notes: 'robots 200, 3 Disallows; blocks CCBot and Bytespider (AI reservation: title and link only, no
+      LLM use). Terms bar robots ''except as expressly authorized by Visit Philadelphia in its robots.txt'',
+      and robots.txt allows us.'
+  - id: sydney-com
+    category: activities
+    name: Sydney.com (Destination NSW)
+    url: https://www.sydney.com/sitemap.xml
+    method: sitemap
+    license: Tourism board copyright; facts only
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: robots 200, 33 Disallows (Drupal admin paths). 'Content may only be used or reproduced ... for
+      non-commercial personal use'; no robots clause. Tour listings are ATDW-fed (excluded).
+  - id: messynessychic
+    category: blogs
+    name: Messy Nessy Chic
+    url: https://www.messynessychic.com/feed/
+    method: rss
+    license: Copyright; terms not found
+    cadence: daily
+    needs_key: false
+    allowed: true
+    notes: robots 200, Crawl-delay 3, 3 Disallows; RSS 200. No terms page found.
+  - id: amusingplanet
+    category: blogs
+    name: Amusing Planet
+    url: http://feeds.feedburner.com/amusingplanet
+    method: rss
+    license: Copyright; terms not found
+    cadence: daily
+    needs_key: false
+    allowed: true
+    notes: www.amusingplanet.com robots 200, no Disallow; feeds.feedburner.com/robots.txt answered 200 with
+      an HTML page that redirects to /lander (a parked-domain lander, not a robots file; checked 2026-11-17).
+      No terms page found.
+  - id: secretldn
+    category: events
+    name: Secret London
+    url: https://secretldn.com/feed/
+    method: rss
+    license: Copyright; terms not found
+    cadence: 12h
+    needs_key: false
+    allowed: true
+    notes: 'robots 200, 7 Disallows (incl. /*/feed/; the root feed is allowed). No site terms found (Fever''s
+      ticketing terms cover its app). Blocker was: no site terms found; owner to confirm. Terms unconfirmed;
+      owner accepted for non-commercial use 2026-11-17.'
+  - id: nps-data-api
+    category: places
+    name: NPS Data API
+    url: https://developer.nps.gov/api/v1/thingstodo
+    method: api
+    license: Copyright; terms not found
+    cadence: weekly
+    needs_key: true
+    allowed: true
+    notes: 'HOLD (research 2026-11-17): developer.nps.gov/robots.txt answers 403 (do-not-crawl origin);
+      ask NPS.'
+  - id: myswitzerland-open-data
+    category: places
+    name: MySwitzerland Open Data API
+    url: https://opendata.myswitzerland.io/
+    method: api
+    license: Copyright; terms not found
+    cadence: weekly
+    needs_key: true
+    allowed: true
+    notes: 'HOLD (research 2026-11-17): opendata.myswitzerland.io/robots.txt answers 403; licence ''Creative
+      Commons'' version unknown.'
+  - id: worlds50best
+    category: places
+    name: The World's 50 Best (restaurants, bars, hotels)
+    url: https://www.the50.com/
+    method: html
+    license: Copyright; terms not found
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'HOLD (research 2026-11-17): William Reed site terms not found. Blocker was: William Reed site
+      terms not found. Terms unconfirmed; owner accepted for non-commercial use 2026-11-17.'
+  - id: laliste
+    category: places
+    name: La Liste
+    url: https://www.laliste.com/sitemap.xml
+    method: sitemap
+    license: Copyright; terms not found
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'HOLD (research 2026-11-17): terms not found. Blocker was: terms not found. Terms unconfirmed;
+      owner accepted for non-commercial use 2026-11-17.'
+  - id: tasteatlas
+    category: places
+    name: TasteAtlas
+    url: https://www.tasteatlas.com/
+    method: html
+    license: Copyright; terms not found
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'HOLD (research 2026-11-17): terms page answered 403 to the fetcher.'
+  - id: oad-guides
+    category: places
+    name: OAD (Opinionated About Dining)
+    url: https://www.oadguides.com/
+    method: html
+    license: Copyright; terms not found
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'HOLD (research 2026-11-17): terms not found. Blocker was: terms not found. Terms unconfirmed;
+      owner accepted for non-commercial use 2026-11-17.'
+  - id: visitberlin
+    category: events
+    name: visitBerlin
+    url: https://www.visitberlin.de/events/sitemap.xml
+    method: sitemap
+    license: Copyright; terms not found
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'HOLD (research 2026-11-17): only booking terms found. Blocker was: only booking terms found.
+      Terms unconfirmed; owner accepted for non-commercial use 2026-11-17.'
+  - id: choosechicago
+    category: events
+    name: Choose Chicago
+    url: https://www.choosechicago.com/sitemap_index.xml
+    method: sitemap
+    license: Copyright; terms not found
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'HOLD (research 2026-11-17): terms §5 ''through any means not intentionally made available''
+      is ambiguous.'
+  - id: discoverlosangeles
+    category: places
+    name: Discover Los Angeles
+    url: https://www.discoverlosangeles.com/sitemap.xml
+    method: sitemap
+    license: Copyright; terms not found
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'HOLD (research 2026-11-17): no site-wide terms found. Blocker was: no site-wide terms found.
+      Terms unconfirmed; owner accepted for non-commercial use 2026-11-17.'
+  - id: colombia-travel
+    category: places
+    name: ProColombia (colombia.travel)
+    url: https://colombia.travel/sitemap.xml
+    method: sitemap
+    license: Copyright; terms not found
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'HOLD (research 2026-11-17): terms 1.3 allow material only via ''means ... the site provides''
+      (ambiguous).'
+  - id: chile-travel
+    category: places
+    name: Chile Travel (Sernatur)
+    url: https://chile.travel/itinerarios-sitemap.xml
+    method: sitemap
+    license: Copyright; terms not found
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'HOLD (research 2026-11-17): terms not found. Blocker was: terms not found. Terms unconfirmed;
+      owner accepted for non-commercial use 2026-11-17.'
+  - id: goturkiye
+    category: places
+    name: Go Türkiye
+    url: https://goturkiye.com/sitemap-en.xml
+    method: sitemap
+    license: Copyright; terms not found
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'HOLD (research 2026-11-17): terms not found. Blocker was: terms not found. Terms unconfirmed;
+      owner accepted for non-commercial use 2026-11-17.'
+  - id: philippines-travel
+    category: places
+    name: Philippines Department of Tourism
+    url: https://philippines.travel/sitemap.xml
+    method: sitemap
+    license: Copyright; terms not found
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'HOLD (research 2026-11-17): terms not found. Blocker was: terms not found. Terms unconfirmed;
+      owner accepted for non-commercial use 2026-11-17.'
+  - id: peru-travel
+    category: places
+    name: PromPerú (peru.travel)
+    url: https://www.peru.travel/en/sitemap.xml
+    method: sitemap
+    license: Copyright; terms not found
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'HOLD (research 2026-11-17): terms not found. Blocker was: terms not found. Terms unconfirmed;
+      owner accepted for non-commercial use 2026-11-17.'
+  - id: srilanka-travel
+    category: places
+    name: Sri Lanka Tourism
+    url: https://www.srilanka.travel/site_map.xml
+    method: sitemap
+    license: Copyright; terms not found
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'HOLD (research 2026-11-17): terms not found. Blocker was: terms not found. Terms unconfirmed;
+      owner accepted for non-commercial use 2026-11-17.'
+  - id: tanzania-tourism
+    category: places
+    name: Tanzania Tourist Board
+    url: https://tanzaniatourism.go.tz/sitemap.xml
+    method: sitemap
+    license: Copyright; terms not found
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'HOLD (research 2026-11-17): terms not found (the sitemap head is weak). Blocker was: terms not
+      found (the sitemap head is weak). Terms unconfirmed; owner accepted for non-commercial use 2026-11-17.'
+  - id: visitrwanda
+    category: places
+    name: Visit Rwanda
+    url: https://visitrwanda.com/wp-sitemap-posts-itineraries-1.xml
+    method: sitemap
+    license: Copyright; terms not found
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'HOLD (research 2026-11-17): terms not found. Blocker was: terms not found. Terms unconfirmed;
+      owner accepted for non-commercial use 2026-11-17.'
+  - id: visitsaudi
+    category: places
+    name: Visit Saudi
+    url: https://www.visitsaudi.com/sitemap.xml
+    method: sitemap
+    license: Copyright; terms not found
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'HOLD (research 2026-11-17): ''Principles of use'' page rendered empty. Blocker was: ''Principles
+      of use'' page rendered empty. Terms unconfirmed; owner accepted for non-commercial use 2026-11-17.'
+  - id: visitjordan
+    category: places
+    name: Visit Jordan
+    url: https://visitjordan.com/
+    method: html
+    license: Copyright; terms not found
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'HOLD (research 2026-11-17): only media-usage terms found. Blocker was: only media-usage terms
+      found. Terms unconfirmed; owner accepted for non-commercial use 2026-11-17.'
+  - id: visiticeland
+    category: places
+    name: Visit Iceland
+    url: https://www.visiticeland.com/sitemap.xml
+    method: sitemap
+    license: Copyright; terms not found
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'HOLD (research 2026-11-17): terms not found. Blocker was: terms not found. Terms unconfirmed;
+      owner accepted for non-commercial use 2026-11-17.'
+  - id: visitdenmark
+    category: places
+    name: VisitDenmark
+    url: https://www.visitdenmark.com/sitemap.xml
+    method: sitemap
+    license: Copyright; terms not found
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'HOLD (research 2026-11-17): terms not found. Blocker was: terms not found. Terms unconfirmed;
+      owner accepted for non-commercial use 2026-11-17.'
+  - id: visitcopenhagen
+    category: places
+    name: Visit Copenhagen
+    url: https://www.visitcopenhagen.com/sitemap.xml
+    method: sitemap
+    license: Copyright; terms not found
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'HOLD (research 2026-11-17): terms not found. Blocker was: terms not found. Terms unconfirmed;
+      owner accepted for non-commercial use 2026-11-17.'
+  - id: visitsweden
+    category: places
+    name: Visit Sweden
+    url: https://visitsweden.com/wt/sitemap.xml
+    method: sitemap
+    license: Copyright; terms not found
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'HOLD (research 2026-11-17): only competition T&Cs found. Blocker was: only competition T&Cs
+      found. Terms unconfirmed; owner accepted for non-commercial use 2026-11-17.'
+  - id: visitcostarica
+    category: places
+    name: Visit Costa Rica (ICT)
+    url: https://www.visitcostarica.com/sitemap.xml
+    method: sitemap
+    license: Copyright; terms not found
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'HOLD (research 2026-11-17): terms not found. Blocker was: terms not found. Terms unconfirmed;
+      owner accepted for non-commercial use 2026-11-17.'
+  - id: holland-com
+    category: places
+    name: Holland.com (NBTC)
+    url: https://www.holland.com/sitemappages.xml.gz
+    method: sitemap
+    license: Copyright; terms not found
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'HOLD (research 2026-11-17): terms not found. Blocker was: terms not found. Terms unconfirmed;
+      owner accepted for non-commercial use 2026-11-17.'
+  - id: budapestinfo
+    category: places
+    name: Budapest Info
+    url: https://www.budapestinfo.hu/storage/sitemap.xml
+    method: sitemap
+    license: Copyright; terms not found
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'HOLD (research 2026-11-17): the /hu/terms page in the sitemap was not read. Blocker was: the
+      /hu/terms page in the sitemap was not read. Terms unconfirmed; owner accepted for non-commercial use
+      2026-11-17.'
+  - id: visitabudhabi
+    category: places
+    name: Visit Abu Dhabi
+    url: https://visitabudhabi.ae/sitemap.xml
+    method: sitemap
+    license: Copyright; terms not found
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'HOLD (research 2026-11-17): terms not found. Blocker was: terms not found. Terms unconfirmed;
+      owner accepted for non-commercial use 2026-11-17.'
+  - id: visitmaldives
+    category: places
+    name: Visit Maldives
+    url: https://visitmaldives.com/
+    method: html
+    license: Copyright; terms not found
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'HOLD (research 2026-11-17): terms not found. Blocker was: terms not found. Terms unconfirmed;
+      owner accepted for non-commercial use 2026-11-17.'
+  - id: visitnamibia
+    category: places
+    name: Namibia Tourism Board
+    url: https://visitnamibia.com.na/wp-sitemap.xml
+    method: sitemap
+    license: Copyright; terms not found
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'HOLD (research 2026-11-17): terms not found. Blocker was: terms not found. Terms unconfirmed;
+      owner accepted for non-commercial use 2026-11-17.'
+  - id: visitdubai
+    category: places
+    name: Visit Dubai (DET)
+    url: https://www.visitdubai.com/en-sitemap.xml
+    method: sitemap
+    license: Copyright; terms not found
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'HOLD (research 2026-11-17): terms page renders with JavaScript only. Blocker was: terms page
+      renders with JavaScript only. Terms unconfirmed; owner accepted for non-commercial use 2026-11-17.'
+  - id: visitseoul
+    category: places
+    name: Visit Seoul
+    url: https://english.visitseoul.net/sitemap/restaurants_en_sitemap.xml
+    method: sitemap
+    license: Copyright; terms not found
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'HOLD (research 2026-11-17): terms not found. Blocker was: terms not found. Terms unconfirmed;
+      owner accepted for non-commercial use 2026-11-17.'
+  - id: destinationcanada
+    category: places
+    name: Destination Canada
+    url: https://travel.destinationcanada.com/sitemap.xml
+    method: sitemap
+    license: Copyright; terms not found
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'HOLD (research 2026-11-17): terms page did not render. Blocker was: terms page did not render.
+      Terms unconfirmed; owner accepted for non-commercial use 2026-11-17.'
+  - id: parisjetaime
+    category: places
+    name: Paris je t'aime (Paris tourist office)
+    url: https://parisjetaime.com/sitemap.xml
+    method: sitemap
+    license: Copyright; terms not found
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'HOLD (research 2026-11-17): legal page answered 403 to the fetcher.'
+  - id: tat-data-api
+    category: events
+    name: TAT Data API (Thailand)
+    url: https://tatdataapi.io/
+    method: api
+    license: Copyright; terms not found
+    cadence: weekly
+    needs_key: true
+    allowed: true
+    notes: 'HOLD (research 2026-11-17): terms are behind sign-up.'
+  - id: visit-finland-datahub
+    category: places
+    name: Visit Finland DataHub API
+    url: https://datahub.visitfinland.com/
+    method: api
+    license: Visit Finland DataHub ToS
+    cadence: weekly
+    needs_key: true
+    allowed: true
+    notes: 'visitfinland.com terms exclude ''the use of any data spiders, robots, and/or similar data gathering,
+      mining or extraction methods''. DataHub robots: * Disallow empty. ToS (Business Finland Oy, 2021-04-23):
+      Business Finland chooses and accepts users.'
+  - id: atdw-atlas
+    category: activities
+    name: ATDW Atlas API (Australian Tourism Data Warehouse)
+    url: https://developer.atdw.com.au/
+    method: api
+    license: ATDW Distributor Licence Agreement
+    cadence: weekly
+    needs_key: true
+    allowed: true
+    notes: 'ATDW ToS §8(b): no ''automated software, devices, scripts, robots'' to scrape or crawl. API
+      under a Distributor Licence Agreement; refresh cache at least twice a week; attribution.'
+  - id: calendarific
+    category: events
+    name: Calendarific holidays API
+    url: https://calendarific.com/api/v2/holidays
+    method: api
+    license: Calendarific API ToS
+    cadence: monthly
+    needs_key: true
+    allowed: true
+    notes: 'Terms 4.2(j): no ''scrape, crawl, or extract Data beyond normal API usage''; 4.2(i): no ML training.
+      ''Powered by Calendarific''; cache at most 30 days.'
+  - id: bandsintown
+    category: events
+    name: Bandsintown API
+    url: https://rest.bandsintown.com/
+    method: api
+    license: Bandsintown API terms (written consent)
+    cadence: daily
+    needs_key: true
+    allowed: true
+    notes: 'Site terms: ''shall not use any automated means (e.g., scraping, robots...)'' except its Data
+      Applications; robots blocks every major AI bot.'

@@ -7,7 +7,7 @@
 Every website and dataset the crawler knows, grouped by the part of the Voyager app it
 feeds. A source that serves several parts is listed under each of them.
 
-**126 sources, 100 on, 26 off.**
+**266 sources, 178 on, 88 off.**
 
 - **What we take**: the traveller-facing data the source gives (its `relevance.why`).
 - **Licence**: *open* (free reuse with credit), *share-alike* (kept apart from other
@@ -63,6 +63,7 @@ is added only with the owner's approval (see CONTRIBUTING.md).
 | `overpass` | `overpass-api.de` | Targeted OpenStreetMap lookups of hotels and sights around a destination, for Hotels and Places to see. | share-alike | yes | no |
 | `overture-places` | `docs.overturemaps.org` | Open points of interest (hotels, sights) with names and coordinates, for Hotels and Places to see. | open | yes | no |
 | `wikivoyage-dump` | `dumps.wikimedia.org` | Wikivoyage destination guides (sights, things to do, where to stay, getting around, SIM and tips) for those app sections. | share-alike | yes | no |
+| `atdw-atlas` | `developer.atdw.com.au` | Australian events, attractions, tours and accommodation listings, for Events, Activities and Hotels. | API terms | no | yes |
 | `booking-demand-api` | `developers.booking.com` | Hotel listings and prices for the Hotels section; needs a partner contract, so off. | API terms | no | yes |
 
 ## Activities
@@ -70,31 +71,81 @@ is added only with the owner's approval (see CONTRIBUTING.md).
 | Source | Website | What we take | Licence | On | Key |
 |---|---|---|---|---|---|
 | `alchemist` | `alchemist.dk` | Opening dates and booking information for Alchemist, a destination restaurant in Copenhagen, for Activities and Places to see. | facts only | yes | no |
+| `argentina-travel` | `www.argentina.travel` | Official Argentine destinations, experiences and itineraries, for Places to see, Activities and the itinerary. | facts only | yes | no |
+| `australia-com` | `www.australia.com` | Official Australian itineraries, places, food and wine and events, for the itinerary, Places to see, Activities and Events. | facts only | yes | no |
 | `blog-atlasandboots` | `www.atlasandboots.com` | Hiking and outdoor adventure guides from Atlas & Boots, for Activities, Places to see and Travel tips (headline, link and a short excerpt only). | facts only | yes | no |
 | `blog-earthtrekkers` | `www.earthtrekkers.com` | Detailed trip itineraries and hikes from Earth Trekkers, for the itinerary, Activities and Places to see (headline, link and a short excerpt only). | facts only | yes | no |
 | `blog-migrationology` | `www.migrationology.com` | Street-food and local-food travel guides from Migrationology, for Travel tips and Activities (headline, link and a short excerpt only). | facts only | yes | no |
 | `blog-nomadasaurus` | `www.nomadasaurus.com` | Adventure and overland travel guides from Nomadasaurus, for Activities, Places to see and Travel tips (headline, link and a short excerpt only). | facts only | yes | no |
 | `blog-thequantumexplorer` | `thequantumexplorer.org` | European city guides (Malta, Zagreb, Oslo, Copenhagen, Prague and more) from the Quantum Explorer travel blog, for Places to see, Activities and Travel tips (headline, link and a short excerpt only). | facts only | yes | no |
+| `chile-travel` | `chile.travel` | Official Chilean itineraries, events, activities and attractions, for the itinerary, Events and Activities. | facts only | yes | no |
 | `common-crawl` | `index.commoncrawl.org` | Index of a public web crawl, used only to discover travel pages (sights, things to do, advice) for Places to see, Activities and Travel tips. | facts only | yes | no |
+| `destinationcanada` | `travel.destinationcanada.com` | Canadian things to do and trip ideas, for Activities and the itinerary. | facts only | yes | no |
+| `discoverireland` | `www.discoverireland.ie` | Irish events, things to do, food experiences and road trips, for Events, Activities, the itinerary and Places to see. | facts only | yes | no |
+| `discoverlosangeles` | `www.discoverlosangeles.com` | Los Angeles eat and drink, things to do and events, for Activities and Events. | facts only | yes | no |
+| `experienceoman` | `experienceoman.om` | Official Omani destinations, things to do and itineraries, for Places to see, Activities and the itinerary. | facts only | yes | no |
+| `france-fr` | `www.france.fr` | Official French inspiration, itineraries and gastronomy pages, for the itinerary, Places to see and Activities. | facts only | yes | no |
+| `gaultmillau` | `www.gaultmillau.com` | Gault&Millau restaurant ratings (name, toque rating and city as facts), for Activities and Places to see. | facts only | yes | no |
+| `gotokyo` | `www.gotokyo.org` | About 925 Tokyo spots, the event calendar and model courses, for Places to see, Events, Activities and the itinerary. | facts only | yes | no |
+| `iamsterdam` | `www.iamsterdam.com` | Amsterdam's official event agenda and restaurant and venue listings, for Events, Activities and Places to see. | facts only | yes | no |
+| `laliste` | `www.laliste.com` | La Liste restaurant rankings (names, scores and cities as facts), for Activities. | facts only | yes | no |
 | `liveriga` | `www.liveriga.com` | Riga's official tourism portal: sights, things to do, events and visitor advice, for Places to see, Activities, Events and Travel tips. | facts only | yes | no |
 | `mathallen-oslo` | `mathallenoslo.no` | Vendors, opening hours and visitor information for the Mathallen food hall in Oslo, for Places to see and Activities. | facts only | yes | no |
+| `melbourne-whatson` | `whatson.melbourne.vic.gov.au` | Melbourne events plus the city's restaurant and bar listings, for Events and Activities. | facts only | yes | no |
 | `noma` | `noma.dk` | Opening dates, seasons and booking information for Noma, a destination restaurant in Copenhagen, for Activities and Places to see. | facts only | yes | no |
+| `nps-site` | `www.nps.gov` | Official things to do, tours, trails and ranger events for more than 400 US national parks, for Places to see, Activities, the itinerary and Events. | open | yes | no |
+| `nyctourism` | `www.nyctourism.com` | Official NYC event listings, restaurant guides and itineraries, for Events, Activities, the itinerary and Places to see. | facts only | yes | no |
+| `oad-guides` | `www.oadguides.com` | Opinionated About Dining restaurant rankings (names and cities as facts), for Activities. | facts only | yes | no |
 | `opentripmap` | `api.opentripmap.com` | Tourist attractions with names, categories and coordinates, for Places to see and Activities. | share-alike | yes | yes |
 | `paris-quefaire` | `opendata.paris.fr` | Official Paris city events and things to do with dates and venues, for Events and Activities. | share-alike | yes | no |
+| `philippines-travel` | `philippines.travel` | Official Philippine destinations and activities, for Places to see and Activities. | facts only | yes | no |
 | `rub-og-stub` | `www.spisrubogstub.dk` | Opening hours, menus and booking information for Rub & Stub, a social restaurant in Copenhagen, for Activities and Places to see. | facts only | yes | no |
-| `timeout-blog-rss` | `www.timeout.com` | Time Out city articles (what's on, things to do, new openings) for Events and Activities. | facts only | yes | no |
-| `timeout-news-sitemap` | `www.timeout.com` | Time Out city news pages (events, openings, things to do) for Events and Activities. | facts only | yes | no |
+| `spain-info` | `www.spain.info` | Spain's official routes, gastronomy and event calendar, for the itinerary, Events and Activities. | facts only | yes | no |
+| `sydney-com` | `www.sydney.com` | Sydney food and drink, things to do and events, for Activities, Events and Places to see. | facts only | yes | no |
 | `torvehallerne` | `torvehallernekbh.dk` | Stalls, opening hours and visitor information for the Torvehallerne food market in Copenhagen, for Places to see and Activities. | facts only | yes | no |
+| `visitcalifornia` | `www.visitcalifornia.com` | California road trips, experiences and events, for the itinerary, Activities, Events and Places to see. | facts only | yes | no |
+| `visitcopenhagen` | `www.visitcopenhagen.com` | Copenhagen things to do, sights and getting-around advice, for Activities and Places to see. | facts only | yes | no |
+| `visitcostarica` | `www.visitcostarica.com` | Official Costa Rican itineraries and things to do, for the itinerary and Activities. | facts only | yes | no |
+| `visitgreece` | `www.visitgreece.gr` | Official Greek routes (itineraries), events calendar and experiences, for the itinerary, Events, Activities and Places to see. | facts only | yes | no |
+| `visiticeland` | `www.visiticeland.com` | Official Icelandic sights and activities, for Places to see and Activities. | facts only | yes | no |
+| `visitlisboa` | `www.visitlisboa.com` | Lisbon's official event agenda and itineraries, for Events, the itinerary and Activities. | facts only | yes | no |
+| `visitphilly` | `www.visitphilly.com` | Philadelphia events, itineraries and restaurant guides (title and link only), for Events, the itinerary and Activities. | facts only | yes | no |
+| `visitqatar` | `visitqatar.com` | Qatar's official events calendar, things to do and itineraries, for Events, Activities and the itinerary. | facts only | yes | no |
+| `visitscotland` | `www.visitscotland.com` | Official Scottish road trips, itineraries, events and food trails, for the itinerary, Activities, Events and Places to see. | facts only | yes | no |
+| `visitseoul` | `english.visitseoul.net` | Seoul restaurants, attractions and editors' picks, for Activities and Places to see. | facts only | yes | no |
+| `wien-info` | `www.wien.info` | Vienna events, Heurigen wine taverns, coffee houses and suggested itineraries, for Events, Activities, the itinerary and Places to see. | facts only | yes | no |
 | `wikivoyage-dump` | `dumps.wikimedia.org` | Wikivoyage destination guides (sights, things to do, where to stay, getting around, SIM and tips) for those app sections. | share-alike | yes | no |
+| `worlds50best` | `www.the50.com` | The World's 50 Best restaurant and bar rankings (names and cities as facts), for Activities. | facts only | yes | no |
+| `atdw-atlas` | `developer.atdw.com.au` | Australian events, attractions, tours and accommodation listings, for Events, Activities and Hotels. | API terms | no | yes |
+| `choosechicago` | `www.choosechicago.com` | Chicago events and things to do from the official tourism board, for Events and Activities. | facts only | no | no |
 | `culturetrip` | `theculturetrip.com` | Culture Trip destination guides (title and link only) for Places to see, Activities and Travel tips; every page times out for our bot, so off. | facts only | no | no |
+| `datatourisme-fr` | `diffuseur.datatourisme.fr` | Every French tourist office's events, restaurants, sights and walking or driving tours in one national feed, for Events, Activities, Places to see and the itinerary. | open | no | yes |
+| `failte-ireland-od` | `failteireland.developer.azure-api.net` | Every Fáilte Ireland-listed attraction and activity provider in Ireland, for Places to see and Activities. | open | no | yes |
+| `germany-kg` | `open-data-germany.org` | Events, sights and tours from German regional tourist boards, for Events, Places to see and Activities. | open | no | yes |
 | `gyg-partner` | `partner.getyourguide.com` | Bookable tours and activities with prices, for the Activities section; needs affiliate approval, so off. | API terms | no | yes |
+| `hel-linkedevents` | `api.hel.fi` | Every public event in Helsinki, Espoo and Vantaa with venue, time and price, for Events and Activities. | open | no | no |
+| `korea-tourapi` | `apis.data.go.kr` | National Korean festivals, restaurants, sights and official travel courses, for Events, Activities, Places to see and the itinerary. | facts only | no | yes |
+| `myswitzerland-open-data` | `opendata.myswitzerland.io` | Swiss sights, experiences and tours as structured data, for Places to see, Activities and the itinerary. | facts only | no | yes |
+| `nps-data-api` | `developer.nps.gov` | US national park things to do, events and tours as structured data, for Activities, Events and the itinerary. | facts only | no | yes |
+| `nyc-parks-events` | `data.cityofnewyork.us` | Free events in New York City parks (tours, concerts, festivals) for Events and Activities. | open | no | no |
+| `parisjetaime` | `parisjetaime.com` | Paris events and things to do from the official tourist office, for Events and Activities. | facts only | no | no |
+| `ridb` | `ridb.recreation.gov` | US federal recreation areas, campgrounds, tours and activities, for Activities and Places to see. | open | no | yes |
+| `stockholm-open-api` | `api.visitstockholm.com` | Official Stockholm events, curated guides and activities for Events, Activities and the itinerary. | open | no | no |
+| `taiwan-tourism-od` | `media.taiwan.net.tw` | Every Taiwanese tourism event, listed restaurant and scenic spot, for Events, Activities and Places to see. | open | no | no |
+| `tasteatlas` | `www.tasteatlas.com` | Traditional dishes and where to eat them by region, for Activities and Travel tips. | facts only | no | no |
+| `tat-data-api` | `tatdataapi.io` | Thai events, attractions and activities as structured data, for Events, Places to see and Activities. | facts only | no | yes |
+| `timeout-blog-rss` | `www.timeout.com` | Time Out city articles (what's on, things to do, new openings) for Events and Activities. | facts only | no | no |
+| `timeout-news-sitemap` | `www.timeout.com` | Time Out city news pages (events, openings, things to do) for Events and Activities. | facts only | no | no |
 | `viator-partner` | `docs.viator.com` | Bookable tours and activities with prices, for the Activities section; needs affiliate approval, so off. | API terms | no | yes |
+| `visit-finland-datahub` | `datahub.visitfinland.com` | Finnish tourism products, sights and opening hours, for Places to see, Activities and Events. | API terms | no | yes |
 
 ## Places to see
 
 | Source | Website | What we take | Licence | On | Key |
 |---|---|---|---|---|---|
 | `alchemist` | `alchemist.dk` | Opening dates and booking information for Alchemist, a destination restaurant in Copenhagen, for Activities and Places to see. | facts only | yes | no |
+| `argentina-travel` | `www.argentina.travel` | Official Argentine destinations, experiences and itineraries, for Places to see, Activities and the itinerary. | facts only | yes | no |
+| `australia-com` | `www.australia.com` | Official Australian itineraries, places, food and wine and events, for the itinerary, Places to see, Activities and Events. | facts only | yes | no |
 | `blog-adventurouskate` | `www.adventurouskate.com` | Solo and women's travel guides from Adventurous Kate, for Travel tips and Places to see (headline, link and a short excerpt only). | facts only | yes | no |
 | `blog-alexinwanderland` | `www.alexinwanderland.com` | Travel blog posts with destination guides and practical trip advice, for Travel tips and Places to see (headline, link and a short excerpt only). | facts only | yes | no |
 | `blog-atlasandboots` | `www.atlasandboots.com` | Hiking and outdoor adventure guides from Atlas & Boots, for Activities, Places to see and Travel tips (headline, link and a short excerpt only). | facts only | yes | no |
@@ -123,9 +174,19 @@ is added only with the owner's approval (see CONTRIBUTING.md).
 | `blog-worldofwanderlust` | `www.worldofwanderlust.com` | Travel blog posts with destination guides and practical trip advice, for Travel tips and Places to see (headline, link and a short excerpt only). | facts only | yes | no |
 | `blog-ytravelblog` | `www.ytravelblog.com` | Family travel guides from Y Travel Blog, for Travel tips and Places to see (headline, link and a short excerpt only). | facts only | yes | no |
 | `brokenships` | `brokenships.com` | Opening hours, tickets and visitor information for the Museum of Broken Relationships in Zagreb, for Places to see. | facts only | yes | no |
+| `budapestinfo` | `www.budapestinfo.hu` | Budapest's official sights and visitor information, for Places to see. | facts only | yes | no |
 | `common-crawl` | `index.commoncrawl.org` | Index of a public web crawl, used only to discover travel pages (sights, things to do, advice) for Places to see, Activities and Travel tips. | facts only | yes | no |
+| `discoverireland` | `www.discoverireland.ie` | Irish events, things to do, food experiences and road trips, for Events, Activities, the itinerary and Places to see. | facts only | yes | no |
 | `enwiki-dump` | `dumps.wikimedia.org` | Facts from English Wikipedia: places, airport destination tables, emergency numbers and plug and voltage types, for Places to see, Flights, the Emergency card and the Packing list. | share-alike | yes | no |
+| `experienceoman` | `experienceoman.om` | Official Omani destinations, things to do and itineraries, for Places to see, Activities and the itinerary. | facts only | yes | no |
+| `france-fr` | `www.france.fr` | Official French inspiration, itineraries and gastronomy pages, for the itinerary, Places to see and Activities. | facts only | yes | no |
 | `fsq-os-places` | `docs.foursquare.com` | Open points of interest (hotels, sights, restaurants) with names and coordinates, for Hotels and Places to see. | open | yes | yes |
+| `gaultmillau` | `www.gaultmillau.com` | Gault&Millau restaurant ratings (name, toque rating and city as facts), for Activities and Places to see. | facts only | yes | no |
+| `gotokyo` | `www.gotokyo.org` | About 925 Tokyo spots, the event calendar and model courses, for Places to see, Events, Activities and the itinerary. | facts only | yes | no |
+| `goturkiye` | `goturkiye.com` | Official Turkish destinations, routes and events, for Places to see, the itinerary and Events. | facts only | yes | no |
+| `holland-com` | `www.holland.com` | Official Dutch destinations and sights, for Places to see. | facts only | yes | no |
+| `iamsterdam` | `www.iamsterdam.com` | Amsterdam's official event agenda and restaurant and venue listings, for Events, Activities and Places to see. | facts only | yes | no |
+| `incredibleindia` | `www.incredibleindia.gov.in` | Official Indian destinations, attractions, festivals and itineraries, for Places to see, the itinerary and Events. | facts only | yes | no |
 | `liveriga` | `www.liveriga.com` | Riga's official tourism portal: sights, things to do, events and visitor advice, for Places to see, Activities, Events and Travel tips. | facts only | yes | no |
 | `lonelyplanet-sitemaps` | `www.lonelyplanet.com` | Lonely Planet destination articles for Places to see and Travel tips (headline, link and a short excerpt only). | facts only | yes | no |
 | `mathallen-oslo` | `mathallenoslo.no` | Vendors, opening hours and visitor information for the Mathallen food hall in Oslo, for Places to see and Activities. | facts only | yes | no |
@@ -145,16 +206,54 @@ is added only with the owner's approval (see CONTRIBUTING.md).
 | `news-travelmag` | `www.travel-mag.com` | Travel-Mag travel-section articles (destination features, openings, travel disruptions) for Travel tips and Places to see (headline, link and a short excerpt only). | facts only | yes | no |
 | `news-wanderlust` | `www.wanderlust.co.uk` | Wanderlust (UK) travel-section articles (destination features, openings, travel disruptions) for Travel tips and Places to see (headline, link and a short excerpt only). | facts only | yes | no |
 | `noma` | `noma.dk` | Opening dates, seasons and booking information for Noma, a destination restaurant in Copenhagen, for Activities and Places to see. | facts only | yes | no |
+| `nps-site` | `www.nps.gov` | Official things to do, tours, trails and ranger events for more than 400 US national parks, for Places to see, Activities, the itinerary and Events. | open | yes | no |
+| `nyctourism` | `www.nyctourism.com` | Official NYC event listings, restaurant guides and itineraries, for Events, Activities, the itinerary and Places to see. | facts only | yes | no |
 | `opentripmap` | `api.opentripmap.com` | Tourist attractions with names, categories and coordinates, for Places to see and Activities. | share-alike | yes | yes |
 | `osm-geofabrik` | `download.geofabrik.de` | OpenStreetMap hotels, sights and transit stops per region, for Hotels, Places to see and Local transportation. | share-alike | yes | no |
 | `overpass` | `overpass-api.de` | Targeted OpenStreetMap lookups of hotels and sights around a destination, for Hotels and Places to see. | share-alike | yes | no |
 | `overture-places` | `docs.overturemaps.org` | Open points of interest (hotels, sights) with names and coordinates, for Hotels and Places to see. | open | yes | no |
+| `peru-travel` | `www.peru.travel` | Official Peruvian destinations and itineraries, for Places to see and the itinerary. | facts only | yes | no |
+| `philippines-travel` | `philippines.travel` | Official Philippine destinations and activities, for Places to see and Activities. | facts only | yes | no |
 | `rub-og-stub` | `www.spisrubogstub.dk` | Opening hours, menus and booking information for Rub & Stub, a social restaurant in Copenhagen, for Activities and Places to see. | facts only | yes | no |
+| `secretldn` | `secretldn.com` | London what's-on and hidden gems (headline, link and a short excerpt only), for Events and Places to see. | facts only | yes | no |
+| `srilanka-travel` | `www.srilanka.travel` | Official Sri Lankan attractions and destinations, for Places to see. | facts only | yes | no |
+| `sydney-com` | `www.sydney.com` | Sydney food and drink, things to do and events, for Activities, Events and Places to see. | facts only | yes | no |
+| `tanzania-tourism` | `tanzaniatourism.go.tz` | Official Tanzanian destinations and parks, for Places to see. | facts only | yes | no |
 | `torvehallerne` | `torvehallernekbh.dk` | Stalls, opening hours and visitor information for the Torvehallerne food market in Copenhagen, for Places to see and Activities. | facts only | yes | no |
+| `visitabudhabi` | `visitabudhabi.ae` | Abu Dhabi events and sights, for Events and Places to see. | facts only | yes | no |
+| `visitberlin` | `www.visitberlin.de` | Berlin events and sights from the official tourism portal, for Events and Places to see. | facts only | yes | no |
+| `visitcalifornia` | `www.visitcalifornia.com` | California road trips, experiences and events, for the itinerary, Activities, Events and Places to see. | facts only | yes | no |
+| `visitcopenhagen` | `www.visitcopenhagen.com` | Copenhagen things to do, sights and getting-around advice, for Activities and Places to see. | facts only | yes | no |
+| `visitdenmark` | `www.visitdenmark.com` | Official Danish destinations and itineraries, for Places to see and the itinerary. | facts only | yes | no |
+| `visitdubai` | `www.visitdubai.com` | Dubai events, sights and itineraries, for Events, Places to see and the itinerary. | facts only | yes | no |
+| `visitgreece` | `www.visitgreece.gr` | Official Greek routes (itineraries), events calendar and experiences, for the itinerary, Events, Activities and Places to see. | facts only | yes | no |
+| `visiticeland` | `www.visiticeland.com` | Official Icelandic sights and activities, for Places to see and Activities. | facts only | yes | no |
+| `visitjordan` | `visitjordan.com` | Official Jordanian sights and destinations, for Places to see. | facts only | yes | no |
+| `visitmaldives` | `visitmaldives.com` | Official Maldives islands, resorts areas and sights, for Places to see. | facts only | yes | no |
+| `visitnamibia` | `visitnamibia.com.na` | Official Namibian destinations and parks, for Places to see. | facts only | yes | no |
+| `visitrwanda` | `visitrwanda.com` | Official Rwandan itineraries, events and destinations, for the itinerary, Events and Places to see. | facts only | yes | no |
+| `visitsaudi` | `www.visitsaudi.com` | Official Saudi destinations, events and things to do, for Events and Places to see. | facts only | yes | no |
+| `visitscotland` | `www.visitscotland.com` | Official Scottish road trips, itineraries, events and food trails, for the itinerary, Activities, Events and Places to see. | facts only | yes | no |
+| `visitseoul` | `english.visitseoul.net` | Seoul restaurants, attractions and editors' picks, for Activities and Places to see. | facts only | yes | no |
+| `visitsweden` | `visitsweden.com` | Official Swedish destinations and trip ideas, for Places to see and the itinerary. | facts only | yes | no |
+| `wien-info` | `www.wien.info` | Vienna events, Heurigen wine taverns, coffee houses and suggested itineraries, for Events, Activities, the itinerary and Places to see. | facts only | yes | no |
 | `wikipedia-geosearch` | `en.wikipedia.org` | Wikipedia articles about sights near a destination (names, coordinates, summaries), for Places to see. | share-alike | yes | no |
 | `wikivoyage-dump` | `dumps.wikimedia.org` | Wikivoyage destination guides (sights, things to do, where to stay, getting around, SIM and tips) for those app sections. | share-alike | yes | no |
+| `amusingplanet` | `feeds.feedburner.com` | Unusual places, natural wonders and hidden sights worldwide (headline, link and a short excerpt only), for Places to see. | facts only | no | no |
+| `colombia-travel` | `colombia.travel` | Official Colombian destinations and itineraries, for Places to see and the itinerary. | facts only | no | no |
 | `culturetrip` | `theculturetrip.com` | Culture Trip destination guides (title and link only) for Places to see, Activities and Travel tips; every page times out for our bot, so off. | facts only | no | no |
+| `datagovhk` | `data.gov.hk` | Official opening hours and admission of Hong Kong museums and attractions, plus cultural programmes and major events, for Places to see and Events. | open | no | no |
+| `datatourisme-fr` | `diffuseur.datatourisme.fr` | Every French tourist office's events, restaurants, sights and walking or driving tours in one national feed, for Events, Activities, Places to see and the itinerary. | open | no | yes |
+| `failte-ireland-od` | `failteireland.developer.azure-api.net` | Every Fáilte Ireland-listed attraction and activity provider in Ireland, for Places to see and Activities. | open | no | yes |
+| `germany-kg` | `open-data-germany.org` | Events, sights and tours from German regional tourist boards, for Events, Places to see and Activities. | open | no | yes |
+| `korea-tourapi` | `apis.data.go.kr` | National Korean festivals, restaurants, sights and official travel courses, for Events, Activities, Places to see and the itinerary. | facts only | no | yes |
+| `messynessychic` | `www.messynessychic.com` | Off-the-beaten-path curiosities and hidden places worldwide (headline, link and a short excerpt only), for Places to see. | facts only | no | no |
+| `myswitzerland-open-data` | `opendata.myswitzerland.io` | Swiss sights, experiences and tours as structured data, for Places to see, Activities and the itinerary. | facts only | no | yes |
+| `ridb` | `ridb.recreation.gov` | US federal recreation areas, campgrounds, tours and activities, for Activities and Places to see. | open | no | yes |
+| `taiwan-tourism-od` | `media.taiwan.net.tw` | Every Taiwanese tourism event, listed restaurant and scenic spot, for Events, Activities and Places to see. | open | no | no |
+| `tat-data-api` | `tatdataapi.io` | Thai events, attractions and activities as structured data, for Events, Places to see and Activities. | facts only | no | yes |
 | `unesco-whc` | `whc.unesco.org` | UNESCO World Heritage Sites with descriptions and locations for Places to see; licence unverified, so off. | restricted | no | no |
+| `visit-finland-datahub` | `datahub.visitfinland.com` | Finnish tourism products, sights and opening hours, for Places to see, Activities and Events. | API terms | no | yes |
 | `wikidata-dump` | `dumps.wikimedia.org` | Facts about places and sights from Wikidata for Places to see; the full dump is too large, so off. | open | no | no |
 
 ## Free walking tours
@@ -162,34 +261,101 @@ is added only with the owner's approval (see CONTRIBUTING.md).
 | Source | Website | What we take | Licence | On | Key |
 |---|---|---|---|---|---|
 | `freetour` | `www.freetour.com` | Free tip-based walking tours by city with meeting points, for the Free walking tours section. | facts only | yes | no |
+| `freewalkingtour-com` | `freewalkingtour.com` | Free tip-based walking tours by city with start times and meeting points, for the Free walking tours section. | facts only | yes | no |
 | `guruwalk` | `www.guruwalk.com` | Free tip-based walking tours by city with times and meeting points, for the Free walking tours section. | facts only | yes | no |
+| `neweuropetours` | `www.neweuropetours.eu` | SANDEMANs free and paid city walking tours with start times and meeting points, for the Free walking tours section. | facts only | yes | no |
 | `wikivoyage-dump` | `dumps.wikimedia.org` | Wikivoyage destination guides (sights, things to do, where to stay, getting around, SIM and tips) for those app sections. | share-alike | yes | no |
 
 ## Events
 
 | Source | Website | What we take | Licence | On | Key |
 |---|---|---|---|---|---|
+| `australia-com` | `www.australia.com` | Official Australian itineraries, places, food and wine and events, for the itinerary, Places to see, Activities and Events. | facts only | yes | no |
+| `chile-travel` | `chile.travel` | Official Chilean itineraries, events, activities and attractions, for the itinerary, Events and Activities. | facts only | yes | no |
+| `discoverireland` | `www.discoverireland.ie` | Irish events, things to do, food experiences and road trips, for Events, Activities, the itinerary and Places to see. | facts only | yes | no |
+| `discoverlosangeles` | `www.discoverlosangeles.com` | Los Angeles eat and drink, things to do and events, for Activities and Events. | facts only | yes | no |
 | `eventbrite-api` | `www.eventbriteapi.com` | Public events by organiser and venue (dates, venues, links), for the Events section. | API terms | yes | yes |
+| `gotokyo` | `www.gotokyo.org` | About 925 Tokyo spots, the event calendar and model courses, for Places to see, Events, Activities and the itinerary. | facts only | yes | no |
+| `goturkiye` | `goturkiye.com` | Official Turkish destinations, routes and events, for Places to see, the itinerary and Events. | facts only | yes | no |
+| `iamsterdam` | `www.iamsterdam.com` | Amsterdam's official event agenda and restaurant and venue listings, for Events, Activities and Places to see. | facts only | yes | no |
+| `incredibleindia` | `www.incredibleindia.gov.in` | Official Indian destinations, attractions, festivals and itineraries, for Places to see, the itinerary and Events. | facts only | yes | no |
 | `liveriga` | `www.liveriga.com` | Riga's official tourism portal: sights, things to do, events and visitor advice, for Places to see, Activities, Events and Travel tips. | facts only | yes | no |
+| `melbourne-whatson` | `whatson.melbourne.vic.gov.au` | Melbourne events plus the city's restaurant and bar listings, for Events and Activities. | facts only | yes | no |
+| `nps-site` | `www.nps.gov` | Official things to do, tours, trails and ranger events for more than 400 US national parks, for Places to see, Activities, the itinerary and Events. | open | yes | no |
+| `nyctourism` | `www.nyctourism.com` | Official NYC event listings, restaurant guides and itineraries, for Events, Activities, the itinerary and Places to see. | facts only | yes | no |
 | `paris-quefaire` | `opendata.paris.fr` | Official Paris city events and things to do with dates and venues, for Events and Activities. | share-alike | yes | no |
 | `seatgeek` | `api.seatgeek.com` | Concerts, sports and theatre events with dates and venues, for the Events section. | API terms | yes | yes |
+| `secretldn` | `secretldn.com` | London what's-on and hidden gems (headline, link and a short excerpt only), for Events and Places to see. | facts only | yes | no |
+| `spain-info` | `www.spain.info` | Spain's official routes, gastronomy and event calendar, for the itinerary, Events and Activities. | facts only | yes | no |
+| `sydney-com` | `www.sydney.com` | Sydney food and drink, things to do and events, for Activities, Events and Places to see. | facts only | yes | no |
 | `ticketmaster` | `app.ticketmaster.com` | Concerts, sports and theatre events with dates, venues and ticket links, for the Events section. | API terms | yes | yes |
-| `timeout-blog-rss` | `www.timeout.com` | Time Out city articles (what's on, things to do, new openings) for Events and Activities. | facts only | yes | no |
-| `timeout-news-sitemap` | `www.timeout.com` | Time Out city news pages (events, openings, things to do) for Events and Activities. | facts only | yes | no |
+| `visitabudhabi` | `visitabudhabi.ae` | Abu Dhabi events and sights, for Events and Places to see. | facts only | yes | no |
+| `visitberlin` | `www.visitberlin.de` | Berlin events and sights from the official tourism portal, for Events and Places to see. | facts only | yes | no |
+| `visitcalifornia` | `www.visitcalifornia.com` | California road trips, experiences and events, for the itinerary, Activities, Events and Places to see. | facts only | yes | no |
+| `visitdubai` | `www.visitdubai.com` | Dubai events, sights and itineraries, for Events, Places to see and the itinerary. | facts only | yes | no |
+| `visitgreece` | `www.visitgreece.gr` | Official Greek routes (itineraries), events calendar and experiences, for the itinerary, Events, Activities and Places to see. | facts only | yes | no |
+| `visitlisboa` | `www.visitlisboa.com` | Lisbon's official event agenda and itineraries, for Events, the itinerary and Activities. | facts only | yes | no |
+| `visitphilly` | `www.visitphilly.com` | Philadelphia events, itineraries and restaurant guides (title and link only), for Events, the itinerary and Activities. | facts only | yes | no |
+| `visitqatar` | `visitqatar.com` | Qatar's official events calendar, things to do and itineraries, for Events, Activities and the itinerary. | facts only | yes | no |
+| `visitrwanda` | `visitrwanda.com` | Official Rwandan itineraries, events and destinations, for the itinerary, Events and Places to see. | facts only | yes | no |
+| `visitsaudi` | `www.visitsaudi.com` | Official Saudi destinations, events and things to do, for Events and Places to see. | facts only | yes | no |
+| `visitscotland` | `www.visitscotland.com` | Official Scottish road trips, itineraries, events and food trails, for the itinerary, Activities, Events and Places to see. | facts only | yes | no |
+| `wien-info` | `www.wien.info` | Vienna events, Heurigen wine taverns, coffee houses and suggested itineraries, for Events, Activities, the itinerary and Places to see. | facts only | yes | no |
+| `atdw-atlas` | `developer.atdw.com.au` | Australian events, attractions, tours and accommodation listings, for Events, Activities and Hotels. | API terms | no | yes |
+| `bandsintown` | `rest.bandsintown.com` | Concerts by artist and venue with dates and ticket links, for the Events section. | API terms | no | yes |
+| `bcn-opendata-agenda` | `opendata-ajuntament.barcelona.cat` | Barcelona city council's cultural and leisure agenda, for the Events section. | open | no | no |
+| `calendarific` | `calendarific.com` | Public holidays in about 230 countries (closures and crowds), for Events and Travel tips. | API terms | no | yes |
+| `choosechicago` | `www.choosechicago.com` | Chicago events and things to do from the official tourism board, for Events and Activities. | facts only | no | no |
+| `datagovhk` | `data.gov.hk` | Official opening hours and admission of Hong Kong museums and attractions, plus cultural programmes and major events, for Places to see and Events. | open | no | no |
+| `datatourisme-fr` | `diffuseur.datatourisme.fr` | Every French tourist office's events, restaurants, sights and walking or driving tours in one national feed, for Events, Activities, Places to see and the itinerary. | open | no | yes |
+| `edinburgh-festivals-api` | `api.edinburghfestivalcity.com` | Listings for the Edinburgh festivals (dates, venues, tickets), for the Events section. | API terms | no | yes |
+| `germany-kg` | `open-data-germany.org` | Events, sights and tours from German regional tourist boards, for Events, Places to see and Activities. | open | no | yes |
+| `hel-linkedevents` | `api.hel.fi` | Every public event in Helsinki, Espoo and Vantaa with venue, time and price, for Events and Activities. | open | no | no |
+| `korea-tourapi` | `apis.data.go.kr` | National Korean festivals, restaurants, sights and official travel courses, for Events, Activities, Places to see and the itinerary. | facts only | no | yes |
+| `madrid-agenda` | `datos.madrid.es` | Free and municipal cultural events in Madrid for the Events section. | open | no | no |
 | `nager-date` | `date.nager.at` | Public holidays per country (closures and crowds) for Events and the itinerary; robots.txt disallows us, so off. | API terms | no | no |
+| `nps-data-api` | `developer.nps.gov` | US national park things to do, events and tours as structured data, for Activities, Events and the itinerary. | facts only | no | yes |
+| `nyc-parks-events` | `data.cityofnewyork.us` | Free events in New York City parks (tours, concerts, festivals) for Events and Activities. | open | no | no |
+| `openagenda-api` | `api.openagenda.com` | Event agendas from French, Belgian and Swiss cities and regions, for the Events section. | open | no | yes |
+| `openholidays` | `openholidaysapi.org` | Public and school holidays by region for about 36 countries (crowds and closures), for Events and Travel tips. | share-alike | no | no |
+| `parisjetaime` | `parisjetaime.com` | Paris events and things to do from the official tourist office, for Events and Activities. | facts only | no | no |
 | `predicthq` | `api.predicthq.com` | Events and public holidays worldwide for the Events section; paid only, so off. | API terms | no | yes |
+| `stockholm-open-api` | `api.visitstockholm.com` | Official Stockholm events, curated guides and activities for Events, Activities and the itinerary. | open | no | no |
+| `taiwan-tourism-od` | `media.taiwan.net.tw` | Every Taiwanese tourism event, listed restaurant and scenic spot, for Events, Activities and Places to see. | open | no | no |
+| `tat-data-api` | `tatdataapi.io` | Thai events, attractions and activities as structured data, for Events, Places to see and Activities. | facts only | no | yes |
+| `timeout-blog-rss` | `www.timeout.com` | Time Out city articles (what's on, things to do, new openings) for Events and Activities. | facts only | no | no |
+| `timeout-news-sitemap` | `www.timeout.com` | Time Out city news pages (events, openings, things to do) for Events and Activities. | facts only | no | no |
+| `toronto-events` | `ckan0.cf.opendata.inter.prod-toronto.ca` | Festivals and events listed by the City of Toronto, for the Events section. | open | no | no |
+| `visit-finland-datahub` | `datahub.visitfinland.com` | Finnish tourism products, sights and opening hours, for Places to see, Activities and Events. | API terms | no | yes |
 
 ## Visa and travel advice
 
 | Source | Website | What we take | Licence | On | Key |
 |---|---|---|---|---|---|
+| `brazil-mre-visas` | `www.gov.br` | Brazil's visa requirement table by nationality, for the Visa section. | facts only | yes | no |
 | `canada-travel-json` | `data.international.gc.ca` | Official Canadian travel advice per country (entry rules, safety level, emergency contacts) for Visa and the Emergency card. | open | yes | no |
+| `cbp-travel` | `www.cbp.gov` | Visa Waiver Program countries and ESTA rules for Visa, plus US duty-free limits, prohibited and agricultural items and the $10,000 cash declaration for Travel tips and Packing. | open | yes | no |
+| `eu-etias-ees` | `travel-europe.europa.eu` | Who needs ETIAS, its fee, validity and start date, and EES biometric registration at Schengen borders, for the Visa section. | open | yes | no |
+| `eu-home-visa-policy` | `home-affairs.ec.europa.eu` | The Schengen visa-required and visa-free nationality lists, airport transit visas and visa waiver agreements, for the Visa section. | open | yes | no |
 | `eu-visa-reg` | `eur-lex.europa.eu` | The EU's official lists of nationalities that need a visa for the Schengen area, for the Visa section. | open | yes | no |
 | `fcdo-atom` | `www.gov.uk` | Change feed of the UK's travel advice per country, so the Visa section's entry and safety advice stays current. | open | yes | no |
 | `fcdo-content-api` | `www.gov.uk` | Official UK travel advice per country (entry rules, safety, local laws, emergency numbers) for Visa, Emergency card and Travel tips. | open | yes | no |
 | `gov-uk-check-visa` | `www.gov.uk` | Official UK rules on which nationalities need a visa to visit the UK, for the Visa section. | open | yes | no |
+| `india-evisa` | `indianvisaonline.gov.in` | India's e-Visa eligible nationalities, types, validity and ports of entry, for the Visa section. | facts only | yes | no |
+| `ircc-entry-requirements` | `www.canada.ca` | Whether each nationality needs a Canadian visitor visa, an eTA or neither, plus transit rules, for the Visa section. | facts only | yes | no |
+| `korea-keta` | `www.k-eta.go.kr` | Which nationalities need a K-ETA for South Korea and which are exempt, for the Visa section. | facts only | yes | no |
+| `korea-visa-portal` | `www.visa.go.kr` | South Korea's visa-free entry periods by nationality, for the Visa section. | facts only | yes | no |
+| `malaysia-imi-visa` | `www.imi.gov.my` | Malaysia's visa-required and visa-free nationalities and lengths of stay, for the Visa section. | facts only | yes | no |
+| `nia-china-visa-free` | `en.nia.gov.cn` | China's 240-hour visa-free transit and unilateral visa-free nationality lists, for the Visa section. | facts only | yes | no |
+| `nz-immigration` | `www.immigration.govt.nz` | New Zealand's visa-waiver countries, NZeTA, visitor levy and transit rules, for the Visa section. | open | yes | no |
 | `smartraveller` | `www.smartraveller.gov.au` | Official Australian travel advice per country (entry rules, safety, local laws) for Visa and Travel tips. | open | yes | no |
 | `state-dept-advisories-api` | `cadataapi.state.gov` | Official US travel advisory level and summary per country, for the Visa section's safety advice. | open | yes | no |
+| `thai-evisa` | `www.thaievisa.go.th` | Thailand's visa-exemption list and e-Visa categories, for the Visa section. | facts only | yes | no |
+| `uae-visa-uae` | `u.ae` | UAE visa-on-arrival nationalities and tourist visa types, for the Visa section. | facts only | yes | no |
+| `vietnam-evisa` | `evisa.gov.vn` | Vietnam's e-Visa rules and ports of entry, for the Visa section. | facts only | yes | no |
+| `au-homeaffairs-visas` | `immi.homeaffairs.gov.au` | Which passports qualify for Australia's ETA or eVisitor and the visitor visa rules, for the Visa section. | open | no | no |
+| `auswaertiges-amt-opendata` | `www.auswaertiges-amt.de` | German embassy and consulate contacts, health leaflets and travel warnings per country, for the Emergency card, Visa and Travel tips. | API terms | no | no |
+| `enwiki-visa-requirements` | `dumps.wikimedia.org` | About 199 passport-by-destination tables (visa-free, eVisa, visa on arrival, days) used only to cross-check official visa rules in the Visa section. | share-alike | no | no |
 | `passport-index-dataset` | `github.com` | Visa requirements by passport, only as a cross-check for the Visa section; provenance unclear, so off. | restricted | no | no |
 | `state-dept-advisories-rss` | `travel.state.gov` | US travel advisory changes per country for the Visa section; travel.state.gov blocks our bot, so off. | open | no | no |
 | `state-dept-country-pages` | `travel.state.gov` | US entry rules and embassy contacts per country for Visa and the Emergency card; travel.state.gov blocks our bot, so off. | open | no | no |
@@ -206,6 +372,8 @@ is added only with the owner's approval (see CONTRIBUTING.md).
 
 | Source | Website | What we take | Licence | On | Key |
 |---|---|---|---|---|---|
+| `abf-travellers` | `www.abf.gov.au` | Australia's duty-free limits, prohibited and restricted goods and the AUD 10,000 cash reporting rule, for Travel tips and Packing. | facts only | yes | no |
+| `aphis-pet-travel` | `www.aphis.usda.gov` | Rules for taking pets out of or into the US, by destination country, for Travel tips and Packing. | open | yes | no |
 | `blog-adventurouskate` | `www.adventurouskate.com` | Solo and women's travel guides from Adventurous Kate, for Travel tips and Places to see (headline, link and a short excerpt only). | facts only | yes | no |
 | `blog-alexinwanderland` | `www.alexinwanderland.com` | Travel blog posts with destination guides and practical trip advice, for Travel tips and Places to see (headline, link and a short excerpt only). | facts only | yes | no |
 | `blog-atlasandboots` | `www.atlasandboots.com` | Hiking and outdoor adventure guides from Atlas & Boots, for Activities, Places to see and Travel tips (headline, link and a short excerpt only). | facts only | yes | no |
@@ -237,9 +405,21 @@ is added only with the owner's approval (see CONTRIBUTING.md).
 | `blog-wildjunket` | `www.wildjunket.com` | Adventure travel guides from Wild Junket, for Travel tips and Places to see (headline, link and a short excerpt only). | facts only | yes | no |
 | `blog-worldofwanderlust` | `www.worldofwanderlust.com` | Travel blog posts with destination guides and practical trip advice, for Travel tips and Places to see (headline, link and a short excerpt only). | facts only | yes | no |
 | `blog-ytravelblog` | `www.ytravelblog.com` | Family travel guides from Y Travel Blog, for Travel tips and Places to see (headline, link and a short excerpt only). | facts only | yes | no |
+| `cbic-baggage` | `www.cbic.gov.in` | India's duty-free baggage allowance, the currency declaration and prohibited items, for Travel tips and Packing. | facts only | yes | no |
+| `cbp-travel` | `www.cbp.gov` | Visa Waiver Program countries and ESTA rules for Visa, plus US duty-free limits, prohibited and agricultural items and the $10,000 cash declaration for Travel tips and Packing. | open | yes | no |
+| `cbsa-travellers` | `www.cbsa-asfc.gc.ca` | Canada's personal exemptions, restricted goods and the CAD 10,000 cash reporting rule, for Travel tips and Packing. | facts only | yes | no |
 | `cdc-travel` | `wwwnc.cdc.gov` | Official health advice per destination (vaccines, medicines, health risks) for Travel tips and the Packing list. | open | yes | no |
+| `cfia-travellers` | `inspection.canada.ca` | Which food, plants and animals travellers may bring into Canada, for Travel tips and Packing. | facts only | yes | no |
 | `common-crawl` | `index.commoncrawl.org` | Index of a public web crawl, used only to discover travel pages (sights, things to do, advice) for Places to see, Activities and Travel tips. | facts only | yes | no |
+| `dubai-customs-passengers` | `www.dubaicustoms.gov.ae` | UAE duty-free allowances and banned items (medicines, e-cigarettes), for Travel tips and Packing. | facts only | yes | no |
+| `eu-customs-travellers` | `taxation-customs.ec.europa.eu` | EU duty-free allowances for alcohol and tobacco, the 10,000 euro cash declaration and banned counterfeit goods, for Travel tips and Packing. | open | yes | no |
+| `eu-food-pets-travel` | `food.ec.europa.eu` | The EU pet passport, rabies and microchip rules and the ban on meat and dairy in luggage from outside the EU, for Travel tips and Packing. | open | yes | no |
 | `fcdo-content-api` | `www.gov.uk` | Official UK travel advice per country (entry rules, safety, local laws, emergency numbers) for Visa, Emergency card and Travel tips. | open | yes | no |
+| `govuk-customs` | `www.gov.uk` | UK duty-free allowances, the 10,000 pound cash rule, banned meat and dairy and pet entry rules, for Travel tips and Packing. | open | yes | no |
+| `hk-customs-travellers` | `www.customs.gov.hk` | Hong Kong duty-free concessions for alcohol and tobacco and the HK$120,000 cash declaration, for Travel tips and Packing. | facts only | yes | no |
+| `japan-customs-passengers` | `www.customs.go.jp` | Japan's duty-free allowances, prohibited items and the one-million-yen cash declaration, for Travel tips and Packing. | open | yes | no |
+| `japan-maff-aqs` | `www.maff.go.jp` | Rules and bans for bringing pets, meat and sausages into Japan, for Travel tips and Packing. | open | yes | no |
+| `korea-customs-travellers` | `www.customs.go.kr` | Korea's USD 800 duty-free allowance, alcohol and tobacco limits and prohibited items, for Travel tips and Packing. | facts only | yes | no |
 | `liveriga` | `www.liveriga.com` | Riga's official tourism portal: sights, things to do, events and visitor advice, for Places to see, Activities, Events and Travel tips. | facts only | yes | no |
 | `lonelyplanet-sitemaps` | `www.lonelyplanet.com` | Lonely Planet destination articles for Places to see and Travel tips (headline, link and a short excerpt only). | facts only | yes | no |
 | `news-bbc` | `www.bbc.com` | BBC Travel travel-section articles (destination features, openings, travel disruptions) for Travel tips and Places to see (headline, link and a short excerpt only). | facts only | yes | no |
@@ -259,13 +439,21 @@ is added only with the owner's approval (see CONTRIBUTING.md).
 | `news-traveldailynews` | `www.traveldailynews.com` | TravelDailyNews articles (airline, route, airport and travel-rule changes) for Flights and Travel tips (headline, link and a short excerpt only). | facts only | yes | no |
 | `news-travelmag` | `www.travel-mag.com` | Travel-Mag travel-section articles (destination features, openings, travel disruptions) for Travel tips and Places to see (headline, link and a short excerpt only). | facts only | yes | no |
 | `news-wanderlust` | `www.wanderlust.co.uk` | Wanderlust (UK) travel-section articles (destination features, openings, travel disruptions) for Travel tips and Places to see (headline, link and a short excerpt only). | facts only | yes | no |
+| `nz-customs-travellers` | `www.customs.govt.nz` | New Zealand's allowances, the NZD 10,000 cash rule and the biosecurity food declaration, for Travel tips and Packing. | facts only | yes | no |
 | `se-dump` | `archive.org` | Travel Stack Exchange questions and answers (transit, border, money and practical problems) for Travel tips. | share-alike | yes | no |
+| `sg-customs-travellers` | `www.customs.gov.sg` | Singapore's GST relief, duty-free concession, no duty-free cigarettes and prohibited goods (chewing gum, e-cigarettes), for Travel tips and Packing. | facts only | yes | no |
 | `smartraveller` | `www.smartraveller.gov.au` | Official Australian travel advice per country (entry rules, safety, local laws) for Visa and Travel tips. | open | yes | no |
 | `wikivoyage-dump` | `dumps.wikimedia.org` | Wikivoyage destination guides (sights, things to do, where to stay, getting around, SIM and tips) for those app sections. | share-alike | yes | no |
+| `auswaertiges-amt-opendata` | `www.auswaertiges-amt.de` | German embassy and consulate contacts, health leaflets and travel warnings per country, for the Emergency card, Visa and Travel tips. | API terms | no | no |
+| `calendarific` | `calendarific.com` | Public holidays in about 230 countries (closures and crowds), for Events and Travel tips. | API terms | no | yes |
 | `culturetrip` | `theculturetrip.com` | Culture Trip destination guides (title and link only) for Places to see, Activities and Travel tips; every page times out for our bot, so off. | facts only | no | no |
+| `eurostat-prices` | `ec.europa.eu` | Official relative price levels for restaurants and hotels, food and transport per European country, for Travel tips cost guidance and itinerary budgets. | open | no | no |
+| `openholidays` | `openholidaysapi.org` | Public and school holidays by region for about 36 countries (crowds and closures), for Events and Travel tips. | share-alike | no | no |
 | `ricksteves-forum` | `community.ricksteves.com` | Traveller questions and answers about trips in Europe, for Travel tips; v1 uses only the Stack Exchange dump, so off. | facts only | no | no |
 | `se-api` | `api.stackexchange.com` | Travel Stack Exchange questions and answers for Travel tips; v1 uses the data dump instead, so off. | share-alike | no | no |
+| `tasteatlas` | `www.tasteatlas.com` | Traditional dishes and where to eat them by region, for Activities and Travel tips. | facts only | no | no |
 | `who-ith` | `www.who.int` | WHO health advice for travellers (vaccines, health risks) for Travel tips and the Packing list; licence restricted, so off. | restricted | no | no |
+| `worldbank-wdi-bulk` | `databank.worldbank.org` | Price level ratio and purchasing-power parity for every country, for Travel tips cost guidance and itinerary budgets. | open | no | no |
 
 ## Emergency card
 
@@ -274,8 +462,14 @@ is added only with the owner's approval (see CONTRIBUTING.md).
 | `canada-travel-json` | `data.international.gc.ca` | Official Canadian travel advice per country (entry rules, safety level, emergency contacts) for Visa and the Emergency card. | open | yes | no |
 | `enwiki-dump` | `dumps.wikimedia.org` | Facts from English Wikipedia: places, airport destination tables, emergency numbers and plug and voltage types, for Places to see, Flights, the Emergency card and the Packing list. | share-alike | yes | no |
 | `fcdo-content-api` | `www.gov.uk` | Official UK travel advice per country (entry rules, safety, local laws, emergency numbers) for Visa, Emergency card and Travel tips. | open | yes | no |
-| `usembassy-list` | `www.usembassy.gov` | US embassy and consulate addresses and phone numbers per country, for the Emergency card. | open | yes | no |
+| `mfat-embassies` | `www.mfat.govt.nz` | Official New Zealand embassy and consulate contacts per country, for the Emergency card. | open | yes | no |
+| `auswaertiges-amt-opendata` | `www.auswaertiges-amt.de` | German embassy and consulate contacts, health leaflets and travel warnings per country, for the Emergency card, Visa and Travel tips. | API terms | no | no |
+| `canada-offices-json` | `data.international.gc.ca` | Official Canadian embassy and consulate addresses, phones and office hours in every country, for the Emergency card. | open | no | no |
+| `govuk-medical-lists` | `www.gov.uk` | Official UK lists of English-speaking hospitals, clinics and doctors per country, for the Emergency card's hospitals. | open | no | no |
+| `govuk-world-orgs` | `www.gov.uk` | Official British embassy, high-commission and consulate addresses, phones and hours in every country, for the Emergency card. | open | no | no |
+| `healthsites-io` | `healthsites.io` | Hospitals and clinics worldwide with names, addresses and phones, for the Emergency card's hospitals. | share-alike | no | yes |
 | `state-dept-country-pages` | `travel.state.gov` | US entry rules and embassy contacts per country for Visa and the Emergency card; travel.state.gov blocks our bot, so off. | open | no | no |
+| `usembassy-list` | `www.usembassy.gov` | US embassy and consulate addresses and phone numbers per country, for the Emergency card. | open | no | no |
 | `wikidata-aviation` | `query.wikidata.org` | Airlines, airports and emergency numbers from Wikidata for Flights and the Emergency card; robots.txt disallows us, so off. | open | no | no |
 
 ## Local transportation
@@ -287,8 +481,29 @@ is added only with the owner's approval (see CONTRIBUTING.md).
 | `seat61` | `www.seat61.com` | How to travel by train and ferry between cities and countries, for Local transportation. | facts only | yes | no |
 | `transitland` | `transit.land` | Public-transit operators and their routes and stops by city, for Local transportation. | API terms | yes | yes |
 | `wikivoyage-dump` | `dumps.wikimedia.org` | Wikivoyage destination guides (sights, things to do, where to stay, getting around, SIM and tips) for those app sections. | share-alike | yes | no |
+| `auckland-gtfs` | `gtfs.at.govt.nz` | Auckland buses, trains and ferries for Local transportation. | open | no | no |
+| `delfi-opendata-oepnv` | `www.opendata-oepnv.de` | Germany's official nationwide public-transport timetables (DELFI) for Local transportation. | open | no | yes |
+| `delhi-otd` | `otd.delhi.gov.in` | Delhi DTC and cluster bus routes and stops for Local transportation. | open | no | yes |
+| `digitransit` | `api.digitransit.fi` | Finnish timetables (HSL, VR and regional transit) for Local transportation. | open | no | yes |
+| `entur-gtfs` | `storage.googleapis.com` | All Norwegian public transport, including trains, ferries and Hurtigruten, for Local transportation. | open | no | no |
+| `gtfs-de` | `download.gtfs.de` | Germany-wide rail, regional and city timetables (routes, lines and frequencies) for Local transportation. | open | no | no |
+| `hk-td-gtfs` | `static.data.gov.hk` | Hong Kong bus, minibus, ferry, tram and MTR routes and headways for Local transportation. | open | no | no |
+| `lta-datamall` | `datamall2.mytransport.sg` | Singapore bus routes, bus stops and MRT service disruptions for Local transportation. | open | no | yes |
+| `mobility-catalogs` | `raw.githubusercontent.com` | The worldwide catalogue of more than 2,000 GTFS feeds with download URLs and licences, the discovery list for city transit in Local transportation. | open | no | no |
 | `mobility-database` | `files.mobilitydatabase.org` | Catalogue of public-transit (GTFS) feeds by city for Local transportation; robots.txt disallows us, so off. | open | no | no |
 | `mobility-database-api` | `api.mobilitydatabase.org` | Catalogue of public-transit (GTFS) feeds by city for Local transportation; robots.txt is unreadable, so off. | open | no | yes |
+| `mta-gtfs` | `rrgtfsfeeds.s3.amazonaws.com` | New York City subway, bus and commuter-rail timetables for Local transportation. | API terms | no | no |
+| `odpt-japan` | `api.odpt.org` | Tokyo and Japanese rail, subway and bus timetables and stations for Local transportation. | API terms | no | yes |
+| `opentransportdata-swiss` | `data.opentransportdata.swiss` | The national Swiss timetable (SBB, PostBus, city transit, boats and cable cars) for Local transportation. | API terms | no | no |
+| `ovapi-gtfs-nl` | `gtfs.ovapi.nl` | All Dutch train, bus, tram and metro timetables for Local transportation. | open | no | no |
+| `sfbay-511` | `api.511.org` | One feed covering about 30 San Francisco Bay Area transit operators, for Local transportation. | API terms | no | yes |
+| `spain-nap` | `nap.transportes.gob.es` | Spain's official register of public-transport feeds (rail, bus, city transit) for Local transportation. | API terms | no | yes |
+| `tfl-unified-api` | `api.tfl.gov.uk` | London lines, stations, fares, service status and step-free access for Local transportation. | open | no | yes |
+| `tfnsw-opendata` | `api.transport.nsw.gov.au` | Sydney and New South Wales timetables for trains, buses, ferries and light rail, for Local transportation. | open | no | yes |
+| `trafiklab-gtfs-sverige` | `opendata.samtrafiken.se` | All Swedish public transport timetables for Local transportation. | open | no | yes |
+| `translink-seq-gtfs` | `gtfsrt.api.translink.com.au` | Brisbane, Gold Coast and Sunshine Coast buses, trains, ferries and trams, for Local transportation. | open | no | no |
+| `transport-data-gouv` | `transport.data.gouv.fr` | France's national register of every GTFS and NeTEx feed with links, licences and coverage, for city transport and rail in Local transportation. | open | no | no |
+| `vic-gtfs` | `opendata.transport.vic.gov.au` | Melbourne and Victoria train, tram and bus timetables for Local transportation. | open | no | no |
 
 ## Forex
 
@@ -305,8 +520,24 @@ is added only with the owner's approval (see CONTRIBUTING.md).
 
 | Source | Website | What we take | Licence | On | Key |
 |---|---|---|---|---|---|
+| `abf-travellers` | `www.abf.gov.au` | Australia's duty-free limits, prohibited and restricted goods and the AUD 10,000 cash reporting rule, for Travel tips and Packing. | facts only | yes | no |
+| `aphis-pet-travel` | `www.aphis.usda.gov` | Rules for taking pets out of or into the US, by destination country, for Travel tips and Packing. | open | yes | no |
+| `cbic-baggage` | `www.cbic.gov.in` | India's duty-free baggage allowance, the currency declaration and prohibited items, for Travel tips and Packing. | facts only | yes | no |
+| `cbp-travel` | `www.cbp.gov` | Visa Waiver Program countries and ESTA rules for Visa, plus US duty-free limits, prohibited and agricultural items and the $10,000 cash declaration for Travel tips and Packing. | open | yes | no |
+| `cbsa-travellers` | `www.cbsa-asfc.gc.ca` | Canada's personal exemptions, restricted goods and the CAD 10,000 cash reporting rule, for Travel tips and Packing. | facts only | yes | no |
 | `cdc-travel` | `wwwnc.cdc.gov` | Official health advice per destination (vaccines, medicines, health risks) for Travel tips and the Packing list. | open | yes | no |
+| `cfia-travellers` | `inspection.canada.ca` | Which food, plants and animals travellers may bring into Canada, for Travel tips and Packing. | facts only | yes | no |
+| `dubai-customs-passengers` | `www.dubaicustoms.gov.ae` | UAE duty-free allowances and banned items (medicines, e-cigarettes), for Travel tips and Packing. | facts only | yes | no |
 | `enwiki-dump` | `dumps.wikimedia.org` | Facts from English Wikipedia: places, airport destination tables, emergency numbers and plug and voltage types, for Places to see, Flights, the Emergency card and the Packing list. | share-alike | yes | no |
+| `eu-customs-travellers` | `taxation-customs.ec.europa.eu` | EU duty-free allowances for alcohol and tobacco, the 10,000 euro cash declaration and banned counterfeit goods, for Travel tips and Packing. | open | yes | no |
+| `eu-food-pets-travel` | `food.ec.europa.eu` | The EU pet passport, rabies and microchip rules and the ban on meat and dairy in luggage from outside the EU, for Travel tips and Packing. | open | yes | no |
+| `govuk-customs` | `www.gov.uk` | UK duty-free allowances, the 10,000 pound cash rule, banned meat and dairy and pet entry rules, for Travel tips and Packing. | open | yes | no |
+| `hk-customs-travellers` | `www.customs.gov.hk` | Hong Kong duty-free concessions for alcohol and tobacco and the HK$120,000 cash declaration, for Travel tips and Packing. | facts only | yes | no |
+| `japan-customs-passengers` | `www.customs.go.jp` | Japan's duty-free allowances, prohibited items and the one-million-yen cash declaration, for Travel tips and Packing. | open | yes | no |
+| `japan-maff-aqs` | `www.maff.go.jp` | Rules and bans for bringing pets, meat and sausages into Japan, for Travel tips and Packing. | open | yes | no |
+| `korea-customs-travellers` | `www.customs.go.kr` | Korea's USD 800 duty-free allowance, alcohol and tobacco limits and prohibited items, for Travel tips and Packing. | facts only | yes | no |
+| `nz-customs-travellers` | `www.customs.govt.nz` | New Zealand's allowances, the NZD 10,000 cash rule and the biosecurity food declaration, for Travel tips and Packing. | facts only | yes | no |
+| `sg-customs-travellers` | `www.customs.gov.sg` | Singapore's GST relief, duty-free concession, no duty-free cigarettes and prohibited goods (chewing gum, e-cigarettes), for Travel tips and Packing. | facts only | yes | no |
 | `wikivoyage-dump` | `dumps.wikimedia.org` | Wikivoyage destination guides (sights, things to do, where to stay, getting around, SIM and tips) for those app sections. | share-alike | yes | no |
 | `who-ith` | `www.who.int` | WHO health advice for travellers (vaccines, health risks) for Travel tips and the Packing list; licence restricted, so off. | restricted | no | no |
 
@@ -314,5 +545,86 @@ is added only with the owner's approval (see CONTRIBUTING.md).
 
 | Source | Website | What we take | Licence | On | Key |
 |---|---|---|---|---|---|
+| `argentina-travel` | `www.argentina.travel` | Official Argentine destinations, experiences and itineraries, for Places to see, Activities and the itinerary. | facts only | yes | no |
+| `australia-com` | `www.australia.com` | Official Australian itineraries, places, food and wine and events, for the itinerary, Places to see, Activities and Events. | facts only | yes | no |
 | `blog-earthtrekkers` | `www.earthtrekkers.com` | Detailed trip itineraries and hikes from Earth Trekkers, for the itinerary, Activities and Places to see (headline, link and a short excerpt only). | facts only | yes | no |
+| `chile-travel` | `chile.travel` | Official Chilean itineraries, events, activities and attractions, for the itinerary, Events and Activities. | facts only | yes | no |
+| `destinationcanada` | `travel.destinationcanada.com` | Canadian things to do and trip ideas, for Activities and the itinerary. | facts only | yes | no |
+| `discoverireland` | `www.discoverireland.ie` | Irish events, things to do, food experiences and road trips, for Events, Activities, the itinerary and Places to see. | facts only | yes | no |
+| `experienceoman` | `experienceoman.om` | Official Omani destinations, things to do and itineraries, for Places to see, Activities and the itinerary. | facts only | yes | no |
+| `france-fr` | `www.france.fr` | Official French inspiration, itineraries and gastronomy pages, for the itinerary, Places to see and Activities. | facts only | yes | no |
+| `gotokyo` | `www.gotokyo.org` | About 925 Tokyo spots, the event calendar and model courses, for Places to see, Events, Activities and the itinerary. | facts only | yes | no |
+| `goturkiye` | `goturkiye.com` | Official Turkish destinations, routes and events, for Places to see, the itinerary and Events. | facts only | yes | no |
+| `incredibleindia` | `www.incredibleindia.gov.in` | Official Indian destinations, attractions, festivals and itineraries, for Places to see, the itinerary and Events. | facts only | yes | no |
+| `nps-site` | `www.nps.gov` | Official things to do, tours, trails and ranger events for more than 400 US national parks, for Places to see, Activities, the itinerary and Events. | open | yes | no |
+| `nyctourism` | `www.nyctourism.com` | Official NYC event listings, restaurant guides and itineraries, for Events, Activities, the itinerary and Places to see. | facts only | yes | no |
+| `peru-travel` | `www.peru.travel` | Official Peruvian destinations and itineraries, for Places to see and the itinerary. | facts only | yes | no |
+| `spain-info` | `www.spain.info` | Spain's official routes, gastronomy and event calendar, for the itinerary, Events and Activities. | facts only | yes | no |
+| `visitcalifornia` | `www.visitcalifornia.com` | California road trips, experiences and events, for the itinerary, Activities, Events and Places to see. | facts only | yes | no |
+| `visitcostarica` | `www.visitcostarica.com` | Official Costa Rican itineraries and things to do, for the itinerary and Activities. | facts only | yes | no |
+| `visitdenmark` | `www.visitdenmark.com` | Official Danish destinations and itineraries, for Places to see and the itinerary. | facts only | yes | no |
+| `visitdubai` | `www.visitdubai.com` | Dubai events, sights and itineraries, for Events, Places to see and the itinerary. | facts only | yes | no |
+| `visitgreece` | `www.visitgreece.gr` | Official Greek routes (itineraries), events calendar and experiences, for the itinerary, Events, Activities and Places to see. | facts only | yes | no |
+| `visitlisboa` | `www.visitlisboa.com` | Lisbon's official event agenda and itineraries, for Events, the itinerary and Activities. | facts only | yes | no |
+| `visitphilly` | `www.visitphilly.com` | Philadelphia events, itineraries and restaurant guides (title and link only), for Events, the itinerary and Activities. | facts only | yes | no |
+| `visitqatar` | `visitqatar.com` | Qatar's official events calendar, things to do and itineraries, for Events, Activities and the itinerary. | facts only | yes | no |
+| `visitrwanda` | `visitrwanda.com` | Official Rwandan itineraries, events and destinations, for the itinerary, Events and Places to see. | facts only | yes | no |
+| `visitscotland` | `www.visitscotland.com` | Official Scottish road trips, itineraries, events and food trails, for the itinerary, Activities, Events and Places to see. | facts only | yes | no |
+| `visitsweden` | `visitsweden.com` | Official Swedish destinations and trip ideas, for Places to see and the itinerary. | facts only | yes | no |
+| `wien-info` | `www.wien.info` | Vienna events, Heurigen wine taverns, coffee houses and suggested itineraries, for Events, Activities, the itinerary and Places to see. | facts only | yes | no |
+| `colombia-travel` | `colombia.travel` | Official Colombian destinations and itineraries, for Places to see and the itinerary. | facts only | no | no |
+| `datatourisme-fr` | `diffuseur.datatourisme.fr` | Every French tourist office's events, restaurants, sights and walking or driving tours in one national feed, for Events, Activities, Places to see and the itinerary. | open | no | yes |
+| `eurostat-prices` | `ec.europa.eu` | Official relative price levels for restaurants and hotels, food and transport per European country, for Travel tips cost guidance and itinerary budgets. | open | no | no |
+| `korea-tourapi` | `apis.data.go.kr` | National Korean festivals, restaurants, sights and official travel courses, for Events, Activities, Places to see and the itinerary. | facts only | no | yes |
+| `myswitzerland-open-data` | `opendata.myswitzerland.io` | Swiss sights, experiences and tours as structured data, for Places to see, Activities and the itinerary. | facts only | no | yes |
 | `nager-date` | `date.nager.at` | Public holidays per country (closures and crowds) for Events and the itinerary; robots.txt disallows us, so off. | API terms | no | no |
+| `nps-data-api` | `developer.nps.gov` | US national park things to do, events and tours as structured data, for Activities, Events and the itinerary. | facts only | no | yes |
+| `stockholm-open-api` | `api.visitstockholm.com` | Official Stockholm events, curated guides and activities for Events, Activities and the itinerary. | open | no | no |
+| `worldbank-wdi-bulk` | `databank.worldbank.org` | Price level ratio and purchasing-power parity for every country, for Travel tips cost guidance and itinerary budgets. | open | no | no |
+
+## Needs a licence or API key
+
+Off until the owner registers a key, signs an agreement or buys a licence. The
+source's notes say where to sign up and what it costs.
+
+| Source | Website | Sections | Access route and cost |
+|---|---|---|---|
+| `airalo-partner` | `partners-doc.airalo.com` | sim | Needs partner approval (not granted). |
+| `atdw-atlas` | `developer.atdw.com.au` | events, activities, hotels | needs an API key: owner must sign the ATDW Distributor Licence Agreement at https://developer.atdw.com.au/ (paid: Industry A$165/month + A$165 set-up, Lite A$200/month + A$660, Premium A$400/month + A$660; 30-day trial key); adapter pending |
+| `bandsintown` | `rest.bandsintown.com` | events | needs an API key: owner must request an app_id and Bandsintown's written consent at https://help.artists.bandsintown.com/ (free, by approval); adapter pending |
+| `booking-demand-api` | `developers.booking.com` | hotels | Hotel prices are a non-goal; needs a partner contract. |
+| `calendarific` | `calendarific.com` | events, tips | needs an API key: owner must register a key at https://calendarific.com/signup (free: 500 requests/month); adapter pending: holidays reader (public holidays map to the event kind) |
+| `datatourisme-fr` | `diffuseur.datatourisme.fr` | events, activities, places, itinerary | needs an API key: owner must register a key at https://diffuseur.datatourisme.fr/ (free account; build a flux and use its download key); adapter pending: DATAtourisme JSON-LD flux reader |
+| `delfi-opendata-oepnv` | `www.opendata-oepnv.de` | getting_around | needs an account: owner must register at https://www.opendata-oepnv.de/ (free); the crawler never logs in, so a token-based download route is needed; adapter pending: GTFS static zip adapter (download, verify, index routes/stops per feed) |
+| `delhi-otd` | `otd.delhi.gov.in` | getting_around | needs an API key: owner must register a key at https://otd.delhi.gov.in/ (free); adapter pending: GTFS static zip adapter (download, verify, index routes/stops per feed) |
+| `digitransit` | `api.digitransit.fi` | getting_around | needs an API key: owner must register a key at https://portal-api.digitransit.fi/ (free); adapter pending: GTFS static zip adapter (download, verify, index routes/stops per feed) |
+| `duffel` | `api.duffel.com` | flights | Live fares are a non-goal; they stay on SerpAPI in the app (spec §2). |
+| `edinburgh-festivals-api` | `api.edinburghfestivalcity.com` | events | needs an API key: owner must register a key at https://api.edinburghfestivalcity.com/ (free); adapter pending: listings API reader |
+| `failte-ireland-od` | `failteireland.developer.azure-api.net` | places, activities | needs an API key: owner must register a key at https://failteireland.developer.azure-api.net/ (free tier, rate-limited; Open Data Plus subscription key); robots.txt of data.failteireland.ie timed out: re-check; adapter pending |
+| `germany-kg` | `open-data-germany.org` | events, places, activities | needs an API key: owner must register a key at https://open-data-germany.org/ (free key from GNTB); adapter pending: KG reader with a per-item licence filter |
+| `gyg-partner` | `partner.getyourguide.com` | activities | Needs affiliate approval (not granted). |
+| `healthsites-io` | `healthsites.io` | emergency_card | needs an API key: owner must register a key at https://healthsites.io/ (free personal account key); AI reservation (no LLM use); low value over OSM amenity=hospital; adapter pending: healthsites API reader |
+| `korea-tourapi` | `apis.data.go.kr` | events, activities, places, itinerary | needs an API key: owner must register a key at https://www.data.go.kr/ (free; dev key auto-approved at 1,000 calls/day, production needs review); licence: confirm the KOGL type of EngService2; adapter pending: TourAPI reader |
+| `lta-datamall` | `datamall2.mytransport.sg` | getting_around | needs an API key: owner must register a key at https://datamall.lta.gov.sg/content/datamall/en/request-for-api.html (free); adapter pending: DataMall paged JSON reader |
+| `mobility-database-api` | `api.mobilitydatabase.org` | getting_around | robots.txt of api.mobilitydatabase.org is unreadable: it answers 302 to a Google IAP login page (checked 2026-11-16), so no robots.txt grants VoyagerBot access, and the published API terms do not say automated access by third-party crawlers is allowed. When in doubt, don't crawl. Re-enable only with a readable robots.txt that allows us. |
+| `myswitzerland-open-data` | `opendata.myswitzerland.io` | places, activities, itinerary | robots.txt of opendata.myswitzerland.io answers 403 to VoyagerBot (research 2026-11-17): do-not-crawl origin; licence version unknown; needs an API key (x-api-key) |
+| `nps-data-api` | `developer.nps.gov` | activities, events, itinerary | robots.txt of developer.nps.gov answers 403 to VoyagerBot (research 2026-11-17): do-not-crawl origin; needs an API key (free, https://www.nps.gov/subjects/developer/get-started.htm); the public-domain nps.gov site is nps-site |
+| `odpt-japan` | `api.odpt.org` | getting_around | needs an API key: owner must register a key at https://developer.odpt.org/ (free, registration with approval; per-operator licences, some limited); adapter pending: ODPT API reader |
+| `openagenda-api` | `api.openagenda.com` | events | needs an API key: owner must register a key at https://developers.openagenda.com/ (free); terms not yet confirmed: OpenAgenda CGU not found; robots.txt redirects off-host; adapter pending |
+| `opensky` | `opensky-network.org` | flights | restricted licence (non-commercial or unknown), not ingested in v1 (spec §5.9). |
+| `predicthq` | `api.predicthq.com` | events | Paid only; the free plan has no API access. \| Research cadence: never. |
+| `ridb` | `ridb.recreation.gov` | activities, places | needs an API key: owner must register a key at https://ridb.recreation.gov/ (free); adapter pending: RIDB paged JSON reader |
+| `sfbay-511` | `api.511.org` | getting_around | needs an API key: owner must register a key at https://511.org/open-data/token (free); adapter pending: GTFS static zip adapter (download, verify, index routes/stops per feed) |
+| `spain-nap` | `nap.transportes.gob.es` | getting_around | needs an account: owner must register at https://nap.transportes.gob.es/ (free); licence per dataset to read; adapter pending: GTFS static zip adapter (download, verify, index routes/stops per feed) |
+| `tat-data-api` | `tatdataapi.io` | events, places, activities | needs an API key: owner must register a key at https://tatdataapi.io/ (free); terms not yet confirmed: terms are behind sign-up |
+| `tfl-unified-api` | `api.tfl.gov.uk` | getting_around | needs an API key: owner must register a key at https://api-portal.tfl.gov.uk/ (free); adapter pending: TfL Unified API reader (lines, stop points, fares) |
+| `tfnsw-opendata` | `api.transport.nsw.gov.au` | getting_around | needs an API key: owner must register a key at https://opendata.transport.nsw.gov.au/ (free); robots.txt of api.transport.nsw.gov.au answers 500 (checked 2026-11-17), so disallowed until readable; adapter pending: GTFS static zip adapter (download, verify, index routes/stops per feed) |
+| `trafiklab-gtfs-sverige` | `opendata.samtrafiken.se` | getting_around | needs an API key: owner must register a key at https://www.trafiklab.se/ (free); adapter pending: GTFS static zip adapter (download, verify, index routes/stops per feed) |
+| `travelpayouts` | `api.travelpayouts.com` | flights | Live fares are a non-goal (spec §2). |
+| `viator-partner` | `docs.viator.com` | activities | Needs affiliate approval (not granted). |
+| `visit-finland-datahub` | `datahub.visitfinland.com` | places, activities, events | needs an API key: owner must apply as a DataHub data user at https://datahub.visitfinland.com/ and accept the ToS (free as far as known; Business Finland decides); check the redistribution clause; adapter pending |
+| IATA Timatic (Web, Widget, AutoCheck API) (no spec) | iata.org (iatatravelcentre.com, timaticweb2.com denylisted) | visa, tips | Ask IATA Timatic sales (https://go.updates.iata.org/timatic-info) for a Timatic Widget or AutoCheck API licence for a consumer trip planner; get written consent for automated use and caching. Cost: No published price (dated trade-press figure: about EUR 499/year for 500 transactions); contract only. |
+| TravelDoc (ICTS Europe Systems) (no spec) | traveldoc.aero (denylisted) | visa, tips | Contact ICTS Europe Systems sales (ies.aero, mail@ictseurope.com) for a commercial or API licence; the site terms ban robots and extraction. Cost: Airline licence product; 'all-inclusive licence fee', no published price. |
+| Rome2Rio partner API (no spec) | rome2rio.com (denylisted) | getting_around | Rome2Rio partner API under contract only. Cost: Commercial; contract. |
+| Tourism New Zealand Tourism Business Database API (no spec) | newzealand.com (robots.txt answers 403) | activities, places, events | Apply to register@newzealand.com; separate agreement. Cost: Free, non-profit use only (so restricted for us). |
+| timeanddate.com API (no spec) | dev.timeanddate.com | events, weather | Buy an API plan at https://dev.timeanddate.com/; the website itself is personal, non-commercial use only. Cost: Paid, key. |
