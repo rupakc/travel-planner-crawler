@@ -1,0 +1,19 @@
+{
+  "origin_iata": "NYC",
+  "destination_iata": "LON",
+  "origin_airport": "JFK",
+  "destination_airport": "LHR",
+  "month": "2027-02",
+  "price": 412,
+  "currency": "USD",
+  "trip_type": "round_trip",
+  "departure_date": "2027-02-03",
+  "return_date": "2027-02-10",
+  "airline": "BA",
+  "flight_number": "178",
+  "transfers": 0,
+  "return_transfers": 0,
+  "duration_min": 790,
+  "search_url": "https://www.aviasales.com/search/NYC0302LON10021",
+  "publisher": "Travelpayouts / Aviasales Data API"
+}

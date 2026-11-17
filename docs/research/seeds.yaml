@@ -66,11 +66,11 @@ seeds:
     name: "Travelpayouts/Aviasales Data API"
     url: "https://api.travelpayouts.com/"
     method: "api"
-    license: "Affiliate ToS"
-    cadence: "daily"
+    license: "Travelpayouts affiliate agreement; Data API terms"
+    cadence: "weekly"
     needs_key: true
     allowed: true
-    notes: "cached cheapest fares"
+    notes: "cached cheapest fares per route-month (Aviasales users' searches, 2-7 days old), not live prices; grouped_prices group_by=month, one call per route; provider rate limit 600/min, recommends caching 24 h"
   - id: openflights
     category: "flights"
     name: "OpenFlights routes"

@@ -24,10 +24,16 @@ pub fn init_tracing(ctx: &Ctx, role: &str) {
 
 /// The metrics registry for a process.
 pub fn metrics(ctx_cfg: &vc_config::Config, clock: Arc<dyn vc_core::Clock>) -> Arc<Metrics> {
-    Arc::new(Metrics::new(
-        clock,
-        vc_obs::heartbeat_freshness(&ctx_cfg.obs),
-    ))
+    let m = Metrics::new(clock, vc_obs::heartbeat_freshness(&ctx_cfg.obs));
+    // `crawler_adapter_calls_total{adapter}`: calls sent by adapters with a call budget
+    // (Travelpayouts), counted in the process that runs them (the fetcher).
+    m.register_counter_fn(
+        "crawler_adapter_calls",
+        "Calls sent by budgeted API adapters since the process started",
+        "adapter",
+        Box::new(vc_sources::adapters::call_counts),
+    );
+    Arc::new(m)
 }
 
 /// The progress tracker (health window `obs.progress_window_s`).

@@ -21,7 +21,9 @@ use regex::Regex;
 use serde_json::{Map, Value, json};
 use vc_core::{CanonicalUrl, Error, Result};
 
-use super::{canada_advisories, ecb_fx, fcdo_content_api, state_dept_advisories};
+use super::{
+    canada_advisories, ecb_fx, fcdo_content_api, state_dept_advisories, travelpayouts_fares,
+};
 
 /// Bumped when a mapping changes (part of the extractor version string of adapter records).
 pub const MAPPING_VERSION: u32 = 1;
@@ -46,6 +48,7 @@ pub const MAPPED: &[&str] = &[
     "fcdo_content_api",
     "ourairports_csv",
     "state_dept_advisories",
+    "travelpayouts_fares",
     "wikivoyage_dump",
 ];
 
@@ -58,6 +61,7 @@ pub fn records(adapter: &str, url: &CanonicalUrl, body: &[u8]) -> Option<Result<
         "fcdo_content_api" => fcdo(url, body),
         "ourairports_csv" => ourairports(body),
         "state_dept_advisories" => state_dept(body),
+        "travelpayouts_fares" => travelpayouts(url, body),
         "wikivoyage_dump" => wikivoyage(body),
         _ => return None,
     })
@@ -117,6 +121,112 @@ fn ecb(body: &[u8]) -> Result<Vec<AdapterItem>> {
                 ("publisher", s("European Central Bank")),
                 ("as_of", s(r.date)),
             ]),
+        })
+        .collect())
+}
+
+// ---------------------------------------------------------------------------------------------
+// Travelpayouts cached cheapest fares → cheapest_fare observations
+// ---------------------------------------------------------------------------------------------
+
+fn upper_code(c: Option<&str>, len: std::ops::RangeInclusive<usize>) -> Option<String> {
+    let c = c?.trim().to_ascii_uppercase();
+    (len.contains(&c.len()) && c.bytes().all(|b| b.is_ascii_alphanumeric())).then_some(c)
+}
+
+fn travelpayouts(url: &CanonicalUrl, body: &[u8]) -> Result<Vec<AdapterItem>> {
+    let travelpayouts_fares::Row::Route(origin, destination) = travelpayouts_fares::row(url)?
+    else {
+        return Ok(Vec::new()); // the route index makes no request
+    };
+    let p = travelpayouts_fares::parse(body)?;
+    let currency = p
+        .currency
+        .clone()
+        .or_else(|| {
+            url.as_url()
+                .query_pairs()
+                .find(|(k, _)| k == "currency")
+                .map(|(_, v)| v.to_ascii_uppercase())
+        })
+        .filter(|c| c.len() == 3 && c.bytes().all(|b| b.is_ascii_uppercase()));
+    let Some(currency) = currency else {
+        return Err(Error::Invalid("travelpayouts: no currency".into()));
+    };
+    Ok(p.months
+        .into_iter()
+        .map(|f| {
+            let series = format!("fare:{origin}:{destination}:{}", f.month);
+            let iata3 = |c: Option<&str>| {
+                upper_code(c, 3..=3)
+                    .filter(|c| c.bytes().all(|b| b.is_ascii_uppercase()))
+                    .map(Value::String)
+            };
+            let round_trip = f.return_at.as_deref().and_then(day).is_some();
+            AdapterItem {
+                kind: "cheapest_fare",
+                id: Some(series.trim_start_matches("fare:").to_string()),
+                series_key: Some(series),
+                data: obj(vec![
+                    ("origin_iata", s(origin.clone())),
+                    ("destination_iata", s(destination.clone())),
+                    ("origin_airport", iata3(f.origin_airport.as_deref())),
+                    (
+                        "destination_airport",
+                        iata3(f.destination_airport.as_deref()),
+                    ),
+                    ("month", s(f.month.clone())),
+                    (
+                        "price",
+                        serde_json::Number::from_f64(f.price).map(Value::Number),
+                    ),
+                    ("currency", s(currency.clone())),
+                    (
+                        "trip_type",
+                        s(if round_trip { "round_trip" } else { "one_way" }),
+                    ),
+                    (
+                        "departure_date",
+                        f.departure_at.as_deref().and_then(day).map(Value::String),
+                    ),
+                    (
+                        "return_date",
+                        f.return_at.as_deref().and_then(day).map(Value::String),
+                    ),
+                    (
+                        "airline",
+                        upper_code(f.airline.as_deref(), 2..=3).map(Value::String),
+                    ),
+                    (
+                        "flight_number",
+                        f.flight_number.filter(|n| n.len() <= 8).map(Value::String),
+                    ),
+                    (
+                        "transfers",
+                        f.transfers.filter(|n| *n <= 9).map(|n| json!(n)),
+                    ),
+                    (
+                        "return_transfers",
+                        f.return_transfers.filter(|n| *n <= 9).map(|n| json!(n)),
+                    ),
+                    (
+                        "duration_min",
+                        f.duration.filter(|n| *n <= 20_000).map(|n| json!(n)),
+                    ),
+                    (
+                        "found_at",
+                        f.found_at.filter(|t| t.len() <= 32).map(Value::String),
+                    ),
+                    (
+                        "search_url",
+                        f.link
+                            .filter(|l| l.starts_with('/') && !l.starts_with("//"))
+                            .filter(|l| !l.contains(char::is_whitespace))
+                            .map(|l| json!(format!("https://www.aviasales.com{l}"))),
+                    ),
+                    ("publisher", s("Travelpayouts / Aviasales Data API")),
+                ]),
+            }
         })
         .collect())
 }

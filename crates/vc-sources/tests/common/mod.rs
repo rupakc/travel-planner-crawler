@@ -137,6 +137,8 @@ pub struct TestClient {
     pub requested: Mutex<Vec<String>>,
     /// Every User-Agent sent.
     pub uas: Mutex<Vec<String>>,
+    /// The extra request headers of every request (as sent, secrets included: test only).
+    pub sent_headers: Mutex<Vec<Vec<(String, String)>>>,
 }
 
 impl TestClient {
@@ -153,6 +155,7 @@ impl TestClient {
             per_chunk: Duration::ZERO,
             requested: Mutex::new(Vec::new()),
             uas: Mutex::new(Vec::new()),
+            sent_headers: Mutex::new(Vec::new()),
         }
     }
 
@@ -169,6 +172,15 @@ impl TestClient {
         if let Some(a) = &req.accept {
             headers.push(("accept".into(), a.clone()));
         }
+        // Extra headers (API keys), as vc-fetch sends them.
+        let extra: Vec<(String, String)> = req
+            .headers
+            .iter()
+            .filter(|(k, _)| *k != "user-agent" && *k != "cookie")
+            .filter_map(|(k, v)| Some((k.as_str().to_string(), v.to_str().ok()?.to_string())))
+            .collect();
+        headers.extend(extra.iter().cloned());
+        self.sent_headers.lock().unwrap().push(extra);
         self.requested
             .lock()
             .unwrap()
@@ -212,11 +224,14 @@ impl PermitClient for TestClient {
     ) -> std::result::Result<Exchange, FetchError> {
         let start = self.clock.now();
         let r = self.get(p, &req).await?;
+        // vc-fetch keeps the headers it sent (they go into the WARC `request` record).
+        let mut request_headers = req.headers.clone();
+        request_headers.insert("user-agent", HeaderValue::from_static(vc_core::USER_AGENT));
         Ok(Exchange {
             url: req.url.clone(),
             redirects: Vec::new(),
             method: Method::GET,
-            request_headers: HeaderMap::new(),
+            request_headers,
             status: r.status.try_into().expect("status"),
             response_headers: Self::header_map(&r),
             body: Bytes::from(r.body),

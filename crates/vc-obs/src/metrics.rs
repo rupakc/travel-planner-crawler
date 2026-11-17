@@ -477,9 +477,92 @@ impl Metrics {
 /// `Content-Type` of [`Metrics::encode`].
 pub const CONTENT_TYPE: &str = prometheus_text::CONTENT_TYPE;
 
+/// Reads `(label value, count)` pairs on every scrape.
+pub type CounterReader = Box<dyn Fn() -> Vec<(&'static str, u64)> + Send + Sync>;
+
+/// A counter family whose values live elsewhere (a process-wide atomic of a crate that does
+/// not depend on vc-obs), read on every scrape.
+struct FnCounters {
+    name: &'static str,
+    help: &'static str,
+    label: &'static str,
+    read: CounterReader,
+}
+
+impl std::fmt::Debug for FnCounters {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        f.debug_struct("FnCounters")
+            .field("name", &self.name)
+            .finish_non_exhaustive()
+    }
+}
+
+impl prometheus_client::collector::Collector for FnCounters {
+    fn encode(
+        &self,
+        mut encoder: prometheus_client::encoding::DescriptorEncoder,
+    ) -> Result<(), std::fmt::Error> {
+        use prometheus_client::encoding::EncodeMetric;
+        use prometheus_client::metrics::counter::ConstCounter;
+        let values = (self.read)();
+        let mut family = encoder.encode_descriptor(
+            self.name,
+            self.help,
+            None,
+            prometheus_client::metrics::MetricType::Counter,
+        )?;
+        for (value, n) in values {
+            let labels: [(&str, &str); 1] = [(self.label, value)];
+            ConstCounter::new(n).encode(family.encode_family(&labels)?)?;
+        }
+        Ok(())
+    }
+}
+
+impl Metrics {
+    /// Registers a counter family `name{label}` (exposed as `<name>_total`) whose values
+    /// `read` returns on every scrape. Low-cardinality labels only.
+    pub fn register_counter_fn(
+        &self,
+        name: &'static str,
+        help: &'static str,
+        label: &'static str,
+        read: CounterReader,
+    ) {
+        self.registry
+            .write()
+            .expect("registry lock")
+            .register_collector(Box::new(FnCounters {
+                name,
+                help,
+                label,
+                read,
+            }));
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    #[test]
+    fn function_counters_are_read_on_scrape() {
+        use std::sync::atomic::Ordering;
+        static N: AtomicU64 = AtomicU64::new(0);
+        let m = Metrics::new(Arc::new(vc_core::SystemClock), Duration::from_secs(180));
+        m.register_counter_fn(
+            "crawler_adapter_calls",
+            "Calls sent by counting adapters",
+            "adapter",
+            Box::new(|| vec![("travelpayouts_fares", N.load(Ordering::Relaxed))]),
+        );
+        N.store(3, Ordering::Relaxed);
+        let text = m.encode();
+        assert!(
+            text.contains("crawler_adapter_calls_total{adapter=\"travelpayouts_fares\"} 3"),
+            "{text}"
+        );
+    }
 
     #[test]
     fn processor_skips_are_counted_per_reason() {

@@ -37,13 +37,14 @@ use vc_core::kinds::{KindDef, KindRegistry};
 pub use policy::{HIGH_STAKES_KINDS, MIN_REFERENCE_AGREEMENT, OFFICIAL_ONLY_KINDS};
 pub use schema_lint::DRAFT_2020_12;
 
-/// The 19 entity kinds of v1 (spec §5.7), sorted.
-pub const V1_KINDS: [&str; 19] = [
+/// The 20 entity kinds of v1 (spec §5.7, plus `cheapest_fare` from 2026-11-17), sorted.
+pub const V1_KINDS: [&str; 20] = [
     "activity",
     "advisory",
     "airport",
     "article",
     "attraction",
+    "cheapest_fare",
     "emergency_numbers",
     "event",
     "fx_rate",

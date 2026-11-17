@@ -1452,11 +1452,296 @@ fn registry_lists_every_adapter_once() {
     let mut sorted = ids.clone();
     sorted.sort();
     sorted.dedup();
-    assert_eq!(sorted.len(), 12);
-    assert_eq!(ids.len(), 12);
+    assert_eq!(sorted.len(), 13);
+    assert_eq!(ids.len(), 13);
     for id in &ids {
         assert_eq!(adapters::get(id).unwrap().id(), *id);
     }
     let cfg_ids: Vec<&str> = adapters::registry().iter().map(|a| a.id()).collect();
     assert_eq!(cfg_ids, ids);
+}
+
+// ---------------------------------------------------------------------------------------
+// travelpayouts_fares
+
+const TP_TOKEN: &str = "tp-secret-token-0123456789abcdef";
+const TP_SECRET: &str = "crawler-src-travelpayouts-key";
+
+/// Answers the NYC→LON route row, only with the token in the header.
+async fn tp_server(resp: ResponseTemplate) -> MockServer {
+    let s = MockServer::start().await;
+    Mock::given(method("GET"))
+        .and(path(adapters::travelpayouts_fares::PATH))
+        .and(query_param("origin", "NYC"))
+        .and(query_param("destination", "LON"))
+        .and(query_param("group_by", "month"))
+        .and(wiremock::matchers::header("x-access-token", TP_TOKEN))
+        .respond_with(resp)
+        .mount(&s)
+        .await;
+    s
+}
+
+fn tp_ok() -> ResponseTemplate {
+    ok(
+        fixture("travelpayouts_grouped_prices_month.json"),
+        "application/json; charset=utf-8",
+    )
+}
+
+fn tp_route(s: &MockServer) -> String {
+    format!(
+        "{}{}",
+        s.uri(),
+        adapters::travelpayouts_fares::route_path("NYC", "LON")
+    )
+}
+
+async fn tp_harness(url: &str) -> Harness {
+    let mut h = Harness::new(spec("travelpayouts"), "travelpayouts_fares", url, t0()).await;
+    h.secrets.0.insert(TP_SECRET.into(), TP_TOKEN.into());
+    h
+}
+
+/// A fresh call budget per test (the registered adapter's budget is process-wide).
+fn tp_adapter(
+    budget: &'static adapters::travelpayouts_fares::CallBudget,
+    daily_cap: u32,
+) -> adapters::travelpayouts_fares::TravelpayoutsFares {
+    adapters::travelpayouts_fares::TravelpayoutsFares {
+        daily_cap,
+        budget,
+        ..adapters::travelpayouts_fares::TravelpayoutsFares::DEFAULT
+    }
+}
+
+#[tokio::test]
+async fn travelpayouts_fares_parses_fixture() {
+    use adapters::travelpayouts_fares as t;
+    let p = t::parse(&fixture("travelpayouts_grouped_prices_month.json")).unwrap();
+    assert_eq!(p.currency.as_deref(), Some("USD"));
+    let months: Vec<&str> = p.months.iter().map(|m| m.month.as_str()).collect();
+    assert_eq!(months, ["2026-12", "2027-01"]);
+    assert_eq!(p.months[0].flight_number.as_deref(), Some("16"));
+    assert_eq!(p.months[0].return_at, None);
+    assert_eq!(p.months[1].price, 389.0);
+    assert!(t::parse(br#"{"success":false,"data":null,"error":"bad token"}"#).is_err());
+
+    static B: t::CallBudget = t::CallBudget::new();
+    let s = tp_server(tp_ok()).await;
+    let mut h = tp_harness(&tp_route(&s)).await;
+    let rep = h.run(&tp_adapter(&B, 10)).await.unwrap();
+    assert_eq!((rep.requests, rep.records, rep.complete), (1, 1, true));
+    assert_eq!(B.total(), 1);
+}
+
+#[tokio::test]
+async fn travelpayouts_index_row_enqueues_routes_without_a_request() {
+    use adapters::travelpayouts_fares as t;
+    static B: t::CallBudget = t::CallBudget::new();
+    let s = MockServer::start().await;
+    let mut h = tp_harness(&format!("{}{}", s.uri(), t::PATH)).await;
+    let rep = h.run(&tp_adapter(&B, 10)).await.unwrap();
+    assert_eq!((rep.requests, rep.records, rep.complete), (0, 0, true));
+    assert_eq!(B.total(), 0);
+    assert!(h.client.requested.lock().unwrap().is_empty());
+    let urls = h.frontier.enqueued_urls();
+    assert_eq!(urls.len(), 2 * t::ROUTES.len());
+    assert!(urls.iter().all(|u| !u.contains("token")));
+    for nu in h.frontier.enqueued.lock().unwrap().iter() {
+        assert_eq!(
+            nu.fetch_mode,
+            FetchMode::Adapter("travelpayouts_fares".into())
+        );
+        assert!(matches!(t::row(&nu.url), Ok(t::Row::Route(..))));
+    }
+}
+
+#[tokio::test]
+async fn travelpayouts_fares_writes_raw_first() {
+    let s = tp_server(tp_ok()).await;
+    raw_first_case(
+        &adapters::travelpayouts_fares::TravelpayoutsFares::DEFAULT,
+        "travelpayouts",
+        &tp_route(&s),
+        &[(TP_SECRET, TP_TOKEN)],
+    )
+    .await;
+}
+
+#[tokio::test]
+async fn travelpayouts_token_never_reaches_the_spool() {
+    use adapters::travelpayouts_fares as t;
+    static B: t::CallBudget = t::CallBudget::new();
+    let s = tp_server(tp_ok()).await;
+    let mut h = tp_harness(&tp_route(&s)).await;
+    h.run(&tp_adapter(&B, 10)).await.unwrap();
+    // Sent in the header only, never in the URL.
+    let sent = h.client.sent_headers.lock().unwrap().clone();
+    assert_eq!(sent.len(), 1);
+    assert!(
+        sent[0]
+            .iter()
+            .any(|(k, v)| k == "x-access-token" && v == TP_TOKEN)
+    );
+    assert!(
+        h.client
+            .requested
+            .lock()
+            .unwrap()
+            .iter()
+            .all(|u| !u.contains(TP_TOKEN))
+    );
+    assert!(!h.sink.records.is_empty());
+    for r in &h.sink.records {
+        assert!(!r.meta.url.as_str().contains(TP_TOKEN));
+        if let SpoolPayload::Response(e) = &r.payload {
+            assert!(!e.url.as_str().contains(TP_TOKEN));
+            assert!(!e.request_headers.contains_key("x-access-token"));
+            assert!(!format!("{:?}", e.request_headers).contains(TP_TOKEN));
+            assert!(!String::from_utf8_lossy(&e.body).contains(TP_TOKEN));
+        }
+    }
+}
+
+#[tokio::test]
+async fn travelpayouts_daily_cap_stops_calls() {
+    use adapters::travelpayouts_fares as t;
+    use vc_core::fetch::FetchError;
+    static B: t::CallBudget = t::CallBudget::new();
+    let s = tp_server(tp_ok()).await;
+    for _ in 0..2 {
+        let mut h = tp_harness(&tp_route(&s)).await;
+        h.run(&tp_adapter(&B, 2)).await.unwrap();
+    }
+    let mut h = tp_harness(&tp_route(&s)).await;
+    let err = h.run(&tp_adapter(&B, 2)).await.unwrap_err();
+    match err {
+        Error::Fetch(FetchError::RateLimited {
+            status: 429,
+            retry_after: Some(d),
+        }) => assert_eq!(d, Duration::from_secs(21 * 3600), "until the next UTC day"),
+        other => panic!("{other:?}"),
+    }
+    assert!(
+        h.client.requested.lock().unwrap().is_empty(),
+        "no call past the cap"
+    );
+    assert!(h.sink.records.is_empty());
+    assert_eq!(s.received_requests().await.unwrap().len(), 2);
+    assert_eq!((B.total(), B.used_on(t0())), (2, 2));
+}
+
+#[tokio::test]
+async fn travelpayouts_429_backs_off_with_retry_after() {
+    use adapters::travelpayouts_fares as t;
+    use vc_core::fetch::FetchError;
+    static B: t::CallBudget = t::CallBudget::new();
+    let s = tp_server(
+        ResponseTemplate::new(429)
+            .insert_header("retry-after", "55")
+            .set_body_string("rate limit"),
+    )
+    .await;
+    let mut h = tp_harness(&tp_route(&s)).await;
+    let err = h.run(&tp_adapter(&B, 10)).await.unwrap_err();
+    assert!(
+        matches!(
+            err,
+            Error::Fetch(FetchError::RateLimited {
+                status: 429,
+                retry_after: Some(d),
+            }) if d == Duration::from_secs(55)
+        ),
+        "{err:?}"
+    );
+    assert_eq!(
+        s.received_requests().await.unwrap().len(),
+        1,
+        "no retry inside the adapter"
+    );
+    assert_eq!(h.sink.records.len(), 1, "the 429 itself is spooled");
+}
+
+#[tokio::test]
+async fn travelpayouts_fresh_row_is_not_refetched() {
+    use adapters::travelpayouts_fares as t;
+    use vc_core::ids::CaptureRef;
+    static B: t::CallBudget = t::CallBudget::new();
+    let s = tp_server(tp_ok()).await;
+    let at = |ago: chrono::Duration| CaptureRef {
+        capture_id: vc_core::CaptureId::at(t0() - ago),
+        captured_at: t0() - ago,
+    };
+
+    let mut h = tp_harness(&tp_route(&s)).await;
+    h.claim.urls[0].last_capture = Some(at(chrono::Duration::hours(3)));
+    let rep = h.run(&tp_adapter(&B, 10)).await.unwrap();
+    assert_eq!((rep.requests, rep.records, rep.complete), (0, 0, true));
+    assert_eq!(s.received_requests().await.unwrap().len(), 0);
+    assert_eq!(B.total(), 0);
+
+    let mut h = tp_harness(&tp_route(&s)).await;
+    h.claim.urls[0].last_capture = Some(at(chrono::Duration::days(7)));
+    let rep = h.run(&tp_adapter(&B, 10)).await.unwrap();
+    assert_eq!(rep.requests, 1);
+
+    // The fetcher never schedules a route row sooner than six days.
+    assert!(
+        adapters::min_refetch("travelpayouts_fares").unwrap() >= Duration::from_secs(6 * 86_400)
+    );
+    assert_eq!(adapters::min_refetch("ecb_fx"), None);
+}
+
+#[test]
+fn travelpayouts_records_are_fare_observations() {
+    use adapters::records::records;
+    use adapters::travelpayouts_fares as t;
+    let u = |p: &str| {
+        vc_core::CanonicalUrl::parse(&format!("https://api.travelpayouts.com{p}")).unwrap()
+    };
+    let body = fixture("travelpayouts_grouped_prices_month.json");
+    let route = u(&t::route_path("NYC", "LON"));
+    let items = records("travelpayouts_fares", &route, &body)
+        .unwrap()
+        .unwrap();
+    assert_eq!(items.len(), 2);
+    let keys: Vec<&str> = items
+        .iter()
+        .map(|i| i.series_key.as_deref().unwrap())
+        .collect();
+    assert_eq!(keys, ["fare:NYC:LON:2026-12", "fare:NYC:LON:2027-01"]);
+    let jan = &items[1];
+    assert_eq!(jan.kind, "cheapest_fare");
+    assert_eq!(jan.id.as_deref(), Some("NYC:LON:2027-01"));
+    let d = &jan.data;
+    assert_eq!(d["origin_iata"], "NYC");
+    assert_eq!(d["destination_airport"], "LGW");
+    assert_eq!(d["month"], "2027-01");
+    assert_eq!(d["price"], 389.0);
+    assert_eq!(d["currency"], "USD");
+    assert_eq!(d["trip_type"], "round_trip");
+    assert_eq!(d["departure_date"], "2027-01-19");
+    assert_eq!(d["return_date"], "2027-01-27");
+    assert_eq!(d["airline"], "DY");
+    assert_eq!(d["transfers"], 0);
+    assert_eq!(d["duration_min"], 845);
+    assert!(
+        d["search_url"]
+            .as_str()
+            .unwrap()
+            .starts_with("https://www.aviasales.com/search/NYC1901LON27011?")
+    );
+    assert_eq!(d["publisher"], "Travelpayouts / Aviasales Data API");
+    let dec = &items[0].data;
+    assert_eq!(dec["trip_type"], "one_way");
+    assert_eq!(dec["flight_number"], "16");
+    assert!(dec.get("return_date").is_none());
+    // The route index makes no request and maps to nothing.
+    let index = records("travelpayouts_fares", &u(t::PATH), b"{}")
+        .unwrap()
+        .unwrap();
+    assert!(index.is_empty());
+    let failed = records("travelpayouts_fares", &route, br#"{"success":false}"#).unwrap();
+    assert!(failed.is_err());
 }

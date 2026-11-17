@@ -1,0 +1,142 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/rupakc/travel-planner-crawler/schemas/cheapest_fare.v1.json",
+  "title": "Cheapest cached fare",
+  "description": "One record: the cheapest fare a fare cache holds for one route and one departure month, as seen when it was fetched (a time series per route-month). Not a live, bookable price. Voyager use: pricing advisor, budget planner and fare-calendar context (typical fares and their trend).",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "origin_iata": {
+      "type": "string",
+      "maxLength": 3,
+      "description": "Origin city or airport IATA code as queried.",
+      "pattern": "^[A-Z]{3}$"
+    },
+    "destination_iata": {
+      "type": "string",
+      "maxLength": 3,
+      "description": "Destination city or airport IATA code as queried.",
+      "pattern": "^[A-Z]{3}$"
+    },
+    "origin_airport": {
+      "type": "string",
+      "maxLength": 3,
+      "description": "Departure airport IATA code of the fare.",
+      "pattern": "^[A-Z]{3}$"
+    },
+    "destination_airport": {
+      "type": "string",
+      "maxLength": 3,
+      "description": "Arrival airport IATA code of the fare.",
+      "pattern": "^[A-Z]{3}$"
+    },
+    "month": {
+      "type": "string",
+      "maxLength": 7,
+      "description": "Departure month (YYYY-MM).",
+      "pattern": "^[0-9]{4}-[0-9]{2}$"
+    },
+    "price": {
+      "type": "number",
+      "minimum": 0,
+      "description": "The cheapest cached price, exactly as published (whole trip, one adult)."
+    },
+    "currency": {
+      "type": "string",
+      "maxLength": 3,
+      "description": "ISO 4217 code of `price`.",
+      "pattern": "^[A-Z]{3}$"
+    },
+    "trip_type": {
+      "type": "string",
+      "enum": ["one_way", "round_trip"],
+      "description": "round_trip when the fare has a return date."
+    },
+    "departure_date": {
+      "type": "string",
+      "maxLength": 10,
+      "description": "Departure date of the fare (YYYY-MM-DD).",
+      "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$"
+    },
+    "return_date": {
+      "type": "string",
+      "maxLength": 10,
+      "description": "Return date of the fare (YYYY-MM-DD), round trips only.",
+      "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$"
+    },
+    "airline": {
+      "type": "string",
+      "maxLength": 3,
+      "description": "Marketing airline IATA code.",
+      "pattern": "^[A-Z0-9]{2,3}$"
+    },
+    "flight_number": {
+      "type": "string",
+      "maxLength": 8,
+      "description": "Outbound flight number."
+    },
+    "transfers": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 9,
+      "description": "Stops on the way out."
+    },
+    "return_transfers": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 9,
+      "description": "Stops on the way back."
+    },
+    "duration_min": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 20000,
+      "description": "Total flight duration in minutes, as published."
+    },
+    "found_at": {
+      "type": "string",
+      "maxLength": 32,
+      "description": "When the cache found this price (ISO 8601), if the source gives it."
+    },
+    "search_url": {
+      "type": "string",
+      "maxLength": 2048,
+      "description": "The source's own search link for this fare (carries no affiliate marker; the app adds one when it links out).",
+      "pattern": "^https://[^\\s]+$"
+    },
+    "publisher": {
+      "type": "string",
+      "maxLength": 120,
+      "description": "Who publishes the cache (e.g. \"Travelpayouts / Aviasales Data API\")."
+    },
+    "source_url": {
+      "type": "string",
+      "maxLength": 2048,
+      "description": "The page's own link for this item (official site, booking or detail page), copied verbatim from the page.",
+      "pattern": "^https?://[^\\s]+$"
+    },
+    "as_of": {
+      "type": "string",
+      "maxLength": 10,
+      "description": "The \"last updated\", \"valid from\" or publication date the page itself states for this information (YYYY-MM-DD).",
+      "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$"
+    },
+    "evidence": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "maxLength": 300,
+        "description": "A verbatim quote from the page."
+      },
+      "maxItems": 3,
+      "description": "Up to 3 short verbatim quotes from the page that support the most important facts."
+    }
+  },
+  "required": [
+    "origin_iata",
+    "destination_iata",
+    "month",
+    "price",
+    "currency"
+  ]
+}

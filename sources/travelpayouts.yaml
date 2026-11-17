@@ -7,33 +7,37 @@ source_class: commercial_api
 licence:
   class: api_terms
   spdx: null
-  attribution: Travelpayouts/Aviasales Data API
-  url: null
+  attribution: 'Fare data: Travelpayouts / Aviasales (cached prices found by Aviasales users)'
+  url: https://support.travelpayouts.com/hc/en-us/articles/203956053-Travelpayouts-Affiliate-Agreement-The-public-offer
 method: api
 seeds:
-- https://api.travelpayouts.com/
+- https://api.travelpayouts.com/aviasales/v3/grouped_prices
 sitemaps: []
 feeds: []
-adapter: null
+adapter: travelpayouts_fares
 include: []
 exclude: []
 max_depth: 0
 kinds:
-- airport
-- route
+- cheapest_fare
 llm_kinds: []
 render: never
-cadence: daily
+cadence: weekly
 min_delay_s: 5
-daily_budget: 3000
+daily_budget: 200
 politeness_key: null
-enabled: false
+enabled: true
 needs_key: true
 key_secret: crawler-src-travelpayouts-key
-max_retention_days: null
-display_requirements: null
-notes: 'cached cheapest fares | Disabled: Live fares are a non-goal (spec §2).'
+max_retention_days: 400
+display_requirements: 'Cached cheapest prices Aviasales users found in the last 2-7 days, not live or
+  bookable: label them as typical/indicative fares with the date seen; link out only through a Travelpayouts
+  partner link (the owner''s marker).'
+notes: 'cached cheapest fares per route-month (Aviasales users'' searches, 2-7 days old), not live prices;
+  grouped_prices group_by=month, one call per route; provider rate limit 600/min, recommends caching 24
+  h | URL template: https://api.travelpayouts.com/'
 relevance:
   sections:
   - flights
-  why: Cached flight prices for the Flights section; live fares are a non-goal, so off.
+  why: 'Cached cheapest fares per route and month (not live prices) for typical-fare and price-trend context
+    in Flights: pricing advisor, budget planner, fare calendar.'
