@@ -8,9 +8,10 @@ Processing turns a committed capture into clean, versioned **records**. It runs 
   run changes nothing.
 - Work payloads hold ids only, never page content.
 
-> **Status:** every step below is built and tested in `vc-parse`, `vc-kinds`, `vc-extract`,
-> `vc-llm` and `vc-index`. The `processor` role in `vcrawl` that runs them is wired and
-> tested; captures reach it only once the `fetcher` is wired.
+> **Status:** every step below is built, wired into the `processor` role and covered by the
+> end-to-end tests. The LLM steps (extraction, repair, link triage, place disambiguation)
+> run only when `llm.enabled` is true; it is off by default (see
+> [Gemini and Budgets](Gemini-and-Budgets)).
 
 ## Pipeline
 
@@ -18,7 +19,10 @@ Processing turns a committed capture into clean, versioned **records**. It runs 
 flowchart TB
   CAP["capture_ready work item"] --> RAW["Read the capture from the raw store"]
   RAW --> H["Content handler for the media type"]
-  H --> LINKS["Links: enqueue in the frontier"]
+  H --> TRI{"Link in scope only by the seed-host fallback?"}
+  TRI -->|"yes, LLM on"| LT["LLM link triage"]
+  TRI -->|"no"| LINKS["Links: enqueue in the frontier"]
+  LT -->|"relevant or undecided"| LINKS
   H --> SD["Structured data: JSON-LD, microdata"]
   H --> TXT["Main text, language, simhash"]
   SD --> MAP["Map to kinds by tables, no LLM"]
@@ -30,7 +34,9 @@ flowchart TB
   VAL --> GR["Grounding checks"]
   GR --> PLACE["Place resolution to GeoNames ids"]
   PLACE --> KEY["Stable record key"]
-  KEY --> SINK["Record sink: records, versions, entities, observations, changes"]
+  KEY --> PEERS["High-stakes: peer check, hold or accept"]
+  PEERS --> SINK["Record sink: records, versions, entities, observations, changes"]
+  SINK --> STALE["Mark records missing from this capture stale"]
 ```
 
 ## 1. Content handlers
@@ -45,10 +51,23 @@ flowchart TB
 | JSON | `json` | JSON-LD flattened, else the whole document as one value |
 | CSV | `csv` | rows as objects keyed by the header (up to 50,000 rows) |
 
+**Reading the capture.** A `revisit` (a 304, or an identical body) points to an earlier
+record. The processor follows that chain (at most 64 hops, cycle-safe) to the stored body.
+If a purge rewrote the segment while it was reading, it reloads the capture row and tries
+once more; if the body is still missing, the item is retried later instead of dropped.
+
 Safety limits: XML with a DTD is refused (no entity expansion); the DOM is pruned to depth
 256 and 200,000 nodes before anything walks it; main text is capped at 1 MiB, links at
 5,000, sitemap entries at 50,000; CPU time per capture is capped at 5 s. **Simhash** (a
 64-bit fingerprint where similar texts get similar numbers) helps spot near-duplicates.
+
+**Link triage.** Most links are followed or not by the source's `include`/`exclude`
+patterns. A link that is in scope only because it is on a seed host (the source has no
+`include` patterns) is "uncertain". When the LLM is on, the processor sends a capture's
+uncertain links to the triage loop in one batch (see [Agentic Loops](Agentic-Loops)).
+A `relevant: false` answer keeps the link out of the frontier. If the call is refused,
+fails or cannot be parsed, the link is followed as before. Verdicts are cached by URL
+pattern, so similar links make no new call. Sitemap and feed entries are never triaged.
 
 ## 2. Structured data first
 
@@ -76,7 +95,9 @@ kind's schema (`responseSchema`), at most 400 tokens, temperature 0.1, no tools.
 records per call are accepted.
 
 **Prompt-injection containment.** Page text is placed only in the input, inside delimiters
-the page cannot forge, under a system prompt that says it is untrusted data. The model has
+the page cannot forge, under a system prompt that says it is untrusted data. Marker-like
+strings in the page are defanged. The delimiter nonce is a hash of the page text (blake3),
+so a recapture of an unchanged page sends the identical request and hits the LLM cache. The model has
 no tools and can only answer with schema JSON. Logs carry counts and ids, never page text
 or model output.
 
@@ -95,7 +116,7 @@ These catch planted data such as fake emergency numbers or phishing links.
 | URLs | Every URL must be on the source's own registrable domain or be one of the page's links. For high-stakes kinds, only the own domain counts. Non-HTTP schemes and URLs with credentials are always dropped. |
 | Arrays | Dropping a field inside an array element drops the whole element (a phone entry without its number could mislead). |
 | Re-validate | After drops, the record is validated again and removed if it no longer fits. |
-| Cross-source | If sources disagree on a high-stakes field, the record gets `conflict = true`, and the API shows it. |
+| Cross-source | If independent sources disagree on a high-stakes field, the record gets `conflict = true`, and the API shows it (see "Peer agreement" below). |
 
 The word "free" counts as grounding for a zero price.
 
@@ -103,12 +124,31 @@ The word "free" counts as grounding for a zero price.
 
 | Kind | Allowed source classes |
 |---|---|
-| `visa_rule`, `advisory` | `official` only |
+| `visa_rule`, `advisory` | `official` only, enforced in code whatever `kinds.toml` says |
 | `emergency_numbers` | `official`, or `reference` when **two independent reference sources agree** |
 | Others | as listed per kind in `kinds.toml` |
 
 A high-stakes kind from a non-official source is refused **before** any model call. The
-kind loader also refuses `kinds.toml` files that would weaken these rules.
+kind loader also refuses `kinds.toml` files that would weaken these rules; `kinds.toml` can
+only make them stricter.
+
+### Peer agreement
+
+For high-stakes records, other records of the same kind (**peers**) are looked up in the
+index after extraction.
+
+| Rule | Meaning |
+|---|---|
+| Independent | A peer counts only if it comes from another **publisher** (registrable domain via the PSL). Several sources of one publisher count once. |
+| Same place | Peers are filtered by place **before** the 500-row limit: a shared GeoNames id, or for country-level records without place ids, the same country. A record with no location never agrees or conflicts. A city-level record never matches a country-level one. |
+| Agrees | The peer covers and equals **every** non-empty fact group of the record (numbers, phones, URLs, …). Agreeing on the numbers alone does not vouch for a planted embassy phone. |
+| Conflicts | A fact group both carry differs. A group the peer lacks is neither. |
+
+Accepted records with a conflict are flagged. `emergency_numbers` from a `reference` source
+is **held** until a second independent source agrees, then accepted with its own
+provenance. Held records are kept in the `held_records` table (migration 1901), shared by
+all processors and kept across restarts: at most 10,000 (oldest dropped first), each for
+7 days. A newer capture replaces a held record; an older one never does.
 
 ## 7. Place resolution
 
@@ -129,6 +169,14 @@ A page can yield many records (for example 30 events). Each gets a stable `recor
 So the same event found again maps to the same record, and a new **version** is written
 only when its data changes.
 
+**Stale records.** When a newer capture of a page no longer contains a record that an
+earlier capture produced, the record is marked `stale` (migration 1902). It is not deleted
+and is still served; `stale_since` and the capture that missed it are recorded, and a
+change-feed row is written. A later capture that has it again re-activates it. Absence
+counts only where this capture could have produced the record: an LLM record is never
+staled because the LLM was off, over budget, blocked by UsePolicy or failed. An older
+capture never stales or re-activates a record that a newer capture already judged.
+
 ## 9. Quality, runs and canaries
 
 - Records below quality 0.3 are dropped.
@@ -140,6 +188,17 @@ only when its data changes.
 
 `vc-index` writes one transaction per capture: records, versions, observations, entities
 and change-feed rows. See [Data Model](Data-Model).
+
+Ordering rules keep the index correct when work arrives late or in parallel:
+
+- A tombstone (removal) and an upsert of the same records cannot interleave: they share a
+  database lock, so an upsert either lands before the tombstone (and is removed by it) or
+  sees it and stays out.
+- An older capture never re-activates a record a newer capture staled, and never adds a
+  record to a page and kind that a newer capture already judged.
+- No embedding is written for a record after it is tombstoned.
+- Observation tombstones carry their kind (migration 1502), so kind-filtered change-feed
+  clients see them.
 
 Code: [vc-parse](Crate-vc-parse), [vc-kinds](Crate-vc-kinds), [vc-extract](Crate-vc-extract),
 [vc-index](Crate-vc-index).

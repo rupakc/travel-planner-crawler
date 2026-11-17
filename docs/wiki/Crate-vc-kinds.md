@@ -9,7 +9,8 @@ code. Each one is three files, which this crate loads, checks and turns into `Ki
 | `schemas/<kind>.v<N>.json` | JSON Schema draft 2020-12; also used as Vertex `responseSchema` |
 | `prompts/<kind>.md` | the extraction system prompt |
 
-Path: `crates/vc-kinds`. Dependencies: `jsonschema`, `toml`.
+Path: `crates/vc-kinds`. Dependencies: `jsonschema`, `toml`. Status: wired; the processor
+loads the registry at startup.
 
 ## The 19 v1 kinds
 

@@ -20,6 +20,7 @@
 **Running it**
 - [Operations and Deploy](Operations-and-Deploy)
 - [Configuration](Configuration)
+- [Cost](Cost)
 - [Security](Security)
 
 **Developing**

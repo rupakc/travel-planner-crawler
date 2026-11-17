@@ -13,6 +13,9 @@ this page is a short guide.
 - TLS uses a **self-signed certificate** for the internal IP (2-year validity). The client
   pins it by reading `crawler-api-tls-cert` from Secret Manager. During rotation it accepts
   the current or the next certificate.
+- The API serves the key and certificate that `deploy.sh` installed as a **matched pair**
+  (`/run/secrets/api_tls_*`). It reads Secret Manager only if those files are missing or
+  unusable, so a half-done rotation never stops it.
 - `/metrics` is on a separate plain-HTTP listener, `127.0.0.1:9100`, never on the API port.
 
 ## Authentication and limits
@@ -70,6 +73,9 @@ What the API enforces before an item leaves:
   is null.
 - `serve = facts_only`: `excerpt` is null.
 - Tombstoned data (opt-out, purge, robots) is never returned.
+- An **author purge** (`vcrawl admin purge --author`) tombstones only records that name the
+  person as an author, blanks their posts in every stored version, and records the name
+  only as a SHA-256 hash ([Storage and Raw Data](Storage-and-Raw-Data)).
 
 When Voyager passes items to its own LLM, it wraps them as **untrusted reference data**, with
 the licence and conflict flags.
@@ -102,6 +108,9 @@ The contract is **additive only**: new endpoints, optional parameters, new field
 codes. Nothing is removed or renamed under `/v1`. Clients must ignore unknown fields. An
 insta snapshot of `/v1/openapi.json` fails the build on any change, so every contract change
 shows up in review.
+
+> **Status:** served by the `api` role in production compose, behind the firewall. Clients
+> are rows in `api_clients`, which keeps only an argon2id hash of each token.
 
 ## Voyager side
 

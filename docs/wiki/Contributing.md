@@ -24,7 +24,8 @@ comes before everything else. The repository version is
 ## Workflow
 
 - Branch from `main`. Write the failing test first, then the code.
-- Before pushing, run the commands in [Testing](Testing).
+- Before pushing, run the commands in [Testing](Testing). CI also runs the end-to-end test
+  (`e2e/run.sh`) on every pull request.
 - Dependencies are added only in the root `[workspace.dependencies]`, by a maintainer. Never
   run `cargo update` in a feature PR. On a lock conflict, take `main`'s `Cargo.lock`, run
   `cargo metadata`, push.
@@ -48,21 +49,23 @@ from colliding:
 
 | You want | Do this |
 |---|---|
-| A new website | `sources/<id>.yaml` valid against `schemas/source.schema.json` → `vcrawl admin source validate <id>` (once wired) → fixture + golden test. See [Sources and Licences](Sources-and-Licences). |
+| A new website | `sources/<id>.yaml` valid against `schemas/source.schema.json` → `vcrawl admin source validate <id>` → fixture + golden test. See [Sources and Licences](Sources-and-Licences). |
 | A new API or dump | `impl SourceAdapter` in `crates/vc-sources/src/adapters/`, register it in `adapters::REGISTRY`, add a recorded wiremock fixture. Spool raw before deriving. |
 | A new record kind | `schemas/<kind>.v1.json` + `prompts/<kind>.md` + a `kinds.toml` entry (source classes, verbatim fields, record or observation) + a fixture. The registry test enforces all four. See [vc-kinds](Crate-vc-kinds). |
 | A new media type | `impl ContentHandler` and register it in `vc-parse`. |
+| A new crash-safety step | add a named [failpoint](Glossary) (feature `failpoints`) and a test that crashes there. See [Testing](Testing). |
 | A new store, queue or LLM | implement `BlobStore`, `WorkQueue`, `LlmClient`, `Embedder` or `Frontier` from `vc-core`. |
 | A new API field | additive only; update the OpenAPI snapshot and `Crawler-API.md` in the same PR. See [Read API](Read-API). |
-| A migration | in your block, `SET lock_timeout = '5s'` first, expand-only; destructive steps go to `migrations/contract/`. See [Data Model](Data-Model). |
+| A migration | in your block, `SET lock_timeout = '5s'` first, expand-only (the lint and the [N-1](Glossary) test check it); destructive steps go to `migrations/contract/`. The image's schema labels come from `vcrawl migrate --print-schema`, and `deploy.sh` refuses an image whose min-schema is above the database's. See [Data Model](Data-Model). |
 
 ## Style
 
 - Rust: `rustfmt`, clippy with `-D warnings`, `missing_docs` warns, no `unsafe`.
 - Docs and comments: short sentences, plain words.
 - Wiki pages live in `docs/wiki/` and are published to the GitHub wiki by
-  `.github/workflows/wiki.yml` on every push to `main`. Edit them in the repository, not in
-  the wiki.
+  `.github/workflows/wiki.yml` on every push to `main` that touches them. Edit them in the
+  repository, not in the wiki: the sync overwrites wiki edits. The workflow first checks that
+  every internal wiki link points to an existing page.
 
 ## Reporting a site problem
 

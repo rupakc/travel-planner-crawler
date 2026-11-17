@@ -11,7 +11,8 @@ provenance and licence, and serves them to Voyager through a private API.
 
 It is one Rust binary (`vcrawl`) with several roles, Postgres 17 + pgvector, Google Cloud
 Storage for raw WARC files, and Gemini on Vertex AI under a hard budget. It is designed to
-run on one small GCP VM for about $100 a month.
+run on one small GCP VM for about $74 to $104 a month
+([Cost](https://github.com/rupakc/travel-planner-crawler/wiki/Cost)).
 
 **Documentation: the [wiki](https://github.com/rupakc/travel-planner-crawler/wiki)**, generated from [`docs/wiki/`](docs/wiki/).
 
@@ -55,9 +56,11 @@ flowchart TB
     EMB["embedder"]
     MNT["maintenance"]
     API["api: /v1 on internal IP"]
+    OTL["otelcol: scrapes /metrics"]
   end
   GCS[("GCS: WARC segments, CDXJ, text tier")]
   GEM["Gemini on Vertex AI, budgeted"]
+  MON["Cloud Monitoring and Logging"]
   VOY["Voyager backend"]
 
   GATE -->|"HTTPS as VoyagerBot"| SITES
@@ -67,15 +70,17 @@ flowchart TB
   FET <-->|"claim, lease, commit"| PG
   FET -->|"WARC segments"| GCS
   PG -->|"capture_ready"| PRO
-  PRO -->|"records, entities"| PG
+  PRO -->|"records, entities, links"| PG
   PRO -->|"read raw"| GCS
-  PRO -->|"extract"| GEM
+  PRO -->|"extract, triage"| GEM
   EMB -->|"embed"| GEM
   EMB -->|"vectors"| PG
-  MNT -->|"partitions, purge"| PG
-  MNT -->|"rewrites"| GCS
+  MNT -->|"partitions, purge, digest"| PG
+  MNT -->|"rewrites, drill"| GCS
+  MNT -->|"scout, auditor (weekly)"| GEM
   API -->|"hybrid search"| PG
   VOY -->|"GET /v1, token, TLS"| API
+  OTL -->|"crawler_* metrics"| MON
 ```
 
 How it fits together: [Architecture](https://github.com/rupakc/travel-planner-crawler/wiki/Architecture) and
@@ -85,14 +90,24 @@ How it fits together: [Architecture](https://github.com/rupakc/travel-planner-cr
 
 | Part | State |
 |---|---|
-| Design (spec v3) and implementation plan | Done |
-| Library crates `vc-*`, migrations, testkit with fakes and oracles | Done, tested in CI |
-| Deploy kit and GCP bootstrap | Done, tested with fakes |
-| `vcrawl` binary (wiring the roles) | In progress: `processor`, `embedder` and `api` are wired; `scheduler`, `fetcher`, `maintenance`, `admin` and `migrate` are not yet |
-| End-to-end test in CI | Not started |
-| Agentic loops (link triage, source scout, quality auditor) | Not started |
-| Provisioning and go-live | Not started; the LLM stays off until the owner raises the project cap |
-| Voyager backend integration | Not started (main repo, behind a flag) |
+| Design (spec v3) and plan | Done |
+| Library crates (`vc-*`), migrations, testkit with fakes and oracles | Done, tested in CI |
+| `vcrawl` binary: every role (`scheduler`, `fetcher`, `processor`, `embedder`, `api`, `maintenance`, `admin`, `migrate`, `health`) | Wired and tested |
+| End-to-end test in CI (fake internet, two fetchers, 8 assertions) | Runs on every pull request and push to `main` |
+| Agentic loops | Wired: link triage in the processor; source scout and quality auditor weekly in maintenance. No-ops while the LLM is off. |
+| Deploy kit (`deploy/`) and GCP bootstrap (`infrastructure/`) | Done, tested with fakes; 12 alert policies, log bucket, Ops Agent config |
+| Nightly fuzzing (`vc-policy`, `vc-parse`, `vc-store`) | Runs every night |
+| Provisioning and go-live on GCP | Not yet. The crawl IP goes into `BOT.md` before the first crawl. The LLM stays off until the owner raises the project's Vertex spend cap. |
+| Voyager backend reading the API | Not started (main repo, behind a flag) |
+
+Still not done:
+
+| Item | Today |
+|---|---|
+| Vertex batch prediction (half price) | The batch runner exists in `vc-llm`; no role uses it yet. |
+| Monthly full restore drill on a Spot VM | Template and account exist; the weekly in-place equivalence drill runs instead. |
+| Parquet export of partitions older than 12 months | Stub: the maintenance job only lists due partitions. |
+| Contract (destructive) migrations | The mechanism exists (`vcrawl migrate --contract`); none written yet. |
 
 ## Quick start (development)
 
@@ -136,11 +151,12 @@ crates/          the Rust workspace
   vc-secrets       Secret Manager and env secrets
   vcrawl           the binary: roles, admin CLI, migrate
 testkit/         Postgres per test, fakes, fake web/Gemini/GCS, oracles
-migrations/      SQL migrations (expand-only)
-sources/         one YAML per source (117)      schemas/  JSON Schemas
-kinds.toml       kind policy                     prompts/  extraction prompts
+migrations/      SQL migrations (expand-only; contract/ for destructive ones)
+sources/         one YAML per source (117, 94 enabled)  schemas/  JSON Schemas
+e2e/             E2E compose stack, fake-web sources, runner with oracles
+kinds.toml       kind policy                     prompts/  extraction and agentic prompts
 policy/          denylist, sub-resource allowlist
-deploy/          the VM's compose kit, deployer, watchdog, systemd units
+deploy/          the VM's compose kit, deployer, watchdog, systemd units, otelcol config
 infrastructure/  idempotent gcloud bootstrap, bucket lifecycle, alert policies
 scripts/         source generator, ownership check
 docs/            design spec, plan, reviews, research, wiki sources
@@ -154,7 +170,7 @@ docs/            design spec, plan, reviews, research, wiki sources
 | How it works | [How a Page Gets Crawled](https://github.com/rupakc/travel-planner-crawler/wiki/How-a-Page-Gets-Crawled), [Storage and Raw Data](https://github.com/rupakc/travel-planner-crawler/wiki/Storage-and-Raw-Data), [Rendering with Chromium](https://github.com/rupakc/travel-planner-crawler/wiki/Rendering-with-Chromium), [Processing and Extraction](https://github.com/rupakc/travel-planner-crawler/wiki/Processing-and-Extraction) |
 | Data | [Data Model](https://github.com/rupakc/travel-planner-crawler/wiki/Data-Model), [Sources and Licences](https://github.com/rupakc/travel-planner-crawler/wiki/Sources-and-Licences), [Read API](https://github.com/rupakc/travel-planner-crawler/wiki/Read-API) |
 | Cost and AI | [Gemini and Budgets](https://github.com/rupakc/travel-planner-crawler/wiki/Gemini-and-Budgets), [Agentic Loops](https://github.com/rupakc/travel-planner-crawler/wiki/Agentic-Loops) |
-| Running it | [Operations and Deploy](https://github.com/rupakc/travel-planner-crawler/wiki/Operations-and-Deploy), [Configuration](https://github.com/rupakc/travel-planner-crawler/wiki/Configuration), [Security](https://github.com/rupakc/travel-planner-crawler/wiki/Security) |
+| Running it | [Operations and Deploy](https://github.com/rupakc/travel-planner-crawler/wiki/Operations-and-Deploy), [Cost](https://github.com/rupakc/travel-planner-crawler/wiki/Cost), [Configuration](https://github.com/rupakc/travel-planner-crawler/wiki/Configuration), [Security](https://github.com/rupakc/travel-planner-crawler/wiki/Security) |
 | Developing | [Contributing](https://github.com/rupakc/travel-planner-crawler/wiki/Contributing), [Testing](https://github.com/rupakc/travel-planner-crawler/wiki/Testing), one page per crate |
 
 The design spec ([`docs/superpowers/specs/`](docs/superpowers/specs/2026-11-15-voyager-crawler-design.md),

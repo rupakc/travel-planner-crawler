@@ -36,5 +36,16 @@ catch planted violations).
   pass. It uses its own robots parser (`texting_robots`), independent of `vc-policy`.
 - Fixtures under `testkit/fixtures/<crate>/` belong to that crate's owner.
 
-> **Status:** the fakes and oracles are built. The end-to-end compose run that uses them
-> with real roles (plan Task 16) is not started.
+## Used by the E2E suite
+
+The fakes and oracles also drive the end-to-end run in `e2e/` (not part of testkit): a
+compose stack with the real `vcrawl` roles (scheduler, two fetchers, processor, embedder,
+maintenance, api), Postgres, Chromium, `fake_web` and fake-gcs-server, with the LLM off.
+`e2e/runner` drives the crawl cycles and checks 8 assertions: `polite`, `raw_first`,
+`version_bump`, `api_provenance`, `challenge_parked`, `spa_rendered`, `private_ip_blocked`,
+`two_fetchers`. The `XFAIL` list of expected failures is empty, so every assertion blocks.
+CI runs it in `.github/workflows/e2e.yml`. Details: [Testing](Testing).
+
+Fixtures for vcrawl's own tests live in `testkit/fixtures/vcrawl/` (`data/` for the data
+path; `ops/` for admin and migrate, including `n_minus_1_queries.json`, the recorded queries
+of the previous image that the N-1 migration test replays).

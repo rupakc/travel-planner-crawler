@@ -49,11 +49,15 @@ The crawler follows RFC 9309, with stricter rules where the RFC leaves room.
 | robots.txt answer | What we do |
 |---|---|
 | 2xx | Parse the first 500 KiB. Use the `VoyagerBot` group if there is one, otherwise `*`. Longest match wins. |
+| 429 or 503 | Back the key off like any rate limit (below), honouring `Retry-After`. |
 | 404 or 410 | Allow everything. |
 | **401, 403, or a bot-challenge page** | **Do not crawl the whole key.** (Stricter than the RFC.) |
 | 5xx or network error | Disallow everything, retry with back-off. After 30 days of errors, use the last good copy. |
 
-- robots.txt is cached for up to 24 hours per origin, in the `origins` table.
+- A group named `VoyagerBot/1.0` (any version, any case) also applies to us: the
+  `/version` part is ignored. `VoyagerBotX` does not match.
+- robots.txt is cached for up to 24 hours per origin, in the `origins` table. Each good
+  answer is also kept as the "last good copy" for the 30-day rule above.
 - A missing or stale cache entry fails closed: the request is not made, and a refresh is
   queued.
 - **AI reservation:** if robots.txt blocks the major AI crawlers (`GPTBot`, `ClaudeBot`,
@@ -63,6 +67,10 @@ The crawler follows RFC 9309, with stricter rules where the RFC leaves room.
   (removed from the API and index).
 - Every redirect hop is checked against robots.txt and the scope. A redirect to **another
   key is never followed inline**; it is enqueued as a new URL under its own key.
+- A redirect within the same key to an origin whose robots.txt is not cached yet (apex to
+  `www`, `http` to `https`) fetches that robots.txt first, under the same permit, and
+  retries the URL once. If it is still not available, the URL waits until the robots
+  cache entry would expire (at least 10 minutes), not a fixed retry loop.
 
 ## Delay, concurrency and budgets
 
@@ -73,19 +81,42 @@ delay per key = max(robots Crawl-delay, source min_delay_s (at least 5 s), 10 ×
 
 - **EWMA latency** is a running average of the site's response time (smoothing 0.3). A slow
   site automatically gets a longer delay.
+- **Crawl-delay mid-claim.** When the fetcher reads a `Crawl-delay` during a claim, it
+  raises the permit's delay at once (`ClaimPermit::raise_delay`; the delay can only go up,
+  capped at 1 hour). Every later URL, redirect hop and sub-request of that same claim is
+  paced by it, not only the next claim.
 - At most **one request in flight per key**, including render sub-requests.
+- **Render sub-requests** (scripts and styles a page loads in Chromium) on the page's own
+  key wait a short **sub-resource gap** (250 ms, `[render] subresource_gap_ms`, never more
+  than the page delay) instead of the full page delay. The next page still waits the full
+  delay. Each sub-request counts once against the budget.
 - Each key has a **daily request budget** (default 3,000; a source can only lower it).
 - A **global rate** of 4 requests per second holds across all processes, as a token bucket
   row in Postgres.
-- A **daily raw-bytes cap** of 3 GB holds across all keys.
+- A **daily raw-bytes cap** of 3 GiB (`[fetch] daily_raw_bytes_cap`) holds across all keys
+  and processes. It is counted per UTC day in the `raw_bytes_daily` table; past it,
+  fetching pauses until the next day.
 
 ## Back-off and parking
 
 | Answer | Reaction |
 |---|---|
-| 429 or 503 | Honour `Retry-After`; otherwise double the wait, up to 24 hours. |
-| 401, 403, or a challenge page | **Park the key**: 24 h, then 48 h, and so on, up to 30 days. Never retried with a browser or another identity. |
+| 429 or 503 | Stop the claim and back off: wait = max(`Retry-After`, 2 x the previous penalty, 2 x the delay), capped at 24 hours. A short `Retry-After` never cancels the doubling already earned. |
+| 401, 403, or a challenge page | **Park the key** (reason `challenge`): 24 h, then 48 h, and so on, up to 30 days. Never retried with a browser or another identity. |
 | 5 server errors in a row | Park for 1 hour. |
+| Success (2xx, 304, or an adapter run that worked) | Ends a run of 5xx errors and halves the 429 penalty (below 1 s it is cleared). |
+
+The same rules apply to every way we reach a key:
+
+- **API and dump adapters** turn a 429 or 503 into a rate limit with its parsed
+  `Retry-After` (seconds or HTTP date), and other 5xx into server errors that count
+  toward the 5-in-a-row park.
+- **robots.txt** answering 429 or 503 rate-limits the key the same way.
+- **Rendered pages** go through the same status ladder as plain fetches: 404/410 mean
+  gone, 429/503 rate-limit the key and stop, other 5xx count as server errors, other
+  non-2xx fail the URL. Only a 2xx or 304 stores the DOM. A 429 or 503 on any in-scope
+  sub-request also ends the render and backs the key off. A 429 or 503 from an
+  allowlisted third party fails only that sub-request.
 
 Parks are counted in metrics and in a daily digest, not sent as one alert each. An alert
 fires only if more than 25 % of active keys are parked.
@@ -94,9 +125,36 @@ fires only if more than 25 % of active keys are parked.
 
 1. headers such as `cf-mitigated: challenge` (Cloudflare), `x-amzn-waf-action: captcha`
    (AWS WAF), `x-datadome` on a 4xx;
-2. interstitial markers of known bot-management providers, whatever the status;
+2. interstitial markers of known bot-management providers, whatever the status (for
+   Cloudflare: `cf_chl_opt`, `cf-browser-verification` and the challenge page titles).
+   The path `/cdn-cgi/challenge-platform/` alone is **not** enough: Cloudflare loads it on
+   ordinary pages too. It counts only with a 403 or 503, or a "Just a moment..." or
+   "Checking your browser" title;
 3. a CAPTCHA widget on a 401/403/429/503, or on a short page whose title asks to verify the
    visitor. A CAPTCHA on a normal long page (a newsletter form) is not a challenge.
+
+## Rendering: sub-resources and third parties
+
+When a page is rendered in Chromium (see [Rendering with Chromium](Rendering-with-Chromium)),
+every request the page makes is intercepted and gated.
+
+| Request | What we do |
+|---|---|
+| Same politeness key as the page | allowed, paced by the sub-resource gap |
+| Host on `policy/subresource_allowlist.yaml` | allowed only for that host's listed `types` (CDP resource types such as `script`, `stylesheet`, `xhr`, `fetch`); denylisted hosts are refused |
+| Images, media, fonts, known trackers | always refused |
+| iframes, and JavaScript or meta-refresh navigations (even back to the page itself) | always refused; only the page's own document loads |
+| Anything else | refused |
+
+An allowlisted third-party host (a CDN) is its own politeness key, so it is respected too:
+
+- In one process, a shared per-host lock and the sub-resource gap space out requests to
+  that host across all renders.
+- Across processes, the render **borrows** that key through Postgres. The borrow is granted
+  only if the key's `next_allowed_at` has passed, it is not parked and no claim on it is in
+  flight. The key's next slot then moves on by its delay. A refused borrow fails that
+  sub-request at once; nothing waits for it.
+- If the policy files cannot be read, the filter fails closed (no third parties).
 
 ## Page-level signals: the UsePolicy matrix
 
