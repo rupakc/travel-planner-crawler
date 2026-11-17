@@ -331,3 +331,42 @@ fn request_log_roundtrips_jsonl() {
     assert_eq!(back.entries(), log.entries());
     assert_eq!(back.by_key()["example.com"].len(), 1);
 }
+
+/// Like `PgFrontier`, the fake never enqueues a URL a standing exclusion names (host,
+/// url_prefix, url, source); authors never select URLs.
+#[tokio::test]
+async fn mem_frontier_enqueue_skips_tombstoned_urls() {
+    use vc_core::index::PurgeSelector;
+    let (_fc, clk) = clock();
+    let f = MemFrontier::new(clk);
+    let nu = |s: &str| NewUrl::new(CanonicalUrl::parse(s).unwrap());
+    let exact = nu("https://exact.example/gone");
+    f.tombstone(PurgeSelector::Host("purged.example".into()));
+    f.tombstone(PurgeSelector::UrlPrefix(
+        "https://mixed.example/private/".into(),
+    ));
+    f.tombstone(PurgeSelector::Url(exact.url.key()));
+    f.tombstone(PurgeSelector::Source(vc_core::SourceId("gone-src".into())));
+    f.tombstone(PurgeSelector::Author("sha256:00".into()));
+    let mut from_src = nu("https://ok.example/s");
+    from_src.source_id = Some(vc_core::SourceId("gone-src".into()));
+    let keep = [
+        nu("https://sub.purged.example/a"),
+        nu("https://mixed.example/public/b"),
+        nu("https://ok.example/c"),
+    ];
+    let drop = [
+        nu("https://purged.example/new"),
+        nu("https://mixed.example/private/x"),
+        exact,
+        from_src,
+    ];
+    let batch: Vec<NewUrl> = keep.iter().chain(drop.iter()).cloned().collect();
+    assert_eq!(f.enqueue(&batch).await.unwrap(), keep.len() as u64);
+    for k in &keep {
+        assert_eq!(f.url_state(&k.url.key()), Some(UrlState::Due), "{}", k.url);
+    }
+    for d in &drop {
+        assert_eq!(f.url_state(&d.url.key()), None, "{}", d.url);
+    }
+}

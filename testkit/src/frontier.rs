@@ -14,6 +14,7 @@ use vc_core::frontier::{
     Claim, ClaimPermit, Frontier, KeyOutcome, KeySignal, LeaseCheck, LeasedUrl, NewUrl, ParkReason,
     PermitScope, UrlResult, Validators,
 };
+use vc_core::index::PurgeSelector;
 use vc_core::media::{FetchMode, MediaType};
 use vc_core::policy::RobotsEntry;
 use vc_core::{
@@ -89,6 +90,19 @@ struct Inner {
     next_epoch: i64,
     rate_tokens: u64,
     completions: Vec<(PolitenessKey, KeyOutcome)>,
+    tombstones: Vec<PurgeSelector>,
+}
+
+/// Whether a standing exclusion names `nu` (the `tombstones` rule of `PgFrontier::enqueue`).
+fn excluded(t: &[PurgeSelector], nu: &NewUrl) -> bool {
+    let host = nu.url.host().trim_end_matches('.').to_ascii_lowercase();
+    t.iter().any(|s| match s {
+        PurgeSelector::Url(k) => *k == nu.url.key(),
+        PurgeSelector::UrlPrefix(p) => nu.url.as_str().starts_with(p.as_str()),
+        PurgeSelector::Host(h) => h.trim_end_matches('.').eq_ignore_ascii_case(&host),
+        PurgeSelector::Source(src) => nu.source_id.as_ref() == Some(src),
+        PurgeSelector::Author(_) | PurgeSelector::Record(_) => false,
+    })
 }
 
 /// An in-memory frontier.
@@ -129,6 +143,11 @@ impl MemFrontier {
 
     fn lock(&self) -> std::sync::MutexGuard<'_, Inner> {
         self.inner.lock().expect("mem frontier lock")
+    }
+
+    /// Adds a standing exclusion (a `tombstones` row): later enqueues skip the URLs it names.
+    pub fn tombstone(&self, sel: PurgeSelector) {
+        self.lock().tombstones.push(sel);
     }
 
     /// The state of a URL.
@@ -429,7 +448,7 @@ impl Frontier for MemFrontier {
         let mut n = 0;
         for nu in batch {
             let uk = nu.url.key();
-            if g.urls.contains_key(&uk) {
+            if g.urls.contains_key(&uk) || excluded(&g.tombstones, nu) {
                 continue;
             }
             g.keys.entry(nu.key.clone()).or_insert_with(|| KeyRow {

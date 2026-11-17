@@ -320,7 +320,8 @@ pub async fn process_purge(
 
 /// Puts the URLs a selector names into the terminal `tombstoned` state (a leased one too: its
 /// fetch's completion is fenced on the lease epoch and leaves it alone), so they are never
-/// fetched again; `Frontier::enqueue` keeps an existing row. Returns the URLs changed.
+/// fetched again; `Frontier::enqueue` keeps an existing row, and never inserts a URL first
+/// discovered later under the standing exclusion (`tombstones`). Returns the URLs changed.
 pub async fn stop_crawling(pool: &PgPool, sel: &PurgeSelector) -> anyhow::Result<u64> {
     let (pred, val) = match sel {
         PurgeSelector::Url(k) => ("u.url_key = decode($1, 'hex')".to_string(), k.to_hex()),

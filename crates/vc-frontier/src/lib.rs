@@ -171,6 +171,18 @@ SELECT t.url_key, t.key, t.priority, coalesce(t.not_before, now()), t.fetch_mode
 FROM t JOIN ins ON ins.url_key = t.url_key
 ON CONFLICT (url_key) DO NOTHING";
 
+/// The url keys of a batch that a standing exclusion names ($1 keys, $2 urls, $3 hosts,
+/// $4 source ids; see `PgFrontier::tombstoned`).
+const ENQUEUE_TOMBSTONED: &str = "
+SELECT t.url_key
+FROM unnest($1::bytea[], $2::text[], $3::text[], $4::text[]) AS t(url_key, url, host, source_id)
+WHERE EXISTS (
+    SELECT 1 FROM tombstones x
+    WHERE (x.selector_type = 'url' AND x.selector = encode(t.url_key, 'hex'))
+       OR (x.selector_type = 'url_prefix' AND starts_with(t.url, x.selector))
+       OR (x.selector_type = 'host' AND x.selector = t.host)
+       OR (x.selector_type = 'source' AND x.selector = t.source_id))";
+
 type LeasedRow = (
     Vec<u8>,
     f32,
@@ -673,7 +685,60 @@ impl PgFrontier {
         Ok(true)
     }
 
+    /// The URLs of `chunk` that a standing exclusion (`tombstones`: `url`, `url_prefix`,
+    /// `host`, `source`) names, so a URL first discovered under a purged host or prefix after
+    /// the purge never enters the crawl.
+    async fn tombstoned(&self, chunk: &[&NewUrl]) -> Result<HashSet<UrlKey>> {
+        let rows: Vec<Vec<u8>> = sqlx::query_scalar(ENQUEUE_TOMBSTONED)
+            .bind(
+                chunk
+                    .iter()
+                    .map(|n| n.url.key().0.to_vec())
+                    .collect::<Vec<_>>(),
+            )
+            .bind(
+                chunk
+                    .iter()
+                    .map(|n| n.url.as_str().to_string())
+                    .collect::<Vec<_>>(),
+            )
+            .bind(
+                chunk
+                    .iter()
+                    .map(|n| n.url.host().trim_end_matches('.').to_ascii_lowercase())
+                    .collect::<Vec<_>>(),
+            )
+            .bind(
+                chunk
+                    .iter()
+                    .map(|n| n.source_id.as_ref().map(|s| s.0.clone()))
+                    .collect::<Vec<_>>(),
+            )
+            .fetch_all(&self.pool)
+            .await
+            .map_err(db)?;
+        Ok(rows
+            .into_iter()
+            .filter_map(|k| UrlKey::from_slice(&k).ok())
+            .collect())
+    }
+
     async fn enqueue_chunk(&self, chunk: &[&NewUrl]) -> Result<u64> {
+        let excluded = self.tombstoned(chunk).await?;
+        let kept: Vec<&NewUrl>;
+        let chunk = if excluded.is_empty() {
+            chunk
+        } else {
+            kept = chunk
+                .iter()
+                .copied()
+                .filter(|n| !excluded.contains(&n.url.key()))
+                .collect();
+            if kept.is_empty() {
+                return Ok(0);
+            }
+            &kept[..]
+        };
         let mut keys: Vec<String> = chunk.iter().map(|n| n.key.0.clone()).collect();
         keys.sort();
         keys.dedup();
