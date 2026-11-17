@@ -12,6 +12,7 @@ licence:
 method: html
 seeds:
 - https://www.smartraveller.gov.au
+- https://www.smartraveller.gov.au/news-and-updates/stop-check-protect-and-keep-scammers-out-your-travel-plans
 sitemaps: []
 feeds: []
 adapter: null
@@ -36,7 +37,9 @@ needs_key: false
 key_secret: null
 max_retention_days: null
 display_requirements: null
-notes: timed out to honest UA 2026-11-15; retry politely, never evade
+notes: 'timed out to honest UA 2026-11-15; robots.txt timed out again from two networks 2026-11-17, which
+  the crawler treats as unavailable (disallow): nothing is fetched until it answers; retry politely, never
+  evade'
 relevance:
   sections:
   - visa

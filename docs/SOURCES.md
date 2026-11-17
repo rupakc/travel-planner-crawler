@@ -7,7 +7,7 @@
 Every website and dataset the crawler knows, grouped by the part of the Voyager app it
 feeds. A source that serves several parts is listed under each of them.
 
-**266 sources, 179 on, 87 off.**
+**269 sources, 182 on, 87 off.**
 
 - **What we take**: the traveller-facing data the source gives (its `relevance.why`).
 - **Licence**: *open* (free reuse with credit), *share-alike* (kept apart from other
@@ -374,6 +374,7 @@ is added only with the owner's approval (see CONTRIBUTING.md).
 |---|---|---|---|---|---|
 | `abf-travellers` | `www.abf.gov.au` | Australia's duty-free limits, prohibited and restricted goods and the AUD 10,000 cash reporting rule, for Travel tips and Packing. | facts only | yes | no |
 | `aphis-pet-travel` | `www.aphis.usda.gov` | Rules for taking pets out of or into the US, by destination country, for Travel tips and Packing. | open | yes | no |
+| `avoidtravelscam` | `avoidtravelscam.com` | Common travel scams and safety advice for the Travel tips section. | facts only | yes | no |
 | `blog-adventurouskate` | `www.adventurouskate.com` | Solo and women's travel guides from Adventurous Kate, for Travel tips and Places to see (headline, link and a short excerpt only). | facts only | yes | no |
 | `blog-alexinwanderland` | `www.alexinwanderland.com` | Travel blog posts with destination guides and practical trip advice, for Travel tips and Places to see (headline, link and a short excerpt only). | facts only | yes | no |
 | `blog-atlasandboots` | `www.atlasandboots.com` | Hiking and outdoor adventure guides from Atlas & Boots, for Activities, Places to see and Travel tips (headline, link and a short excerpt only). | facts only | yes | no |
@@ -443,6 +444,8 @@ is added only with the owner's approval (see CONTRIBUTING.md).
 | `se-dump` | `archive.org` | Travel Stack Exchange questions and answers (transit, border, money and practical problems) for Travel tips. | share-alike | yes | no |
 | `sg-customs-travellers` | `www.customs.gov.sg` | Singapore's GST relief, duty-free concession, no duty-free cigarettes and prohibited goods (chewing gum, e-cigarettes), for Travel tips and Packing. | facts only | yes | no |
 | `smartraveller` | `www.smartraveller.gov.au` | Official Australian travel advice per country (entry rules, safety, local laws) for Visa and Travel tips. | open | yes | no |
+| `travelerset-scams` | `travelerset.com` | Common travel scams and safety advice for the Travel tips section. | facts only | yes | no |
+| `twopassportspacked-scams` | `twopassportspacked.com` | Common travel scams and safety advice for the Travel tips section. | facts only | yes | no |
 | `wikivoyage-dump` | `dumps.wikimedia.org` | Wikivoyage destination guides (sights, things to do, where to stay, getting around, SIM and tips) for those app sections. | share-alike | yes | no |
 | `auswaertiges-amt-opendata` | `www.auswaertiges-amt.de` | German embassy and consulate contacts, health leaflets and travel warnings per country, for the Emergency card, Visa and Travel tips. | API terms | no | no |
 | `calendarific` | `calendarific.com` | Public holidays in about 230 countries (closures and crowds), for Events and Travel tips. | API terms | no | yes |

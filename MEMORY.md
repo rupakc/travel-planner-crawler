@@ -130,3 +130,9 @@ plan = `docs/superpowers/plans/2026-11-15-voyager-crawler.md`, r1–r5 = `docs/r
   in-adapter cap, `daily_budget` 200, `crawler_adapter_calls_total{adapter}`. Affiliate marker
   belongs app-side when linking out. (crates/vc-sources/src/adapters/travelpayouts_fares.rs,
   https://support.travelpayouts.com/hc/en-us/articles/4402565416594)
+- 2026-11-17: scam-safety sources (owner request): travelerset-scams, avoidtravelscam,
+  twopassportspacked-scams (tips, editorial, facts_only, monthly, depth ≤ 1 pinned by include
+  or seed page only, ≤ 50/day; in ramp-2) and a Smartraveller scam article as an extra seed
+  (its robots.txt times out = disallow until it answers). worldpackers, moneycrashers,
+  eurochange, travelersunited and consumer.ftc.gov (exact host, not ftc.gov) denylisted for
+  403s. (scripts/seeds_to_sources.py "Travel safety", policy/denylist.yaml)

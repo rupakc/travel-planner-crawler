@@ -234,6 +234,12 @@ fn batch2_entries_are_denied() {
         "https://download.gtfs.de/germany/fv_free/latest.zip",
         "https://static.data.gov.hk/td/x.zip",
         "https://www.iata.org/",
+        // scam-safety research 2026-11-17: 403 to an honest bot
+        "https://www.worldpackers.com/articles/travel-scams",
+        "https://www.moneycrashers.com/travel-scams/",
+        "https://www.eurochange.co.uk/travel-money/guides",
+        "https://travelersunited.org/",
+        "https://consumer.ftc.gov/articles/travel-scams",
     ] {
         assert!(denied(u).is_some(), "{u} must be denied");
     }
@@ -262,6 +268,13 @@ fn approved_hosts_stay_allowed() {
         "https://data.gov.hk/en-data/",
         "https://gtfs.de/",
         "https://chile.travel/",
+        // scam-safety sources (2026-11-17); consumer.ftc.gov is denied, ftc.gov is not
+        "https://travelerset.com/blog/common-travel-scams-and-how-to-avoid-them",
+        "https://avoidtravelscam.com/resources/",
+        "https://twopassportspacked.com/common-travel-scams/",
+        "https://www.smartraveller.gov.au/news-and-updates/stop-check-protect-and-keep-scammers-out-your-travel-plans",
+        "https://www.ftc.gov/",
+        "https://reportfraud.ftc.gov/",
     ] {
         assert_eq!(denied(u), None, "{u} must stay allowed");
     }
