@@ -37,7 +37,9 @@ current_image() {
 vc_compose() {
   local -a files=(--env-file "$VC_STATE/host.env")
   [[ -f "$VC_STATE/image.env" ]] && files+=(--env-file "$VC_STATE/image.env")
-  VC_IMAGE="${VC_IMAGE:-$(current_image)}" \
+  # A fresh install has no image.env yet: compose still needs *a* value for
+  # ${VC_IMAGE:?} to read state (ps, logs). Every `up`/`run` passes the real ref.
+  VC_IMAGE="${VC_IMAGE:-$(current_image)}" VC_IMAGE="${VC_IMAGE:-unset.invalid/voyager-crawler:none}" \
     docker compose -p "$VC_PROJECT_NAME" -f "$VC_OPT/compose.yaml" "${files[@]}" "$@"
 }
 
