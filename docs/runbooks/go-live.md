@@ -120,8 +120,8 @@ address that already exists.
 
    Expected: a public IPv4 address.
 2. On a branch (`agent/t18-…` or a controller branch), replace `<egress-ip>` in `BOT.md`
-   with that address, and `crawler-contact@<domain>` with the real contact address if the
-   owner has chosen it (it must be a working mailbox: site owners will write to it). Open
+   with that address (the contact address is already set; it must stay a working mailbox,
+   since site owners will write to it). Open
    the PR, wait for green, squash-merge.
 3. Check the published page:
 

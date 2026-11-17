@@ -10,7 +10,7 @@ current, attributed facts instead of guessing. The crawler's code is public too:
 It is a small crawler run by one person: a single machine, one request at a time per
 site.
 
-**Contact:** `crawler-contact@<domain>` (email), or an issue in this repository. We answer
+**Contact:** `rupak97.4@gmail.com` (email), or an issue in this repository. We answer
 opt-out and removal requests within 24 hours.
 
 ## How to recognise it
@@ -95,7 +95,7 @@ Disallow: /
 
 We treat any of these as an AI reservation and keep only titles and links.
 
-**Or ask us directly**: email `crawler-contact@<domain>`, or use the
+**Or ask us directly**: email `rupak97.4@gmail.com`, or use the
 [opt-out form](https://github.com/rupakc/travel-planner-crawler/issues/new?template=opt-out.yml).
 Either covers whole domains, specific URLs, and removal of data already collected.
 Issues are public; for a private request, email us or use
@@ -121,5 +121,5 @@ request the same way.
 
 ## Questions
 
-Email `crawler-contact@<domain>` or open an issue in this repository. Security reports:
+Email `rupak97.4@gmail.com` or open an issue in this repository. Security reports:
 see [SECURITY.md](SECURITY.md).
