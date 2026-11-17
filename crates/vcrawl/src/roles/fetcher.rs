@@ -22,7 +22,9 @@
 //! not fetched; they go back to `due` [`ALLOWLIST_HOLD`] later. A claim with nothing allowed
 //! makes no request at all (not even robots.txt) and is completed at once.
 //!
-//! A cross-key redirect is **enqueued**, never followed. A challenge, 401 or 403 **parks** the
+//! A cross-key redirect is **enqueued**, never followed, and only when the target is on one of
+//! the source's own sites (the politeness keys of its seeds, sitemaps and feeds; otherwise it
+//! is dropped). A challenge, 401 or 403 **parks** the
 //! key (detect → park; nothing is retried with another identity). 429/503 honour
 //! `Retry-After`. The overall daily raw-bytes cap is shared by every fetcher through Postgres
 //! ([`RawBytesBudget`]). An adapter response's `Expires` (MET Norway's terms) is a lower bound
@@ -1245,8 +1247,23 @@ impl Fetcher {
             FetchError::Lease(l) => return Err(Error::LeaseLost(l)),
             FetchError::DeadlineExceeded => run.stop = true,
             FetchError::CrossKeyRedirect(target) => {
-                // Never followed inline: the target goes to the frontier under its own key.
-                if self.p.policy.denied(&target).is_none() {
+                // Never followed inline: the target goes to the frontier under its own key,
+                // and only when it is on one of the source's own sites (a source never
+                // crawls another site through a redirect).
+                let owned = match &u.source_id {
+                    None => true,
+                    Some(_) => self
+                        .source(u)
+                        .is_some_and(|s| crate::data::sources::source_owns(&s, &target)),
+                };
+                if !owned {
+                    tracing::debug!(
+                        key = %run.permit.key(),
+                        target_key = %target.politeness_key().0,
+                        "cross-key redirect off the source's sites: dropped"
+                    );
+                }
+                if owned && self.p.policy.denied(&target).is_none() {
                     let nu = NewUrl {
                         key: target.politeness_key(),
                         source_id: u.source_id.clone(),
