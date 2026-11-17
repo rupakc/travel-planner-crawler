@@ -231,6 +231,7 @@ exporter.
 | Crawler down | no `heartbeat` for 15 minutes (absence) |
 | No captures | no `captures_committed` for 60 minutes while `due_urls` > 0 |
 | Spool backpressure | fetchers paused for 5 minutes (spool > 2 GB or uploads failing 15 min) |
+| Spool quarantine | a fetcher quarantined an unreadable sealed spool file (`spool_quarantined` rose) |
 | Disk | a VM disk above 80 % for 10 minutes (Ops Agent metric) |
 | Backup age | WAL archive older than 2 h, or base backup older than 30 h; or either not reported (1 h, 24 h) |
 | Restore drill | last drill failed; no successful drill in 8 days; no successful light drill in 8 days, or none reported in 24 h |

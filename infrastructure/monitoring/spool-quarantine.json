@@ -1,0 +1,40 @@
+{
+  "displayName": "voyager-crawler: spool file quarantined",
+  "combiner": "OR",
+  "enabled": true,
+  "userLabels": {
+    "app": "voyager-crawler"
+  },
+  "documentation": {
+    "content": "A fetcher quarantined a sealed spool file it could not read (bit rot, a bad disk block, a torn write): its captures are not published, and the URLs come back as due after the stale-pending sweep (6 h). The file is kept as `*.sealed.quarantined` under `/var/lib/voyager-crawler/spool/fetcher-*`. Check the disk (`dmesg`, Ops Agent disk metrics) and the fetcher log line `store: sealed file quarantined`; copy the file aside for inspection, then delete it.",
+    "mimeType": "text/markdown"
+  },
+  "conditions": [
+    {
+      "displayName": "sealed spool files quarantined",
+      "conditionThreshold": {
+        "filter": "metric.type=\"custom.googleapis.com/crawler/spool_quarantined\" AND resource.type=\"gce_instance\"",
+        "comparison": "COMPARISON_GT",
+        "thresholdValue": 0,
+        "duration": "0s",
+        "aggregations": [
+          {
+            "alignmentPeriod": "600s",
+            "perSeriesAligner": "ALIGN_DELTA",
+            "crossSeriesReducer": "REDUCE_SUM"
+          }
+        ],
+        "trigger": {
+          "count": 1
+        }
+      }
+    }
+  ],
+  "notificationChannels": [
+    "__CHANNEL__"
+  ],
+  "alertStrategy": {
+    "autoClose": "86400s"
+  },
+  "severity": "ERROR"
+}

@@ -80,7 +80,7 @@ test_fresh_project_creates_everything() {
     "--notifications-rule-monitoring-notification-channels=projects/voyager-prod-ohzkl/notificationChannels/42"; do
     grep -qF -- "$want" "$CALLS" || { fail fresh_project_creates_everything "missing: $want"; return; }
   done
-  [[ "$(grep -c 'monitoring policies create' "$CALLS")" == 12 ]] || { fail fresh_project_creates_everything "policies: $(grep -c 'monitoring policies create' "$CALLS")"; return; }
+  [[ "$(grep -c 'monitoring policies create' "$CALLS")" == 13 ]] || { fail fresh_project_creates_everything "policies: $(grep -c 'monitoring policies create' "$CALLS")"; return; }
   grep -q '"projects/voyager-prod-ohzkl/notificationChannels/42"' "$BOOTSTRAP_WORK/crawler-down.json" ||
     { fail fresh_project_creates_everything "channel not substituted"; return; }
   # TLS: a 2-year P-256 certificate for the internal IP; the key never stays on disk
