@@ -1,0 +1,97 @@
+{
+ "base_path": "/world/organisations/british-embassy-tirana",
+ "content_id": "f4c39ed8-7a30-11e4-a3cb-005056011aef",
+ "description": "The British Embassy in Tirana maintains and develops relations between the UK and Albania",
+ "document_type": "worldwide_organisation",
+ "first_published_at": "2013-02-19T12:31:57+00:00",
+ "locale": "en",
+ "phase": "live",
+ "public_updated_at": "2026-08-07T08:43:40+01:00",
+ "schema_name": "worldwide_organisation",
+ "title": "British Embassy Tirana",
+ "updated_at": "2026-11-12T12:25:46+00:00",
+ "details": {
+  "office_contact_associations": [
+   {
+    "contact_content_id": "6e3a6d0e-f3d2-4324-97c1-6ebcf3eff012",
+    "office_content_id": "04b848d8-8bdf-40e6-a72b-e31b197656b7"
+   }
+  ],
+  "world_location_names": [
+   {
+    "content_id": "5e9ece18-7706-11e4-a3cb-005056011aef",
+    "name": "Albania"
+   }
+  ]
+ },
+ "links": {
+  "contacts": [
+   {
+    "content_id": "6e3a6d0e-f3d2-4324-97c1-6ebcf3eff012",
+    "details": {
+     "contact_form_links": null,
+     "description": "To call us 24/7 in an emergency or send us an online enquiry go to: https://www.contact.service.csd.fcdo.gov.uk/posts/albania/british-embassy-tirana",
+     "email_addresses": null,
+     "phone_numbers": [
+      {
+       "number": "-",
+       "title": "Public access to the embassy is by appointment only"
+      },
+      {
+       "number": "+355 4 224 7697",
+       "title": "Fax"
+      }
+     ],
+     "post_addresses": [
+      {
+       "iso2_country_code": "al",
+       "locality": "Tirana",
+       "street_address": "Rruga Skenderbeg 12",
+       "world_location": "Albania"
+      }
+     ],
+     "title": "British Embassy Tirana"
+    },
+    "document_type": "contact",
+    "links": {},
+    "locale": "en",
+    "public_updated_at": "2026-08-07T07:30:08Z",
+    "schema_name": "contact",
+    "title": "British Embassy Tirana",
+    "withdrawn": false
+   }
+  ],
+  "main_office": [
+   {
+    "api_path": "/api/content/world/organisations/british-embassy-tirana/office/british-embassy-tirana",
+    "api_url": "https://www.gov.uk/api/content/world/organisations/british-embassy-tirana/office/british-embassy-tirana",
+    "base_path": "/world/organisations/british-embassy-tirana/office/british-embassy-tirana",
+    "content_id": "04b848d8-8bdf-40e6-a72b-e31b197656b7",
+    "details": {
+     "access_and_opening_times": "<div class=\"govspeak\"><h2 id=\"public-holidays\">2026 public holidays</h2>\n\n<ul>\n  <li>1 January – New Year’s Day</li>\n  <li>2 January – New Year’s Day</li>\n  <li>20 March – Eid- Al-Fitr (End of Ramadan)**</li>\n  <li>23 March – NawRuz Day * (22 March)</li>\n  <li>3 April – Good Friday</li>\n  <li>6 April – Catholic Easter *(5 April)</li>\n  <li>13 April – Orthodox Easter *(12 April)</li>\n  <li>4 May – Early May Bank Holiday</li>\n  <li>25 May – Spring bank Holiday</li>\n  <li>27 May – Eid al-Adha (Feast of Sacrifice)**</li>\n  <li>31 August – Summer bank holiday</li>\n  <li>30 November – 28 Flag Day and Independence Day – 28 November</li>\n  <li>1 December – 29 November -Independence Day* - 29 November</li>\n  <li>25 December – Christmas Day</li>\n  <li>28 December – 26 December Boxing Day</li>\n</ul>\n\n<p>*Holidays falling on Saturday or Sunday are observed on Monday.</p>\n\n<p>**Note: The Eid al-Fitr and Eid al-Adha holidays may be subject to change according to the lunar calendar. In case of eventual changes, you will be notified accordingly</p>\n\n<h2 id=\"consular-section\">Consular section</h2>\n\n<p>The Consular section office works by appointment only and is therefore not open to the public at all times. See more <a href=\"https://www.gov.uk/guidance/notarial-and-documentary-services-guide-for-albania\">information on how to make an appointment here</a>.</p>\n\n</div>"
+    },
+    "document_type": "worldwide_office",
+    "links": {},
+    "locale": "en",
+    "public_updated_at": "2026-08-07T07:43:00Z",
+    "schema_name": "worldwide_office",
+    "title": "British Embassy Tirana",
+    "web_url": "https://www.gov.uk/world/organisations/british-embassy-tirana/office/british-embassy-tirana",
+    "withdrawn": false
+   }
+  ],
+  "world_locations": [
+   {
+    "analytics_identifier": "WL2",
+    "content_id": "5e9ece18-7706-11e4-a3cb-005056011aef",
+    "document_type": "world_location",
+    "links": {},
+    "locale": "en",
+    "public_updated_at": "2020-09-02T07:27:15Z",
+    "schema_name": "world_location",
+    "title": "Albania",
+    "withdrawn": false
+   }
+  ]
+ }
+}

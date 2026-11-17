@@ -159,3 +159,14 @@ plan = `docs/superpowers/plans/2026-11-15-voyager-crawler.md`, r1–r5 = `docs/r
   ovapi-gtfs-nl, opentransportdata-swiss, vic-gtfs, translink-seq-gtfs, entur-gtfs
   (ET-Client-Name: voyagerbot-crawler), auckland-gtfs, listed in sources/ramp-3.txt; keyed feeds
   wired but off. (crates/vc-sources/src/adapters/gtfs_static.rs)
+- 2026-11-18: official embassy, medical and Wikipedia visa sources on, with adapters
+  (`govuk_world_orgs`, `canada_offices`, `govuk_medical_lists`, `enwiki_visa`) and three
+  adapter-only kinds: `embassy` and `medical_facility` (`official` only, not high-stakes so
+  different countries' offices in one city never "conflict"), `visa_reference` (`reference`
+  only, cross-check data; Wikipedia never yields `visa_rule`). Phones keep the written form;
+  E.164 only when written internationally (`+`/`00`, `(0)` trunk dropped), never from local
+  forms. Medical lists keep each list's own updated date. The Wikipedia articles are read from
+  the multistream dump: the 290 MB index is streamed and filtered, then one Range request per
+  bzip2 stream (about 200), never the 27 GB dump. Adapters can now send conditional GETs
+  (`Fetch::conditional`: the leased row's validators; a 304 is spooled as a revisit).
+  (crates/vc-sources/src/adapters/{govuk_world_orgs,canada_offices,govuk_medical_lists,enwiki_visa,phone,countries}.rs)

@@ -12,7 +12,7 @@ use vc_core::media::{FetchMode, MediaType};
 use vc_core::sources::SourceAdapter;
 use vc_core::store::{CaptureRole, SpoolPayload};
 use vc_sources::adapters::{self, DumpSettings};
-use wiremock::matchers::{method, path, query_param, query_param_contains};
+use wiremock::matchers::{header, method, path, query_param, query_param_contains};
 use wiremock::{Mock, MockServer, ResponseTemplate};
 
 fn ok(body: Vec<u8>, ct: &str) -> ResponseTemplate {
@@ -1452,8 +1452,8 @@ fn registry_lists_every_adapter_once() {
     let mut sorted = ids.clone();
     sorted.sort();
     sorted.dedup();
-    assert_eq!(sorted.len(), 18);
-    assert_eq!(ids.len(), 18);
+    assert_eq!(sorted.len(), 22);
+    assert_eq!(ids.len(), 22);
     for id in &ids {
         assert_eq!(adapters::get(id).unwrap().id(), *id);
     }
@@ -1744,4 +1744,614 @@ fn travelpayouts_records_are_fare_observations() {
     assert!(index.is_empty());
     let failed = records("travelpayouts_fares", &route, br#"{"success":false}"#).unwrap();
     assert!(failed.is_err());
+}
+
+// ---------------------------------------------------------------------------------------
+// Embassy, medical and visa-reference adapters (2026-11-18)
+
+fn recs(adapter: &str, url: &str, body: &[u8]) -> Vec<adapters::records::AdapterItem> {
+    let u = vc_core::CanonicalUrl::parse(url).unwrap();
+    adapters::records::records(adapter, &u, body)
+        .expect("adapter has a record mapping")
+        .expect("fixture maps")
+}
+
+fn sent_header(h: &Harness, i: usize, name: &str) -> Option<String> {
+    h.client.sent.lock().unwrap()[i]
+        .iter()
+        .find(|(k, _)| k == name)
+        .map(|(_, v)| v.clone())
+}
+
+/// Gives the leased row a committed capture with these validators (a later crawl).
+fn seen_before(h: &mut Harness, etag: &str) {
+    let u = &mut h.claim.urls[0];
+    u.validators.etag = Some(etag.to_string());
+    u.last_capture = Some(vc_core::CaptureRef {
+        capture_id: vc_core::CaptureId::at(t0()),
+        captured_at: t0(),
+    });
+}
+
+async fn govuk_server() -> MockServer {
+    let s = MockServer::start().await;
+    serve(
+        &s,
+        "/api/search.json",
+        fixture("govuk_world_orgs_search.json"),
+        "application/json",
+    )
+    .await;
+    serve(
+        &s,
+        "/api/content/world/organisations/british-embassy-tirana",
+        fixture("govuk_org_tirana.json"),
+        "application/json",
+    )
+    .await;
+    serve(
+        &s,
+        "/api/content/government/collections/doctors-and-medical-facilities-worldwide-list",
+        fixture("govuk_medical_collection.json"),
+        "application/json",
+    )
+    .await;
+    serve(
+        &s,
+        "/api/content/government/publications/albania-list-of-medical-facilities",
+        fixture("govuk_medical_albania.json"),
+        "application/json",
+    )
+    .await;
+    s
+}
+
+#[tokio::test]
+async fn govuk_world_orgs_parses_fixture() {
+    use adapters::govuk_world_orgs as g;
+    let page = g::parse_search(&fixture("govuk_world_orgs_search.json")).unwrap();
+    assert_eq!(page.total, 411);
+    assert_eq!(
+        page.links,
+        [
+            "/world/organisations/british-embassy-bangkok",
+            "/world/organisations/british-high-commission-new-delhi",
+            "/world/organisations/british-embassy-washington"
+        ]
+    );
+
+    let s = govuk_server().await;
+    let base = s.uri();
+    let search = format!(
+        "{base}/api/search.json?filter_format=worldwide_organisation&count=3&fields=title,link"
+    );
+    let mut h = Harness::new(spec("govuk-world-orgs"), "govuk_world_orgs", &search, t0()).await;
+    let rep = h.run(&g::GovukWorldOrgs).await.unwrap();
+    assert!(rep.complete);
+    assert_eq!(rep.enqueued, 4, "3 organisations + the next page");
+    let urls = h.frontier.enqueued_urls();
+    assert!(urls.contains(&format!(
+        "{base}/api/content/world/organisations/british-embassy-bangkok"
+    )));
+    assert!(
+        urls.iter()
+            .any(|u| u.starts_with(&format!("{base}/api/search.json?")) && u.contains("start=3")),
+        "{urls:?}"
+    );
+    for n in h.frontier.enqueued.lock().unwrap().iter() {
+        assert_eq!(n.fetch_mode, FetchMode::Adapter("govuk_world_orgs".into()));
+    }
+
+    let org = format!("{base}/api/content/world/organisations/british-embassy-tirana");
+    let mut h = Harness::new(spec("govuk-world-orgs"), "govuk_world_orgs", &org, t0()).await;
+    let rep = h.run(&g::GovukWorldOrgs).await.unwrap();
+    assert_eq!((rep.requests, rep.records, rep.enqueued), (1, 1, 0));
+    assert_eq!(
+        sent_header(&h, 0, "if-none-match"),
+        None,
+        "no validators on a first crawl"
+    );
+}
+
+#[tokio::test]
+async fn govuk_world_orgs_yield_embassies() {
+    let url = "https://www.gov.uk/api/content/world/organisations/british-embassy-tirana";
+    let items = recs("govuk_world_orgs", url, &fixture("govuk_org_tirana.json"));
+    assert_eq!(items.len(), 1);
+    let e = &items[0];
+    assert_eq!(e.kind, "embassy");
+    assert_eq!(
+        e.id.as_deref(),
+        Some("govuk:04b848d8-8bdf-40e6-a72b-e31b197656b7")
+    );
+    let d = &e.data;
+    assert_eq!(d["name"], "British Embassy Tirana");
+    assert_eq!(d["mission_type"], "embassy");
+    assert_eq!(
+        (d["of_country"].as_str(), d["of_country_code"].as_str()),
+        (Some("United Kingdom"), Some("GB"))
+    );
+    assert_eq!(
+        (d["country"].as_str(), d["country_code"].as_str()),
+        (Some("Albania"), Some("AL"))
+    );
+    assert_eq!(d["city"], "Tirana");
+    assert_eq!(d["address"], "Rruga Skenderbeg 12, Tirana");
+    // "-" ("by appointment only") is not a number; the fax is, with its raw form kept.
+    assert_eq!(
+        d["phones"],
+        serde_json::json!([{"type": "fax", "label": "Fax", "number": "+355 4 224 7697", "e164": "+35542247697"}])
+    );
+    assert_eq!(
+        d["contact_form_url"],
+        "https://www.contact.service.csd.fcdo.gov.uk/posts/albania/british-embassy-tirana"
+    );
+    assert_eq!(
+        d["website_url"],
+        "https://www.gov.uk/world/organisations/british-embassy-tirana/office/british-embassy-tirana"
+    );
+    assert!(d["as_of"].as_str().is_some_and(|s| s.len() == 10));
+
+    let madrid = recs(
+        "govuk_world_orgs",
+        "https://www.gov.uk/api/content/world/organisations/british-embassy-madrid",
+        &fixture("govuk_org_madrid.json"),
+    );
+    assert_eq!(
+        madrid[0].data["hours"],
+        "British Embassy opening hours: Monday to Friday, 8:30am to 5pm"
+    );
+    assert!(madrid[0].data.get("phones").is_none());
+
+    let search = recs(
+        "govuk_world_orgs",
+        "https://www.gov.uk/api/search.json?filter_format=worldwide_organisation",
+        &fixture("govuk_world_orgs_search.json"),
+    );
+    assert!(search.is_empty(), "search pages carry no offices");
+}
+
+#[tokio::test]
+async fn govuk_conditional_get_spools_a_revisit() {
+    let s = MockServer::start().await;
+    let p = "/api/content/world/organisations/british-embassy-tirana";
+    Mock::given(method("GET"))
+        .and(path(p))
+        .and(header("if-none-match", "\"v1\""))
+        .respond_with(ResponseTemplate::new(304).insert_header("etag", "\"v1\""))
+        .mount(&s)
+        .await;
+    let mut h = Harness::new(
+        spec("govuk-world-orgs"),
+        "govuk_world_orgs",
+        &format!("{}{p}", s.uri()),
+        t0(),
+    )
+    .await;
+    seen_before(&mut h, "\"v1\"");
+    let rep = h
+        .run(&adapters::govuk_world_orgs::GovukWorldOrgs)
+        .await
+        .unwrap();
+    assert!(rep.complete);
+    assert_eq!(
+        sent_header(&h, 0, "if-none-match").as_deref(),
+        Some("\"v1\"")
+    );
+    assert_eq!(h.sink.records.len(), 1);
+    let r = &h.sink.records[0];
+    assert!(matches!(r.payload, SpoolPayload::Revisit(_)));
+    assert_eq!(r.meta.status, Some(304));
+    assert_eq!(r.meta.revisit_of, h.claim.urls[0].last_capture);
+}
+
+#[tokio::test]
+async fn govuk_world_orgs_writes_raw_first() {
+    let s = govuk_server().await;
+    let a = adapters::govuk_world_orgs::GovukWorldOrgs;
+    raw_first_case(
+        &a,
+        "govuk-world-orgs",
+        &format!(
+            "{}/api/search.json?filter_format=worldwide_organisation&count=3",
+            s.uri()
+        ),
+        &[],
+    )
+    .await;
+}
+
+#[tokio::test]
+async fn canada_offices_parses_fixture() {
+    use adapters::canada_offices as c;
+    let list = c::parse(&fixture("canada_offices.json")).unwrap();
+    assert_eq!(list.generated.as_deref(), Some("2026-11-17 11:40:07"));
+    assert!(list.offices.len() >= 6, "{}", list.offices.len());
+
+    let s = MockServer::start().await;
+    serve(
+        &s,
+        "/travel-voyage/opendata-offices-list-alpha-eng.json",
+        fixture("canada_offices.json"),
+        "application/json",
+    )
+    .await;
+    let url = format!(
+        "{}/travel-voyage/opendata-offices-list-alpha-eng.json",
+        s.uri()
+    );
+    let mut h = Harness::new(spec("canada-offices-json"), "canada_offices", &url, t0()).await;
+    let rep = h.run(&c::CanadaOfficesAdapter).await.unwrap();
+    assert_eq!((rep.requests, rep.records, rep.enqueued), (1, 1, 0));
+    raw_first_case(&c::CanadaOfficesAdapter, "canada-offices-json", &url, &[]).await;
+}
+
+#[test]
+fn canada_offices_yield_embassies() {
+    let items = recs(
+        "canada_offices",
+        "https://data.international.gc.ca/travel-voyage/opendata-offices-list-alpha-eng.json",
+        &fixture("canada_offices.json"),
+    );
+    assert!(items.iter().all(|i| i.kind == "embassy"));
+    let ids: std::collections::HashSet<_> = items.iter().map(|i| i.id.clone()).collect();
+    assert_eq!(ids.len(), items.len(), "ids are unique");
+    let find = |code: &str, ty: &str| {
+        items
+            .iter()
+            .find(|i| {
+                i.data["country_code"] == code && i.data["name"].as_str().unwrap().starts_with(ty)
+            })
+            .unwrap_or_else(|| panic!("{code} {ty}: {items:#?}"))
+    };
+    // The Azores list (PT-20): Portugal, region Azores; Lisbon embassy with E.164 phones.
+    let lisbon = &find("PT", "Embassy of Canada").data;
+    assert_eq!(lisbon["country"], "Portugal");
+    assert_eq!(lisbon["region"], "Azores");
+    assert_eq!(lisbon["city"], "Lisbon");
+    assert_eq!(lisbon["of_country_code"], "CA");
+    assert_eq!(lisbon["mission_type"], "embassy");
+    assert_eq!(lisbon["passport_services"], true);
+    assert_eq!(lisbon["phones"][0]["number"], "+351 21 316 4600");
+    assert_eq!(lisbon["phones"][0]["e164"], "+351213164600");
+    assert_eq!(lisbon["phones"][1]["type"], "fax");
+    assert!(lisbon["lat"].is_number() && lisbon["lng"].is_number());
+    let hc = &find("PT", "Honorary consul").data;
+    assert_eq!(hc["mission_type"], "honorary_consulate");
+    assert!(hc["hours"].as_str().unwrap().starts_with("Monday"));
+    assert!(
+        hc["notes"][0]
+            .as_str()
+            .unwrap()
+            .starts_with("Consular services: This office is headed by an Honorary Consul")
+    );
+    // Partner office: the British Embassy in Banjul helps Canadians in The Gambia.
+    let gb = &find("GM", "British Embassy").data;
+    assert_eq!(gb["of_country_code"], "GB");
+    assert_eq!(gb["of_country"], "United Kingdom");
+    // A trailing note is kept apart from the number; local forms get no E.164.
+    let hk = &find("HK", "Consulate General of Canada").data;
+    assert_eq!(hk["phones"][0]["number"], "(852) 3719 4700");
+    assert!(hk["phones"][0].get("e164").is_none());
+    assert!(
+        hk["phones"][0]["label"]
+            .as_str()
+            .unwrap()
+            .starts_with("this line is not for immigration")
+    );
+    // Several numbers in one field.
+    let td = &find("TD", "Honorary consul").data;
+    assert_eq!(td["phones"].as_array().unwrap().len(), 3);
+}
+
+#[tokio::test]
+async fn govuk_medical_lists_walk_and_parse() {
+    use adapters::govuk_medical_lists as m;
+    let docs = m::parse_collection(&fixture("govuk_medical_collection.json")).unwrap();
+    assert_eq!(docs.len(), 3);
+    assert_eq!(docs[0].title, "Albania: medical facilities");
+
+    let s = govuk_server().await;
+    let base = s.uri();
+    let coll = format!(
+        "{base}/api/content/government/collections/doctors-and-medical-facilities-worldwide-list"
+    );
+    let mut h = Harness::new(
+        spec("govuk-medical-lists"),
+        "govuk_medical_lists",
+        &coll,
+        t0(),
+    )
+    .await;
+    let rep = h.run(&m::GovukMedicalLists).await.unwrap();
+    assert_eq!(rep.enqueued, 3);
+    assert!(h.frontier.enqueued_urls().contains(&format!(
+        "{base}/api/content/government/publications/albania-list-of-medical-facilities"
+    )));
+
+    let publ =
+        format!("{base}/api/content/government/publications/albania-list-of-medical-facilities");
+    let mut h = Harness::new(
+        spec("govuk-medical-lists"),
+        "govuk_medical_lists",
+        &publ,
+        t0(),
+    )
+    .await;
+    let rep = h.run(&m::GovukMedicalLists).await.unwrap();
+    assert_eq!(rep.enqueued, 1, "the HTML attachment");
+    assert_eq!(
+        h.frontier.enqueued_urls(),
+        [format!(
+            "{base}/api/content/government/publications/albania-list-of-medical-facilities/list-of-english-speaking-medical-facilities-for-british-nationals-in-albania--2"
+        )]
+    );
+    raw_first_case(&m::GovukMedicalLists, "govuk-medical-lists", &coll, &[]).await;
+}
+
+#[test]
+fn govuk_medical_lists_yield_facilities_and_a_dated_list() {
+    let list = recs(
+        "govuk_medical_lists",
+        "https://www.gov.uk/api/content/government/publications/albania-list-of-medical-facilities/list-of-english-speaking-medical-facilities-for-british-nationals-in-albania--2",
+        &fixture("govuk_medical_albania_list.json"),
+    );
+    assert_eq!(
+        list.len(),
+        6,
+        "one per table row; the embassy contact block is not a facility"
+    );
+    assert!(list.iter().all(|i| i.kind == "medical_facility"));
+    let tirana = &list[0].data;
+    assert_eq!(tirana["name"], "American Hospital Tirana");
+    assert_eq!(tirana["country"], "Albania");
+    assert_eq!(tirana["country_code"], "AL");
+    assert_eq!(tirana["phones"][0]["number"], "00355 4235 7535");
+    assert_eq!(tirana["phones"][0]["e164"], "+35542357535");
+    assert_eq!(tirana["website_url"], "https://www.spitaliamerikan.com");
+    assert_eq!(tirana["address"], "Prane Spitalit Ushtarak, Laprake");
+    assert_eq!(tirana["list_updated"], "2026-03-17");
+    assert_eq!(tirana["list_title"], "Albania: medical facilities");
+    assert_eq!(tirana["section"], "List of medical facilities in Albania");
+    let german = list
+        .iter()
+        .find(|i| i.data["name"] == "German Hospital Tirana")
+        .unwrap();
+    assert_eq!(
+        german.data["emails"],
+        serde_json::json!(["info@spitaligjerman.com"])
+    );
+
+    let publ = recs(
+        "govuk_medical_lists",
+        "https://www.gov.uk/api/content/government/publications/albania-list-of-medical-facilities",
+        &fixture("govuk_medical_albania.json"),
+    );
+    assert_eq!(publ.len(), 1);
+    assert_eq!(publ[0].kind, "article");
+    let a = &publ[0].data;
+    assert_eq!(a["headline"], "Albania: medical facilities");
+    assert_eq!(a["country_code"], "AL");
+    assert_eq!(a["updated_date"], "2026-03-17");
+    assert_eq!(
+        a["source_url"],
+        "https://www.gov.uk/government/publications/albania-list-of-medical-facilities"
+    );
+    let coll = recs(
+        "govuk_medical_lists",
+        "https://www.gov.uk/api/content/government/collections/doctors-and-medical-facilities-worldwide-list",
+        &fixture("govuk_medical_collection.json"),
+    );
+    assert!(coll.is_empty());
+}
+
+const WIKI_INDEX: &str = "/enwiki/latest/enwiki-latest-pages-articles-multistream-index.txt.bz2";
+const WIKI_DUMP: &str = "/enwiki/latest/enwiki-latest-pages-articles-multistream.xml.bz2";
+
+async fn wiki_server(honour_range: bool) -> MockServer {
+    let s = MockServer::start().await;
+    serve(
+        &s,
+        WIKI_INDEX,
+        fixture("enwiki_visa_index.txt.bz2"),
+        "application/octet-stream",
+    )
+    .await;
+    let stream = fixture("enwiki_visa_stream.xml.bz2");
+    let range = format!("bytes=1000-{}", 1000 + stream.len() - 1);
+    let resp = if honour_range {
+        ResponseTemplate::new(206)
+            .insert_header("content-type", "application/octet-stream")
+            .set_body_bytes(stream)
+    } else {
+        ok(stream, "application/octet-stream")
+    };
+    Mock::given(method("GET"))
+        .and(path(WIKI_DUMP))
+        .and(header("range", range.as_str()))
+        .respond_with(resp)
+        .mount(&s)
+        .await;
+    s
+}
+
+#[test]
+fn enwiki_visa_index_filter_finds_streams() {
+    use adapters::enwiki_visa as w;
+    let lines = "600:1:Albania\n1000:2:Visa requirements for Albanian citizens\n1000:3:Other\n\
+                 1000:4:Visa requirements for Tuvaluan citizens\n4600:5:X\n4600:6:Y\n\
+                 9000:7:Visa requirements for Fooian citizens list\n9100:8:Z\n";
+    let s = w::index_streams(lines);
+    assert_eq!(s.len(), 1, "titles must match exactly: {s:?}");
+    assert_eq!((s[0].offset, s[0].end), (1000, Some(4600)));
+    assert_eq!(s[0].titles.len(), 2);
+    let idx =
+        vc_core::CanonicalUrl::parse(&format!("https://dumps.wikimedia.org{WIKI_INDEX}")).unwrap();
+    let u = w::stream_url(&idx, &s[0]).unwrap();
+    assert_eq!(
+        u.as_str(),
+        format!("https://dumps.wikimedia.org{WIKI_DUMP}?length=3600&offset=1000")
+    );
+    assert_eq!(w::stream_range(&u), Some((1000, 3600)));
+    assert_eq!(
+        w::nationality_of_title("Visa requirements for British citizens"),
+        Some(("GB", "United Kingdom"))
+    );
+    assert_eq!(
+        w::nationality_of_title("Visa requirements for United States citizens"),
+        Some(("US", "United States"))
+    );
+    assert_eq!(
+        w::nationality_of_title("Visa requirements for European Union citizens"),
+        None
+    );
+    assert_eq!(w::classify("Visa not required"), "visa_free");
+    assert_eq!(w::classify("eVisa"), "e_visa");
+    assert_eq!(w::classify("eVisa / Visa on arrival"), "other");
+    assert_eq!(w::classify("Online Visa required"), "visa_required");
+    assert_eq!(w::classify("Electronic Travel Authorization"), "eta");
+    assert_eq!(w::classify("Freedom of movement"), "freedom_of_movement");
+}
+
+#[tokio::test]
+async fn enwiki_visa_fetches_only_the_visa_streams() {
+    let s = wiki_server(true).await;
+    let url = format!("{}{WIKI_INDEX}", s.uri());
+    let mut h = Harness::new(spec("enwiki-visa-requirements"), "enwiki_visa", &url, t0()).await;
+    h.client.chunk = 64;
+    let rep = h
+        .run(&adapters::enwiki_visa::EnwikiVisa::DEFAULT)
+        .await
+        .unwrap();
+    assert!(rep.complete);
+    assert_eq!(rep.requests, 2, "the index, then one Range request");
+    let stream_len = fixture("enwiki_visa_stream.xml.bz2").len();
+    assert_eq!(
+        sent_header(&h, 1, "range"),
+        Some(format!("bytes=1000-{}", 1000 + stream_len - 1))
+    );
+    let res = h.resources();
+    assert_eq!(res.len(), 1);
+    let streams: Vec<serde_json::Value> = serde_json::from_slice(&res[0].1).unwrap();
+    assert_eq!(streams.len(), 1);
+    assert_eq!(streams[0]["offset"], 1000);
+    assert_eq!(
+        streams[0]["titles"],
+        serde_json::json!(["Visa requirements for Albanian citizens"])
+    );
+    let m = &h.manifests()[0];
+    assert_eq!(m["filter_version"], "enwiki-visa-index-v1");
+    let resp: Vec<_> = h
+        .sink
+        .records
+        .iter()
+        .filter(|r| matches!(r.payload, SpoolPayload::Response(_)))
+        .collect();
+    assert_eq!(resp.len(), 1);
+    assert!(resp[0].meta.url.as_str().contains("offset=1000"));
+    assert_eq!(resp[0].meta.status, Some(206));
+    let ev = h.events.all();
+    let fetches: Vec<_> = ev.iter().filter(|e| e.starts_with("fetch")).collect();
+    assert_eq!(fetches.len(), 2, "{ev:?}");
+    assert_raw_first(&ev);
+}
+
+#[tokio::test]
+async fn enwiki_visa_refuses_an_unhonoured_range() {
+    let s = wiki_server(false).await;
+    let url = format!("{}{WIKI_INDEX}", s.uri());
+    let mut h = Harness::new(spec("enwiki-visa-requirements"), "enwiki_visa", &url, t0()).await;
+    let err = h
+        .run(&adapters::enwiki_visa::EnwikiVisa::DEFAULT)
+        .await
+        .unwrap_err();
+    assert!(
+        matches!(err, Error::Invalid(ref m) if m.contains("range not honoured")),
+        "{err:?}"
+    );
+}
+
+#[tokio::test]
+async fn enwiki_visa_waits_for_the_dump_window() {
+    let s = wiki_server(true).await;
+    let url = format!("{}{WIKI_INDEX}", s.uri());
+    let noon = t0() + chrono::Duration::hours(9);
+    let mut h = Harness::new(spec("enwiki-visa-requirements"), "enwiki_visa", &url, noon).await;
+    let rep = h
+        .run(&adapters::enwiki_visa::EnwikiVisa::DEFAULT)
+        .await
+        .unwrap();
+    assert_eq!(rep.requests, 0);
+    assert!(h.events.all().iter().all(|e| !e.starts_with("fetch")));
+}
+
+#[test]
+fn enwiki_visa_stream_yields_reference_rows() {
+    let url = format!(
+        "https://dumps.wikimedia.org{WIKI_DUMP}?length={}&offset=1000",
+        fixture("enwiki_visa_stream.xml.bz2").len()
+    );
+    let items = recs("enwiki_visa", &url, &fixture("enwiki_visa_stream.xml.bz2"));
+    assert!(items.iter().all(|i| i.kind == "visa_reference"));
+    let dests: Vec<&str> = items
+        .iter()
+        .map(|i| i.data["destination_country"].as_str().unwrap())
+        .collect();
+    assert_eq!(
+        dests,
+        [
+            "Afghanistan",
+            "Algeria",
+            "Andorra",
+            "Angola",
+            "Antigua and Barbuda",
+            "Argentina",
+            "Armenia",
+            "Australia"
+        ],
+        "the main table only: territories (Abkhazia) and other pages are not read"
+    );
+    let get = |code: &str| {
+        &items
+            .iter()
+            .find(|i| i.data["destination_country_code"] == code)
+            .unwrap()
+            .data
+    };
+    let af = get("AF");
+    assert_eq!(af["nationality"], "Albania");
+    assert_eq!(af["nationality_code"], "AL");
+    assert_eq!(af["requirement"], "e_visa");
+    assert_eq!(af["requirement_text"], "eVisa");
+    assert_eq!(af["max_stay_days"], 30);
+    assert_eq!(
+        af["notes"],
+        "e-Visa : Visitors must arrive at Kabul International (KBL)."
+    );
+    assert_eq!(af["provenance"], "wikipedia");
+    assert_eq!(af["revision_id"], 1382895999u64);
+    assert_eq!(af["as_of"], "2026-10-30");
+    assert_eq!(
+        af["source_url"],
+        "https://en.wikipedia.org/wiki/Visa_requirements_for_Albanian_citizens"
+    );
+    let ad = get("AD");
+    assert_eq!(
+        (ad["requirement"].as_str(), ad["max_stay_days"].as_u64()),
+        (Some("visa_free"), Some(90))
+    );
+    let au = get("AU");
+    assert_eq!(au["requirement"], "visa_required");
+    assert!(au.get("max_stay_days").is_none());
+    assert_eq!(
+        items[0].id.as_deref(),
+        Some("enwiki:AL:AF"),
+        "ids are per passport and destination"
+    );
+    let idx = recs(
+        "enwiki_visa",
+        &format!("https://dumps.wikimedia.org{WIKI_INDEX}"),
+        b"[]",
+    );
+    assert!(idx.is_empty());
 }

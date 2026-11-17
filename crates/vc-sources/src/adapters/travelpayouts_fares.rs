@@ -469,6 +469,7 @@ impl SourceAdapter for TravelpayoutsFares {
                     hint: Some(MediaType::Json),
                     redact: &[TOKEN_PARAM],
                     secret_header: Some((TOKEN_HEADER, &token)),
+                    ..Fetch::default()
                 };
                 let ex = fetch_raw(ctx, url, &opts, &mut rep).await?;
                 check_status(&ex)?;

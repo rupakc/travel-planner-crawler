@@ -518,3 +518,113 @@ async fn admin_reprocess_hands_done_captures_back() {
     assert_eq!(r.proc.tick(8).await.unwrap(), 1);
     assert!(count(&r.pool, "SELECT count(*) FROM observations").await >= 20);
 }
+
+// ---------------------------------------------------------------------------------------------
+// Embassy, medical and visa-reference sources (2026-11-18)
+// ---------------------------------------------------------------------------------------------
+
+/// `(adapter, URL, fixture)` of every recorded capture of the 2026-11-18 adapters.
+const EMBASSY_CAPTURES: &[(&str, &str, &str)] = &[
+    (
+        "govuk_world_orgs",
+        "https://www.gov.uk/api/content/world/organisations/british-embassy-tirana",
+        "govuk_org_tirana.json",
+    ),
+    (
+        "govuk_world_orgs",
+        "https://www.gov.uk/api/content/world/organisations/british-embassy-madrid",
+        "govuk_org_madrid.json",
+    ),
+    (
+        "canada_offices",
+        "https://data.international.gc.ca/travel-voyage/opendata-offices-list-alpha-eng.json",
+        "canada_offices.json",
+    ),
+    (
+        "govuk_medical_lists",
+        "https://www.gov.uk/api/content/government/publications/albania-list-of-medical-facilities",
+        "govuk_medical_albania.json",
+    ),
+    (
+        "govuk_medical_lists",
+        "https://www.gov.uk/api/content/government/publications/albania-list-of-medical-facilities/list-of-english-speaking-medical-facilities-for-british-nationals-in-albania--2",
+        "govuk_medical_albania_list.json",
+    ),
+    (
+        "enwiki_visa",
+        "https://dumps.wikimedia.org/enwiki/latest/enwiki-latest-pages-articles-multistream.xml.bz2?length=3569&offset=1000",
+        "enwiki_visa_stream.xml.bz2",
+    ),
+];
+
+#[test]
+fn embassy_medical_and_visa_records_fit_their_schemas() {
+    let r = root();
+    let reg = vc_kinds::FileKindRegistry::load(&vc_config::KindsConfig {
+        kinds_toml: r.join("kinds.toml").display().to_string(),
+        schemas_dir: r.join("schemas").display().to_string(),
+        prompts_dir: r.join("prompts").display().to_string(),
+    })
+    .expect("kind registry");
+    let mut total = 0;
+    for (adapter, url, file) in EMBASSY_CAPTURES {
+        let u = vc_core::CanonicalUrl::parse(url).unwrap();
+        let items = vc_sources::adapters::records::records(adapter, &u, &recorded(file))
+            .expect("mapped")
+            .expect("fixture maps");
+        assert!(!items.is_empty(), "{file}: no records");
+        for it in items {
+            if let Err(e) = reg.validate(&vc_core::KindId::new(it.kind), &it.data) {
+                panic!(
+                    "{file}: {} does not fit {}: {e:?}\n{:#}",
+                    it.kind, it.kind, it.data
+                );
+            }
+            total += 1;
+        }
+    }
+    assert!(total > 20, "{total}");
+}
+
+#[tokio::test]
+async fn official_embassy_and_medical_lists_reach_the_index() {
+    let r = rig_real(false).await;
+    seed_real(
+        &r.pool,
+        &[
+            "govuk-world-orgs",
+            "canada-offices-json",
+            "govuk-medical-lists",
+        ],
+    )
+    .await;
+    let caps = [
+        ("govuk-world-orgs", 0),
+        ("canada-offices-json", 2),
+        ("govuk-medical-lists", 3),
+        ("govuk-medical-lists", 4),
+    ];
+    for (source, i) in caps {
+        let (adapter, url, file) = EMBASSY_CAPTURES[i];
+        let body = text(file);
+        let o = run(&r, api(url, source, adapter, MediaType::Json, &body)).await;
+        assert_processed(&o);
+    }
+    let uk = records_of(&r, "embassy", "govuk-world-orgs").await;
+    assert_eq!(uk.len(), 1, "{uk:?}");
+    assert_eq!(uk[0]["name"], "British Embassy Tirana");
+    assert_eq!(uk[0]["phones"][0]["e164"], "+35542247697");
+    let ca = records_of(&r, "embassy", "canada-offices-json").await;
+    assert!(ca.len() >= 6, "{}", ca.len());
+    assert!(
+        ca.iter()
+            .any(|d| d["of_country_code"] == "GB" && d["country_code"] == "GM"),
+        "partner offices are kept with their own sending country"
+    );
+    let med = records_of(&r, "medical_facility", "govuk-medical-lists").await;
+    assert_eq!(med.len(), 6);
+    assert!(med.iter().all(|d| d["list_updated"] == "2026-03-17"));
+    let lists = records_of(&r, "article", "govuk-medical-lists").await;
+    assert_eq!(lists.len(), 1);
+    assert_eq!(lists[0]["updated_date"], "2026-03-17");
+}

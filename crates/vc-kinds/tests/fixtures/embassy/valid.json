@@ -1,0 +1,21 @@
+{
+  "name": "Embassy of Canada to Portugal",
+  "mission_type": "embassy",
+  "of_country": "Canada",
+  "of_country_code": "CA",
+  "country": "Portugal",
+  "country_code": "PT",
+  "city": "Lisbon",
+  "address": "Avenida da Liberdade 196-200, 3rd Floor, 1269-121 Lisbon, Portugal",
+  "lat": 38.72104,
+  "lng": -9.1458,
+  "phones": [
+    {"type": "main", "number": "+351 21 316 4600", "e164": "+351213164600"},
+    {"type": "fax", "number": "+351 21 316 4693", "e164": "+351213164693"}
+  ],
+  "emails": ["lsbon.consular@international.gc.ca"],
+  "website_url": "https://www.international.gc.ca/country-pays/portugal/lisbon-lisbonne.aspx?lang=eng",
+  "hours": "Monday to Friday, 8:30 a.m. to 12:30 p.m. and 1:30 p.m. to 5 p.m.",
+  "passport_services": true,
+  "as_of": "2026-11-17"
+}

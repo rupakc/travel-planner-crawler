@@ -1,0 +1,95 @@
+{
+ "base_path": "/world/organisations/british-embassy-madrid",
+ "content_id": "f4c3a0be-7a30-11e4-a3cb-005056011aef",
+ "description": "The British Embassy in Madrid maintains and develops relations between the UK and Spain.",
+ "document_type": "worldwide_organisation",
+ "first_published_at": "2013-02-19T13:35:37+00:00",
+ "locale": "en",
+ "phase": "live",
+ "public_updated_at": "2026-08-06T14:37:55+01:00",
+ "schema_name": "worldwide_organisation",
+ "title": "British Embassy Madrid",
+ "updated_at": "2026-11-12T12:25:46+00:00",
+ "details": {
+  "office_contact_associations": [
+   {
+    "contact_content_id": "410c4c3b-5c1c-4617-b603-4356bedcc85e",
+    "office_content_id": "58c83be0-6264-4cb0-a652-126d57e8c0b7"
+   }
+  ],
+  "world_location_names": [
+   {
+    "content_id": "5e9f204e-7706-11e4-a3cb-005056011aef",
+    "name": "Spain"
+   }
+  ]
+ },
+ "links": {
+  "contacts": [
+   {
+    "content_id": "410c4c3b-5c1c-4617-b603-4356bedcc85e",
+    "details": {
+     "contact_form_links": null,
+     "description": "To call us in an emergency or send us an online enquiry go to:\r\nhttps://www.contact.service.csd.fcdo.gov.uk/posts/spain/british-embassy-madrid\r\n",
+     "email_addresses": null,
+     "phone_numbers": [
+      {
+       "number": "-",
+       "title": "Public access to the embassy is by appointment only"
+      }
+     ],
+     "post_addresses": [
+      {
+       "iso2_country_code": "es",
+       "locality": "Madrid",
+       "postal_code": "28046",
+       "street_address": "Paseo de la Castellana 259D ",
+       "title": "Torre Emperador Castellana",
+       "world_location": "Spain"
+      }
+     ],
+     "title": "British Embassy Madrid"
+    },
+    "document_type": "contact",
+    "links": {},
+    "locale": "en",
+    "public_updated_at": "2026-08-06T10:38:58Z",
+    "schema_name": "contact",
+    "title": "British Embassy Madrid",
+    "withdrawn": false
+   }
+  ],
+  "main_office": [
+   {
+    "api_path": "/api/content/world/organisations/british-embassy-madrid/office/british-embassy-madrid",
+    "api_url": "https://www.gov.uk/api/content/world/organisations/british-embassy-madrid/office/british-embassy-madrid",
+    "base_path": "/world/organisations/british-embassy-madrid/office/british-embassy-madrid",
+    "content_id": "58c83be0-6264-4cb0-a652-126d57e8c0b7",
+    "details": {
+     "access_and_opening_times": "<div class=\"govspeak\"><h2 id=\"opening-hours\">Opening hours</h2>\n\n<p>British Embassy opening hours: Monday to Friday, 8:30am to 5pm</p>\n\n<p>The British Consulate General in Madrid is open by appointment only.</p>\n\n<p>To call us in an emergency or send us an online enquiry <a rel=\"external\" href=\"https://www.contact.service.csd.fcdo.gov.uk/posts/spain/british-embassy-madrid\">use our contact form</a>.</p>\n\n<h2 id=\"public-holidays\">2026 public holidays</h2>\n\n<p>Our offices will be closed for the following public holidays in 2026:</p>\n\n<table>\n  <tbody>\n    <tr>\n      <td>Thursday 1 January</td>\n      <td>New Year’s Day</td>\n    </tr>\n    <tr>\n      <td>Tuesday 6 January</td>\n      <td>Epiphany</td>\n    </tr>\n    <tr>\n      <td>Thursday 2 April</td>\n      <td>Maundy Thursday</td>\n    </tr>\n    <tr>\n      <td>Friday 3 April</td>\n      <td>Good Friday</td>\n    </tr>\n    <tr>\n      <td>Monday 6 April</td>\n      <td>Easter Monday</td>\n    </tr>\n    <tr>\n      <td>Friday 1 May</td>\n      <td>Labour Day</td>\n    </tr>\n    <tr>\n      <td>Friday 15 May</td>\n      <td>San Isidro</td>\n    </tr>\n    <tr>\n      <td>Monday 12 October</td>\n      <td>Fiesta Nacional de España</td>\n    </tr>\n    <tr>\n      <td>Monday 2 November</td>\n      <td>All Saints Day (in lieu of Sun 1 Nov)</td>\n    </tr>\n    <tr>\n      <td>Monday 9 November</td>\n      <td>La Almudena</td>\n    </tr>\n    <tr>\n      <td>Monday 7 December</td>\n      <td>Día de la Constitución Española (in lieu of Sun 6 Dec)</td>\n    </tr>\n    <tr>\n      <td>Tuesday 8 December</td>\n      <td>Inmaculada Concepcion</td>\n    </tr>\n    <tr>\n      <td>Friday 25 December</td>\n      <td>Christmas Day</td>\n    </tr>\n    <tr>\n      <td>Monday 28 December</td>\n      <td>UK Boxing Day</td>\n    </tr>\n  </tbody>\n</table>\n\n</div>"
+    },
+    "document_type": "worldwide_office",
+    "links": {},
+    "locale": "en",
+    "public_updated_at": "2026-02-12T08:46:09Z",
+    "schema_name": "worldwide_office",
+    "title": "British Embassy Madrid",
+    "web_url": "https://www.gov.uk/world/organisations/british-embassy-madrid/office/british-embassy-madrid",
+    "withdrawn": false
+   }
+  ],
+  "world_locations": [
+   {
+    "analytics_identifier": "WL129",
+    "content_id": "5e9f204e-7706-11e4-a3cb-005056011aef",
+    "document_type": "world_location",
+    "links": {},
+    "locale": "en",
+    "public_updated_at": "2017-08-15T14:41:56Z",
+    "schema_name": "world_location",
+    "title": "Spain",
+    "withdrawn": false
+   }
+  ]
+ }
+}

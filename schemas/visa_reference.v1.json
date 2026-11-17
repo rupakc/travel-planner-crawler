@@ -1,0 +1,112 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/rupakc/travel-planner-crawler/schemas/visa_reference.v1.json",
+  "title": "Visa requirement (reference, cross-check only)",
+  "description": "One record: the entry requirement for holders of one passport visiting one destination, as a reference work (Wikipedia) summarises it. NOT an official rule: used only to cross-check `visa_rule` records and flag disagreements; never shown as the answer. Voyager use: visa (cross-check).",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "nationality": {
+      "type": "string",
+      "maxLength": 80,
+      "description": "The passport country, in English."
+    },
+    "nationality_code": {
+      "type": "string",
+      "maxLength": 2,
+      "description": "ISO 3166-1 alpha-2 of `nationality`.",
+      "pattern": "^[A-Z]{2}$"
+    },
+    "destination_country": {
+      "type": "string",
+      "maxLength": 80,
+      "description": "The destination as the table names it, in English."
+    },
+    "destination_country_code": {
+      "type": "string",
+      "maxLength": 2,
+      "description": "ISO 3166-1 alpha-2 of `destination_country`, when it is a country the table names unambiguously.",
+      "pattern": "^[A-Z]{2}$"
+    },
+    "requirement": {
+      "type": "string",
+      "enum": [
+        "visa_free",
+        "visa_on_arrival",
+        "e_visa",
+        "eta",
+        "visa_required",
+        "freedom_of_movement",
+        "entry_banned",
+        "other"
+      ],
+      "description": "The requirement, from the table's own wording."
+    },
+    "requirement_text": {
+      "type": "string",
+      "maxLength": 160,
+      "description": "The table's requirement cell as written (markup removed)."
+    },
+    "max_stay_days": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 3660,
+      "description": "Allowed stay in days, only when the table states it in days or weeks (months are left in `allowed_stay_text`)."
+    },
+    "allowed_stay_text": {
+      "type": "string",
+      "maxLength": 160,
+      "description": "The table's allowed-stay cell as written (markup removed)."
+    },
+    "notes": {
+      "type": "string",
+      "maxLength": 600,
+      "description": "The table's notes cell, markup and references removed."
+    },
+    "article_title": {
+      "type": "string",
+      "maxLength": 200,
+      "description": "The Wikipedia article the row comes from."
+    },
+    "revision_id": {
+      "type": "integer",
+      "minimum": 1,
+      "description": "The article revision the row was read from."
+    },
+    "provenance": {
+      "type": "string",
+      "enum": [
+        "wikipedia"
+      ],
+      "description": "Where the row comes from: a reference work, never an official source."
+    },
+    "source_url": {
+      "type": "string",
+      "maxLength": 2048,
+      "description": "The page's own link for this item (official site, booking or detail page), copied verbatim from the page.",
+      "pattern": "^https?://[^\\s]+$"
+    },
+    "as_of": {
+      "type": "string",
+      "maxLength": 10,
+      "description": "The \"last updated\", \"valid from\" or publication date the page itself states for this information (YYYY-MM-DD).",
+      "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$"
+    },
+    "evidence": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "maxLength": 300,
+        "description": "A verbatim quote from the page."
+      },
+      "maxItems": 3,
+      "description": "Up to 3 short verbatim quotes from the page that support the most important facts."
+    }
+  },
+  "required": [
+    "nationality",
+    "destination_country",
+    "requirement",
+    "provenance"
+  ]
+}

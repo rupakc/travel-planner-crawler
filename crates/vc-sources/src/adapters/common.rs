@@ -98,6 +98,14 @@ pub(crate) struct Fetch<'a> {
     /// A request header carrying a secret (e.g. `x-access-token`): sent on the request and
     /// **removed from the stored request headers** before the exchange is spooled.
     pub secret_header: Option<(&'static str, &'a Secret)>,
+    /// Conditional GET: when fetching the leased URL itself and it has a committed capture,
+    /// send that capture's validators. A `304` is spooled as a `revisit` of it (the processor
+    /// follows revisits to the stored body) and returned for the caller to treat as "unchanged".
+    pub conditional: bool,
+    /// A byte range `[start, end)` (`Range: bytes=start-(end-1)`).
+    pub range: Option<(u64, u64)>,
+    /// Cap on the body (0 = the purpose's default).
+    pub max_body_bytes: u64,
 }
 
 /// Removes a secret header from the request headers an exchange keeps (they are written to the
@@ -117,6 +125,21 @@ pub(crate) async fn fetch_raw(
 ) -> Result<Exchange> {
     let mut req = FetchRequest::get(url, RequestPurpose::Api);
     req.accept = opts.accept.map(str::to_string);
+    req.max_body_bytes = opts.max_body_bytes;
+    let revisit_of = if opts.conditional && req.url == ctx.url.url {
+        ctx.url.last_capture
+    } else {
+        None
+    };
+    if revisit_of.is_some() {
+        req.validators = ctx.url.validators.clone();
+    }
+    if let Some((start, end)) = opts.range
+        && end > start
+        && let Ok(v) = format!("bytes={start}-{}", end - 1).try_into()
+    {
+        req.headers.insert("range", v);
+    }
     if let Some((name, value)) = opts.secret_header {
         let v = value
             .expose()
@@ -141,6 +164,29 @@ pub(crate) async fn fetch_raw(
         for h in &mut ex.redirects {
             h.url = redact_query(&h.url, opts.redact);
         }
+    }
+    if ex.status.as_u16() == 304
+        && let Some(last) = revisit_of
+    {
+        let mut m = meta(
+            ctx,
+            &ex.url,
+            CaptureRole::Primary,
+            opts.hint.or(ctx.url.expect).unwrap_or(MediaType::Json),
+            Some(304),
+            &ex.body,
+            ex.validators(),
+        );
+        m.payload_hash = ctx.url.last_payload_hash.or(m.payload_hash);
+        m.revisit_of = Some(last);
+        ctx.sink
+            .append(SpoolRecord {
+                meta: m,
+                payload: SpoolPayload::Revisit(ex.clone()),
+            })
+            .await?;
+        report.records += 1;
+        return Ok(ex);
     }
     let (media, mismatch) = MediaType::detect(opts.hint, ex.content_type(), &ex.body);
     if mismatch {
@@ -228,6 +274,12 @@ pub(crate) async fn append_manifest(
 /// parks the key, never retries with another identity); 404/410 → not found; 429/503 → rate
 /// limited with the parsed `Retry-After` (the caller backs the key off); other 5xx → server
 /// error (counts toward the key's consecutive-5xx park).
+/// Whether a response is a `304 Not Modified` (only possible for a conditional
+/// [`fetch_raw`], which already spooled it as a revisit).
+pub(crate) fn not_modified(ex: &Exchange) -> bool {
+    ex.status.as_u16() == 304
+}
+
 pub(crate) fn check_status(ex: &Exchange) -> Result<()> {
     let s = ex.status.as_u16();
     match s {
