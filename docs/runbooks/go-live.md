@@ -20,6 +20,21 @@ on (§12) is a separate owner decision.
   gcloud compute ssh voyager-crawler --zone=us-east1-b --tunnel-through-iap --project=voyager-prod-ohzkl
   ```
 
+  The VM is the one instance of the stateful managed instance group `voyager-crawler-mig`
+  (a Spot e2-medium this month). Its name is fixed by the group's per-instance config, so
+  it stays `voyager-crawler` across preemptions and recreates; the group, the instance
+  name, its state and what the group is doing to it:
+
+  ```bash
+  gcloud compute instance-groups managed list-instances voyager-crawler-mig --zone=us-east1-b \
+    --project=voyager-prod-ohzkl --format='table(instance.basename(),instanceStatus,currentAction,instanceHealth[0].detailedHealthState)'
+  ```
+
+  Expected: one row, `voyager-crawler RUNNING NONE HEALTHY` (health is `UNKNOWN`/`TIMEOUT`
+  during the 30-minute initial delay after a (re)create). If SSH says the instance does
+  not exist, it is being recreated (`currentAction` `RECREATING` or `CREATING`): wait and
+  retry.
+
   and, once per SSH session, these helpers:
 
   ```bash
@@ -91,15 +106,23 @@ on (§12) is a separate owner decision.
    - the first command prints nothing (every non-billing `gcloud` call is pinned to the
      project);
    - the sections are, in order: APIs, Service accounts, Custom roles, Buckets, Secrets,
-     Static IPs, API TLS certificate, IAM bindings, Data disk + snapshot schedule,
-     Firewall, Log bucket + sink, Restore-drill instance template, VM voyager-crawler,
-     Notification channel + alert policies, Budget, Done (16 `==>` lines);
+     Static IPs, API TLS certificate, IAM bindings, Data disk, Firewall, Log bucket +
+     sink, Restore-drill instance template, Autohealing health check, Instance template
+     voyager-crawler-spot-…, Managed instance group voyager-crawler-mig (SPOT),
+     Notification channel + alert policies, Budget, Done (18 `==>` lines);
    - every created name starts with `crawler-`, `voyager-crawler` or
      `allow-crawler-`/`deny-crawler-`; nothing deletes or modifies a travel-planner
      resource except the two `vm-runtime` secret bindings and the `_Default` sink
      exclusion;
-   - the VM line has `--deletion-protection`, `--shielded-secure-boot`,
-     `enable-oslogin=TRUE`, `--machine-type=e2-standard-2`;
+   - the instance template line has `--machine-type=e2-medium`,
+     `--provisioning-model=SPOT`, `--instance-termination-action=STOP`,
+     `--boot-disk-size=10GB`, `--shielded-secure-boot`, `enable-oslogin=TRUE` and a
+     `shutdown-script=…/deploy/host/shutdown.sh`;
+   - the group line has `--size=0`, the three `--stateful-…` policies with
+     `auto-delete=never` and `--health-check=…/crawler-healthz`; the `create-instance`
+     line names `--instance=voyager-crawler`, the disk `crawler-data` and both addresses
+     (`crawler-internal-ip`, `crawler-external-ip`), all `auto-delete=never`;
+   - there is no `resource-policies` (snapshot) line and the data disk is `--size=30GB`;
    - the channel line has `email_address=<your address>` (check it is spelled right);
    - the budget is `9000INR` with thresholds 0.5/0.9/1.0.
 
@@ -143,8 +166,24 @@ That is safe: a fresh install crawls only the ten ramp sources (§5).
    infrastructure/bootstrap.sh 2>&1 | tee /tmp/bootstrap-run.txt
    ```
 
-   Expected: exit 0, the same 16 sections as the dry run, `==> Done.` last. A second run
+   Expected: exit 0, the same 18 sections as the dry run, `==> Done.` last. A second run
    must create nothing (you may run it again later to re-assert IAM and policies).
+   Then the group and its VM (a Spot VM is created only when capacity allows; usually at
+   once):
+
+   ```bash
+   gcloud compute instance-groups managed list-instances voyager-crawler-mig --zone=us-east1-b \
+     --project=voyager-prod-ohzkl --format='table(instance.basename(),instanceStatus,currentAction)'
+   gcloud compute instance-groups managed list-errors voyager-crawler-mig --zone=us-east1-b --project=voyager-prod-ohzkl
+   gcloud compute instances describe voyager-crawler --zone=us-east1-b --project=voyager-prod-ohzkl \
+     --format='value(scheduling.provisioningModel,scheduling.instanceTerminationAction,networkInterfaces[0].networkIP,networkInterfaces[0].accessConfigs[0].natIP)'
+   ```
+
+   Expected: `voyager-crawler RUNNING NONE`; no errors (a `ZONE_RESOURCE_POOL_EXHAUSTED`
+   or "does not have enough resources" line means no Spot capacity yet: the group keeps
+   retrying; see incident.md, crawler down for over 6 h); `SPOT STOP` and the two
+   reserved addresses (step 2 below). Spot VMs use the project's regular `CPUS` quota
+   (its `PREEMPTIBLE_CPUS` quota is 0, never requested).
 2. Note the two IPs:
 
    ```bash
@@ -165,7 +204,7 @@ That is safe: a fresh install crawls only the ten ramp sources (§5).
 
    Expected: one channel with your address and `True` (an email channel needs no
    verification; if `verificationStatus` says `UNVERIFIED`, click the link in the email
-   Cloud Monitoring sent you, then re-run). 12 policies, all enabled. In the console
+   Cloud Monitoring sent you, then re-run). 14 policies, all enabled. In the console
    (Monitoring → Alerting → Edit notification channels → Voyager crawler alerts) use
    **Send test notification** and check that the email arrives.
 
@@ -253,7 +292,15 @@ unreadable file stops the scheduler's pass and the fetcher (fail closed).
    ```
 
    Expected: `voyager-crawler.service` `active (exited)`; four timers (deploy, watchdog,
-   basebackup, restore-drill) with a next run; no failed units.
+   basebackup on Saturdays, restore-drill on Sundays) with a next run; no failed units.
+   Swap and the Spot shutdown hook:
+
+   ```bash
+   swapon --show; cat /proc/sys/vm/swappiness
+   curl -s -H 'Metadata-Flavor: Google' http://metadata.google.internal/computeMetadata/v1/instance/attributes/shutdown-script | head -3
+   ```
+
+   Expected: `/swapfile file 2G`; `10`; the first lines of `deploy/host/shutdown.sh`.
 2. Containers and role health:
 
    ```bash
@@ -336,7 +383,8 @@ unreadable file stops the scheduler's pass and the fetcher (fail closed).
 
    Expected: `archived_count` ≥ 1, `last_archived_time` within the last 2 minutes,
    `failed_count` 0; the bucket lists `wal_005/`.
-8. The first base backup (don't wait for 03:15 UTC):
+8. The first base backup (don't wait for Saturday 03:15 UTC; base backups are weekly and
+   always full):
 
    ```bash
    sudo systemctl start voyager-crawler-basebackup.service
@@ -572,13 +620,47 @@ AI must never be starved, so:
    `/var/lib/voyager-crawler/deploy/host.local.env`, then
    `sudo google_metadata_script_runner startup && sudo systemctl restart voyager-crawler`.
    The fetcher at once stops fetching other sources' URLs (each is released for an hour).
-6. **Whole stack down**:
-   `sudo systemctl stop voyager-crawler-deploy.timer voyager-crawler-watchdog.timer voyager-crawler.service`.
+6. **Whole stack down**. The API's `/healthz` is the group's autohealing check: with the
+   stack down for 15 minutes the group would recreate the VM, and the stack would come back
+   on its own. Clear autohealing first (laptop), then stop (VM):
+
+   ```bash
+   gcloud compute instance-groups managed update voyager-crawler-mig --zone=us-east1-b \
+     --clear-autohealing --project=voyager-prod-ohzkl
+   sudo systemctl stop voyager-crawler-deploy.timer voyager-crawler-watchdog.timer voyager-crawler.service
+   ```
+
    Data stays on the data disk; `sudo systemctl start voyager-crawler.service` and the two
-   timers bring it back.
+   timers bring it back. Then restore autohealing (laptop; a full bootstrap run re-asserts
+   it too):
+
+   ```bash
+   gcloud compute instance-groups managed update voyager-crawler-mig --zone=us-east1-b \
+     --health-check=projects/voyager-prod-ohzkl/global/healthChecks/crawler-healthz \
+     --initial-delay=1800 --project=voyager-prod-ohzkl
+   ```
+
+   Do not stop or delete the VM itself (`gcloud compute instances stop|delete`): it
+   belongs to the group, which repairs a stopped or missing VM; stopping the stack as
+   above is the supported way down.
 7. **LLM**: §12.5.
-8. Infrastructure is not rolled back: bootstrap only adds, the VM has deletion protection,
+8. Infrastructure is not rolled back: bootstrap only adds, the group never deletes the data
+   disk or the addresses (`auto-delete=never`; a MIG's VM cannot have deletion protection),
    and removing the footprint is the owner's call.
+9. **Spot → standard in one command** (no Spot capacity for hours, or next month's switch
+   to the committed VM; laptop):
+
+   ```bash
+   infrastructure/bootstrap.sh --update-host --standard
+   gcloud compute instances describe voyager-crawler --zone=us-east1-b --project=voyager-prod-ohzkl \
+     --format='value(scheduling.provisioningModel)'
+   ```
+
+   Expected: a `voyager-crawler-std-…` template, `set-instance-template` and
+   `update-instances` run; the VM restarts (or is recreated) once with the same disks and
+   IPs, then `STANDARD`. Later bootstrap runs keep standard; `--update-host --spot` goes
+   back. Next month, after this, buy the 1-year commitment (infrastructure/README.md,
+   owner step 5): it covers standard VMs only, so switch first.
 
 ## 14. When a site complains (opt-out and removal)
 

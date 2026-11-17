@@ -59,8 +59,13 @@ plan = `docs/superpowers/plans/2026-11-15-voyager-crawler.md`, r1–r5 = `docs/r
   ingest by key → 72 h cancel; batch reservations not auto-settled. (spec §17.3, r4 B3)
 - **Budget reserves against day and month rows in one statement**; dynamic daily cap;
   purpose shares 70/8/8/7/4/3; `llm_cache`; default model `gemini-3.1-flash-lite`. (spec §17.4)
-- **Plain VM, no MIG**; static internal + external IP; watchdog timer; self-signed TLS
-  for the internal API. (spec §17.5)
+- ~~Plain VM, no MIG~~ → **one Spot e2-medium in a stateful MIG of size 1** (owner,
+  2026-11-17: Spot this month, then a standard e2-medium with a 1-year commitment):
+  per-instance config keeps the name `voyager-crawler`, boot + data disks and both static
+  IPs across preemption recreates; autohealing on the API `/healthz`; termination action
+  STOP; no disk snapshots (wal-g PITR + weekly drill); weekly full base backups.
+  Static internal + external IP; watchdog timer; self-signed TLS for the internal API.
+  (spec §17.5)
 - **Opt-out SLA:** API/index 24 h, GCS 7 d, backups/snapshots 21 d; `ephemeral/` prefix
   for noarchive/TDM. (spec §17.7)
 - **`source_class`** (official | reference | editorial | community | commercial_api) and

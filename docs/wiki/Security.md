@@ -21,7 +21,7 @@ Do not open a public issue. Opt-out requests are not security issues; see BOT.md
 | Secret leaks | Secrets only in Secret Manager; delivered as tmpfs files, never env values; `Secret` values never appear in `Debug`, errors or logs; Secret Manager payload CRC32C verified. |
 | Content in logs | a log **field allowlist**: only named fields are written; `body`, `token`, `headers` and similar are dropped by name; long values are cut. |
 | Runaway LLM spend | off by default; race-free day + month reservation; monthly cap ≤ 50 % of the project cap, or the LLM is forced off; billing errors open a 6 h breaker shared by every role and kept across restarts ([Gemini and Budgets](Gemini-and-Budgets)). |
-| Losing or corrupting raw data | fsynced spool; idempotent uploads with `ifGenerationMatch=0`; one commit transaction; failpoint tests; WAL archiving, snapshots and restore drills. |
+| Losing or corrupting raw data | fsynced spool; idempotent uploads with `ifGenerationMatch=0`; one commit transaction; failpoint tests; WAL archiving, weekly full base backups and restore drills. |
 | Backups deleted by a compromised VM | the runtime account can create and read backups but not delete them; the bucket lifecycle deletes them. |
 
 ## Container hardening

@@ -9,6 +9,19 @@ fix. Commands use the VM helpers from [go-live.md](go-live.md#conventions) (`VC`
 gcloud compute ssh voyager-crawler --zone=us-east1-b --tunnel-through-iap --project=voyager-prod-ohzkl
 ```
 
+The VM is a **Spot** e2-medium, the single instance of the stateful group
+`voyager-crawler-mig`: GCE may preempt it at any time (about 30 s notice; the shutdown
+script stops the crawler, then Postgres), and the group recreates it with the same name,
+disks and IPs when capacity allows. Where the VM stands, and recent preemptions:
+
+```bash
+gcloud compute instance-groups managed list-instances voyager-crawler-mig --zone=us-east1-b \
+  --project=voyager-prod-ohzkl --format='table(instance.basename(),instanceStatus,currentAction,instanceHealth[0].detailedHealthState)'
+gcloud compute instance-groups managed list-errors voyager-crawler-mig --zone=us-east1-b --project=voyager-prod-ohzkl --limit=10
+gcloud compute operations list --project=voyager-prod-ohzkl \
+  --filter='operationType=compute.instances.preempted AND targetLink~voyager-crawler' --limit=10
+```
+
 Rule zero: if the crawler might be **impolite** (too fast, retrying a site that refused us,
 fetching something it should not), stop the fetcher first (go-live.md §13.2) and diagnose
 afterwards. Every other incident can wait for a diagnosis.
@@ -18,19 +31,54 @@ afterwards. Every other incident can wait for a diagnosis.
 ## voyager-crawler: crawler down
 
 **Means.** A role stopped sending `crawler/heartbeat` for 15 minutes, or the whole VM is
-down.
+down: on the Spot VM most often a **preemption** (the group recreates the VM; the alert
+closes by itself once the roles beat again, usually within 15–30 minutes).
 
 **Check.**
-1. `gcloud compute instances describe voyager-crawler --zone=us-east1-b --project=voyager-prod-ohzkl --format='value(status)'` (laptop): `RUNNING`?
+1. Laptop: the group listing and the preemption operations above. `RUNNING NONE` with a
+   recent `compute.instances.preempted` → it was a preemption and the VM is back; wait
+   for the stack. `TERMINATED`/`STOPPED` or `currentAction` `RECREATING` with errors in
+   `list-errors` → no Spot capacity yet; the group keeps retrying (see the next entry
+   if it lasts).
 2. `sudo "$VC" ps --format '{{.Service}} {{.State}} {{.Health}}'`: which role is missing,
    exited or unhealthy? Then `sudo "$VC" logs --tail 100 <role>`.
 3. `tail -20 /var/lib/voyager-crawler/deploy/watchdog.log` and `sudo "$VC" ps otelcol`:
    restart loop, or only the metrics path (otelcol) down while the roles are fine?
 
-**Fix.** VM stopped → start it (`gcloud compute instances start …`); the stack comes up from
-`voyager-crawler.service`. One role crashing after a deploy → `deploy.sh --rollback`
+**Fix.** VM preempted or stopped → nothing to do: the group recreates it (do not
+`instances start` or `delete` it by hand); the stack comes up from
+`voyager-crawler.service`, first boot re-runs and keeps the data disk as it is. One role
+crashing after a deploy → `deploy.sh --rollback`
 (go-live.md §13.1). otelcol down → `sudo "$VC" up -d otelcol`. Postgres down → its logs;
 disk full is the usual cause (see disk). Expected during a deliberate fetcher stop.
+
+## voyager-crawler: crawler down for over 6 h (Spot capacity?)
+
+**Means.** No role on any instance has sent a heartbeat for 6 hours. Almost always: the
+Spot VM was preempted and the group cannot get Spot e2-medium capacity in us-east1-b
+(the zone is fixed by the zonal data disk). Possibly the VM is up but the stack is not
+(then the 15-minute entry above applies).
+
+**Check.**
+1. The group listing and `list-errors` (top of this page): `ZONE_RESOURCE_POOL_EXHAUSTED`,
+   "does not have enough resources available" or a stockout → no Spot capacity.
+2. `QUOTA_EXCEEDED` → quota, not capacity: Spot uses the regular `CPUS` quota here
+   (`PREEMPTIBLE_CPUS` is 0, never requested): `gcloud compute regions describe us-east1
+   --project=voyager-prod-ohzkl --format=json | jq '.quotas[] | select(.metric=="CPUS" or .metric=="PREEMPTIBLE_CPUS")'`.
+3. The VM is `RUNNING` → it is the stack: follow the crawler-down entry above.
+
+**Fix.** No capacity → switch to standard provisioning, one command (laptop):
+
+```bash
+infrastructure/bootstrap.sh --update-host --standard
+```
+
+The group gets a standard e2-medium template and recreates the VM with it (same name,
+disks and IPs; on demand, about $24.5 a month prorated). Check with the group listing
+(`RUNNING`) and `gcloud compute instances describe voyager-crawler --zone=us-east1-b
+--project=voyager-prod-ohzkl --format='value(scheduling.provisioningModel)'` →
+`STANDARD`. Go back to Spot later with `--update-host --spot`, or keep standard if the
+commitment is due anyway (go-live.md §13.9).
 
 ## voyager-crawler: no captures for 60 min while work is due
 
@@ -123,7 +171,9 @@ and investigate before anything else.
 
 ## voyager-crawler: disk over 80%
 
-**Means.** The boot disk or the 100 GB data disk is over 80 % full.
+**Means.** The 10 GB boot disk (Debian, Docker images, the 2 GB swap file) or the 30 GB
+data disk is over 80 % full. The light restore drill needs pgdata + 10 % free on the
+data disk, so pgdata above about 13 GB leaves the drill without room.
 
 **Check.**
 1. `df -h / /var/lib/voyager-crawler`
@@ -134,8 +184,12 @@ and investigate before anything else.
 **Fix.** `pg_wal` large → fix archiving first (backup age). Spool large → backpressure.
 Docker images on the boot disk → `sudo docker image prune -f` (dangling images only; keep
 the image named in `/var/lib/voyager-crawler/deploy/previous`, the rollback target). Real growth →
-plan a disk resize (`gcloud compute disks resize crawler-data --size=…`, then
-`resize2fs`) with the owner.
+plan a disk resize with the owner: `gcloud compute disks resize crawler-data --size=…
+--zone=us-east1-b --project=voyager-prod-ohzkl`, then `sudo resize2fs
+/dev/disk/by-id/google-crawler-data` on the VM (the disk stays in the group's
+per-instance config; nothing else changes). The boot disk: `gcloud compute disks resize
+voyager-crawler --size=…` (the boot disk carries the instance's name), then
+`sudo growpart /dev/sda 1 && sudo resize2fs /dev/sda1`.
 
 ## voyager-crawler: API TLS certificate expires within 30 days
 
