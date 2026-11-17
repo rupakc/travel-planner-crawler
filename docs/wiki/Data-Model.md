@@ -33,6 +33,7 @@ and kinds.
 | vcrawl | `1904_purge_garbage` | `store_garbage`; `vc_rewrite_segment` also releases validators of removed captures |
 | vcrawl | `1905_purge_author_scope` | `purge_requests.scope`; author names stored only as `sha256:<hex>` |
 | vcrawl | `1906_noarchive_expiry` | partial index over captures whose final use policy is `raw: ephemeral` and that have no `raw_expires_at` yet |
+| vcrawl | `1907_render_requeue` | `url_state.render_requested_hash`: SHA-256 of the HTTP body that re-queued an `auto` URL for rendering (once per hash) |
 
 ### Tables added after go-live
 

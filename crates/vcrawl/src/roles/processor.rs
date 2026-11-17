@@ -101,6 +101,8 @@ pub async fn run(ctx: Ctx) -> anyhow::Result<()> {
         limits: vc_parse::limits_from(&cfg.parse),
     });
     p = p.with_metrics(ctx.metrics.clone());
+    // `render: auto` pages flagged needs_render go back to the frontier in render mode.
+    p = p.with_render_requeue(cfg.render.enabled);
     if let Some(t) = triage {
         p = p.with_triage(t);
     }

@@ -19,6 +19,14 @@
 //! source is held until a second independent official/reference source agrees: held records
 //! are fed back as peers ([`PendingPeers`], the shared `held_records` table) and promoted once
 //! agreement is reached, by whichever processor instance sees the agreeing capture.
+//!
+//! **Render re-queue** (spec §5.4, `render: auto`): an HTTP capture that `vc-parse` flags
+//! `needs_render` (little text, SPA markers) switches its URL to `render` mode and makes it due
+//! now ([`Processor::with_render_requeue`], on when rendering is enabled). The render fetch is an
+//! ordinary frontier claim, so the key's delay, budget, parking and robots all still apply. At
+//! most once per content hash: the hash that triggered it is kept in
+//! `url_state.render_requested_hash` (migration 1907), and only a URL still in `http` mode is
+//! switched, so a redelivered or repeated capture never re-queues.
 
 use std::sync::Arc;
 use std::time::Duration;
@@ -32,6 +40,7 @@ use vc_core::media::{FetchMode, MediaType};
 use vc_core::parse::{HandlerRegistry, Limits, LinkKind, Parsed};
 use vc_core::queue::{WorkItem, WorkKind, WorkQueue};
 use vc_core::records::{ExtractedRecord, Provenance};
+use vc_core::sources::RenderMode;
 use vc_core::store::{BlobStore, CaptureRole};
 use vc_core::usepolicy::UsePolicy;
 use vc_core::{CaptureRef, Error, ErrorClass, KindId, Result};
@@ -147,6 +156,7 @@ pub struct Processor {
     triage: Option<(AgenticLlm, PgTriageCache)>,
     lease: Duration,
     metrics: Option<Arc<vc_obs::Metrics>>,
+    render_requeue: bool,
 }
 
 impl std::fmt::Debug for Processor {
@@ -174,7 +184,16 @@ impl Processor {
             triage: None,
             lease: Duration::from_secs(600),
             metrics: None,
+            render_requeue: false,
         }
+    }
+
+    /// Re-queues `needs_render` pages of `render: auto` sources for a render fetch (see the
+    /// module docs). Off by default; the processor role turns it on with `render.enabled`
+    /// (with rendering off the fetcher would only fetch the same shell over HTTP again).
+    pub fn with_render_requeue(mut self, on: bool) -> Self {
+        self.render_requeue = on;
+        self
     }
 
     /// Counts skipped captures in `crawler_processor_skipped_total{reason}`.
@@ -343,6 +362,10 @@ impl Processor {
             .meet(&UsePolicy::from_signals(&parsed.body_signals));
         capture::set_final_policy(pool, cref, &final_policy).await?;
         let links = self.enqueue_links(&src, &c, &parsed).await?;
+        if self.request_render(&src, &c, &parsed, &body).await? {
+            tracing::debug!(capture = %cref.capture_id, source = %src.spec.id.0,
+                "needs_render: url queued for a render fetch");
+        }
 
         let prov = Provenance {
             source_id: src.spec.id.clone(),
@@ -609,6 +632,47 @@ impl Processor {
             }
         }
         drop
+    }
+
+    /// Marks the capture's URL for rendering when its source renders in `auto` mode and the
+    /// HTML parser flagged this HTTP capture `needs_render`: `fetch_mode = 'render'`, due now
+    /// (or right after the running fetch, through `refetch_at`). At most once per content
+    /// hash, and only while the URL is still in `http` mode. Returns whether it was queued.
+    async fn request_render(
+        &self,
+        src: &LoadedSource,
+        c: &StoredCapture,
+        parsed: &Parsed,
+        body: &[u8],
+    ) -> Result<bool> {
+        if !self.render_requeue
+            || !parsed.needs_render
+            || src.spec.render != RenderMode::Auto
+            || c.meta.fetch_mode != FetchMode::Http
+        {
+            return Ok(false);
+        }
+        use sha2::Digest as _;
+        let hash = sha2::Sha256::digest(body);
+        let r = sqlx::query(
+            "UPDATE url_state SET
+                 fetch_mode = 'render',
+                 render_requested_hash = $2,
+                 next_fetch_at = CASE WHEN state = 'due' THEN least(next_fetch_at, now())
+                                      ELSE next_fetch_at END,
+                 refetch_at = CASE WHEN state = 'due' THEN refetch_at
+                                   ELSE least(coalesce(refetch_at, now()), now()) END
+             WHERE url_key = $1
+               AND fetch_mode = 'http'
+               AND state IN ('due', 'leased', 'fetched_pending')
+               AND render_requested_hash IS DISTINCT FROM $2",
+        )
+        .bind(c.meta.url_key.as_bytes().as_slice())
+        .bind(hash.as_slice())
+        .execute(&self.d.pool)
+        .await
+        .map_err(|e| Error::Db(e.to_string()))?;
+        Ok(r.rows_affected() > 0)
     }
 
     /// Enqueues in-scope links (sitemap and feed entries keep the parent's depth; page links
