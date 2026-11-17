@@ -594,6 +594,17 @@ test_otelcol_targets_have_listeners() {
 # A pinned ipv4_address must sit outside the network's dynamic ip_range, or a
 # container that starts first can take it ("Address already in use" on the real
 # first boot: otelcol got 192.168.250.2 before vcrawl).
+# wal-g runs inside the postgres container and talks TLS to GCS: the image has no
+# CA bundle, so the host's must be mounted (found on the first real boot).
+test_postgres_has_ca_bundle_for_walg() {
+  local body
+  body="$(compose_service "$HERE/../compose.yaml" postgres)"
+  grep -q '/usr/local/bin/wal-g' <<<"$body" || { ok postgres_has_ca_bundle_for_walg; return; }
+  grep -qE -- '- /etc/ssl/certs/ca-certificates.crt:/etc/ssl/certs/ca-certificates.crt:ro' <<<"$body" ||
+    { fail postgres_has_ca_bundle_for_walg "postgres runs wal-g but has no CA bundle mounted"; return; }
+  ok postgres_has_ca_bundle_for_walg
+}
+
 test_pinned_ips_outside_dynamic_range() {
   local compose="$HERE/../compose.yaml" pinned range
   pinned="$(grep -oE 'ipv4_address: [0-9.]+' "$compose" | awk '{print $2}' | sort -u)"
