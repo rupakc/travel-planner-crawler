@@ -147,6 +147,12 @@ fn to_capture(r: &PgRow) -> Result<StoredCapture> {
 }
 
 /// Loads a committed capture; `None` when it is unknown (e.g. purged).
+///
+/// `c.captured_at` may carry nanoseconds (the fetcher stamps `Utc::now()`, and the
+/// `capture_ready` payload repeats the committed string verbatim) while Postgres stored it
+/// rounded to microseconds, and sqlx binds it truncated: an exact match misses about half of
+/// all captures. So the partition key is matched within a microsecond either side (the capture
+/// id is unique), and callers use the returned capture's own [`CaptureMeta::capture_ref`].
 pub async fn load(pool: &PgPool, c: &CaptureRef) -> Result<Option<StoredCapture>> {
     let row = sqlx::query(
         "SELECT c.capture_id, c.captured_at, c.epoch, c.orphan_epoch, c.url_key, c.url, c.key,
@@ -155,7 +161,11 @@ pub async fn load(pool: &PgPool, c: &CaptureRef) -> Result<Option<StoredCapture>
                 c.use_signals, c.use_policy_fetch, c.raw_expires_at, c.warc_offset,
                 c.warc_length, s.path
          FROM captures c JOIN segments s ON s.segment_id = c.segment_id
-         WHERE c.capture_id = $1 AND c.captured_at = $2 AND s.purged_at IS NULL",
+         WHERE c.capture_id = $1
+           AND c.captured_at BETWEEN $2::timestamptz - interval '1 microsecond'
+                                 AND $2::timestamptz + interval '1 microsecond'
+           AND s.purged_at IS NULL
+         LIMIT 1",
     )
     .bind(c.capture_id.to_string())
     .bind(c.captured_at)

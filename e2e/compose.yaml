@@ -182,6 +182,7 @@ services:
     environment:
       <<: *vcrawl-env
       VC_VCRAWL_INSTANCE: processor
+      VC_OBS_LOG_LEVEL: info,vcrawl::data::processor=debug
 
   embedder:
     <<: *vcrawl

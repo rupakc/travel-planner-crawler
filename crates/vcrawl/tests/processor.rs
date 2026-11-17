@@ -756,3 +756,73 @@ async fn capture_body_still_missing_after_reload_is_transient() {
     let e = r.proc.process(&c).await.unwrap_err();
     assert_eq!(e.class(), vc_core::ErrorClass::Transient, "{e}");
 }
+/// A fetcher stamps `captured_at` with `Utc::now()` (nanoseconds on Linux). Postgres keeps
+/// microseconds, rounding, while the `capture_ready` payload carries the original nanosecond
+/// string; the capture must still be found and processed (it was silently skipped as
+/// `Missing` whenever the sub-microsecond part rounded up: the E2E flake).
+#[tokio::test]
+async fn nanosecond_captured_at_is_still_processed() {
+    let r = rig(&["events-test"], RigOpts::default()).await;
+    for (i, ns) in [123_456_789_u32, 123_456_499, 999_999_999, 500]
+        .into_iter()
+        .enumerate()
+    {
+        let url = format!("{EVENT_URL}-{i}");
+        let t = at(i as i64) + chrono::Duration::nanoseconds(i64::from(ns));
+        let cref = commit(
+            &r.pool,
+            &r.blobs,
+            Cap::html(&url, "events-test", &fixture("event_v1.html"), t),
+        )
+        .await;
+        let o = r.proc.process(&cref).await.unwrap();
+        let (report, ..) = processed(&o);
+        assert_eq!(report.inserted, 1, "{ns} ns: {o:?}");
+        let pol: i64 = count(
+            &r.pool,
+            &format!(
+                "SELECT count(*) FROM captures WHERE capture_id = '{}' AND use_policy_final IS NOT NULL",
+                cref.capture_id
+            ),
+        )
+        .await;
+        assert_eq!(pol, 1, "{ns} ns: final use policy recorded");
+    }
+}
+
+/// A stamped capture time ([`vc_core::store::capture_time`]) round-trips exactly: the
+/// `captures` row, the `capture_ready` payload and the value the fetcher spooled are one instant.
+#[tokio::test]
+async fn stamped_capture_time_round_trips_through_postgres() {
+    let r = rig(&["events-test"], RigOpts::default()).await;
+    for ns in [123_456_789_u32, 999_999_999, 500, 0] {
+        let raw = at(1) + chrono::Duration::nanoseconds(i64::from(ns));
+        let t = vc_core::store::capture_time(raw);
+        assert!(t <= raw && raw - t < chrono::Duration::microseconds(1));
+        let url = format!("{EVENT_URL}-rt-{ns}");
+        let cref = commit(
+            &r.pool,
+            &r.blobs,
+            Cap::html(&url, "events-test", &fixture("event_v1.html"), t),
+        )
+        .await;
+        let (stored,): (chrono::DateTime<chrono::Utc>,) = sqlx::query_as(
+            "SELECT captured_at FROM captures WHERE capture_id = $1 AND captured_at = $2",
+        )
+        .bind(cref.capture_id.to_string())
+        .bind(t)
+        .fetch_one(&r.pool)
+        .await
+        .expect("exact partition-key match");
+        assert_eq!(stored, t, "{ns} ns");
+        let (payload,): (serde_json::Value,) = sqlx::query_as(
+            "SELECT payload FROM work_items WHERE kind = 'capture_ready' AND payload->>'capture_id' = $1",
+        )
+        .bind(cref.capture_id.to_string())
+        .fetch_one(&r.pool)
+        .await
+        .unwrap();
+        let p = vcrawl::data::capture::CaptureReady::parse(&payload).unwrap();
+        assert_eq!(p.captured_at, t, "{ns} ns: payload");
+    }
+}

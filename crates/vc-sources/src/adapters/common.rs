@@ -28,7 +28,7 @@ pub(crate) fn meta(
     body: &[u8],
     validators: Validators,
 ) -> CaptureMeta {
-    let now = ctx.clock.now();
+    let now = vc_core::store::capture_time(ctx.clock.now());
     CaptureMeta {
         capture_id: CaptureId::at(now),
         captured_at: now,

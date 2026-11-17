@@ -69,6 +69,30 @@ pub enum SkipReason {
     NoHandler,
 }
 
+impl SkipReason {
+    /// A fixed name (log field and metric label).
+    pub fn as_str(self) -> &'static str {
+        match self {
+            SkipReason::Missing => "missing",
+            SkipReason::NotPrimary => "not_primary",
+            SkipReason::Status => "status",
+            SkipReason::NoSource => "no_source",
+            SkipReason::SourceDisabled => "source_disabled",
+            SkipReason::Restricted => "restricted",
+            SkipReason::NoBody => "no_body",
+            SkipReason::NoHandler => "no_handler",
+        }
+    }
+}
+
+/// The `capture_id` of a work-item payload, for logs (empty when absent).
+fn c_id(payload: &serde_json::Value) -> &str {
+    payload
+        .get("capture_id")
+        .and_then(|v| v.as_str())
+        .unwrap_or_default()
+}
+
 /// What processing one capture did.
 #[derive(Debug, Clone, PartialEq)]
 pub enum Outcome {
@@ -122,6 +146,7 @@ pub struct Processor {
     pending: PendingPeers,
     triage: Option<(AgenticLlm, PgTriageCache)>,
     lease: Duration,
+    metrics: Option<Arc<vc_obs::Metrics>>,
 }
 
 impl std::fmt::Debug for Processor {
@@ -148,7 +173,14 @@ impl Processor {
             pending,
             triage: None,
             lease: Duration::from_secs(600),
+            metrics: None,
         }
+    }
+
+    /// Counts skipped captures in `crawler_processor_skipped_total{reason}`.
+    pub fn with_metrics(mut self, m: Arc<vc_obs::Metrics>) -> Self {
+        self.metrics = Some(m);
+        self
     }
 
     /// Replaces the source cache (tests use a zero TTL).
@@ -198,7 +230,33 @@ impl Processor {
         while let Some(joined) = set.join_next().await {
             let (it, r) = joined.map_err(|e| Error::Invalid(format!("processor task: {e}")))?;
             match r {
-                Ok(_) => self.d.queue.ack(it.id).await?,
+                Ok(o) => {
+                    match &o {
+                        Outcome::Skipped(r) => {
+                            if let Some(m) = &self.metrics {
+                                m.processor_skipped(r.as_str());
+                            }
+                            if *r == SkipReason::Missing {
+                                // Never expected in steady state: the commit enqueued the item
+                                // in the same transaction as the capture row.
+                                tracing::warn!(work_id = it.id.0, capture_id = %c_id(&it.payload),
+                                    reason = r.as_str(), "capture_ready names no committed capture; acked");
+                            } else {
+                                tracing::debug!(
+                                    work_id = it.id.0,
+                                    reason = r.as_str(),
+                                    "capture skipped"
+                                );
+                            }
+                        }
+                        Outcome::Processed { links, .. } => tracing::debug!(
+                            work_id = it.id.0,
+                            count = *links,
+                            "capture processed (links enqueued)"
+                        ),
+                    }
+                    self.d.queue.ack(it.id).await?
+                }
                 Err(e) => match e.class() {
                     ErrorClass::Permanent | ErrorClass::Policy => {
                         tracing::warn!(work_id = it.id.0, error_class = ?e.class(), error = %e,
@@ -228,6 +286,9 @@ impl Processor {
         let Some(c) = capture::load(pool, cref).await? else {
             return Ok(Outcome::Skipped(SkipReason::Missing));
         };
+        // The committed (microsecond) reference, not the payload's nanosecond one.
+        let stored_ref = c.meta.capture_ref();
+        let cref = &stored_ref;
         if c.meta.role != CaptureRole::Primary {
             return Ok(Outcome::Skipped(SkipReason::NotPrimary));
         }
