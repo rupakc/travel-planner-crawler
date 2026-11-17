@@ -163,6 +163,40 @@ async fn ecb_fx_xml_yields_fx_rate_observations() {
 }
 
 #[tokio::test]
+async fn travelpayouts_grouped_prices_yield_fare_observations() {
+    let r = rig_real(false).await;
+    seed_real(&r.pool, &["travelpayouts"]).await;
+    let body = text("travelpayouts_grouped_prices_month.json");
+    let o = run(
+        &r,
+        api(
+            "https://api.travelpayouts.com/aviasales/v3/grouped_prices?currency=usd&destination=LON&group_by=month&origin=NYC",
+            "travelpayouts",
+            "travelpayouts_fares",
+            MediaType::Json,
+            &body,
+        ),
+    )
+    .await;
+    assert_processed(&o);
+    let n = count(
+        &r.pool,
+        "SELECT count(*) FROM observations WHERE series_key LIKE 'fare:NYC:LON:%'",
+    )
+    .await;
+    assert_eq!(n, 2, "one observation per departure month");
+    let jan: serde_json::Value = sqlx::query_scalar(
+        "SELECT value FROM observations WHERE series_key = 'fare:NYC:LON:2027-01'",
+    )
+    .fetch_one(&r.pool)
+    .await
+    .expect("NYC-LON January observation");
+    assert_eq!(jan["price"].as_f64(), Some(389.0));
+    assert_eq!(jan["currency"], "USD");
+    assert_eq!(jan["trip_type"], "round_trip");
+}
+
+#[tokio::test]
 async fn canada_advisories_json_yields_advisories() {
     let r = rig_real(false).await;
     let body = text("canada_index.json");

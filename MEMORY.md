@@ -120,3 +120,13 @@ plan = `docs/superpowers/plans/2026-11-15-voyager-crawler.md`, r1–r5 = `docs/r
   packing_hint, hospitals → place, holidays → event, price indicators → tip (no new kinds).
   sources/ramp-2.txt = ramp-1 + the runnable batch-2 sources. (scripts/seeds_to_sources.py
   "Batch 2", policy/denylist.yaml, docs/research/licence_only.yaml)
+- 2026-11-17: Travelpayouts Data API enabled with the owner's free token as **cached**
+  cheapest fares (not live prices; supersedes "travelpayouts disabled: live fares are a
+  non-goal"). Terms allow storing: the provider recommends caching responses ("save the
+  received information in the database"; cache 24 h). New observation kind `cheapest_fare`,
+  series `fare:<ORIG>:<DEST>:<YYYY-MM>`; adapter `travelpayouts_fares` (grouped_prices
+  group_by=month, one call per route, 100 committed routes, token only in `X-Access-Token`,
+  stripped before spooling), weekly cadence + 6-day refetch floor in the fetcher, 150/day
+  in-adapter cap, `daily_budget` 200, `crawler_adapter_calls_total{adapter}`. Affiliate marker
+  belongs app-side when linking out. (crates/vc-sources/src/adapters/travelpayouts_fares.rs,
+  https://support.travelpayouts.com/hc/en-us/articles/4402565416594)

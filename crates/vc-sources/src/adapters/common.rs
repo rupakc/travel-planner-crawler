@@ -6,6 +6,7 @@ use vc_core::fetch::{Exchange, FetchError, FetchRequest, RequestPurpose};
 use vc_core::frontier::{NewUrl, Validators};
 use vc_core::ids::PayloadHash;
 use vc_core::media::{FetchMode, MediaType};
+use vc_core::secrets::Secret;
 use vc_core::sources::{AdapterCtx, AdapterReport};
 use vc_core::store::{CaptureMeta, CaptureRole, SpoolPayload, SpoolRecord};
 use vc_core::usepolicy::{UsePolicy, UseSignals};
@@ -94,6 +95,15 @@ pub(crate) struct Fetch<'a> {
     pub hint: Option<MediaType>,
     /// Query parameters to strip from the stored URL (secrets).
     pub redact: &'a [&'a str],
+    /// A request header carrying a secret (e.g. `x-access-token`): sent on the request and
+    /// **removed from the stored request headers** before the exchange is spooled.
+    pub secret_header: Option<(&'static str, &'a Secret)>,
+}
+
+/// Removes a secret header from the request headers an exchange keeps (they are written to the
+/// WARC `request` record).
+pub(crate) fn strip_secret_header(ex: &mut Exchange, name: &str) {
+    while ex.request_headers.remove(name).is_some() {}
 }
 
 /// GETs `url` through the permit client and **spools the raw response (fsync) before
@@ -107,12 +117,25 @@ pub(crate) async fn fetch_raw(
 ) -> Result<Exchange> {
     let mut req = FetchRequest::get(url, RequestPurpose::Api);
     req.accept = opts.accept.map(str::to_string);
+    if let Some((name, value)) = opts.secret_header {
+        let v = value
+            .expose()
+            .parse()
+            .map_err(|_| Error::Invalid("secret header value is not a valid header".into()))?;
+        req.headers.insert(name, v);
+        if let Some(v) = req.headers.get_mut(name) {
+            v.set_sensitive(true);
+        }
+    }
     report.requests += 1;
     let mut ex = ctx
         .client
         .fetch(ctx.permit, req)
         .await
         .map_err(|e| redact_fetch_error(e, opts.redact))?;
+    if let Some((name, _)) = opts.secret_header {
+        strip_secret_header(&mut ex, name);
+    }
     if !opts.redact.is_empty() {
         ex.url = redact_query(&ex.url, opts.redact);
         for h in &mut ex.redirects {

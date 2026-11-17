@@ -7,7 +7,7 @@
 Every website and dataset the crawler knows, grouped by the part of the Voyager app it
 feeds. A source that serves several parts is listed under each of them.
 
-**266 sources, 178 on, 88 off.**
+**266 sources, 179 on, 87 off.**
 
 - **What we take**: the traveller-facing data the source gives (its `relevance.why`).
 - **Licence**: *open* (free reuse with credit), *share-alike* (kept apart from other
@@ -32,10 +32,10 @@ is added only with the owner's approval (see CONTRIBUTING.md).
 | `news-skift` | `skift.com` | Skift travel news (airline, route, airport and travel-rule changes) for Flights and Travel tips (headline, link and a short excerpt only). | facts only | yes | no |
 | `news-traveldailynews` | `www.traveldailynews.com` | TravelDailyNews articles (airline, route, airport and travel-rule changes) for Flights and Travel tips (headline, link and a short excerpt only). | facts only | yes | no |
 | `ourairports` | `davidmegginson.github.io` | Every airport with its codes, location and type, for the Flights section. | open | yes | no |
+| `travelpayouts` | `api.travelpayouts.com` | Cached cheapest fares per route and month (not live prices) for typical-fare and price-trend context in Flights: pricing advisor, budget planner, fare calendar. | API terms | yes | yes |
 | `duffel` | `api.duffel.com` | Live flight offers for the Flights section; live fares are a non-goal, so off. | API terms | no | yes |
 | `openflights` | `raw.githubusercontent.com` | Airline routes between airports for the Flights section; stale since 2014, so off. | share-alike | no | no |
 | `opensky` | `opensky-network.org` | Flight positions and schedules for the Flights section; restricted terms, so off. | restricted | no | yes |
-| `travelpayouts` | `api.travelpayouts.com` | Cached flight prices for the Flights section; live fares are a non-goal, so off. | API terms | no | yes |
 | `wikidata-aviation` | `query.wikidata.org` | Airlines, airports and emergency numbers from Wikidata for Flights and the Emergency card; robots.txt disallows us, so off. | open | no | no |
 
 ## Weather
@@ -620,7 +620,6 @@ source's notes say where to sign up and what it costs.
 | `tfl-unified-api` | `api.tfl.gov.uk` | getting_around | needs an API key: owner must register a key at https://api-portal.tfl.gov.uk/ (free); adapter pending: TfL Unified API reader (lines, stop points, fares) |
 | `tfnsw-opendata` | `api.transport.nsw.gov.au` | getting_around | needs an API key: owner must register a key at https://opendata.transport.nsw.gov.au/ (free); robots.txt of api.transport.nsw.gov.au answers 500 (checked 2026-11-17), so disallowed until readable; adapter pending: GTFS static zip adapter (download, verify, index routes/stops per feed) |
 | `trafiklab-gtfs-sverige` | `opendata.samtrafiken.se` | getting_around | needs an API key: owner must register a key at https://www.trafiklab.se/ (free); adapter pending: GTFS static zip adapter (download, verify, index routes/stops per feed) |
-| `travelpayouts` | `api.travelpayouts.com` | flights | Live fares are a non-goal (spec §2). |
 | `viator-partner` | `docs.viator.com` | activities | Needs affiliate approval (not granted). |
 | `visit-finland-datahub` | `datahub.visitfinland.com` | places, activities, events | needs an API key: owner must apply as a DataHub data user at https://datahub.visitfinland.com/ and accept the ToS (free as far as known; Business Finland decides); check the redistribution clause; adapter pending |
 | IATA Timatic (Web, Widget, AutoCheck API) (no spec) | iata.org (iatatravelcentre.com, timaticweb2.com denylisted) | visa, tips | Ask IATA Timatic sales (https://go.updates.iata.org/timatic-info) for a Timatic Widget or AutoCheck API licence for a consumer trip planner; get written consent for automated use and caching. Cost: No published price (dated trade-press figure: about EUR 499/year for 500 transactions); contract only. |

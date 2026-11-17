@@ -12,12 +12,13 @@ code. Each one is three files, which this crate loads, checks and turns into `Ki
 Path: `crates/vc-kinds`. Dependencies: `jsonschema`, `toml`. Status: wired; the processor
 loads the registry at startup.
 
-## The 19 v1 kinds
+## The 20 v1 kinds
 
-`activity`, `advisory`, `airport`, `article`, `attraction`, `emergency_numbers`, `event`,
-`fx_rate`, `hotel`, `packing_hint`, `place`, `qa_thread`, `route`, `sim_offer`, `tip`,
-`transport_option`, `visa_rule`, `walking_tour`, `weather_normal`. `fx_rate` and
-`weather_normal` are observations; the rest are records.
+`activity`, `advisory`, `airport`, `article`, `attraction`, `cheapest_fare`,
+`emergency_numbers`, `event`, `fx_rate`, `hotel`, `packing_hint`, `place`, `qa_thread`,
+`route`, `sim_offer`, `tip`, `transport_option`, `visa_rule`, `walking_tour`,
+`weather_normal`. `cheapest_fare` (series `fare:<ORIG>:<DEST>:<YYYY-MM>`, cached fares, not
+live prices), `fx_rate` and `weather_normal` are observations; the rest are records.
 
 ## What the loader refuses
 

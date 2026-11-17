@@ -37,6 +37,7 @@ KINDS = {
     "place", "attraction", "activity", "walking_tour", "event", "hotel", "visa_rule",
     "advisory", "sim_offer", "transport_option", "emergency_numbers", "fx_rate",
     "weather_normal", "tip", "packing_hint", "article", "qa_thread", "airport", "route",
+    "cheapest_fare",  # observation series fare:<ORIG>:<DEST>:<YYYY-MM> (added 2026-11-17)
 }
 
 
@@ -94,6 +95,11 @@ LICENCES: dict[str, tuple[str, str | None, str | None]] = {
     ),
     "Commercial API ToS": ("api_terms", None, None),
     "Affiliate ToS": ("api_terms", None, None),
+    # Data API: the provider recommends caching/storing responses (checked 2026-11-17).
+    "Travelpayouts affiliate agreement; Data API terms": (
+        "api_terms", None,
+        "https://support.travelpayouts.com/hc/en-us/articles/203956053-Travelpayouts-Affiliate-Agreement-The-public-offer",
+    ),
     "Partner ToS": ("api_terms", None, None),
     "Eventbrite API ToS; public search shut 2019": ("api_terms", None, None),
     "SeatGeek API ToS, attribution": ("api_terms", None, None),
@@ -193,6 +199,7 @@ ATTRIBUTION = {
     "er-api-open": "Rates by Exchange Rate API",
     "ticketmaster": "Ticketmaster",
     "nager-date": "Nager.Date",
+    "travelpayouts": "Fare data: Travelpayouts / Aviasales (cached prices found by Aviasales users)",
 }
 
 # ---------------------------------------------------------------------------------------
@@ -300,6 +307,7 @@ KINDS_OVERRIDE = {
     "common-crawl": [],
     "liveriga": ["place", "attraction", "activity", "event", "tip"],
     "culturetrip": ["article", "place", "attraction"],
+    "travelpayouts": ["cheapest_fare"],
 }
 # LLM extraction is for unstructured text only; adapters/feeds produce structured data.
 LLM_KINDS_OVERRIDE = {
@@ -339,12 +347,15 @@ ADAPTERS = {
     "mobility-database": "mobility_database_catalog",
     "ourairports": "ourairports_csv",
     "se-dump": "se_travel_dump",
+    "travelpayouts": "travelpayouts_fares",
 }
 
 # Template URLs in seeds.yaml -> a concrete, fetchable entry URL (template kept in notes).
 SEED_URL_OVERRIDE = {
     "fcdo-content-api": "https://www.gov.uk/api/content/foreign-travel-advice",
     "nager-date": "https://date.nager.at/api/v3/AvailableCountries",
+    # The route index: the adapter enqueues one row per committed route (no request itself).
+    "travelpayouts": "https://api.travelpayouts.com/aviasales/v3/grouped_prices",
 }
 
 TIMEOUT_AI = (
@@ -363,7 +374,6 @@ DISABLED = {
     "open-meteo": "Free API is non-commercial; replaced by MET Norway (spec §5.9, §17.8).",
     "wikidata-dump": "Full dump too large; Wikidata is queried via SPARQL (spec §5.10).",
     "duffel": "Live fares are a non-goal; they stay on SerpAPI in the app (spec §2).",
-    "travelpayouts": "Live fares are a non-goal (spec §2).",
     "booking-demand-api": "Hotel prices are a non-goal; needs a partner contract.",
     "viator-partner": "Needs affiliate approval (not granted).",
     "gyg-partner": "Needs affiliate approval (not granted).",
@@ -458,7 +468,7 @@ RELEVANCE: dict[str, tuple[list[str], str]] = {
     "openflights": (["flights"], "Airline routes between airports for the Flights section; stale since 2014, so off."),
     "opensky": (["flights"], "Flight positions and schedules for the Flights section; restricted terms, so off."),
     "ourairports": (["flights"], "Every airport with its codes, location and type, for the Flights section."),
-    "travelpayouts": (["flights"], "Cached flight prices for the Flights section; live fares are a non-goal, so off."),
+    "travelpayouts": (["flights"], "Cached cheapest fares per route and month (not live prices) for typical-fare and price-trend context in Flights: pricing advisor, budget planner, fare calendar."),
     "wikidata-aviation": (["flights", "emergency_card"], "Airlines, airports and emergency numbers from Wikidata for Flights and the Emergency card; robots.txt disallows us, so off."),
     "enwiki-dump": (["places", "flights", "emergency_card", "packing"], "Facts from English Wikipedia: places, airport destination tables, emergency numbers and plug and voltage types, for Places to see, Flights, the Emergency card and the Packing list."),
     # --- weather ---
@@ -615,6 +625,9 @@ MIN_DELAY = {"cdc-travel": 20, "seat61": 10, "ricksteves-forum": 10}
 _VENUES = ("brokenships", "torvehallerne", "mathallen-oslo", "noma", "alchemist", "rub-og-stub")
 MAX_DEPTH = {sid: 1 for sid in _VENUES} | {"liveriga": 2}
 DAILY_BUDGET = {sid: 100 for sid in _VENUES} | {"liveriga": 500}
+# Owner's free Travelpayouts token, "use it mindfully": ~100 route rows refreshed weekly
+# (about 15 calls a day); 200/day is a hard ceiling far below the API's 600/min.
+DAILY_BUDGET["travelpayouts"] = 200
 EXTRA_SITEMAPS = {
     "blog-thequantumexplorer": ["https://thequantumexplorer.org/sitemap.xml"],
     "brokenships": ["https://brokenships.com/sitemap.xml"],
@@ -641,8 +654,16 @@ DISPLAY_REQUIREMENTS = {
     "eventbrite-api": "Eventbrite branding and event links per the API terms.",
     "transitland": "Show each feed's agency attribution and licence.",
     "opentripmap": "Credit OpenTripMap and © OpenStreetMap contributors.",
+    "travelpayouts": (
+        "Cached cheapest prices Aviasales users found in the last 2-7 days, not live or "
+        "bookable: label them as typical/indicative fares with the date seen; link out only "
+        "through a Travelpayouts partner link (the owner's marker)."
+    ),
 }
-MAX_RETENTION_DAYS = {"ticketmaster": 30, "seatgeek": 30, "eventbrite-api": 30}
+MAX_RETENTION_DAYS = {
+    "ticketmaster": 30, "seatgeek": 30, "eventbrite-api": 30,
+    "travelpayouts": 400,  # a year of route-month fare history for trends
+}
 
 # ---------------------------------------------------------------------------------------
 # Batch 2 (research 2026-11-17, owner request "add all relevant, pertinent sources"):

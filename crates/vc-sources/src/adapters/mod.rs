@@ -34,6 +34,7 @@ pub mod records;
 pub mod se_travel_dump;
 pub mod state_dept_advisories;
 pub mod ticketmaster_discovery;
+pub mod travelpayouts_fares;
 pub mod wikidata_sparql;
 pub mod wikivoyage_dump;
 
@@ -51,6 +52,7 @@ pub static REGISTRY: &[&dyn SourceAdapter] = &[
     &se_travel_dump::SeTravelDump::DEFAULT,
     &state_dept_advisories::StateDeptAdvisories,
     &ticketmaster_discovery::TicketmasterDiscovery::DEFAULT,
+    &travelpayouts_fares::TravelpayoutsFares::DEFAULT,
     &wikidata_sparql::WikidataSparql::DEFAULT,
     &wikivoyage_dump::WikivoyageDump::DEFAULT,
 ];
@@ -79,6 +81,22 @@ pub fn resumable() -> Vec<Arc<dyn ResumableAdapter>> {
     ]
 }
 
+/// The shortest time the fetcher may wait before refetching a row of adapter `id` (cached
+/// data an adapter must not poll), if the adapter sets one. It raises the recrawl estimator's
+/// lower bound; the source cadence still bounds it from above (and is raised to it if lower).
+pub fn min_refetch(id: &str) -> Option<std::time::Duration> {
+    match id {
+        travelpayouts_fares::ID => Some(travelpayouts_fares::MIN_REFETCH),
+        _ => None,
+    }
+}
+
+/// Calls each counting adapter has sent since the process started (`(adapter id, calls)`),
+/// for the `crawler_adapter_calls_total{adapter}` metric.
+pub fn call_counts() -> Vec<(&'static str, u64)> {
+    vec![(travelpayouts_fares::ID, travelpayouts_fares::CALLS.total())]
+}
+
 /// The ids of the built-in adapters.
 pub fn ids() -> Vec<&'static str> {
     REGISTRY.iter().map(|a| a.id()).collect()
@@ -105,6 +123,7 @@ pub fn registry_with(cfg: &vc_config::SourcesConfig) -> Vec<Box<dyn SourceAdapte
         Box::new(se_travel_dump::SeTravelDump::new(d.clone())),
         Box::new(state_dept_advisories::StateDeptAdvisories),
         Box::new(ticketmaster_discovery::TicketmasterDiscovery::DEFAULT),
+        Box::new(travelpayouts_fares::TravelpayoutsFares::DEFAULT),
         Box::new(wikidata_sparql::WikidataSparql::DEFAULT),
         Box::new(wikivoyage_dump::WikivoyageDump::new(d)),
     ]

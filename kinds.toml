@@ -34,6 +34,13 @@ storage = "record"
 source_classes = ["official", "reference", "editorial", "commercial_api"]
 verbatim = ["/admission/text", "/admission/amount", "/phone", "/info_url", "/source_url", "/as_of", "/evidence/*"]
 
+[kinds.cheapest_fare]
+version = 1
+storage = "observation"
+source_classes = ["reference", "commercial_api"]
+verbatim = ["/price", "/departure_date", "/return_date", "/search_url", "/source_url", "/as_of", "/evidence/*"]
+series_key = "fare:{origin_iata}:{destination_iata}:{month}"
+
 [kinds.emergency_numbers]
 version = 1
 storage = "record"

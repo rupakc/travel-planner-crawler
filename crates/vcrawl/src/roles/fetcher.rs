@@ -1016,7 +1016,8 @@ impl Fetcher {
         u.source_id.as_ref().and_then(|s| self.p.sources.get(s))
     }
 
-    /// `[min, max]` for the recrawl estimator from the source cadence.
+    /// `[min, max]` for the recrawl estimator from the source cadence (raised to an adapter's
+    /// minimum refetch interval, see [`adapter_recrawl_floor`]).
     fn recrawl_bounds(&self, u: &LeasedUrl) -> (Duration, Duration) {
         let max = self
             .source(u)
@@ -1025,7 +1026,7 @@ impl Fetcher {
                 self.p.cfg.vcrawl.recrawl_default_s.max(60),
             ));
         let min = Duration::from_secs(self.p.cfg.vcrawl.recrawl_min_s).min(max);
-        (min, max)
+        adapter_recrawl_floor(&u.fetch_mode, min, max)
     }
 
     async fn next_fetch(&self, u: &LeasedUrl, not_before: Option<DateTime<Utc>>) -> DateTime<Utc> {
@@ -1636,6 +1637,23 @@ struct RecordingSink {
     leased_body: Option<bytes::Bytes>,
 }
 
+/// Raises the recrawl bounds `[min, max]` of an adapter row to the adapter's minimum refetch
+/// interval (`vc_sources::adapters::min_refetch`: cached API data that must not be polled, e.g.
+/// Travelpayouts fares); `max` is raised too if it falls below the floor. Other rows unchanged.
+pub fn adapter_recrawl_floor(
+    mode: &FetchMode,
+    min: Duration,
+    max: Duration,
+) -> (Duration, Duration) {
+    match mode {
+        FetchMode::Adapter(id) => match vc_sources::adapters::min_refetch(id) {
+            Some(floor) => (min.max(floor), max.max(floor)),
+            None => (min, max),
+        },
+        _ => (min, max),
+    }
+}
+
 /// The `Expires` header of a response, if it parses.
 pub fn expires_of(ex: &Exchange) -> Option<DateTime<Utc>> {
     let v = ex
@@ -1674,5 +1692,24 @@ impl CaptureSink for RecordingSink {
             expires,
         });
         Ok(id)
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn adapter_floor_raises_recrawl_bounds() {
+        let h = Duration::from_secs(3600);
+        let week = Duration::from_secs(7 * 24 * 3600);
+        let tp = FetchMode::Adapter("travelpayouts_fares".into());
+        let floor = vc_sources::adapters::min_refetch("travelpayouts_fares").unwrap();
+        assert_eq!(adapter_recrawl_floor(&tp, h, week), (floor, week));
+        // A cadence shorter than the floor is raised to it (never polled sooner).
+        assert_eq!(adapter_recrawl_floor(&tp, h, 24 * h), (floor, floor));
+        let other = FetchMode::Adapter("ecb_fx".into());
+        assert_eq!(adapter_recrawl_floor(&other, h, week), (h, week));
+        assert_eq!(adapter_recrawl_floor(&FetchMode::Http, h, week), (h, week));
     }
 }

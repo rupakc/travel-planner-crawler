@@ -52,9 +52,9 @@ fn every_kind_has_schema_prompt_policy_fixture() {
     expected.sort();
     assert_eq!(
         ids, expected,
-        "registry holds exactly the 19 v1 kinds, sorted"
+        "registry holds exactly the 20 v1 kinds, sorted"
     );
-    assert_eq!(ids.len(), 19);
+    assert_eq!(ids.len(), 20);
 
     for k in reg.all() {
         let id = k.id.to_string();
@@ -158,10 +158,10 @@ fn high_stakes_kinds_official_only() {
 // --- further tests ---
 
 #[test]
-fn fx_rate_and_weather_normal_are_observations() {
+fn fx_rate_weather_normal_and_cheapest_fare_are_observations() {
     let reg = registry();
     for k in reg.all() {
-        let obs = ["fx_rate", "weather_normal"].contains(&&*k.id.0);
+        let obs = ["cheapest_fare", "fx_rate", "weather_normal"].contains(&&*k.id.0);
         let want = if obs {
             KindStorage::Observation
         } else {
@@ -180,6 +180,13 @@ fn series_keys_render_from_fixtures() {
         reg.series_key(&KindId::new("fx_rate"), &fx, None)
             .as_deref(),
         Some("fx:EUR:USD")
+    );
+    let fare = json!({"origin_iata": "NYC", "destination_iata": "LON", "month": "2027-02",
+                      "price": 412, "currency": "USD"});
+    assert_eq!(
+        reg.series_key(&KindId::new("cheapest_fare"), &fare, None)
+            .as_deref(),
+        Some("fare:NYC:LON:2027-02")
     );
     let w = json!({"city": "Kyoto", "country": "Japan", "month": 7});
     assert_eq!(

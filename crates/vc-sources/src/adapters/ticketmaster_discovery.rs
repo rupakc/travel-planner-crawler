@@ -292,6 +292,7 @@ impl ResumableAdapter for TicketmasterDiscovery {
             accept: Some("application/json"),
             hint: Some(MediaType::Json),
             redact: &[KEY_PARAM],
+            ..Fetch::default()
         };
         let start = cursor
             .and_then(|c| resume_url(&ctx.url.url, c))
