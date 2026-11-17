@@ -28,6 +28,15 @@ mutations() {
 
 # wal-g's chunked GCS upload deletes its chunks: the runtime needs objects.delete,
 # but only under walg/ (never the whole -ops bucket). Found on the first real boot.
+# A bucket whose policy has a conditional binding rejects unconditional
+# add-iam-policy-binding in non-interactive mode: every one must say --condition.
+test_bucket_bindings_state_condition() {
+  local out bad
+  out="$(CRAWLER_ALERT_EMAIL=example@example.com PATH="/usr/bin:/bin" bash "$SCRIPT" --dry-run 2>&1 | tr -s ' ')"
+  bad="$(grep 'storage buckets add-iam-policy-binding' <<<"$out" | grep -v -- '--condition' || true)"
+  [[ -z "$bad" ]] && ok bucket_bindings_state_condition || fail bucket_bindings_state_condition "no --condition: $bad"
+}
+
 test_walg_delete_scoped_to_prefix() {
   local out
   out="$(CRAWLER_ALERT_EMAIL=example@example.com PATH="/usr/bin:/bin" bash "$SCRIPT" --dry-run 2>&1)"

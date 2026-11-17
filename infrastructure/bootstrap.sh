@@ -358,11 +358,11 @@ iam() {
   say "IAM bindings (re-asserted)"
   local s
   g storage buckets add-iam-policy-binding "gs://$RAW_BUCKET" --member="serviceAccount:$RUNTIME_SA" \
-    --role=roles/storage.objectAdmin >/dev/null
+    --role=roles/storage.objectAdmin --condition=None >/dev/null
   g storage buckets add-iam-policy-binding "gs://$OPS_BUCKET" --member="serviceAccount:$RUNTIME_SA" \
-    --role=roles/storage.objectCreator >/dev/null
+    --role=roles/storage.objectCreator --condition=None >/dev/null
   g storage buckets add-iam-policy-binding "gs://$OPS_BUCKET" --member="serviceAccount:$RUNTIME_SA" \
-    --role=roles/storage.objectViewer >/dev/null
+    --role=roles/storage.objectViewer --condition=None >/dev/null
   # wal-g uploads to GCS in chunks, composes them, then deletes the chunks: it needs
   # objects.delete. Only under walg/ (an IAM condition); the bucket keeps deleted
   # versions 7 days, so nothing it removes is unrecoverable.
@@ -370,7 +370,7 @@ iam() {
     --role=roles/storage.objectUser \
     --condition="expression=resource.name.startsWith('projects/_/buckets/$OPS_BUCKET/objects/walg/'),title=walg-prefix-only,description=wal-g chunk compose cleanup under walg/ only" >/dev/null
   g storage buckets add-iam-policy-binding "gs://$OPS_BUCKET" --member="serviceAccount:$DRILL_SA" \
-    --role=roles/storage.objectViewer >/dev/null
+    --role=roles/storage.objectViewer --condition=None >/dev/null
   project_binding "$RUNTIME_SA" roles/logging.logWriter
   project_binding "$RUNTIME_SA" roles/monitoring.metricWriter
   project_binding "$RUNTIME_SA" "projects/$PROJECT_ID/roles/$VERTEX_ROLE"

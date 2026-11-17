@@ -596,6 +596,14 @@ test_otelcol_targets_have_listeners() {
 # first boot: otelcol got 192.168.250.2 before vcrawl).
 # wal-g runs inside the postgres container and talks TLS to GCS: the image has no
 # CA bundle, so the host's must be mounted (found on the first real boot).
+# wal-g v3.0.9 can only wal-fetch what it finds at "<name>.lz4" on GCS (a 404 on
+# the first probed extension is fatal), so WAL must be pushed as lz4.
+test_walg_compression_is_fetchable() {
+  grep -qx 'WALG_COMPRESSION_METHOD=lz4' "$HERE/../postgres/walg.env" &&
+    ok walg_compression_is_fetchable ||
+    fail walg_compression_is_fetchable "walg.env must push lz4 (wal-fetch probes .lz4 first and stops)"
+}
+
 test_postgres_has_ca_bundle_for_walg() {
   local body
   body="$(compose_service "$HERE/../compose.yaml" postgres)"
@@ -761,6 +769,7 @@ test_restore_drill() {
   local inner="$HERE/../host/restore-drill-inner.sh"
   grep -qF 'archive_mode=off' "$inner" && grep -qF 'standby.signal' "$inner" &&
     grep -qF 'default_transaction_read_only=on' "$inner" && grep -qF "wal-g backup-fetch \"\$D\" LATEST" "$inner" &&
+    grep -qF "max_connections=\$(ctl max_connections)" "$inner" && ! grep -qE 'max_connections=[0-9]' "$inner" &&
     ok restore_drill || fail restore_drill "inner script settings"
 }
 
