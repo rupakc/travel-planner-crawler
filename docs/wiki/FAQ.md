@@ -22,8 +22,8 @@ titles and links; your text is never sent to a language model or embedded. We ne
 models.
 
 **How fast is data removed after an opt-out?**
-From the API and index within 24 hours, from raw storage within 7 days, from backups and
-snapshots within 21 days.
+From the API and index within 24 hours, from raw storage within 7 days, from database
+backups within 21 days.
 
 **How often will it hit my site?**
 At most one request at a time, at least 5 seconds apart (longer if you set Crawl-delay or

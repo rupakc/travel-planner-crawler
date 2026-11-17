@@ -206,7 +206,7 @@ capture; a content-type allowlist.
 | No more requests to newly disallowed paths | within 24 h of the next robots.txt fetch (cached at most 24 h) |
 | Removed from the API and search index | within **24 hours** of a request |
 | Removed from raw and text storage in GCS | within **7 days** |
-| Gone from database backups and disk snapshots | within **21 days** |
+| Gone from database backups | within **21 days** |
 
 Site owners can opt out with robots.txt, a GitHub issue form, or private reporting. See
 [BOT.md](https://github.com/rupakc/travel-planner-crawler/blob/main/BOT.md).

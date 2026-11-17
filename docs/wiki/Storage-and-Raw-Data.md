@@ -174,7 +174,8 @@ never re-inserts captures that a URL, prefix, host or source tombstone covers.
 
 A later dump can bring the posts back into raw storage; re-run the purge to cut them
 again. Kept captures are copied byte for byte, not recompressed. Together with the 14-day
-backup expiry and 7-day snapshots, data is gone everywhere within 21 days.
+backup expiry (plus 7 days of soft delete; there are no disk snapshots), data is gone everywhere
+within 21 days.
 
 ## Disaster recovery
 
