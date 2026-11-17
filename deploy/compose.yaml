@@ -101,6 +101,10 @@ services:
       - /var/lib/voyager-crawler/pgdata:/var/lib/postgresql/data
       - /opt/voyager-crawler/postgres/postgresql.conf:/etc/postgresql/postgresql.conf:ro
       - /opt/voyager-crawler/bin/wal-g:/usr/local/bin/wal-g:ro
+      # The pgvector image ships no CA bundle: without the host's, wal-g's TLS to
+      # storage.googleapis.com fails ("certificate signed by unknown authority") and
+      # WAL archiving and base backups never succeed.
+      - /etc/ssl/certs/ca-certificates.crt:/etc/ssl/certs/ca-certificates.crt:ro
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U vcrawl -d vcrawl"]
       interval: 10s
