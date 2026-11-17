@@ -76,3 +76,36 @@ async fn sources_nobody_decided_on_follow_their_spec() {
         .unwrap();
     assert_eq!(state(&pool, "ops-b").await, (true, None));
 }
+
+/// The scheduler never seeds a source an admin disabled, even when its spec gains new seeds.
+#[tokio::test]
+async fn scheduler_does_not_seed_an_admin_disabled_source() {
+    let pool = testkit::pg().await;
+    let cfg = std::sync::Arc::new(vc_config::Config::default());
+    let frontier = std::sync::Arc::new(vc_frontier::PgFrontier::new(
+        pool.clone(),
+        cfg.frontier.clone(),
+    ));
+    let sched = vcrawl::roles::scheduler::Scheduler::new(cfg, pool.clone(), frontier);
+    sched.pass(&[spec("ops-c", "")]).await.unwrap();
+    source::disable(&pool, "ops-c").await.unwrap();
+
+    let changed = vc_sources::parse_spec(
+        "id: ops-c\nname: test\ncategory: test\nsource_class: official\n\
+         licence: {class: open, attribution: test}\nmethod: html\ncadence: daily\n\
+         seeds: [\"https://ops-c.example/\", \"https://ops-c.example/new\"]\n",
+    )
+    .expect("spec");
+    let rep = sched.pass(&[changed]).await.unwrap();
+    assert_eq!((rep.sources.updated, rep.enqueued), (1, 0));
+    let states: Vec<String> = sqlx::query_scalar("SELECT state FROM url_state ORDER BY state")
+        .fetch_all(&pool)
+        .await
+        .unwrap();
+    assert_eq!(
+        states,
+        ["disabled"],
+        "only the old seed, parked by the disable"
+    );
+    assert_eq!(state(&pool, "ops-c").await, (false, Some(false)));
+}
