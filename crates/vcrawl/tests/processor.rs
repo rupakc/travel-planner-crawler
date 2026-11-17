@@ -216,6 +216,44 @@ async fn links_in_scope_are_enqueued() {
     assert_eq!(urls[0].2.as_deref(), Some("events-test"));
 }
 
+/// An include regex never widens a source past its own sites: with `include: [".*"]` the
+/// off-site link (`elsewhere.example.net`) is still dropped; same-site links follow.
+#[tokio::test]
+async fn include_regex_never_enqueues_another_site() {
+    let r = rig(
+        &["events-test"],
+        RigOpts {
+            frontier: true,
+            ..RigOpts::default()
+        },
+    )
+    .await;
+    sqlx::query(
+        "UPDATE sources SET spec = jsonb_set(spec, '{include}', '[\".*\"]')
+         WHERE source_id = 'events-test'",
+    )
+    .execute(&r.pool)
+    .await
+    .unwrap();
+    commit(
+        &r.pool,
+        &r.blobs,
+        Cap::html(EVENT_URL, "events-test", &fixture("event_v1.html"), at(0)),
+    )
+    .await;
+    r.proc.tick(8).await.unwrap();
+    let urls: Vec<(String,)> = sqlx::query_as("SELECT url FROM urls ORDER BY url")
+        .fetch_all(&r.pool)
+        .await
+        .unwrap();
+    let names: Vec<&str> = urls.iter().map(|u| u.0.as_str()).collect();
+    assert_eq!(
+        names,
+        vec!["https://events.example.org/e/fado-evening"],
+        "{urls:?}"
+    );
+}
+
 #[tokio::test]
 async fn non_processable_captures_are_skipped() {
     let r = rig(&["events-test", "blog-test"], RigOpts::default()).await;

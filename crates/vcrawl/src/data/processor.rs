@@ -706,7 +706,8 @@ impl Processor {
 
     /// Enqueues in-scope links (sitemap and feed entries keep the parent's depth; page links
     /// go one level deeper, up to the source's `max_depth`). `rel=nofollow`, canonical and
-    /// alternate links are not followed.
+    /// alternate links are not followed. Links off the source's own sites
+    /// ([`LoadedSource::owns`]) are dropped whatever its include regexes say.
     async fn enqueue_links(
         &self,
         src: &LoadedSource,
@@ -736,6 +737,7 @@ impl Processor {
         };
         let mut batch = Vec::new();
         let mut uncertain = Vec::new();
+        let mut off_source = 0u32;
         for l in &parsed.links {
             if batch.len() >= MAX_LINKS_PER_CAPTURE {
                 break;
@@ -743,8 +745,14 @@ impl Processor {
             if matches!(l.kind, LinkKind::Canonical | LinkKind::Alternate)
                 || l.rel.iter().any(|r| r.eq_ignore_ascii_case("nofollow"))
                 || l.url == c.meta.url
-                || !src.in_scope(&l.url)
             {
+                continue;
+            }
+            if !src.owns(&l.url) {
+                off_source += 1;
+                continue;
+            }
+            if !src.in_scope(&l.url) {
                 continue;
             }
             let follow_listing = matches!(l.kind, LinkKind::Sitemap | LinkKind::Feed);
@@ -766,6 +774,13 @@ impl Processor {
                 uncertain.push((batch.len(), l));
             }
             batch.push(n);
+        }
+        if off_source > 0 {
+            tracing::debug!(
+                source = %src.spec.id.0,
+                off_source,
+                "links off the source's sites: dropped"
+            );
         }
         let drop = self.triage_drop(src, parsed, &uncertain).await;
         if !drop.is_empty() {

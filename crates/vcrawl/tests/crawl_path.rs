@@ -331,6 +331,71 @@ async fn cross_key_redirect_is_enqueued_not_followed() {
     assert_eq!(from_key.as_deref(), Some(from.key().as_bytes().as_slice()));
 }
 
+/// A source only crawls its own sites: a cross-key redirect from one of its URLs is enqueued
+/// only when the target is under one of the source's seed/sitemap/feed keys; a redirect to
+/// any other site (the cdc-travel → medscape.com leak) is dropped.
+#[tokio::test]
+async fn cross_key_redirect_off_the_source_is_dropped() {
+    let (web, _srv, port) = start(vec![
+        Site::new("src", "src.test"),
+        Site::new("sister", "sister.test").route("/here", Reply::html("<p>here</p>")),
+        Site::new("offsite", "offsite.test").route("/article", Reply::html("<p>ad</p>")),
+    ])
+    .await;
+    let sister = url("sister.test", port, "/here");
+    let offsite = url("offsite.test", port, "/article");
+    web.add_site(
+        Site::new("src", "src.test")
+            .route("/leak", Reply::redirect(301, offsite.as_str()))
+            .route("/moved", Reply::redirect(301, sister.as_str())),
+    );
+    let pool = testkit::pg().await;
+    let dir = tempfile::tempdir().unwrap();
+    let list = url("src.test", port, "/list");
+    let feed = url("sister.test", port, "/feed.xml");
+    let s = spec(&format!(
+        "id: scope-test\nmethod: html\ncadence: daily\nseeds: [\"{list}\"]\nfeeds: [\"{feed}\"]\n"
+    ));
+    let f = fetcher(
+        &cfg(),
+        &pool,
+        &["src.test", "sister.test", "offsite.test"],
+        vec![s.clone()],
+        dir.path(),
+        Arc::new(MemBlobStore::new()),
+    );
+    let row = |p: &str| {
+        let mut n = NewUrl::new(url("src.test", port, p));
+        n.source_id = Some(s.id.clone());
+        n.depth = 2;
+        n
+    };
+    f.parts()
+        .frontier
+        .enqueue(&[row("/leak"), row("/moved")])
+        .await
+        .unwrap();
+    let r = claimed(f.pass().await.unwrap());
+    assert_eq!(
+        r.enqueued,
+        vec![sister.clone()],
+        "only the source's own site"
+    );
+    let n: i64 = sqlx::query_scalar("SELECT count(*) FROM urls WHERE url_key = $1")
+        .bind(offsite.key().as_bytes().as_slice())
+        .fetch_one(&pool)
+        .await
+        .unwrap();
+    assert_eq!(n, 0, "the off-source target is never enqueued");
+    assert!(
+        !paths(&web).iter().any(|p| p.starts_with("offsite.test")),
+        "{:?}",
+        paths(&web)
+    );
+    let (state, ..) = url_state(&pool, &sister).await;
+    assert_eq!(state, "due");
+}
+
 /// Detect → park: a challenge page parks the key; nothing is retried.
 #[tokio::test]
 async fn challenge_parks_the_key_and_stops() {

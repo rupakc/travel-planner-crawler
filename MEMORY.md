@@ -107,3 +107,7 @@ plan = `docs/superpowers/plans/2026-11-15-voyager-crawler.md`, r1–r5 = `docs/r
   travel-focused; the owner approves additions; registry `docs/SOURCES.md` is generated and
   CI-checked. travel.state.gov denylisted (403 bot wall; cadataapi.state.gov unaffected).
   (crates/vc-sources/src/relevance.rs, scripts/sources_doc.py)
+- 2026-11-17: a source only crawls its own sites: discovered links (also with include regexes)
+  and cross-key redirect targets are enqueued only under the politeness keys of its seeds,
+  sitemaps and feeds; others are dropped (cdc-travel → medscape.com leak).
+  (crates/vcrawl/src/data/sources.rs, crates/vcrawl/src/roles/fetcher.rs)
