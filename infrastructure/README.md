@@ -31,7 +31,7 @@ the reserved internal address instead of letting GCP choose).
 |---|---|---|
 | Managed instance group | `voyager-crawler-mig` | zonal (us-east1-b), stateful, one instance **`voyager-crawler`** (fixed name); boot disk, data disk and both IPs preserved on every recreate and never auto-deleted; repair on failure, autohealing on `crawler-healthz` (30 min initial delay), opportunistic updates, force-update on repair |
 | Instance template | `voyager-crawler-spot-<hash>` (`-std-` when standard) | e2-medium (2 shared vCPUs, 4 GB), Spot with termination action STOP (or standard: live migration + auto-restart), Debian 12, 10 GB pd-balanced boot disk (device `crawler-boot`), Shielded VM, OS Login, as `crawler-runtime`; `startup-script` = `deploy/host/first-boot.sh`, `shutdown-script` = `deploy/host/shutdown.sh`, metadata `crawler-bundle` = `deploy/`. `<hash>` covers `deploy/`'s content and the flags |
-| Health check | `crawler-healthz` | HTTPS `GET /healthz` on tcp:8443 (the read API), every 60 s, unhealthy after 15 failures; autohealing only (no load balancer, not billed) |
+| Health check | `crawler-healthz` | HTTPS `GET /healthz` on tcp:8443 (the read API), every 90 s, unhealthy after 10 failures (15 min); autohealing only (no load balancer, not billed) |
 | Disk | `crawler-data` | 30 GB pd-balanced at `/var/lib/voyager-crawler` (pgdata, spool, deploy state); no snapshot schedule (wal-g PITR to `-ops` + the weekly restore drill) |
 | IPs | `crawler-internal-ip`, `crawler-external-ip` | static internal (API, in the TLS certificate) and static external (the crawl identity in `BOT.md`) |
 | Buckets | `voyager-crawler-raw`, `voyager-crawler-ops` | uniform access, PAP, versioning, soft delete 7 d, lifecycle in `gcs/` (below) |

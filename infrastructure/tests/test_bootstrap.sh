@@ -241,8 +241,8 @@ test_health_check_and_firewall() {
   fresh_run || { fail health_check_and_firewall "exit $?"; return; }
   local c why
   c="$(call 'health-checks create https crawler-healthz')"
-  why="$(has_all "$c" --global --port=8443 --request-path=/healthz --check-interval=60s --timeout=10s \
-    --healthy-threshold=1 --unhealthy-threshold=15)" || { fail health_check_and_firewall "$why: $c"; return; }
+  why="$(has_all "$c" --global --port=8443 --request-path=/healthz --check-interval=90s --timeout=10s \
+    --healthy-threshold=1 --unhealthy-threshold=10)" || { fail health_check_and_firewall "$why: $c"; return; }
   c="$(call 'firewall-rules create allow-crawler-health-check')"
   why="$(has_all "$c" --action=ALLOW --priority=900 --rules=tcp:8443 --source-ranges=130.211.0.0/22,35.191.0.0/16 \
     --target-service-accounts=crawler-runtime@voyager-prod-ohzkl.iam.gserviceaccount.com)" ||

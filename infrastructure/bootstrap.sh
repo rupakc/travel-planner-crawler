@@ -467,13 +467,13 @@ drill_template() {
 }
 
 # health_check — HTTPS GET /healthz on the read API, for autohealing only
-# (health checks are not billed without a load balancer). 15 failed checks a
-# minute apart (15 min) before the group recreates the VM: a deploy's API
+# (health checks are not billed without a load balancer). 10 failed checks
+# 90 s apart (15 min; GCE allows at most 10) before the group recreates the VM: a deploy's API
 # roll or a short restart never trips it.
 health_check() {
   say "Autohealing health check (re-asserted)"
-  local -a hc=(--global --port="$HEALTH_PORT" --request-path=/healthz --check-interval=60s --timeout=10s
-    --healthy-threshold=1 --unhealthy-threshold=15
+  local -a hc=(--global --port="$HEALTH_PORT" --request-path=/healthz --check-interval=90s --timeout=10s
+    --healthy-threshold=1 --unhealthy-threshold=10
     --description="Voyager crawler: read API /healthz (MIG autohealing)")
   if gx compute health-checks describe "$HEALTH_CHECK" --global; then
     g compute health-checks update https "$HEALTH_CHECK" "${hc[@]}"

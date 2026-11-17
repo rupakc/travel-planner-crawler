@@ -68,7 +68,7 @@
       "displayName": "light restore drill never reported (24 h)",
       "conditionAbsent": {
         "filter": "metric.type=\"custom.googleapis.com/crawler/backup_restore_age_seconds\" AND resource.type=\"gce_instance\"",
-        "duration": "86400s",
+        "duration": "84600s",
         "aggregations": [
           {
             "alignmentPeriod": "300s",
