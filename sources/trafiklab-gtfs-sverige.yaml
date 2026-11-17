@@ -14,12 +14,12 @@ seeds:
 - https://opendata.samtrafiken.se/gtfs-sweden/sweden.zip
 sitemaps: []
 feeds: []
-adapter: null
+adapter: gtfs_static
 include: []
 exclude: []
 max_depth: 0
 kinds:
-- transport_option
+- transit_item
 llm_kinds: []
 render: never
 cadence: weekly
@@ -32,8 +32,7 @@ key_secret: crawler-src-trafiklab-gtfs-sverige-key
 max_retention_days: null
 display_requirements: null
 notes: 'trafiklab.se robots ok (allow all). Free key; CC0 or CC BY 4.0 per feed. | Disabled: needs an
-  API key: owner must register a key at https://www.trafiklab.se/ (free); adapter pending: GTFS static
-  zip adapter (download, verify, index routes/stops per feed)'
+  API key: owner must register a key at https://www.trafiklab.se/ (free; sent as the key query parameter)'
 relevance:
   sections:
   - getting_around

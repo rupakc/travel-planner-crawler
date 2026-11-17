@@ -382,6 +382,7 @@ impl ReqwestPermitClient {
         if allowed(&self.config.allowed_content_types)
             || (purpose == RequestPurpose::SubResource
                 && allowed(&self.config.subresource_content_types))
+            || (purpose == RequestPurpose::Dump && allowed(&self.config.dump_content_types))
         {
             Ok(())
         } else {

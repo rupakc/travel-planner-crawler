@@ -22,6 +22,9 @@ pub struct FetchConfig {
     pub allowed_content_types: Vec<String>,
     /// Extra `Content-Type` essences allowed for render sub-requests only (scripts, styles).
     pub subresource_content_types: Vec<String>,
+    /// Extra `Content-Type` essences allowed for dump downloads only (zip archives such as
+    /// GTFS feeds; the dump adapter checks the archive's own magic bytes).
+    pub dump_content_types: Vec<String>,
     /// Daily raw-bytes cap across all keys (3 GB).
     pub daily_raw_bytes_cap: u64,
 }
@@ -59,6 +62,13 @@ impl Default for FetchConfig {
                 "application/javascript",
                 "application/x-javascript",
                 "application/ecmascript",
+            ]
+            .map(String::from)
+            .to_vec(),
+            dump_content_types: [
+                "application/zip",
+                "application/x-zip-compressed",
+                "application/octet-stream",
             ]
             .map(String::from)
             .to_vec(),

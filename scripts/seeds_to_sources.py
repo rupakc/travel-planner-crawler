@@ -39,6 +39,7 @@ KINDS = {
     "weather_normal", "tip", "packing_hint", "article", "qa_thread", "airport", "route",
     "cheapest_fare",  # observation series fare:<ORIG>:<DEST>:<YYYY-MM> (added 2026-11-17)
     "public_holiday", "price_level",  # added 2026-11-18 with the open-data adapters
+    "transit_item",
 }
 
 
@@ -139,7 +140,7 @@ LICENCES: dict[str, tuple[str, str | None, str | None]] = {
     "DATA.GOV.HK terms (attribution)": ("open", None, "https://data.gov.hk/en/terms-and-conditions"),
     "GODL-India": ("open", None, "https://data.gov.in/government-open-data-license-india"),
     "CC0 metadata; per-feed licences": ("open", "CC0-1.0", None),
-    "CC0 (NDOV Loket, verify in feed)": ("open", "CC0-1.0", None),
+    "OVapi feed licence (free to use; README)": ("open", None, "https://gtfs.ovapi.nl/README"),
     "CC0 / CC BY 4.0 per feed": ("open", None, None),
     "TfL Transport Data Service licence (OGL v2 based)": (
         "open", None, "https://tfl.gov.uk/corporate/terms-and-conditions/transport-data-service",
@@ -335,6 +336,32 @@ for _sid in ("torvehallerne", "mathallen-oslo", "noma", "alchemist", "rub-og-stu
 LLM_KINDS_OVERRIDE["liveriga"] = ["attraction", "activity", "event", "tip"]
 
 # Built-in adapters (plan Task 10).
+# GTFS Schedule feeds (batch 2), all read by the `gtfs_static` adapter (2026-11-18). The keyless
+# ones whose robots.txt and terms allow us are on (GTFS_ON); the rest stay off with their reason
+# (an API key or account the owner must register, robots.txt 403, unread terms).
+GTFS_FEEDS = (
+    "gtfs-de",
+    "ovapi-gtfs-nl",
+    "opentransportdata-swiss",
+    "tfnsw-opendata",
+    "vic-gtfs",
+    "translink-seq-gtfs",
+    "sfbay-511",
+    "entur-gtfs",
+    "trafiklab-gtfs-sverige",
+    "digitransit",
+    "hk-td-gtfs",
+    "delhi-otd",
+    "auckland-gtfs",
+    "mta-gtfs",
+    "delfi-opendata-oepnv",
+    "spain-nap",
+)
+GTFS_ON = frozenset({
+    "ovapi-gtfs-nl", "opentransportdata-swiss", "vic-gtfs", "translink-seq-gtfs", "entur-gtfs",
+    "auckland-gtfs",
+})
+
 ADAPTERS = {
     "wikivoyage-dump": "wikivoyage_dump",
     "wikidata-aviation": "wikidata_sparql",
@@ -355,6 +382,7 @@ ADAPTERS = {
     "stockholm-open-api": "json_events",
     "eurostat-prices": "eurostat_jsonstat",
     "worldbank-wdi-bulk": "wdi_csv",
+    **{sid: "gtfs_static" for sid in GTFS_FEEDS},
 }
 
 # Template URLs in seeds.yaml -> a concrete, fetchable entry URL (template kept in notes).
@@ -363,6 +391,9 @@ SEED_URL_OVERRIDE = {
     "nager-date": "https://date.nager.at/api/v3/AvailableCountries",
     # The route index: the adapter enqueues one row per committed route (no request itself).
     "travelpayouts": "https://api.travelpayouts.com/aviasales/v3/grouped_prices",
+    # CKAN permalinks / resources: the zip itself (the dataset page stays in the notes).
+    "opentransportdata-swiss": "https://data.opentransportdata.swiss/dataset/timetable-2026-gtfs2020/permalink",
+    "vic-gtfs": "https://opendata.transport.vic.gov.au/dataset/3f4e292e-7f8a-4ffe-831f-1953be0fe448/resource/8af7737c-5c9e-4022-aa98-911aa04370a7/download/gtfs.zip",
 }
 
 TIMEOUT_AI = (
@@ -731,8 +762,8 @@ _src(
     ['getting_around'],
     'Germany-wide rail, regional and city timetables (routes, lines and frequencies) for Local transportation.',
     cls='reference',
-    kinds=['transport_option'],
-    off='robots.txt of download.gtfs.de answers 403 to VoyagerBot (checked 2026-11-17): that origin is do-not-crawl (denylisted); also adapter pending: GTFS static zip adapter (download, verify, index routes/stops per feed)',
+    kinds=['transit_item'],
+    off='robots.txt of download.gtfs.de answers 403 to VoyagerBot (checked 2026-11-17): that origin is do-not-crawl (denylisted)',
     seeds=['https://download.gtfs.de/germany/rv_free/latest.zip', 'https://download.gtfs.de/germany/nv_free/latest.zip'],
     attribution='DELFI e.V. / gtfs.de, CC BY 4.0',
 )
@@ -741,8 +772,9 @@ _src(
     ['getting_around'],
     'All Dutch train, bus, tram and metro timetables for Local transportation.',
     cls='reference',
-    kinds=['transport_option'],
-    off='adapter pending: GTFS static zip adapter (download, verify, index routes/stops per feed); licence: confirm CC0 in the feed README before enabling',
+    kinds=['transit_item'],
+    attribution='OVapi (Stichting OpenGeo); timetables of the Dutch transit agencies via NDOV Loket',
+    display='Do not present the data as coming from, or representing, any transit agency (OVapi licence).',
 )
 _src(
     'transport-data-gouv',
@@ -757,41 +789,43 @@ _src(
     ['getting_around'],
     'The national Swiss timetable (SBB, PostBus, city transit, boats and cable cars) for Local transportation.',
     cls='official',
-    kinds=['transport_option'],
-    off='adapter pending: GTFS static zip adapter (download, verify, index routes/stops per feed) (resource permalink zip)',
+    kinds=['transit_item'],
     display='Cite opentransportdata.swiss as the source of the raw data.',
+    delay=10,
+    seeds=['https://data.opentransportdata.swiss/dataset/timetable-2027-gtfs2020/permalink'],
+    attribution='Source: opentransportdata.swiss',
 )
 _src(
     'tfnsw-opendata',
     ['getting_around'],
     'Sydney and New South Wales timetables for trains, buses, ferries and light rail, for Local transportation.',
     cls='official',
-    kinds=['transport_option'],
-    off='needs an API key: owner must register a key at https://opendata.transport.nsw.gov.au/ (free); robots.txt of api.transport.nsw.gov.au answers 500 (checked 2026-11-17), so disallowed until readable; adapter pending: GTFS static zip adapter (download, verify, index routes/stops per feed)',
+    kinds=['transit_item'],
+    off="needs an API key: owner must register a key at https://opendata.transport.nsw.gov.au/ (free; sent as 'Authorization: apikey <key>'); robots.txt of api.transport.nsw.gov.au answers 500 (checked 2026-11-17), so disallowed until readable",
 )
 _src(
     'vic-gtfs',
     ['getting_around'],
     'Melbourne and Victoria train, tram and bus timetables for Local transportation.',
     cls='official',
-    kinds=['transport_option'],
-    off='adapter pending: CKAN package_show reader (resolve the resource URL, then a JSON/CSV event reader); adapter pending: GTFS static zip adapter (download, verify, index routes/stops per feed)',
+    kinds=['transit_item'],
+    attribution='© State of Victoria (Department of Transport and Planning), CC BY 4.0',
 )
 _src(
     'translink-seq-gtfs',
     ['getting_around'],
     'Brisbane, Gold Coast and Sunshine Coast buses, trains, ferries and trams, for Local transportation.',
     cls='official',
-    kinds=['transport_option'],
-    off='adapter pending: GTFS static zip adapter (download, verify, index routes/stops per feed)',
+    kinds=['transit_item'],
+    attribution='© State of Queensland (Translink), CC BY 4.0',
 )
 _src(
     'sfbay-511',
     ['getting_around'],
     'One feed covering about 30 San Francisco Bay Area transit operators, for Local transportation.',
     cls='official',
-    kinds=['transport_option'],
-    off='needs an API key: owner must register a key at https://511.org/open-data/token (free); adapter pending: GTFS static zip adapter (download, verify, index routes/stops per feed)',
+    kinds=['transit_item'],
+    off='needs an API key: owner must register a key at https://511.org/open-data/token (free; sent as the api_key query parameter)',
     display='Acknowledge 511.org as the data provider.',
 )
 _src(
@@ -809,8 +843,7 @@ _src(
     ['getting_around'],
     'All Norwegian public transport, including trains, ferries and Hurtigruten, for Local transportation.',
     cls='official',
-    kinds=['transport_option'],
-    off='adapter pending: GTFS static zip adapter (download, verify, index routes/stops per feed), plus the ET-Client-Name header Entur requires',
+    kinds=['transit_item'],
     attribution='Data made available by Entur',
 )
 _src(
@@ -818,16 +851,16 @@ _src(
     ['getting_around'],
     'All Swedish public transport timetables for Local transportation.',
     cls='official',
-    kinds=['transport_option'],
-    off='needs an API key: owner must register a key at https://www.trafiklab.se/ (free); adapter pending: GTFS static zip adapter (download, verify, index routes/stops per feed)',
+    kinds=['transit_item'],
+    off='needs an API key: owner must register a key at https://www.trafiklab.se/ (free; sent as the key query parameter)',
 )
 _src(
     'digitransit',
     ['getting_around'],
     'Finnish timetables (HSL, VR and regional transit) for Local transportation.',
     cls='official',
-    kinds=['transport_option'],
-    off='needs an API key: owner must register a key at https://portal-api.digitransit.fi/ (free); adapter pending: GTFS static zip adapter (download, verify, index routes/stops per feed)',
+    kinds=['transit_item'],
+    off='needs an API key: owner must register a key at https://portal-api.digitransit.fi/ (free; sent as the digitransit-subscription-key header)',
 )
 _src(
     'lta-datamall',
@@ -844,32 +877,32 @@ _src(
     ['getting_around'],
     'Hong Kong bus, minibus, ferry, tram and MTR routes and headways for Local transportation.',
     cls='official',
-    kinds=['transport_option'],
-    off='robots.txt of static.data.gov.hk answers 403 (checked 2026-11-17): that origin is do-not-crawl (denylisted); also adapter pending: GTFS static zip adapter (download, verify, index routes/stops per feed)',
+    kinds=['transit_item'],
+    off='robots.txt of static.data.gov.hk answers 403 (checked 2026-11-17): that origin is do-not-crawl (denylisted)',
 )
 _src(
     'delhi-otd',
     ['getting_around'],
     'Delhi DTC and cluster bus routes and stops for Local transportation.',
     cls='official',
-    kinds=['transport_option'],
-    off='needs an API key: owner must register a key at https://otd.delhi.gov.in/ (free); adapter pending: GTFS static zip adapter (download, verify, index routes/stops per feed)',
+    kinds=['transit_item'],
+    off='needs an API key: owner must register a key at https://otd.delhi.gov.in/ (free; sent as the key query parameter); the seed is the download page, the zip URL is to be confirmed after registration',
 )
 _src(
     'auckland-gtfs',
     ['getting_around'],
     'Auckland buses, trains and ferries for Local transportation.',
     cls='official',
-    kinds=['transport_option'],
-    off='adapter pending: GTFS static zip adapter (download, verify, index routes/stops per feed)',
+    kinds=['transit_item'],
+    attribution='Auckland Transport, CC BY 4.0',
 )
 _src(
     'mta-gtfs',
     ['getting_around'],
     'New York City subway, bus and commuter-rail timetables for Local transportation.',
     cls='official',
-    kinds=['transport_option'],
-    off='terms not yet confirmed: MTA developer data terms not yet read and quoted; adapter pending: GTFS static zip adapter (download, verify, index routes/stops per feed)',
+    kinds=['transit_item'],
+    off='terms not yet confirmed: MTA developer data terms not yet read and quoted; rrgtfsfeeds S3 robots.txt not checked',
     seeds=['https://rrgtfsfeeds.s3.amazonaws.com/gtfs_b.zip'],
 )
 _src(
@@ -885,8 +918,8 @@ _src(
     ['getting_around'],
     "Germany's official nationwide public-transport timetables (DELFI) for Local transportation.",
     cls='reference',
-    kinds=['transport_option'],
-    off='needs an account: owner must register at https://www.opendata-oepnv.de/ (free); the crawler never logs in, so a token-based download route is needed; adapter pending: GTFS static zip adapter (download, verify, index routes/stops per feed)',
+    kinds=['transit_item'],
+    off='needs an account: owner must register at https://www.opendata-oepnv.de/ (free); the crawler never logs in, so a token-based download route (and its key placement in gtfs_static) is needed',
 )
 _src(
     'odpt-japan',
@@ -901,8 +934,8 @@ _src(
     ['getting_around'],
     "Spain's official register of public-transport feeds (rail, bus, city transit) for Local transportation.",
     cls='official',
-    kinds=['transport_option'],
-    off='needs an account: owner must register at https://nap.transportes.gob.es/ (free); licence per dataset to read; adapter pending: GTFS static zip adapter (download, verify, index routes/stops per feed)',
+    kinds=['transit_item'],
+    off='needs an account: owner must register at https://nap.transportes.gob.es/ (free); licence per dataset to read; a per-dataset download URL and key placement in gtfs_static are needed',
 )
 _src(
     'eu-etias-ees',

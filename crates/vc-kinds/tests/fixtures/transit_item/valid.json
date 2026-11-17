@@ -1,0 +1,34 @@
+{
+  "item_type": "operator",
+  "name": "Auckland Transport",
+  "modes": [
+    "bus",
+    "ferry",
+    "rail"
+  ],
+  "website_url": "https://at.govt.nz/",
+  "fare_url": "https://at.govt.nz/bus-train-ferry/ways-to-pay/",
+  "phone": "09 366 6400",
+  "time_zone": "Pacific/Auckland",
+  "language": "en",
+  "route_count": 412,
+  "fares": [
+    {
+      "label": "Adult single, 1 zone",
+      "price": {
+        "text": "2.40 NZD",
+        "amount": 2.4,
+        "currency": "NZD"
+      },
+      "transfers": 5,
+      "transfer_window_min": 60
+    }
+  ],
+  "valid_from": "2026-11-10",
+  "valid_to": "2027-02-01",
+  "feed_publisher": "Auckland Transport",
+  "country": "New Zealand",
+  "country_code": "NZ",
+  "source_url": "https://gtfs.at.govt.nz/gtfs.zip",
+  "as_of": "2026-11-10"
+}

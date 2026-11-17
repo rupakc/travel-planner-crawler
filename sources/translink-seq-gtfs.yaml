@@ -7,33 +7,32 @@ source_class: official
 licence:
   class: open
   spdx: CC-BY-4.0
-  attribution: Translink SEQ GTFS (Queensland)
+  attribution: © State of Queensland (Translink), CC BY 4.0
   url: https://creativecommons.org/licenses/by/4.0/
 method: dump
 seeds:
 - https://gtfsrt.api.translink.com.au/GTFS/SEQ_GTFS.zip
 sitemaps: []
 feeds: []
-adapter: null
+adapter: gtfs_static
 include: []
 exclude: []
 max_depth: 0
 kinds:
-- transport_option
+- transit_item
 llm_kinds: []
 render: never
 cadence: weekly
 min_delay_s: 5
 daily_budget: 300
 politeness_key: null
-enabled: false
+enabled: true
 needs_key: false
 key_secret: null
 max_retention_days: null
 display_requirements: null
-notes: 'translink.com.au robots ok; gtfsrt.api.translink.com.au/robots.txt 404 (allowed, checked 2026-11-17).
-  CC BY 4.0, Queensland Government. | Disabled: adapter pending: GTFS static zip adapter (download, verify,
-  index routes/stops per feed)'
+notes: translink.com.au robots ok; gtfsrt.api.translink.com.au/robots.txt 404 (allowed, checked 2026-11-17).
+  CC BY 4.0, Queensland Government.
 relevance:
   sections:
   - getting_around

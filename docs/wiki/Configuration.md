@@ -129,6 +129,7 @@ The User-Agent is a constant in code, not a setting.
 | `max_nested_gzip` | 2 | |
 | `allowed_content_types` | HTML, XHTML, RSS, Atom, RDF, XML, JSON, JSON-LD, CSV, plain text, gzip, bzip2 | |
 | `subresource_content_types` | CSS and JavaScript types | render sub-requests only |
+| `dump_content_types` | `application/zip`, `application/x-zip-compressed`, `application/octet-stream` | dump downloads only (GTFS zips; the adapter checks the zip magic) |
 | `daily_raw_bytes_cap` | 3 GiB | raw bytes stored per UTC day across all keys; counted in Postgres (`raw_bytes_daily`, migration 1801), so it holds across processes and restarts |
 
 ### `[render]`
@@ -213,6 +214,7 @@ The User-Agent is a constant in code, not a setting.
 | `dir` | `sources` |
 | `dump_window_utc` | 02:00–05:00 |
 | `dump_max_bytes` | 2 GiB per adapter run |
+| `gtfs_max_bytes` | 600 MiB per GTFS feed (`gtfs_static`): larger feeds are skipped with a report |
 | `dump_extend_every_s` | 60 (extend the lease while streaming) |
 
 ### `[queue]`

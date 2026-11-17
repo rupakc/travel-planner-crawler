@@ -14,12 +14,12 @@ seeds:
 - https://api.511.org/transit/datafeeds?operator_id=RG
 sitemaps: []
 feeds: []
-adapter: null
+adapter: gtfs_static
 include: []
 exclude: []
 max_depth: 0
 kinds:
-- transport_option
+- transit_item
 llm_kinds: []
 render: never
 cadence: weekly
@@ -33,7 +33,7 @@ max_retention_days: null
 display_requirements: Acknowledge 511.org as the data provider.
 notes: '511.org robots ok. ''acknowledgement of 511.org as the data provider is required''; 60 requests
   per hour by default. | Disabled: needs an API key: owner must register a key at https://511.org/open-data/token
-  (free); adapter pending: GTFS static zip adapter (download, verify, index routes/stops per feed)'
+  (free; sent as the api_key query parameter)'
 relevance:
   sections:
   - getting_around

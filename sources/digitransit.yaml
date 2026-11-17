@@ -14,12 +14,12 @@ seeds:
 - https://api.digitransit.fi/routing-data/v3/finland/gtfs.zip
 sitemaps: []
 feeds: []
-adapter: null
+adapter: gtfs_static
 include: []
 exclude: []
 max_depth: 0
 kinds:
-- transport_option
+- transit_item
 llm_kinds: []
 render: never
 cadence: weekly
@@ -32,8 +32,8 @@ key_secret: crawler-src-digitransit-key
 max_retention_days: null
 display_requirements: null
 notes: 'digitransit.fi robots 404. ''requires registration and use of API keys''; data CC BY 4.0. | Disabled:
-  needs an API key: owner must register a key at https://portal-api.digitransit.fi/ (free); adapter pending:
-  GTFS static zip adapter (download, verify, index routes/stops per feed)'
+  needs an API key: owner must register a key at https://portal-api.digitransit.fi/ (free; sent as the
+  digitransit-subscription-key header)'
 relevance:
   sections:
   - getting_around

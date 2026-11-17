@@ -110,3 +110,11 @@ nyc-parks-events           # events: NYC Parks events dated today or later (NYC 
 stockholm-open-api         # events: Visit Stockholm public events list (CC BY 4.0, daily, ~45 pages, 5/run, resumes); json_events adapter -> event
 eurostat-prices            # tips/itinerary: Eurostat price level indices EU27_2020=100 per country and category since 2015 (CC BY 4.0, yearly, 1 request); eurostat_jsonstat -> price_level
 worldbank-wdi-bulk         # tips/itinerary: World Bank WDI price level ratio (US=1) per country since 2000 (CC BY 4.0, yearly, one ~270 MB zip streamed in the dump window); wdi_csv -> price_level
+
+# --- ramp-3: GTFS timetable feeds (2026-11-18) ---
+ovapi-gtfs-nl              # getting_around: all Dutch transit (OVapi, open, weekly, one conditional request; zip streamed in the dump window); gtfs_static -> transit_item
+opentransportdata-swiss    # getting_around: Swiss national timetable, 2026 + 2027 permalinks (ODMCH terms, weekly, Crawl-delay 10); gtfs_static -> transit_item
+vic-gtfs                   # getting_around: Victoria train/tram/bus, zip of zips (~300 MB, CC BY 4.0, weekly); gtfs_static -> transit_item
+translink-seq-gtfs         # getting_around: South East Queensland (CC BY 4.0, weekly); gtfs_static -> transit_item
+entur-gtfs                 # getting_around: all of Norway (NLOD 2.0, weekly, ET-Client-Name sent); gtfs_static -> transit_item
+auckland-gtfs              # getting_around: Auckland bus/train/ferry (CC BY 4.0, weekly); gtfs_static -> transit_item

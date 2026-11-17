@@ -6,34 +6,36 @@ category: getting_around
 source_class: reference
 licence:
   class: open
-  spdx: CC0-1.0
-  attribution: OVapi GTFS Netherlands (all operators)
-  url: null
+  spdx: null
+  attribution: OVapi (Stichting OpenGeo); timetables of the Dutch transit agencies via NDOV Loket
+  url: https://gtfs.ovapi.nl/README
 method: dump
 seeds:
 - https://gtfs.ovapi.nl/nl/gtfs-nl.zip
 sitemaps: []
 feeds: []
-adapter: null
+adapter: gtfs_static
 include: []
 exclude: []
 max_depth: 0
 kinds:
-- transport_option
+- transit_item
 llm_kinds: []
 render: never
 cadence: weekly
 min_delay_s: 5
 daily_budget: 300
 politeness_key: null
-enabled: false
+enabled: true
 needs_key: false
 key_secret: null
 max_retention_days: null
-display_requirements: null
-notes: 'robots.txt 404 (allowed). NDOV Loket open data, CC0 for most KV1-derived data; confirm the README
-  in the zip. | Disabled: adapter pending: GTFS static zip adapter (download, verify, index routes/stops
-  per feed); licence: confirm CC0 in the feed README before enabling'
+display_requirements: Do not present the data as coming from, or representing, any transit agency (OVapi
+  licence).
+notes: 'robots.txt 404 (allowed, re-checked 2026-11-18). README (https://gtfs.ovapi.nl/README, read 2026-11-18):
+  ''You are free to use this data, but there is no service level agreement (best-effort) nor are you allowed
+  to say you represent or impersonate any of the transit agencies''; usage policy asks for an identifying
+  User-Agent and If-Modified-Since/If-None-Match (both sent).'
 relevance:
   sections:
   - getting_around

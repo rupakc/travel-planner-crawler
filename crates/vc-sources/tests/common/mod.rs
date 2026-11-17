@@ -139,6 +139,8 @@ pub struct TestClient {
     pub uas: Mutex<Vec<String>>,
     /// The extra request headers of every request (as sent, secrets included: test only).
     pub sent_headers: Mutex<Vec<Vec<(String, String)>>>,
+    /// The headers of every request (lower-case names; test only).
+    pub sent: Mutex<Vec<Vec<(String, String)>>>,
 }
 
 impl TestClient {
@@ -156,6 +158,7 @@ impl TestClient {
             requested: Mutex::new(Vec::new()),
             uas: Mutex::new(Vec::new()),
             sent_headers: Mutex::new(Vec::new()),
+            sent: Mutex::new(Vec::new()),
         }
     }
 
@@ -172,6 +175,13 @@ impl TestClient {
         if let Some(a) = &req.accept {
             headers.push(("accept".into(), a.clone()));
         }
+        // Conditional GET from the leased row's validators (as vc-fetch sends them).
+        if let Some(e) = &req.validators.etag {
+            headers.push(("if-none-match".into(), e.clone()));
+        }
+        if let Some(lm) = &req.validators.last_modified {
+            headers.push(("if-modified-since".into(), lm.clone()));
+        }
         // Extra headers (API keys), as vc-fetch sends them.
         let extra: Vec<(String, String)> = req
             .headers
@@ -181,6 +191,7 @@ impl TestClient {
             .collect();
         headers.extend(extra.iter().cloned());
         self.sent_headers.lock().unwrap().push(extra);
+        self.sent.lock().unwrap().push(headers.clone());
         self.requested
             .lock()
             .unwrap()

@@ -7,33 +7,33 @@ source_class: official
 licence:
   class: open
   spdx: CC-BY-4.0
-  attribution: Transport Victoria GTFS schedule
+  attribution: © State of Victoria (Department of Transport and Planning), CC BY 4.0
   url: https://creativecommons.org/licenses/by/4.0/
 method: dump
 seeds:
-- https://opendata.transport.vic.gov.au/dataset/gtfs-schedule
+- https://opendata.transport.vic.gov.au/dataset/3f4e292e-7f8a-4ffe-831f-1953be0fe448/resource/8af7737c-5c9e-4022-aa98-911aa04370a7/download/gtfs.zip
 sitemaps: []
 feeds: []
-adapter: null
+adapter: gtfs_static
 include: []
 exclude: []
 max_depth: 0
 kinds:
-- transport_option
+- transit_item
 llm_kinds: []
 render: never
 cadence: weekly
 min_delay_s: 5
 daily_budget: 300
 politeness_key: null
-enabled: false
+enabled: true
 needs_key: false
 key_secret: null
 max_retention_days: null
 display_requirements: null
-notes: 'robots ok (faceted queries disallowed); sitemap. CC BY 4.0, CKAN download without a key. | Disabled:
-  adapter pending: CKAN package_show reader (resolve the resource URL, then a JSON/CSV event reader);
-  adapter pending: GTFS static zip adapter (download, verify, index routes/stops per feed)'
+notes: 'robots ok (faceted queries disallowed, re-checked 2026-11-18); sitemap. CC BY 4.0, CKAN download
+  without a key; weekly updates. One zip of zips (a folder per mode: 1 regional train, 2 metro train,
+  3 tram, 4 bus, 5 coach, 6 regional bus, 10 interstate, 11 SkyBus), about 300 MB. | URL template: https://opendata.transport.vic.gov.au/dataset/gtfs-schedule'
 relevance:
   sections:
   - getting_around

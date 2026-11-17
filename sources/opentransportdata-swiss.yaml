@@ -7,34 +7,37 @@ source_class: official
 licence:
   class: api_terms
   spdx: null
-  attribution: opentransportdata.swiss GTFS (Swiss national timetable)
+  attribution: 'Source: opentransportdata.swiss'
   url: https://opentransportdata.swiss/en/terms-of-use/
 method: dump
 seeds:
-- https://data.opentransportdata.swiss/dataset/timetable-2026-gtfs2020
+- https://data.opentransportdata.swiss/dataset/timetable-2026-gtfs2020/permalink
+- https://data.opentransportdata.swiss/dataset/timetable-2027-gtfs2020/permalink
 sitemaps: []
 feeds: []
-adapter: null
+adapter: gtfs_static
 include: []
 exclude: []
 max_depth: 0
 kinds:
-- transport_option
+- transit_item
 llm_kinds: []
 render: never
 cadence: weekly
-min_delay_s: 5
+min_delay_s: 10
 daily_budget: 300
 politeness_key: null
-enabled: false
+enabled: true
 needs_key: false
 key_secret: null
 max_retention_days: null
 display_requirements: Cite opentransportdata.swiss as the source of the raw data.
-notes: 'robots ok for * (Crawl-delay 60 and /dataset?* only for named SEO bots; never query /dataset?*).
-  Terms: ''File-based data needs no registration''; ''The URL opentransportdata.swiss must be cited as
-  the source for raw data'' (5.1). | Disabled: adapter pending: GTFS static zip adapter (download, verify,
-  index routes/stops per feed) (resource permalink zip)'
+notes: 'data.opentransportdata.swiss/robots.txt (re-checked 2026-11-18): * disallows /dataset/rate/, /revision/,
+  /dataset/*/history, /api/, Crawl-Delay 10. Feeds are the CKAN permalinks of the yearly datasets (timetable-2026-gtfs2020
+  until the 2026-12-13 timetable change, timetable-2027-gtfs2020 after; add the next year''s permalink
+  each December). robots ok for * (Crawl-delay 60 and /dataset?* only for named SEO bots; never query
+  /dataset?*). Terms: ''File-based data needs no registration''; ''The URL opentransportdata.swiss must
+  be cited as the source for raw data'' (5.1). | URL template: https://data.opentransportdata.swiss/dataset/timetable-2026-gtfs2020'
 relevance:
   sections:
   - getting_around

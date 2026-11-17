@@ -50,6 +50,7 @@ pub const MAPPED: &[&str] = &[
     "fcdo_content_api",
     "json_events",
     "openholidays",
+    "gtfs_static",
     "ourairports_csv",
     "state_dept_advisories",
     "travelpayouts_fares",
@@ -67,6 +68,7 @@ pub fn records(adapter: &str, url: &CanonicalUrl, body: &[u8]) -> Option<Result<
         "fcdo_content_api" => fcdo(url, body),
         "json_events" => json_event_items(url, body),
         "openholidays" => holidays(url, body),
+        "gtfs_static" => gtfs(body),
         "ourairports_csv" => ourairports(body),
         "state_dept_advisories" => state_dept(body),
         "travelpayouts_fares" => travelpayouts(url, body),
@@ -979,6 +981,235 @@ fn wikivoyage(body: &[u8]) -> Result<Vec<AdapterItem>> {
                         .and_then(Value::as_str)
                         .and_then(day)
                         .map(Value::String),
+                ),
+            ]),
+        });
+    }
+    Ok(out)
+}
+
+// ---------------------------------------------------------------------------------------------
+// GTFS static feeds → transit_item records (operators, lines, stations)
+// ---------------------------------------------------------------------------------------------
+
+/// The country of an IANA time zone, for the zones of the feeds we read and their neighbours
+/// (a zone outside the table leaves the country to the place resolver, which uses a station's
+/// coordinates).
+const TZ_COUNTRY: &[(&str, &str)] = &[
+    ("America/Chicago", "US"),
+    ("America/Denver", "US"),
+    ("America/Los_Angeles", "US"),
+    ("America/New_York", "US"),
+    ("America/Montreal", "CA"),
+    ("America/Toronto", "CA"),
+    ("America/Vancouver", "CA"),
+    ("America/Sao_Paulo", "BR"),
+    ("America/Mexico_City", "MX"),
+    ("Asia/Hong_Kong", "HK"),
+    ("Asia/Kolkata", "IN"),
+    ("Asia/Calcutta", "IN"),
+    ("Asia/Singapore", "SG"),
+    ("Asia/Tokyo", "JP"),
+    ("Asia/Seoul", "KR"),
+    ("Asia/Taipei", "TW"),
+    ("Australia/Adelaide", "AU"),
+    ("Australia/Brisbane", "AU"),
+    ("Australia/Darwin", "AU"),
+    ("Australia/Hobart", "AU"),
+    ("Australia/Melbourne", "AU"),
+    ("Australia/Perth", "AU"),
+    ("Australia/Sydney", "AU"),
+    ("Europe/Amsterdam", "NL"),
+    ("Europe/Athens", "GR"),
+    ("Europe/Berlin", "DE"),
+    ("Europe/Brussels", "BE"),
+    ("Europe/Budapest", "HU"),
+    ("Europe/Copenhagen", "DK"),
+    ("Europe/Dublin", "IE"),
+    ("Europe/Helsinki", "FI"),
+    ("Europe/Lisbon", "PT"),
+    ("Europe/London", "GB"),
+    ("Europe/Luxembourg", "LU"),
+    ("Europe/Madrid", "ES"),
+    ("Europe/Oslo", "NO"),
+    ("Europe/Paris", "FR"),
+    ("Europe/Prague", "CZ"),
+    ("Europe/Rome", "IT"),
+    ("Europe/Stockholm", "SE"),
+    ("Europe/Vienna", "AT"),
+    ("Europe/Warsaw", "PL"),
+    ("Europe/Zurich", "CH"),
+    ("Pacific/Auckland", "NZ"),
+];
+
+fn tz_country(tz: &str) -> Option<&'static str> {
+    TZ_COUNTRY
+        .iter()
+        .find(|(z, _)| z.eq_ignore_ascii_case(tz.trim()))
+        .map(|(_, c)| *c)
+}
+
+fn http_url(v: &Value) -> Option<Value> {
+    v.as_str()
+        .map(str::trim)
+        .filter(|u| u.starts_with("https://") || u.starts_with("http://"))
+        .filter(|u| !u.contains(char::is_whitespace) && u.len() <= 2048)
+        .map(|u| json!(u))
+}
+
+fn clip(v: &Value, n: usize) -> Option<Value> {
+    v.as_str()
+        .map(str::trim)
+        .filter(|t| !t.is_empty())
+        .map(|t| json!(t.chars().take(n).collect::<String>()))
+}
+
+fn gtfs_fares(v: &Value) -> Option<Value> {
+    let fares: Vec<Value> = v
+        .as_array()?
+        .iter()
+        .take(6)
+        .filter_map(|f| {
+            let amount = f.get("amount")?.as_f64().filter(|a| *a >= 0.0)?;
+            let cur = f.get("currency")?.as_str()?;
+            let text = format!("{amount:.2} {cur}");
+            let mut price = json!({"text": text, "amount": amount, "currency": cur});
+            if amount == 0.0 {
+                price["is_free"] = json!(true);
+            }
+            Some(obj(vec![
+                (
+                    "label",
+                    clip(f.get("label").unwrap_or(&Value::Null), 80).or(s("Fare")),
+                ),
+                ("price", Some(price)),
+                (
+                    "transfers",
+                    f.get("transfers")
+                        .and_then(Value::as_u64)
+                        .map(|n| json!(n.min(10))),
+                ),
+                (
+                    "unlimited_transfers",
+                    f.get("unlimited_transfers")
+                        .filter(|b| b.as_bool() == Some(true))
+                        .cloned(),
+                ),
+                (
+                    "transfer_window_min",
+                    f.get("transfer_duration_s")
+                        .and_then(Value::as_u64)
+                        .map(|s| json!((s / 60).min(1440))),
+                ),
+            ]))
+        })
+        .collect();
+    (!fares.is_empty()).then_some(Value::Array(fares))
+}
+
+fn gtfs(body: &[u8]) -> Result<Vec<AdapterItem>> {
+    let items: Vec<Value> =
+        serde_json::from_slice(body).map_err(|e| Error::Invalid(format!("gtfs: {e}")))?;
+    let mut out = Vec::new();
+    for it in items {
+        let g = |k: &str| it.get(k).cloned().unwrap_or(Value::Null);
+        let Some(t) = it.get("t").and_then(Value::as_str) else {
+            continue;
+        };
+        let Some(id) = it
+            .get("id")
+            .and_then(Value::as_str)
+            .filter(|i| !i.is_empty())
+        else {
+            continue;
+        };
+        let name = match t {
+            "line" => {
+                let (sn, ln) = (
+                    it.get("short_name").and_then(Value::as_str).unwrap_or(""),
+                    it.get("long_name").and_then(Value::as_str).unwrap_or(""),
+                );
+                match (sn.is_empty(), ln.is_empty()) {
+                    (false, false) => format!("{sn}: {ln}"),
+                    (false, true) => sn.to_string(),
+                    (true, false) => ln.to_string(),
+                    (true, true) => continue,
+                }
+            }
+            "operator" | "station" => match it.get("name").and_then(Value::as_str) {
+                Some(n) if !n.trim().is_empty() => n.to_string(),
+                _ => continue,
+            },
+            _ => continue,
+        };
+        let tz = it.get("timezone").and_then(Value::as_str).unwrap_or("");
+        let feed = it.get("feed").and_then(Value::as_str).unwrap_or("");
+        let key = if feed.is_empty() {
+            format!("{t}:{id}")
+        } else {
+            format!("{feed}/{t}:{id}")
+        };
+        let modes = it
+            .get("modes")
+            .and_then(Value::as_array)
+            .map(|m| Value::Array(m.iter().take(8).cloned().collect()));
+        out.push(AdapterItem {
+            kind: "transit_item",
+            id: Some(key),
+            series_key: None,
+            data: obj(vec![
+                ("item_type", s(t)),
+                ("name", clip(&json!(name), 160)),
+                ("mode", g("mode").as_str().and_then(s)),
+                (
+                    "modes",
+                    modes.filter(|m| m.as_array().is_some_and(|a| !a.is_empty())),
+                ),
+                ("short_name", clip(&g("short_name"), 40)),
+                ("long_name", clip(&g("long_name"), 200)),
+                ("operator", clip(&g("operator"), 160)),
+                (
+                    "website_url",
+                    http_url(&g("url")).or_else(|| http_url(&g("operator_url"))),
+                ),
+                ("fare_url", http_url(&g("fare_url"))),
+                ("phone", clip(&g("phone"), 40)),
+                ("time_zone", clip(&g("timezone"), 40)),
+                ("language", clip(&g("lang"), 35)),
+                ("station_code", clip(&g("code"), 40)),
+                (
+                    "lat",
+                    g("lat")
+                        .as_f64()
+                        .filter(|v| (-90.0..=90.0).contains(v))
+                        .map(|v| json!(v)),
+                ),
+                (
+                    "lng",
+                    g("lng")
+                        .as_f64()
+                        .filter(|v| (-180.0..=180.0).contains(v))
+                        .map(|v| json!(v)),
+                ),
+                (
+                    "wheelchair_accessible",
+                    g("wheelchair").as_bool().map(Value::Bool),
+                ),
+                ("route_count", g("route_count").as_u64().map(|n| json!(n))),
+                ("fares", gtfs_fares(&g("fares"))),
+                (
+                    "valid_from",
+                    g("valid_from").as_str().and_then(day).map(Value::String),
+                ),
+                (
+                    "valid_to",
+                    g("valid_to").as_str().and_then(day).map(Value::String),
+                ),
+                ("feed_publisher", clip(&g("publisher"), 160)),
+                ("country_code", tz_country(tz).map(|c| json!(c))),
+                (
+                    "as_of",
+                    g("valid_from").as_str().and_then(day).map(Value::String),
                 ),
             ]),
         });

@@ -44,7 +44,7 @@ fetcher runs adapters.
 
 ## The 12 adapters
 
-`canada_advisories`, `ecb_fx`, `fcdo_content_api`, `met_norway`,
+`canada_advisories`, `ecb_fx`, `fcdo_content_api`, `gtfs_static`, `met_norway`,
 `mobility_database_catalog`, `nager_holidays`, `ourairports_csv`, `se_travel_dump`,
 `state_dept_advisories`, `ticketmaster_discovery`, `wikidata_sparql`, `wikivoyage_dump`.
 What each one reads: [Sources and Licences](Sources-and-Licences#built-in-adapters-apis-and-dumps).

@@ -134,6 +134,7 @@ politeness applies to each.
 | `canada_advisories` | Global Affairs Canada travel advice JSON | advisory level and text per country |
 | `ecb_fx` | ECB euro reference rates XML | daily, 90-day and historical |
 | `fcdo_content_api` | UK FCDO advice via the GOV.UK Content API | |
+| `gtfs_static` | Any GTFS Schedule zip (one feed per source seed; zips of zips too), streamed with a size cap (`gtfs_max_bytes`) | keeps agencies, routes, stations, fares and feed validity as `transit_item` records, never `stop_times`/`trips`; conditional GET (an unchanged feed is one 304); provider keys in the header or query each host expects, never stored; `ET-Client-Name` for Entur |
 | `met_norway` | MET Norway Locationforecast 2.0 | coordinates at most 4 decimals, as MET requires |
 | `mobility_database_catalog` | Mobility Database `feeds_v2.csv` (CC0), streamed | keeps active GTFS Schedule feeds; its source is disabled (robots.txt) |
 | `nager_holidays` | Nager.Date public holidays | countries, then one row per year and country; its source is disabled (robots.txt) |

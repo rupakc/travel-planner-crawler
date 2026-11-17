@@ -16,12 +16,12 @@ seeds:
 - https://download.gtfs.de/germany/nv_free/latest.zip
 sitemaps: []
 feeds: []
-adapter: null
+adapter: gtfs_static
 include: []
 exclude: []
 max_depth: 0
 kinds:
-- transport_option
+- transit_item
 llm_kinds: []
 render: never
 cadence: weekly
@@ -35,8 +35,7 @@ max_retention_days: null
 display_requirements: null
 notes: 'gtfs.de robots allows (only /imprint, /contact disallowed); download.gtfs.de/robots.txt answers
   403 (checked 2026-11-17). Licence: CC BY 4.0, source ''NeTEx Datensatz, DELFI e.V.'' | Disabled: robots.txt
-  of download.gtfs.de answers 403 to VoyagerBot (checked 2026-11-17): that origin is do-not-crawl (denylisted);
-  also adapter pending: GTFS static zip adapter (download, verify, index routes/stops per feed)'
+  of download.gtfs.de answers 403 to VoyagerBot (checked 2026-11-17): that origin is do-not-crawl (denylisted)'
 relevance:
   sections:
   - getting_around

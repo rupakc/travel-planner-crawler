@@ -14,12 +14,12 @@ seeds:
 - https://nap.transportes.gob.es/
 sitemaps: []
 feeds: []
-adapter: null
+adapter: gtfs_static
 include: []
 exclude: []
 max_depth: 0
 kinds:
-- transport_option
+- transit_item
 llm_kinds: []
 render: never
 cadence: weekly
@@ -33,7 +33,7 @@ max_retention_days: null
 display_requirements: null
 notes: 'robots 404. Downloads need a registered account; the site is a JavaScript SPA. | Disabled: needs
   an account: owner must register at https://nap.transportes.gob.es/ (free); licence per dataset to read;
-  adapter pending: GTFS static zip adapter (download, verify, index routes/stops per feed)'
+  a per-dataset download URL and key placement in gtfs_static are needed'
 relevance:
   sections:
   - getting_around

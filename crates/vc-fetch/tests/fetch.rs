@@ -1086,3 +1086,95 @@ async fn host_with_public_and_private_addresses_refused() {
     assert_eq!(block.ip, IpAddr::from([10, 0, 0, 5]));
     assert!(server.received_requests().await.unwrap().is_empty());
 }
+
+// --- GTFS feeds (zip dumps) -------------------------------------------------------------
+
+fn dump(url: CanonicalUrl) -> FetchRequest {
+    FetchRequest::get(url, RequestPurpose::Dump)
+}
+
+/// A GTFS zip is accepted for a dump download (and only there): `application/zip` and the
+/// `application/octet-stream` many feed hosts send.
+#[tokio::test]
+async fn zip_allowed_for_dumps_only() {
+    let env = Env::new().await;
+    for (p, ct) in [
+        ("/gtfs.zip", "application/zip"),
+        ("/feed.zip", "application/octet-stream"),
+    ] {
+        Mock::given(path(p))
+            .respond_with(
+                ResponseTemplate::new(200)
+                    .insert_header("content-type", ct)
+                    .set_body_bytes(b"PK\x03\x04".to_vec()),
+            )
+            .mount(&env.server)
+            .await;
+    }
+    let u = env.url("site.test", "/gtfs.zip");
+    let claim = env.claim(&u, "", &["site.test"]).await;
+    for p in ["/gtfs.zip", "/feed.zip"] {
+        let u = env.url("site.test", p);
+        let s = env.client.stream(&claim.permit, dump(u.clone())).await;
+        assert!(s.is_ok(), "{p}: {:?}", s.err());
+        env.clock.advance(Duration::from_secs(1));
+        let err = env.client.fetch(&claim.permit, page(u)).await.unwrap_err();
+        assert!(
+            matches!(err, FetchError::ContentTypeNotAllowed(_)),
+            "{p} as a page: {err:?}"
+        );
+        env.clock.advance(Duration::from_secs(1));
+    }
+}
+
+/// The download host's own robots.txt governs the feed: a disallowed zip is never requested.
+#[tokio::test]
+async fn dump_download_respects_robots_of_its_host() {
+    let env = Env::new().await;
+    Mock::given(path("/gtfs/feed.zip"))
+        .respond_with(
+            ResponseTemplate::new(200)
+                .insert_header("content-type", "application/zip")
+                .set_body_bytes(b"PK\x03\x04".to_vec()),
+        )
+        .expect(0)
+        .mount(&env.server)
+        .await;
+    let u = env.url("site.test", "/gtfs/feed.zip");
+    let claim = env
+        .claim(
+            &u,
+            "User-agent: VoyagerBot\nDisallow: /gtfs/\n",
+            &["site.test"],
+        )
+        .await;
+    let Err(err) = env.client.stream(&claim.permit, dump(u.clone())).await else {
+        panic!("a disallowed download was streamed");
+    };
+    assert!(
+        matches!(&err, FetchError::RobotsDisallowed(x) if *x == u),
+        "{err:?}"
+    );
+    assert_eq!(env.requests_to("/gtfs/feed.zip").await, 0);
+}
+
+/// A dump stream sends the validators of the last capture: an unchanged feed is one 304.
+#[tokio::test]
+async fn dump_stream_conditional_get_304() {
+    let env = Env::new().await;
+    Mock::given(path("/gtfs.zip"))
+        .and(header("if-none-match", "\"v7\""))
+        .respond_with(ResponseTemplate::new(304).insert_header("etag", "\"v7\""))
+        .expect(1)
+        .mount(&env.server)
+        .await;
+    let u = env.url("site.test", "/gtfs.zip");
+    let claim = env.claim(&u, "", &["site.test"]).await;
+    let mut req = dump(u);
+    req.validators = Validators {
+        etag: Some("\"v7\"".into()),
+        last_modified: None,
+    };
+    let s = env.client.stream(&claim.permit, req).await.unwrap();
+    assert_eq!(s.head.status, StatusCode::NOT_MODIFIED);
+}

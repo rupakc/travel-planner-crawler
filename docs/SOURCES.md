@@ -7,7 +7,7 @@
 Every website and dataset the crawler knows, grouped by the part of the Voyager app it
 feeds. A source that serves several parts is listed under each of them.
 
-**269 sources, 187 on, 82 off.**
+**269 sources, 193 on, 76 off.**
 
 - **What we take**: the traveller-facing data the source gives (its `relevance.why`).
 - **Licence**: *open* (free reuse with credit), *share-alike* (kept apart from other
@@ -479,16 +479,20 @@ is added only with the owner's approval (see CONTRIBUTING.md).
 
 | Source | Website | What we take | Licence | On | Key |
 |---|---|---|---|---|---|
+| `auckland-gtfs` | `gtfs.at.govt.nz` | Auckland buses, trains and ferries for Local transportation. | open | yes | no |
+| `entur-gtfs` | `storage.googleapis.com` | All Norwegian public transport, including trains, ferries and Hurtigruten, for Local transportation. | open | yes | no |
 | `gbfs-systems` | `raw.githubusercontent.com` | The list of bike- and scooter-share systems by city, for the Local transportation section. | open | yes | no |
+| `opentransportdata-swiss` | `data.opentransportdata.swiss` | The national Swiss timetable (SBB, PostBus, city transit, boats and cable cars) for Local transportation. | API terms | yes | no |
 | `osm-geofabrik` | `download.geofabrik.de` | OpenStreetMap hotels, sights and transit stops per region, for Hotels, Places to see and Local transportation. | share-alike | yes | no |
+| `ovapi-gtfs-nl` | `gtfs.ovapi.nl` | All Dutch train, bus, tram and metro timetables for Local transportation. | open | yes | no |
 | `seat61` | `www.seat61.com` | How to travel by train and ferry between cities and countries, for Local transportation. | facts only | yes | no |
 | `transitland` | `transit.land` | Public-transit operators and their routes and stops by city, for Local transportation. | API terms | yes | yes |
+| `translink-seq-gtfs` | `gtfsrt.api.translink.com.au` | Brisbane, Gold Coast and Sunshine Coast buses, trains, ferries and trams, for Local transportation. | open | yes | no |
+| `vic-gtfs` | `opendata.transport.vic.gov.au` | Melbourne and Victoria train, tram and bus timetables for Local transportation. | open | yes | no |
 | `wikivoyage-dump` | `dumps.wikimedia.org` | Wikivoyage destination guides (sights, things to do, where to stay, getting around, SIM and tips) for those app sections. | share-alike | yes | no |
-| `auckland-gtfs` | `gtfs.at.govt.nz` | Auckland buses, trains and ferries for Local transportation. | open | no | no |
 | `delfi-opendata-oepnv` | `www.opendata-oepnv.de` | Germany's official nationwide public-transport timetables (DELFI) for Local transportation. | open | no | yes |
 | `delhi-otd` | `otd.delhi.gov.in` | Delhi DTC and cluster bus routes and stops for Local transportation. | open | no | yes |
 | `digitransit` | `api.digitransit.fi` | Finnish timetables (HSL, VR and regional transit) for Local transportation. | open | no | yes |
-| `entur-gtfs` | `storage.googleapis.com` | All Norwegian public transport, including trains, ferries and Hurtigruten, for Local transportation. | open | no | no |
 | `gtfs-de` | `download.gtfs.de` | Germany-wide rail, regional and city timetables (routes, lines and frequencies) for Local transportation. | open | no | no |
 | `hk-td-gtfs` | `static.data.gov.hk` | Hong Kong bus, minibus, ferry, tram and MTR routes and headways for Local transportation. | open | no | no |
 | `lta-datamall` | `datamall2.mytransport.sg` | Singapore bus routes, bus stops and MRT service disruptions for Local transportation. | open | no | yes |
@@ -497,16 +501,12 @@ is added only with the owner's approval (see CONTRIBUTING.md).
 | `mobility-database-api` | `api.mobilitydatabase.org` | Catalogue of public-transit (GTFS) feeds by city for Local transportation; robots.txt is unreadable, so off. | open | no | yes |
 | `mta-gtfs` | `rrgtfsfeeds.s3.amazonaws.com` | New York City subway, bus and commuter-rail timetables for Local transportation. | API terms | no | no |
 | `odpt-japan` | `api.odpt.org` | Tokyo and Japanese rail, subway and bus timetables and stations for Local transportation. | API terms | no | yes |
-| `opentransportdata-swiss` | `data.opentransportdata.swiss` | The national Swiss timetable (SBB, PostBus, city transit, boats and cable cars) for Local transportation. | API terms | no | no |
-| `ovapi-gtfs-nl` | `gtfs.ovapi.nl` | All Dutch train, bus, tram and metro timetables for Local transportation. | open | no | no |
 | `sfbay-511` | `api.511.org` | One feed covering about 30 San Francisco Bay Area transit operators, for Local transportation. | API terms | no | yes |
 | `spain-nap` | `nap.transportes.gob.es` | Spain's official register of public-transport feeds (rail, bus, city transit) for Local transportation. | API terms | no | yes |
 | `tfl-unified-api` | `api.tfl.gov.uk` | London lines, stations, fares, service status and step-free access for Local transportation. | open | no | yes |
 | `tfnsw-opendata` | `api.transport.nsw.gov.au` | Sydney and New South Wales timetables for trains, buses, ferries and light rail, for Local transportation. | open | no | yes |
 | `trafiklab-gtfs-sverige` | `opendata.samtrafiken.se` | All Swedish public transport timetables for Local transportation. | open | no | yes |
-| `translink-seq-gtfs` | `gtfsrt.api.translink.com.au` | Brisbane, Gold Coast and Sunshine Coast buses, trains, ferries and trams, for Local transportation. | open | no | no |
 | `transport-data-gouv` | `transport.data.gouv.fr` | France's national register of every GTFS and NeTEx feed with links, licences and coverage, for city transport and rail in Local transportation. | open | no | no |
-| `vic-gtfs` | `opendata.transport.vic.gov.au` | Melbourne and Victoria train, tram and bus timetables for Local transportation. | open | no | no |
 
 ## Forex
 
@@ -598,9 +598,9 @@ source's notes say where to sign up and what it costs.
 | `booking-demand-api` | `developers.booking.com` | hotels | Hotel prices are a non-goal; needs a partner contract. |
 | `calendarific` | `calendarific.com` | events, tips | needs an API key: owner must register a key at https://calendarific.com/signup (free: 500 requests/month); adapter pending: holidays reader (public holidays map to the event kind) |
 | `datatourisme-fr` | `diffuseur.datatourisme.fr` | events, activities, places, itinerary | needs an API key: owner must register a key at https://diffuseur.datatourisme.fr/ (free account; build a flux and use its download key); adapter pending: DATAtourisme JSON-LD flux reader |
-| `delfi-opendata-oepnv` | `www.opendata-oepnv.de` | getting_around | needs an account: owner must register at https://www.opendata-oepnv.de/ (free); the crawler never logs in, so a token-based download route is needed; adapter pending: GTFS static zip adapter (download, verify, index routes/stops per feed) |
-| `delhi-otd` | `otd.delhi.gov.in` | getting_around | needs an API key: owner must register a key at https://otd.delhi.gov.in/ (free); adapter pending: GTFS static zip adapter (download, verify, index routes/stops per feed) |
-| `digitransit` | `api.digitransit.fi` | getting_around | needs an API key: owner must register a key at https://portal-api.digitransit.fi/ (free); adapter pending: GTFS static zip adapter (download, verify, index routes/stops per feed) |
+| `delfi-opendata-oepnv` | `www.opendata-oepnv.de` | getting_around | needs an account: owner must register at https://www.opendata-oepnv.de/ (free); the crawler never logs in, so a token-based download route (and its key placement in gtfs_static) is needed |
+| `delhi-otd` | `otd.delhi.gov.in` | getting_around | needs an API key: owner must register a key at https://otd.delhi.gov.in/ (free; sent as the key query parameter); the seed is the download page, the zip URL is to be confirmed after registration |
+| `digitransit` | `api.digitransit.fi` | getting_around | needs an API key: owner must register a key at https://portal-api.digitransit.fi/ (free; sent as the digitransit-subscription-key header) |
 | `duffel` | `api.duffel.com` | flights | Live fares are a non-goal; they stay on SerpAPI in the app (spec §2). |
 | `edinburgh-festivals-api` | `api.edinburghfestivalcity.com` | events | needs an API key: owner must register a key at https://api.edinburghfestivalcity.com/ (free); adapter pending: listings API reader |
 | `failte-ireland-od` | `failteireland.developer.azure-api.net` | places, activities | needs an API key: owner must register a key at https://failteireland.developer.azure-api.net/ (free tier, rate-limited; Open Data Plus subscription key); robots.txt of data.failteireland.ie timed out: re-check; adapter pending |
@@ -617,12 +617,12 @@ source's notes say where to sign up and what it costs.
 | `opensky` | `opensky-network.org` | flights | restricted licence (non-commercial or unknown), not ingested in v1 (spec §5.9). |
 | `predicthq` | `api.predicthq.com` | events | Paid only; the free plan has no API access. \| Research cadence: never. |
 | `ridb` | `ridb.recreation.gov` | activities, places | needs an API key: owner must register a key at https://ridb.recreation.gov/ (free); adapter pending: RIDB paged JSON reader |
-| `sfbay-511` | `api.511.org` | getting_around | needs an API key: owner must register a key at https://511.org/open-data/token (free); adapter pending: GTFS static zip adapter (download, verify, index routes/stops per feed) |
-| `spain-nap` | `nap.transportes.gob.es` | getting_around | needs an account: owner must register at https://nap.transportes.gob.es/ (free); licence per dataset to read; adapter pending: GTFS static zip adapter (download, verify, index routes/stops per feed) |
+| `sfbay-511` | `api.511.org` | getting_around | needs an API key: owner must register a key at https://511.org/open-data/token (free; sent as the api_key query parameter) |
+| `spain-nap` | `nap.transportes.gob.es` | getting_around | needs an account: owner must register at https://nap.transportes.gob.es/ (free); licence per dataset to read; a per-dataset download URL and key placement in gtfs_static are needed |
 | `tat-data-api` | `tatdataapi.io` | events, places, activities | needs an API key: owner must register a key at https://tatdataapi.io/ (free); terms not yet confirmed: terms are behind sign-up |
 | `tfl-unified-api` | `api.tfl.gov.uk` | getting_around | needs an API key: owner must register a key at https://api-portal.tfl.gov.uk/ (free); adapter pending: TfL Unified API reader (lines, stop points, fares) |
-| `tfnsw-opendata` | `api.transport.nsw.gov.au` | getting_around | needs an API key: owner must register a key at https://opendata.transport.nsw.gov.au/ (free); robots.txt of api.transport.nsw.gov.au answers 500 (checked 2026-11-17), so disallowed until readable; adapter pending: GTFS static zip adapter (download, verify, index routes/stops per feed) |
-| `trafiklab-gtfs-sverige` | `opendata.samtrafiken.se` | getting_around | needs an API key: owner must register a key at https://www.trafiklab.se/ (free); adapter pending: GTFS static zip adapter (download, verify, index routes/stops per feed) |
+| `tfnsw-opendata` | `api.transport.nsw.gov.au` | getting_around | needs an API key: owner must register a key at https://opendata.transport.nsw.gov.au/ (free; sent as 'Authorization: apikey <key>'); robots.txt of api.transport.nsw.gov.au answers 500 (checked 2026-11-17), so disallowed until readable |
+| `trafiklab-gtfs-sverige` | `opendata.samtrafiken.se` | getting_around | needs an API key: owner must register a key at https://www.trafiklab.se/ (free; sent as the key query parameter) |
 | `viator-partner` | `docs.viator.com` | activities | Needs affiliate approval (not granted). |
 | `visit-finland-datahub` | `datahub.visitfinland.com` | places, activities, events | needs an API key: owner must apply as a DataHub data user at https://datahub.visitfinland.com/ and accept the ToS (free as far as known; Business Finland decides); check the redistribution clause; adapter pending |
 | IATA Timatic (Web, Widget, AutoCheck API) (no spec) | iata.org (iatatravelcentre.com, timaticweb2.com denylisted) | visa, tips | Ask IATA Timatic sales (https://go.updates.iata.org/timatic-info) for a Timatic Widget or AutoCheck API licence for a consumer trip planner; get written consent for automated use and caching. Cost: No published price (dated trade-press figure: about EUR 499/year for 500 transactions); contract only. |

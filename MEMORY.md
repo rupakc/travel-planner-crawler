@@ -148,3 +148,14 @@ plan = `docs/superpowers/plans/2026-11-15-voyager-crawler.md`, r1–r5 = `docs/r
   switches). Off with reasons: bcn (robots disallows /data/api*), madrid (robots disallows the
   CKAN downloads), toronto (dataset retired), taiwan (data.gov.tw robots 500), datagovhk (LCSD
   XML on another host). (crates/vc-sources/src/adapters/, scripts/seeds_to_sources.py)
+- 2026-11-18: GTFS Schedule adapter `gtfs_static`: one permit-gated zip stream per feed, read
+  as it arrives (own streaming zip reader; nested zips = one feed each), size cap
+  `[sources] gtfs_max_bytes` (600 MiB; over it = skipped with a manifest) plus an inflate cap;
+  keeps agencies, routes, stations (location_type 1), fares and feed_info only (never
+  stop_times/trips). Items are stored only after the whole archive checked out; a primary status
+  capture carries the validators, so an unchanged feed costs one 304. New record kind
+  `transit_item` (operator / line / station): GTFS has no city, which `transport_option`
+  requires. Zip types allowed for dump downloads only (`[fetch] dump_content_types`). On:
+  ovapi-gtfs-nl, opentransportdata-swiss, vic-gtfs, translink-seq-gtfs, entur-gtfs
+  (ET-Client-Name: voyagerbot-crawler), auckland-gtfs, listed in sources/ramp-3.txt; keyed feeds
+  wired but off. (crates/vc-sources/src/adapters/gtfs_static.rs)

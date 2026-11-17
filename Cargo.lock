@@ -5815,6 +5815,8 @@ dependencies = [
  "csv",
  "flate2",
  "futures",
+ "http",
+ "jsonschema",
  "quick-xml",
  "regex",
  "serde",

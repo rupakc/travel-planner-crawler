@@ -1,0 +1,265 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/rupakc/travel-planner-crawler/schemas/transit_item.v1.json",
+  "title": "Public transport item",
+  "description": "One record: one public-transport operator, line or station from an official timetable feed (GTFS). Voyager use: getting_around (operators with their website, fare page and fares; lines by mode; stations with step-free access).",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "item_type": {
+      "type": "string",
+      "enum": [
+        "operator",
+        "line",
+        "station"
+      ],
+      "description": "What the record is."
+    },
+    "name": {
+      "type": "string",
+      "maxLength": 160,
+      "description": "Operator name, line name (\"<short>: <long>\") or station name, as published."
+    },
+    "mode": {
+      "type": "string",
+      "enum": [
+        "tram",
+        "metro",
+        "rail",
+        "bus",
+        "ferry",
+        "cable_tram",
+        "aerial_lift",
+        "funicular",
+        "trolleybus",
+        "monorail",
+        "coach",
+        "air",
+        "taxi",
+        "other"
+      ],
+      "description": "A line's mode."
+    },
+    "modes": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "tram",
+          "metro",
+          "rail",
+          "bus",
+          "ferry",
+          "cable_tram",
+          "aerial_lift",
+          "funicular",
+          "trolleybus",
+          "monorail",
+          "coach",
+          "air",
+          "taxi",
+          "other"
+        ],
+        "description": "A mode."
+      },
+      "maxItems": 8,
+      "description": "An operator's modes."
+    },
+    "short_name": {
+      "type": "string",
+      "maxLength": 40,
+      "description": "A line's short name, e.g. \"5\" or \"IC\"."
+    },
+    "long_name": {
+      "type": "string",
+      "maxLength": 200,
+      "description": "A line's long name, e.g. \"Centraal - Zuid\"."
+    },
+    "operator": {
+      "type": "string",
+      "maxLength": 160,
+      "description": "A line's operator."
+    },
+    "website_url": {
+      "type": "string",
+      "maxLength": 2048,
+      "description": "Official page of the operator, line or station.",
+      "pattern": "^https?://[^\\s]+$"
+    },
+    "fare_url": {
+      "type": "string",
+      "maxLength": 2048,
+      "description": "The operator's fare information page.",
+      "pattern": "^https?://[^\\s]+$"
+    },
+    "phone": {
+      "type": "string",
+      "maxLength": 40,
+      "description": "The operator's customer phone number as published."
+    },
+    "time_zone": {
+      "type": "string",
+      "maxLength": 40,
+      "description": "IANA time zone of the service, e.g. \"Europe/Oslo\"."
+    },
+    "language": {
+      "type": "string",
+      "maxLength": 35,
+      "description": "The operator's main language (BCP 47), as published."
+    },
+    "station_code": {
+      "type": "string",
+      "maxLength": 40,
+      "description": "A station's public code, if any."
+    },
+    "lat": {
+      "type": "number",
+      "minimum": -90,
+      "maximum": 90,
+      "description": "A station's latitude."
+    },
+    "lng": {
+      "type": "number",
+      "minimum": -180,
+      "maximum": 180,
+      "description": "A station's longitude."
+    },
+    "wheelchair_accessible": {
+      "type": "boolean",
+      "description": "A station's step-free boarding, only when the feed states it."
+    },
+    "route_count": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 1000000,
+      "description": "Number of lines an operator runs in the feed."
+    },
+    "fares": {
+      "type": "array",
+      "maxItems": 6,
+      "description": "An operator's fares (cheapest first).",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "label"
+        ],
+        "properties": {
+          "label": {
+            "type": "string",
+            "maxLength": 80,
+            "description": "Fare name or id."
+          },
+          "price": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "text": {
+                "type": "string",
+                "maxLength": 80,
+                "description": "The price as published, e.g. \"2.50 EUR\"."
+              },
+              "amount": {
+                "type": "number",
+                "minimum": 0,
+                "description": "The number in `text`."
+              },
+              "currency": {
+                "type": "string",
+                "maxLength": 3,
+                "description": "ISO 4217 code; never converted.",
+                "pattern": "^[A-Z]{3}$"
+              },
+              "unit": {
+                "type": "string",
+                "maxLength": 40,
+                "description": "What the price is for, e.g. \"per ride\"."
+              },
+              "is_free": {
+                "type": "boolean",
+                "description": "True only for a published price of zero."
+              }
+            },
+            "description": "Fare price."
+          },
+          "transfers": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 10,
+            "description": "Transfers allowed."
+          },
+          "unlimited_transfers": {
+            "type": "boolean",
+            "description": "True when transfers are unlimited."
+          },
+          "transfer_window_min": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 1440,
+            "description": "Minutes a ticket stays valid for transfers."
+          }
+        },
+        "description": "A fare."
+      }
+    },
+    "valid_from": {
+      "type": "string",
+      "maxLength": 10,
+      "description": "First day of the timetable (YYYY-MM-DD).",
+      "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$"
+    },
+    "valid_to": {
+      "type": "string",
+      "maxLength": 10,
+      "description": "Last day of the timetable (YYYY-MM-DD).",
+      "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$"
+    },
+    "feed_publisher": {
+      "type": "string",
+      "maxLength": 160,
+      "description": "Who publishes the timetable feed."
+    },
+    "city": {
+      "type": "string",
+      "maxLength": 120,
+      "description": "City in English. Always paired with `country`."
+    },
+    "country": {
+      "type": "string",
+      "maxLength": 80,
+      "description": "Country in English. Required whenever `city` is set."
+    },
+    "country_code": {
+      "type": "string",
+      "maxLength": 2,
+      "description": "ISO 3166-1 alpha-2 country code.",
+      "pattern": "^[A-Z]{2}$"
+    },
+    "source_url": {
+      "type": "string",
+      "maxLength": 2048,
+      "description": "The feed or page this item comes from.",
+      "pattern": "^https?://[^\\s]+$"
+    },
+    "as_of": {
+      "type": "string",
+      "maxLength": 10,
+      "description": "The date the published information is valid from (YYYY-MM-DD).",
+      "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$"
+    },
+    "evidence": {
+      "type": "array",
+      "maxItems": 3,
+      "items": {
+        "type": "string",
+        "maxLength": 300,
+        "description": "A verbatim quote from the page."
+      },
+      "description": "Up to 3 short verbatim quotes from the page that support the most important facts."
+    }
+  },
+  "required": [
+    "item_type",
+    "name"
+  ]
+}

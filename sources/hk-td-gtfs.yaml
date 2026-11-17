@@ -14,12 +14,12 @@ seeds:
 - https://static.data.gov.hk/td/pt-headway-en/gtfs.zip
 sitemaps: []
 feeds: []
-adapter: null
+adapter: gtfs_static
 include: []
 exclude: []
 max_depth: 0
 kinds:
-- transport_option
+- transit_item
 llm_kinds: []
 render: never
 cadence: weekly
@@ -34,8 +34,7 @@ display_requirements: null
 notes: 'data.gov.hk robots 404; static.data.gov.hk/robots.txt answers 403 AccessDenied (checked 2026-11-17).
   DATA.GOV.HK: ''reproduce ... for both commercial and non-commercial purposes on a free-of-charge basis''.
   | Disabled: robots.txt of static.data.gov.hk answers 403 (checked 2026-11-17): that origin is do-not-crawl
-  (denylisted); also adapter pending: GTFS static zip adapter (download, verify, index routes/stops per
-  feed)'
+  (denylisted)'
 relevance:
   sections:
   - getting_around
