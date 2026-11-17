@@ -7,6 +7,10 @@
 #   CRAWLER_ALERT_EMAIL=… infrastructure/bootstrap.sh             create what is missing
 #   infrastructure/bootstrap.sh --rotate-tls [--dry-run]          new API key + certificate only
 #   infrastructure/bootstrap.sh --update-host [--dry-run]         refresh the VM's host bundle only
+#   infrastructure/bootstrap.sh --update-host --standard          Spot → standard provisioning (one command)
+#   … --spot / --standard (with a full run or --update-host): the provisioning
+#   model of the VM's template; without either, the group keeps its current one
+#   (a fresh group: Spot)
 #
 # Creates (skipping anything that exists; every resource that takes labels
 # gets app=voyager-crawler):
@@ -32,18 +36,35 @@
 #     internal IP, valid 2 years)
 #   static internal IP crawler-internal-ip (default subnet) and static external
 #     IP crawler-external-ip (the crawl identity published in BOT.md)
-#   data disk crawler-data: 100 GB pd-balanced, daily snapshot schedule
-#     crawler-data-daily kept 7 days
+#   data disk crawler-data: 30 GB pd-balanced, no snapshot schedule (wal-g
+#     PITR to GCS + the weekly restore drill cover recovery)
 #   firewall: allow-crawler-api (tcp:8443, source SA vm-runtime → target SA
-#     crawler-runtime), allow-crawler-iap-ssh (tcp:22 from IAP), and
+#     crawler-runtime), allow-crawler-iap-ssh (tcp:22 from IAP),
+#     allow-crawler-health-check (tcp:8443 from Google's health-check ranges
+#     130.211.0.0/22 and 35.191.0.0/16 only), and
 #     deny-crawler-ingress (everything else, so the project-wide
 #     default-allow-internal and the app's voyager-web (0.0.0.0/0:80,443,
 #     every instance) do not open the crawler VM; DENY wins at equal priority)
 #   instance template crawler-drill-template (Spot e2-standard-2, as crawler-drill)
-#   VM voyager-crawler: e2-standard-2, Debian 12, 20 GB boot disk, Shielded
-#     VM, OS Login, both static IPs, automatic restart + live migration,
-#     deletion protection; startup-script = deploy/host/first-boot.sh,
-#     metadata crawler-bundle = deploy/ (without tests and ci)
+#   health check crawler-healthz: HTTPS GET /healthz on tcp:8443 (the read
+#     API, TLS only), every 60 s, unhealthy after 15 failures (free; used only
+#     for autohealing, no load balancer)
+#   instance template voyager-crawler-{spot,std}-<hash>: e2-medium, Debian 12,
+#     10 GB pd-balanced boot disk (device crawler-boot), Shielded VM, OS
+#     Login, as crawler-runtime; Spot (termination action STOP) or standard
+#     (live migration + automatic restart); startup-script =
+#     deploy/host/first-boot.sh, shutdown-script = deploy/host/shutdown.sh,
+#     metadata crawler-bundle = deploy/ (without tests and ci). Templates are
+#     immutable: <hash> covers the bundle's content and the template flags, so
+#     a changed deploy/ makes a new template, which the group adopts with a
+#     metadata refresh (no restart)
+#   stateful managed instance group voyager-crawler-mig (zonal, size 1,
+#     opportunistic updates, repair on failure + autohealing on
+#     crawler-healthz after a 30 min initial delay, force-update on repair)
+#     with one instance voyager-crawler whose per-instance config keeps the
+#     boot disk, the data disk crawler-data and both static IPs (never
+#     auto-deleted): a preempted or unhealthy VM is recreated with the same
+#     name, disks, internal IP and egress IP
 #   log bucket voyager-crawler-logs (us-east1, 30-day retention) and sink
 #     voyager-crawler-logs: the VM's container logs (Ops Agent log
 #     crawler_docker, first-boot.sh), DEBUG excluded; the _Default sink excludes
@@ -52,14 +73,17 @@
 #   alert policies infrastructure/monitoring/*.json on that channel
 #   budget "voyager-crawler": ₹9,000/month on label app=voyager-crawler, 50/90/100 %
 #
-# Never: a MIG, a load balancer, NAT, Cloud SQL, any CI identity in GCP
+# Never: a load balancer, NAT, Cloud SQL, any CI identity in GCP
 # (CI signs with Sigstore and pushes to GHCR; the VM pulls), or a change to
 # the travel planner's resources other than the two secret bindings for
 # vm-runtime and one exclusion on the project's _Default log sink. Existing
 # resources are not modified, except what is re-asserted on every run: IAM
 # bindings, custom-role permissions, bucket settings and labels, firewall rules
-# (all but direction/action), the log bucket's retention and the sink's filter,
-# the alert channel's email, every alert policy (from its file) and the budget.
+# (all but direction/action), the health check, the group's autohealing and
+# update policy (an emergency stop may have cleared autohealing), the group's
+# template (a new one when deploy/ changed), the log bucket's retention and the
+# sink's filter, the alert channel's email, every alert policy (from its file)
+# and the budget.
 #
 # Every gcloud call passes --project (the local default project is another
 # one); billing calls use the project as their quota project. Needs gcloud's
@@ -68,12 +92,15 @@ set -euo pipefail
 
 DRY_RUN=0
 MODE=all
+WANT_MODEL=""
 while [[ $# -gt 0 ]]; do
   case "$1" in
     --dry-run) DRY_RUN=1 ;;
     --rotate-tls) MODE=rotate-tls ;;
     --update-host) MODE=update-host ;;
-    -h | --help) sed -n '2,60p' "$0"; exit 0 ;;
+    --standard) WANT_MODEL=STANDARD ;;
+    --spot) WANT_MODEL=SPOT ;;
+    -h | --help) sed -n '2,95p' "$0"; exit 0 ;;
     *) echo "unknown argument: $1" >&2; exit 2 ;;
   esac
   shift
@@ -84,6 +111,17 @@ BILLING_ACCOUNT="${BILLING_ACCOUNT:-010A0B-F39593-14A899}"
 REGION="${REGION:-us-east1}"
 ZONE="${ZONE:-us-east1-b}"
 VM="${VM:-voyager-crawler}"
+MIG="${MIG:-voyager-crawler-mig}"
+MACHINE_TYPE="${MACHINE_TYPE:-e2-medium}"
+TEMPLATE_PREFIX="voyager-crawler"
+BOOT_DEVICE="crawler-boot"
+HEALTH_CHECK="crawler-healthz"
+# The read API (vc-api, TLS only) answers GET /healthz on 8443, published on
+# the VM's internal IP; the roles' own /healthz (:9464) never leaves Docker
+HEALTH_PORT="${HEALTH_PORT:-8443}"
+HC_RANGES="130.211.0.0/22,35.191.0.0/16"
+# First boot (Docker, Ops Agent, image pulls, migrations) before autohealing counts
+INITIAL_DELAY=1800
 LABELS="app=voyager-crawler"
 RAW_BUCKET="voyager-crawler-raw"
 OPS_BUCKET="voyager-crawler-ops"
@@ -91,7 +129,6 @@ RUNTIME_SA="crawler-runtime@$PROJECT_ID.iam.gserviceaccount.com"
 DRILL_SA="crawler-drill@$PROJECT_ID.iam.gserviceaccount.com"
 APP_SA="vm-runtime@$PROJECT_ID.iam.gserviceaccount.com"
 DISK="crawler-data"
-SNAPSHOT_POLICY="crawler-data-daily"
 INTERNAL_IP_NAME="crawler-internal-ip"
 EXTERNAL_IP_NAME="crawler-external-ip"
 DRILL_TEMPLATE="crawler-drill-template"
@@ -158,6 +195,10 @@ preflight() {
   fi
 }
 
+sha256() {
+  if command -v sha256sum >/dev/null; then sha256sum | cut -d' ' -f1; else shasum -a 256 | cut -d' ' -f1; fi
+}
+
 host_bundle() {
   # deploy/ without tests/ and ci/, as a base64 tar.gz (instance metadata,
   # ≤ 256 KB). C-sorted, no extended attributes: the same bytes everywhere.
@@ -165,6 +206,10 @@ host_bundle() {
   local -a flags
   (cd "$ROOT/deploy" && find . -type f ! -path './tests/*' ! -path './ci/*' \
     ! -name '.DS_Store' ! -name '._*' | LC_ALL=C sort) >"$list"
+  # The bundle's identity: paths and contents (not tar's mtimes)
+  BUNDLE_HASH="$(cd "$ROOT/deploy" && while IFS= read -r f; do
+    printf '%s %s\n' "$(sha256 <"$f")" "$f"
+  done <"$list" | sha256)"
   if tar --version 2>/dev/null | grep -q 'GNU tar'; then
     flags=(--no-xattrs --no-acls --owner=0 --group=0 --numeric-owner)
   else
@@ -343,21 +388,14 @@ iam() {
   # When it is, grant roles/storage.objectUser conditioned on objects/batch/.
 }
 
+# disk — the data disk, stateful in the group (never auto-deleted). No
+# snapshot schedule: wal-g base backups + WAL in gs://voyager-crawler-ops and
+# the weekly restore drill cover recovery (the disk holds nothing else that
+# is not rebuilt by first boot and deploy).
 disk() {
-  say "Data disk + snapshot schedule"
-  gx compute resource-policies describe "$SNAPSHOT_POLICY" --region="$REGION" ||
-    g compute resource-policies create snapshot-schedule "$SNAPSHOT_POLICY" --region="$REGION" \
-      --daily-schedule --start-time=04:00 --max-retention-days=7 --storage-location="$REGION" \
-      --on-source-disk-delete=keep-auto-snapshots --snapshot-labels="$LABELS"
-  if gx compute disks describe "$DISK" --zone="$ZONE"; then
-    PLACEHOLDER=""
-    if [[ "$(gv compute disks describe "$DISK" --zone="$ZONE" --format='value(resourcePolicies)')" != *"/$SNAPSHOT_POLICY"* ]]; then
-      g compute disks add-resource-policies "$DISK" --zone="$ZONE" --resource-policies="$SNAPSHOT_POLICY"
-    fi
-  else
-    g compute disks create "$DISK" --zone="$ZONE" --size=100GB --type=pd-balanced \
-      --resource-policies="$SNAPSHOT_POLICY" --labels="$LABELS"
-  fi
+  say "Data disk"
+  gx compute disks describe "$DISK" --zone="$ZONE" ||
+    g compute disks create "$DISK" --zone="$ZONE" --size=30GB --type=pd-balanced --labels="$LABELS"
 }
 
 # fw_rule NAME ACTION PRIORITY ARGS… — create, or re-assert everything but the
@@ -380,6 +418,9 @@ firewall() {
     --description="Voyager app VM to the crawler read API"
   fw_rule allow-crawler-iap-ssh ALLOW 900 --rules=tcp:22 --source-ranges="$IAP_RANGE" \
     --target-service-accounts="$RUNTIME_SA" --description="IAP TCP forwarding (SSH) to the crawler VM"
+  fw_rule allow-crawler-health-check ALLOW 900 --rules="tcp:$HEALTH_PORT" --source-ranges="$HC_RANGES" \
+    --target-service-accounts="$RUNTIME_SA" \
+    --description="Google health-check probers to the crawler API /healthz (MIG autohealing)"
   fw_rule deny-crawler-ingress DENY 1000 --rules=all --source-ranges=0.0.0.0/0 \
     --target-service-accounts="$RUNTIME_SA" \
     --description="Nothing else reaches the crawler VM (overrides default-allow-internal and voyager-web)"
@@ -425,30 +466,115 @@ drill_template() {
       --labels="$LABELS,role=restore-drill"
 }
 
-vm() {
-  say "VM $VM"
-  if gx compute instances describe "$VM" --zone="$ZONE"; then
-    echo "  exists; host bundle changes: --update-host" >&2
+# health_check — HTTPS GET /healthz on the read API, for autohealing only
+# (health checks are not billed without a load balancer). 15 failed checks a
+# minute apart (15 min) before the group recreates the VM: a deploy's API
+# roll or a short restart never trips it.
+health_check() {
+  say "Autohealing health check (re-asserted)"
+  local -a hc=(--global --port="$HEALTH_PORT" --request-path=/healthz --check-interval=60s --timeout=10s
+    --healthy-threshold=1 --unhealthy-threshold=15
+    --description="Voyager crawler: read API /healthz (MIG autohealing)")
+  if gx compute health-checks describe "$HEALTH_CHECK" --global; then
+    g compute health-checks update https "$HEALTH_CHECK" "${hc[@]}"
+  else
+    g compute health-checks create https "$HEALTH_CHECK" "${hc[@]}"
+  fi
+}
+
+# provisioning — MODEL (SPOT or STANDARD): --spot/--standard, else the
+# group's current template (a fresh group starts on Spot)
+provisioning() {
+  if [[ -n "$WANT_MODEL" ]]; then
+    MODEL="$WANT_MODEL"
     return 0
   fi
-  g compute instances create "$VM" --zone="$ZONE" --machine-type=e2-standard-2 \
-    --image-family=debian-12 --image-project=debian-cloud \
-    --boot-disk-size=20GB --boot-disk-type=pd-balanced \
-    --disk=name="$DISK",device-name="$DISK",mode=rw,boot=no,auto-delete=no \
-    --subnet=default --private-network-ip="$INTERNAL_IP" \
-    --address="$EXTERNAL_IP" --network-tier=STANDARD \
-    --service-account="$RUNTIME_SA" --scopes=cloud-platform \
-    --shielded-secure-boot --shielded-vtpm --shielded-integrity-monitoring \
-    --maintenance-policy=MIGRATE --restart-on-failure --provisioning-model=STANDARD \
-    --deletion-protection --labels="$LABELS" \
-    --metadata=enable-oslogin=TRUE,block-project-ssh-keys=TRUE \
-    --metadata-from-file="startup-script=$ROOT/deploy/host/first-boot.sh,crawler-bundle=$WORK/bundle.b64"
+  PLACEHOLDER=""
+  local cur
+  cur="$(gv compute instance-groups managed describe "$MIG" --zone="$ZONE" --format='value(instanceTemplate.basename())')"
+  if [[ "$cur" == "$TEMPLATE_PREFIX-std-"* ]]; then MODEL=STANDARD; else MODEL=SPOT; fi
+}
+
+# instance_template — TEMPLATE, created when missing. Spot: STOP on
+# preemption (the group then recreates the VM, keeping its stateful disks
+# and IPs; a stopped Spot VM costs no vCPU/RAM); no live migration or
+# automatic restart (Spot allows neither). Standard: both.
+instance_template() {
+  local -a sched
+  if [[ "$MODEL" == STANDARD ]]; then
+    sched=(--provisioning-model=STANDARD --maintenance-policy=MIGRATE --restart-on-failure)
+  else
+    sched=(--provisioning-model=SPOT --instance-termination-action=STOP --maintenance-policy=TERMINATE
+      --no-restart-on-failure)
+  fi
+  local -a args=(--machine-type="$MACHINE_TYPE" --image-family=debian-12 --image-project=debian-cloud
+    --boot-disk-size=10GB --boot-disk-type=pd-balanced --boot-disk-device-name="$BOOT_DEVICE"
+    --network=default --subnet=default --region="$REGION" --network-tier=STANDARD
+    --service-account="$RUNTIME_SA" --scopes=cloud-platform
+    --shielded-secure-boot --shielded-vtpm --shielded-integrity-monitoring
+    "${sched[@]}" --labels="$LABELS"
+    "--metadata=enable-oslogin=TRUE,block-project-ssh-keys=TRUE")
+  local short=spot
+  [[ "$MODEL" == STANDARD ]] && short=std
+  TEMPLATE="$TEMPLATE_PREFIX-$short-$( { printf '%s\n' "${args[@]}"; echo "$BUNDLE_HASH"; } | sha256 | cut -c1-12)"
+  say "Instance template $TEMPLATE"
+  gx compute instance-templates describe "$TEMPLATE" ||
+    g compute instance-templates create "$TEMPLATE" "${args[@]}" \
+      --metadata-from-file="startup-script=$ROOT/deploy/host/first-boot.sh,shutdown-script=$ROOT/deploy/host/shutdown.sh,crawler-bundle=$WORK/bundle.b64"
+}
+
+# roll_template — point the group at TEMPLATE and apply it to the VM: a host
+# bundle change is metadata only (refresh, no restart); Spot ↔ standard needs
+# a restart or replace, which the group picks (stateful disks and IPs stay)
+roll_template() {
+  PLACEHOLDER="<current-template>"
+  local cur
+  cur="$(gv compute instance-groups managed describe "$MIG" --zone="$ZONE" --format='value(instanceTemplate.basename())')"
+  if [[ "$cur" == "$TEMPLATE" ]]; then
+    echo "  $MIG already on $TEMPLATE" >&2
+    return 0
+  fi
+  g compute instance-groups managed set-instance-template "$MIG" --zone="$ZONE" --template="$TEMPLATE"
+  g compute instance-groups managed update-instances "$MIG" --zone="$ZONE" --instances="$VM" \
+    --minimal-action=refresh --most-disruptive-allowed-action=replace
+}
+
+mig() {
+  say "Managed instance group $MIG ($MODEL)"
+  local -a policy=(--health-check="projects/$PROJECT_ID/global/healthChecks/$HEALTH_CHECK" --initial-delay="$INITIAL_DELAY"
+    --default-action-on-vm-failure=repair --force-update-on-repair --update-policy-type=opportunistic)
+  if gx compute instance-groups managed describe "$MIG" --zone="$ZONE"; then
+    g compute instance-groups managed update "$MIG" --zone="$ZONE" "${policy[@]}"
+    roll_template
+  else
+    g compute instance-groups managed create "$MIG" --zone="$ZONE" --template="$TEMPLATE" --size=0 \
+      --base-instance-name="$VM" --description="Voyager crawler: one stateful Spot/standard VM" \
+      --stateful-disk=device-name="$BOOT_DEVICE",auto-delete=never \
+      --stateful-internal-ip=interface-name=nic0,auto-delete=never \
+      --stateful-external-ip=interface-name=nic0,auto-delete=never \
+      "${policy[@]}"
+  fi
+  PLACEHOLDER=""
+  if ! gv compute instance-groups managed list-instances "$MIG" --zone="$ZONE" \
+    --format='value(instance.basename())' | grep -qx "$VM"; then
+    # The per-instance config: this name, the existing data disk and both
+    # reserved addresses, kept on every recreate and never auto-deleted
+    g compute instance-groups managed create-instance "$MIG" --zone="$ZONE" --instance="$VM" \
+      --stateful-disk="device-name=$DISK,source=projects/$PROJECT_ID/zones/$ZONE/disks/$DISK,mode=rw,auto-delete=never" \
+      --stateful-internal-ip="address=projects/$PROJECT_ID/regions/$REGION/addresses/$INTERNAL_IP_NAME,interface-name=nic0,auto-delete=never" \
+      --stateful-external-ip="address=projects/$PROJECT_ID/regions/$REGION/addresses/$EXTERNAL_IP_NAME,interface-name=nic0,auto-delete=never"
+  fi
 }
 
 update_host() {
-  say "Host bundle → $VM metadata"
-  g compute instances add-metadata "$VM" --zone="$ZONE" \
-    --metadata-from-file="startup-script=$ROOT/deploy/host/first-boot.sh,crawler-bundle=$WORK/bundle.b64"
+  say "Host bundle → $MIG"
+  if ! ((DRY_RUN)) && ! gx compute instance-groups managed describe "$MIG" --zone="$ZONE"; then
+    echo "no group $MIG: run the full bootstrap first" >&2
+    exit 1
+  fi
+  provisioning
+  instance_template
+  roll_template
   echo "  then on the VM: sudo google_metadata_script_runner startup" >&2
 }
 
@@ -533,7 +659,10 @@ main() {
   firewall
   logs
   drill_template
-  vm
+  health_check
+  provisioning
+  instance_template
+  mig
   monitoring
   budget
   say "Done. Manual steps: infrastructure/README.md"
