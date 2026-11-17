@@ -138,7 +138,12 @@ impl VoyagerPolicy {
     /// The robots file that currently governs the origin, or the verdict to use instead.
     fn effective(&self, r: &RobotsEntry) -> Result<Arc<ParsedRobots>, RobotsVerdict> {
         match r.status {
-            RobotsStatus::Unauthorized | RobotsStatus::Challenge => Err(RobotsVerdict::KeyBlocked),
+            // Our stricter 401/403 rule, scoped like robots.txt itself (RFC 9309 §2.3: one
+            // file per origin): every path of this origin is disallowed, other hosts of the
+            // key are governed by their own robots.txt.
+            RobotsStatus::Unauthorized => Err(RobotsVerdict::Disallowed),
+            // A challenge page is a bot wall run by the site's operator: the whole key stops.
+            RobotsStatus::Challenge => Err(RobotsVerdict::KeyBlocked),
             RobotsStatus::NotFound => Ok(Arc::new(ParsedRobots::default())),
             RobotsStatus::Ok => Ok(match &r.body {
                 Some(b) => self.parsed(b),

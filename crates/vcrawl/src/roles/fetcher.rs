@@ -4,9 +4,10 @@
 //!
 //! 1. **Claim** a ready key ([`Frontier::claim`]); nothing ready → wait.
 //! 2. **robots.txt first**: every origin in `robots_due` is fetched under the same permit,
-//!    spooled raw (fsync) and stored ([`Frontier::store_robots`]). 401/403 or a challenge on
-//!    robots.txt makes the whole key do-not-crawl: a WARC `metadata` record notes it and the key
-//!    is parked. Paths that robots newly disallows are tombstoned
+//!    spooled raw (fsync) and stored ([`Frontier::store_robots`]). 401/403 on robots.txt makes
+//!    that origin do-not-crawl (its URLs end `Disallowed`; other hosts of the key go on under
+//!    their own robots.txt); a challenge page makes the whole key do-not-crawl and parks it.
+//!    Either way a WARC `metadata` record notes it. Paths that robots newly disallows are tombstoned
 //!    ([`RecordSink::tombstone`], reason `robots`; Review Focus 1).
 //! 3. **Each leased URL**, sequentially (the permit client paces by the key delay):
 //!    `http` → [`PermitClient::fetch`] with the committed validators; `render` →
@@ -829,12 +830,13 @@ impl Fetcher {
                 if code == 429 || code == 503 {
                     rate_limited = Some(vc_fetch::retry_after(&ex.response_headers, now));
                 }
-                let st = if self.p.policy.is_challenge(&ex) {
+                // 401/403 first, as for a refused challenge below: the origin refuses us.
+                let st = if code == 401 || code == 403 {
+                    RobotsStatus::Unauthorized
+                } else if self.p.policy.is_challenge(&ex) {
                     RobotsStatus::Challenge
                 } else if ex.status.is_success() {
                     RobotsStatus::Ok
-                } else if code == 401 || code == 403 {
-                    RobotsStatus::Unauthorized
                 } else if code == 429 || ex.status.is_server_error() {
                     RobotsStatus::Unavailable
                 } else if ex.status.is_client_error() {
@@ -859,7 +861,7 @@ impl Fetcher {
                     "url": url.as_str(),
                     "http_status": status,
                     "robots_status": if st == RobotsStatus::Unauthorized { "unauthorized" } else { "challenge" },
-                    "action": "key_do_not_crawl",
+                    "action": if st == RobotsStatus::Unauthorized { "origin_do_not_crawl" } else { "key_do_not_crawl" },
                 });
                 self.spool_robots(
                     run,
@@ -919,12 +921,12 @@ impl Fetcher {
             let cap = Duration::from_secs(self.p.cfg.frontier.max_delay_s);
             p.raise_delay(d.min(cap));
         }
-        let blocked = summary.key_blocked
-            || matches!(
-                entry.status,
-                RobotsStatus::Unauthorized | RobotsStatus::Challenge
-            );
+        let blocked = summary.key_blocked || entry.status == RobotsStatus::Challenge;
         run.summaries.insert(origin.clone(), summary);
+        if entry.status == RobotsStatus::Unauthorized {
+            // Only this origin: its URLs come back `Disallowed` from the robots check.
+            tracing::info!(key = %p.key(), origin = %origin.0, "robots.txt refuses us (401/403): origin is do-not-crawl");
+        }
         if blocked {
             tracing::info!(key = %p.key(), origin = %origin.0, "robots.txt blocks the key: parking");
             run.stop_with(KeySignal::Park(ParkReason::RobotsBlocked));

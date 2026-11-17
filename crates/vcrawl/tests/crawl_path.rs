@@ -378,14 +378,17 @@ async fn challenge_parks_the_key_and_stops() {
     );
 }
 
-/// robots.txt answered 401 → the whole key is do-not-crawl: a WARC metadata record notes it,
-/// the key is parked, no page is requested.
+/// robots.txt answered 401 on one host → that origin is do-not-crawl: a WARC metadata record
+/// notes it, none of its pages is requested and its URL ends `Disallowed`. Another host of the
+/// same key (its own robots.txt is 404) is still crawled and the key is not parked: robots.txt
+/// speaks for its own origin only (RFC 9309 §2.3).
 #[tokio::test]
-async fn robots_401_writes_a_metadata_record_and_parks() {
+async fn robots_401_blocks_only_its_origin() {
     let (web, _srv, port) = start(vec![
-        Site::new("locked", "locked.test")
+        Site::new("locked", "www.locked.test")
             .route("/robots.txt", Reply::status(401))
             .route("/x", Reply::html("<p>x</p>")),
+        Site::new("api", "api.locked.test").route("/y", Reply::html("<p>y</p>")),
     ])
     .await;
     let pool = testkit::pg().await;
@@ -394,25 +397,49 @@ async fn robots_401_writes_a_metadata_record_and_parks() {
     let f = fetcher(
         &cfg(),
         &pool,
-        &["locked.test"],
+        &["www.locked.test", "api.locked.test"],
         vec![],
         dir.path(),
         store.clone(),
     );
+    let x = url("www.locked.test", port, "/x");
+    let y = url("api.locked.test", port, "/y");
     f.parts()
         .frontier
-        .enqueue(&[NewUrl::new(url("locked.test", port, "/x"))])
+        .enqueue(&[NewUrl::new(x.clone()), NewUrl::new(y.clone())])
         .await
         .unwrap();
     let r = claimed(f.pass().await.unwrap());
-    assert_eq!(r.signal, Some(KeySignal::Park(ParkReason::RobotsBlocked)));
-    assert_eq!(paths(&web), ["locked.test/robots.txt"]);
+    assert_eq!(r.signal, Some(KeySignal::Normal), "the key is not parked: {r:?}");
+    let result = |u: &vc_core::CanonicalUrl| {
+        r.urls
+            .iter()
+            .find(|o| o.url_key == u.key())
+            .map(|o| o.result.clone())
+    };
+    assert_eq!(result(&x), Some(UrlResult::Disallowed), "{r:?}");
+    assert_eq!(result(&y), Some(UrlResult::Fetched), "{r:?}");
+    let mut got = paths(&web);
+    got.sort();
+    assert_eq!(
+        got,
+        [
+            "api.locked.test/robots.txt",
+            "api.locked.test/y",
+            "www.locked.test/robots.txt"
+        ],
+        "nothing but robots.txt is asked of the refusing host"
+    );
     f.flush().await.unwrap();
     let caps = captures(&pool).await;
-    assert_eq!(caps.len(), 1);
-    assert_eq!((caps[0].1.as_str(), caps[0].2), ("robots", Some(401)));
+    assert!(
+        caps.iter()
+            .any(|c| c.1.as_str() == "robots" && c.2 == Some(401)),
+        "{caps:?}"
+    );
     let seg: (String, i64) = sqlx::query_as(
-        "SELECT s.path, c.warc_offset FROM captures c JOIN segments s USING (segment_id)",
+        "SELECT s.path, c.warc_offset FROM captures c JOIN segments s USING (segment_id)
+         WHERE c.status = 401",
     )
     .fetch_one(&pool)
     .await
@@ -424,11 +451,22 @@ async fn robots_401_writes_a_metadata_record_and_parks() {
         recs.iter().any(|r| r.warc_type() == Some("metadata")),
         "a WARC metadata record"
     );
-    let state: String = sqlx::query_scalar("SELECT robots_state FROM origins")
-        .fetch_one(&pool)
-        .await
-        .unwrap();
-    assert_eq!(state, "unauthorized");
+    let states: Vec<(String, String)> =
+        sqlx::query_as("SELECT origin, robots_state FROM origins ORDER BY origin")
+            .fetch_all(&pool)
+            .await
+            .unwrap();
+    assert_eq!(states[0].1, "not_found", "{states:?}");
+    assert_eq!(states[1].1, "unauthorized", "{states:?}");
+    let parked: Option<chrono::DateTime<Utc>> =
+        sqlx::query_scalar("SELECT parked_until FROM politeness_keys WHERE key = 'locked.test'")
+            .fetch_one(&pool)
+            .await
+            .unwrap();
+    assert!(
+        parked.is_none_or(|t| t <= Utc::now()),
+        "not parked: {parked:?}"
+    );
 }
 
 /// Review Focus 1: robots.txt changes mid-crawl to disallow a path → no further request to it,

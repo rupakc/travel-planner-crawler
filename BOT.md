@@ -36,8 +36,9 @@ or try to get past a bot challenge.
 - **robots.txt (RFC 9309).** We read it before crawling a host and cache it for up to
   24 hours. We use the `VoyagerBot` group if there is one, otherwise `*`.
   - A missing robots.txt (404/410) allows crawling.
-  - A robots.txt that answers 401, 403 or a bot challenge means **do not crawl** that
-    site at all, which is stricter than RFC 9309 requires.
+  - A robots.txt that answers 401 or 403 means **do not crawl** that host at all, which is
+    stricter than RFC 9309 requires. A bot challenge on robots.txt stops us on every host
+    of that site.
   - A server error (5xx) or network failure means *disallow everything* until we can
     read it again.
 - **Rate limits.**

@@ -11,7 +11,7 @@ use common::{entry, ok, policy, t0, url};
 use proptest::prelude::*;
 use serde::Deserialize;
 use testkit::vc_policy_fixtures as fx;
-use vc_core::policy::{Policy, RobotsStatus, RobotsVerdict};
+use vc_core::policy::{Policy, RobotsStatus, RobotsSummary, RobotsVerdict};
 use vc_policy::robots::{self, ParsedRobots};
 
 #[derive(Deserialize)]
@@ -88,17 +88,29 @@ fn robots_google_corpus() {
     assert!(checked >= 136);
 }
 
+/// 401/403 on robots.txt: every path of that origin is disallowed (robots.txt included), but
+/// the key is not blocked: robots.txt speaks for its own origin only (RFC 9309 §2.3).
 #[test]
-fn robots_401_403_blocks_key() {
+fn robots_401_403_disallows_the_origin_not_the_key() {
     let p = policy();
     for code in [401, 403] {
         let r = entry(RobotsStatus::Unauthorized, Some(code), None);
-        assert_eq!(
-            p.robots_verdict(&r, &url("https://example.com/any")),
-            RobotsVerdict::KeyBlocked
-        );
-        assert!(p.robots_summary(&r).key_blocked);
+        for path in ["/", "/any", "/robots.txt", "/a/b?c=d"] {
+            assert_eq!(
+                p.robots_verdict(&r, &url(&format!("https://example.com{path}"))),
+                RobotsVerdict::Disallowed,
+                "{code} {path}"
+            );
+        }
+        assert!(!p.robots_summary(&r).key_blocked, "{code}");
+        assert_eq!(p.robots_summary(&r), RobotsSummary::default());
     }
+}
+
+/// A challenge page on robots.txt is a bot wall: the whole key is blocked.
+#[test]
+fn robots_challenge_blocks_key() {
+    let p = policy();
     let r = entry(
         RobotsStatus::Challenge,
         Some(200),
@@ -228,7 +240,7 @@ fn robots_refresh_tombstones() {
             "https://example.com/events",
         ]
     );
-    // A switch to 403 blocks the whole key: everything previously allowed is tombstoned.
+    // A switch to 403 disallows the whole origin: everything previously allowed is tombstoned.
     let blocked = entry(RobotsStatus::Unauthorized, Some(403), None);
     assert_eq!(p.newly_disallowed(&old, &blocked, &urls).len(), 5);
     // A transient 5xx never tombstones.

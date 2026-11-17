@@ -363,7 +363,7 @@ pub enum ParkReason {
         /// The status.
         status: u16,
     },
-    /// robots.txt answered 401/403 or with a challenge.
+    /// robots.txt answered with a challenge page.
     RobotsBlocked,
     /// Five consecutive 5xx (parked 1 h).
     ServerErrors,
