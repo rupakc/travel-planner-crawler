@@ -4,6 +4,9 @@
 #   FAKE_EXIST=0  nothing exists until this run creates it
 # Created resources are remembered in $FAKE_STATE, so a list after a create
 # finds the new resource (e.g. the notification channel).
+#   FAKE_MIG_TEMPLATE  the template the group uses (describe instanceTemplate);
+#                      unset: none (no group)
+#   FAKE_NO_MIG=1      the group does not exist even with FAKE_EXIST=1
 echo "gcloud $*" >>"$CALLS"
 args=" $* "
 mkdir -p "$FAKE_STATE"
@@ -22,9 +25,11 @@ case "$args" in
   *" sinks describe _Default "*) exist && echo "voyager-crawler-logs"; exit 0 ;;
   *" addresses describe crawler-internal-ip "*"value(address)"*) echo 10.142.0.50; exit 0 ;;
   *" addresses describe crawler-external-ip "*"value(address)"*) echo 34.0.0.7; exit 0 ;;
-  *" disks describe "*"value(resourcePolicies)"*)
-    exist && echo "https://www.googleapis.com/compute/v1/projects/voyager-prod-ohzkl/regions/us-east1/resourcePolicies/crawler-data-daily"
-    exit 0 ;;
+  *" instance-groups managed describe "*"instanceTemplate"*) printf '%s\n' "${FAKE_MIG_TEMPLATE:-}"; exit 0 ;;
+  *" instance-groups managed describe "*)
+    [[ "${FAKE_NO_MIG:-0}" != 1 ]] && exist && exit 0; exit 1 ;;
+  *" instance-groups managed list-instances "*)
+    [[ "${FAKE_NO_MIG:-0}" != 1 ]] && exist && echo voyager-crawler; exit 0 ;;
   *" describe "*) exist && exit 0; exit 1 ;;
 esac
 exit 0

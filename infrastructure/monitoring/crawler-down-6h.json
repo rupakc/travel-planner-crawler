@@ -1,0 +1,38 @@
+{
+  "displayName": "voyager-crawler: crawler down for over 6 h (Spot capacity?)",
+  "combiner": "OR",
+  "enabled": true,
+  "userLabels": {
+    "app": "voyager-crawler"
+  },
+  "documentation": {
+    "content": "No role on any instance has sent `crawler/heartbeat` for 6 h. On the Spot VM this usually means the group cannot get Spot e2-medium capacity in us-east1-b after a preemption (it keeps retrying). Check the group: `gcloud compute instance-groups managed list-instances voyager-crawler-mig --zone=us-east1-b --project=voyager-prod-ohzkl` and its errors (`list-errors`). If it is waiting for capacity, switch to standard provisioning in one command: `infrastructure/bootstrap.sh --update-host --standard` (docs/runbooks/incident.md, \"crawler down for over 6 h\").",
+    "mimeType": "text/markdown"
+  },
+  "conditions": [
+    {
+      "displayName": "no heartbeat from any role for 6 h",
+      "conditionAbsent": {
+        "filter": "metric.type=\"custom.googleapis.com/crawler/heartbeat\" AND resource.type=\"gce_instance\"",
+        "duration": "21600s",
+        "aggregations": [
+          {
+            "alignmentPeriod": "300s",
+            "perSeriesAligner": "ALIGN_MAX",
+            "crossSeriesReducer": "REDUCE_MAX"
+          }
+        ],
+        "trigger": {
+          "count": 1
+        }
+      }
+    }
+  ],
+  "notificationChannels": [
+    "__CHANNEL__"
+  ],
+  "alertStrategy": {
+    "autoClose": "86400s"
+  },
+  "severity": "CRITICAL"
+}

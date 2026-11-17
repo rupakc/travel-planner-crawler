@@ -72,7 +72,8 @@
         "aggregations": [
           {
             "alignmentPeriod": "300s",
-            "perSeriesAligner": "ALIGN_MAX"
+            "perSeriesAligner": "ALIGN_MAX",
+            "crossSeriesReducer": "REDUCE_MAX"
           }
         ],
         "trigger": {

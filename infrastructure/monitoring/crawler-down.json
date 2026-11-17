@@ -6,7 +6,7 @@
     "app": "voyager-crawler"
   },
   "documentation": {
-    "content": "A role stopped sending `crawler/heartbeat` for 15 min (or the VM is down). Check `vc-compose.sh ps` over IAP SSH and the watchdog log in `/var/lib/voyager-crawler/deploy/watchdog.log`.",
+    "content": "A role stopped sending `crawler/heartbeat` for 15 min (or the VM is down). On the Spot VM a preemption causes this too: the group recreates the VM (same name, disks and IPs) and the alert closes once the roles beat again; `gcloud compute instance-groups managed list-instances voyager-crawler-mig --zone=us-east1-b --project=voyager-prod-ohzkl` shows it. Otherwise check `vc-compose.sh ps` over IAP SSH and the watchdog log in `/var/lib/voyager-crawler/deploy/watchdog.log`. Series are per role, across instances (a recreated VM has a new instance id).",
     "mimeType": "text/markdown"
   },
   "conditions": [
@@ -18,7 +18,11 @@
         "aggregations": [
           {
             "alignmentPeriod": "300s",
-            "perSeriesAligner": "ALIGN_MAX"
+            "perSeriesAligner": "ALIGN_MAX",
+            "crossSeriesReducer": "REDUCE_MAX",
+            "groupByFields": [
+              "metric.label.role"
+            ]
           }
         ],
         "trigger": {
