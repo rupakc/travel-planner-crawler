@@ -449,7 +449,7 @@ async fn scout_rejects_denylisted_brand_domain() {
         {"host": "www.expedia.co.uk", "name": "Expedia UK"},
         {"host": "tripadvisor.de", "name": "Tripadvisor DE"},
         {"host": "m.booking.com", "name": "Booking mobile"},
-        {"host": "www.japan.travel", "name": "JNTO", "reason": "National tourism board"}
+        {"host": "www.gotokyo.org", "name": "GO TOKYO", "reason": "City tourism board"}
     ]}));
     let rep = run_scout(&r.llm, &pool, &policy(), &[cell()])
         .await
@@ -464,7 +464,7 @@ async fn scout_rejects_denylisted_brand_domain() {
     assert_eq!(status("www.expedia.co.uk"), ProposalStatus::Denylisted);
     assert_eq!(status("tripadvisor.de"), ProposalStatus::Denylisted);
     assert_eq!(status("m.booking.com"), ProposalStatus::Denylisted);
-    assert_eq!(status("www.japan.travel"), ProposalStatus::Proposed);
+    assert_eq!(status("www.gotokyo.org"), ProposalStatus::Proposed);
 
     let rows: Vec<(String, String, Option<String>, Value)> = sqlx::query_as(
         "SELECT host, status, decided_by, checks FROM source_candidates ORDER BY host",
@@ -477,7 +477,7 @@ async fn scout_rejects_denylisted_brand_domain() {
         .filter(|r| r.1 == "proposed")
         .map(|r| r.0.as_str())
         .collect();
-    assert_eq!(proposed, vec!["www.japan.travel"]);
+    assert_eq!(proposed, vec!["www.gotokyo.org"]);
     let expedia = rows
         .iter()
         .find(|r| r.0 == "www.expedia.co.uk")

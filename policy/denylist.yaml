@@ -153,3 +153,194 @@ entries:
   - host: cheapflights.*
     reason: Booking Holdings brand (Kayak group)
     source: brand
+  # --- Batch 2 research 2026-11-17 (transport/visa/customs, events/food/ideas, gaps) ----
+  # Terms that ban robots, scraping or automated access.
+  - host: traveldoc.aero
+    reason: "ToS: 'Use any robot, spider, scraper, or other automated or manual means to access the Service' is prohibited; airline licence product (ICTS Europe Systems)"
+    source: research 2026-11-17 transport-visa-customs B2
+  - host: timaticweb2.com
+    reason: "IATA Timatic: 'Use automated systems to access the Data without IATA's consent' is prohibited; licence only"
+    source: research 2026-11-17 transport-visa-customs B1
+  - host: iata.org
+    reason: "Terms: may not distribute or reproduce any materials or content on this Website for commercial or non-commercial exploitation; Timatic is a licence product"
+    source: research 2026-11-17 gaps (IATA baggage guidance)
+  - host: ica.gov.sg
+    reason: "ToS: using any robot, spider or other automatic device to monitor or copy pages needs ICA's prior written permission"
+    source: research 2026-11-17 transport-visa-customs B10
+  - host: henleyglobal.com
+    reason: "ToS: 'Use any robot, spider, scraper, or other automated means to access the website for any purpose' is prohibited"
+    source: research 2026-11-17 transport-visa-customs B28
+  - host: passportindex.org
+    reason: "Blocks GPTBot, ClaudeBot, CCBot, Google-Extended; Content-Signal ai-train=no, use=reference; upstream of the restricted passport-index-dataset"
+    source: research 2026-11-17 transport-visa-customs B27
+  - host: ricksteves.com
+    reason: "ToS ban 'any robot, spider, crawler, scraper or other automated means or interface not provided by us to access the Services'"
+    source: research 2026-11-17 food-events-ideas (conflicts)
+  - host: timeout.com
+    reason: "Terms 11.4: no use of the Content on any AI or machine-learning platform, including retrieval-augmented generation, without prior written approval"
+    source: research 2026-11-17 food-events-ideas (conflicts)
+  - host: guide.michelin.com
+    reason: "robots.txt answers 403; terms §4: must not 'use any robot, spider, other automatic device ... to monitor or copy our web pages'"
+    source: research 2026-11-17 food-events-ideas SKIP
+  - host: theinfatuation.com
+    reason: "Terms: 'not permitted to use any data mining, robots, scraping'; robots blocks every major AI bot"
+    source: research 2026-11-17 food-events-ideas SKIP
+  - host: zagat.com
+    reason: The Infatuation brand (Zagat); same terms
+    source: brand
+  - host: happycow.net
+    reason: "Terms: must not 'use any robot, spider ... to access, retrieve, scrape, or index the Services'; no public API"
+    source: research 2026-11-17 food-events-ideas SKIP
+  - host: ra.co
+    reason: "Resident Advisor terms 4.4(f): automated access needs prior written authorisation; blocks every major AI bot"
+    source: research 2026-11-17 food-events-ideas SKIP
+  - host: officeholidays.com
+    reason: "Terms ban 'systematic or automated data collection ... scraping' and robots"
+    source: research 2026-11-17 food-events-ideas SKIP
+  - host: cityofsydney.nsw.gov.au
+    reason: "City of Sydney conditions (whatson.cityofsydney.nsw.gov.au): must not 'use any automated scripting tools or software'"
+    source: research 2026-11-17 food-events-ideas SKIP
+  - host: visitbarcelona.com
+    reason: Turisme de Barcelona terms ban scraping, data mining and AI training (redirects to thisisbarcelona.com)
+    source: research 2026-11-17 food-events-ideas SKIP
+  - host: thisisbarcelona.com
+    reason: Turisme de Barcelona terms ban scraping, data mining and AI training
+    source: research 2026-11-17 food-events-ideas SKIP
+  - host: vietnam.travel
+    reason: "Terms §3: no 'automated tools (robots, spiders, crawlers, or scraping scripts)'"
+    source: research 2026-11-17 food-events-ideas SKIP
+  - host: indonesia.travel
+    reason: "Terms: no 'robot, spider, other automatic device ... to monitor or copy'"
+    source: research 2026-11-17 food-events-ideas SKIP
+  - host: visitwales.com
+    reason: "Terms 3.1.6 ban 'text or data mining, web scraping ... machine learning training' (text is OGL v3 but the site bans scraping)"
+    source: research 2026-11-17 food-events-ideas SKIP
+  - host: visitsingapore.com
+    reason: Terms require prior written permission for robots or spiders; its API (STB TIH) was discontinued 31 July 2025
+    source: research 2026-11-17 food-events-ideas SKIP
+  - host: afar.com
+    reason: "Terms §6(b) ban bots, spiders, scrapers and data mining; §6(c) bans AI use"
+    source: research 2026-11-17 food-events-ideas SKIP
+  - host: nationalgeographic.com
+    reason: Disney terms of use ban robots, scraping and building AI tools
+    source: research 2026-11-17 food-events-ideas SKIP
+  - host: opensignal.com
+    reason: "Terms: 'NO TEXT OR DATA MINING, WEB SCRAPING'; reports may not be reproduced for any commercial purpose without written consent"
+    source: research 2026-11-17 gaps SKIP
+  - host: mea.gov.in
+    reason: India MEA disclaimer requires explicit authorisation of the Ministry to reproduce; no open licence
+    source: research 2026-11-17 gaps SKIP
+  - host: exteriores.gob.es
+    reason: "Aviso legal: 'Su uso, reproducción, distribución... queda totalmente prohibida salvo que medie autorización expresa'"
+    source: research 2026-11-17 gaps SKIP
+  # Terms that forbid downloading or storing the site (raw-first capture would breach them).
+  - host: ireland.com
+    reason: "Tourism Ireland: 'No part of this site may be reproduced or stored in any ... electronic retrieval system' without permission"
+    source: research 2026-11-17 food-events-ideas SKIP
+  - host: austria.info
+    reason: "§11: 'nicht gestattet, die Website im Ganzen oder einzelne Teile davon herunterzuladen'"
+    source: research 2026-11-17 food-events-ideas SKIP
+  - host: visitflanders.com
+    reason: "Terms: 'strictly prohibited to store ... reproduce' without written consent"
+    source: research 2026-11-17 food-events-ideas SKIP
+  - host: visitmorocco.com
+    reason: "Terms: 'any partial or total use, reproduction or download of the site ... prohibited'"
+    source: research 2026-11-17 food-events-ideas SKIP
+  - host: southafrica.net
+    reason: "Terms 7.6.6: must not 'create a database by downloading and storing' content"
+    source: research 2026-11-17 food-events-ideas SKIP
+  - host: japan.travel
+    reason: "JNTO: content 'may not be reproduced, distributed ... copied or stored for public or private use'; ask JNTO for permission"
+    source: research 2026-11-17 food-events-ideas SKIP
+  - host: italia.it
+    reason: "Terms: 'non è consentito registrare tali contenuti ... su alcun tipo di supporto'"
+    source: research 2026-11-17 food-events-ideas SKIP
+  - host: turismoroma.it
+    reason: No licence or right of use; recording or copying the content is not allowed
+    source: research 2026-11-17 food-events-ideas SKIP
+  # robots.txt (or the site) answers 401/403 or a challenge to an honest bot: bot wall.
+  - host: usembassy.gov
+    reason: "robots.txt of www.usembassy.gov and fr.usembassy.gov answers 403 (verified 2026-11-17); covers every *.usembassy.gov country site"
+    source: seed:usembassy-list
+  - host: bus-data.dft.gov.uk
+    reason: robots.txt answers 403 to an honest bot (bot wall); ask DfT (bodsdata@dft.gov.uk) to allow VoyagerBot
+    source: research 2026-11-17 transport-visa-customs A10
+  - host: transit.dot.gov
+    reason: robots.txt answers 403 (Akamai Access Denied) to an honest bot
+    source: research 2026-11-17 transport-visa-customs A11
+  - host: transportation.gov
+    reason: robots.txt answers 403 (Akamai) to an honest bot
+    source: research 2026-11-17 gaps SKIP
+  - host: mofa.go.jp
+    reason: robots.txt answers 403 (Access Denied) to an honest bot
+    source: research 2026-11-17 transport-visa-customs B8
+  - host: dha.gov.za
+    reason: robots.txt answers 403 to an honest bot
+    source: research 2026-11-17 transport-visa-customs B21
+  - host: mpi.govt.nz
+    reason: Incapsula challenge on robots.txt (bot wall)
+    source: research 2026-11-17 transport-visa-customs C16
+  - host: download.gtfs.de
+    reason: robots.txt answers 403 to VoyagerBot (checked 2026-11-17); gtfs.de itself is not covered
+    source: seed:gtfs-de
+  - host: static.data.gov.hk
+    reason: robots.txt answers 403 AccessDenied to VoyagerBot (checked 2026-11-17); data.gov.hk is not covered
+    source: seed:hk-td-gtfs
+  - host: ireland.ie
+    reason: robots.txt answers 403 (CloudFront 'Request blocked'); www.dfa.ie redirects here
+    source: research 2026-11-17 gaps SKIP
+  - host: embassypages.com
+    reason: Cloudflare challenge ('Just a moment...') to an honest bot
+    source: research 2026-11-17 gaps SKIP
+  - host: opencellid.org
+    reason: robots.txt answers 403 to an honest bot
+    source: research 2026-11-17 gaps SKIP
+  - host: budgetyourtrip.com
+    reason: Terms page answers 403 to VoyagerBot (bot wall); robots also disallows most data paths
+    source: research 2026-11-17 gaps SKIP
+  - host: visitbritain.com
+    reason: robots.txt answers 403 to an honest bot
+    source: research 2026-11-17 food-events-ideas SKIP
+  - host: visitnorway.com
+    reason: robots.txt answers 403 to an honest bot; licence is personal and non-commercial only
+    source: research 2026-11-17 food-events-ideas SKIP
+  - host: visittheusa.com
+    reason: robots.txt answers 403 to an honest bot (Brand USA)
+    source: research 2026-11-17 food-events-ideas SKIP
+  - host: visitbrasil.com
+    reason: robots.txt answers 403 to an honest bot
+    source: research 2026-11-17 food-events-ideas SKIP
+  - host: visitmelbourne.com
+    reason: robots.txt answers 403 to an honest bot (ATDW is the API route)
+    source: research 2026-11-17 food-events-ideas SKIP
+  - host: sftravel.com
+    reason: robots.txt answers 403 to an honest bot
+    source: research 2026-11-17 food-events-ideas SKIP
+  - host: fiji.travel
+    reason: robots.txt answers 403 to an honest bot (Tourism Fiji)
+    source: research 2026-11-17 food-events-ideas SKIP
+  - host: experienceegypt.eg
+    reason: robots.txt answers 403 to an honest bot
+    source: research 2026-11-17 food-events-ideas SKIP
+  - host: discoverhongkong.com
+    reason: robots.txt answers 403 to an honest bot (DATA.GOV.HK is the open route)
+    source: research 2026-11-17 food-events-ideas SKIP
+  - host: roadsideamerica.com
+    reason: robots.txt answers 403 to an honest bot
+    source: research 2026-11-17 food-events-ideas SKIP
+  - host: spottedbylocals.com
+    reason: robots.txt answers 403 to an honest bot
+    source: research 2026-11-17 food-events-ideas SKIP
+  - host: visitlondon.com
+    reason: sitemap answers 403 to an honest bot (bot wall)
+    source: research 2026-11-17 food-events-ideas SKIP
+  - host: magicalkenya.com
+    reason: sitemap answers 403; robots blocks GPTBot, ClaudeBot and Google-Extended
+    source: research 2026-11-17 food-events-ideas SKIP
+  - host: capetown.travel
+    reason: Cloudflare challenge ('Just a moment...') on sitemap.rss
+    source: research 2026-11-17 food-events-ideas SKIP
+  # Hijacked or lapsed domains.
+  - host: welcomenepal.com
+    reason: robots.txt redirects to a gambling site (domain hijacked or lapsed); never crawl
+    source: research 2026-11-17 food-events-ideas (conflicts)

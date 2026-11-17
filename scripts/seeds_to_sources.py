@@ -52,6 +52,7 @@ CC_BY_SA = ("share_alike", "CC-BY-SA-4.0", "https://creativecommons.org/licenses
 ODBL = ("share_alike", "ODbL-1.0", "https://opendatacommons.org/licenses/odbl/1-0/")
 PD = ("open", None, None)
 COPYRIGHT = ("facts_only", None, None)
+ETALAB = ("open", "etalab-2.0", "https://www.etalab.gouv.fr/licence-ouverte-open-licence/")
 
 LICENCES: dict[str, tuple[str, str | None, str | None]] = {
     "Public domain": PD,
@@ -118,6 +119,49 @@ LICENCES: dict[str, tuple[str, str | None, str | None]] = {
     "UNESCO terms, attribution (verify)": ("restricted", None, None),
     "IMF terms (attribution)": ("restricted", None, None),
     "MIT (scraped from passportindex.org; provenance caveat)": ("restricted", None, None),
+    # --- Batch 2 (research 2026-11-17) ---------------------------------------------------
+    "Licence Ouverte 2.0": ETALAB,
+    "Licence Ouverte 2.0 or ODbL per dataset": ETALAB,  # ODbL datasets need their own spec
+    "CC BY 3.0 NZ": ("open", None, "https://creativecommons.org/licenses/by/3.0/nz/"),
+    "CC BY 4.0 (government notice, verify)": CC_BY,
+    "NLOD 2.0": ("open", "NLOD-2.0", "https://data.norge.no/nlod/en/2.0"),
+    "ODMCH terms of use": ("api_terms", None, "https://opentransportdata.swiss/en/terms-of-use/"),
+    "Singapore Open Data Licence 1.0": (
+        "open", None, "https://datamall.lta.gov.sg/content/datamall/en/SingaporeOpenDataLicence.html",
+    ),
+    "DATA.GOV.HK terms (attribution)": ("open", None, "https://data.gov.hk/en/terms-and-conditions"),
+    "GODL-India": ("open", None, "https://data.gov.in/government-open-data-license-india"),
+    "CC0 metadata; per-feed licences": ("open", "CC0-1.0", None),
+    "CC0 (NDOV Loket, verify in feed)": ("open", "CC0-1.0", None),
+    "CC0 / CC BY 4.0 per feed": ("open", None, None),
+    "TfL Transport Data Service licence (OGL v2 based)": (
+        "open", None, "https://tfl.gov.uk/corporate/terms-and-conditions/transport-data-service",
+    ),
+    "PDL 1.0 (Japan)": ("open", None, None),
+    "Government of Japan Standard Terms of Use 2.0": ("open", None, None),
+    "US government data (Recreation.gov)": PD,
+    "Madrid open data (attribution)": ("open", None, None),
+    "OGL-Toronto": ("open", None, "https://open.toronto.ca/open-data-license/"),
+    "NYC Open Data terms": ("open", None, None),
+    "OGDL-Taiwan 1.0": ("open", None, "https://data.gov.tw/license"),
+    "Open per item (CC0/CC BY; CC BY-SA kept apart)": ("open", None, None),
+    "Canada.ca terms (facts only; commercial redistribution needs permission)": (
+        "facts_only", None, "https://www.canada.ca/en/transparency/terms.html",
+    ),
+    "Tourism board copyright; facts only": COPYRIGHT,
+    "Government site; terms unverified": COPYRIGHT,
+    "KOGL (type per page unconfirmed)": COPYRIGHT,
+    "Copyright; terms not found": COPYRIGHT,
+    "511 SF Bay open data terms": ("api_terms", None, None),
+    "MTA developer data terms (not yet read)": ("api_terms", None, None),
+    "ODPT licences (per operator)": ("api_terms", None, None),
+    "Registration portal; licence per dataset": ("api_terms", None, None),
+    "Edinburgh Festivals Listings API Licence v2.0": ("api_terms", None, None),
+    "Visit Finland DataHub ToS": ("api_terms", None, None),
+    "ATDW Distributor Licence Agreement": ("api_terms", None, None),
+    "Calendarific API ToS": ("api_terms", None, None),
+    "Bandsintown API terms (written consent)": ("api_terms", None, None),
+    "Auswärtiges Amt OpenData conditions": ("api_terms", None, None),
 }
 
 # Attribution strings (sources.md §18). Default: "<name>".
@@ -177,7 +221,13 @@ EDITORIAL = {
 }
 
 
+# Per-source class for batch-2 sources (set by _src below).
+SOURCE_CLASS: dict[str, str] = {}
+
+
 def source_class(sid: str) -> str:
+    if sid in SOURCE_CLASS:
+        return SOURCE_CLASS[sid]
     if sid in OFFICIAL:
         return "official"
     if sid in COMMERCIAL_API:
@@ -297,6 +347,13 @@ SEED_URL_OVERRIDE = {
     "nager-date": "https://date.nager.at/api/v3/AvailableCountries",
 }
 
+TIMEOUT_AI = (
+    "Time Out's terms of use (https://www.timeout.com/terms-of-use, 11.4, read 2026-11-17) say it "
+    "'does not permit the use of the Content on any artificial intelligence (AI) or machine "
+    "learning platform ... including ... retrieval-augmented generation' without prior written "
+    "approval; timeout.com is denylisted until Time Out approves."
+)
+
 STATE_DEPT_403 = (
     "travel.state.gov answers 403 to VoyagerBot's robots.txt (bot wall) — do not crawl"
 )
@@ -315,7 +372,24 @@ DISABLED = {
     "openflights": "Stale since 2014; fallback only.",
     "ecmwf-open": "GRIB2 forecasts; only useful when self-hosting a forecast model.",
     "se-api": "v1 forums = Stack Exchange data dump only (spec §5.10).",
-    "ricksteves-forum": "v1 forums = Stack Exchange data dump only (spec §5.10, GDPR).",
+    "ricksteves-forum": (
+        "Rick Steves' terms (https://ricksteves.com/about-us/terms-of-service, read 2026-11-17) "
+        "ban 'any robot, spider, crawler, scraper or other automated means or interface not "
+        "provided by us to access the Services'; ricksteves.com is denylisted. (Also: v1 forums "
+        "= Stack Exchange data dump only, spec §5.10, GDPR.)"
+    ),
+    "timeout-blog-rss": TIMEOUT_AI,
+    "timeout-news-sitemap": TIMEOUT_AI,
+    "usembassy-list": (
+        "robots.txt of www.usembassy.gov (and fr.usembassy.gov) answers 403 to VoyagerBot "
+        "(verified 2026-11-17): bot wall, do not crawl; usembassy.gov is denylisted."
+    ),
+    "passport-index-dataset": (
+        "The repo says MIT, but the data is scraped from passportindex.org (Arton Capital), whose "
+        "robots.txt blocks GPTBot, ClaudeBot, CCBot and Google-Extended and sends Content-Signal "
+        "search=yes,ai-train=no,use=reference; the repo owner cannot relicence Arton's "
+        "compilation (research 2026-11-17). passportindex.org is denylisted."
+    ),
     # robots.txt disallows these routes for every user agent (checked 2026-11-16); we obey.
     "wikidata-aviation": (
         "robots.txt of query.wikidata.org disallows /sparql for all agents (checked 2026-11-16). "
@@ -570,6 +644,1554 @@ DISPLAY_REQUIREMENTS = {
 }
 MAX_RETENTION_DAYS = {"ticketmaster": 30, "seatgeek": 30, "eventbrite-api": 30}
 
+# ---------------------------------------------------------------------------------------
+# Batch 2 (research 2026-11-17, owner request "add all relevant, pertinent sources"):
+# public transport, visa, customs, embassies, events and official tourism boards. Every
+# source names its tables in one `_src` call. A source is on only when robots.txt allows us
+# (checked), its terms are quoted and allow it, its licence is clear and the crawler can
+# already run it (html, rss or sitemap); every other one is off with the reason, prefixed:
+#   "adapter pending: <what>"      needs a new SourceAdapter (GTFS, CKAN, open-data APIs...)
+#   "needs an API key: <sign-up>"  the owner must register a key (needs_key + key_secret)
+#   "terms not yet confirmed: ..." terms unread or unquotable (HOLD rows included)
+#   "licence: ..."                 licence class not settled
+#   "robots.txt ..."               robots.txt answers 401/403/5xx, redirects or times out
+#   "owner decision: ..."          the owner must decide (sg-customs-travellers)
+# Kinds: customs rules map to tip/packing_hint, hospitals to place, public holidays to event
+# and country price indicators to tip (no new kinds; all such sources are off for now).
+# ---------------------------------------------------------------------------------------
+EXTRA_SEEDS: dict[str, list[str]] = {}
+EXTRA_FEEDS: dict[str, list[str]] = {}
+RENDER: dict[str, str] = {}
+BATCH2_DEFAULT_BUDGET = 300
+
+
+def _src(sid: str, sections: list[str], why: str, *, cls: str, kinds: list[str],
+         llm: list[str] = (), off: str | None = None, depth: int | None = None,
+         budget: int | None = None, delay: int | None = None, seeds: list[str] = (),
+         sitemaps: list[str] = (), feeds: list[str] = (), include: list[str] = (),
+         exclude: list[str] = (), render: str | None = None, attribution: str | None = None,
+         display: str | None = None, retention: int | None = None) -> None:
+    """Registers a batch-2 source in every table it needs."""
+    RELEVANCE[sid] = (sections, why)
+    SOURCE_CLASS[sid] = cls
+    KINDS_OVERRIDE[sid] = list(kinds)
+    LLM_KINDS_OVERRIDE[sid] = list(llm)
+    DAILY_BUDGET[sid] = budget or BATCH2_DEFAULT_BUDGET
+    if off:
+        DISABLED[sid] = off
+    if depth is not None:
+        MAX_DEPTH[sid] = depth
+    if delay is not None:
+        MIN_DELAY[sid] = delay
+    for table, value in ((EXTRA_SEEDS, seeds), (EXTRA_SITEMAPS, sitemaps), (EXTRA_FEEDS, feeds),
+                         (INCLUDE, include), (EXCLUDE, exclude)):
+        if value:
+            table[sid] = list(value)
+    if render:
+        RENDER[sid] = render
+    if attribution:
+        ATTRIBUTION[sid] = attribution
+    if display:
+        DISPLAY_REQUIREMENTS[sid] = display
+    if retention:
+        MAX_RETENTION_DAYS[sid] = retention
+
+
+_src(
+    'gtfs-de',
+    ['getting_around'],
+    'Germany-wide rail, regional and city timetables (routes, lines and frequencies) for Local transportation.',
+    cls='reference',
+    kinds=['transport_option'],
+    off='robots.txt of download.gtfs.de answers 403 to VoyagerBot (checked 2026-11-17): that origin is do-not-crawl (denylisted); also adapter pending: GTFS static zip adapter (download, verify, index routes/stops per feed)',
+    seeds=['https://download.gtfs.de/germany/rv_free/latest.zip', 'https://download.gtfs.de/germany/nv_free/latest.zip'],
+    attribution='DELFI e.V. / gtfs.de, CC BY 4.0',
+)
+_src(
+    'ovapi-gtfs-nl',
+    ['getting_around'],
+    'All Dutch train, bus, tram and metro timetables for Local transportation.',
+    cls='reference',
+    kinds=['transport_option'],
+    off='adapter pending: GTFS static zip adapter (download, verify, index routes/stops per feed); licence: confirm CC0 in the feed README before enabling',
+)
+_src(
+    'transport-data-gouv',
+    ['getting_around'],
+    "France's national register of every GTFS and NeTEx feed with links, licences and coverage, for city transport and rail in Local transportation.",
+    cls='official',
+    kinds=['transport_option'],
+    off='adapter pending: NAP dataset-register walker (dataset JSON, then per-dataset GTFS/NeTEx resources; ODbL datasets need their own share_alike spec)',
+)
+_src(
+    'opentransportdata-swiss',
+    ['getting_around'],
+    'The national Swiss timetable (SBB, PostBus, city transit, boats and cable cars) for Local transportation.',
+    cls='official',
+    kinds=['transport_option'],
+    off='adapter pending: GTFS static zip adapter (download, verify, index routes/stops per feed) (resource permalink zip)',
+    display='Cite opentransportdata.swiss as the source of the raw data.',
+)
+_src(
+    'tfnsw-opendata',
+    ['getting_around'],
+    'Sydney and New South Wales timetables for trains, buses, ferries and light rail, for Local transportation.',
+    cls='official',
+    kinds=['transport_option'],
+    off='needs an API key: owner must register a key at https://opendata.transport.nsw.gov.au/ (free); robots.txt of api.transport.nsw.gov.au answers 500 (checked 2026-11-17), so disallowed until readable; adapter pending: GTFS static zip adapter (download, verify, index routes/stops per feed)',
+)
+_src(
+    'vic-gtfs',
+    ['getting_around'],
+    'Melbourne and Victoria train, tram and bus timetables for Local transportation.',
+    cls='official',
+    kinds=['transport_option'],
+    off='adapter pending: CKAN package_show reader (resolve the resource URL, then a JSON/CSV event reader); adapter pending: GTFS static zip adapter (download, verify, index routes/stops per feed)',
+)
+_src(
+    'translink-seq-gtfs',
+    ['getting_around'],
+    'Brisbane, Gold Coast and Sunshine Coast buses, trains, ferries and trams, for Local transportation.',
+    cls='official',
+    kinds=['transport_option'],
+    off='adapter pending: GTFS static zip adapter (download, verify, index routes/stops per feed)',
+)
+_src(
+    'sfbay-511',
+    ['getting_around'],
+    'One feed covering about 30 San Francisco Bay Area transit operators, for Local transportation.',
+    cls='official',
+    kinds=['transport_option'],
+    off='needs an API key: owner must register a key at https://511.org/open-data/token (free); adapter pending: GTFS static zip adapter (download, verify, index routes/stops per feed)',
+    display='Acknowledge 511.org as the data provider.',
+)
+_src(
+    'tfl-unified-api',
+    ['getting_around'],
+    'London lines, stations, fares, service status and step-free access for Local transportation.',
+    cls='official',
+    kinds=['transport_option'],
+    off='needs an API key: owner must register a key at https://api-portal.tfl.gov.uk/ (free); adapter pending: TfL Unified API reader (lines, stop points, fares)',
+    seeds=['https://api.tfl.gov.uk/StopPoint/Mode/tube'],
+    attribution='Powered by TfL Open Data',
+)
+_src(
+    'entur-gtfs',
+    ['getting_around'],
+    'All Norwegian public transport, including trains, ferries and Hurtigruten, for Local transportation.',
+    cls='official',
+    kinds=['transport_option'],
+    off='adapter pending: GTFS static zip adapter (download, verify, index routes/stops per feed), plus the ET-Client-Name header Entur requires',
+    attribution='Data made available by Entur',
+)
+_src(
+    'trafiklab-gtfs-sverige',
+    ['getting_around'],
+    'All Swedish public transport timetables for Local transportation.',
+    cls='official',
+    kinds=['transport_option'],
+    off='needs an API key: owner must register a key at https://www.trafiklab.se/ (free); adapter pending: GTFS static zip adapter (download, verify, index routes/stops per feed)',
+)
+_src(
+    'digitransit',
+    ['getting_around'],
+    'Finnish timetables (HSL, VR and regional transit) for Local transportation.',
+    cls='official',
+    kinds=['transport_option'],
+    off='needs an API key: owner must register a key at https://portal-api.digitransit.fi/ (free); adapter pending: GTFS static zip adapter (download, verify, index routes/stops per feed)',
+)
+_src(
+    'lta-datamall',
+    ['getting_around'],
+    'Singapore bus routes, bus stops and MRT service disruptions for Local transportation.',
+    cls='official',
+    kinds=['transport_option'],
+    off='needs an API key: owner must register a key at https://datamall.lta.gov.sg/content/datamall/en/request-for-api.html (free); adapter pending: DataMall paged JSON reader',
+    seeds=['https://datamall2.mytransport.sg/ltaodataservice/BusStops', 'https://datamall2.mytransport.sg/ltaodataservice/TrainServiceAlerts'],
+    attribution='Contains information from LTA DataMall, made available under the Singapore Open Data Licence 1.0',
+)
+_src(
+    'hk-td-gtfs',
+    ['getting_around'],
+    'Hong Kong bus, minibus, ferry, tram and MTR routes and headways for Local transportation.',
+    cls='official',
+    kinds=['transport_option'],
+    off='robots.txt of static.data.gov.hk answers 403 (checked 2026-11-17): that origin is do-not-crawl (denylisted); also adapter pending: GTFS static zip adapter (download, verify, index routes/stops per feed)',
+)
+_src(
+    'delhi-otd',
+    ['getting_around'],
+    'Delhi DTC and cluster bus routes and stops for Local transportation.',
+    cls='official',
+    kinds=['transport_option'],
+    off='needs an API key: owner must register a key at https://otd.delhi.gov.in/ (free); adapter pending: GTFS static zip adapter (download, verify, index routes/stops per feed)',
+)
+_src(
+    'auckland-gtfs',
+    ['getting_around'],
+    'Auckland buses, trains and ferries for Local transportation.',
+    cls='official',
+    kinds=['transport_option'],
+    off='adapter pending: GTFS static zip adapter (download, verify, index routes/stops per feed)',
+)
+_src(
+    'mta-gtfs',
+    ['getting_around'],
+    'New York City subway, bus and commuter-rail timetables for Local transportation.',
+    cls='official',
+    kinds=['transport_option'],
+    off='terms not yet confirmed: MTA developer data terms not yet read and quoted; adapter pending: GTFS static zip adapter (download, verify, index routes/stops per feed)',
+    seeds=['https://rrgtfsfeeds.s3.amazonaws.com/gtfs_b.zip'],
+)
+_src(
+    'mobility-catalogs',
+    ['getting_around'],
+    'The worldwide catalogue of more than 2,000 GTFS feeds with download URLs and licences, the discovery list for city transit in Local transportation.',
+    cls='reference',
+    kinds=['transport_option'],
+    off='adapter pending: catalogue walker (one JSON file per feed; needs a listing route such as the GitHub tree API or codeload tarball, robots-checked first)',
+)
+_src(
+    'delfi-opendata-oepnv',
+    ['getting_around'],
+    "Germany's official nationwide public-transport timetables (DELFI) for Local transportation.",
+    cls='reference',
+    kinds=['transport_option'],
+    off='needs an account: owner must register at https://www.opendata-oepnv.de/ (free); the crawler never logs in, so a token-based download route is needed; adapter pending: GTFS static zip adapter (download, verify, index routes/stops per feed)',
+)
+_src(
+    'odpt-japan',
+    ['getting_around'],
+    'Tokyo and Japanese rail, subway and bus timetables and stations for Local transportation.',
+    cls='reference',
+    kinds=['transport_option'],
+    off='needs an API key: owner must register a key at https://developer.odpt.org/ (free, registration with approval; per-operator licences, some limited); adapter pending: ODPT API reader',
+)
+_src(
+    'spain-nap',
+    ['getting_around'],
+    "Spain's official register of public-transport feeds (rail, bus, city transit) for Local transportation.",
+    cls='official',
+    kinds=['transport_option'],
+    off='needs an account: owner must register at https://nap.transportes.gob.es/ (free); licence per dataset to read; adapter pending: GTFS static zip adapter (download, verify, index routes/stops per feed)',
+)
+_src(
+    'eu-etias-ees',
+    ['visa'],
+    'Who needs ETIAS, its fee, validity and start date, and EES biometric registration at Schengen borders, for the Visa section.',
+    cls='official',
+    kinds=['visa_rule'],
+    llm=['visa_rule'],
+    depth=2,
+    budget=100,
+    seeds=['https://travel-europe.europa.eu/en/ees', 'https://travel-europe.europa.eu/en/etias/who-should-apply'],
+    include=['^https://travel-europe\\.europa\\.eu/(?:en/etias|en/ees)'],
+    render='always',
+    attribution='© European Union, travel-europe.europa.eu, CC BY 4.0',
+)
+_src(
+    'eu-home-visa-policy',
+    ['visa'],
+    'The Schengen visa-required and visa-free nationality lists, airport transit visas and visa waiver agreements, for the Visa section.',
+    cls='official',
+    kinds=['visa_rule'],
+    llm=['visa_rule'],
+    depth=1,
+    budget=300,
+    seeds=['https://home-affairs.ec.europa.eu/policies/schengen/visa-policy_en'],
+    include=['^https://home-affairs\\.ec\\.europa\\.eu/(?:policies/schengen)'],
+    attribution='© European Union, DG Migration and Home Affairs, CC BY 4.0',
+)
+_src(
+    'au-homeaffairs-visas',
+    ['visa'],
+    "Which passports qualify for Australia's ETA or eVisitor and the visitor visa rules, for the Visa section.",
+    cls='official',
+    kinds=['visa_rule'],
+    llm=['visa_rule'],
+    off="terms not yet confirmed: the Home Affairs copyright page answered 403 to the fetcher (possible bot wall); not covered by the owner's 2026-11-17 acceptance",
+    depth=2,
+    budget=100,
+    seeds=['https://immi.homeaffairs.gov.au/visas/getting-a-visa/visa-listing/electronic-travel-authority-601', 'https://immi.homeaffairs.gov.au/visas/getting-a-visa/visa-listing/evisitor-651'],
+    include=['^https://immi\\.homeaffairs\\.gov\\.au/(?:visas/getting-a-visa/visa-listing)'],
+)
+_src(
+    'ircc-entry-requirements',
+    ['visa'],
+    'Whether each nationality needs a Canadian visitor visa, an eTA or neither, plus transit rules, for the Visa section.',
+    cls='official',
+    kinds=['visa_rule'],
+    llm=['visa_rule'],
+    depth=1,
+    budget=100,
+    include=['^https://www\\.canada\\.ca/(?:en/immigration-refugees-citizenship/services/visit-canada/)'],
+)
+_src(
+    'india-evisa',
+    ['visa'],
+    "India's e-Visa eligible nationalities, types, validity and ports of entry, for the Visa section.",
+    cls='official',
+    kinds=['visa_rule'],
+    llm=['visa_rule'],
+    depth=1,
+    budget=100,
+    include=['^https://indianvisaonline\\.gov\\.in/(?:evisa/)'],
+)
+_src(
+    'nia-china-visa-free',
+    ['visa'],
+    "China's 240-hour visa-free transit and unilateral visa-free nationality lists, for the Visa section.",
+    cls='official',
+    kinds=['visa_rule'],
+    llm=['visa_rule'],
+    depth=2,
+    budget=100,
+    include=['^https://en\\.nia\\.gov\\.cn/(?:n147418/)'],
+)
+_src(
+    'uae-visa-uae',
+    ['visa'],
+    'UAE visa-on-arrival nationalities and tourist visa types, for the Visa section.',
+    cls='official',
+    kinds=['visa_rule'],
+    llm=['visa_rule'],
+    depth=2,
+    budget=100,
+    include=['^https://u\\.ae/(?:en/information-and-services/visa-and-emirates-id)'],
+)
+_src(
+    'thai-evisa',
+    ['visa'],
+    "Thailand's visa-exemption list and e-Visa categories, for the Visa section.",
+    cls='official',
+    kinds=['visa_rule'],
+    llm=['visa_rule'],
+    depth=1,
+    budget=100,
+    include=['^https://www\\.thaievisa\\.go\\.th/(?:visa/)'],
+    render='auto',
+)
+_src(
+    'korea-keta',
+    ['visa'],
+    'Which nationalities need a K-ETA for South Korea and which are exempt, for the Visa section.',
+    cls='official',
+    kinds=['visa_rule'],
+    llm=['visa_rule'],
+    depth=1,
+    budget=100,
+    include=['^https://www\\.k-eta\\.go\\.kr/(?:portal/guide/)'],
+)
+_src(
+    'korea-visa-portal',
+    ['visa'],
+    "South Korea's visa-free entry periods by nationality, for the Visa section.",
+    cls='official',
+    kinds=['visa_rule'],
+    llm=['visa_rule'],
+    depth=1,
+    budget=100,
+    include=['^https://www\\.visa\\.go\\.kr/(?:openPage\\.do)'],
+)
+_src(
+    'nz-immigration',
+    ['visa'],
+    "New Zealand's visa-waiver countries, NZeTA, visitor levy and transit rules, for the Visa section.",
+    cls='official',
+    kinds=['visa_rule'],
+    llm=['visa_rule'],
+    depth=1,
+    budget=300,
+    seeds=['https://www.immigration.govt.nz/new-zealand-visas/preparing-a-visa-application/visa-waiver-countries-and-territories'],
+    include=['^https://www\\.immigration\\.govt\\.nz/(?:new-zealand-visas/|nzeta)'],
+    attribution='© Crown copyright, Immigration New Zealand, CC BY 3.0 NZ',
+)
+_src(
+    'cbp-travel',
+    ['visa', 'tips', 'packing'],
+    'Visa Waiver Program countries and ESTA rules for Visa, plus US duty-free limits, prohibited and agricultural items and the $10,000 cash declaration for Travel tips and Packing.',
+    cls='official',
+    kinds=['visa_rule', 'tip', 'packing_hint'],
+    llm=['visa_rule', 'tip', 'packing_hint'],
+    depth=2,
+    budget=300,
+    seeds=['https://www.cbp.gov/travel/international-visitors/esta', 'https://www.cbp.gov/travel/us-citizens/know-before-you-go', 'https://www.cbp.gov/travel/international-visitors/kbyg/prohibited-restricted', 'https://www.cbp.gov/travel/international-visitors/agricultural-items'],
+    include=['^https://www\\.cbp\\.gov/(?:travel/)'],
+    attribution='U.S. Customs and Border Protection',
+)
+_src(
+    'brazil-mre-visas',
+    ['visa'],
+    "Brazil's visa requirement table by nationality, for the Visa section.",
+    cls='official',
+    kinds=['visa_rule'],
+    llm=['visa_rule'],
+    depth=1,
+    budget=100,
+    include=['^https://www\\.gov\\.br/(?:mre/pt-br/assuntos/portal-consular/vistos)'],
+)
+_src(
+    'vietnam-evisa',
+    ['visa'],
+    "Vietnam's e-Visa rules and ports of entry, for the Visa section.",
+    cls='official',
+    kinds=['visa_rule'],
+    llm=['visa_rule'],
+    depth=1,
+    budget=100,
+)
+_src(
+    'malaysia-imi-visa',
+    ['visa'],
+    "Malaysia's visa-required and visa-free nationalities and lengths of stay, for the Visa section.",
+    cls='official',
+    kinds=['visa_rule'],
+    llm=['visa_rule'],
+    depth=1,
+    budget=100,
+    include=['^https://www\\.imi\\.gov\\.my/(?:index.php/perkhidmatan-utama/pas-lawatan/)'],
+)
+_src(
+    'enwiki-visa-requirements',
+    ['visa'],
+    'About 199 passport-by-destination tables (visa-free, eVisa, visa on arrival, days) used only to cross-check official visa rules in the Visa section.',
+    cls='reference',
+    kinds=[],
+    off="adapter pending: enwiki dump extractor for the 'Visa requirements for X citizens' tables (reference class cannot yield visa_rule; cross-check only)",
+    attribution='Text from Wikipedia contributors, CC BY-SA 4.0',
+)
+_src(
+    'eu-customs-travellers',
+    ['tips', 'packing'],
+    'EU duty-free allowances for alcohol and tobacco, the 10,000 euro cash declaration and banned counterfeit goods, for Travel tips and Packing.',
+    cls='official',
+    kinds=['tip', 'packing_hint'],
+    llm=['tip', 'packing_hint'],
+    depth=1,
+    budget=200,
+    seeds=['https://taxation-customs.ec.europa.eu/travelling_en'],
+    include=['^https://taxation-customs\\.ec\\.europa\\.eu/(?:travelling|customs-4/customs-security/cash-controls)'],
+    attribution='© European Union, DG TAXUD, CC BY 4.0',
+)
+_src(
+    'eu-food-pets-travel',
+    ['tips', 'packing'],
+    'The EU pet passport, rabies and microchip rules and the ban on meat and dairy in luggage from outside the EU, for Travel tips and Packing.',
+    cls='official',
+    kinds=['tip', 'packing_hint'],
+    llm=['tip', 'packing_hint'],
+    depth=1,
+    budget=150,
+    seeds=['https://food.ec.europa.eu/animals/movement-pets_en'],
+    include=['^https://food\\.ec\\.europa\\.eu/(?:animals/movement-pets|[^?#]*personal-imports)'],
+    attribution='© European Union, DG SANTE, CC BY 4.0',
+)
+_src(
+    'govuk-customs',
+    ['tips', 'packing'],
+    'UK duty-free allowances, the 10,000 pound cash rule, banned meat and dairy and pet entry rules, for Travel tips and Packing.',
+    cls='official',
+    kinds=['tip', 'packing_hint'],
+    llm=['tip', 'packing_hint'],
+    depth=1,
+    budget=100,
+    delay=10,
+    seeds=['https://www.gov.uk/duty-free-goods', 'https://www.gov.uk/bringing-cash-into-uk', 'https://www.gov.uk/bringing-food-animals-plants-into-uk', 'https://www.gov.uk/bring-pet-to-great-britain'],
+    include=['^https://www\\.gov\\.uk/(?:bringing-goods-into-uk-personal-use|duty-free-goods|bringing-cash-into-uk|bringing-food-animals-plants-into-uk|bring-pet-to-great-britain)'],
+)
+_src(
+    'aphis-pet-travel',
+    ['tips', 'packing'],
+    'Rules for taking pets out of or into the US, by destination country, for Travel tips and Packing.',
+    cls='official',
+    kinds=['tip', 'packing_hint'],
+    llm=['tip', 'packing_hint'],
+    depth=2,
+    budget=200,
+    include=['^https://www\\.aphis\\.usda\\.gov/(?:pet-travel)'],
+    attribution='USDA Animal and Plant Health Inspection Service',
+)
+_src(
+    'abf-travellers',
+    ['tips', 'packing'],
+    "Australia's duty-free limits, prohibited and restricted goods and the AUD 10,000 cash reporting rule, for Travel tips and Packing.",
+    cls='official',
+    kinds=['tip', 'packing_hint'],
+    llm=['tip', 'packing_hint'],
+    depth=2,
+    budget=150,
+    seeds=['https://www.abf.gov.au/entering-and-leaving-australia/duty-free-concessions', 'https://www.abf.gov.au/entering-and-leaving-australia/crossing-the-border/currency-reporting'],
+    include=['^https://www\\.abf\\.gov\\.au/(?:entering-and-leaving-australia/)'],
+)
+_src(
+    'cbsa-travellers',
+    ['tips', 'packing'],
+    "Canada's personal exemptions, restricted goods and the CAD 10,000 cash reporting rule, for Travel tips and Packing.",
+    cls='official',
+    kinds=['tip', 'packing_hint'],
+    llm=['tip', 'packing_hint'],
+    depth=2,
+    budget=150,
+    seeds=['https://www.cbsa-asfc.gc.ca/travel-voyage/declare-eng.html', 'https://www.cbsa-asfc.gc.ca/travel-voyage/ifcrc-rpcepc-eng.html'],
+    include=['^https://www\\.cbsa-asfc\\.gc\\.ca/(?:travel-voyage/)'],
+    attribution='Canada Border Services Agency',
+)
+_src(
+    'cfia-travellers',
+    ['tips', 'packing'],
+    'Which food, plants and animals travellers may bring into Canada, for Travel tips and Packing.',
+    cls='official',
+    kinds=['tip', 'packing_hint'],
+    llm=['tip', 'packing_hint'],
+    depth=1,
+    budget=100,
+    include=['^https://inspection\\.canada\\.ca/(?:en/importing-food-plants-animals/)'],
+    attribution='Canadian Food Inspection Agency',
+)
+_src(
+    'japan-customs-passengers',
+    ['tips', 'packing'],
+    "Japan's duty-free allowances, prohibited items and the one-million-yen cash declaration, for Travel tips and Packing.",
+    cls='official',
+    kinds=['tip', 'packing_hint'],
+    llm=['tip', 'packing_hint'],
+    depth=1,
+    budget=150,
+    seeds=['https://www.customs.go.jp/english/summary/passenger.htm'],
+    include=['^https://www\\.customs\\.go\\.jp/(?:english/summary/|english/c-answer_e/kotsu/)'],
+    attribution='Japan Customs (PDL 1.0)',
+)
+_src(
+    'japan-maff-aqs',
+    ['tips', 'packing'],
+    'Rules and bans for bringing pets, meat and sausages into Japan, for Travel tips and Packing.',
+    cls='official',
+    kinds=['tip', 'packing_hint'],
+    llm=['tip', 'packing_hint'],
+    depth=2,
+    budget=150,
+    seeds=['https://www.maff.go.jp/aqs/english/animal/dog/import-other.html'],
+    include=['^https://www\\.maff\\.go\\.jp/(?:aqs/english/)'],
+    attribution='Animal Quarantine Service, MAFF Japan',
+)
+_src(
+    'sg-customs-travellers',
+    ['tips', 'packing'],
+    "Singapore's GST relief, duty-free concession, no duty-free cigarettes and prohibited goods (chewing gum, e-cigarettes), for Travel tips and Packing.",
+    cls='official',
+    kinds=['tip', 'packing_hint'],
+    llm=['tip', 'packing_hint'],
+    depth=1,
+    budget=100,
+    include=['^https://www\\.customs\\.gov\\.sg/(?:individuals/going-through-customs)'],
+)
+_src(
+    'dubai-customs-passengers',
+    ['tips', 'packing'],
+    'UAE duty-free allowances and banned items (medicines, e-cigarettes), for Travel tips and Packing.',
+    cls='official',
+    kinds=['tip', 'packing_hint'],
+    llm=['tip', 'packing_hint'],
+    depth=1,
+    budget=100,
+    include=['^https://www\\.dubaicustoms\\.gov\\.ae/(?:en/)'],
+)
+_src(
+    'cbic-baggage',
+    ['tips', 'packing'],
+    "India's duty-free baggage allowance, the currency declaration and prohibited items, for Travel tips and Packing.",
+    cls='official',
+    kinds=['tip', 'packing_hint'],
+    llm=['tip', 'packing_hint'],
+    depth=1,
+    budget=100,
+    include=['^https://www\\.cbic\\.gov\\.in/[^?#]*(?:[Bb]aggage|[Tt]raveller)'],
+)
+_src(
+    'nz-customs-travellers',
+    ['tips', 'packing'],
+    "New Zealand's allowances, the NZD 10,000 cash rule and the biosecurity food declaration, for Travel tips and Packing.",
+    cls='official',
+    kinds=['tip', 'packing_hint'],
+    llm=['tip', 'packing_hint'],
+    depth=1,
+    budget=150,
+    seeds=['https://www.customs.govt.nz/personal/travel-to-and-from-nz/'],
+    include=['^https://www\\.customs\\.govt\\.nz/(?:personal/travel-to-and-from-nz/)'],
+)
+_src(
+    'hk-customs-travellers',
+    ['tips', 'packing'],
+    'Hong Kong duty-free concessions for alcohol and tobacco and the HK$120,000 cash declaration, for Travel tips and Packing.',
+    cls='official',
+    kinds=['tip', 'packing_hint'],
+    llm=['tip', 'packing_hint'],
+    depth=2,
+    budget=100,
+    include=['^https://www\\.customs\\.gov\\.hk/(?:en/passenger_clearance/)'],
+)
+_src(
+    'korea-customs-travellers',
+    ['tips', 'packing'],
+    "Korea's USD 800 duty-free allowance, alcohol and tobacco limits and prohibited items, for Travel tips and Packing.",
+    cls='official',
+    kinds=['tip', 'packing_hint'],
+    llm=['tip', 'packing_hint'],
+    depth=2,
+    budget=100,
+    include=['^https://www\\.customs\\.go\\.kr/(?:english/)'],
+)
+_src(
+    'govuk-world-orgs',
+    ['emergency_card'],
+    'Official British embassy, high-commission and consulate addresses, phones and hours in every country, for the Emergency card.',
+    cls='official',
+    kinds=['emergency_numbers'],
+    off='adapter pending: GOV.UK search + Content API walker for worldwide organisations (411 offices)',
+    delay=10,
+)
+_src(
+    'govuk-medical-lists',
+    ['emergency_card'],
+    "Official UK lists of English-speaking hospitals, clinics and doctors per country, for the Emergency card's hospitals.",
+    cls='official',
+    kinds=['place'],
+    off='adapter pending: GOV.UK Content API collection walker (collection, then per-country publications and HTML attachments); hospitals map to the place kind until a medical_facility kind exists',
+    delay=10,
+)
+_src(
+    'canada-offices-json',
+    ['emergency_card'],
+    'Official Canadian embassy and consulate addresses, phones and office hours in every country, for the Emergency card.',
+    cls='official',
+    kinds=['emergency_numbers'],
+    off='adapter pending: offices JSON reader (one list; map to emergency_numbers.embassies)',
+)
+_src(
+    'mfat-embassies',
+    ['emergency_card'],
+    'Official New Zealand embassy and consulate contacts per country, for the Emergency card.',
+    cls='official',
+    kinds=['emergency_numbers'],
+    llm=['emergency_numbers'],
+    depth=2,
+    budget=300,
+    include=['^https://www\\.mfat\\.govt\\.nz/(?:en/embassies/)'],
+    attribution='© Crown copyright, New Zealand MFAT, CC BY 4.0',
+)
+_src(
+    'freewalkingtour-com',
+    ['walking_tours'],
+    'Free tip-based walking tours by city with start times and meeting points, for the Free walking tours section.',
+    cls='editorial',
+    kinds=['walking_tour'],
+    llm=['walking_tour'],
+    depth=1,
+    budget=300,
+    sitemaps=['https://freewalkingtour.com/city-sitemap.xml'],
+    include=['^https://freewalkingtour\\.com/(?:[a-z]{2}/)?(?:tour|city)/'],
+)
+_src(
+    'neweuropetours',
+    ['walking_tours'],
+    'SANDEMANs free and paid city walking tours with start times and meeting points, for the Free walking tours section.',
+    cls='editorial',
+    kinds=['walking_tour'],
+    llm=['walking_tour'],
+    depth=0,
+    budget=200,
+    exclude=['/booking', '/checkout', '/partners'],
+)
+_src(
+    'eurostat-prices',
+    ['tips', 'itinerary'],
+    'Official relative price levels for restaurants and hotels, food and transport per European country, for Travel tips cost guidance and itinerary budgets.',
+    cls='official',
+    kinds=['tip'],
+    off='adapter pending: Eurostat JSON-stat reader; country indicators map to the tip kind until a country_indicator kind exists',
+    attribution='Source: Eurostat',
+)
+_src(
+    'worldbank-wdi-bulk',
+    ['tips', 'itinerary'],
+    'Price level ratio and purchasing-power parity for every country, for Travel tips cost guidance and itinerary budgets.',
+    cls='official',
+    kinds=['tip'],
+    off='adapter pending: WDI CSV zip filter (PA.NUS.PPPC.RF and PPP rows); verify the download URL first',
+    attribution='The World Bank, World Development Indicators, CC BY 4.0',
+)
+_src(
+    'datagovhk',
+    ['places', 'events'],
+    'Official opening hours and admission of Hong Kong museums and attractions, plus cultural programmes and major events, for Places to see and Events.',
+    cls='official',
+    kinds=['attraction', 'event'],
+    off='adapter pending: DATA.GOV.HK CKAN dataset reader (pick LCSD museum and facility hours, LCSD programmes, HKTB events)',
+)
+_src(
+    'auswaertiges-amt-opendata',
+    ['emergency_card', 'visa', 'tips'],
+    'German embassy and consulate contacts, health leaflets and travel warnings per country, for the Emergency card, Visa and Travel tips.',
+    cls='official',
+    kinds=['emergency_numbers', 'advisory', 'tip'],
+    off='access route: write via https://www.diplo.de/kontakt asking for the interface documentation, name the app and explicitly accept the terms (free); records must be shown complete and current, not as excerpts; adapter pending: AA OpenData reader',
+)
+_src(
+    'healthsites-io',
+    ['emergency_card'],
+    "Hospitals and clinics worldwide with names, addresses and phones, for the Emergency card's hospitals.",
+    cls='reference',
+    kinds=['place'],
+    off='needs an API key: owner must register a key at https://healthsites.io/ (free personal account key); AI reservation (no LLM use); low value over OSM amenity=hospital; adapter pending: healthsites API reader',
+    attribution='© healthsites.io and OpenStreetMap contributors, ODbL 1.0',
+)
+_src(
+    'datatourisme-fr',
+    ['events', 'activities', 'places', 'itinerary'],
+    "Every French tourist office's events, restaurants, sights and walking or driving tours in one national feed, for Events, Activities, Places to see and the itinerary.",
+    cls='official',
+    kinds=['event', 'place', 'attraction', 'activity', 'walking_tour'],
+    off='needs an API key: owner must register a key at https://diffuseur.datatourisme.fr/ (free account; build a flux and use its download key); adapter pending: DATAtourisme JSON-LD flux reader',
+    attribution='DATAtourisme, Licence Ouverte 2.0',
+)
+_src(
+    'hel-linkedevents',
+    ['events', 'activities'],
+    'Every public event in Helsinki, Espoo and Vantaa with venue, time and price, for Events and Activities.',
+    cls='official',
+    kinds=['event'],
+    off='robots.txt of api.hel.fi redirects to dev.hel.fi, which timed out: re-check before enabling; adapter pending: Linked Events paged JSON reader',
+)
+_src(
+    'bcn-opendata-agenda',
+    ['events'],
+    "Barcelona city council's cultural and leisure agenda, for the Events section.",
+    cls='official',
+    kinds=['event'],
+    off='adapter pending: CKAN package_show reader (resolve the resource URL, then a JSON/CSV event reader); confirm the package id',
+    delay=10,
+)
+_src(
+    'madrid-agenda',
+    ['events'],
+    'Free and municipal cultural events in Madrid for the Events section.',
+    cls='official',
+    kinds=['event'],
+    off='adapter pending: Madrid agenda JSON reader',
+    delay=10,
+    attribution='Origen de los datos: Ayuntamiento de Madrid',
+)
+_src(
+    'toronto-events',
+    ['events'],
+    'Festivals and events listed by the City of Toronto, for the Events section.',
+    cls='official',
+    kinds=['event'],
+    off='adapter pending: CKAN package_show reader (resolve the resource URL, then a JSON/CSV event reader); confirm the package is still live',
+    attribution='Contains information licensed under the Open Government Licence – Toronto',
+)
+_src(
+    'nyc-parks-events',
+    ['events', 'activities'],
+    'Free events in New York City parks (tours, concerts, festivals) for Events and Activities.',
+    cls='official',
+    kinds=['event'],
+    off='adapter pending: Socrata SODA reader; confirm the dataset id',
+)
+_src(
+    'korea-tourapi',
+    ['events', 'activities', 'places', 'itinerary'],
+    'National Korean festivals, restaurants, sights and official travel courses, for Events, Activities, Places to see and the itinerary.',
+    cls='official',
+    kinds=['event', 'place', 'attraction', 'activity'],
+    off='needs an API key: owner must register a key at https://www.data.go.kr/ (free; dev key auto-approved at 1,000 calls/day, production needs review); licence: confirm the KOGL type of EngService2; adapter pending: TourAPI reader',
+    seeds=['https://apis.data.go.kr/B551011/EngService2/searchFestival2'],
+)
+_src(
+    'taiwan-tourism-od',
+    ['events', 'activities', 'places'],
+    'Every Taiwanese tourism event, listed restaurant and scenic spot, for Events, Activities and Places to see.',
+    cls='official',
+    kinds=['event', 'place', 'attraction'],
+    off='adapter pending: Taiwan tourism JSON dump reader; verify the file names on data.gov.tw',
+    seeds=['https://media.taiwan.net.tw/XMLReleaseALL_public/restaurant_C_f.json', 'https://media.taiwan.net.tw/XMLReleaseALL_public/scenic_spot_C_f.json'],
+)
+_src(
+    'failte-ireland-od',
+    ['places', 'activities'],
+    'Every Fáilte Ireland-listed attraction and activity provider in Ireland, for Places to see and Activities.',
+    cls='official',
+    kinds=['attraction', 'activity'],
+    off='needs an API key: owner must register a key at https://failteireland.developer.azure-api.net/ (free tier, rate-limited; Open Data Plus subscription key); robots.txt of data.failteireland.ie timed out: re-check; adapter pending',
+)
+_src(
+    'nps-site',
+    ['places', 'activities', 'itinerary', 'events'],
+    'Official things to do, tours, trails and ranger events for more than 400 US national parks, for Places to see, Activities, the itinerary and Events.',
+    cls='official',
+    kinds=['place', 'attraction', 'activity', 'event', 'walking_tour'],
+    llm=['attraction', 'activity', 'event', 'walking_tour'],
+    depth=1,
+    budget=500,
+    sitemaps=['https://www.nps.gov/sitemap/trails.xml', 'https://www.nps.gov/sitemap.xml'],
+    include=['^https://www\\.nps\\.gov/(?:[a-z]{4}/planyourvisit/(?:things2do|calendar|[^/?#]*itinerar|[^/?#]*tour)|tours/|trails/)'],
+    attribution='National Park Service',
+)
+_src(
+    'ridb',
+    ['activities', 'places'],
+    'US federal recreation areas, campgrounds, tours and activities, for Activities and Places to see.',
+    cls='official',
+    kinds=['activity', 'attraction', 'place'],
+    off='needs an API key: owner must register a key at https://ridb.recreation.gov/ (free); adapter pending: RIDB paged JSON reader',
+    delay=10,
+    seeds=['https://ridb.recreation.gov/api/v1/facilities', 'https://ridb.recreation.gov/api/v1/activities', 'https://ridb.recreation.gov/api/v1/tours'],
+    attribution='Data Source: Recreation.gov',
+)
+_src(
+    'openholidays',
+    ['events', 'tips'],
+    'Public and school holidays by region for about 36 countries (crowds and closures), for Events and Travel tips.',
+    cls='reference',
+    kinds=['event'],
+    off='adapter pending: OpenHolidays per-country reader (needs countryIsoCode and date-range parameters); public holidays map to the event kind; licence: ODbL is reported, not stated on the site',
+    seeds=['https://openholidaysapi.org/SchoolHolidays', 'https://openholidaysapi.org/Subdivisions'],
+    attribution='OpenHolidays API, ODbL 1.0',
+)
+_src(
+    'stockholm-open-api',
+    ['events', 'activities', 'itinerary'],
+    'Official Stockholm events, curated guides and activities for Events, Activities and the itinerary.',
+    cls='official',
+    kinds=['event', 'activity', 'attraction'],
+    off='adapter pending: Visit Stockholm API reader (events, guides, activities)',
+    attribution='Stockholm Business Region AB, CC BY 4.0',
+)
+_src(
+    'germany-kg',
+    ['events', 'places', 'activities'],
+    'Events, sights and tours from German regional tourist boards, for Events, Places to see and Activities.',
+    cls='official',
+    kinds=['event', 'attraction', 'activity'],
+    off='needs an API key: owner must register a key at https://open-data-germany.org/ (free key from GNTB); adapter pending: KG reader with a per-item licence filter',
+)
+_src(
+    'edinburgh-festivals-api',
+    ['events'],
+    'Listings for the Edinburgh festivals (dates, venues, tickets), for the Events section.',
+    cls='commercial_api',
+    kinds=['event'],
+    off='needs an API key: owner must register a key at https://api.edinburghfestivalcity.com/ (free); adapter pending: listings API reader',
+    display="Credit 'Listings courtesy of Edinburgh Festival City' with a link; refresh at least every 24 h.",
+    retention=1,
+)
+_src(
+    'openagenda-api',
+    ['events'],
+    'Event agendas from French, Belgian and Swiss cities and regions, for the Events section.',
+    cls='commercial_api',
+    kinds=['event'],
+    off='needs an API key: owner must register a key at https://developers.openagenda.com/ (free); terms not yet confirmed: OpenAgenda CGU not found; robots.txt redirects off-host; adapter pending',
+)
+_src(
+    'visitscotland',
+    ['itinerary', 'activities', 'events', 'places'],
+    'Official Scottish road trips, itineraries, events and food trails, for the itinerary, Activities, Events and Places to see.',
+    cls='official',
+    kinds=['place', 'attraction', 'activity', 'event', 'article'],
+    llm=['attraction', 'activity', 'event'],
+    depth=1,
+    budget=300,
+    delay=5,
+    sitemaps=['https://www.visitscotland.com/global-tms-tours-sitemap.xml'],
+    include=['^https://www\\.visitscotland\\.com/(?:inspiration|see-do|things-to-do|destinations-maps|holidays-breaks|itineraries|events|tours?/)'],
+)
+_src(
+    'visitgreece',
+    ['itinerary', 'events', 'activities', 'places'],
+    'Official Greek routes (itineraries), events calendar and experiences, for the itinerary, Events, Activities and Places to see.',
+    cls='official',
+    kinds=['place', 'attraction', 'activity', 'event', 'article'],
+    llm=['attraction', 'activity', 'event'],
+    depth=1,
+    budget=300,
+    delay=5,
+    sitemaps=['https://www.visitgreece.gr/sitemap/routes-0.xml', 'https://www.visitgreece.gr/sitemap/experiences-0.xml', 'https://www.visitgreece.gr/sitemap/inspirations.xml', 'https://www.visitgreece.gr/sitemap/destinations-0.xml'],
+)
+_src(
+    'visitcalifornia',
+    ['itinerary', 'activities', 'events', 'places'],
+    'California road trips, experiences and events, for the itinerary, Activities, Events and Places to see.',
+    cls='editorial',
+    kinds=['place', 'attraction', 'activity', 'event', 'article'],
+    llm=['attraction', 'activity', 'event'],
+    depth=1,
+    budget=300,
+    delay=5,
+    include=['^https://www\\.visitcalifornia\\.com/(?:experience|trip-inspiration|road-trips|places-to-visit|event)/'],
+)
+_src(
+    'nyctourism',
+    ['events', 'activities', 'itinerary', 'places'],
+    'Official NYC event listings, restaurant guides and itineraries, for Events, Activities, the itinerary and Places to see.',
+    cls='editorial',
+    kinds=['place', 'attraction', 'activity', 'event', 'article'],
+    llm=['attraction', 'activity', 'event'],
+    depth=1,
+    budget=300,
+    delay=5,
+    include=['^https://www\\.nyctourism\\.com/(?:restaurants-bars|things-to-do|events|neighborhoods|articles|itineraries)/'],
+)
+_src(
+    'wien-info',
+    ['events', 'activities', 'itinerary', 'places'],
+    'Vienna events, Heurigen wine taverns, coffee houses and suggested itineraries, for Events, Activities, the itinerary and Places to see.',
+    cls='official',
+    kinds=['place', 'attraction', 'activity', 'event', 'article'],
+    llm=['attraction', 'activity', 'event'],
+    depth=1,
+    budget=300,
+    delay=5,
+    include=['^https://www\\.wien\\.info/en/(?:sightseeing|music-stage-shows|dining-drinking|shopping-wellness|travel-info|[^?#]*itinerar|[^?#]*events)'],
+)
+_src(
+    'visitqatar',
+    ['events', 'activities', 'itinerary'],
+    "Qatar's official events calendar, things to do and itineraries, for Events, Activities and the itinerary.",
+    cls='official',
+    kinds=['place', 'attraction', 'activity', 'event', 'article'],
+    llm=['attraction', 'activity', 'event'],
+    depth=1,
+    budget=300,
+    delay=5,
+    include=['^https://visitqatar\\.com/(?:intl-en/events-calendar|intl-en/things-to-do|intl-en/experiences|intl-en/highlights|intl-en/plan-your-trip/itineraries)'],
+)
+_src(
+    'gotokyo',
+    ['places', 'events', 'activities', 'itinerary'],
+    'About 925 Tokyo spots, the event calendar and model courses, for Places to see, Events, Activities and the itinerary.',
+    cls='editorial',
+    kinds=['place', 'attraction', 'activity', 'event', 'article'],
+    llm=['attraction', 'activity', 'event'],
+    depth=1,
+    budget=300,
+    delay=5,
+    include=['^https://www\\.gotokyo\\.org/(?:en/spot/|en/calendar/|en/experiences/|en/story/|en/itinerary/|en/guide/)'],
+)
+_src(
+    'australia-com',
+    ['itinerary', 'places', 'activities', 'events'],
+    'Official Australian itineraries, places, food and wine and events, for the itinerary, Places to see, Activities and Events.',
+    cls='official',
+    kinds=['place', 'attraction', 'activity', 'event', 'article'],
+    llm=['attraction', 'activity', 'event'],
+    depth=1,
+    budget=300,
+    delay=5,
+    include=['^https://www\\.australia\\.com/(?:en/places/|en/things-to-do/|en/trips-and-itineraries/|en/events/)'],
+    exclude=['/atdw/'],
+)
+_src(
+    'france-fr',
+    ['itinerary', 'places', 'activities'],
+    'Official French inspiration, itineraries and gastronomy pages, for the itinerary, Places to see and Activities.',
+    cls='official',
+    kinds=['place', 'attraction', 'activity', 'event', 'article'],
+    llm=['attraction', 'activity', 'event'],
+    depth=1,
+    budget=300,
+    delay=5,
+    include=['^https://www\\.france\\.fr/en/(?:article|itinerary|destination|[^?#]*gastronom)'],
+)
+_src(
+    'gaultmillau',
+    ['activities', 'places'],
+    'Gault&Millau restaurant ratings (name, toque rating and city as facts), for Activities and Places to see.',
+    cls='editorial',
+    kinds=['place', 'attraction', 'activity', 'event', 'article'],
+    llm=['attraction', 'activity', 'event'],
+    depth=1,
+    budget=300,
+    delay=5,
+    sitemaps=['https://www.gaultmillau.com/sitemap/awards.xml', 'https://www.gaultmillau.com/sitemap/news-2026.xml'],
+)
+_src(
+    'discoverireland',
+    ['events', 'activities', 'itinerary', 'places'],
+    'Irish events, things to do, food experiences and road trips, for Events, Activities, the itinerary and Places to see.',
+    cls='official',
+    kinds=['place', 'attraction', 'activity', 'event', 'article'],
+    llm=['attraction', 'activity', 'event'],
+    depth=1,
+    budget=300,
+    delay=5,
+    include=['^https://www\\.discoverireland\\.ie/(?:whats-on|things-to-do|road-trips|itineraries|[a-z-]+/[a-z0-9-]+$)'],
+)
+_src(
+    'iamsterdam',
+    ['events', 'activities', 'places'],
+    "Amsterdam's official event agenda and restaurant and venue listings, for Events, Activities and Places to see.",
+    cls='editorial',
+    kinds=['place', 'attraction', 'activity', 'event', 'article'],
+    llm=['attraction', 'activity', 'event'],
+    depth=1,
+    budget=300,
+    delay=5,
+    sitemaps=['https://www.iamsterdam.com/sitemap/locations.xml', 'https://www.iamsterdam.com/sitemap/articles.xml'],
+)
+_src(
+    'incredibleindia',
+    ['places', 'itinerary', 'events'],
+    'Official Indian destinations, attractions, festivals and itineraries, for Places to see, the itinerary and Events.',
+    cls='official',
+    kinds=['place', 'attraction', 'activity', 'event', 'article'],
+    llm=['attraction', 'activity', 'event'],
+    depth=1,
+    budget=300,
+    delay=5,
+    include=['^https://www\\.incredibleindia\\.gov\\.in/(?:en/)'],
+)
+_src(
+    'melbourne-whatson',
+    ['events', 'activities'],
+    "Melbourne events plus the city's restaurant and bar listings, for Events and Activities.",
+    cls='official',
+    kinds=['place', 'attraction', 'activity', 'event', 'article'],
+    llm=['attraction', 'activity', 'event'],
+    depth=1,
+    budget=300,
+    delay=5,
+    include=['^https://whatson\\.melbourne\\.vic\\.gov\\.au/(?:things-to-do/|eat-and-drink/|whats-on/|events/)'],
+)
+_src(
+    'spain-info',
+    ['itinerary', 'events', 'activities'],
+    "Spain's official routes, gastronomy and event calendar, for the itinerary, Events and Activities.",
+    cls='official',
+    kinds=['place', 'attraction', 'activity', 'event', 'article'],
+    llm=['attraction', 'activity', 'event'],
+    depth=1,
+    budget=300,
+    delay=5,
+    sitemaps=['https://www.spain.info/export/sitemap_eventos.xml'],
+    include=['^https://www\\.spain\\.info/(?:en/)'],
+    display="Show 'Source: Web server of the Spanish Tourism Institute, TURESPAÑA, www.spain.info'.",
+)
+_src(
+    'experienceoman',
+    ['places', 'activities', 'itinerary'],
+    'Official Omani destinations, things to do and itineraries, for Places to see, Activities and the itinerary.',
+    cls='official',
+    kinds=['place', 'attraction', 'activity', 'event', 'article'],
+    llm=['attraction', 'activity', 'event'],
+    depth=1,
+    budget=300,
+    delay=5,
+    include=['^https://experienceoman\\.om/(?:destinations/|things-to-do/|itineraries/|events/)'],
+)
+_src(
+    'argentina-travel',
+    ['places', 'activities', 'itinerary'],
+    'Official Argentine destinations, experiences and itineraries, for Places to see, Activities and the itinerary.',
+    cls='official',
+    kinds=['place', 'attraction', 'activity', 'event', 'article'],
+    llm=['attraction', 'activity', 'event'],
+    depth=2,
+    budget=300,
+    delay=5,
+    include=['^https://www\\.argentina\\.travel/(?:en/)?(?:destinos|experiencias|itinerarios|destinations|experiences)'],
+)
+_src(
+    'visitlisboa',
+    ['events', 'itinerary', 'activities'],
+    "Lisbon's official event agenda and itineraries, for Events, the itinerary and Activities.",
+    cls='editorial',
+    kinds=['place', 'attraction', 'activity', 'event', 'article'],
+    llm=['attraction', 'activity', 'event'],
+    depth=2,
+    budget=300,
+    delay=5,
+    seeds=['https://www.visitlisboa.com/en/itineraries'],
+    include=['^https://www\\.visitlisboa\\.com/(?:en/events|en/itineraries|en/places|en/p/)'],
+)
+_src(
+    'visitphilly',
+    ['events', 'itinerary', 'activities'],
+    'Philadelphia events, itineraries and restaurant guides (title and link only), for Events, the itinerary and Activities.',
+    cls='editorial',
+    kinds=['place', 'attraction', 'activity', 'event', 'article'],
+    depth=2,
+    budget=300,
+    delay=5,
+    seeds=['https://www.visitphilly.com/itineraries/'],
+    include=['^https://www\\.visitphilly\\.com/(?:events/|itineraries/|things-to-do/|articles/|restaurants/)'],
+)
+_src(
+    'sydney-com',
+    ['activities', 'events', 'places'],
+    'Sydney food and drink, things to do and events, for Activities, Events and Places to see.',
+    cls='official',
+    kinds=['place', 'attraction', 'activity', 'event', 'article'],
+    llm=['attraction', 'activity', 'event'],
+    depth=1,
+    budget=300,
+    delay=5,
+    include=['^https://www\\.sydney\\.com/(?:things-to-do|destinations/[^?#]*/food-and-drink|articles|events)/'],
+    exclude=['^https://www\\.sydney\\.com/things-to-do/tours/'],
+)
+_src(
+    'messynessychic',
+    ['places'],
+    'Off-the-beaten-path curiosities and hidden places worldwide (headline, link and a short excerpt only), for Places to see.',
+    cls='editorial',
+    kinds=['article'],
+    off='terms not yet confirmed: no terms page found; also the relevance gate: not a whole-travel publication (the owner may add messynessychic.com to TRAVEL_PUBLICATIONS)',
+    depth=1,
+    budget=50,
+)
+_src(
+    'amusingplanet',
+    ['places'],
+    'Unusual places, natural wonders and hidden sights worldwide (headline, link and a short excerpt only), for Places to see.',
+    cls='editorial',
+    kinds=['article'],
+    off='terms not yet confirmed: no terms page found; feeds.feedburner.com serves a parked-domain lander instead of robots.txt (checked 2026-11-17): do not fetch the feed there',
+    depth=1,
+    budget=50,
+)
+_src(
+    'secretldn',
+    ['events', 'places'],
+    "London what's-on and hidden gems (headline, link and a short excerpt only), for Events and Places to see.",
+    cls='editorial',
+    kinds=['article', 'event'],
+    depth=1,
+    budget=50,
+)
+_src(
+    'nps-data-api',
+    ['activities', 'events', 'itinerary'],
+    'US national park things to do, events and tours as structured data, for Activities, Events and the itinerary.',
+    cls='official',
+    kinds=['attraction', 'activity', 'event'],
+    off='robots.txt of developer.nps.gov answers 403 to VoyagerBot (research 2026-11-17): do-not-crawl origin; needs an API key (free, https://www.nps.gov/subjects/developer/get-started.htm); the public-domain nps.gov site is nps-site',
+    depth=0,
+    budget=300,
+    delay=5,
+    seeds=['https://developer.nps.gov/api/v1/events', 'https://developer.nps.gov/api/v1/tours'],
+)
+_src(
+    'myswitzerland-open-data',
+    ['places', 'activities', 'itinerary'],
+    'Swiss sights, experiences and tours as structured data, for Places to see, Activities and the itinerary.',
+    cls='official',
+    kinds=['attraction', 'activity', 'event'],
+    off='robots.txt of opendata.myswitzerland.io answers 403 to VoyagerBot (research 2026-11-17): do-not-crawl origin; licence version unknown; needs an API key (x-api-key)',
+    depth=0,
+    budget=300,
+    delay=5,
+)
+_src(
+    'worlds50best',
+    ['activities'],
+    "The World's 50 Best restaurant and bar rankings (names and cities as facts), for Activities.",
+    cls='editorial',
+    kinds=['place', 'attraction', 'activity', 'event', 'article'],
+    llm=['attraction', 'activity', 'event'],
+    depth=1,
+    budget=300,
+    delay=5,
+)
+_src(
+    'laliste',
+    ['activities'],
+    'La Liste restaurant rankings (names, scores and cities as facts), for Activities.',
+    cls='editorial',
+    kinds=['place', 'attraction', 'activity', 'event', 'article'],
+    llm=['attraction', 'activity', 'event'],
+    depth=1,
+    budget=300,
+    delay=5,
+)
+_src(
+    'tasteatlas',
+    ['activities', 'tips'],
+    'Traditional dishes and where to eat them by region, for Activities and Travel tips.',
+    cls='editorial',
+    kinds=['place', 'attraction', 'activity', 'event', 'article'],
+    llm=['attraction', 'activity', 'event'],
+    off="terms not yet confirmed: the terms page answered 403 to the fetcher (possible bot wall); not covered by the owner's 2026-11-17 acceptance",
+    depth=1,
+    budget=300,
+    delay=5,
+)
+_src(
+    'oad-guides',
+    ['activities'],
+    'Opinionated About Dining restaurant rankings (names and cities as facts), for Activities.',
+    cls='editorial',
+    kinds=['place', 'attraction', 'activity', 'event', 'article'],
+    llm=['attraction', 'activity', 'event'],
+    depth=1,
+    budget=300,
+    delay=5,
+)
+_src(
+    'visitberlin',
+    ['events', 'places'],
+    'Berlin events and sights from the official tourism portal, for Events and Places to see.',
+    cls='official',
+    kinds=['place', 'attraction', 'activity', 'event', 'article'],
+    llm=['attraction', 'activity', 'event'],
+    depth=1,
+    budget=300,
+    delay=5,
+    sitemaps=['https://www.visitberlin.de/sehenswuerdigkeiten/sitemap.xml', 'https://www.visitberlin.de/blog/sitemap.xml'],
+)
+_src(
+    'choosechicago',
+    ['events', 'activities'],
+    'Chicago events and things to do from the official tourism board, for Events and Activities.',
+    cls='editorial',
+    kinds=['place', 'attraction', 'activity', 'event', 'article'],
+    llm=['attraction', 'activity', 'event'],
+    off="terms not yet confirmed: §5 'through any means not intentionally made available' may bar automated access (ambiguous); not covered by the owner's 2026-11-17 acceptance",
+    depth=1,
+    budget=300,
+    delay=20,
+)
+_src(
+    'discoverlosangeles',
+    ['activities', 'events'],
+    'Los Angeles eat and drink, things to do and events, for Activities and Events.',
+    cls='editorial',
+    kinds=['place', 'attraction', 'activity', 'event', 'article'],
+    llm=['attraction', 'activity', 'event'],
+    depth=1,
+    budget=300,
+    delay=5,
+)
+_src(
+    'colombia-travel',
+    ['places', 'itinerary'],
+    'Official Colombian destinations and itineraries, for Places to see and the itinerary.',
+    cls='official',
+    kinds=['place', 'attraction', 'activity', 'event', 'article'],
+    llm=['attraction', 'activity', 'event'],
+    off="terms not yet confirmed: terms 1.3 allow material only via 'means ... the site provides' (may bar automated access); not covered by the owner's 2026-11-17 acceptance",
+    depth=1,
+    budget=300,
+    delay=5,
+)
+_src(
+    'chile-travel',
+    ['itinerary', 'events', 'activities'],
+    'Official Chilean itineraries, events, activities and attractions, for the itinerary, Events and Activities.',
+    cls='official',
+    kinds=['place', 'attraction', 'activity', 'event', 'article'],
+    llm=['attraction', 'activity', 'event'],
+    depth=1,
+    budget=300,
+    delay=5,
+    sitemaps=['https://chile.travel/eventos-sitemap.xml', 'https://chile.travel/actividades-sitemap.xml', 'https://chile.travel/atractivo-sitemap.xml'],
+)
+_src(
+    'goturkiye',
+    ['places', 'itinerary', 'events'],
+    'Official Turkish destinations, routes and events, for Places to see, the itinerary and Events.',
+    cls='official',
+    kinds=['place', 'attraction', 'activity', 'event', 'article'],
+    llm=['attraction', 'activity', 'event'],
+    depth=1,
+    budget=300,
+    delay=5,
+)
+_src(
+    'philippines-travel',
+    ['places', 'activities'],
+    'Official Philippine destinations and activities, for Places to see and Activities.',
+    cls='official',
+    kinds=['place', 'attraction', 'activity', 'event', 'article'],
+    llm=['attraction', 'activity', 'event'],
+    depth=1,
+    budget=300,
+    delay=5,
+)
+_src(
+    'peru-travel',
+    ['places', 'itinerary'],
+    'Official Peruvian destinations and itineraries, for Places to see and the itinerary.',
+    cls='official',
+    kinds=['place', 'attraction', 'activity', 'event', 'article'],
+    llm=['attraction', 'activity', 'event'],
+    depth=1,
+    budget=300,
+    delay=5,
+)
+_src(
+    'srilanka-travel',
+    ['places'],
+    'Official Sri Lankan attractions and destinations, for Places to see.',
+    cls='official',
+    kinds=['place', 'attraction', 'activity', 'event', 'article'],
+    llm=['attraction', 'activity', 'event'],
+    depth=1,
+    budget=300,
+    delay=5,
+)
+_src(
+    'tanzania-tourism',
+    ['places'],
+    'Official Tanzanian destinations and parks, for Places to see.',
+    cls='official',
+    kinds=['place', 'attraction', 'activity', 'event', 'article'],
+    llm=['attraction', 'activity', 'event'],
+    depth=1,
+    budget=300,
+    delay=5,
+)
+_src(
+    'visitrwanda',
+    ['itinerary', 'events', 'places'],
+    'Official Rwandan itineraries, events and destinations, for the itinerary, Events and Places to see.',
+    cls='official',
+    kinds=['place', 'attraction', 'activity', 'event', 'article'],
+    llm=['attraction', 'activity', 'event'],
+    depth=1,
+    budget=300,
+    delay=5,
+    sitemaps=['https://visitrwanda.com/wp-sitemap-posts-news-and-event-1.xml', 'https://visitrwanda.com/wp-sitemap-posts-destinations-1.xml'],
+)
+_src(
+    'visitsaudi',
+    ['events', 'places'],
+    'Official Saudi destinations, events and things to do, for Events and Places to see.',
+    cls='official',
+    kinds=['place', 'attraction', 'activity', 'event', 'article'],
+    llm=['attraction', 'activity', 'event'],
+    depth=1,
+    budget=300,
+    delay=5,
+)
+_src(
+    'visitjordan',
+    ['places'],
+    'Official Jordanian sights and destinations, for Places to see.',
+    cls='official',
+    kinds=['place', 'attraction', 'activity', 'event', 'article'],
+    llm=['attraction', 'activity', 'event'],
+    depth=1,
+    budget=300,
+    delay=5,
+)
+_src(
+    'visiticeland',
+    ['places', 'activities'],
+    'Official Icelandic sights and activities, for Places to see and Activities.',
+    cls='official',
+    kinds=['place', 'attraction', 'activity', 'event', 'article'],
+    llm=['attraction', 'activity', 'event'],
+    depth=1,
+    budget=300,
+    delay=5,
+)
+_src(
+    'visitdenmark',
+    ['places', 'itinerary'],
+    'Official Danish destinations and itineraries, for Places to see and the itinerary.',
+    cls='official',
+    kinds=['place', 'attraction', 'activity', 'event', 'article'],
+    llm=['attraction', 'activity', 'event'],
+    depth=1,
+    budget=300,
+    delay=5,
+)
+_src(
+    'visitcopenhagen',
+    ['activities', 'places'],
+    'Copenhagen things to do, sights and getting-around advice, for Activities and Places to see.',
+    cls='official',
+    kinds=['place', 'attraction', 'activity', 'event', 'article'],
+    llm=['attraction', 'activity', 'event'],
+    depth=1,
+    budget=300,
+    delay=5,
+)
+_src(
+    'visitsweden',
+    ['places', 'itinerary'],
+    'Official Swedish destinations and trip ideas, for Places to see and the itinerary.',
+    cls='official',
+    kinds=['place', 'attraction', 'activity', 'event', 'article'],
+    llm=['attraction', 'activity', 'event'],
+    depth=1,
+    budget=300,
+    delay=5,
+)
+_src(
+    'visitcostarica',
+    ['itinerary', 'activities'],
+    'Official Costa Rican itineraries and things to do, for the itinerary and Activities.',
+    cls='official',
+    kinds=['place', 'attraction', 'activity', 'event', 'article'],
+    llm=['attraction', 'activity', 'event'],
+    depth=1,
+    budget=300,
+    delay=5,
+)
+_src(
+    'holland-com',
+    ['places'],
+    'Official Dutch destinations and sights, for Places to see.',
+    cls='official',
+    kinds=['place', 'attraction', 'activity', 'event', 'article'],
+    llm=['attraction', 'activity', 'event'],
+    depth=1,
+    budget=300,
+    delay=5,
+    sitemaps=['https://www.holland.com/sitemaparticle.xml.gz'],
+)
+_src(
+    'budapestinfo',
+    ['places'],
+    "Budapest's official sights and visitor information, for Places to see.",
+    cls='official',
+    kinds=['place', 'attraction', 'activity', 'event', 'article'],
+    llm=['attraction', 'activity', 'event'],
+    depth=1,
+    budget=300,
+    delay=5,
+)
+_src(
+    'visitabudhabi',
+    ['events', 'places'],
+    'Abu Dhabi events and sights, for Events and Places to see.',
+    cls='official',
+    kinds=['place', 'attraction', 'activity', 'event', 'article'],
+    llm=['attraction', 'activity', 'event'],
+    depth=1,
+    budget=300,
+    delay=5,
+)
+_src(
+    'visitmaldives',
+    ['places'],
+    'Official Maldives islands, resorts areas and sights, for Places to see.',
+    cls='official',
+    kinds=['place', 'attraction', 'activity', 'event', 'article'],
+    llm=['attraction', 'activity', 'event'],
+    depth=1,
+    budget=300,
+    delay=5,
+)
+_src(
+    'visitnamibia',
+    ['places'],
+    'Official Namibian destinations and parks, for Places to see.',
+    cls='official',
+    kinds=['place', 'attraction', 'activity', 'event', 'article'],
+    llm=['attraction', 'activity', 'event'],
+    depth=1,
+    budget=300,
+    delay=5,
+)
+_src(
+    'visitdubai',
+    ['events', 'places', 'itinerary'],
+    'Dubai events, sights and itineraries, for Events, Places to see and the itinerary.',
+    cls='official',
+    kinds=['place', 'attraction', 'activity', 'event', 'article'],
+    llm=['attraction', 'activity', 'event'],
+    depth=1,
+    budget=300,
+    delay=5,
+)
+_src(
+    'visitseoul',
+    ['activities', 'places'],
+    "Seoul restaurants, attractions and editors' picks, for Activities and Places to see.",
+    cls='official',
+    kinds=['place', 'attraction', 'activity', 'event', 'article'],
+    llm=['attraction', 'activity', 'event'],
+    depth=1,
+    budget=300,
+    delay=5,
+    sitemaps=['https://english.visitseoul.net/sitemap/attractions_en_sitemap.xml', 'https://english.visitseoul.net/sitemap/editorspicks_en_sitemap.xml'],
+)
+_src(
+    'destinationcanada',
+    ['activities', 'itinerary'],
+    'Canadian things to do and trip ideas, for Activities and the itinerary.',
+    cls='official',
+    kinds=['place', 'attraction', 'activity', 'event', 'article'],
+    llm=['attraction', 'activity', 'event'],
+    depth=1,
+    budget=300,
+    delay=5,
+)
+_src(
+    'parisjetaime',
+    ['events', 'activities'],
+    'Paris events and things to do from the official tourist office, for Events and Activities.',
+    cls='official',
+    kinds=['place', 'attraction', 'activity', 'event', 'article'],
+    llm=['attraction', 'activity', 'event'],
+    off="terms not yet confirmed: the legal page answered 403 to the fetcher (possible bot wall); not covered by the owner's 2026-11-17 acceptance",
+    depth=1,
+    budget=300,
+    delay=5,
+)
+_src(
+    'tat-data-api',
+    ['events', 'places', 'activities'],
+    'Thai events, attractions and activities as structured data, for Events, Places to see and Activities.',
+    cls='official',
+    kinds=['event'],
+    off='needs an API key: owner must register a key at https://tatdataapi.io/ (free); terms not yet confirmed: terms are behind sign-up',
+    depth=0,
+    budget=300,
+    delay=5,
+)
+_src(
+    'visit-finland-datahub',
+    ['places', 'activities', 'events'],
+    'Finnish tourism products, sights and opening hours, for Places to see, Activities and Events.',
+    cls='official',
+    kinds=['attraction', 'activity', 'event'],
+    off='needs an API key: owner must apply as a DataHub data user at https://datahub.visitfinland.com/ and accept the ToS (free as far as known; Business Finland decides); check the redistribution clause; adapter pending',
+)
+_src(
+    'atdw-atlas',
+    ['events', 'activities', 'hotels'],
+    'Australian events, attractions, tours and accommodation listings, for Events, Activities and Hotels.',
+    cls='commercial_api',
+    kinds=['event', 'activity', 'attraction', 'hotel'],
+    off='needs an API key: owner must sign the ATDW Distributor Licence Agreement at https://developer.atdw.com.au/ (paid: Industry A$165/month + A$165 set-up, Lite A$200/month + A$660, Premium A$400/month + A$660; 30-day trial key); adapter pending',
+    display='ATDW attribution per the Distributor Licence Agreement.',
+    retention=3,
+)
+_src(
+    'calendarific',
+    ['events', 'tips'],
+    'Public holidays in about 230 countries (closures and crowds), for Events and Travel tips.',
+    cls='commercial_api',
+    kinds=['event'],
+    off='needs an API key: owner must register a key at https://calendarific.com/signup (free: 500 requests/month); adapter pending: holidays reader (public holidays map to the event kind)',
+    display="Show 'Powered by Calendarific'.",
+    retention=30,
+)
+_src(
+    'bandsintown',
+    ['events'],
+    'Concerts by artist and venue with dates and ticket links, for the Events section.',
+    cls='commercial_api',
+    kinds=['event'],
+    off="needs an API key: owner must request an app_id and Bandsintown's written consent at https://help.artists.bandsintown.com/ (free, by approval); adapter pending",
+    display='Bandsintown attribution per the API terms.',
+    retention=30,
+)
+
+
 METHODS = {"html", "rss", "sitemap", "api", "dump"}
 
 
@@ -652,6 +2274,8 @@ def build_spec(seed: dict) -> dict:
     if lclass == "restricted":
         enabled = False
         notes.append("Disabled: restricted licence (non-commercial or unknown), not ingested in v1 (spec §5.9).")
+        if sid in DISABLED:
+            notes.append(f"Also: {DISABLED[sid]}")
     elif sid in DISABLED:
         enabled = False
         notes.append(f"Disabled: {DISABLED[sid]}")
@@ -661,6 +2285,17 @@ def build_spec(seed: dict) -> dict:
     needs_key = bool(seed["needs_key"])
     max_depth = MAX_DEPTH.get(sid, {"rss": 1, "sitemap": 1, "html": 2}.get(method, 0))
     sitemaps.extend(u for u in EXTRA_SITEMAPS.get(sid, []) if u not in sitemaps)
+    seeds.extend(u for u in EXTRA_SEEDS.get(sid, []) if u not in seeds)
+    feeds.extend(u for u in EXTRA_FEEDS.get(sid, []) if u not in feeds)
+    include = list(INCLUDE.get(sid, []))
+    if include and method == "sitemap":
+        # Links found in a sitemap index must match an include to be followed, so nested
+        # sitemaps on the source's own hosts stay in scope.
+        for host in dict.fromkeys(urlsplit(u).hostname for u in sitemaps):
+            esc = host.replace(".", "\\.")
+            pat = f"^https?://{esc}/[^?#]*sitemap"
+            if pat not in include:
+                include.append(pat)
 
     spec: dict = {
         "id": sid,
@@ -673,12 +2308,12 @@ def build_spec(seed: dict) -> dict:
         "sitemaps": sitemaps,
         "feeds": feeds,
         "adapter": ADAPTERS.get(sid),
-        "include": INCLUDE.get(sid, []),
+        "include": include,
         "exclude": EXCLUDE.get(sid, []),
         "max_depth": max_depth,
         "kinds": list(kinds),
         "llm_kinds": list(llm_kinds),
-        "render": "never",
+        "render": RENDER.get(sid, "never"),
         "cadence": CADENCE[seed["cadence"]],
         "min_delay_s": MIN_DELAY.get(sid, 5),
         "daily_budget": DAILY_BUDGET.get(sid, 3000),

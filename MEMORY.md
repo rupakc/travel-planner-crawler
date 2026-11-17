@@ -111,3 +111,12 @@ plan = `docs/superpowers/plans/2026-11-15-voyager-crawler.md`, r1–r5 = `docs/r
   and cross-key redirect targets are enqueued only under the politeness keys of its seeds,
   sitemaps and feeds; others are dropped (cdc-travel → medscape.com leak).
   (crates/vcrawl/src/data/sources.rs, crates/vcrawl/src/roles/fetcher.rs)
+- 2026-11-17: sources batch 2 (research 2026-11-17): 140 new specs (transport, visa, customs,
+  embassies, events, tourism boards); only html/rss/sitemap sources with robots checked are on;
+  api/dump ones wait for adapters or owner keys. Owner decision: Voyager is free and
+  non-commercial, so sources whose only blocker is unconfirmed terms are on as facts_only
+  (never over an explicit ban, a 401/403/challenge or a missing adapter/key). Time Out (AI/RAG
+  ban), usembassy.gov (robots 403) off; 62 denylist entries added. Kinds: customs → tip/
+  packing_hint, hospitals → place, holidays → event, price indicators → tip (no new kinds).
+  sources/ramp-2.txt = ramp-1 + the runnable batch-2 sources. (scripts/seeds_to_sources.py
+  "Batch 2", policy/denylist.yaml, docs/research/licence_only.yaml)

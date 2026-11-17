@@ -209,3 +209,60 @@ fn subresource_types_enforced() {
     assert!(!p.subresource_allowed("evil.cdnjs.cloudflare.com", "script"));
     assert!(!p.subresource_allowed("www.booking.com", "script"));
 }
+
+/// Batch-2 additions (research 2026-11-17): terms bans, bot walls and a hijacked domain.
+#[test]
+fn batch2_entries_are_denied() {
+    for u in [
+        "https://library.traveldoc.aero/",
+        "https://timaticweb2.com/",
+        "https://www.ica.gov.sg/",
+        "https://www.henleyglobal.com/",
+        "https://www.passportindex.org/",
+        "https://bus-data.dft.gov.uk/",
+        "https://www.transit.dot.gov/",
+        "https://www.mofa.go.jp/",
+        "https://www.dha.gov.za/",
+        "https://www.mpi.govt.nz/",
+        "https://www.usembassy.gov/",
+        "https://fr.usembassy.gov/",
+        "https://www.ricksteves.com/",
+        "https://www.welcomenepal.com/",
+        "https://www.timeout.com/london",
+        "https://guide.michelin.com/en",
+        "https://www.visitbritain.com/",
+        "https://download.gtfs.de/germany/fv_free/latest.zip",
+        "https://static.data.gov.hk/td/x.zip",
+        "https://www.iata.org/",
+    ] {
+        assert!(denied(u).is_some(), "{u} must be denied");
+    }
+}
+
+/// Hosts the crawler uses must never be caught by a denylist entry (siblings and
+/// look-alikes of denied hosts included).
+#[test]
+fn approved_hosts_stay_allowed() {
+    for u in [
+        "https://www.gov.uk/duty-free-goods",
+        "https://www.gov.uk/api/content/foreign-travel-advice",
+        "https://cadataapi.state.gov/api/TravelAdvisories",
+        "https://data.international.gc.ca/travel-voyage/x.json",
+        "https://www.canada.ca/en/immigration-refugees-citizenship/",
+        "https://www.cbp.gov/travel/",
+        "https://home-affairs.ec.europa.eu/",
+        "https://www.immigration.govt.nz/",
+        "https://www.customs.govt.nz/",
+        "https://www.mfat.govt.nz/en/embassies",
+        "https://www.customs.go.jp/english/",
+        "https://www.maff.go.jp/aqs/english/",
+        "https://www.nps.gov/sitemap.xml",
+        "https://www.discoverireland.ie/",
+        "https://whatson.melbourne.vic.gov.au/",
+        "https://data.gov.hk/en-data/",
+        "https://gtfs.de/",
+        "https://chile.travel/",
+    ] {
+        assert_eq!(denied(u), None, "{u} must stay allowed");
+    }
+}

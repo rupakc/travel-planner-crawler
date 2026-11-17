@@ -377,3 +377,155 @@ def test_disabled_source_may_name_a_denylisted_host(tmp_path, monkeypatch):
     monkeypatch.delitem(s2s.DISABLED, "mystery")
     with pytest.raises(s2s.MappingError, match="denylisted"):
         s2s.generate(seeds, tmp_path / "out2", ROOT / "policy" / "denylist.yaml")
+
+
+# --- batch 2 (research 2026-11-17) ------------------------------------------------------
+
+BATCH2_DENIED = [
+    "https://library.traveldoc.aero/", "https://infopages.traveldoc.aero/x", "https://timaticweb2.com/",
+    "https://www.ica.gov.sg/enter-transit-depart", "https://www.henleyglobal.com/passport-index",
+    "https://www.passportindex.org/", "https://bus-data.dft.gov.uk/", "https://www.transit.dot.gov/ntd",
+    "https://www.mofa.go.jp/j_info/visit/visa/", "https://www.dha.gov.za/", "https://www.mpi.govt.nz/",
+    "https://www.usembassy.gov/", "https://fr.usembassy.gov/", "https://www.ricksteves.com/forums",
+    "https://www.welcomenepal.com/", "https://www.timeout.com/london", "https://guide.michelin.com/en",
+    "https://www.theinfatuation.com/", "https://www.happycow.net/", "https://ra.co/events",
+    "https://www.officeholidays.com/", "https://www.visitwales.com/", "https://www.visitsingapore.com/",
+    "https://www.thisisbarcelona.com/", "https://www.visitbarcelona.com/", "https://www.afar.com/",
+    "https://www.nationalgeographic.com/travel", "https://www.visitbritain.com/", "https://www.visitnorway.com/",
+    "https://www.visittheusa.com/", "https://visitbrasil.com/", "https://www.visitmelbourne.com/",
+    "https://www.sftravel.com/", "https://www.fiji.travel/", "https://experienceegypt.eg/",
+    "https://www.discoverhongkong.com/", "https://www.roadsideamerica.com/", "https://www.spottedbylocals.com/",
+    "https://www.visitlondon.com/", "https://magicalkenya.com/", "https://www.capetown.travel/",
+    "https://www.embassypages.com/", "https://opencellid.org/", "https://www.opensignal.com/",
+    "https://www.iata.org/en/", "https://www.mea.gov.in/", "https://www.exteriores.gob.es/",
+    "https://download.gtfs.de/germany/fv_free/latest.zip", "https://static.data.gov.hk/td/x.zip",
+    "https://www.ireland.ie/en/", "https://www.transportation.gov/", "https://whatson.cityofsydney.nsw.gov.au/",
+]
+
+# Hosts the crawler uses (or will use) that no denylist entry may catch.
+APPROVED = [
+    "https://www.gov.uk/api/content/foreign-travel-advice", "https://www.gov.uk/duty-free-goods",
+    "https://cadataapi.state.gov/api/TravelAdvisories", "https://data.international.gc.ca/travel-voyage/x.json",
+    "https://www.canada.ca/en/immigration-refugees-citizenship/", "https://www.cbsa-asfc.gc.ca/travel-voyage/",
+    "https://inspection.canada.ca/en/", "https://www.cbp.gov/travel/", "https://www.aphis.usda.gov/pet-travel",
+    "https://home-affairs.ec.europa.eu/", "https://taxation-customs.ec.europa.eu/", "https://food.ec.europa.eu/",
+    "https://travel-europe.europa.eu/en/etias", "https://www.immigration.govt.nz/", "https://www.customs.govt.nz/",
+    "https://www.mfat.govt.nz/en/embassies", "https://www.customs.go.jp/english/", "https://www.maff.go.jp/aqs/english/",
+    "https://www.nps.gov/sitemap.xml", "https://www.visitscotland.com/", "https://www.discoverireland.ie/",
+    "https://whatson.melbourne.vic.gov.au/", "https://www.sydney.com/", "https://www.gotokyo.org/",
+    "https://www.gaultmillau.com/", "https://data.gov.hk/en-data/", "https://gtfs.de/", "https://smartraveller.gov.au/",
+    "https://wwwnc.cdc.gov/travel", "https://www.iatatravelcentre.com.example/", "https://chile.travel/",
+    "https://www.spain.info/en/", "https://www.australia.com/en/", "https://freewalkingtour.com/",
+]
+
+
+@pytest.mark.parametrize("url", BATCH2_DENIED)
+def test_batch2_denylist_entries(url):
+    assert s2s.denied(url, DENYLIST) is not None, url
+
+
+@pytest.mark.parametrize("url", APPROVED)
+def test_approved_hosts_stay_allowed(url):
+    assert s2s.denied(url, DENYLIST) is None, url
+
+
+def test_every_enabled_source_is_allowed_by_the_denylist(generated):
+    for sid, spec in generated.items():
+        if spec["enabled"]:
+            for u in spec["seeds"] + spec["sitemaps"] + spec["feeds"]:
+                assert s2s.denied(u, DENYLIST) is None, (sid, u)
+
+
+def test_terms_and_bot_wall_sources_are_off(generated):
+    for sid in ("timeout-blog-rss", "timeout-news-sitemap"):
+        notes = " ".join(generated[sid]["notes"].split())
+        assert generated[sid]["enabled"] is False and "retrieval-augmented generation" in notes, sid
+    usemb = generated["usembassy-list"]
+    assert usemb["enabled"] is False and "answers 403" in " ".join(usemb["notes"].split())
+    rs = generated["ricksteves-forum"]
+    assert rs["enabled"] is False and "any robot, spider, crawler" in " ".join(rs["notes"].split())
+    pi = generated["passport-index-dataset"]
+    assert pi["enabled"] is False and pi["licence"]["class"] == "restricted"
+    assert "Arton Capital" in " ".join(pi["notes"].split())
+
+
+def test_batch2_off_sources_say_why(generated):
+    prefixes = ("adapter pending", "needs an API key", "needs an account", "terms not yet confirmed",
+                "licence:", "robots.txt", "access route", "owner decision")
+    for sid in s2s.SOURCE_CLASS:
+        spec = generated[sid]
+        if spec["enabled"]:
+            continue
+        reason = " ".join(spec["notes"].split()).split("Disabled: ", 1)[1]
+        assert reason.startswith(prefixes), (sid, reason)
+
+
+def test_batch2_api_and_dump_sources_stay_off(generated):
+    # No new adapter ships in this batch: every api/dump source is off.
+    for sid in s2s.SOURCE_CLASS:
+        spec = generated[sid]
+        if spec["method"] in ("api", "dump"):
+            assert spec["enabled"] is False, sid
+            assert spec["adapter"] is None, sid
+        if spec["needs_key"]:
+            assert spec["enabled"] is False and spec["key_secret"] == f"crawler-src-{sid}-key", sid
+
+
+def test_batch2_enabled_sources_are_polite_and_scoped(generated):
+    for sid in s2s.SOURCE_CLASS:
+        spec = generated[sid]
+        if not spec["enabled"]:
+            continue
+        assert spec["method"] in ("html", "rss", "sitemap"), sid
+        assert spec["daily_budget"] <= 500 and spec["max_depth"] <= 2 and spec["min_delay_s"] >= 5, sid
+        assert spec["licence"]["class"] in ("open", "facts_only"), sid
+        assert spec["cadence"] in ("daily", "h12", "weekly", "monthly", "quarterly"), sid
+        # Every include regex is pinned to the source's own host.
+        hosts = {u.split("/")[2] for u in spec["seeds"] + spec["sitemaps"] + spec["feeds"]}
+        for r in spec["include"]:
+            assert any(r.startswith(f"^https://{h.replace('.', chr(92) + '.')}/") or
+                       r.startswith(f"^https?://{h.replace('.', chr(92) + '.')}/") for h in hosts), (sid, r)
+
+
+def test_owner_accepted_terms_2026_11_17(generated):
+    accepted = [sid for sid in s2s.SOURCE_CLASS
+                if "owner accepted for non-commercial use 2026-11-17" in " ".join((generated[sid]["notes"] or "").split())]
+    assert len(accepted) >= 40
+    for sid in accepted:
+        spec = generated[sid]
+        assert spec["enabled"] is True, sid
+        assert spec["licence"]["class"] == "facts_only", sid
+    sg = generated["sg-customs-travellers"]
+    assert sg["enabled"] is True and "Owner decision 2026-11-17" in " ".join(sg["notes"].split())
+    # Not covered by the acceptance: a possible ban, a 403 page, the relevance gate.
+    for sid in ("choosechicago", "colombia-travel", "tasteatlas", "parisjetaime", "au-homeaffairs-visas",
+                "messynessychic", "nps-data-api", "myswitzerland-open-data", "amusingplanet"):
+        assert generated[sid]["enabled"] is False, sid
+
+
+def test_ai_reserved_sources_have_no_llm_kinds(generated):
+    for sid in ("visitphilly", "healthsites-io"):
+        assert generated[sid]["llm_kinds"] == [], sid
+
+
+def _ramp(name):
+    text = (ROOT / "sources" / name).read_text()
+    return [ln.split("#")[0].strip() for ln in text.splitlines() if ln.split("#")[0].strip()]
+
+
+def test_ramp_2_extends_ramp_1_with_enabled_runnable_sources():
+    committed = {p.stem: yaml.safe_load(p.read_text()) for p in (ROOT / "sources").glob("*.yaml")}
+    r1, r2 = _ramp("ramp-1.txt"), _ramp("ramp-2.txt")
+    assert len(r2) == len(set(r2))
+    assert r2[: len(r1)] == r1
+    v = _validator()
+    for sid in r2:
+        assert sid in committed, sid
+        spec = committed[sid]
+        assert spec["enabled"] is True, sid
+        assert not list(v.iter_errors(spec)), sid
+    for sid in r2[len(r1):]:
+        assert committed[sid]["method"] in ("html", "rss", "sitemap"), sid
+    # Every source this batch enables is in ramp-2.
+    on = {sid for sid in s2s.SOURCE_CLASS if committed[sid]["enabled"]}
+    assert on <= set(r2), sorted(on - set(r2))

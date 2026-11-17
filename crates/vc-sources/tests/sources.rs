@@ -401,3 +401,49 @@ async fn seed_sources_upserts_into_postgres() {
             .unwrap();
     assert_eq!(notes.as_deref(), Some("changed"));
 }
+
+/// `sources/ramp-2.txt` (go-live ramp, step 2): ramp-1 first, then only sources that exist,
+/// are enabled, validate (relevance, denylist, politeness) and need no adapter or key.
+#[test]
+fn ramp_2_ids_exist_are_enabled_and_validate() {
+    let ids_of = |name: &str| -> Vec<String> {
+        std::fs::read_to_string(repo_root().join("sources").join(name))
+            .unwrap()
+            .lines()
+            .map(|l| l.split('#').next().unwrap_or("").trim().to_string())
+            .filter(|l| !l.is_empty())
+            .collect()
+    };
+    let (r1, r2) = (ids_of("ramp-1.txt"), ids_of("ramp-2.txt"));
+    assert!(r2.len() > r1.len());
+    assert_eq!(&r2[..r1.len()], &r1[..], "ramp-2 starts with ramp-1");
+    let mut seen = std::collections::BTreeSet::new();
+    let denylist = vc_sources::load_denylist(&repo_root().join("policy/denylist.yaml")).unwrap();
+    let ids = adapters::ids();
+    let specs = vc_sources::load_dir(&repo_root().join("sources")).unwrap();
+    for id in &r2 {
+        assert!(seen.insert(id.clone()), "{id} listed twice");
+        let s = specs
+            .iter()
+            .find(|s| s.id.0 == *id)
+            .unwrap_or_else(|| panic!("{id}: no sources/{id}.yaml"));
+        assert!(s.enabled, "{id} is disabled");
+        let v = validate(
+            s,
+            &ValidateOpts {
+                file_stem: Some(id),
+                adapters: &ids,
+                denylist: Some(&denylist),
+            },
+        );
+        assert!(v.is_ok(), "{id}: {:?}", v.errors);
+        assert!(!s.needs_key, "{id} needs a key");
+    }
+    for id in &r2[r1.len()..] {
+        let s = specs.iter().find(|s| s.id.0 == *id).unwrap();
+        assert!(
+            matches!(s.method, Method::Html | Method::Rss | Method::Sitemap),
+            "{id}: batch-2 ramp sources need no adapter"
+        );
+    }
+}

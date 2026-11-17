@@ -1,0 +1,47 @@
+# Sources that need a licence or contract and have no crawlable spec (research 2026-11-17).
+# Rendered by scripts/sources_doc.py into docs/SOURCES.md, "Needs a licence or API key".
+entries:
+- name: IATA Timatic (Web, Widget, AutoCheck API)
+  host: iata.org (iatatravelcentre.com, timaticweb2.com denylisted)
+  sections:
+  - visa
+  - tips
+  what: Official passport, visa, health and customs entry rules per passenger.
+  route: Ask IATA Timatic sales (https://go.updates.iata.org/timatic-info) for a Timatic Widget or AutoCheck
+    API licence for a consumer trip planner; get written consent for automated use and caching.
+  cost: 'No published price (dated trade-press figure: about EUR 499/year for 500 transactions); contract
+    only.'
+- name: TravelDoc (ICTS Europe Systems)
+  host: traveldoc.aero (denylisted)
+  sections:
+  - visa
+  - tips
+  what: Passport, visa, health, customs and duty-free rules per passenger.
+  route: Contact ICTS Europe Systems sales (ies.aero, mail@ictseurope.com) for a commercial or API licence;
+    the site terms ban robots and extraction.
+  cost: Airline licence product; 'all-inclusive licence fee', no published price.
+- name: Rome2Rio partner API
+  host: rome2rio.com (denylisted)
+  sections:
+  - getting_around
+  what: Door-to-door routes across rail, bus, ferry and flights.
+  route: Rome2Rio partner API under contract only.
+  cost: Commercial; contract.
+- name: Tourism New Zealand Tourism Business Database API
+  host: newzealand.com (robots.txt answers 403)
+  sections:
+  - activities
+  - places
+  - events
+  what: New Zealand tourism operators, attractions and events.
+  route: Apply to register@newzealand.com; separate agreement.
+  cost: Free, non-profit use only (so restricted for us).
+- name: timeanddate.com API
+  host: dev.timeanddate.com
+  sections:
+  - events
+  - weather
+  what: Public holidays and astronomy/time-zone data.
+  route: Buy an API plan at https://dev.timeanddate.com/; the website itself is personal, non-commercial
+    use only.
+  cost: Paid, key.

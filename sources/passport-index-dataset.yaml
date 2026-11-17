@@ -31,7 +31,10 @@ key_secret: null
 max_retention_days: null
 display_requirements: null
 notes: 'secondary cross-check only | Disabled: restricted licence (non-commercial or unknown), not ingested
-  in v1 (spec §5.9).'
+  in v1 (spec §5.9). | Also: The repo says MIT, but the data is scraped from passportindex.org (Arton
+  Capital), whose robots.txt blocks GPTBot, ClaudeBot, CCBot and Google-Extended and sends Content-Signal
+  search=yes,ai-train=no,use=reference; the repo owner cannot relicence Arton''s compilation (research
+  2026-11-17). passportindex.org is denylisted.'
 relevance:
   sections:
   - visa
