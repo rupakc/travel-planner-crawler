@@ -1,7 +1,13 @@
 #!/usr/bin/env bash
 # Voyager Crawler VM provisioning: the GCE `startup-script` (runs on every
-# boot, idempotent). Debian 12, e2-standard-2, 20 GB boot disk + the 100 GB
-# pd-balanced data disk `crawler-data` (device name crawler-data).
+# boot, idempotent). Debian 12, e2-medium (Spot this month, standard later),
+# 10 GB boot disk + the 30 GB pd-balanced data disk `crawler-data` (device
+# name crawler-data). The VM is the one instance of the stateful managed
+# instance group voyager-crawler-mig (infrastructure/bootstrap.sh): after a
+# Spot preemption or an autoheal the group recreates it with the same name,
+# IPs, boot disk and data disk, and this script runs again. Nothing here may
+# assume a first boot: the data disk is formatted only when it has no
+# filesystem, and the go-live ramp is decided by the data disk (ramp_default).
 #
 # Reads instance metadata (set by infrastructure/bootstrap.sh):
 #   crawler-bundle   base64 tar.gz of deploy/ (compose, postgres, chromium,
@@ -16,13 +22,18 @@
 # (mounted into the postgres container). Mounts the data disk at
 # /var/lib/voyager-crawler (formatted only when it has no filesystem), which
 # holds pgdata, the spool and the deploy state (§17.5). Installs and enables
-# the units, then queues the first deploy.
+# the units, then queues the first deploy. Adds a 2 GB swap file on the boot
+# disk (vm.swappiness=10): the stack runs within ~3.4 GB of a 4 GB VM.
 set -euo pipefail
 
 MD="http://metadata.google.internal/computeMetadata/v1"
-OPT=/opt/voyager-crawler
-DATA=/var/lib/voyager-crawler
-DISK=/dev/disk/by-id/google-crawler-data
+OPT="${VC_FB_OPT:-/opt/voyager-crawler}"
+DATA="${VC_FB_DATA:-/var/lib/voyager-crawler}"
+DISK="${VC_DATA_DISK:-/dev/disk/by-id/google-crawler-data}"
+FSTAB="${VC_FSTAB:-/etc/fstab}"
+SWAPFILE="${VC_SWAPFILE:-/swapfile}"
+SWAP_SIZE=2G
+SYSCTL_DIR="${VC_SYSCTL_DIR:-/etc/sysctl.d}"
 SYSTEMD_DIR="${VC_SYSTEMD_DIR:-/etc/systemd/system}"
 OPS_AGENT_DIR="${VC_OPS_AGENT_DIR:-/etc/google-cloud-ops-agent}"
 COSIGN_VERSION=v2.4.1
@@ -117,8 +128,37 @@ configure_docker() {
   sysctl -q -p /etc/sysctl.d/99-voyager-crawler-docker.conf || log "could not set ip_forward"
 }
 
+# configure_swap — a 2 GB swap file on the boot disk, vm.swappiness=10 (only
+# under real memory pressure). Built under a temporary name and renamed once
+# mkswap succeeded, so an interrupted boot never leaves a half-made swap file;
+# swapon failing is logged, never fatal.
+configure_swap() {
+  if [[ ! -f "$SWAPFILE" ]]; then
+    log "creating a $SWAP_SIZE swap file at $SWAPFILE"
+    rm -f "$SWAPFILE.tmp"
+    fallocate -l "$SWAP_SIZE" "$SWAPFILE.tmp"
+    chmod 0600 "$SWAPFILE.tmp"
+    mkswap "$SWAPFILE.tmp" >/dev/null
+    mv "$SWAPFILE.tmp" "$SWAPFILE"
+  fi
+  grep -q "^$SWAPFILE " "$FSTAB" 2>/dev/null || echo "$SWAPFILE none swap sw 0 0" >>"$FSTAB"
+  if ! swapon --show=NAME --noheadings 2>/dev/null | grep -qx "$SWAPFILE"; then
+    swapon "$SWAPFILE" || log "swapon $SWAPFILE failed"
+  fi
+  install -d "$SYSCTL_DIR"
+  printf 'vm.swappiness=10\n' >"$SYSCTL_DIR/99-voyager-crawler-swap.conf"
+  sysctl -q -p "$SYSCTL_DIR/99-voyager-crawler-swap.conf" || log "could not set vm.swappiness"
+}
+
+# data_disk_attached — the stateful data disk is there (a function, so the
+# tests can stand in for the block device)
+data_disk_attached() { [[ -b "$DISK" ]]; }
+
+# mount_data_disk — on every boot. After a MIG recreate the data disk comes
+# back with its filesystem (stateful, never re-created), so it is mounted as
+# it is; only a disk without any filesystem is formatted.
 mount_data_disk() {
-  [[ -b "$DISK" ]] || die "data disk $DISK not attached"
+  data_disk_attached || die "data disk $DISK not attached"
   if ! blkid "$DISK" >/dev/null 2>&1; then
     log "formatting the empty data disk"
     mkfs.ext4 -q -m 0 -L crawler-data -E lazy_itable_init=0,lazy_journal_init=0,discard "$DISK"
@@ -126,8 +166,9 @@ mount_data_disk() {
   local uuid
   uuid="$(blkid -s UUID -o value "$DISK")"
   install -d "$DATA"
-  if ! grep -q "UUID=$uuid" /etc/fstab; then
-    echo "UUID=$uuid $DATA ext4 discard,defaults,nofail 0 2" >>/etc/fstab
+  [[ -n "$uuid" ]] || die "data disk $DISK has no filesystem UUID"
+  if ! grep -q "UUID=$uuid" "$FSTAB" 2>/dev/null; then
+    echo "UUID=$uuid $DATA ext4 discard,defaults,nofail 0 2" >>"$FSTAB"
   fi
   mountpoint -q "$DATA" || mount "$DATA"
   mountpoint -q "$DATA" || die "$DATA is not mounted"
@@ -263,7 +304,8 @@ install_bundle() {
 }
 
 install_units() {
-  install -m 0644 "$OPT"/host/systemd/*.service "$OPT"/host/systemd/*.timer /etc/systemd/system/
+  install -d "$SYSTEMD_DIR"
+  install -m 0644 "$OPT"/host/systemd/*.service "$OPT"/host/systemd/*.timer "$SYSTEMD_DIR/"
   systemctl daemon-reload
   systemctl enable voyager-crawler.service
   systemctl enable --now voyager-crawler-deploy.timer voyager-crawler-watchdog.timer \
@@ -271,6 +313,7 @@ install_units() {
 }
 
 main() {
+  configure_swap
   install_packages
   configure_ops_agent
   configure_docker

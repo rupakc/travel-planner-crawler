@@ -1,8 +1,9 @@
 [Unit]
-Description=Voyager Crawler base backup, daily (WAL and backups expire after 14 days by lifecycle)
+Description=Voyager Crawler full base backup, weekly (WAL and backups expire after 14 days by lifecycle: 2 base backups kept)
 
 [Timer]
-OnCalendar=*-*-* 03:15:00 UTC
+# Saturday, so Sunday's light restore drill (05:30) restores a fresh backup
+OnCalendar=Sat *-*-* 03:15:00 UTC
 Persistent=true
 RandomizedDelaySec=15min
 

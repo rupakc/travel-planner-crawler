@@ -165,7 +165,7 @@ jobs:
         with:
           persist-credentials: false
       - name: deploy.sh and bootstrap.sh tests (fakes, no GCP)
-        run: bash deploy/tests/test_deploy.sh && bash infrastructure/tests/test_bootstrap.sh
+        run: bash deploy/tests/test_deploy.sh && bash deploy/tests/test_host.sh && bash infrastructure/tests/test_bootstrap.sh
 
   scripts:
     name: scripts (python + ownership self-test)

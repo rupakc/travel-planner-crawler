@@ -6,7 +6,7 @@
     "app": "voyager-crawler"
   },
   "documentation": {
-    "content": "The newest archived WAL segment is older than 2 h, or the newest base backup is older than 30 h (wal-g \u2192 gs://voyager-crawler-ops/walg). Check `voyager-crawler-basebackup.service` and Postgres `archive_command` errors. The ages come from the maintenance role (Postgres `pg_stat_archiver`; the base-backup unit's `last_ok_at`); no age reported at all (archiving never succeeded, no base backup yet, maintenance down) alerts too.",
+    "content": "The newest archived WAL segment is older than 2 h, or the newest base backup is older than 8 days (weekly full backups, Saturdays; wal-g \u2192 gs://voyager-crawler-ops/walg). Check `voyager-crawler-basebackup.service` and Postgres `archive_command` errors. The ages come from the maintenance role (Postgres `pg_stat_archiver`; the base-backup unit's `last_ok_at`); no age reported at all (archiving never succeeded, no base backup yet, maintenance down) alerts too.",
     "mimeType": "text/markdown"
   },
   "conditions": [
@@ -29,11 +29,11 @@
       }
     },
     {
-      "displayName": "base backup age > 30 h",
+      "displayName": "base backup age > 8 days",
       "conditionThreshold": {
         "filter": "metric.type=\"custom.googleapis.com/crawler/base_backup_age_seconds\" AND resource.type=\"gce_instance\"",
         "comparison": "COMPARISON_GT",
-        "thresholdValue": 108000,
+        "thresholdValue": 691200,
         "duration": "300s",
         "aggregations": [
           {

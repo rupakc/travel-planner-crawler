@@ -163,7 +163,7 @@ It writes nothing.
 | Job | When | What |
 |---|---|---|
 | WAL archiving | continuous | wal-g streams Postgres WAL to `gs://voyager-crawler-ops/walg/`. `WALG_PREVENT_WAL_OVERWRITE=true`: a retried upload of an identical segment succeeds; a different one fails loudly |
-| Base backup | daily 03:15 UTC | `voyager-crawler-basebackup.timer`; backups and WAL expire after 14 days by lifecycle |
+| Base backup | weekly, Saturdays 03:15 UTC, always full | `voyager-crawler-basebackup.timer`; backups and WAL expire after 14 days by lifecycle, so the two newest base backups and the WAL since the older one are kept |
 | Disk snapshot | daily | kept 7 days |
 | Light restore drill | Sundays 05:30 UTC | `deploy/host/restore-drill.sh`, see below |
 | Equivalence drill | weekly, maintenance role | rebuilds the newest segments' capture rows from CDXJ in memory and compares them with the database; exports `restore_drill_ok` |
@@ -236,7 +236,7 @@ exporter.
 | Spool backpressure | fetchers paused for 5 minutes (spool > 2 GB or uploads failing 15 min) |
 | Spool quarantine | a fetcher quarantined an unreadable sealed spool file (`spool_quarantined` rose) |
 | Disk | a VM disk above 80 % for 10 minutes (Ops Agent metric) |
-| Backup age | WAL archive older than 2 h, or base backup older than 30 h; or either not reported (1 h, 24 h) |
+| Backup age | WAL archive older than 2 h, or base backup older than 8 days (weekly full backups); or either not reported (1 h, 24 h) |
 | Restore drill | last drill failed; no successful drill in 8 days; no successful light drill in 8 days, or none reported in 24 h |
 | LLM spend | month spend above 80 % of the cap; or the ratio not reported for 30 minutes |
 | LLM config | `llm_config_invalid` > 0: `VC_LLM_ENABLED=true` but `[llm]` is invalid, so the LLM was forced off |

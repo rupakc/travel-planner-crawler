@@ -85,7 +85,7 @@ full → see disk.
 ## voyager-crawler: backup or WAL archive too old
 
 **Means.** The newest archived WAL is older than 2 h, the newest base backup older than
-30 h, or either has not been reported (maintenance down, or never measured).
+8 days (base backups are weekly, Saturdays), or either has not been reported (maintenance down, or never measured).
 
 **Check.**
 1. `psqlc -c "SELECT archived_count, last_archived_time, failed_count, last_failed_wal, last_failed_time FROM pg_stat_archiver"`
