@@ -26,6 +26,7 @@ sqlx = { workspace = true }
 tokio = { workspace = true }
 futures = { workspace = true }
 bytes = { workspace = true }
+http = { workspace = true }
 chrono = { workspace = true }
 url = { workspace = true }
 tracing = { workspace = true }
@@ -33,4 +34,5 @@ thiserror = { workspace = true }
 
 [dev-dependencies]
 testkit = { workspace = true }
+jsonschema = { workspace = true }
 wiremock = { workspace = true }

@@ -15,12 +15,12 @@ seeds:
 - https://rrgtfsfeeds.s3.amazonaws.com/gtfs_b.zip
 sitemaps: []
 feeds: []
-adapter: null
+adapter: gtfs_static
 include: []
 exclude: []
 max_depth: 0
 kinds:
-- transport_option
+- transit_item
 llm_kinds: []
 render: never
 cadence: weekly
@@ -34,7 +34,7 @@ max_retention_days: null
 display_requirements: null
 notes: 'www.mta.info/robots.txt 200, * disallows only admin/search/user paths (checked 2026-11-17); rrgtfsfeeds
   S3 host not checked. | Disabled: terms not yet confirmed: MTA developer data terms not yet read and
-  quoted; adapter pending: GTFS static zip adapter (download, verify, index routes/stops per feed)'
+  quoted; rrgtfsfeeds S3 robots.txt not checked'
 relevance:
   sections:
   - getting_around

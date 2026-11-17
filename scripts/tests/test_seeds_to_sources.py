@@ -484,6 +484,8 @@ def test_batch2_api_and_dump_sources_run_only_on_an_adapter(generated):
     # An api/dump source is on only with a built-in adapter; every other one stays off.
     for sid in s2s.SOURCE_CLASS:
         spec = generated[sid]
+        if sid in s2s.GTFS_FEEDS:
+            continue
         if spec["method"] in ("api", "dump"):
             want = OPEN_DATA_ADAPTERS.get(sid)
             assert spec["adapter"] == want, sid
@@ -495,7 +497,7 @@ def test_batch2_api_and_dump_sources_run_only_on_an_adapter(generated):
 def test_batch2_enabled_sources_are_polite_and_scoped(generated):
     for sid in s2s.SOURCE_CLASS:
         spec = generated[sid]
-        if not spec["enabled"]:
+        if not spec["enabled"] or sid in s2s.GTFS_FEEDS:
             continue
         assert spec["method"] in ("html", "rss", "sitemap") or sid in OPEN_DATA_ADAPTERS, sid
         assert spec["daily_budget"] <= 500 and spec["max_depth"] <= 2 and spec["min_delay_s"] >= 5, sid
@@ -550,7 +552,7 @@ def test_ramp_2_extends_ramp_1_with_enabled_runnable_sources():
         assert committed[sid]["method"] in ("html", "rss", "sitemap"), sid
     # Every html/rss/sitemap source this batch enables is in ramp-2 (the open-data adapter
     # sources come with ramp-3).
-    on = {sid for sid in s2s.SOURCE_CLASS if committed[sid]["enabled"]} - set(OPEN_DATA_ADAPTERS)
+    on = {sid for sid in s2s.SOURCE_CLASS if committed[sid]["enabled"]} - set(OPEN_DATA_ADAPTERS) - set(s2s.GTFS_FEEDS)
     assert on <= set(r2), sorted(on - set(r2))
 
 
@@ -574,7 +576,7 @@ def test_ramp_3_is_ramp_2_plus_the_open_data_sources():
     r2, r3 = _ramp("ramp-2.txt"), _ramp("ramp-3.txt")
     assert len(r3) == len(set(r3))
     assert r3[: len(r2)] == r2
-    assert set(r3[len(r2):]) == set(OPEN_DATA_ADAPTERS)
+    assert set(r3[len(r2):]) == set(OPEN_DATA_ADAPTERS) | s2s.GTFS_ON
     v = _validator()
     for sid in r3:
         spec = committed[sid]
@@ -607,3 +609,27 @@ def test_open_data_sources_2026_11_18(generated):
         spec = generated[sid]
         assert spec["enabled"] is False and why in " ".join(spec["notes"].split()), sid
     assert {"public_holiday", "price_level"} <= s2s.KINDS
+
+
+def test_gtfs_feeds_run_on_the_gtfs_adapter(generated):
+    assert s2s.GTFS_ON <= set(s2s.GTFS_FEEDS)
+    for sid in s2s.GTFS_FEEDS:
+        spec = generated[sid]
+        assert spec["adapter"] == "gtfs_static", sid
+        assert spec["method"] in ("api", "dump"), sid
+        assert spec["kinds"] == ["transit_item"] and spec["llm_kinds"] == [], sid
+        assert spec["enabled"] is (sid in s2s.GTFS_ON), sid
+        assert spec["cadence"] == "weekly" and spec["min_delay_s"] >= 5, sid
+        assert spec["daily_budget"] <= 500, sid
+        assert spec["licence"]["attribution"], sid
+        if spec["needs_key"]:
+            assert spec["enabled"] is False and spec["key_secret"] == f"crawler-src-{sid}-key", sid
+        if spec["enabled"]:
+            assert spec["licence"]["class"] in ("open", "api_terms"), sid
+            assert not spec["needs_key"], sid
+            assert all(u.startswith("https://") for u in spec["seeds"]), sid
+    # robots.txt Crawl-Delay 10 on data.opentransportdata.swiss.
+    assert generated["opentransportdata-swiss"]["min_delay_s"] >= 10
+    for sid in ("gtfs-de", "hk-td-gtfs"):
+        assert "403" in generated[sid]["notes"], sid
+    assert "terms not yet confirmed" in generated["mta-gtfs"]["notes"]

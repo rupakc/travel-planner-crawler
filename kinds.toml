@@ -117,6 +117,12 @@ storage = "record"
 source_classes = ["official", "reference", "editorial", "community"]
 verbatim = ["/source_url", "/as_of", "/evidence/*"]
 
+[kinds.transit_item]
+version = 1
+storage = "record"
+source_classes = ["official", "reference"]
+verbatim = ["/fares/*/price/text", "/fares/*/price/amount", "/website_url", "/fare_url", "/phone", "/valid_from", "/valid_to", "/source_url", "/as_of", "/evidence/*"]
+
 [kinds.transport_option]
 version = 1
 storage = "record"

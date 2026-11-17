@@ -331,6 +331,50 @@ async fn ourairports_dump_batch_yields_airports() {
     assert!(lhr["country"].is_string());
 }
 
+/// A `gtfs_static` batch (as the adapter stores it) becomes `transit_item` records under the
+/// feed's own licence (CC BY 4.0, Auckland Transport).
+#[tokio::test]
+async fn gtfs_static_batch_yields_transit_items_with_the_feed_licence() {
+    let r = rig_real(false).await;
+    seed_real(&r.pool, &["auckland-gtfs"]).await;
+    let body = r#"[
+      {"t":"operator","id":"AT","name":"Auckland Transport","url":"https://at.govt.nz/","fare_url":"https://at.govt.nz/fares/","timezone":"Pacific/Auckland","lang":"en","modes":["bus","ferry","rail"],"route_count":3,
+       "fares":[{"label":"adult_1zone","amount":2.4,"currency":"NZD","unlimited_transfers":true,"transfer_duration_s":3600}],
+       "valid_from":"2026-11-10","valid_to":"2027-02-01","publisher":"Auckland Transport"},
+      {"t":"line","id":"EAST","short_name":"EAST","long_name":"Eastern Line","route_type":2,"mode":"rail","operator":"Auckland Transport","timezone":"Pacific/Auckland"},
+      {"t":"station","id":"BRIT","name":"Britomart Train Station","lat":-36.8443,"lng":174.7676,"wheelchair":true,"timezone":"Pacific/Auckland"}
+    ]"#;
+    let o = run(
+        &r,
+        dump(
+            "https://gtfs.at.govt.nz/gtfs.zip",
+            "auckland-gtfs",
+            "gtfs_static",
+            MediaType::Json,
+            body,
+        ),
+    )
+    .await;
+    assert_processed(&o);
+    let recs = records_of(&r, "transit_item", "auckland-gtfs").await;
+    assert_eq!(recs.len(), 3, "{recs:?}");
+    let op = recs
+        .iter()
+        .find(|x| x["item_type"] == "operator")
+        .expect("operator");
+    assert_eq!(op["country_code"], "NZ");
+    assert!(op["country"].is_string(), "country filled from the code");
+    assert_eq!(op["fares"][0]["price"]["currency"], "NZD");
+    assert_eq!(op["source_url"], "https://gtfs.at.govt.nz/gtfs.zip");
+    let classes: Vec<String> = sqlx::query_scalar(
+        "SELECT DISTINCT licence_class FROM records WHERE source_id = 'auckland-gtfs'",
+    )
+    .fetch_all(&r.pool)
+    .await
+    .unwrap();
+    assert_eq!(classes, ["open"]);
+}
+
 #[tokio::test]
 async fn wikivoyage_dump_batch_yields_places() {
     let r = rig_real(false).await;

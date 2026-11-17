@@ -12,15 +12,17 @@ code. Each one is three files, which this crate loads, checks and turns into `Ki
 Path: `crates/vc-kinds`. Dependencies: `jsonschema`, `toml`. Status: wired; the processor
 loads the registry at startup.
 
-## The 22 v1 kinds
+## The 23 v1 kinds
 
 `activity`, `advisory`, `airport`, `article`, `attraction`, `cheapest_fare`,
 `emergency_numbers`, `event`, `fx_rate`, `hotel`, `packing_hint`, `place`, `price_level`,
-`public_holiday`, `qa_thread`, `route`, `sim_offer`, `tip`, `transport_option`, `visa_rule`,
-`walking_tour`, `weather_normal`. `cheapest_fare` (series `fare:<ORIG>:<DEST>:<YYYY-MM>`,
+`public_holiday`, `qa_thread`, `route`, `sim_offer`, `tip`, `transit_item`,
+`transport_option`, `visa_rule`, `walking_tour`, `weather_normal`. `cheapest_fare` (series `fare:<ORIG>:<DEST>:<YYYY-MM>`,
 cached fares, not live prices), `fx_rate`, `price_level` (series
 `price_level:<ISO2>:<category>:<basis>`) and `weather_normal` are observations; the rest are
 records. `price_level` and `public_holiday` were added on 2026-11-18 (open-data adapters).
+`transit_item` (2026-11-18) is one public-transport operator, line or station from a GTFS
+feed (`gtfs_static`): GTFS gives no city, which `transport_option` requires.
 
 ## What the loader refuses
 

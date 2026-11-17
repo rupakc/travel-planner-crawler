@@ -22,6 +22,7 @@ use vc_core::sources::{AdapterCtx, AdapterReport, SourceAdapter};
 pub(crate) mod common;
 pub(crate) mod csv_filter;
 pub mod dump;
+pub(crate) mod gtfs_zip;
 pub(crate) mod iso3;
 pub(crate) mod zip_stream;
 
@@ -29,6 +30,7 @@ pub mod canada_advisories;
 pub mod ecb_fx;
 pub mod eurostat_jsonstat;
 pub mod fcdo_content_api;
+pub mod gtfs_static;
 pub mod json_events;
 pub mod met_norway;
 pub mod mobility_database_catalog;
@@ -53,6 +55,7 @@ pub static REGISTRY: &[&dyn SourceAdapter] = &[
     &eurostat_jsonstat::EurostatJsonStat,
     &fcdo_content_api::FcdoContentApi,
     &json_events::JsonEvents::DEFAULT,
+    &gtfs_static::GtfsStatic::DEFAULT,
     &met_norway::MetNorway,
     &mobility_database_catalog::MobilityDatabaseCatalog::DEFAULT,
     &nager_holidays::NagerHolidays,
@@ -127,6 +130,9 @@ pub fn registry_with(cfg: &vc_config::SourcesConfig) -> Vec<Box<dyn SourceAdapte
         Box::new(eurostat_jsonstat::EurostatJsonStat),
         Box::new(fcdo_content_api::FcdoContentApi),
         Box::new(json_events::JsonEvents::DEFAULT),
+        Box::new(gtfs_static::GtfsStatic::new(
+            gtfs_static::GtfsSettings::from_config(cfg),
+        )),
         Box::new(met_norway::MetNorway),
         Box::new(mobility_database_catalog::MobilityDatabaseCatalog::new(
             d.clone(),

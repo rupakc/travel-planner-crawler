@@ -14,12 +14,12 @@ seeds:
 - https://api.transport.nsw.gov.au/v1/publictransport/timetables/complete/gtfs
 sitemaps: []
 feeds: []
-adapter: null
+adapter: gtfs_static
 include: []
 exclude: []
 max_depth: 0
 kinds:
-- transport_option
+- transit_item
 llm_kinds: []
 render: never
 cadence: weekly
@@ -33,9 +33,8 @@ max_retention_days: null
 display_requirements: null
 notes: 'Portal robots ok (Drupal asset rules only); api.transport.nsw.gov.au/robots.txt answers 500 (checked
   2026-11-17). CC BY 4.0; free API key (Authorization: apikey). | Disabled: needs an API key: owner must
-  register a key at https://opendata.transport.nsw.gov.au/ (free); robots.txt of api.transport.nsw.gov.au
-  answers 500 (checked 2026-11-17), so disallowed until readable; adapter pending: GTFS static zip adapter
-  (download, verify, index routes/stops per feed)'
+  register a key at https://opendata.transport.nsw.gov.au/ (free; sent as ''Authorization: apikey <key>'');
+  robots.txt of api.transport.nsw.gov.au answers 500 (checked 2026-11-17), so disallowed until readable'
 relevance:
   sections:
   - getting_around
