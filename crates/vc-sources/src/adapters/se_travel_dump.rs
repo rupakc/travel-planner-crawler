@@ -2,11 +2,17 @@
 //! through archive.org's in-archive file view of `travel.stackexchange.com.7z` (no 7z decoder
 //! needed). Filter v1 keeps questions and answers as JSON objects. Author identity is kept
 //! **only** as the required attribution (display name or user link, spec §5.10); editor
-//! names and other personal fields are dropped. Erasure is `admin purge --author`.
+//! names and other personal fields are dropped. Erasure is `admin purge --author`; a purged
+//! author stays out of later dumps: the caller hands the adapter the purged authors' hashes
+//! ([`SeTravelDump::with_excluded_authors`], from `tombstones`) and their posts are dropped by
+//! the filter, before anything is spooled.
 //!
 //! A leased `https://archive.org/details/<item>` row is mapped to
 //! `https://archive.org/download/<item>/<item>/<site file>/Posts.xml`; any other leased URL is
 //! downloaded as is.
+
+use std::collections::BTreeSet;
+use std::sync::Arc;
 
 use async_trait::async_trait;
 use quick_xml::events::Event;
@@ -77,6 +83,25 @@ pub fn filter_row(line: &[u8]) -> Result<Option<Value>> {
     })))
 }
 
+/// The lowercase hex sha256 of an author name: the form a purged author is excluded by (the
+/// `sha256:<hex>` selector of `tombstones` without its prefix).
+pub fn author_digest(name: &str) -> String {
+    crate::sha256::hex(&crate::sha256::Sha256::digest(name.as_bytes()))
+}
+
+/// [`filter_row`], dropping posts whose author's [`author_digest`] is in `excluded`.
+pub fn filter_row_excluding(line: &[u8], excluded: &BTreeSet<String>) -> Result<Option<Value>> {
+    let v = filter_row(line)?;
+    if excluded.is_empty() {
+        return Ok(v);
+    }
+    Ok(v.filter(|p| {
+        !p["attribution"]["author"]
+            .as_str()
+            .is_some_and(|a| excluded.contains(&author_digest(a)))
+    }))
+}
+
 /// The download URL for a leased row.
 pub fn download_url(leased: &CanonicalUrl) -> Result<CanonicalUrl> {
     let path = leased.as_url().path();
@@ -92,7 +117,9 @@ pub fn download_url(leased: &CanonicalUrl) -> Result<CanonicalUrl> {
         .map_err(|e| Error::Invalid(e.to_string()))
 }
 
-struct PostsFilter;
+struct PostsFilter {
+    excluded: Arc<BTreeSet<String>>,
+}
 
 impl DumpFilter for PostsFilter {
     fn version(&self) -> &'static str {
@@ -108,7 +135,7 @@ impl DumpFilter for PostsFilter {
     }
 
     fn filter(&mut self, unit: &[u8]) -> Result<Unit> {
-        Ok(match filter_row(unit)? {
+        Ok(match filter_row_excluding(unit, &self.excluded)? {
             Some(v) => Unit::Keep(serde_json::to_vec(&v)?),
             None => Unit::Drop,
         })
@@ -119,17 +146,35 @@ impl DumpFilter for PostsFilter {
 #[derive(Debug, Clone)]
 pub struct SeTravelDump {
     settings: DumpSettings,
+    excluded: Option<Arc<BTreeSet<String>>>,
 }
 
 impl SeTravelDump {
     /// Default settings.
     pub const DEFAULT: SeTravelDump = SeTravelDump {
         settings: DumpSettings::DEFAULT,
+        excluded: None,
     };
 
     /// With settings.
     pub fn new(settings: DumpSettings) -> Self {
-        SeTravelDump { settings }
+        SeTravelDump {
+            settings,
+            excluded: None,
+        }
+    }
+
+    /// Drops the posts of these authors (lowercase hex sha256 of the name, see
+    /// [`author_digest`]; a `sha256:` prefix is accepted): the purged authors, loaded by the
+    /// caller when the run starts.
+    #[must_use]
+    pub fn with_excluded_authors(mut self, digests: impl IntoIterator<Item = String>) -> Self {
+        let set = digests
+            .into_iter()
+            .map(|d| d.strip_prefix("sha256:").unwrap_or(&d).to_ascii_lowercase())
+            .collect();
+        self.excluded = Some(Arc::new(set));
+        self
     }
 }
 
@@ -141,6 +186,9 @@ impl SourceAdapter for SeTravelDump {
 
     async fn run(&self, ctx: &mut AdapterCtx<'_>) -> Result<AdapterReport> {
         let url = download_url(&ctx.url.url)?;
-        run_dump(ctx, self.id(), url, &mut PostsFilter, &self.settings).await
+        let mut f = PostsFilter {
+            excluded: self.excluded.clone().unwrap_or_default(),
+        };
+        run_dump(ctx, self.id(), url, &mut f, &self.settings).await
     }
 }

@@ -58,6 +58,38 @@ pub fn adapters(cfg: &Config) -> HashMap<&'static str, Arc<dyn SourceAdapter>> {
         .collect()
 }
 
+/// The adapter to run for one leased row of `id`. An author-keeping dump (`se_travel_dump`,
+/// see [`crate::admin::author::AUTHOR_DUMP_ADAPTERS`]) gets the purged authors' hashes from
+/// `tombstones`, loaded now, so a re-ingested dump never stores a purged author's posts (final
+/// review B3). Without a pool every adapter runs as registered. A failed load fails the run
+/// (it is retried), never runs the dump unfiltered.
+pub async fn adapter_for_run(
+    cfg: &Config,
+    pool: Option<&sqlx::PgPool>,
+    id: &str,
+    registered: Arc<dyn SourceAdapter>,
+) -> Result<Arc<dyn SourceAdapter>> {
+    use vc_sources::adapters::se_travel_dump::SeTravelDump;
+    let Some(pool) = pool else {
+        return Ok(registered);
+    };
+    if id != SeTravelDump::DEFAULT.id() {
+        return Ok(registered);
+    }
+    let authors: Vec<String> =
+        sqlx::query_scalar("SELECT selector FROM tombstones WHERE selector_type = 'author'")
+            .fetch_all(pool)
+            .await
+            .map_err(|e| vc_core::Error::Db(e.to_string()))?;
+    let digests = authors.iter().map(|a| crate::admin::author::digest(a));
+    Ok(Arc::new(
+        SeTravelDump::new(vc_sources::adapters::DumpSettings::from_config(
+            &cfg.sources,
+        ))
+        .with_excluded_authors(digests),
+    ))
+}
+
 /// The built-in adapters that resume a paged stream from a cursor, by id.
 pub fn resumable_adapters() -> HashMap<&'static str, Arc<dyn ResumableAdapter>> {
     vc_sources::adapters::resumable()

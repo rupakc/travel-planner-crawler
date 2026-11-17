@@ -23,6 +23,10 @@
 //!   (touched) a record is cut out as well; plus every output chunk of an author-keeping dump
 //!   adapter ([`AUTHOR_DUMP_ADAPTERS`]) that holds a post attributed to the author (found by
 //!   reading the chunk: the extracted records of such dumps carry no author at all).
+//! * **Later dumps:** the fetcher hands `se_travel_dump` the hashed selectors of every author
+//!   tombstone when a run starts ([`crate::wiring::sources::adapter_for_run`]), and the adapter
+//!   drops their posts before anything is spooled, so a re-ingested dump brings no purged
+//!   author back to raw, the text tier or the index.
 
 use std::collections::BTreeSet;
 
