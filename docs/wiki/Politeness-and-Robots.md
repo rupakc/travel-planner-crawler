@@ -152,8 +152,8 @@ An allowlisted third-party host (a CDN) is its own politeness key, so it is resp
   that host across all renders.
 - Across processes, the render **borrows** that key through Postgres. The borrow is granted
   only if the key's `next_allowed_at` has passed, it is not parked and no claim on it is in
-  flight. The key's next slot then moves on by its delay. A refused borrow fails that
-  sub-request at once; nothing waits for it.
+  flight. The key's next slot then moves on by its delay. A busy key is asked again for up
+  to 12 s (never past the render deadline); still busy, that sub-request is skipped.
 - If the policy files cannot be read, the filter fails closed (no third parties).
 
 ## Page-level signals: the UsePolicy matrix

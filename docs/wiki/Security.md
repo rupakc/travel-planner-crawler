@@ -38,6 +38,7 @@ Do not open a public issue. Opt-out requests are not security issues; see BOT.md
   which `deploy.sh` installs only as a matched pair. It falls back to Secret Manager only
   when those files are missing or unusable. rustls refuses a mismatched pair, so a
   half-done rotation cannot take the API down.
+- `unsafe` Rust is forbidden workspace-wide (`unsafe_code = "forbid"`).
 
 ## Known limitation: child targets
 
@@ -46,13 +47,14 @@ chromiumoxide 0.9.1 (the CDP library) the renderer cannot turn on `Fetch.enable`
 target before it starts, so their requests are not intercepted. What limits the risk:
 
 - every document other than the page's own is refused, so no OOPIF document loads;
-- worker and service-worker scripts are refused, and non-http(s) URLs are refused;
-- Chromium is only on the internal `render` network, which has no route out;
+- a worker script loaded by the page passes the same checks as any script, and non-http(s)
+  URLs (`blob:`, `data:`) are refused;
+- Chromium is only on the internal `render` network, which has no route out, so a child
+  target's own requests fail;
 - the only other listener the fetcher had on that network, its metrics endpoint, moved to
   the separate `metrics` network.
 
 See [Rendering with Chromium](Rendering-with-Chromium).
-- `unsafe` Rust is forbidden workspace-wide (`unsafe_code = "forbid"`).
 
 ## Least-privilege IAM
 

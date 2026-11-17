@@ -88,6 +88,28 @@ Every real request becomes a normal exchange, stored as WARC `request`/`response
 next to the final DOM (`resource` record), in the same spool. Refused requests are listed
 in the render outcome.
 
+### Known gap: child targets are not intercepted
+
+`Fetch.enable` applies to **one CDP target**. The renderer (chromiumoxide 0.9.1) attaches to
+the page target only; that version cannot auto-attach to child targets and send them their
+own `Fetch.enable`. Requests made **inside** a child target are therefore not paused by the
+renderer:
+
+- dedicated, shared and service **workers** (a worker's own `fetch()`/XHR/`importScripts`);
+- **out-of-process iframes** (OOPIFs: cross-site frames run in their own renderer process).
+
+How this is contained:
+
+| Mitigation | Effect |
+|---|---|
+| Documents refused | Only the page's own document is fetched. Every other document request (iframes, JS or meta-refresh navigations) is refused, so an OOPIF never gets a document to run. |
+| Workers get nothing | A worker script paused at the page passes the same checks as any script (an unknown type is `other` and refused; `blob:`, `data:` and other non-http(s) URLs are refused). A request Chromium makes from the worker's own target is not paused and fails: there is no network (next row). |
+| Internal render network | Anything a child target requests on its own has nowhere to go: Chromium sits on the `internal` Docker network `render`, with no route out. |
+| Nothing to reach on `render` | The fetcher's `/metrics` and `/healthz` listen on the separate `metrics` network (`VC_OBS_METRICS_ADDR`), never on `render`; the only peer Chromium can see is the fetcher's outgoing CDP connection. |
+
+A future chromiumoxide with `Target.setAutoAttach` support should intercept child targets too
+(`Fetch.enable` per attached target) and turn this gap into a test.
+
 ## Allowlisted sub-resource hosts
 
 `policy/subresource_allowlist.yaml` lists a few public CDNs (for example
@@ -103,10 +125,11 @@ Third-party hosts are paced twice:
 | Layer | Scope | Rule |
 |---|---|---|
 | In-process lock | every tab and renderer in the fetcher process | one request at a time per host, at least the sub-resource gap apart; a wait past the render deadline refuses the request as `budget` |
-| Key borrow | every process, through Postgres | the request **borrows** the CDN's own politeness key: granted only if its `next_allowed_at` has passed, it is not parked and no claim is in flight. The key's `next_allowed_at` then moves on by its delay, and again when the request ends. A refused borrow fails that sub-request at once; nothing waits. |
+| Key borrow | every process, through Postgres | the request **borrows** the CDN's own politeness key: granted only if its `next_allowed_at` has passed, it is not parked and no claim is in flight. The key's `next_allowed_at` then moves on by its delay, and again when the request ends. A busy key is asked again every 250 ms for up to 12 s (never past the render deadline), so a second file from the same CDN arrives after the CDN's delay; still busy, that sub-request is skipped. |
 
-The borrow lives in `vcrawl`'s `wiring::fetch::third_party_gate`, which wraps the renderer's
-permit client. Cache hits skip both layers.
+The borrow is the renderer's `ThirdPartyBorrow` hook, set by the fetcher with
+`wiring::fetch::third_party_borrow` (over `PgFrontier::borrow_subresource`). Cache hits skip
+both layers.
 
 ## Budgets
 
@@ -150,14 +173,6 @@ The rendered page's own status follows the same ladder as a plain fetch:
 | 429, 503 | key rate-limited (with `Retry-After`), render stops |
 | other 5xx | counts toward the key's run of server errors |
 | other non-2xx | permanent failure for that URL |
-
-## Known limitation: child targets
-
-Workers and out-of-process iframes run as Chromium **child targets**. With chromiumoxide
-0.9.1 the renderer cannot enable `Fetch` interception on them before they start. The risk is
-contained: other documents and worker scripts are refused, non-http(s) URLs are refused,
-and Chromium sits on the internal `render` network with no route out and no other listener.
-See [Security](Security).
 
 > **Status:** the fetcher renders URLs queued in `render` mode (the seeds of `always`
 > sources, and links and redirects found from them), with the third-party borrow above.
