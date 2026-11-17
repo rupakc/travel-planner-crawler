@@ -278,7 +278,23 @@ unreadable file stops the scheduler's pass and the fetcher (fail closed).
    ```
 
    Expected: `{"status":"ready"}`, then `401` (no token sent).
-4. Metrics in Cloud Monitoring (laptop):
+4. Register Voyager as an API client. The token is `crawler-api-token-voyager` in Secret
+   Manager (bootstrap made it `voyager.<random>`); the command stores only its argon2 hash
+   and never prints it:
+
+   ```bash
+   vcadm client add --name voyager | jq -c .
+   vcadm client list | jq -c '.[] | {client_id, enabled}'
+   sudo sh -c 'curl -s -o /dev/null -w "%{http_code}\n" --cacert /run/voyager-crawler/secrets/api_tls_cert \
+     -H "Authorization: Bearer $(cat /run/voyager-crawler/secrets/api_token_voyager)" '"https://$IP:8443/v1/stats"
+   ```
+
+   Expected: `{"client_id":"voyager","enabled":true,"rotated":false}`; one client, enabled;
+   `200`. Rotating later: add a new secret version, `vcadm client add --name voyager`
+   again (`"rotated":true`), then restart Voyager's backend. Cutting a client off:
+   `vcadm client revoke --name <name>` (refused within 60 s). Details:
+   [Read API](../wiki/Read-API.md#registering-a-client).
+5. Metrics in Cloud Monitoring (laptop):
 
    ```bash
    TOKEN="$(gcloud auth print-access-token)"
@@ -292,12 +308,12 @@ unreadable file stops the scheduler's pass and the fetcher (fail closed).
    `captures_committed`, `due_urls`, `backpressure`, `parked_keys_ratio`,
    `wal_archive_age_seconds`, `deploy_drift_seconds`, `tls_cert_days_left`,
    `host_units_failed`, `llm_month_spend_ratio`, `llm_config_invalid`, each under
-   `custom.googleapis.com/crawler/`. `base_backup_age_seconds` appears after step 7,
+   `custom.googleapis.com/crawler/`. `base_backup_age_seconds` appears after step 8,
    `backup_restore_age_seconds` after §8. `restore_drill_ok` /
    `restore_drill_age_seconds` stay absent: the monthly Spot drill is not wired yet.
    In the console, Metrics Explorer → `custom.googleapis.com/crawler/heartbeat`, grouped by
    `role`, shows six lines.
-5. Logs in the 30-day bucket, and only there (laptop):
+6. Logs in the 30-day bucket, and only there (laptop):
 
    ```bash
    gcloud logging read 'log_id("crawler_docker")' --project=voyager-prod-ohzkl \
@@ -309,7 +325,7 @@ unreadable file stops the scheduler's pass and the fetcher (fail closed).
 
    Expected: three recent entries at `INFO` or above (never `DEBUG`); `30`; the exclusion
    list contains `voyager-crawler-logs`.
-6. WAL archiving with wal-g:
+7. WAL archiving with wal-g:
 
    ```bash
    psqlc -c "SELECT pg_switch_wal()"
@@ -320,7 +336,7 @@ unreadable file stops the scheduler's pass and the fetcher (fail closed).
 
    Expected: `archived_count` ≥ 1, `last_archived_time` within the last 2 minutes,
    `failed_count` 0; the bucket lists `wal_005/`.
-7. The first base backup (don't wait for 03:15 UTC):
+8. The first base backup (don't wait for 03:15 UTC):
 
    ```bash
    sudo systemctl start voyager-crawler-basebackup.service
