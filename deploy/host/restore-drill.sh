@@ -58,6 +58,7 @@ main() {
     --env-file "$VC_OPT/postgres/walg.env" \
     -v "$SCRATCH:/drill" \
     -v "$VC_OPT/bin/wal-g:/usr/local/bin/wal-g:ro" \
+    -v /etc/ssl/certs/ca-certificates.crt:/etc/ssl/certs/ca-certificates.crt:ro \
     -v "$VC_OPT/host/restore-drill-inner.sh:/drill-inner.sh:ro" \
     --entrypoint /bin/bash "$image" /drill-inner.sh)" || die "restore drill FAILED (see journalctl -u voyager-crawler-restore-drill)"
 

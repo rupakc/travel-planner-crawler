@@ -745,6 +745,7 @@ test_restore_drill() {
   run="$(grep '^run ' "$CALLS")"
   for want in "--network voyager-crawler_pgbackup" "--user 999:999" "$VC_DATA/restore-drill:/drill" \
     "$VC_OPT/postgres/walg.env" "$VC_OPT/host/restore-drill-inner.sh:/drill-inner.sh:ro" \
+    "/etc/ssl/certs/ca-certificates.crt:/etc/ssl/certs/ca-certificates.crt:ro" \
     "pgvector/pgvector:pg17@sha256:feed /drill-inner.sh"; do
     [[ "$run" == *"$want"* ]] || { fail restore_drill "container lacks '$want': $run"; return; }
   done
