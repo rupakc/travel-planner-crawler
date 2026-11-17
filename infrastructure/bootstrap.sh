@@ -231,12 +231,14 @@ has_version() {
 }
 
 # random_secret NAME — a 256-bit random value as the first version
+# random_secret NAME [PREFIX] — PREFIX (e.g. `voyager.` for an API token,
+# whose part before the dot is the client id) goes before the random part
 random_secret() {
   has_version "$1" && return 0
   if ((DRY_RUN)); then
-    echo "  # generate 32 random bytes (base64url) → $WORK/$1" >&2
+    echo "  # generate ${2:-}32 random bytes (base64url) → $WORK/$1" >&2
   else
-    (umask 077 && openssl rand -base64 32 | tr '+/' '-_' | tr -d '=\n' >"$WORK/$1")
+    (umask 077 && { printf '%s' "${2:-}"; openssl rand -base64 32 | tr '+/' '-_' | tr -d '=\n'; } >"$WORK/$1")
   fi
   g secrets versions add "$1" --data-file="$WORK/$1"
   ((DRY_RUN)) || rm -f "$WORK/$1"
@@ -250,7 +252,7 @@ secrets() {
       g secrets create "$s" --replication-policy=automatic --labels="$LABELS"
   done
   random_secret crawler-pg-password
-  random_secret crawler-api-token-voyager
+  random_secret crawler-api-token-voyager voyager.   # `vcrawl admin client add --name voyager`
 }
 
 addresses() {

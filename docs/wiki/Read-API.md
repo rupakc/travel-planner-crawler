@@ -32,6 +32,28 @@ Authorization: Bearer <client_id>.<secret>
   `Retry-After`.
 - Request timeout 10 s (`503 unavailable` after that).
 
+### Registering a client
+
+Clients are rows of `api_clients`, managed with `vcrawl admin client` (on the VM through
+`vcadm`, see the go-live runbook's conventions). The token is never printed, logged or
+stored in clear: only its argon2id hash.
+
+```bash
+vcadm client add --name voyager              # token from Secret Manager crawler-api-token-voyager
+printf '%s\n' "$TOKEN" | vcadm client add --name other --stdin    # or from stdin
+vcadm client list                            # id, enabled, licence classes, rate, last use
+vcadm client revoke --name other             # refused within 60 s
+```
+
+- The token must be `<name>.<secret>` with a secret of at least 16 characters. bootstrap
+  creates `crawler-api-token-voyager` in that form (`voyager.` + 32 random bytes,
+  base64url); the Voyager app reads the same secret and sends it as the bearer token.
+- `add` on an existing name rotates the token (new hash) and re-enables the client, with the
+  default licence classes and rate.
+- A client other than `voyager` reading from Secret Manager needs its secret
+  `crawler-api-token-<name>` and `secretAccessor` for `crawler-runtime` on it; otherwise use
+  `--stdin`.
+
 ## Endpoints
 
 All are `GET`. Lists default to 20 items, capped at 100.
