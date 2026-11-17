@@ -9,6 +9,9 @@ yanked = "deny"
 ignore = [
     # Unmaintained (not vulnerable); only reached through testcontainers 0.28 in tests.
     { id = "RUSTSEC-2026-0440", reason = "astral-tokio-tar via testcontainers, dev-only; revisit on the next testcontainers release" },
+    # Unmaintained (not vulnerable), published 2026-11-17. chrono is used across the workspace
+    # (and by sqlx, reqwest-adjacent crates); migrating to jiff is tracked as a follow-up.
+    { id = "RUSTSEC-2026-0543", reason = "chrono unmaintained, no known vulnerability; migrate to jiff in a dedicated PR" },
 ]
 
 [licenses]
