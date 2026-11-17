@@ -197,8 +197,11 @@ Number blocks per owner:
 config or a database. `schema` is the highest expand migration in the image; `min_schema`
 is the lowest schema the image can run on; today it equals `schema`, since the image's
 queries may use any migration it ships. The deploy workflow stores them as the image
-labels `io.voyager-crawler.schema` and `io.voyager-crawler.min-schema`. `deploy.sh` holds a
-deploy, or refuses a rollback, when the image's `min-schema` is above the database's
+labels `io.voyager-crawler.schema` and `io.voyager-crawler.min-schema`, plus
+`io.voyager-crawler.migrations`, every version the image ships. `deploy.sh` holds a deploy,
+or refuses a rollback, when any of those is missing from `_sqlx_migrations` (blocks merge
+out of order, so the highest number is not enough); `vcrawl migrate` also fails if one is
+still missing after it ran. Without the list it falls back to `min-schema` ≤ the database's
 highest applied migration. See [Operations and Deploy](Operations-and-Deploy).
 
 See also: [Storage and Raw Data](Storage-and-Raw-Data), [Processing and Extraction](Processing-and-Extraction).

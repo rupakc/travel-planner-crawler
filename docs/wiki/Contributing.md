@@ -56,7 +56,7 @@ from colliding:
 | A new crash-safety step | add a named [failpoint](Glossary) (feature `failpoints`) and a test that crashes there. See [Testing](Testing). |
 | A new store, queue or LLM | implement `BlobStore`, `WorkQueue`, `LlmClient`, `Embedder` or `Frontier` from `vc-core`. |
 | A new API field | additive only; update the OpenAPI snapshot and `Crawler-API.md` in the same PR. See [Read API](Read-API). |
-| A migration | in your block, `SET lock_timeout = '5s'` first, expand-only (the lint and the [N-1](Glossary) test check it); destructive steps go to `migrations/contract/`. The image's schema labels come from `vcrawl migrate --print-schema`, and `deploy.sh` refuses an image whose min-schema is above the database's. See [Data Model](Data-Model). |
+| A migration | in your block, `SET lock_timeout = '5s'` first, expand-only (the lint and the [N-1](Glossary) test check it); destructive steps go to `migrations/contract/`. The image's schema labels come from `vcrawl migrate --print-schema`, and `deploy.sh` refuses an image when the database lacks any migration it ships. See [Data Model](Data-Model). |
 
 ## Style
 

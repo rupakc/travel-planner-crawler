@@ -10,6 +10,8 @@
 #   FAKE_LABEL_<NAME>      value of image label io.voyager-crawler.<name>
 #   FAKE_PS_A              output of `compose ps -a --format …` (watchdog)
 #   FAKE_DB_SCHEMA         what `compose exec postgres psql …` prints (unset → it fails)
+#   FAKE_DB_MIGRATIONS     what the applied-migration list query (string_agg) prints
+#                          (unset → it fails)
 #   FAKE_MIGRATE_FAILS     the first N `run --rm migrate` calls fail (then FAKE_MIGRATE_RC)
 #   FAKE_BEAT_RC           exit code of a heartbeat upsert (lib.sh host_beat); the call
 #                          is logged as "beat <instance> <json>"
@@ -78,6 +80,11 @@ if [[ "${1:-}" == compose ]]; then
         done
         echo "beat $i $p" >>"$CALLS"
         exit "${FAKE_BEAT_RC:-0}"
+      fi
+      if [[ "$*" == *psql* && "$*" == *string_agg* ]]; then
+        [[ -n "${FAKE_DB_MIGRATIONS:-}" ]] || exit 2
+        echo "$FAKE_DB_MIGRATIONS"
+        exit 0
       fi
       [[ "$*" == *psql* && -n "${FAKE_DB_SCHEMA:-}" ]] || exit 2
       echo "$FAKE_DB_SCHEMA"

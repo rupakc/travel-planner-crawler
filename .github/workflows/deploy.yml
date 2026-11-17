@@ -69,7 +69,8 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      # The schema labels come from the binary itself (migrate::schema_version(),
+      # The schema labels come from the binary itself (migrate::schema_version() and
+      # migration_versions(): deploy.sh checks the full list against _sqlx_migrations,
       # the migrations embedded at build time), so the image is built once
       # locally, asked, then pushed with the labels (every layer from cache).
       - name: Build (local, for the schema labels)
@@ -94,9 +95,12 @@ jobs:
           out="$(docker run --rm --network none vcrawl:schema-probe migrate --print-schema)"
           schema="$(jq -er '.schema' <<<"$out")"
           min="$(jq -er '.min_schema' <<<"$out")"
+          migrations="$(jq -er '.migrations' <<<"$out")"
           [[ "$schema" =~ ^[0-9]+$ && "$min" =~ ^[0-9]+$ ]] || { echo "::error::bad schema output: $out"; exit 1; }
+          [[ "$migrations" =~ ^[0-9]+(,[0-9]+)*$ ]] || { echo "::error::bad migration list: $out"; exit 1; }
           echo "schema=$schema" >>"$GITHUB_OUTPUT"
           echo "min_schema=$min" >>"$GITHUB_OUTPUT"
+          echo "migrations=$migrations" >>"$GITHUB_OUTPUT"
 
       - name: Build and push (sha tag only)
         id: image
@@ -115,6 +119,7 @@ jobs:
             io.voyager-crawler.build=${{ github.run_number }}
             io.voyager-crawler.schema=${{ steps.schema.outputs.schema }}
             io.voyager-crawler.min-schema=${{ steps.schema.outputs.min_schema }}
+            io.voyager-crawler.migrations=${{ steps.schema.outputs.migrations }}
           cache-from: type=gha,scope=crawler
 
       - name: Trivy scan (unfixed ignored; a fixed CRITICAL fails)

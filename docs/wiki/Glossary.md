@@ -59,7 +59,7 @@ Short definitions of the words used across this wiki, in alphabetical order.
 | **Licence class** | `open`, `share_alike`, `facts_only`, `api_terms` or `restricted`; decides how data may be used. |
 | **Link triage** | Gemini deciding whether an uncertain link is worth crawling; verdicts are cached per URL pattern. See [Agentic Loops](Agentic-Loops). |
 | **Marker nonce** | A random-looking tag around page text in an LLM prompt, marking where untrusted text starts and ends. It is a hash of that text, so an unchanged page builds the same request and hits the cache. |
-| **Min-schema** | The lowest database schema an image works with (image label `io.voyager-crawler.min-schema`). `deploy.sh` refuses an image whose min-schema is above the database's. |
+| **Min-schema** | The lowest database schema an image works with (image label `io.voyager-crawler.min-schema`). Superseded as the deploy gate by the `io.voyager-crawler.migrations` list: `deploy.sh` refuses an image when any migration it ships is missing from the database. |
 | **N-1 rule** | A new migration must keep the previous image (N-1) working. A test replays that image's recorded queries against the new schema. |
 | **Observation** | A point in a time series (FX rate, weather normal), not a fact record. |
 | **Ops Agent** | Google's VM agent; here it ships host metrics and the containers' logs to Cloud Monitoring and Logging. |

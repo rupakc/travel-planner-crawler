@@ -93,9 +93,11 @@ Purge details:
 - `--contract` applies `migrations/contract/*.sql` (table `_vc_contract_migrations`) only if
   this image was first seen at least `contract_min_days` (7) ago, no other image ran
   `migrate` since, and no rollback is listed in `<data_dir>/deploy/rollbacks`.
-- **Min-schema gate:** an image's `min_schema` is the newest expand migration it ships.
-  `deploy.sh` refuses to run, or roll back to, an image whose min-schema is above the
-  database's schema.
+- **Migration gate:** an image's `migrations` label lists every expand migration it ships.
+  `deploy.sh` refuses to run, or roll back to, an image when any of them is missing from
+  `_sqlx_migrations` (owner blocks merge out of order, so 1102 can land after 1906 and the
+  highest number proves nothing). Images without that label fall back to the min-schema
+  check (`min_schema`, the newest migration, at most the database's highest).
 
 ## Deploy contract
 
@@ -107,8 +109,8 @@ From `deploy/compose.yaml` and `infrastructure/README.md`:
   fails on any other `VC_*` name in `deploy/compose.yaml`. The DB password arrives as a file
   (`VC_DATABASE_PASSWORD_FILE`); the API TLS pair is read from `/run/secrets` with a Secret
   Manager fallback; client tokens are argon2 hashes in `api_clients`.
-- Image labels `io.voyager-crawler.schema` and `io.voyager-crawler.min-schema` come from
-  `vcrawl migrate --print-schema` at build time.
+- Image labels `io.voyager-crawler.schema`, `io.voyager-crawler.min-schema` and
+  `io.voyager-crawler.migrations` come from `vcrawl migrate --print-schema` at build time.
 
 ## Config
 

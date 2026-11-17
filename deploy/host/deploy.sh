@@ -14,8 +14,12 @@
 #      keeps working on the new schema). Retried; still failing → nothing
 #      rolled, not held: the next tick tries again (a migration is one
 #      transaction, so a retry is safe), and the drift alert fires after 30 min.
-#      Then the image's io.voyager-crawler.min-schema label must not be above
-#      the database's schema (highest applied migration); else → held.
+#      Then every migration the image ships (io.voyager-crawler.migrations,
+#      the full version list) must be applied in the database
+#      (_sqlx_migrations); else → held. Owner blocks merge out of order (1102
+#      landed after 1906), so the highest number alone proves nothing. Images
+#      without that label fall back to io.voyager-crawler.min-schema ≤ the
+#      database's highest applied migration.
 #   5. Roll the roles one at a time (maintenance … api); after each, wait
 #      for its progress-based health check. Unhealthy → every rolled role
 #      goes back to the previous digest, and the new one is held.
@@ -32,8 +36,9 @@
 #
 #   deploy.sh             one pass (the timer)
 #   deploy.sh --rollback  back to the previous digest (held: the current one);
-#                         refused if its min-schema label is above the schema
-#                         the database is at
+#                         refused if the database lacks a migration it ships
+#                         (or, without that label, its min-schema is above the
+#                         database's)
 #   deploy.sh --secrets   only refresh the secret files (boot, before compose)
 #
 # Exit: 0 done or nothing to do, 1 failure (retried next tick), 3 refused.
@@ -205,10 +210,44 @@ db_schema() {
   echo "$v"
 }
 
-# schema_too_new IMAGE → 0 (and a reason on stdout) when IMAGE's min-schema
-# label is above the database's schema; images without the label pass
+# db_migrations → the database's successfully applied expand migrations,
+# comma-separated ascending (empty when the database cannot be read)
+db_migrations() {
+  local v
+  v="$(vc_compose exec -T postgres psql -U vcrawl -d vcrawl -tAc \
+    "SELECT coalesce(string_agg(version::text, ',' ORDER BY version), '') FROM _sqlx_migrations WHERE success" 2>/dev/null |
+    tr -d '[:space:]')" || v=""
+  [[ "$v" =~ ^[0-9]+(,[0-9]+)*$ ]] || v=""
+  echo "$v"
+}
+
+# missing_migrations NEED HAVE → the versions of NEED (comma list) not in HAVE
+missing_migrations() {
+  local v out=""
+  for v in ${1//,/ }; do
+    [[ ",$2," == *",$v,"* ]] || out+="$v,"
+  done
+  echo "${out%,}"
+}
+
+# schema_too_new IMAGE → 0 (and a reason on stdout) when the database lacks a
+# migration IMAGE ships (label io.voyager-crawler.migrations), or, for an image
+# without that label (or a database whose list cannot be read), when its
+# min-schema label is above the database's highest migration; unlabelled pass
 schema_too_new() {
-  local min db
+  local min db need have missing
+  need="$(label "$1" io.voyager-crawler.migrations)"
+  if [[ "$need" =~ ^[0-9]+(,[0-9]+)*$ ]]; then
+    have="$(db_migrations)"
+    if [[ -n "$have" ]]; then
+      missing="$(missing_migrations "$need" "$have")"
+      if [[ -n "$missing" ]]; then
+        echo "needs migrations $missing, missing in the database"
+        return 0
+      fi
+      return 1
+    fi
+  fi
   min="$(label "$1" io.voyager-crawler.min-schema)"
   db="$(db_schema)"
   if [[ "$min" =~ ^[0-9]+$ && "$db" =~ ^[0-9]+$ ]] && ((10#$min > 10#$db)); then

@@ -28,8 +28,8 @@ use admin_common::*;
 use chrono::{Duration, Utc};
 use sqlx::{Executor, PgPool};
 use vcrawl::migrate::{
-    CONTRACT_TABLE, contract_gate, migrate_contract, migrate_expand, read_rollbacks, record_image,
-    schema_version,
+    CONTRACT_TABLE, applied_versions, contract_gate, migrate_contract, migrate_expand,
+    migration_versions, missing_migrations, read_rollbacks, record_image, schema_version,
 };
 
 const FIXTURE: &str = "n_minus_1_queries.json";
@@ -506,6 +506,23 @@ fn print_schema_reports_the_highest_expand_migration() {
     let v: serde_json::Value = serde_json::from_slice(&out.stdout).expect("json");
     assert_eq!(v["schema"], highest);
     assert_eq!(v["min_schema"], highest);
+    // The full set (owner blocks merge out of order: the highest number is not enough).
+    let mut all: Vec<i64> = std::fs::read_dir(repo().join("migrations"))
+        .expect("migrations")
+        .filter_map(|e| e.ok())
+        .filter_map(|e| {
+            let name = e.file_name().to_string_lossy().to_string();
+            name.strip_suffix(".sql")?
+                .split('_')
+                .next()?
+                .parse::<i64>()
+                .ok()
+        })
+        .collect();
+    all.sort_unstable();
+    assert_eq!(migration_versions(), all);
+    let list = all.iter().map(i64::to_string).collect::<Vec<_>>().join(",");
+    assert_eq!(v["migrations"], list.as_str());
     let bad = std::process::Command::new(env!("CARGO_BIN_EXE_vcrawl"))
         .args(["migrate", "--print-schema", "--contract"])
         .output()
@@ -514,4 +531,36 @@ fn print_schema_reports_the_highest_expand_migration() {
         !bad.status.success(),
         "--print-schema with --contract is refused"
     );
+}
+
+/// A migration numbered below the highest one (1102 after 1906) is not covered by the
+/// highest-number schema label: the image's full set is compared with the database's.
+#[test]
+fn missing_migrations_sees_an_out_of_order_gap() {
+    let all = migration_versions();
+    assert!(all.contains(&1102) && all.contains(&1401) && all.contains(&1906));
+    assert!(missing_migrations(&all).is_empty());
+    let without: Vec<i64> = all
+        .iter()
+        .copied()
+        .filter(|v| *v != 1102 && *v != 1401)
+        .collect();
+    // The highest version is applied, yet two migrations are missing.
+    assert_eq!(without.iter().max(), Some(&schema_version()));
+    assert_eq!(missing_migrations(&without), vec![1102, 1401]);
+}
+
+#[tokio::test]
+async fn applied_versions_reads_the_database_set() {
+    let pool = testkit::pg().await;
+    assert_eq!(
+        applied_versions(&pool).await.expect("applied"),
+        migration_versions()
+    );
+    sqlx::query("DELETE FROM _sqlx_migrations WHERE version = 1102")
+        .execute(&pool)
+        .await
+        .expect("forget 1102");
+    let applied = applied_versions(&pool).await.expect("applied");
+    assert_eq!(missing_migrations(&applied), vec![1102]);
 }

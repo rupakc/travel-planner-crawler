@@ -167,8 +167,8 @@ and so on).
 
 `deploy/tests/test_deploy.sh` runs `deploy.sh`, the watchdog, `first-boot.sh`, the restore
 drill and the compose file against fakes. It covers, among others: unsigned images held,
-transient cosign and migrate failures retried, rollback, the min-schema gate (deploy and
-rollback), drift and TLS heartbeats, unit outcome heartbeats, the restore drill's isolation
+transient cosign and migrate failures retried, rollback, the migration gate (deploy and
+rollback, including an out-of-order migration such as 1102 after 1906), drift and TLS heartbeats, unit outcome heartbeats, the restore drill's isolation
 and cleanup, the WAL overwrite guard, Docker waiting for the data disk, the Ops Agent
 config, Chromium's network flags, the fetcher's metrics address off the `render`
 network, and that every otelcol scrape target has a matching role listener (address, port,
