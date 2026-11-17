@@ -106,15 +106,28 @@ impl KeyBorrow for PgFrontier {
 /// path for this): a render sub-request to **another** politeness key (an allowlisted CDN)
 /// first borrows that key through the frontier, so it honours the key's own
 /// `next_allowed_at`, parking and in-flight claim across every process, and moves its
-/// `next_allowed_at` on; when the request ends the key is held for its delay from then. A
-/// refused or failed borrow refuses that sub-request only (the renderer skips it); nothing
-/// waits for the other key. The renderer has already applied its per-host lock and gap.
-pub fn third_party_borrow(borrow: Arc<dyn KeyBorrow>) -> Arc<dyn ThirdPartyBorrow> {
-    Arc::new(FrontierBorrow { borrow })
+/// `next_allowed_at` on; when the request ends the key is held for its delay from then. A key
+/// that is not ready is asked again every [`THIRD_PARTY_POLL`] for at most `max_wait` (and never
+/// past the render deadline): a page that needs two files from one CDN gets the second after
+/// the CDN's delay instead of losing it. Still not ready, or a failed borrow, refuses that
+/// sub-request only (the renderer skips it). The renderer has already applied its per-host
+/// lock and gap.
+pub fn third_party_borrow(
+    borrow: Arc<dyn KeyBorrow>,
+    max_wait: Duration,
+) -> Arc<dyn ThirdPartyBorrow> {
+    Arc::new(FrontierBorrow { borrow, max_wait })
 }
+
+/// How long a render sub-request waits for a busy third-party key (production).
+pub const THIRD_PARTY_MAX_WAIT: Duration = Duration::from_secs(12);
+
+/// How often a busy third-party key is asked again.
+pub const THIRD_PARTY_POLL: Duration = Duration::from_millis(250);
 
 struct FrontierBorrow {
     borrow: Arc<dyn KeyBorrow>,
+    max_wait: Duration,
 }
 
 #[async_trait]
@@ -129,9 +142,17 @@ impl ThirdPartyBorrow for FrontierBorrow {
         if key == *permit.key() {
             return Ok(Box::new(())); // the permit already covers its own key
         }
-        let granted = tokio::time::timeout_at(deadline, self.borrow.borrow(&key))
-            .await
-            .map_err(|_| FetchError::DeadlineExceeded)?;
+        let give_up = deadline.min(tokio::time::Instant::now() + self.max_wait);
+        let granted = loop {
+            let g = tokio::time::timeout_at(deadline, self.borrow.borrow(&key))
+                .await
+                .map_err(|_| FetchError::DeadlineExceeded)?;
+            let next = tokio::time::Instant::now() + THIRD_PARTY_POLL;
+            if !matches!(g, Ok(false)) || next >= give_up {
+                break g;
+            }
+            tokio::time::sleep_until(next).await;
+        };
         match granted {
             Ok(true) => Ok(Box::new(Release {
                 key: Some(key),

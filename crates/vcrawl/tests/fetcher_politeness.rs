@@ -704,7 +704,7 @@ async fn render_subrequest_to_a_third_party_key_honours_that_key() {
     parts.policy = policy;
     parts.renderer = Some(Arc::new(DocAndCdnRenderer {
         client,
-        borrow: vcrawl::wiring::fetch::third_party_borrow(pg),
+        borrow: vcrawl::wiring::fetch::third_party_borrow(pg, Duration::from_secs(1)),
         sub: css.clone(),
     }));
     let f = vcrawl::roles::fetcher::Fetcher::new(parts);
@@ -754,9 +754,10 @@ async fn render_subrequest_to_a_third_party_key_honours_that_key() {
     assert_eq!(css_hits(&web), 1, "{:?}", paths(&web));
 }
 
-/// A scripted [`KeyBorrow`]: answers `grant` (or an error) and records every call.
+/// A scripted [`KeyBorrow`]: answers from `answers` (the last one repeats; `None` = a DB
+/// error) after `delay`, and records every call.
 struct ScriptedBorrow {
-    grant: Option<bool>,
+    answers: std::sync::Mutex<Vec<Option<bool>>>,
     delay: Duration,
     calls: std::sync::Mutex<Vec<String>>,
 }
@@ -766,8 +767,11 @@ impl vcrawl::wiring::fetch::KeyBorrow for ScriptedBorrow {
     async fn borrow(&self, key: &vc_core::PolitenessKey) -> vc_core::Result<bool> {
         self.calls.lock().unwrap().push(format!("borrow {key}"));
         tokio::time::sleep(self.delay).await;
-        self.grant
-            .ok_or_else(|| vc_core::Error::Db("connection reset".into()))
+        let a = {
+            let mut q = self.answers.lock().unwrap();
+            if q.len() > 1 { q.remove(0) } else { q[0] }
+        };
+        a.ok_or_else(|| vc_core::Error::Db("connection reset".into()))
     }
 
     async fn done(&self, key: &vc_core::PolitenessKey) -> vc_core::Result<()> {
@@ -777,9 +781,10 @@ impl vcrawl::wiring::fetch::KeyBorrow for ScriptedBorrow {
 }
 
 /// The production third-party hook: a granted borrow is released (key held for its delay)
-/// when the request's guard drops; a refused or failed borrow refuses only that sub-request
-/// (a `Transport` error, nothing to release); the permit's own key never borrows; a borrow
-/// still pending at the render deadline ends as `DeadlineExceeded`.
+/// when the request's guard drops; a busy key is asked again until it is ready (a page's
+/// second file from one CDN is not lost), at most `max_wait`; still busy, or a failed borrow,
+/// refuses only that sub-request (a `Transport` error, nothing to release); the permit's own
+/// key never borrows; a borrow still pending at the render deadline is `DeadlineExceeded`.
 #[tokio::test]
 async fn third_party_borrow_hook_holds_and_releases_the_other_key() {
     use vc_core::fetch::FetchError;
@@ -795,50 +800,83 @@ async fn third_party_borrow_hook_holds_and_releases_the_other_key() {
     let p = &claim.permit;
     let cdn = vc_core::CanonicalUrl::parse("https://cdn.example.net/lib.js").unwrap();
     let soon = || tokio::time::Instant::now() + Duration::from_secs(5);
-
-    let hook = |grant: Option<bool>, delay: Duration| {
+    let hook = |answers: Vec<Option<bool>>, delay: Duration, max_wait: Duration| {
         let b = Arc::new(ScriptedBorrow {
-            grant,
+            answers: std::sync::Mutex::new(answers),
             delay,
             calls: std::sync::Mutex::new(Vec::new()),
         });
-        (b.clone(), vcrawl::wiring::fetch::third_party_borrow(b))
+        (
+            b.clone(),
+            vcrawl::wiring::fetch::third_party_borrow(b, max_wait),
+        )
     };
+    let calls = |b: &ScriptedBorrow| b.calls.lock().unwrap().clone();
 
     // Granted: held while the request runs, released when the guard drops.
-    let (b, h) = hook(Some(true), Duration::ZERO);
+    let (b, h) = hook(vec![Some(true)], Duration::ZERO, Duration::from_secs(2));
     let guard = h.borrow(p, &cdn, soon()).await.expect("granted");
-    assert_eq!(*b.calls.lock().unwrap(), vec!["borrow example.net"]);
+    assert_eq!(calls(&b), vec!["borrow example.net"]);
     drop(guard);
     for _ in 0..100 {
-        if b.calls.lock().unwrap().len() == 2 {
+        if calls(&b).len() == 2 {
             break;
         }
         tokio::time::sleep(Duration::from_millis(10)).await;
     }
+    assert_eq!(calls(&b), vec!["borrow example.net", "done example.net"]);
+
+    // Busy twice, then ready: the sub-request waits for it instead of being lost.
+    let (b, h) = hook(
+        vec![Some(false), Some(false), Some(true)],
+        Duration::ZERO,
+        Duration::from_secs(5),
+    );
+    let started = tokio::time::Instant::now();
+    drop(
+        h.borrow(p, &cdn, soon())
+            .await
+            .expect("granted after waiting"),
+    );
+    assert!(started.elapsed() >= vcrawl::wiring::fetch::THIRD_PARTY_POLL * 2);
     assert_eq!(
-        *b.calls.lock().unwrap(),
-        vec!["borrow example.net", "done example.net"]
+        calls(&b).iter().filter(|c| c.starts_with("borrow")).count(),
+        3
     );
 
-    // Not ready, or unverifiable: that sub-request only is refused; nothing to release.
-    for grant in [Some(false), None] {
-        let (b, h) = hook(grant, Duration::ZERO);
+    // Busy for longer than max_wait, or unverifiable: that sub-request only is refused.
+    for answers in [vec![Some(false)], vec![None]] {
+        let (b, h) = hook(answers.clone(), Duration::ZERO, Duration::from_millis(600));
+        let started = tokio::time::Instant::now();
         let e = h.borrow(p, &cdn, soon()).await.err().expect("refused");
         assert!(matches!(e, FetchError::Transport(_)), "{e:?}");
+        assert!(
+            started.elapsed() < Duration::from_secs(2),
+            "bounded by max_wait"
+        );
         tokio::time::sleep(Duration::from_millis(50)).await;
-        assert_eq!(*b.calls.lock().unwrap(), vec!["borrow example.net"]);
+        assert!(
+            calls(&b).iter().all(|c| c.starts_with("borrow")),
+            "nothing to release"
+        );
+        if answers == vec![None] {
+            assert_eq!(calls(&b).len(), 1, "a DB error is not retried");
+        }
     }
 
     // The permit's own key is covered by the permit: no borrow.
-    let (b, h) = hook(Some(false), Duration::ZERO);
+    let (b, h) = hook(vec![Some(false)], Duration::ZERO, Duration::from_secs(2));
     let own = vc_core::CanonicalUrl::parse("https://spa.example.com/app.js").unwrap();
     drop(h.borrow(p, &own, soon()).await.expect("own key"));
     tokio::time::sleep(Duration::from_millis(50)).await;
-    assert!(b.calls.lock().unwrap().is_empty());
+    assert!(calls(&b).is_empty());
 
     // A borrow that cannot finish before the render deadline.
-    let (_, h) = hook(Some(true), Duration::from_secs(5));
+    let (_, h) = hook(
+        vec![Some(true)],
+        Duration::from_secs(5),
+        Duration::from_secs(2),
+    );
     let deadline = tokio::time::Instant::now() + Duration::from_millis(50);
     let e = h.borrow(p, &cdn, deadline).await.err().expect("deadline");
     assert!(matches!(e, FetchError::DeadlineExceeded), "{e:?}");
