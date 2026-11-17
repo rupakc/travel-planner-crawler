@@ -47,22 +47,22 @@ infrastructure/bootstrap.sh --update-host --standard                        # Sp
 
 | Service | Image | Networks | Memory |
 |---|---|---|---|
-| `postgres` | `pgvector/pgvector:pg17`, pinned by digest; wal-g mounted read-only | `db`, `pgbackup` | 3 GB |
-| `chromium` | `chromedp/headless-shell`, pinned by digest; started by `deploy/chromium/run.sh` | `render` only | 1.5 GB |
-| `otelcol` | `otel/opentelemetry-collector-contrib`, pinned by digest | `egress`, `metrics` | 128 MB |
-| `scheduler`, `maintenance`, `embedder` | the `vcrawl` image | `db`, `egress` | 256 MB each |
-| `fetcher` | the `vcrawl` image, spool on the data disk, stable instance name `fetcher-a` | `db`, `egress`, `render`, `metrics` | 512 MB |
-| `processor` | the `vcrawl` image | `db`, `egress` | 768 MB |
-| `api` | the `vcrawl` image, published on the internal IP:8443 | `db`, `egress` | 512 MB |
-| `migrate` | one-shot, run by `deploy.sh` | `db`, `egress` | 256 MB |
+| `postgres` | `pgvector/pgvector:pg17`, pinned by digest; wal-g mounted read-only; `shared_buffers` 384 MB, `max_connections` 40 | `db`, `pgbackup` | 1152 MiB |
+| `chromium` | `chromedp/headless-shell`, pinned by digest; started by `deploy/chromium/run.sh` (V8 heap capped at 256 MB per renderer, one tab, a new CDP session every 50 renders; an OOM kill restarts the container) | `render` only | 768 MiB |
+| `otelcol` | `otel/opentelemetry-collector-contrib`, pinned by digest | `egress`, `metrics` | 96 MiB |
+| `vcrawl` | the `vcrawl` image running `vcrawl run` (every role); spool on the data disk, stable instance name `vcrawl`; the API published on the internal IP:8443 | `db`, `egress`, `render`, `metrics` | 1 GiB |
+| `migrate` | one-shot, run by `deploy.sh` | `db`, `egress` | 128 MiB |
+
+The limits sum to 3.3 GB of the Spot e2-medium's 4 GB (`deploy_env.rs` checks ≤ 3.4 GB); the
+E2E job samples `docker stats` every 2 s and fails when the peak total passes 3.2 GB.
 
 | Network | Purpose |
 |---|---|
-| `db` | internal (no route out): Postgres and the roles |
-| `render` | internal: Chromium and the fetcher only |
-| `egress` | roles that call GCS, Vertex, the metadata server, or (fetcher only, with permits) the web |
+| `db` | internal (no route out): Postgres and `vcrawl` |
+| `render` | internal: Chromium and `vcrawl` only |
+| `egress` | `vcrawl` (GCS, Vertex, the metadata server, and with permits the web) and `otelcol` |
 | `pgbackup` | Postgres alone: wal-g's route to the ops bucket |
-| `metrics` | internal, `192.168.250.0/29`: only the fetcher and `otelcol`. The fetcher's `/metrics` and `/healthz` listen here (`192.168.250.2:9464`), so Chromium on `render` cannot reach them |
+| `metrics` | internal, `192.168.250.0/29`: only `vcrawl` and `otelcol`. `vcrawl`'s `/metrics` and `/healthz` listen here (`192.168.250.2:9464`), so Chromium on `render` cannot reach them |
 
 ```mermaid
 flowchart LR
@@ -72,19 +72,18 @@ flowchart LR
   subgraph metrics["metrics (internal)"]
     OTEL["otelcol"]
   end
-  FET["fetcher"] --- CHR
-  FET --- OTEL
-  ROLES["scheduler, processor, embedder, api, maintenance"] -->|"/metrics :9464 on egress"| OTEL
-  FET --> DB[("postgres (db, internal)")]
-  ROLES --> DB
+  VC["vcrawl run (every role)"] --- CHR
+  VC -->|"/metrics :9464"| OTEL
+  VC --> DB[("postgres (db, internal)")]
   DB -->|"pgbackup: wal-g"| GCS[("GCS ops bucket")]
   OTEL -->|"egress"| CM["Cloud Monitoring"]
 ```
 
-Every role serves `/metrics` and `/healthz` on `:9464` and writes a heartbeat (the embedder also while the LLM is off). `deploy/tests/test_deploy.sh` (`otelcol_targets_have_listeners`) checks that each otelcol scrape target matches the role's listener address, port and networks; `crates/vcrawl/tests/role_metrics.rs` runs each role and scrapes it. The api's vc-api request counters (`vc_api_*`) stay on a separate localhost listener and are not exported.
+`vcrawl run` serves one `/metrics` and `/healthz` on `:9464` for every role and writes one heartbeat per role (the embedder also while the LLM is off); `/healthz` is 503 while any role is down or stalled. A role run alone (`vcrawl fetcher`) serves its own. `deploy/tests/test_deploy.sh` (`otelcol_targets_have_listeners`) checks that the otelcol scrape target matches the listener address, port and networks; `crates/vcrawl/tests/role_metrics.rs` runs each role, and `vcrawl run`, and scrapes them. The api's vc-api request counters (`vc_api_*`) stay on a separate localhost listener and are not exported.
 
 The fetcher's spool lives under `spool/fetcher-<instance>/`. The fixed instance name
-(`VC_VCRAWL_INSTANCE=fetcher-a`) keeps that path when the container is recreated.
+(`VC_VCRAWL_INSTANCE=vcrawl`) keeps that path when the container is recreated; a spool of
+the old per-role `fetcher-a` container is adopted at start (orphan adoption).
 
 Every role container: read-only root, user 65532, all capabilities dropped,
 `no-new-privileges`, `restart: unless-stopped`, logs rotated. Secrets arrive as files in
@@ -131,9 +130,10 @@ flowchart LR
    `_sqlx_migrations`, the digest is held. Owner blocks merge out of order (1102 landed
    after 1906), so the highest number alone is not enough. Images without the label (or a
    database list that cannot be read) fall back to `min-schema` ≤ the highest applied one.
-6. Roll the roles **one at a time**, waiting for each one's progress-based health check
-   (up to 7 minutes). Unhealthy: every rolled role goes back to the previous digest, and the
-   new one is held.
+6. Roll the services in `VC_ROLES` **one at a time** (just `vcrawl` now), waiting for each
+   one's progress-based health check (up to 7 minutes). Unhealthy: every rolled service goes
+   back to the previous digest, and the new one is held. `docker stop` gives `vcrawl` 30 s;
+   it stops in about 20 s, inside `shutdown.sh`'s `stop -t 25` (in-flight fetches finish, spool flushed, leases released).
 7. Success: the new digest is recorded; the old one becomes the rollback target.
 
 Every tick also writes a `deploy` heartbeat row: the running and the `:prod` digest, since
@@ -158,7 +158,9 @@ ends the hold. Exit codes: 0 done, 1 failure (retried next tick), 3 refused.
 | GCE | Spot: a preempted VM is stopped (the shutdown script stops the crawler, then Postgres, within ~30 s) and the group recreates it when capacity allows; the group also recreates it after 15 min of failed `/healthz`. Standard (next month): automatic restart and live migration |
 
 `vcrawl health` is the container health check. It passes when Postgres answers
-`SELECT 1` and the role's own `/healthz` answers 200 within `vcrawl.health_timeout_s`.
+`SELECT 1` and the container's `/healthz` (every role up and progressing) answers 200 within
+`vcrawl.health_timeout_s`. Inside `vcrawl run` a failed role is restarted with a backoff
+(1 s doubling to 60 s); its heartbeat stops meanwhile, so the crawler-down alert names it.
 It writes nothing.
 
 ## Backups and drills
@@ -214,11 +216,12 @@ Operator commands use the `vcrawl` image and the database, like the `migrate` se
 
 ## Monitoring
 
-Each role exposes `/metrics` and `/healthz` on port 9464. The Ops Agent cannot rename
-Prometheus metrics, so the `otelcol` container (OpenTelemetry Collector) scrapes every role,
-keeps `crawler_*` metrics, renames `crawler_<x>[_total]` to
-`custom.googleapis.com/crawler/<x>`, and writes them to Cloud Monitoring. The role name is
-the `service_name` label.
+`vcrawl` exposes `/metrics` and `/healthz` on port 9464 for all its roles. The Ops Agent
+cannot rename Prometheus metrics, so the `otelcol` container (OpenTelemetry Collector)
+scrapes it, keeps `crawler_*` metrics, renames `crawler_<x>[_total]` to
+`custom.googleapis.com/crawler/<x>`, and writes them to Cloud Monitoring; the heartbeat
+keeps its `role` label. (The collector stays, at ≈ 50 MB, rather than a Cloud Monitoring
+exporter inside `vcrawl`: no new code, auth or retry queue in the crawler.)
 
 The **Ops Agent** on the VM (config written by `first-boot.sh`) ships host metrics, without
 the per-process metrics, and only the containers' JSON logs as log `crawler_docker`

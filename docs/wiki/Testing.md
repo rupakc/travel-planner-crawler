@@ -107,7 +107,7 @@ pull request and on `main`. Every compose network is internal: no secrets, no re
 | trap at `169.254.169.254` | a fake metadata server, the same idea |
 | `gcs`, fake Gemini | `fake-gcs-server` and a scripted Vertex endpoint |
 | `chromium` | the pinned headless shell, started by `deploy/chromium/run.sh` like production |
-| roles | `scheduler`, `fetcher-a`, `fetcher-b`, `processor`, `embedder`, `maintenance`, `api`; config `e2e/vcrawl.toml` with production politeness |
+| roles | production's single-process topology: `vcrawl` (`vcrawl run --roles scheduler,processor,embedder,maintenance,api`, alias `api` for TLS) plus `fetcher-a` and `fetcher-b` (`vcrawl run --roles fetcher` each, so two fetchers race for keys); config `e2e/vcrawl.toml` with production politeness and concurrency; Postgres with production's memory settings and every container with its memory limit |
 
 The runner (`e2e/runner`, its own lock file kept equal to the root lock) runs
 `E2E_CYCLES` cycles (default 3): set the fake web to cycle *n*, make due URLs due now,
@@ -127,6 +127,13 @@ crawl, drain. Then it checks eight assertions:
 `run.sh` classifies each role as running, "not wired yet" or crashed. A crashed role fails
 the run. Every role is wired today, so no assertion is skipped. Logs go to `e2e/out/`
 (uploaded as a CI artifact). `E2E_KEEP=1` leaves the stack up for debugging.
+
+**Memory budget.** `e2e/mem-sampler.sh` runs `docker stats` every 2 s for the whole run and
+records each container's memory. The job summary gets a table of the peak per container and
+the **total peak** (the largest sum over one snapshot) of the production-equivalent
+containers (`postgres`, `chromium`, `vcrawl`, both fetchers, plus otelcol's 96 MiB limit,
+since E2E has no collector); the fakes and the runner are listed but not counted. The run
+fails when the total passes 3.2 GB (`E2E_MEM_LIMIT_BYTES`), the budget of the 4 GB Spot VM.
 
 ## Failpoints
 

@@ -12,6 +12,9 @@
 # prerendering, pings and the background services are off (the internal network is the hard
 # guarantee; these flags keep Chromium from even trying). Unknown feature names are ignored.
 #
+# Memory (the 4 GB VM, container limit 768 MiB): the V8 heap of each renderer is capped at
+# 256 MB; vc-render opens one tab at a time in a fresh browser context.
+#
 # The vc-render integration tests start the pinned image with exactly this script.
 set -eu
 
@@ -38,4 +41,5 @@ exec /headless-shell/headless-shell \
   --no-default-browser-check \
   --metrics-recording-only \
   --user-data-dir=/tmp/profile \
+  --js-flags=--max-old-space-size=256 \
   about:blank

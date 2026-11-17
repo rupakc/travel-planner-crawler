@@ -15,7 +15,7 @@
 //!   before their next request (requests in flight finish and are spooled with fsync), claims
 //!   are completed so their leases are released, the spool is flushed (sealed, uploaded,
 //!   committed); the other roles finish their current step. Whatever still runs after
-//!   `vcrawl.shutdown_grace_s` (25 s) is aborted, which is crash-safe: fsynced spool frames
+//!   `vcrawl.shutdown_grace_s` (20 s, inside the host's `docker compose stop -t 25`) is aborted, which is crash-safe: fsynced spool frames
 //!   are replayed at the next start and unfinished leases expire.
 //!
 //! The per-role subcommands (`vcrawl fetcher`, …) are unchanged.
@@ -208,6 +208,7 @@ pub async fn run_until(
         })
         .collect();
     let health = Arc::new(health);
+    base.roles_health = Some(health.clone());
     let server = match vc_obs::bind_metrics(&base.cfg.obs).await? {
         Some(listener) => {
             let (m, h) = (base.metrics.clone(), health.clone());

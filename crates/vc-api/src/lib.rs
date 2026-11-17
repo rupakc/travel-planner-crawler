@@ -58,6 +58,9 @@ struct Internals {
     stats: tokio::sync::Mutex<Option<(Instant, StatsDto)>>,
 }
 
+/// The process health `/healthz` reports (`true` = healthy); see [`ApiState::with_health`].
+pub type HealthProbe = Arc<dyn Fn() -> bool + Send + Sync>;
+
 /// Shared state of the API.
 #[derive(Clone)]
 pub struct ApiState {
@@ -72,6 +75,7 @@ pub struct ApiState {
     /// Sources, stats, readiness.
     pub catalog: Arc<dyn Catalog>,
     inner: Arc<Internals>,
+    health: Option<HealthProbe>,
 }
 
 impl ApiState {
@@ -95,7 +99,21 @@ impl ApiState {
                 metrics: Arc::new(Metrics::default()),
                 stats: tokio::sync::Mutex::new(None),
             }),
+            health: None,
         }
+    }
+
+    /// `/healthz` answers 503 while `probe` returns `false` (the process hosting the API is
+    /// unhealthy; e.g. `vcrawl run` with a role down or stalled). Without a probe it is pure
+    /// liveness.
+    pub fn with_health(mut self, probe: HealthProbe) -> Self {
+        self.health = Some(probe);
+        self
+    }
+
+    /// Whether the health probe (if any) passes.
+    pub fn healthy(&self) -> bool {
+        self.health.as_ref().is_none_or(|h| h())
     }
 
     /// The request counters.

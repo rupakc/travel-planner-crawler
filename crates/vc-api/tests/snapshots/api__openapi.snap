@@ -797,9 +797,18 @@ expression: json
                 }
               }
             }
+          },
+          "503": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StatusDto"
+                }
+              }
+            }
           }
         },
-        "summary": "Liveness.",
+        "summary": "Liveness; 503 while the hosting process reports itself unhealthy (`ApiState::with_health`).",
         "tags": [
           "probe"
         ]

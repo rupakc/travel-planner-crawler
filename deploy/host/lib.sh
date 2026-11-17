@@ -9,8 +9,11 @@ VC_STATE="${VC_STATE:-$VC_DATA/deploy}"
 VC_SECRETS_DIR="${VC_SECRETS_DIR:-/run/voyager-crawler/secrets}"
 VC_PROJECT_NAME="${VC_PROJECT_NAME:-voyager-crawler}"
 VC_REPO_IMAGE="${VC_REPO_IMAGE:-ghcr.io/rupakc/voyager-crawler}"
-# The roles deploy.sh rolls, in this order (the API last: it serves Voyager)
-VC_ROLES="${VC_ROLES:-maintenance scheduler processor embedder fetcher api}"
+# The vcrawl services deploy.sh rolls, in this order. One on the Spot e2-medium:
+# `vcrawl run` runs every role in one container (deploy/compose.yaml)
+VC_ROLES="${VC_ROLES:-vcrawl}"
+# The service that serves the read API (recreated when its TLS pair changes)
+VC_API_SERVICE="${VC_API_SERVICE:-vcrawl}"
 # Third-party services, pinned by digest in compose.yaml (never rolled)
 VC_BASE_SERVICES="${VC_BASE_SERVICES:-postgres chromium otelcol}"
 

@@ -88,3 +88,8 @@ plan = `docs/superpowers/plans/2026-11-15-voyager-crawler.md`, r1–r5 = `docs/r
   `<brand>.*` = that label under any public suffix. Partner-API hosts of denied brands
   (Booking Demand, Viator, GYG) are excepted but their sources stay disabled.
 - Branch convention `agent/<task>[-slug]`; ownership map in `docs/ownership.md`.
+- 2026-11-17: the crawler VM is a Spot e2-medium (4 GB); every role runs in one process,
+  `vcrawl run` (one pool, one `/metrics` + `/healthz`, heartbeat per role, ≤ 25 s graceful
+  stop), in one `vcrawl` container; limits sum to 3.3 GB and the E2E job fails above a
+  3.2 GB measured peak. otelcol is kept (≈ 50 MB) rather than a Cloud Monitoring exporter
+  in vcrawl. (crates/vcrawl/src/run.rs, deploy/compose.yaml, e2e/mem-sampler.sh)

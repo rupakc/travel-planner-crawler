@@ -7,10 +7,11 @@
 # cosign-verified digest) and VC_API_BIND (the reserved internal IP).
 #
 # Contract with the vcrawl image (Task 15 implements it):
-#   ENTRYPOINT ["vcrawl"]; the role is the command (`vcrawl fetcher`, …).
-#   `vcrawl health` exits 0 when the role in this container is healthy. It is
-#   progress-based: e.g. the fetcher fails it after 10 min without a
-#   completion while due work exists.
+#   ENTRYPOINT ["vcrawl"]; the command is `run` (every role in one process,
+#   the 4 GB Spot e2-medium); `vcrawl <role>` still runs one role alone.
+#   `vcrawl health` exits 0 when every role in this container is up and
+#   healthy. It is progress-based: e.g. the fetcher fails it after 10 min
+#   without a completion while due work exists.
 #   Secrets arrive as files (/run/secrets/*), never as environment values.
 #   Labels: io.voyager-crawler.schema (highest migration the image ships),
 #   io.voyager-crawler.min-schema (lowest schema it runs against) and
@@ -18,15 +19,19 @@
 #   deploy.sh requires each in _sqlx_migrations).
 #
 # Networks:
-#   db        internal: Postgres and the roles that use it. No route out.
-#   render    internal: Chromium and its only peer, the fetcher (CDP). No route
-#             out, so every Chromium request is paused and fulfilled by the
-#             fetcher under the page's permit (§17.1).
-#   egress    the roles that call GCS, Vertex, the metadata server or (fetcher
-#             only, through vc-frontier permits) the web.
+#   db        internal: Postgres and vcrawl. No route out.
+#   render    internal: Chromium and its only peer, vcrawl's fetcher (CDP). No
+#             route out, so every Chromium request is paused and fulfilled by
+#             the fetcher under the page's permit (§17.1).
+#   egress    vcrawl (GCS, Vertex, the metadata server and, through
+#             vc-frontier permits only, the web) and otelcol.
 #   pgbackup  Postgres alone: wal-g's route to gs://voyager-crawler-ops. No
 #             other container shares it, and no port is published on it.
-# Memory limits: §6 without egress (removed by §17.1) plus otelcol: 7.19 GB of 8 GB.
+# Memory limits (Spot e2-medium, 4 GB; a 2 GB swap file is the safety net only):
+#   postgres 1152m + chromium 768m + vcrawl 1024m + otelcol 96m + migrate 128m
+#   = 3168 MiB (3.32 GB) ≤ 3.4 GB, leaving the host OS, Docker and the Ops Agent
+#   the rest. crates/vc-config/tests/deploy_env.rs checks the sum; the E2E job
+#   measures the peak (e2e/run.sh, must stay under 3.2 GB).
 
 name: voyager-crawler
 
@@ -103,7 +108,7 @@ services:
       retries: 6
       start_period: 60s
     deploy:
-      resources: { limits: { memory: 3g } }
+      resources: { limits: { memory: 1152m } }
     logging:
       driver: json-file
       options: { max-size: "20m", max-file: "5" }
@@ -131,16 +136,20 @@ services:
       - /opt/voyager-crawler/chromium/run.sh:/opt/voyager-crawler/chromium/run.sh:ro
     # No health check of its own: a broken Chromium fails the fetcher's
     # progress health (renders stop completing), and the watchdog restarts it
+    # One tab at a time (render.max_tabs 1), a fresh browser context per
+    # render and a new CDP session every render.restart_after_renders (50),
+    # V8 heap capped per renderer (run.sh). Over the limit the kernel kills
+    # Chromium, the container exits and Docker restarts it.
     deploy:
-      resources: { limits: { memory: 1536m } }
+      resources: { limits: { memory: 768m } }
     logging:
       driver: json-file
       options: { max-size: "5m", max-file: "2" }
     networks: [render]
 
   otelcol:
-    # OpenTelemetry Collector contrib 0.164.0, pinned by digest. Scrapes every
-    # role's :9464 and writes custom.googleapis.com/crawler/* to Cloud
+    # OpenTelemetry Collector contrib 0.164.0, pinned by digest. Scrapes
+    # vcrawl's :9464 (every role's series, labelled role=…) and writes custom.googleapis.com/crawler/* to Cloud
     # Monitoring (deploy/otelcol/config.yaml says why the Ops Agent cannot).
     # Credentials: the metadata server (egress network).
     image: otel/opentelemetry-collector-contrib:0.164.0@sha256:340c9ca6a36617084c6661bdc4f0fe92b7cda5a805d61673ec8db375fddc522b
@@ -152,69 +161,53 @@ services:
     volumes:
       - /opt/voyager-crawler/otelcol/config.yaml:/etc/otelcol/config.yaml:ro
     deploy:
-      resources: { limits: { memory: 128m } }
+      resources: { limits: { memory: 96m } }
     logging:
       driver: json-file
       options: { max-size: "5m", max-file: "2" }
     networks: [egress, metrics]
 
-  scheduler:
+  vcrawl:
+    # Every role in one process (`vcrawl run`, crates/vcrawl/src/run.rs): one tokio
+    # runtime, one Postgres pool sized for the roles, one /metrics + /healthz on the
+    # metrics network, heartbeats per role. SIGTERM: fetches in flight finish, the
+    # spool is flushed, leases are released, within vcrawl.shutdown_grace_s (20 s; shutdown.sh stops with -t 25).
     <<: *role
-    command: ["scheduler"]
-    deploy: { resources: { limits: { memory: 256m } } }
-
-  maintenance:
-    <<: *role
-    command: ["maintenance"]
-    deploy: { resources: { limits: { memory: 256m } } }
-
-  fetcher:
-    <<: *role
-    command: ["fetcher"]
+    command: ["run"]
+    secrets: [pg_password, api_token_voyager, api_tls_key, api_tls_cert]
     environment:
       <<: *role-env
       VC_RENDER_CDP_URL: http://chromium:9222
       VC_STORE_SPOOL_DIR: /spool
       # Stable instance: the spool dir (spool/fetcher-<instance>/) survives recreation.
-      VC_VCRAWL_INSTANCE: fetcher-a
+      # (A fetcher-* spool of the old per-role topology is adopted at start.)
+      VC_VCRAWL_INSTANCE: vcrawl
+      # Small VM: 8 keys in flight, 2 captures processed at once.
+      VC_VCRAWL_FETCHER_CONCURRENCY: 8
+      VC_VCRAWL_PROCESSOR_CONCURRENCY: 2
       # /metrics + /healthz only on the metrics network, never on `render` (Chromium).
       VC_OBS_METRICS_ADDR: 192.168.250.2:9464
+      # The read API (TLS + client tokens). Chromium shares the render network but every
+      # request it makes is paused by CDP Fetch interception and answered by the fetcher;
+      # WebSockets would still meet TLS and the token check.
+      VC_API_BIND: 0.0.0.0:8443
+      # TLS: the matched key/cert pair deploy.sh installed (/run/secrets/api_tls_*,
+      # never a half-rotated one), else Secret Manager by name (api.tls_*_secret);
+      # client tokens are argon2 hashes in api_clients, so no token file.
     volumes:
       - /var/lib/voyager-crawler/spool:/spool
+    # Published on the reserved internal IP only; the firewall admits
+    # tcp:8443 from the app VM's service account alone
+    ports: ["${VC_API_BIND:?VC_API_BIND is set by first-boot.sh}:8443:8443"]
     depends_on:
       postgres: { condition: service_healthy }
       chromium: { condition: service_started }
-    deploy: { resources: { limits: { memory: 512m } } }
+    deploy: { resources: { limits: { memory: 1024m } } }
     networks:
       db: {}
       egress: {}
       render: {}
       metrics: { ipv4_address: 192.168.250.2 }
-
-  processor:
-    <<: *role
-    command: ["processor"]
-    deploy: { resources: { limits: { memory: 768m } } }
-
-  embedder:
-    <<: *role
-    command: ["embedder"]
-    deploy: { resources: { limits: { memory: 256m } } }
-
-  api:
-    <<: *role
-    command: ["api"]
-    secrets: [pg_password, api_token_voyager, api_tls_key, api_tls_cert]
-    environment:
-      <<: *role-env
-      VC_API_BIND: 0.0.0.0:8443
-      # TLS: the matched key/cert pair deploy.sh installed (/run/secrets/api_tls_*,
-      # never a half-rotated one), else Secret Manager by name (api.tls_*_secret);
-      # client tokens are argon2 hashes in api_clients, so no token file.
-    # Published on the reserved internal IP only; the firewall admits
-    # tcp:8443 from the app VM's service account alone
-    ports: ["${VC_API_BIND:?VC_API_BIND is set by first-boot.sh}:8443:8443"]
-    deploy: { resources: { limits: { memory: 512m } } }
 
   # One-shot, run by deploy.sh before any role rolls (expand-only, §17.6).
   # `migrate --contract` (run by hand) refuses while a rollback is listed in
@@ -232,7 +225,7 @@ services:
         target: /var/lib/voyager-crawler/deploy/rollbacks
         read_only: true
         bind: { create_host_path: false }
-    deploy: { resources: { limits: { memory: 256m } } }
+    deploy: { resources: { limits: { memory: 128m } } }
 
 secrets:
   # Written by deploy.sh from Secret Manager into tmpfs (/run), mode 0400,
@@ -246,7 +239,7 @@ secrets:
 networks:
   db: { internal: true }
   render: { internal: true }
-  # otelcol ↔ fetcher metrics only (the fetcher's /metrics is bound to its address here so
+  # otelcol ↔ vcrawl metrics only (vcrawl's /metrics is bound to its address here so
   # the render network, which Chromium shares, cannot reach it).
   metrics:
     internal: true

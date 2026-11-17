@@ -18,6 +18,7 @@ restore drill on a Spot VM.
 | Path | Holds |
 |---|---|
 | `src/roles/<role>.rs` | one entry point per long-running role |
+| `src/run.rs` | `vcrawl run`: several roles as tasks of one process (supervisor, shared pool, one `/metrics` + `/healthz`, graceful shutdown) |
 | `src/data/` | the data path: `processor`, `peers` (held records), `stale`, `text_tier`, `embed`, `api`, `capture`, `sources` |
 | `src/admin/` | one file per admin command group (`status`, `source`, `purge`, `author`, `rebuild`, `reextract`) |
 | `src/agentic/` | `triage`, `scout`, `auditor`; see [Agentic Loops](Agentic-Loops) |
@@ -26,13 +27,15 @@ restore drill on a Spot VM.
 | `src/obs_jobs.rs` | the ops gauges every minute and the hourly LLM `settle_stale` (run by maintenance) |
 | `src/migrate.rs`, `src/health.rs` | `vcrawl migrate`, `vcrawl health` |
 
-Data-path roles share the `Ctx` pool. `admin`, `migrate` and `maintenance` use
-`wiring::db::ops_pool`, a small pool capped by `[database] max_connections`.
+Data-path roles share the `Ctx` pool. `admin`, `migrate` and a lone `maintenance` use
+`wiring::db::ops_pool`, a small pool capped by `[database] max_connections`; under
+`vcrawl run` maintenance uses the process's pool too.
 
 ## Roles
 
 | Command | Job |
 |---|---|
+| `vcrawl run [--roles a,b,…]` | the production command: the chosen roles (default all six) as tasks of one process. One runtime; one Postgres pool of `run::pool_size` connections; one `/metrics` + `/healthz` on `obs.metrics_addr` (`/healthz` 503 while a role is down or stalled), one heartbeat per role. A failed role is restarted after a backoff (1 s doubling to 60 s), the others keep running. SIGTERM / Ctrl-C: fetch workers stop before their next request (no new pacing wait), claims complete with the rest `NotAttempted` (leases released), the spool is flushed; whatever still runs after `shutdown_grace_s` (20 s, inside the host's `docker compose stop -t 25`) is aborted, which is crash-safe. Under `run` the api's TLS `/healthz` on 8443 (the MIG autohealing check) reports the whole process: 503 while any role is down or stalled |
 | `vcrawl scheduler` | every `scheduler_interval_s` (300 s): load and upsert `sources/*.yaml` (missing ones are disabled, never deleted); enqueue seeds, feeds, sitemaps and `adapter:<id>` rows; apply source limits (`min_delay_s` only raises a key's delay, `daily_budget` only lowers its budget); retire rows of disabled sources; make one page row due for origins whose robots.txt expired; export `due_urls` and `parked_keys_ratio`; prune old raw-byte counters and adapter cursors. Runs the LLM startup probe once when the LLM is on |
 | `vcrawl fetcher` | the claim loop, `fetcher_concurrency` (16) workers. Per claim: robots.txt first for due origins (a `Crawl-delay` found there raises the permit delay at once); each leased URL by `http`, `render` or `adapter:<id>`; spool and fsync; `mark_fetched`; complete with a key signal. Cross-key redirects are enqueued, never followed; a challenge, 401 or 403 parks the key; 429/503 back the key off. A same-key redirect to an origin without cached robots.txt fetches it under the same permit. Also runs the segment roller (replay on start, then every `roller_tick_s`), the daily raw-bytes cap (shared through Postgres), resumable adapter cursors, and the sweeper that returns `fetched_pending` rows older than 6 h to `due` |
 | `vcrawl processor` | `capture_ready` items to records: parse, final UsePolicy, in-scope links to the frontier (uncertain ones triaged by the LLM when it is on), extract, upsert; held `reference` records for high-stakes kinds (`held_records`); stale reconciliation; writes the extracted-text tier per committed segment; with `render.enabled`, re-queues `render: auto` pages flagged `needs_render` in render mode (once per content hash). A capture it cannot find or attribute is acked as skipped, logged at WARN and counted in `crawler_processor_skipped_total{reason}` (`missing`, `no_source`). Serves `/metrics` and writes a heartbeat |
@@ -41,7 +44,7 @@ Data-path roles share the `Ctx` pool. `admin`, `migrate` and `maintenance` use
 | `vcrawl maintenance` | the scheduled jobs below |
 | `vcrawl admin …` | the operator commands below; each prints one JSON document (ids and counts, never page content) |
 | `vcrawl migrate [--contract \| --print-schema]` | apply expand migrations; `--contract` applies destructive ones; `--print-schema` prints `{"schema":N,"min_schema":N}` without a database |
-| `vcrawl health` | exits 0 when Postgres answers and the role's own `/healthz` (progress-based) answers 200 |
+| `vcrawl health` | exits 0 when Postgres answers and the container's `/healthz` (progress-based; every role under `vcrawl run`) answers 200 |
 
 ### Maintenance jobs
 
@@ -103,7 +106,7 @@ Purge details:
 
 From `deploy/compose.yaml` and `infrastructure/README.md`:
 
-- `ENTRYPOINT ["vcrawl"]`; the role is the compose command.
+- `ENTRYPOINT ["vcrawl"]`; the compose command is `run` (every role in one container).
 - Runs as uid 65532 on a read-only root filesystem.
 - Settings are `VC_<SECTION>_<FIELD>` (vc-config); `crates/vc-config/tests/deploy_env.rs`
   fails on any other `VC_*` name in `deploy/compose.yaml`. The DB password arrives as a file
@@ -116,7 +119,8 @@ From `deploy/compose.yaml` and `infrastructure/README.md`:
 
 `[vcrawl]`: instance, data directory, fetcher and processor concurrency, partitions ahead,
 contract minimum days, scheduler interval, robots refresh batch, fetcher idle wait, roller
-tick, recrawl bounds, health timeout. Defaults: [vc-config](Crate-vc-config).
+tick, recrawl bounds, health timeout, `vcrawl run`'s shutdown grace and pool size. Defaults:
+[vc-config](Crate-vc-config).
 
 ## Tests
 
@@ -133,5 +137,7 @@ All in `crates/vcrawl/tests/`, on a real Postgres with testkit fakes:
 | `maintenance.rs`, `maintenance_agentic.rs`, `obs_jobs.rs` | maintenance jobs, scout and auditor, ops gauges |
 | `admin.rs`, `admin_purge_trace.rs`, `purge_author.rs`, `purge_hygiene.rs` | admin commands (`rebuild_captures_from_cdxj_equivalent`), purge traces, the scoped author purge, purge and expiry hygiene |
 | `migrate.rs` | expand and contract rules; `migration_n_minus_1` replays the previous image's recorded queries against the new schema |
+| `role_metrics.rs` | each role alone serves `/metrics` + `/healthz` and beats; `vcrawl run` starts every role with one listener and a heartbeat each, keeps the others up when one fails (and reports it), and the binary stops cleanly on SIGTERM |
+| `run_shutdown.rs` | a shutdown mid-claim makes no further request, completes the claim (lease released, the rest `due`) and commits every fsynced spool frame, without waiting out the key's pacing |
 
 See [Testing](Testing) for the E2E suite.

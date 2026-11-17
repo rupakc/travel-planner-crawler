@@ -39,8 +39,9 @@ pub struct VcrawlConfig {
     /// empty = every enabled source. A set but unreadable file fails closed.
     pub source_allowlist: Option<String>,
     /// `vcrawl run`: seconds a SIGTERM leaves the roles to finish (in-flight fetches end, the
-    /// spool is flushed, leases are released) before the rest is aborted (25; compose's
-    /// `stop_grace_period` is 30 s).
+    /// spool is flushed, leases are released) before the rest is aborted (20: the process is
+    /// gone well inside the host's `docker compose stop -t 25` and compose's 30 s
+    /// `stop_grace_period`).
     pub shutdown_grace_s: u64,
     /// `vcrawl run`: size of the one shared Postgres pool; 0 = the sum of the chosen roles'
     /// needs (`vcrawl::run::pool_size`).
@@ -64,7 +65,7 @@ impl Default for VcrawlConfig {
             recrawl_default_s: 7 * 24 * 3600,
             health_timeout_s: 5,
             source_allowlist: None,
-            shutdown_grace_s: 25,
+            shutdown_grace_s: 20,
             run_pool_max: 0,
         }
     }

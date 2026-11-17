@@ -129,19 +129,16 @@ fn every_role_gets_the_owner_llm_settings() {
         .iter()
         .filter(|(_, b)| b.iter().any(|l| l.trim() == "<<: *role"))
         .collect();
-    for want in [
-        "scheduler",
-        "fetcher",
-        "processor",
-        "embedder",
-        "api",
-        "maintenance",
-    ] {
-        assert!(
-            roles.iter().any(|(n, _)| n == want),
-            "{want} is not a role service"
-        );
-    }
+    // One container runs every role (`vcrawl run`, the 4 GB Spot VM).
+    let vcrawl = roles
+        .iter()
+        .find(|(n, _)| n == "vcrawl")
+        .expect("vcrawl is a role service");
+    assert!(
+        vcrawl.1.iter().any(|l| l.trim() == r#"command: ["run"]"#),
+        "vcrawl does not run every role: {:?}",
+        vcrawl.1
+    );
     for (name, body) in roles {
         if body.iter().any(|l| l.trim() == "environment:") {
             assert!(
@@ -203,4 +200,40 @@ fn secret_file_variables_never_break_load() {
         Config::load(None).expect("a secret file path is not a setting");
         Ok(())
     });
+}
+
+/// `512m`, `1g`, `1536m` → bytes.
+fn mem_bytes(v: &str) -> u64 {
+    let v = v.trim();
+    let (n, unit) = v.split_at(v.find(|c: char| c.is_ascii_alphabetic()).unwrap_or(v.len()));
+    let n: u64 = n.parse().unwrap_or_else(|_| panic!("memory limit {v:?}"));
+    n * match unit.to_ascii_lowercase().as_str() {
+        "k" => 1 << 10,
+        "m" => 1 << 20,
+        "g" => 1 << 30,
+        "" | "b" => 1,
+        u => panic!("unit {u:?} in {v:?}"),
+    }
+}
+
+#[test]
+fn memory_limits_fit_the_small_vm() {
+    // Spot e2-medium: 4 GB. Every service (the one-shot migrate included) has a limit, and
+    // the limits leave ≥ 0.6 GB to the host OS, Docker and the Ops Agent.
+    let mut total = 0;
+    for (name, body) in compose_services() {
+        let limit = body
+            .iter()
+            .find_map(|l| {
+                let i = l.find("memory:")?;
+                let rest = l[i + "memory:".len()..].trim();
+                Some(rest.split([' ', '}']).next().unwrap_or("").to_string())
+            })
+            .unwrap_or_else(|| panic!("{name} has no memory limit"));
+        total += mem_bytes(&limit);
+    }
+    assert!(
+        total <= 3_400_000_000,
+        "memory limits sum to {total} bytes (> 3.4 GB)"
+    );
 }

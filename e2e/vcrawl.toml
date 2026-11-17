@@ -46,3 +46,5 @@ bind = "0.0.0.0:8443"
 [vcrawl]
 data_dir = "/tmp/vcrawl"
 scheduler_interval_s = 10                      # seed/enqueue/robots refresh within a cycle
+fetcher_concurrency = 8                        # production's (deploy/compose.yaml)
+processor_concurrency = 2

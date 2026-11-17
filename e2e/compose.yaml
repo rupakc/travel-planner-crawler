@@ -7,7 +7,7 @@
 # runner. Every network is internal: nothing in this stack can reach the internet.
 #
 # Networks:
-#   db       Postgres, the roles, the runner.
+#   db       Postgres, vcrawl, the fetchers, the runner.
 #   web      the fake web, on a public-looking subnet so the SSRF guard treats it as the
 #            internet. Each site's DNS name (and denied.test, which must never be requested)
 #            is an alias of the fake-web container.
@@ -19,7 +19,8 @@
 #   render   Chromium and the fetchers (CDP). Chromium has no other network: every request
 #            it makes is paused and answered by the fetcher (spec §17.1).
 #   store    fake GCS, fake Gemini, the roles, the runner.
-#   apinet   the API and the runner (TLS on 8443, certificate from run.sh's throwaway CA).
+#   apinet   vcrawl (alias `api`) and the runner (TLS on 8443, certificate from run.sh's
+#            throwaway CA).
 
 name: vc-e2e
 
@@ -55,6 +56,13 @@ x-fake: &fake
 services:
   postgres:
     image: pgvector/pgvector:pg17@sha256:b513c48566e4777cd3370451400000c78eda6a08131d68f4c31d4a76f27bd8fd
+    # Production's memory settings (deploy/postgres/postgresql.conf), so the sampler in
+    # run.sh measures what the 4 GB VM will see.
+    command: ["postgres", "-c", "max_connections=40", "-c", "shared_buffers=384MB",
+              "-c", "effective_cache_size=1GB", "-c", "work_mem=4MB",
+              "-c", "maintenance_work_mem=64MB", "-c", "autovacuum_work_mem=32MB",
+              "-c", "wal_buffers=8MB", "-c", "autovacuum_max_workers=2"]
+    deploy: { resources: { limits: { memory: 1152m } } }
     environment:
       POSTGRES_USER: vcrawl
       POSTGRES_DB: vcrawl
@@ -137,6 +145,7 @@ services:
     environment: { HOME: /tmp }
     volumes: ["../deploy/chromium/run.sh:/opt/run.sh:ro"]
     entrypoint: ["/bin/sh", "/opt/run.sh"]
+    deploy: { resources: { limits: { memory: 768m } } }
     networks: [render]
 
   migrate:
@@ -144,17 +153,31 @@ services:
     command: ["migrate"]
     profiles: [tools]
 
-  scheduler:
+  # The production topology (deploy/compose.yaml): every role but the fetcher in one
+  # `vcrawl run` process; the two fetchers are `vcrawl run --roles fetcher` each (the
+  # politeness oracle needs two of them racing for keys).
+  vcrawl:
     <<: *vcrawl
-    command: ["scheduler"]
+    command: ["run", "--roles", "scheduler,processor,embedder,maintenance,api"]
     environment:
       <<: *vcrawl-env
-      VC_VCRAWL_INSTANCE: scheduler
-    networks: [db, store, web, trapnet, metanet]
+      VC_VCRAWL_INSTANCE: vcrawl
+      VC_OBS_LOG_LEVEL: info,vcrawl::data::processor=debug
+      VC_SECRET_CRAWLER_API_TLS_CERT: ${E2E_TLS_CERT:?run e2e/run.sh}
+      VC_SECRET_CRAWLER_API_TLS_KEY: ${E2E_TLS_KEY:?run e2e/run.sh}
+    deploy: { resources: { limits: { memory: 1024m } } }
+    networks:
+      db: {}
+      store: {}
+      web: {}
+      trapnet: {}
+      metanet: {}
+      # The API's certificate is for "api" (run.sh); the runner calls https://api:8443.
+      apinet: { aliases: [api] }
 
   fetcher-a:
     <<: *vcrawl
-    command: ["fetcher"]
+    command: ["run", "--roles", "fetcher"]
     environment:
       <<: *vcrawl-env
       VC_VCRAWL_INSTANCE: fetcher-a
@@ -162,11 +185,12 @@ services:
     depends_on:
       postgres: { condition: service_healthy }
       chromium: { condition: service_started }
+    deploy: { resources: { limits: { memory: 768m } } }
     networks: [db, store, web, trapnet, metanet, render]
 
   fetcher-b:
     <<: *vcrawl
-    command: ["fetcher"]
+    command: ["run", "--roles", "fetcher"]
     environment:
       <<: *vcrawl-env
       VC_VCRAWL_INSTANCE: fetcher-b
@@ -174,39 +198,8 @@ services:
     depends_on:
       postgres: { condition: service_healthy }
       chromium: { condition: service_started }
+    deploy: { resources: { limits: { memory: 768m } } }
     networks: [db, store, web, trapnet, metanet, render]
-
-  processor:
-    <<: *vcrawl
-    command: ["processor"]
-    environment:
-      <<: *vcrawl-env
-      VC_VCRAWL_INSTANCE: processor
-      VC_OBS_LOG_LEVEL: info,vcrawl::data::processor=debug
-
-  embedder:
-    <<: *vcrawl
-    command: ["embedder"]
-    environment:
-      <<: *vcrawl-env
-      VC_VCRAWL_INSTANCE: embedder
-
-  maintenance:
-    <<: *vcrawl
-    command: ["maintenance"]
-    environment:
-      <<: *vcrawl-env
-      VC_VCRAWL_INSTANCE: maintenance
-
-  api:
-    <<: *vcrawl
-    command: ["api"]
-    environment:
-      <<: *vcrawl-env
-      VC_VCRAWL_INSTANCE: api
-      VC_SECRET_CRAWLER_API_TLS_CERT: ${E2E_TLS_CERT:?run e2e/run.sh}
-      VC_SECRET_CRAWLER_API_TLS_KEY: ${E2E_TLS_KEY:?run e2e/run.sh}
-    networks: [db, store, apinet]
 
   runner:
     image: vc-e2e:local

@@ -216,6 +216,27 @@ async fn wait_for_heartbeats(addr: SocketAddr, roles: &[&str]) {
     }
 }
 
+/// `GET https://<api.bind>/healthz` (the MIG autohealing check; self-signed test cert).
+async fn api_healthz(bind: &str) -> u16 {
+    let http = reqwest::Client::builder()
+        .danger_accept_invalid_certs(true)
+        .build()
+        .expect("client");
+    let port = bind.rsplit(':').next().unwrap();
+    let start = Instant::now();
+    loop {
+        if let Ok(r) = http
+            .get(format!("https://127.0.0.1:{port}/healthz"))
+            .send()
+            .await
+        {
+            return r.status().as_u16();
+        }
+        assert!(start.elapsed() < Duration::from_secs(30), "api not serving");
+        tokio::time::sleep(Duration::from_millis(100)).await;
+    }
+}
+
 const ALL_ROLES: [&str; 6] = [
     "scheduler",
     "fetcher",
@@ -228,6 +249,7 @@ const ALL_ROLES: [&str; 6] = [
 #[tokio::test]
 async fn run_starts_every_role_in_one_process_and_each_writes_its_heartbeat() {
     let (tmp, pool, ctx, addr) = setup("run").await;
+    let api_bind = ctx.cfg.api.bind.clone();
     let opts = vcrawl::run::RunOptions {
         tls_dir: tls_dir(tmp.path()),
         ..Default::default()
@@ -250,6 +272,8 @@ async fn run_starts_every_role_in_one_process_and_each_writes_its_heartbeat() {
     for r in ALL_ROLES {
         assert_eq!(h["roles"][r]["up"], true, "{r}: {body}");
     }
+    // The API's TLS /healthz (port 8443 in production) reports the healthy process.
+    assert_eq!(api_healthz(&api_bind).await, 200);
     // One heartbeat row per role, all for this instance.
     let rows: Vec<(String,)> =
         sqlx::query_as("SELECT role FROM heartbeats WHERE instance = 'run-test' ORDER BY 1")
@@ -280,17 +304,22 @@ async fn run_starts_every_role_in_one_process_and_each_writes_its_heartbeat() {
 
 #[tokio::test]
 async fn run_keeps_the_other_roles_up_when_one_fails_and_reports_it() {
-    let (tmp, _pool, ctx, addr) = setup("run").await;
-    // No TLS pair: the api role fails closed (and is retried); the others keep running.
+    let (tmp, pool, ctx, addr) = setup("run").await;
+    // The processor cannot load its kind registry: it fails (and is retried); the others
+    // keep running, and the API's TLS /healthz reports the process unhealthy.
+    let mut c = (*ctx.cfg).clone();
+    c.kinds.kinds_toml = tmp.path().join("missing-kinds.toml").display().to_string();
+    let api_bind = c.api.bind.clone();
+    let ctx = Ctx::new(c).with_pool(pool.clone());
     let opts = vcrawl::run::RunOptions {
-        tls_dir: tmp.path().join("no-tls"),
+        tls_dir: tls_dir(tmp.path()),
         backoff: Duration::from_millis(200),
         max_backoff: Duration::from_secs(1),
     };
     let (tx, rx) = tokio::sync::watch::channel(false);
     let task = tokio::spawn(vcrawl::run::run_until(
         ctx,
-        vcrawl::run::parse_roles("scheduler,api").unwrap(),
+        vcrawl::run::parse_roles("scheduler,processor,api").unwrap(),
         opts,
         rx,
     ));
@@ -301,7 +330,7 @@ async fn run_keeps_the_other_roles_up_when_one_fails_and_reports_it() {
             .await
             .expect("/healthz");
         let h: serde_json::Value = serde_json::from_str(&body).expect("json");
-        if status == 503 && h["roles"]["api"]["up"] == false {
+        if status == 503 && h["roles"]["processor"]["up"] == false {
             break body;
         }
         assert!(start.elapsed() < Duration::from_secs(30), "{status} {body}");
@@ -310,10 +339,16 @@ async fn run_keeps_the_other_roles_up_when_one_fails_and_reports_it() {
     let h: serde_json::Value = serde_json::from_str(&body).unwrap();
     assert_eq!(h["healthy"], false);
     assert_eq!(h["roles"]["scheduler"]["up"], true, "{body}");
+    assert_eq!(h["roles"]["api"]["up"], true, "{body}");
     let metrics = vc_obs::server::get(addr, "/metrics").await.unwrap().1;
     assert!(
-        !metrics.contains("crawler_heartbeat{role=\"api\"}"),
+        !metrics.contains("crawler_heartbeat{role=\"processor\"}"),
         "{metrics}"
+    );
+    assert_eq!(
+        api_healthz(&api_bind).await,
+        503,
+        "TLS /healthz of an unhealthy process"
     );
     tx.send(true).unwrap();
     tokio::time::timeout(Duration::from_secs(30), task)
@@ -414,7 +449,7 @@ async fn the_binary_stops_cleanly_on_sigterm() {
         }
         assert!(
             t.elapsed() < Duration::from_secs(25),
-            "vcrawl run still running 25 s after SIGTERM"
+            "vcrawl run still running 25 s after SIGTERM (the host stops it with -t 25)"
         );
         tokio::time::sleep(Duration::from_millis(100)).await;
     };

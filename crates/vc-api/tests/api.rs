@@ -775,3 +775,36 @@ async fn sources_stats_and_probes() {
         .expect("send");
     assert_eq!(r.status(), StatusCode::BAD_REQUEST);
 }
+
+#[tokio::test]
+async fn healthz_follows_the_host_process_health_probe() {
+    let healthy = Arc::new(std::sync::atomic::AtomicBool::new(true));
+    let probe = healthy.clone();
+    let state = ApiState::new(
+        ApiConfig::default(),
+        Arc::new(MemIndex::new()),
+        Arc::new(MemPlaces { matches: vec![] }),
+        Arc::new(MemClientStore::new(vec![])),
+        Arc::new(MemCatalog::default()),
+    )
+    .with_health(Arc::new(move || {
+        probe.load(std::sync::atomic::Ordering::Relaxed)
+    }));
+    let base = start(state).await;
+    let http = reqwest::Client::new();
+    let r = http
+        .get(format!("{base}/healthz"))
+        .send()
+        .await
+        .expect("send");
+    assert_eq!(r.status(), StatusCode::OK);
+    healthy.store(false, std::sync::atomic::Ordering::Relaxed);
+    let r = http
+        .get(format!("{base}/healthz"))
+        .send()
+        .await
+        .expect("send");
+    assert_eq!(r.status(), StatusCode::SERVICE_UNAVAILABLE);
+    let body: Value = r.json().await.expect("json");
+    assert_eq!(body["status"], "unhealthy");
+}

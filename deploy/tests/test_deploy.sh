@@ -18,7 +18,7 @@ setup() {
   export CALLS="$T/calls" FAKE_STATE="$T/fake" VC_STATE="$T/state" VC_SECRETS_DIR="$T/secrets"
   export VC_OPT="$T/opt" PATH="$HERE/fakes:$PATH" VC_HEALTH_POLL=0 VC_HEALTH_TIMEOUT=5
   export VC_RETRY_SLEEP=0 VC_DATA="$T/data"
-  unset FAKE_PROD_DIGEST FAKE_RUNNING FAKE_UNHEALTHY_DIGEST FAKE_MIGRATE_RC FAKE_SIGNED \
+  unset VC_ROLES FAKE_PROD_DIGEST FAKE_RUNNING FAKE_UNHEALTHY_DIGEST FAKE_MIGRATE_RC FAKE_SIGNED \
     FAKE_LABEL_SCHEMA FAKE_LABEL_MIN_SCHEMA FAKE_PS_A FAKE_LOCKED VC_NOW FAKE_DB_SCHEMA \
     FAKE_COSIGN_TRANSIENT FAKE_LABEL_MIGRATIONS FAKE_DB_MIGRATIONS FAKE_MIGRATE_FAILS FAKE_BEAT_RC FAKE_DRILL_OUT FAKE_DRILL_RC VC_DRILL_NO_CHOWN
   mkdir -p "$VC_STATE" "$VC_SECRETS_DIR" "$FAKE_STATE" "$VC_OPT"
@@ -35,7 +35,7 @@ setup() {
 running_on() {
   echo "VC_IMAGE=$IMG@$1" >"$VC_STATE/image.env"
   local s
-  for s in postgres chromium otelcol maintenance scheduler processor embedder fetcher api; do
+  for s in postgres chromium otelcol ${VC_ROLES:-vcrawl}; do
     echo "$IMG@$1" >"$FAKE_STATE/$s"
   done
 }
@@ -93,14 +93,14 @@ test_migrate_runs_before_roll() {
   v="$(line_of "cosign verify")"
   p="$(line_of "pull -q $IMG@$NEW")"
   m="$(grep -nF "run --rm migrate" "$CALLS" | head -n1 | cut -d: -f1)"
-  r="$(grep -nF "up -d --no-deps maintenance" "$CALLS" | head -n1 | cut -d: -f1)"
+  r="$(grep -nF "up -d --no-deps vcrawl" "$CALLS" | head -n1 | cut -d: -f1)"
   [[ -n "$v" && -n "$p" && -n "$m" && -n "$r" ]] || { fail migrate_runs_before_roll "missing step (v=$v p=$p m=$m r=$r)"; return; }
   ((v < p && p < m && m < r)) || { fail migrate_runs_before_roll "order verify=$v pull=$p migrate=$m roll=$r"; return; }
   grep -F "run --rm migrate" "$CALLS" | grep -qF "VC_IMAGE=$IMG@$NEW" ||
     { fail migrate_runs_before_roll "migrate did not use the new image"; return; }
   local order
   order="$(grep -oE 'up -d --no-deps [a-z]+' "$CALLS" | awk '{print $4}' | tr '\n' ' ')"
-  [[ "$order" == "maintenance scheduler processor embedder fetcher api " ]] ||
+  [[ "$order" == "vcrawl " ]] ||
     { fail migrate_runs_before_roll "roll order '$order'"; return; }
   [[ "$(cat "$VC_STATE/image.env")" == "VC_IMAGE=$IMG@$NEW" ]] || { fail migrate_runs_before_roll "image.env not updated"; return; }
   [[ "$(cat "$VC_STATE/previous")" == "$IMG@$OLD" ]] || { fail migrate_runs_before_roll "previous not recorded"; return; }
@@ -212,16 +212,12 @@ test_rollback_on_unhealthy() {
   bash "$DEPLOY" 2>"$T/err"
   local rc=$?
   [[ $rc == 1 ]] || { fail rollback_on_unhealthy "exit $rc"; return; }
-  # the first role failed: it goes back to OLD and nothing else rolled
-  has "compose VC_IMAGE=$IMG@$OLD -p voyager-crawler -f $VC_OPT/compose.yaml --env-file $VC_STATE/host.env --env-file $VC_STATE/image.env up -d --no-deps maintenance" ||
-    { fail rollback_on_unhealthy "maintenance not rolled back to the old digest"; return; }
-  has "up -d --no-deps scheduler" && { fail rollback_on_unhealthy "kept rolling after a failure"; return; }
-  local s
-  for s in maintenance scheduler processor embedder fetcher api; do
-    [[ "$(cat "$FAKE_STATE/$s")" == "$IMG@$OLD" ]] || { fail rollback_on_unhealthy "$s runs $(cat "$FAKE_STATE/$s")"; return; }
-  done
+  # vcrawl (every role) failed: it goes back to OLD
+  has "compose VC_IMAGE=$IMG@$OLD -p voyager-crawler -f $VC_OPT/compose.yaml --env-file $VC_STATE/host.env --env-file $VC_STATE/image.env up -d --no-deps vcrawl" ||
+    { fail rollback_on_unhealthy "vcrawl not rolled back to the old digest"; return; }
+  [[ "$(cat "$FAKE_STATE/vcrawl")" == "$IMG@$OLD" ]] || { fail rollback_on_unhealthy "vcrawl runs $(cat "$FAKE_STATE/vcrawl")"; return; }
   [[ "$(cat "$VC_STATE/image.env")" == "VC_IMAGE=$IMG@$OLD" ]] || { fail rollback_on_unhealthy "image.env moved"; return; }
-  grep -q "^$NEW unhealthy after roll (maintenance)" "$VC_STATE/held" || { fail rollback_on_unhealthy "not held"; return; }
+  grep -q "^$NEW unhealthy after roll (vcrawl)" "$VC_STATE/held" || { fail rollback_on_unhealthy "not held"; return; }
   # held: the next tick neither verifies nor rolls
   : >"$CALLS"
   bash "$DEPLOY" 2>/dev/null
@@ -229,8 +225,12 @@ test_rollback_on_unhealthy() {
   ok rollback_on_unhealthy
 }
 
+# deploy.sh still rolls a list of services in order (VC_ROLES; one on the small VM): a late
+# one turning unhealthy rolls every service back
 test_rollback_on_unhealthy_late_role() {
   setup
+  export VC_ROLES="maintenance scheduler processor embedder fetcher api"
+  export FAKE_RUNNING="postgres chromium otelcol $VC_ROLES"
   running_on "$OLD"
   export FAKE_PROD_DIGEST="$NEW" FAKE_SIGNED="$NEW"
   # only the api turns unhealthy on NEW: wrap the fake through a marker
@@ -253,6 +253,7 @@ EOF
   done
   grep -q "unhealthy after roll (maintenance scheduler processor embedder fetcher api)" "$VC_STATE/held" &&
     ok rollback_on_unhealthy_late_role || fail rollback_on_unhealthy_late_role "held reason"
+  unset VC_ROLES FAKE_RUNNING
 }
 
 test_idempotent_when_digest_unchanged() {
@@ -267,9 +268,9 @@ test_idempotent_when_digest_unchanged() {
   [[ "$(cat "$VC_STATE/image.env")" == "VC_IMAGE=$IMG@$OLD" ]] || { fail idempotent_when_digest_unchanged "image.env changed"; return; }
   # a stopped service is started again, still without pull or cosign
   : >"$CALLS"
-  FAKE_RUNNING="postgres chromium otelcol maintenance scheduler processor embedder api" bash "$DEPLOY" 2>/dev/null
+  FAKE_RUNNING="postgres chromium otelcol" bash "$DEPLOY" 2>/dev/null
   { has cosign || has pull; } && { fail idempotent_when_digest_unchanged "pulled/verified to restart"; return; }
-  has "up -d --no-recreate fetcher" || { fail idempotent_when_digest_unchanged "stopped fetcher not started"; return; }
+  has "up -d --no-recreate vcrawl" || { fail idempotent_when_digest_unchanged "stopped vcrawl not started"; return; }
   ok idempotent_when_digest_unchanged
 }
 
@@ -416,13 +417,13 @@ test_skips_when_locked() {
 test_watchdog_restarts_then_reboots() {
   setup
   running_on "$OLD"
-  export FAKE_PS_A=$'postgres running healthy\nfetcher running unhealthy\napi running healthy\n'
+  export FAKE_PS_A=$'postgres running healthy\nvcrawl running unhealthy\n'
   export VC_REBOOT_CMD="$HERE/fakes/reboot" VC_NOW=100000
   local i
   for i in 1 2 3; do
     VC_NOW=$((100000 + i * 120)) bash "$WATCHDOG" 2>/dev/null
   done
-  [[ "$(grep -c "restart fetcher" "$CALLS")" == 3 ]] || { fail watchdog_restarts_then_reboots "restarts: $(grep -c "restart fetcher" "$CALLS")"; return; }
+  [[ "$(grep -c "restart vcrawl" "$CALLS")" == 3 ]] || { fail watchdog_restarts_then_reboots "restarts: $(grep -c "restart vcrawl" "$CALLS")"; return; }
   has REBOOT && { fail watchdog_restarts_then_reboots "rebooted too early"; return; }
   VC_NOW=100480 bash "$WATCHDOG" 2>/dev/null
   has REBOOT || { fail watchdog_restarts_then_reboots "no reboot after 3 failed restarts"; return; }
@@ -432,7 +433,7 @@ test_watchdog_restarts_then_reboots() {
   has REBOOT && { fail watchdog_restarts_then_reboots "reboot loop"; return; }
   # healthy → nothing
   : >"$CALLS"
-  FAKE_PS_A=$'postgres running healthy\nfetcher running healthy\n' VC_NOW=200000 bash "$WATCHDOG" 2>/dev/null
+  FAKE_PS_A=$'postgres running healthy\nvcrawl running healthy\n' VC_NOW=200000 bash "$WATCHDOG" 2>/dev/null
   has restart && { fail watchdog_restarts_then_reboots "restarted a healthy stack"; return; }
   ok watchdog_restarts_then_reboots
 }
@@ -440,7 +441,7 @@ test_watchdog_restarts_then_reboots() {
 test_watchdog_idle_while_deploying() {
   setup
   running_on "$OLD"
-  export FAKE_PS_A=$'fetcher running unhealthy\n' FAKE_LOCKED=1
+  export FAKE_PS_A=$'vcrawl running unhealthy\n' FAKE_LOCKED=1
   bash "$WATCHDOG" 2>/dev/null
   has restart && fail watchdog_idle_while_deploying "acted during a deploy" || ok watchdog_idle_while_deploying
 }
@@ -509,9 +510,10 @@ test_chromium_outside_interception_off() {
 
 test_fetcher_metrics_not_on_render_network() {
   local compose="$HERE/../compose.yaml" otel="$HERE/../otelcol/config.yaml" fetcher chromium addr ip
-  fetcher="$(compose_service "$compose" fetcher)"
+  # The fetcher runs inside vcrawl (`vcrawl run`)
+  fetcher="$(compose_service "$compose" vcrawl)"
   chromium="$(compose_service "$compose" chromium)"
-  # The fetcher shares the render network with Chromium: its /metrics must not listen there.
+  # vcrawl shares the render network with Chromium: its /metrics must not listen there.
   addr="$(sed -n 's/^      VC_OBS_METRICS_ADDR: *"\{0,1\}\([0-9.]*:9464\)"\{0,1\}$/\1/p' <<<"$fetcher")"
   [[ -n "$addr" && "$addr" != 0.0.0.0:* ]] ||
     { fail fetcher_metrics_not_on_render_network "fetcher metrics bound to all interfaces"; return; }
@@ -556,8 +558,8 @@ test_otelcol_targets_have_listeners() {
     host="${target%:*}" port="${target##*:}"
     body="$(compose_service "$compose" "$job")"
     [[ -n "$body" ]] || { fail otelcol_targets_have_listeners "job $job: no such compose service"; return; }
-    grep -qF "command: [\"$job\"]" <<<"$body" ||
-      { fail otelcol_targets_have_listeners "job $job: service does not run role $job"; return; }
+    grep -qE "command: \[\"($job|run)\"" <<<"$body" ||
+      { fail otelcol_targets_have_listeners "job $job: service runs neither role $job nor vcrawl run"; return; }
     addr="$(sed -n 's/^      VC_OBS_METRICS_ADDR: *"\{0,1\}\([^"]*\)"\{0,1\}$/\1/p' <<<"$body")"
     addr="${addr:-$default}"
     [[ "${addr##*:}" == "$port" ]] ||
@@ -583,6 +585,30 @@ test_otelcol_targets_have_listeners() {
     grep -qE "job_name: $role\$" "$otel" || { fail otelcol_targets_have_listeners "role $role not scraped"; return; }
   done
   ok otelcol_targets_have_listeners
+}
+
+# MIG autohealing probes https://<host>:8443/healthz (infrastructure/bootstrap.sh): in the
+# single-process topology vcrawl runs the api (`vcrawl run`, all roles), publishes 8443 on
+# the host, and that /healthz is the whole process's health (crates/vcrawl/src/roles/api.rs).
+# shutdown.sh stops it with `-t 25`: vcrawl's grace must end before that.
+test_api_healthz_on_host_8443() {
+  local compose="$HERE/../compose.yaml" vc grace stop_t
+  vc="$(compose_service "$compose" vcrawl)"
+  grep -qxF '    command: ["run"]' <<<"$vc" ||
+    { fail api_healthz_on_host_8443 "vcrawl does not run every role (api included)"; return; }
+  grep -qE '^      VC_API_BIND: 0\.0\.0\.0:8443$' <<<"$vc" ||
+    { fail api_healthz_on_host_8443 "the api does not listen on :8443 in the container"; return; }
+  # shellcheck disable=SC2016 # the literal compose expression
+  grep -qF 'ports: ["${VC_API_BIND:?VC_API_BIND is set by first-boot.sh}:8443:8443"]' <<<"$vc" ||
+    { fail api_healthz_on_host_8443 "8443 not published on the host"; return; }
+  grep -qF 'with_health' "$HERE/../../crates/vcrawl/src/roles/api.rs" ||
+    { fail api_healthz_on_host_8443 "the api's /healthz does not report the process health"; return; }
+  grace="$(sed -n 's/^ *shutdown_grace_s: \([0-9]*\),$/\1/p' "$HERE/../../crates/vc-config/src/sections/vcrawl.rs")"
+  stop_t="$(grep -oE 'STOP_TIMEOUT="\$\{[A-Z_]*:-[0-9]+' "$HERE/../host/shutdown.sh" | grep -oE '[0-9]+$' || true)"
+  stop_t="${stop_t:-25}"
+  [[ -n "$grace" ]] && ((grace + 3 <= stop_t)) ||
+    { fail api_healthz_on_host_8443 "shutdown_grace_s '$grace' does not end before stop -t $stop_t"; return; }
+  ok api_healthz_on_host_8443
 }
 
 # wal-g must not overwrite archived WAL: a retried archive_command of an

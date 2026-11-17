@@ -401,13 +401,25 @@ pub async fn stats(
     Ok(Json(state.cached_stats().await?))
 }
 
-/// Liveness.
+/// Liveness; 503 while the hosting process reports itself unhealthy (`ApiState::with_health`).
 #[utoipa::path(get, path = "/healthz", tag = "probe",
-    responses((status = 200, body = StatusDto)))]
-pub async fn healthz() -> Json<StatusDto> {
-    Json(StatusDto {
-        status: "ok".into(),
-    })
+    responses((status = 200, body = StatusDto), (status = 503, body = StatusDto)))]
+pub async fn healthz(State(state): State<ApiState>) -> (StatusCode, Json<StatusDto>) {
+    if state.healthy() {
+        (
+            StatusCode::OK,
+            Json(StatusDto {
+                status: "ok".into(),
+            }),
+        )
+    } else {
+        (
+            StatusCode::SERVICE_UNAVAILABLE,
+            Json(StatusDto {
+                status: "unhealthy".into(),
+            }),
+        )
+    }
 }
 
 /// Readiness (the database answers).
