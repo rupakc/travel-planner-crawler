@@ -12,8 +12,10 @@
 #   progress-based: e.g. the fetcher fails it after 10 min without a
 #   completion while due work exists.
 #   Secrets arrive as files (/run/secrets/*), never as environment values.
-#   Labels: io.voyager-crawler.schema (highest migration the image ships) and
-#   io.voyager-crawler.min-schema (lowest schema it runs against).
+#   Labels: io.voyager-crawler.schema (highest migration the image ships),
+#   io.voyager-crawler.min-schema (lowest schema it runs against) and
+#   io.voyager-crawler.migrations (every migration it ships, comma-separated;
+#   deploy.sh requires each in _sqlx_migrations).
 #
 # Networks:
 #   db        internal: Postgres and the roles that use it. No route out.

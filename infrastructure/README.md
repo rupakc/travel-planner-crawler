@@ -114,8 +114,8 @@ committed; with the LLM off (the default): ≈ $74 / $56.
   fails on any other `VC_*` name in `deploy/compose.yaml`. The DB password arrives as a file
   (`VC_DATABASE_PASSWORD_FILE`); the API TLS key/cert are read by secret name through
   vc-secrets; client tokens are argon2 hashes in `api_clients` (see `deploy/compose.yaml`).
-- Image labels `io.voyager-crawler.schema` / `min-schema` are stamped by
-  `.github/workflows/deploy.yml` from `migrations/`.
+- Image labels `io.voyager-crawler.schema` / `min-schema` / `migrations` (the full version
+  list) are stamped by `.github/workflows/deploy.yml` from `migrations/`.
 - Metrics the alert policies read (`custom.googleapis.com/crawler/…`, resource
   `gce_instance`): `heartbeat` (label `role`), `captures_committed` (cumulative),
   `due_urls`, `backpressure` (0/1), `wal_archive_age_seconds`,

@@ -102,7 +102,8 @@ flowchart LR
   with **cosign keyless** (GitHub OIDC to Sigstore), verify, then move the `prod` tag.
 - Signing happens only in the promote job, and only if the commit is still main's HEAD. So
   every signed image passed CI.
-- Image labels `io.voyager-crawler.schema` and `io.voyager-crawler.min-schema` come from
+- Image labels `io.voyager-crawler.schema`, `io.voyager-crawler.min-schema` and
+  `io.voyager-crawler.migrations` (every version the image ships) come from
   the binary itself: the workflow builds the image, runs `vcrawl migrate --print-schema`
   in it with no network, then pushes with the labels. See [Data Model](Data-Model).
 - Promotion **carbon-copies** the signed manifest to `:prod`
@@ -123,8 +124,10 @@ flowchart LR
    image keeps working. Retried 3 times; still failing: nothing is rolled and the digest is
    **not** held (each migration is one transaction, so a retry is safe). The drift alert
    fires after 30 minutes.
-5. **Min-schema gate:** if the image's `min-schema` label is above the database's highest
-   applied migration, the digest is held.
+5. **Migration gate:** if any migration in the image's `migrations` label is missing from
+   `_sqlx_migrations`, the digest is held. Owner blocks merge out of order (1102 landed
+   after 1906), so the highest number alone is not enough. Images without the label (or a
+   database list that cannot be read) fall back to `min-schema` ≤ the highest applied one.
 6. Roll the roles **one at a time**, waiting for each one's progress-based health check
    (up to 7 minutes). Unhealthy: every rolled role goes back to the previous digest, and the
    new one is held.
@@ -135,8 +138,8 @@ when they differ (`drift_since`), and the expiry of the installed API certificat
 maintenance role turns these into the `deploy_drift_seconds` and `tls_cert_days_left`
 metrics.
 
-`deploy.sh --rollback` goes back one digest, and refuses if that image's `min-schema` is
-above the database schema (it checks the database, not the recorded label). Held digests
+`deploy.sh --rollback` goes back one digest, and refuses if the database lacks a migration
+that image ships (same gate; it checks the database, not the recorded label). Held digests
 are listed in `$VC_STATE/held`; deleting a line releases one, and a newer `:prod` digest
 ends the hold. Exit codes: 0 done, 1 failure (retried next tick), 3 refused.
 

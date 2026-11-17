@@ -51,9 +51,54 @@ pub fn min_schema_version() -> i64 {
     schema_version()
 }
 
-/// `{"schema": …, "min_schema": …}` (`vcrawl migrate --print-schema`, read at image build time).
+/// Every expand migration version this image ships, ascending (`io.voyager-crawler.migrations`,
+/// comma-separated). Owner blocks merge out of order (1102 and 1401 landed after 1906), so the
+/// highest version alone does not say whether a database has every migration an image needs:
+/// `deploy.sh` compares this set with `_sqlx_migrations`.
+pub fn migration_versions() -> Vec<i64> {
+    let mut v: Vec<i64> = EXPAND.iter().map(|m| m.version).collect();
+    v.sort_unstable();
+    v.dedup();
+    v
+}
+
+/// The versions this image ships that are not in `applied` (ascending).
+pub fn missing_migrations(applied: &[i64]) -> Vec<i64> {
+    migration_versions()
+        .into_iter()
+        .filter(|v| !applied.contains(v))
+        .collect()
+}
+
+/// The successfully applied expand migrations of the database (ascending; none without the
+/// table).
+pub async fn applied_versions(pool: &PgPool) -> anyhow::Result<Vec<i64>> {
+    let exists: bool = sqlx::query_scalar("SELECT to_regclass('_sqlx_migrations') IS NOT NULL")
+        .fetch_one(pool)
+        .await?;
+    if !exists {
+        return Ok(vec![]);
+    }
+    Ok(
+        sqlx::query_scalar("SELECT version FROM _sqlx_migrations WHERE success ORDER BY version")
+            .fetch_all(pool)
+            .await?,
+    )
+}
+
+/// `{"schema": …, "min_schema": …, "migrations": "1,2,…"}` (`vcrawl migrate --print-schema`,
+/// read at image build time).
 pub fn schema_labels() -> serde_json::Value {
-    serde_json::json!({ "schema": schema_version(), "min_schema": min_schema_version() })
+    let list = migration_versions()
+        .iter()
+        .map(i64::to_string)
+        .collect::<Vec<_>>()
+        .join(",");
+    serde_json::json!({
+        "schema": schema_version(),
+        "min_schema": min_schema_version(),
+        "migrations": list,
+    })
 }
 
 /// Runs the command.
@@ -117,6 +162,12 @@ pub async fn migrate_expand(pool: &PgPool, image: &str) -> anyhow::Result<i64> {
     let mut m = sqlx::migrate!("../../migrations");
     m.set_ignore_missing(true);
     let n = apply(pool, &m, "_sqlx_migrations").await?;
+    // Every migration this image ships must now be applied, whatever its number.
+    let missing = missing_migrations(&applied_versions(pool).await?);
+    anyhow::ensure!(
+        missing.is_empty(),
+        "migrate: the database still lacks migrations {missing:?}"
+    );
     record_image(pool, image).await?;
     tracing::info!(
         applied = n,

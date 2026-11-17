@@ -33,8 +33,9 @@ enum Role {
         /// Apply contract (destructive) migrations.
         #[arg(long)]
         contract: bool,
-        /// Print `{"schema":N,"min_schema":N}` of this image and exit (no database; the
-        /// build reads it for the `io.voyager-crawler.{schema,min-schema}` labels).
+        /// Print `{"schema":N,"min_schema":N,"migrations":"1,2,…"}` of this image and exit (no
+        /// database; the build reads it for the `io.voyager-crawler.{schema,min-schema,migrations}`
+        /// labels).
         #[arg(long, conflicts_with = "contract")]
         print_schema: bool,
     },

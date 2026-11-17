@@ -20,7 +20,7 @@ setup() {
   export VC_RETRY_SLEEP=0 VC_DATA="$T/data"
   unset FAKE_PROD_DIGEST FAKE_RUNNING FAKE_UNHEALTHY_DIGEST FAKE_MIGRATE_RC FAKE_SIGNED \
     FAKE_LABEL_SCHEMA FAKE_LABEL_MIN_SCHEMA FAKE_PS_A FAKE_LOCKED VC_NOW FAKE_DB_SCHEMA \
-    FAKE_COSIGN_TRANSIENT FAKE_MIGRATE_FAILS FAKE_BEAT_RC FAKE_DRILL_OUT FAKE_DRILL_RC VC_DRILL_NO_CHOWN
+    FAKE_COSIGN_TRANSIENT FAKE_LABEL_MIGRATIONS FAKE_DB_MIGRATIONS FAKE_MIGRATE_FAILS FAKE_BEAT_RC FAKE_DRILL_OUT FAKE_DRILL_RC VC_DRILL_NO_CHOWN
   mkdir -p "$VC_STATE" "$VC_SECRETS_DIR" "$FAKE_STATE" "$VC_OPT"
   : >"$CALLS"
   echo "VC_API_BIND=10.142.0.9" >"$VC_STATE/host.env"
@@ -346,6 +346,62 @@ test_rollback_checks_the_database_schema() {
   [[ $rc == 0 ]] || { fail rollback_checks_the_database_schema "rollback failed (rc $rc)"; return; }
   [[ "$(cat "$VC_STATE/schema")" == 1300 ]] && ok rollback_checks_the_database_schema ||
     fail rollback_checks_the_database_schema "schema went back to $(cat "$VC_STATE/schema")"
+}
+
+# Owner blocks merge out of order: 1102 landed after 1906. The highest applied
+# migration equals the image's min-schema, yet the database lacks 1102: the
+# image's full migration list decides (fails on the highest-number gate).
+test_deploy_refuses_out_of_order_gap() {
+  setup
+  running_on "$OLD"
+  export FAKE_PROD_DIGEST="$NEW" FAKE_SIGNED="$NEW" FAKE_LABEL_SCHEMA=1906 \
+    FAKE_LABEL_MIN_SCHEMA=1906 FAKE_LABEL_MIGRATIONS=1,2,1102,1903,1906 \
+    FAKE_DB_SCHEMA=1906 FAKE_DB_MIGRATIONS=1,2,1903,1906
+  bash "$DEPLOY" 2>/dev/null
+  local rc=$?
+  [[ $rc == 1 ]] || { fail deploy_refuses_out_of_order_gap "exit $rc"; return; }
+  has "up -d --no-deps" && { fail deploy_refuses_out_of_order_gap "rolled"; return; }
+  grep -q "^$NEW needs migrations 1102, missing in the database" "$VC_STATE/held" ||
+    { fail deploy_refuses_out_of_order_gap "not held: $(cat "$VC_STATE/held" 2>/dev/null)"; return; }
+  # once the database has it, the same image deploys
+  sed -i.bak "/^$NEW /d" "$VC_STATE/held"
+  : >"$CALLS"
+  export FAKE_DB_MIGRATIONS=1,2,1102,1903,1906,1907
+  bash "$DEPLOY" 2>/dev/null
+  rc=$?
+  [[ $rc == 0 && "$(cat "$VC_STATE/image.env")" == "VC_IMAGE=$IMG@$NEW" ]] &&
+    ok deploy_refuses_out_of_order_gap || fail deploy_refuses_out_of_order_gap "not deployed (rc $rc)"
+}
+
+test_rollback_refuses_out_of_order_gap() {
+  setup
+  running_on "$NEW"
+  echo "$IMG@$OLD" >"$VC_STATE/previous"
+  export FAKE_SIGNED="$OLD" FAKE_LABEL_MIN_SCHEMA=1903 FAKE_LABEL_MIGRATIONS=1,1401,1903 \
+    FAKE_DB_SCHEMA=1906 FAKE_DB_MIGRATIONS=1,1903,1906
+  bash "$DEPLOY" --rollback 2>/dev/null
+  local rc=$?
+  [[ $rc == 1 ]] && ! has "up -d --no-deps" ||
+    { fail rollback_refuses_out_of_order_gap "rolled to an image whose migration is missing (rc $rc)"; return; }
+  : >"$CALLS"
+  export FAKE_DB_MIGRATIONS=1,1401,1903,1906
+  bash "$DEPLOY" --rollback 2>/dev/null
+  rc=$?
+  [[ $rc == 0 && "$(cat "$VC_STATE/image.env")" == "VC_IMAGE=$IMG@$OLD" ]] &&
+    ok rollback_refuses_out_of_order_gap || fail rollback_refuses_out_of_order_gap "rollback failed (rc $rc)"
+}
+
+# The migration list cannot be read: the highest-number gate still applies.
+test_unreadable_migration_list_falls_back_to_min_schema() {
+  setup
+  running_on "$OLD"
+  export FAKE_PROD_DIGEST="$NEW" FAKE_SIGNED="$NEW" FAKE_LABEL_SCHEMA=1999 \
+    FAKE_LABEL_MIN_SCHEMA=1999 FAKE_LABEL_MIGRATIONS=1,1999 FAKE_DB_SCHEMA=1903
+  bash "$DEPLOY" 2>/dev/null
+  local rc=$?
+  [[ $rc == 1 ]] && grep -q "^$NEW needs schema 1999, the database is at 1903" "$VC_STATE/held" &&
+    ok unreadable_migration_list_falls_back_to_min_schema ||
+    fail unreadable_migration_list_falls_back_to_min_schema "rc $rc, held: $(cat "$VC_STATE/held" 2>/dev/null)"
 }
 
 test_skips_when_locked() {
