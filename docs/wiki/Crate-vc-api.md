@@ -6,7 +6,8 @@
 
 Path: `crates/vc-api`. Dependencies: `axum`, `axum-server` (TLS), `tower-http`, `utoipa`
 (OpenAPI), `argon2`, `sqlx`. Migration block `16xx` (no migration needed: `api_clients` and
-`changes` are in `0010_api.sql`).
+`changes` are in `0010_api.sql`). Status: wired as the `api` role of [vcrawl](Crate-vcrawl);
+search gets the vector leg only when the LLM is enabled.
 
 ## Modules
 
@@ -19,7 +20,7 @@ Path: `crates/vc-api`. Dependencies: `axum`, `axum-server` (TLS), `tower-http`, 
 | `dto` | the response types (`ItemDto`, `EntityDto`, `ChangeDto`, …) with OpenAPI schemas |
 | `catalog` | sources and stats (cached up to 60 s) |
 | `error` | `{"error", "message"}` bodies and status codes |
-| `tls` | `serve`: TLS from secrets on the API port, plus a separate localhost-only `/metrics` listener |
+| `tls` | `serve`: TLS on the API port, plus a separate localhost-only `/metrics` listener. `tls_from_secrets` loads `/run/secrets/api_tls_{cert,key}` (the pair `deploy.sh` installs only when key and certificate match) and falls back to Secret Manager when those files are missing or unusable. rustls refuses a mismatched pair, so a half-done TLS rotation does not crash-loop the api; nothing usable fails closed (no plain HTTP) |
 | `metrics` | request metrics |
 | `pg` | Postgres-backed client store and catalog |
 
@@ -37,6 +38,8 @@ max page (100), excerpt length (300), request timeout (10 s).
   `rate_limited_per_client_429`, `metrics_not_on_public_listener`,
   `places_resolve_and_limits`, `sources_stats_and_probes`.
 - `tests/pg.rs`: the Postgres client store, sources and stats.
+- TLS: `mismatched_pair_is_refused`, `installed_pair_wins_over_a_half_rotated_secret_manager`
+  (fixtures: two self-signed P-256 pairs in `tests/fixtures/tls/`).
 
 ## Compatibility rule
 

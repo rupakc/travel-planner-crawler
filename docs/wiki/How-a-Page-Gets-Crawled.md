@@ -3,9 +3,9 @@
 This page follows one URL from a source file to the read API. Words in **bold** are
 explained in the [Glossary](Glossary).
 
-> **Status:** each step below is implemented and tested in its own crate. The loop that
-> runs them in order (the `fetcher`, `processor` and other roles in `vcrawl`) is being wired
-> now. See [vcrawl](Crate-vcrawl).
+> **Status:** every step below runs in production code. The `vcrawl` roles run them in
+> order, and the end-to-end test in CI checks the whole path on a fake internet (see
+> [Testing](Testing)).
 
 ## 1. A source becomes URLs
 
@@ -19,7 +19,11 @@ explained in the [Glossary](Glossary).
 - Each URL belongs to a **politeness key** (by default the registrable domain, such as
   `example.com`). All politeness rules (delay, one request at a time, daily budget, parking)
   apply per key.
-- Enqueueing is batched (1,000 rows) and ignores URLs that already exist.
+- Enqueueing is batched (1,000 rows) and ignores URLs that already exist, so a known URL
+  keeps its own schedule.
+- API and dump sources get one `adapter:<id>` row instead of page URLs.
+- A source's `min_delay_s` can only raise its key's delay, and `daily_budget` can only
+  lower its budget. Rows of a disabled source are retired (`disabled`).
 
 ## 2. A fetcher claims a key
 
@@ -35,6 +39,13 @@ The fetcher asks the frontier for work with `Frontier::claim`. In one transactio
 
 The fetcher receives a **`ClaimPermit`**. Only `vc-frontier` can create one. Without it, no
 code can make a request to a crawl target.
+
+**robots.txt first.** Every origin of the claim whose robots.txt is missing or expired is
+fetched first, under the same permit, and stored raw like any page. A `Crawl-delay` learned
+there raises the permit's delay at once (`raise_delay`, capped at `frontier.max_delay_s`, 1 h by default), so every
+later URL, redirect hop and sub-request of the same claim waits that long. 401, 403 or a
+challenge on robots.txt makes the whole key do-not-crawl and parks it; 429 or 503 backs the
+key off. Paths that robots.txt newly disallows are tombstoned.
 
 ## 3. The fetch, request by request
 
@@ -53,14 +64,24 @@ Then the response is classified:
 
 - **401, 403 or a challenge page:** stop. The key is **parked** for 24 hours (doubling up to
   30 days). Never retried with a browser or another identity.
-- **429 or 503:** honour `Retry-After`, else back off ×2 up to 24 hours.
-- **5 server errors in a row:** park for 1 hour.
-- **304 Not Modified:** a metadata-only capture is written.
+- **429 or 503:** the claim stops. The key's penalty becomes the largest of `Retry-After`,
+  twice the previous penalty and twice the delay, capped at 24 hours. A short
+  `Retry-After` never cancels the doubling. API adapters, dumps and robots.txt follow the
+  same rule.
+- **5 server errors in a row:** park for 1 hour. Any success ends the run of errors.
+- **404 or 410:** counted toward `gone`.
+- **304 Not Modified:** a `revisit` of the last committed capture, so it always points at a
+  body we have.
 - **Body:** decoded (gzip, deflate) under a byte cap (HTML 5 MB, other 10 MB) and checked
   against the content-type allowlist.
 
+A redirect to the same key but to an origin with no cached robots.txt (apex to `www`, http
+to https) fetches that robots.txt under the same permit and retries the URL once.
+
 JavaScript-only pages are rendered in Chromium instead, with every sub-request going through
-the same checks. See [Rendering with Chromium](Rendering-with-Chromium).
+the same checks. A rendered page's own status follows the same ladder as above. A
+sub-request to another site on the sub-resource allowlist (a CDN) must **borrow** that
+site's key, so its delay holds too. See [Rendering with Chromium](Rendering-with-Chromium).
 
 ## 4. Raw first: spool, segment, commit
 
@@ -107,7 +128,17 @@ sequenceDiagram
    the `captures` rows, updates the URL's validators (only if this capture is newer than the
    last one), returns the URL to `due`, and queues `capture_ready` work.
 5. **Clean up.** Only after the commit is the sealed spool file deleted. On start, every
-   sealed file is replayed; steps 3 and 4 are idempotent by segment id.
+   sealed file is replayed; steps 3 and 4 are idempotent by segment id. A replayed file
+   whose segment is already committed is deleted without uploading again.
+
+Safety nets around this path:
+
+| Problem | What happens |
+|---|---|
+| A fetcher dies and a new one starts with another instance name | Each fetcher locks its own spool directory. Every roller tick it **adopts** sibling spool directories whose lock is free, publishes them and removes them. Unpublished orphan bytes count toward backpressure. |
+| A URL stays `fetched_pending` (lost spool, race with the commit) | `mark_fetched` waits for a concurrent commit and goes straight to `due` if its capture is already committed. A sweeper, every 10 min, returns rows pending longer than 6 h to `due`. |
+| A sealed spool file is damaged | It is skipped so newer files still publish, and renamed `*.quarantined` after 3 tries. |
+| A seal fails after the record was fsynced | The append still succeeds; the seal is retried. |
 
 Until step 4, nothing built from the capture is visible, and the frontier still holds the
 **old** validators. So a crash can never cause a `304` for a body that was never stored.
@@ -126,8 +157,11 @@ stateDiagram-v2
 ```
 
 - `leased` URLs whose epoch is dead go back to `due` the next time that key is claimed.
-- `fetched_pending` URLs are never leased again; the spool replay always finishes them.
+- `fetched_pending` URLs are never leased again; the spool replay, spool adoption or the
+  6-hour sweeper finishes them.
 - The table also allows `disabled` (source turned off).
+- A url, prefix, host or source purge moves matching rows to `tombstoned`, even while
+  leased, so purged URLs leave the crawl.
 
 ## 6. Completing the claim
 
@@ -145,12 +179,22 @@ next_allowed_at = max(deadline, last request end + delay)
 `capture_ready` work is taken by the `processor` (at-least-once; every write is idempotent):
 
 1. the content handler for the media type parses it (HTML, RSS/Atom, sitemap, JSON, CSV);
-2. new links are enqueued; sitemaps and feeds fan out;
+2. new links are enqueued; sitemaps and feeds fan out; uncertain in-scope links go to
+   [link triage](Agentic-Loops) when the LLM is on;
 3. structured data (JSON-LD, microdata) becomes records with no LLM;
 4. if allowed and budgeted, Gemini extracts records from the main text;
 5. grounding checks drop anything not found in the page;
 6. places are resolved to GeoNames ids;
-7. records, versions, entities and observations are written, with a change-feed row.
+7. records, versions, entities and observations are written, with a change-feed row;
+8. records a newer capture no longer contains are marked **stale** (still served, never
+   deleted), and come back if a later capture has them again;
+9. high-stakes records waiting for a second source are kept in `held_records` (shared by
+   every processor, bounded, 7-day expiry).
+
+Separately, the processor writes the **extracted-text tier**: one compressed JSON-lines
+object per committed segment with each page's main text, used by the quality auditor and
+for re-extraction. A 304 chain (`revisit` of a `revisit`) is followed back to the stored
+body.
 
 Details: [Processing and Extraction](Processing-and-Extraction).
 

@@ -19,8 +19,31 @@ and kinds.
 | Index | `0009_index` | `embeddings` |
 | API | `0010_api` | `api_clients`, `changes` |
 | Ops | `0011_ops` | `tombstones`, `purge_requests`, `audits`, `crawl_digest`, `heartbeats`, `vc_ensure_partitions` |
+| Frontier | `1101_frontier_reschedule` | `url_state.refetch_at` + trigger: a forced refetch of a leased URL waits until the URL is `due` again |
+| Frontier | `1102_url_state_pending_since` | `url_state.pending_since`: when a URL entered `fetched_pending`, for the sweeper |
 | Store | `1201_store_rewrite` | `vc_rewrite_segment` (purge rewrite) |
-| Index read model | `1501_index_read_model` | `vc_haversine_m` and read-model indexes |
+| LLM | `1401_llm_breaker` | `llm_breaker` (one row): the shared, persisted spend breaker |
+| Index read model | `1501_index_read_model` | read-model columns on `records` and `observations`, `entities.licence_spdx`, `vc_haversine_m` and indexes |
+| Index | `1502_observation_kind` | `observations.kind`, so observation tombstones in the change feed carry their kind |
+| Sources | `1701_adapter_cursors` | `adapter_cursors`: where an API adapter stopped, so the next run resumes |
+| Ops | `1801_raw_bytes_daily` | `raw_bytes_daily`: decoded bytes spooled per UTC day, shared by every fetcher |
+| vcrawl | `1901_held_records` | `held_records`: high-stakes reference records waiting for a second source |
+| vcrawl | `1902_record_staleness` | `records.stale_since`, `stale_capture_id`, `stale_captured_at` |
+| vcrawl | `1903_text_tier` | `text_tier_segments`: which segments have an extracted-text object |
+| vcrawl | `1904_purge_garbage` | `store_garbage`; `vc_rewrite_segment` also releases validators of removed captures |
+| vcrawl | `1905_purge_author_scope` | `purge_requests.scope`; author names stored only as `sha256:<hex>` |
+| vcrawl | `1906_noarchive_expiry` | partial index over captures whose final use policy is `raw: ephemeral` and that have no `raw_expires_at` yet |
+
+### Tables added after go-live
+
+| Table | Columns (main) | Purpose |
+|---|---|---|
+| `llm_breaker` | `id = 1`, `open_until`, `reason`, `updated_at` | Opened by a Vertex 403/429 that names billing or budget. Every role reads it before calling Vertex, so one trip pauses all roles and a restart keeps it. `open_until` only moves forward. See [Gemini and Budgets](Gemini-and-Budgets). |
+| `adapter_cursors` | `url_key`, `adapter`, `cursor` (at most 2048 chars), `updated_at` | An adapter that stops at its page cap saves a position (query name and offset, or a redacted page path; never content or credentials). A complete run deletes the row. The scheduler prunes rows of URLs that left the crawl and rows not resumed for 30 days. |
+| `raw_bytes_daily` | `day`, `bytes` | The daily cap on decoded bytes spooled (`fetch.daily_raw_bytes_cap`, default 3 GB), by database time. Replaces the old `raw_bytes:YYYY-MM-DD` rows in `rate_bucket`; their totals were carried over. |
+| `held_records` | `kind`, `source_id`, `record_key`, `record`, `provenance`, `captured_at`, `held_at` | A high-stakes record (`emergency_numbers`) from a `reference` source, held until a second independent source agrees. Never served. Rows older than 7 days are ignored and deleted. |
+| `text_tier_segments` | `segment_id`, `claimed_at`, `written_at`, `archive_rows`, `ephemeral_rows` | One row per segment whose `text/YYYY/MM/<segment>.jsonl.zst` object was written. `claimed_at` is a [lease](Glossary), so a crashed writer's segment is picked up again. See [Storage and Raw Data](Storage-and-Raw-Data). |
+| `store_garbage` | `path`, `segment_id`, `reason` (`rewritten`, `abandoned`, `unreferenced`), `recorded_at` | Object paths a purge rewrite made obsolete. Written in the rewrite's own transaction, so purged bytes are deleted later even after a crash. `admin rebuild-captures` never brings a listed object back. |
 
 ### Partitioning
 
@@ -40,7 +63,9 @@ foreign keys into partitioned tables; references carry the id and the month.
   last_capture_id, etag, last_modified, payload_hash, change_count, fetch_count, …)`:
   the moving parts. `state` is `due`, `leased`, `fetched_pending`, `gone`, `tombstoned` or
   `disabled`. `fetch_mode` is `http`, `render` or `adapter:<id>`. Claims use a partial index
-  on `(key, next_fetch_at, priority) WHERE state = 'due'`.
+  on `(key, next_fetch_at, priority) WHERE state = 'due'`. `pending_since` (1102) lets a
+  sweeper return rows stuck in `fetched_pending` (for example a lost spool) to `due`.
+  `refetch_at` (1101) holds a forced refetch until a running fetch ends.
 - `politeness_keys`: `next_allowed_at`, `delay_ms`, EWMA latency, park level and reason,
   daily budget and use, shard, enabled.
 - `claims(key, holder, epoch, deadline)`: at most one live claim per key.
@@ -74,12 +99,14 @@ a database check.
 | State | Meaning |
 |---|---|
 | `active` | seen recently |
-| `stale` | not seen for 3 × the source's cadence |
+| `stale` | a newer capture of its page no longer contains it; still served, never deleted. `stale_since` and `stale_capture_id` say which capture found it missing. A later capture that contains it re-activates it. Absence counts only when this capture's extraction could have produced the record (an unchanged page, a disabled LLM or a failed call never stales anything). |
 | `gone` | the page answered 404 or 410 twice |
 | `tombstoned` | removed by opt-out, denylist, robots change or purge; never served again |
 
 Tombstones are also stored as standing exclusions (`tombstones`), so a later re-crawl does
-not bring the data back.
+not bring the data back. `records.tombstone_reason` is `opt_out`, `robots`, `denylist`,
+`purge` or `gone`. Author purges store the author only as `sha256:<hex>` of the name, never
+the name itself (1905).
 
 ## Entities
 
@@ -140,11 +167,37 @@ when transactions commit out of order. The cursor is `(xid, seq)`.
 ## Migration rules
 
 - Every migration starts with `SET lock_timeout = '5s'` and is **expand-only**: the previous
-  image must keep working on the new schema. A test (N-1) checks this.
-- Destructive ("contract") migrations live in `migrations/contract/` and run only with
-  `vcrawl migrate --contract`, after the current image has run for 7 days without a rollback.
-- Number blocks per owner: P0 `0001–0099`, frontier `11xx`, store `12xx`, queue `13xx`,
-  llm `14xx`, index `15xx`, api `16xx`, sources `17xx`, ops `18xx`.
+  image must keep working on the new schema. The N-1 test checks this (see [Testing](Testing)).
+- Destructive ("contract") migrations live in `migrations/contract/` (empty today) and run
+  only with `vcrawl migrate --contract`. It refuses unless the current image has run for
+  `vcrawl.contract_min_days` (7) days with no other image and no rollback. They are tracked
+  in `_vc_contract_migrations`, apart from the expand set.
 - Indexes on partitioned tables are built per partition (`CONCURRENTLY`), then attached.
+- No foreign keys into partitioned tables.
+
+Number blocks per owner:
+
+| Block | Owner |
+|---|---|
+| `0001–0099` | P0 (first schema) |
+| `11xx` | frontier (`vc-frontier`) |
+| `12xx` | store (`vc-store`) |
+| `13xx` | queue (`vc-queue`) |
+| `14xx` | llm (`vc-llm`) |
+| `15xx` | index (`vc-index`) |
+| `16xx` | api (`vc-api`) |
+| `17xx` | sources (`vc-sources`) |
+| `18xx` | ops |
+| `19xx` | `vcrawl` (data path, purge) |
+
+### Schema labels
+
+`vcrawl migrate --print-schema` prints `{"schema":N,"min_schema":N}` and exits without
+config or a database. `schema` is the highest expand migration in the image; `min_schema`
+is the lowest schema the image can run on; today it equals `schema`, since the image's
+queries may use any migration it ships. The deploy workflow stores them as the image
+labels `io.voyager-crawler.schema` and `io.voyager-crawler.min-schema`. `deploy.sh` holds a
+deploy, or refuses a rollback, when the image's `min-schema` is above the database's
+highest applied migration. See [Operations and Deploy](Operations-and-Deploy).
 
 See also: [Storage and Raw Data](Storage-and-Raw-Data), [Processing and Extraction](Processing-and-Extraction).

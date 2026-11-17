@@ -17,7 +17,7 @@ Path: `crates/vc-core`. Main dependencies: `url`, `psl`, `blake3`, `ulid`, `chro
 | `frontier` | `Frontier`, `LeaseCheck`, `ClaimPermit`, `Claim`, outcomes | [vc-frontier](Crate-vc-frontier) |
 | `fetch` | `PermitClient`, `FetchRequest`, `Exchange`, `FetchError` | [vc-fetch](Crate-vc-fetch) |
 | `render` | `Renderer`, `RenderBudget`, `BlockReason`, `RenderOutcome` | [vc-render](Crate-vc-render) |
-| `store` | `BlobStore`, `CaptureSink`, `SegmentCommitter`, `SpoolRecord`, `SegmentManifest` | [vc-store](Crate-vc-store) |
+| `store` | `BlobStore`, `CaptureSink`, `SegmentCommitter`, `SpoolRecord`, `SegmentManifest`, `capture_time` (truncates a capture time to whole microseconds, as Postgres stores it) | [vc-store](Crate-vc-store) |
 | `parse` | `ContentHandler`, `HandlerRegistry`, `Parsed`, `Link`, `Limits` | [vc-parse](Crate-vc-parse) |
 | `kinds` | `KindRegistry`, `KindDef`, `KindStorage` | [vc-kinds](Crate-vc-kinds) |
 | `llm` | `LlmClient`, `Embedder`, `BudgetLedger`, `BatchRunner`, `Purpose`, `Usd` | [vc-llm](Crate-vc-llm) |
@@ -48,7 +48,13 @@ Path: `crates/vc-core`. Main dependencies: `url`, `psl`, `blake3`, `ulid`, `chro
   for leases).
 - **`CanonicalUrl`**: the only accepted URL type for crawling (rules below).
 - **`ClaimPermit`**: proof of a live claim. Its constructor `mint` and `extend_to` are
-  forbidden outside `vc-frontier` and testkit by `clippy.toml`.
+  forbidden outside `vc-frontier` and testkit by `clippy.toml`. `raise_delay(d)` raises the
+  permit's per-request delay for the rest of the claim (never lowers it), used when a
+  `Crawl-delay` is learned mid-claim.
+- **`FetchError`**: includes `Challenge`, `OutOfScope`, `CrossKeyRedirect`,
+  `RobotsUnavailable`, `RateLimited { status, retry_after }` (a 429/503 from an adapter, a
+  render or robots.txt; the fetcher backs the key off) and `ServerError { status }` (other
+  5xx; counted toward the key's server-error run). Both new variants are transient.
 - **`UsePolicy`**: `{raw, index, llm, embed, serve, train}` with a `meet` operation (the
   minimum of each dimension), `ALLOW_ALL` and `DENY_ALL`. Signals can only restrict.
 - **`LicenceClass`** (`open`, `share_alike`, `facts_only`, `api_terms`, `restricted`) and
@@ -74,6 +80,7 @@ Idempotent (`canon(canon(u)) == canon(u)`, a property test) and conservative:
 
 ## Tests
 
+- `tests/deadline_handle.rs`: the permit's deadline handle and `raise_delay_only_increases`.
 - `tests/contracts.rs`: `canonical_url_is_idempotent` (property test),
   `use_policy_meet_only_restricts`, `url_key_is_16_bytes_and_stable`, source-spec field and
   enum spellings.
@@ -82,4 +89,5 @@ Idempotent (`canon(canon(u)) == canon(u)`, a property test) and conservative:
 
 ## Limits
 
-Frozen after P0. No hard-coded entity kinds (they come from data; see [vc-kinds](Crate-vc-kinds)).
+Frozen after P0; changes since then are additive only (`raise_delay`, the two `FetchError`
+variants). No hard-coded entity kinds (they come from data; see [vc-kinds](Crate-vc-kinds)).

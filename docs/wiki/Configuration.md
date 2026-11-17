@@ -22,13 +22,37 @@ Later sources win:
 | `VC_PROJECT_CAP_USD=200` | `llm.project_cap_usd` (alias) |
 
 Names are case-insensitive. Variables whose section is unknown (such as `VC_SECRET_*` for the
-env secret backend, or `VC_CONFIG`) are ignored. Unknown **fields** inside a known section
-are an error.
+env secret backend, or `VC_CONFIG`) are ignored, and so is `VC_DATABASE_PASSWORD_FILE` (a
+secret file path, not a setting). Unknown **fields** inside a known section are an error.
 
-> **Status:** `deploy/compose.yaml` also passes deploy-contract variables such as
-> `VC_DATABASE_PASSWORD_FILE`, `VC_API_LISTEN`, `VC_API_*_FILE`, `VC_SPOOL_DIR`,
-> `VC_GCS_RAW_BUCKET` and `VC_LOG_FORMAT`. These do not map one to one onto the section
-> fields below; reconciling them is part of the `vcrawl` wiring.
+## Variables set in production
+
+`deploy/compose.yaml` passes only real settings. A test (`crates/vc-config/tests/deploy_env.rs`)
+loads the config with exactly the compose environment and fails on any name that no setting
+reads.
+
+| Variable | Set for | Value | Meaning |
+|---|---|---|---|
+| `VC_DATABASE_URL` | every role | `postgres://vcrawl@postgres:5432/vcrawl` | database, without the password |
+| `VC_DATABASE_PASSWORD_FILE` | every role | `/run/secrets/pg_password` | password file (tmpfs, written by `deploy.sh`) |
+| `VC_STORE_RAW_BUCKET`, `VC_STORE_OPS_BUCKET` | every role | `voyager-crawler-raw`, `voyager-crawler-ops` | GCS buckets |
+| `VC_LLM_GCP_PROJECT`, `VC_SECRETS_PROJECT` | every role | `voyager-prod-ohzkl` | project for Vertex and Secret Manager |
+| `VC_OBS_LOG_FORMAT` | every role | `json` | log format |
+| `VC_LLM_ENABLED` | every role | from `host.local.env`, default `false` | turn the LLM on |
+| `VC_PROJECT_CAP_USD` | every role | from `host.local.env`, default `0` | the project's Gemini spend cap; 0 keeps the LLM off |
+| `VC_RENDER_CDP_URL` | fetcher | `http://chromium:9222` | Chromium DevTools address |
+| `VC_STORE_SPOOL_DIR` | fetcher | `/spool` | spool mount |
+| `VC_VCRAWL_INSTANCE` | fetcher | `fetcher-a` | stable name, so the fetcher's spool subfolder survives a container rebuild |
+| `VC_OBS_METRICS_ADDR` | fetcher | `192.168.250.2:9464` | `/metrics` only on the internal `metrics` network ([Security](Security)) |
+| `VC_API_BIND` | api | `0.0.0.0:8443` inside the container | `api.bind`. The host's own `VC_API_BIND` (the VM's internal IP, from `host.env`) is a compose variable: the port is published only on that IP |
+
+Owner overrides go in `/var/lib/voyager-crawler/deploy/host.local.env` on the VM.
+`first-boot.sh` copies them into `host.env` on every boot. Only `VC_LLM_ENABLED` and
+`VC_PROJECT_CAP_USD` are forwarded from there to the roles today; to change another setting
+(for example `VC_LLM_MONTHLY_USD`), add it to the role environment in `deploy/compose.yaml`.
+
+Rendering stays off in production: compose does not set `VC_RENDER_ENABLED`, so
+`render.enabled` keeps its default `false`.
 
 ## Startup checks
 
@@ -44,7 +68,8 @@ An invalid `[llm]` section does **not** stop the role: the LLM is forced off ins
 (`llm.forced_off` holds the reason, exported as `crawler_llm_config_invalid`, which alerts).
 That covers LLM caps breaking `0 ≤ daily_usd ≤ monthly_usd`, purpose shares that do not
 sum to 1, and `llm.enabled` with `VC_PROJECT_CAP_USD` missing, 0, or below twice the
-monthly cap. `Config::validate()` still rejects all of them.
+monthly cap. `Config::validate()` still rejects all of them. Errors in any other section stay
+fatal.
 
 ## Sections
 
@@ -99,7 +124,7 @@ The User-Agent is a constant in code, not a setting.
 | `max_nested_gzip` | 2 | |
 | `allowed_content_types` | HTML, XHTML, RSS, Atom, RDF, XML, JSON, JSON-LD, CSV, plain text, gzip, bzip2 | |
 | `subresource_content_types` | CSS and JavaScript types | render sub-requests only |
-| `daily_raw_bytes_cap` | 3 GiB | across all keys |
+| `daily_raw_bytes_cap` | 3 GiB | raw bytes stored per UTC day across all keys; counted in Postgres (`raw_bytes_daily`, migration 1801), so it holds across processes and restarts |
 
 ### `[render]`
 
@@ -109,7 +134,8 @@ The User-Agent is a constant in code, not a setting.
 | `cdp_url` | `http://chromium:9222` | headless-shell on the internal network |
 | `max_tabs` | 2 | |
 | `budget_s`, `max_subrequests`, `max_bytes` | 90, 60, 20 MiB | per render |
-| `network_idle_ms`, `subresource_gap_ms` | 1000, 250 | |
+| `network_idle_ms` | 1000 | no paused request for this long = network idle |
+| `subresource_gap_ms` | 250 | the **sub-resource gap**: minimum time between two sub-requests (scripts, stylesheets) of one render to the same host. Applied inside the permit client's `admit`, never longer than the key's page delay; the next page still waits the full delay |
 | `subresource_cache_ttl_h`, `subresource_cache_max_bytes` | 24, 64 MiB | in-memory cache |
 | `cache_dir` | `/var/lib/voyager-crawler/render-cache` | reserved |
 | `restart_after_renders` | 200 | leak containment |
@@ -146,6 +172,7 @@ The User-Agent is a constant in code, not a setting.
 | Field | Default | Meaning |
 |---|---|---|
 | `enabled` | **false** | `VC_LLM_ENABLED` |
+| `forced_off` | none | not a setting: the reason the LLM was forced off at load (see Startup checks) |
 | `model` | `gemini-3.1-flash-lite` | `VC_LLM_MODEL` |
 | `embedding_model`, `embedding_dim`, `embedding_location` | `text-embedding-005`, 768, `us-central1` | |
 | `gcp_project`, `location` | `voyager-prod-ohzkl`, `global` | |
@@ -154,7 +181,7 @@ The User-Agent is a constant in code, not a setting.
 | `shares` | extraction 0.70, embedding 0.08, triage 0.08, auditor 0.07, scout 0.04, place 0.03 | |
 | `max_output_tokens`, `max_input_tokens`, `max_chunks` | 400, 1200, 3 | |
 | `chars_per_token` | 3.5 | for estimates |
-| `breaker_h`, `stale_settle_h`, `batch_timeout_h` | 6, 1, 72 | |
+| `breaker_h`, `stale_settle_h`, `batch_timeout_h` | 6, 1, 72 | breaker hours; open reservations older than this are settled as spent (hourly sweep); batch job timeout |
 | `request_timeout_s` | 60 | |
 | `input_usd_per_m`, `output_usd_per_m`, `cached_input_usd_per_m` | 0.25, 1.50, 0.025 | list prices |
 | `batch_discount`, `embedding_usd_per_1k_chars` | 0.5, 0.000025 | |
@@ -208,7 +235,7 @@ The User-Agent is a constant in code, not a setting.
 |---|---|
 | `bind` | `0.0.0.0:8443` (internal IP only in production) |
 | `metrics_bind` | `127.0.0.1:9100` |
-| `tls_cert_secret`, `tls_key_secret` | `crawler-api-tls-cert`, `crawler-api-tls-key` |
+| `tls_cert_secret`, `tls_key_secret` | `crawler-api-tls-cert`, `crawler-api-tls-key` (used only when the files `/run/secrets/api_tls_cert` and `api_tls_key` are missing or unusable) |
 | `rate_per_min` | 600 per client |
 | `max_page` | 100 |
 | `excerpt_chars` | 300 |
@@ -236,13 +263,22 @@ The User-Agent is a constant in code, not a setting.
 
 ### `[vcrawl]`
 
-| Field | Default |
-|---|---|
-| `instance` | hostname |
-| `data_dir` | `/var/lib/voyager-crawler` |
-| `fetcher_concurrency` | 16 keys in flight per process |
-| `processor_concurrency` | 4 |
-| `partitions_ahead_months` | 2 |
-| `contract_min_days` | 7 |
+Settings of the `vcrawl` binary itself (its roles and admin commands).
+
+| Field | Default | Meaning |
+|---|---|---|
+| `instance` | hostname | instance name; part of the role's spool subfolder name |
+| `data_dir` | `/var/lib/voyager-crawler` | data disk |
+| `fetcher_concurrency` | 16 | keys in flight per fetcher process |
+| `processor_concurrency` | 4 | |
+| `partitions_ahead_months` | 2 | monthly partitions created ahead |
+| `contract_min_days` | 7 | `migrate --contract` needs the current image to have run this long |
+| `scheduler_interval_s` | 300 | scheduler pass: sources to seeds, source limits, robots refresh |
+| `robots_refresh_batch` | 100 | origins refreshed per scheduler pass |
+| `fetcher_idle_ms` | 1000 | fetcher wait when no key is ready |
+| `roller_tick_s` | 5 | segment roller: seal due files, upload, commit |
+| `recrawl_min_s` | 3600 | shortest recrawl interval (the source cadence is the longest) |
+| `recrawl_default_s` | 604800 (7 days) | recrawl interval without a source or with `on_demand` cadence |
+| `health_timeout_s` | 5 | per-dependency timeout of `vcrawl health` |
 
 Code: [vc-config](Crate-vc-config).

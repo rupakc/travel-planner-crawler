@@ -4,7 +4,9 @@
 They turn a captured body into links, main text and structured data. Handlers never fetch.
 
 Path: `crates/vc-parse`. Dependencies: `scraper`, `dom_smoothie` (main-content extraction),
-`quick-xml`, `feed-rs`, `whatlang` (language), `encoding_rs`, `csv`, `flate2`.
+`quick-xml`, `feed-rs`, `whatlang` (language), `encoding_rs`, `csv`, `flate2`. Status:
+wired; the processor parses every committed capture, and the extracted-text tier is built
+from its output.
 
 ## Handlers
 
@@ -54,8 +56,9 @@ threshold.
 `links_capped_at_limit`, `legacy_charset_decoded`, JSON and CSV handlers, registry dispatch
 and sniffing, simhash properties.
 
-Fuzz targets (separate workspace in `fuzz/`, nightly): `fuzz_html`, `fuzz_sitemap`,
-`fuzz_feed`:
+Fuzz targets (separate workspace in `fuzz/`): `fuzz_html`, `fuzz_sitemap`, `fuzz_feed`.
+`.github/workflows/fuzz.yml` runs every target nightly (03:17 UTC) and a 60 s smoke on pull
+requests that touch a fuzz crate. Locally:
 
 ```bash
 cd crates/vc-parse

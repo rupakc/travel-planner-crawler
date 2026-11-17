@@ -3,12 +3,16 @@
 **Purpose.** `PgWorkQueue`: the Postgres work queue between roles (`work_items` table,
 migration `0005_queue.sql`). Implements `vc_core::queue::WorkQueue`. Migration block `13xx`.
 
-Path: `crates/vc-queue`. Dependency: `sqlx`.
+Path: `crates/vc-queue`. Dependency: `sqlx`. Status: wired; the processor takes
+`capture_ready` items from it.
 
 ## Work kinds
 
 `capture_ready` (a committed capture to process, enqueued by `vc_commit_segment`),
 `extract`, `embed`, `triage`, `audit`, `purge`. Payloads hold **ids only**, never content.
+Today only `capture_ready` is used: the embedder reads `pending_embeddings` from the index,
+triage and the auditor run inline in the processor and maintenance, and purges advance
+through the `purge_requests` table. The other kinds are reserved.
 
 ## Behaviour
 

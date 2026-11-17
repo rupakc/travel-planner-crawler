@@ -6,7 +6,7 @@ its source, licence and attribution.
 
 ## The source catalogue
 
-There are 117 source files: 98 enabled and 19 disabled. They were generated from the
+There are 117 source files: 94 enabled and 23 disabled. They were generated from the
 research list `docs/research/seeds.yaml` by `scripts/seeds_to_sources.py`; change that
 script's tables, not its output, for lasting changes.
 
@@ -22,10 +22,30 @@ Sources cover every Voyager agent domain: visa and advisories, weather, FX, even
 places and activities, walking tours, getting around, SIM, emergency numbers, tips,
 flights reference data, plus blogs, news and one forum dump.
 
-Why some are disabled: non-commercial or unknown licences (`restricted`), live prices (a
-non-goal; they stay on SerpAPI in Voyager), partner APIs without an agreement, forums other
-than the Stack Exchange dump, the full Wikidata dump (SPARQL is used instead), and stale or
-paid sources.
+The counts above include disabled files. A disabled source keeps its file, with
+`enabled: false` and the reason in `notes`. The reasons live in the `DISABLED` table of
+`scripts/seeds_to_sources.py`.
+
+## Disabled sources
+
+| Source | Why it is off |
+|---|---|
+| `wikidata-aviation` | robots.txt of query.wikidata.org disallows `/sparql` for all agents. No other allowed bulk route; airports come from OurAirports. |
+| `mobility-database` | robots.txt of files.mobilitydatabase.org disallows `/`. |
+| `mobility-database-api` | robots.txt answers a redirect to a login page, so it cannot be read. Unreadable robots.txt is not permission. |
+| `nager-date` | robots.txt of date.nager.at disallows `/api/v`; the data is not published as files. |
+| `open-meteo`, `meteostat` | non-commercial terms (`restricted`); MET Norway replaces Open-Meteo |
+| `wikidata-dump` | the full dump is too large |
+| `duffel`, `travelpayouts`, `booking-demand-api` | live fares and hotel prices are a non-goal (they stay on SerpAPI in Voyager) |
+| `viator-partner`, `gyg-partner`, `airalo-partner` | need partner approval, not granted |
+| `predicthq` | paid only |
+| `openflights` | stale since 2014 |
+| `ecmwf-open` | GRIB2 forecasts, only useful when self-hosting a forecast model |
+| `se-api`, `ricksteves-forum` | forums are ingested only from the Stack Exchange data dump |
+| `imf-fx`, `opensky`, `passport-index-dataset`, `unesco-whc`, `who-ith` | `restricted`: non-commercial or unclear terms |
+
+The four robots.txt cases were checked on 2026-11-16. Re-enable one only when its
+robots.txt is readable and allows `VoyagerBot`.
 
 ## A source file
 
@@ -115,20 +135,32 @@ politeness applies to each.
 | `ecb_fx` | ECB euro reference rates XML | daily, 90-day and historical |
 | `fcdo_content_api` | UK FCDO advice via the GOV.UK Content API | |
 | `met_norway` | MET Norway Locationforecast 2.0 | coordinates at most 4 decimals, as MET requires |
-| `mobility_database_catalog` | Mobility Database `feeds_v2.csv` (CC0), streamed | keeps active GTFS Schedule feeds |
-| `nager_holidays` | Nager.Date public holidays | countries, then one row per year and country |
+| `mobility_database_catalog` | Mobility Database `feeds_v2.csv` (CC0), streamed | keeps active GTFS Schedule feeds; its source is disabled (robots.txt) |
+| `nager_holidays` | Nager.Date public holidays | countries, then one row per year and country; its source is disabled (robots.txt) |
 | `ourairports_csv` | OurAirports `airports.csv` (public domain), streamed | keeps large, medium and small airports |
 | `se_travel_dump` | Stack Exchange Travel `Posts.xml` (CC BY-SA), streamed | author names kept only as attribution |
 | `state_dept_advisories` | US State Department advisories API | |
-| `ticketmaster_discovery` | Ticketmaster Discovery API v2 | the API key never reaches the spool; no key = no request |
-| `wikidata_sparql` | Wikidata SPARQL, paginated | emergency numbers, plug types, voltage, airports with IATA codes |
+| `ticketmaster_discovery` | Ticketmaster Discovery API v2 | the API key never reaches the spool; no key = no request; resumable |
+| `wikidata_sparql` | Wikidata SPARQL, paginated | emergency numbers, plug types, voltage; resumable; the `wikidata-aviation` source is disabled (robots.txt) |
 | `wikivoyage_dump` | English Wikivoyage pages-articles (CC BY-SA 4.0), bzip2 streamed | main-namespace pages |
+
+Adapters that answer 429 or 503 back the key off with their `Retry-After`; other 5xx
+count toward parking (see [Politeness and Robots](Politeness-and-Robots)).
+
+**Resume cursors.** A run stops at a page cap. The two resumable adapters save where they
+stopped in `adapter_cursors` (migration 1701): `wikidata_sparql` as `<query>@<offset>`,
+`ticketmaster_discovery` as the next-page path with the key removed (accepted only on the
+same origin and endpoint; the key is added back at request time). The row is due again
+after 60 s and continues from the cursor, even after a restart. A complete run deletes it;
+an unknown cursor starts over.
 
 ## Forums and personal data
 
 v1 ingests only the **Stack Exchange Travel data dump** (CC BY-SA). Author display names are
 kept only as the required attribution string. Erasure requests use
-`admin purge --author`. Other open forums block honest bots anyway.
+`vcrawl admin purge --author`: it removes only that person's posts, cuts the dump chunks that
+hold them, and stores the name only as a hash (see
+[Storage and Raw Data](Storage-and-Raw-Data)). Other open forums block honest bots anyway.
 
 ## Adding a source
 
@@ -136,11 +168,24 @@ kept only as the required attribution string. Erasure requests use
    denylist.
 2. Add `sources/<id>.yaml`. Pick `licence.class` and `source_class` carefully. Unknown
    terms mean `restricted` and `enabled: false`.
-3. Run `python3 -m pytest -q scripts/tests`. Once the binary is wired:
-   `vcrawl admin source validate <id>` (robots, denylist, three permit-gated sample fetches).
+3. Run `python3 -m pytest -q scripts/tests`, then `vcrawl admin source validate <id>`.
+   It checks the file offline (schema, adapter, licence and source-class rules, denylist).
+   The network half (robots.txt for `VoyagerBot`, three permit-gated sample fetches) runs
+   later in the scheduler under a normal claim.
 4. Add a fixture and a golden test.
 
 For a new API or dump, implement `SourceAdapter` in `crates/vc-sources/src/adapters/`,
 register it in `adapters::REGISTRY`, and add a recorded fixture. See [vc-sources](Crate-vc-sources).
+
+The **source scout** (weekly, only with the LLM on) looks for destinations and kinds with
+few records and proposes new sources in `source_candidates` and
+`<data_dir>/proposals/<date>.md`. It never adds a crawlable source: a person reviews
+proposals with `vcrawl admin source list --proposed`; `admin source approve <n>` prints a
+draft YAML for a pull request, and nothing is crawled before that PR merges.
+
+To stop a source at runtime, `vcrawl admin source disable <id>` stops scheduling it and
+parks its due URLs; `admin source approve <id>` resumes it (refused for `restricted`
+licences). See
+[Agentic Loops](Agentic-Loops).
 
 The research behind the catalogue (robots checks, terms, licences) is in `docs/research/`.

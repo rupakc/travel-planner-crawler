@@ -37,7 +37,12 @@ proxy or a CAPTCHA solver.
 **Does it run JavaScript on my site?**
 Only for a few JavaScript-only pages, in a sandboxed Chromium with no network of its own.
 Every request it makes goes through the same robots, rate and identity rules. Images, fonts,
-media and trackers are not loaded.
+media, trackers, iframes and other documents are not loaded. A script or style from another
+site (a CDN on our allowlist) is fetched only when that site's own delay allows it.
+
+**Do you honour Retry-After?**
+Yes. A 429 or 503 stops the visit. We wait at least as long as `Retry-After` says, and each
+repeat doubles the wait, up to 24 hours.
 
 **Does it republish my articles?**
 No. Blog and news content is served only as facts, a headline, an excerpt of at most 300
@@ -46,9 +51,14 @@ characters and a link back to you.
 ## For developers
 
 **Can I run it today?**
-Not as a crawler yet. The libraries are built and tested, but the `vcrawl` roles are still
-being wired. You can build and run all the tests (`cargo test --workspace`, needs Docker).
-See [Testing](Testing).
+Yes, locally. Every `vcrawl` role is wired. `bash e2e/run.sh` starts the whole crawler
+against a scripted fake internet in Docker and checks it (the same run as CI). `cargo test
+--workspace` runs the unit and integration tests (needs Docker). The production VM is not
+live yet. See [Testing](Testing).
+
+**What does it cost to run?**
+About $74 a month with the LLM off, and at most about $104 with the LLM at its full $30
+cap, on demand. A 1-year VM commitment lowers both. See [Cost](Cost).
 
 **Why Rust and not an existing crawler framework?**
 The obvious Rust option, `spider`, has bot-evasion features on by default, which conflicts

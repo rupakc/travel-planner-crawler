@@ -7,7 +7,9 @@
 | `SecretManagerSource` | production | GCP Secret Manager over REST, `GET {endpoint}/v1/projects/{project}/secrets/{name}/versions/latest:access`, with an ADC token for the VM's `crawler-runtime` account; the payload's CRC32C is verified |
 | `EnvSource` | tests, development | `VC_SECRET_<NAME>`: `crawler-pg-password` becomes `VC_SECRET_CRAWLER_PG_PASSWORD` |
 
-Path: `crates/vc-secrets`. Dependencies: `reqwest`, `google-cloud-auth`.
+Path: `crates/vc-secrets`. Dependencies: `reqwest`, `google-cloud-auth`. Status: wired;
+`wiring::sources::secrets` builds the source for every role (API keys for adapters, the API
+TLS fallback, the database password when no secret file is mounted).
 
 ## Key items
 
