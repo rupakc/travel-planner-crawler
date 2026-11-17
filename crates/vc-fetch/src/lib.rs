@@ -13,7 +13,7 @@
 //! 2. **robots.txt** of the hop's origin, from the frontier's cache; missing or stale fails
 //!    closed with [`FetchError::RobotsUnavailable`] (robots.txt requests themselves skip this).
 //! 3. **DNS once per hop**: every resolved address goes through `Policy::ssrf_check`; the first
-//!    one is pinned for the connection (reqwest `resolve` override, proxies disabled).
+//!    IPv4 one (else the first) is pinned for the connection (reqwest `resolve` override, proxies disabled).
 //! 4. **Pacing**: wait until `last request end + permit delay`; render sub-requests
 //!    ([`RequestPurpose::SubResource`]) wait the sub-resource gap instead (default 250 ms,
 //!    never more than the permit delay; spec §17.1), so the page delay still applies between
@@ -218,14 +218,22 @@ impl ReqwestPermitClient {
         }
     }
 
-    /// Resolves the hop's host once, SSRF-checks every address, and returns the pinned one.
+    /// Resolves the hop's host once, SSRF-checks every address, and returns the pinned one:
+    /// the first IPv4 address, else the first address. The crawler's one published egress
+    /// address (BOT.md) is IPv4 and its VM has no IPv6 route, while the resolver lists AAAA
+    /// records first, so pinning the first address failed every dual-stack host.
     async fn pin(&self, url: &CanonicalUrl) -> Result<IpAddr, FetchError> {
         if let Some(ip) = self.check_ip_literal(url)? {
             return Ok(ip);
         }
         let host = url.host();
         let ips = self.resolver.resolve(host).await?;
-        let Some(first) = ips.first().copied() else {
+        let Some(first) = ips
+            .iter()
+            .find(|ip| ip.is_ipv4())
+            .or_else(|| ips.first())
+            .copied()
+        else {
             return Err(FetchError::Dns(format!("no address for {host}")));
         };
         for ip in &ips {
