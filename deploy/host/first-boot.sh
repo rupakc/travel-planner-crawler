@@ -210,6 +210,29 @@ RequiresMountsFor=$DATA"
   fi
 }
 
+# Go-live ramp (docs/runbooks/go-live.md §3): a fresh install crawls only the
+# sources listed in sources/ramp-1.txt (baked into the image) until the
+# operator deletes the VC_VCRAWL_SOURCE_ALLOWLIST line from host.local.env.
+# Decided once per data disk (the marker): deleting the line sticks, and a
+# disk that already holds a database is never put back on the ramp.
+RAMP_ALLOWLIST=/app/sources/ramp-1.txt
+ramp_default() {
+  local data="${1:-$DATA}"
+  local d="$data/deploy"
+  [[ -e "$d/.ramp-default" ]] && return 0
+  install -d "$d"
+  if [[ ! -e "$data/pgdata/PG_VERSION" ]] &&
+    ! grep -q '^VC_VCRAWL_SOURCE_ALLOWLIST=' "$d/host.local.env" 2>/dev/null; then
+    {
+      echo "# Go-live ramp: only the sources in this file crawl (docs/runbooks/go-live.md)."
+      echo "# Delete the next line (then rerun the startup script and restart) to crawl every source."
+      echo "VC_VCRAWL_SOURCE_ALLOWLIST=$RAMP_ALLOWLIST"
+    } >>"$d/host.local.env"
+    log "fresh install: crawling only the ramp sources ($RAMP_ALLOWLIST)"
+  fi
+  : >"$d/.ramp-default"
+}
+
 install_bundle() {
   local b64 tmp ip
   b64="$(md instance/attributes/crawler-bundle)"
@@ -229,7 +252,9 @@ install_bundle() {
   ip="$(md instance/network-interfaces/0/ip)"
   [[ "$ip" =~ ^10\.[0-9.]+$ ]] || die "unexpected internal IP '$ip'"
   # host.env: per-VM settings for compose. Owner overrides (e.g.
-  # VC_LLM_ENABLED=true) go in host.local.env, which this never touches.
+  # VC_LLM_ENABLED=true) go in host.local.env, which this never touches
+  # (except ramp_default's one line on a fresh install).
+  ramp_default
   {
     echo "# Written by first-boot.sh on every boot; put overrides in host.local.env"
     echo "VC_API_BIND=$ip"

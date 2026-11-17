@@ -33,6 +33,11 @@ pub struct VcrawlConfig {
     pub recrawl_default_s: u64,
     /// `vcrawl health`: timeout of each dependency check, seconds.
     pub health_timeout_s: u64,
+    /// Go-live ramp: a file of source ids (one per line, `#` comments; a relative path is
+    /// resolved against `sources.dir`). When set, the scheduler seeds and enqueues only these
+    /// sources and the fetcher skips (and releases) claimed URLs of any other source. Unset or
+    /// empty = every enabled source. A set but unreadable file fails closed.
+    pub source_allowlist: Option<String>,
 }
 
 impl Default for VcrawlConfig {
@@ -51,6 +56,7 @@ impl Default for VcrawlConfig {
             recrawl_min_s: 3600,
             recrawl_default_s: 7 * 24 * 3600,
             health_timeout_s: 5,
+            source_allowlist: None,
         }
     }
 }

@@ -17,6 +17,10 @@
 //!    body we do not have.
 //! 4. **Complete** the claim with the per-URL results and the key signal.
 //!
+//! **Ramp** (`vcrawl.source_allowlist`): leased URLs of sources the allowlist leaves out are
+//! not fetched; they go back to `due` [`ALLOWLIST_HOLD`] later. A claim with nothing allowed
+//! makes no request at all (not even robots.txt) and is completed at once.
+//!
 //! A cross-key redirect is **enqueued**, never followed. A challenge, 401 or 403 **parks** the
 //! key (detect → park; nothing is retried with another identity). 429/503 honour
 //! `Retry-After`. The overall daily raw-bytes cap is shared by every fetcher through Postgres
@@ -67,6 +71,7 @@ use vc_store::{SegmentRoller, Spool};
 
 use crate::Ctx;
 use crate::wiring;
+use crate::wiring::allowlist::SourceAllowlist;
 use crate::wiring::rawcap::{PgRawBytes, RawBytesBudget};
 use crate::wiring::signals::header_signals;
 use crate::wiring::sources::Sources;
@@ -74,6 +79,9 @@ use crate::wiring::sources::Sources;
 /// Runs the `fetcher` role until SIGTERM / Ctrl-C.
 pub async fn run(ctx: Ctx) -> anyhow::Result<()> {
     wiring::obs::init_tracing(&ctx, "fetcher");
+    if let Some(a) = SourceAllowlist::load(&ctx.cfg)? {
+        tracing::warn!(path = %a.path().display(), sources = a.ids().len(), "fetcher: source allowlist active (ramp)");
+    }
     let pool = ctx.pool().await?;
     let parts = FetcherParts::from_ctx(&ctx, pool.clone()).await?;
     let fetcher = Arc::new(Fetcher::new(parts));
@@ -239,6 +247,9 @@ pub const SPOOL_LOCK: &str = "LOCK";
 /// frame is lost). Well above the segment age plus the upload back-pressure window.
 pub const STALE_PENDING_AFTER: Duration = Duration::from_secs(6 * 3600);
 
+/// A claimed URL of a source outside `vcrawl.source_allowlist` is due again this much later.
+pub const ALLOWLIST_HOLD: Duration = Duration::from_secs(3600);
+
 /// How often a fetcher runs the stale-pending sweep.
 pub const SWEEP_EVERY: Duration = Duration::from_secs(600);
 
@@ -346,6 +357,8 @@ pub struct Fetcher {
     last_sweep: std::sync::Mutex<Option<std::time::Instant>>,
     /// The roller's quarantine total already exported (`crawler_spool_quarantined_total`).
     quarantined_seen: std::sync::atomic::AtomicU64,
+    /// `vcrawl.source_allowlist` (`None`: every source).
+    allowlist: Option<SourceAllowlist>,
 }
 
 /// Takes the exclusive lock of a spool dir (`None`: held by a live fetcher, or unavailable).
@@ -421,11 +434,17 @@ impl Fetcher {
         if own_lock.is_none() {
             tracing::warn!(dir = %parts.spool.dir().display(), "fetcher: own spool lock not taken (another live fetcher with this instance name?)");
         }
+        // Fail closed: `run` refuses to start on a bad allowlist; anyone else gets an empty one.
+        let allowlist = SourceAllowlist::load(&parts.cfg).unwrap_or_else(|e| {
+            tracing::error!(error = %e, "fetcher: source allowlist unreadable, holding every source");
+            Some(SourceAllowlist::empty())
+        });
         Fetcher {
             p: parts,
             _own_lock: own_lock,
             last_sweep: std::sync::Mutex::new(None),
             quarantined_seen: std::sync::atomic::AtomicU64::new(0),
+            allowlist,
         }
     }
 
@@ -658,8 +677,16 @@ impl Fetcher {
         let Claim {
             permit,
             urls,
-            robots_due,
+            mut robots_due,
         } = claim;
+        let (urls, held): (Vec<LeasedUrl>, Vec<LeasedUrl>) = urls.into_iter().partition(|u| {
+            self.allowlist
+                .as_ref()
+                .is_none_or(|a| a.allows(u.source_id.as_ref()))
+        });
+        if urls.is_empty() && !held.is_empty() {
+            robots_due.clear();
+        }
         let mut run = Run {
             permit: &permit,
             report: ClaimReport::default(),
@@ -671,6 +698,13 @@ impl Fetcher {
             stop: false,
             robots_wanted: None,
         };
+        if !held.is_empty() {
+            let at = self.p.clock.now() + chrono_of(ALLOWLIST_HOLD);
+            tracing::debug!(key = %permit.key(), held = held.len(), "fetcher: held by the source allowlist");
+            for u in &held {
+                run.result(&u.url_key, UrlResult::Retry { at });
+            }
+        }
         for origin in &robots_due {
             match self.refresh_robots(&mut run, origin).await {
                 Ok(()) => {}

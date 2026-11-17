@@ -1,9 +1,10 @@
 # Go-live ramp, step 1 (plan Task 18; docs/runbooks/go-live.md §6).
 #
-# The only sources crawled for the first 24 hours. Everything else stays disabled in the
-# database (`vcrawl admin source disable`) until the ramp passes. The loader has no ramp
-# field: this file is read by the runbook's shell loops, never by vcrawl (the scheduler
-# loads only *.yaml from this directory).
+# The only sources crawled for the first 24 hours. A fresh install sets
+# VC_VCRAWL_SOURCE_ALLOWLIST=/app/sources/ramp-1.txt (deploy/host/first-boot.sh writes it
+# into host.local.env once): the scheduler then seeds only these sources and the fetcher
+# fetches nothing for any other (`[vcrawl] source_allowlist`). The ramp ends when the
+# operator deletes that line (go-live.md §11). The spec loader reads only *.yaml here.
 #
 # Format: one source id per line (= sources/<id>.yaml); `#` starts a comment.
 # Each line says why the source is in the first ten. Chosen to be stable, low-volume,
