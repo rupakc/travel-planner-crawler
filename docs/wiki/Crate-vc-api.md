@@ -20,7 +20,7 @@ search gets the vector leg only when the LLM is enabled.
 | `dto` | the response types (`ItemDto`, `EntityDto`, `ChangeDto`, …) with OpenAPI schemas |
 | `catalog` | sources and stats (cached up to 60 s) |
 | `error` | `{"error", "message"}` bodies and status codes |
-| `tls` | `serve`: TLS on the API port, plus a separate localhost-only `/metrics` listener. `tls_from_secrets` loads `/run/secrets/api_tls_{cert,key}` (the pair `deploy.sh` installs only when key and certificate match) and falls back to Secret Manager when those files are missing or unusable. rustls refuses a mismatched pair, so a half-done TLS rotation does not crash-loop the api; nothing usable fails closed (no plain HTTP) |
+| `tls` | `serve`: TLS on the API port, plus a separate localhost-only `/metrics` listener for the `vc_api_*` request counters (the api role's `crawler_*` metrics and heartbeat are served by vcrawl on `:9464`, like every role). `tls_from_secrets` loads `/run/secrets/api_tls_{cert,key}` (the pair `deploy.sh` installs only when key and certificate match) and falls back to Secret Manager when those files are missing or unusable. rustls refuses a mismatched pair, so a half-done TLS rotation does not crash-loop the api; nothing usable fails closed (no plain HTTP) |
 | `metrics` | request metrics |
 | `pg` | Postgres-backed client store and catalog |
 

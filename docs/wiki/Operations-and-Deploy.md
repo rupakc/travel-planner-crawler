@@ -71,14 +71,14 @@ flowchart LR
   end
   FET["fetcher"] --- CHR
   FET --- OTEL
-  ROLES["scheduler, processor, maintenance"] -->|"/metrics :9464 on egress"| OTEL
+  ROLES["scheduler, processor, embedder, api, maintenance"] -->|"/metrics :9464 on egress"| OTEL
   FET --> DB[("postgres (db, internal)")]
   ROLES --> DB
   DB -->|"pgbackup: wal-g"| GCS[("GCS ops bucket")]
   OTEL -->|"egress"| CM["Cloud Monitoring"]
 ```
 
-The embedder and api log but are not scraped yet: the embedder serves no `/metrics` and writes no heartbeat, and the api's `/metrics` listens on localhost only.
+Every role serves `/metrics` and `/healthz` on `:9464` and writes a heartbeat (the embedder also while the LLM is off). `deploy/tests/test_deploy.sh` (`otelcol_targets_have_listeners`) checks that each otelcol scrape target matches the role's listener address, port and networks; `crates/vcrawl/tests/role_metrics.rs` runs each role and scrapes it. The api's vc-api request counters (`vc_api_*`) stay on a separate localhost listener and are not exported.
 
 The fetcher's spool lives under `spool/fetcher-<instance>/`. The fixed instance name
 (`VC_VCRAWL_INSTANCE=fetcher-a`) keeps that path when the container is recreated.

@@ -469,6 +469,66 @@ test_fetcher_metrics_not_on_render_network() {
   ok fetcher_metrics_not_on_render_network
 }
 
+# The networks a compose service joins: its own `networks:` (flow or block form), else the
+# role anchor's for services merging `<<: *role`.
+compose_networks() {
+  local compose="$1" body="$2" flow
+  flow="$(sed -n 's/^    networks: \[\(.*\)\]$/\1/p' <<<"$body")"
+  if [[ -n "$flow" ]]; then
+    tr -d ' ' <<<"$flow" | tr ',' '\n'
+  elif grep -qE '^    networks:$' <<<"$body"; then
+    awk '/^    networks:$/{on=1; next} on && /^    [a-z]/{on=0} on && /^      [a-z][a-z0-9_-]*:/{sub(":","",$1); print $1}' <<<"$body"
+  elif grep -qxF '    <<: *role' <<<"$body"; then
+    awk '/^x-role:/{on=1; next} on && /^[a-z]/{on=0} on' "$compose" |
+      sed -n 's/^  networks: \[\(.*\)\]$/\1/p' | tr -d ' ' | tr ',' '\n'
+  fi
+}
+
+# Every job otelcol scrapes has a listener: the scraped service (job = role = service) binds
+# its /metrics (`VC_OBS_METRICS_ADDR`, else vc-config's default obs.metrics_addr) on the
+# scraped port, on all interfaces for a service-name target or on its pinned address for an
+# IP target, and shares a network with otelcol. Every role is scraped.
+test_otelcol_targets_have_listeners() {
+  local compose="$HERE/../compose.yaml" otel="$HERE/../otelcol/config.yaml"
+  local obs="$HERE/../../crates/vc-config/src/sections/obs.rs"
+  local default job target host port body addr otel_nets nets ip n=0 roles role
+  default="$(sed -n 's/^ *metrics_addr: "\([^"]*\)"\.into(),$/\1/p' "$obs")"
+  [[ -n "$default" ]] || { fail otelcol_targets_have_listeners "no default obs.metrics_addr in $obs"; return; }
+  otel_nets="$(compose_networks "$compose" "$(compose_service "$compose" otelcol)")"
+  while read -r job target; do
+    n=$((n + 1))
+    host="${target%:*}" port="${target##*:}"
+    body="$(compose_service "$compose" "$job")"
+    [[ -n "$body" ]] || { fail otelcol_targets_have_listeners "job $job: no such compose service"; return; }
+    grep -qF "command: [\"$job\"]" <<<"$body" ||
+      { fail otelcol_targets_have_listeners "job $job: service does not run role $job"; return; }
+    addr="$(sed -n 's/^      VC_OBS_METRICS_ADDR: *"\{0,1\}\([^"]*\)"\{0,1\}$/\1/p' <<<"$body")"
+    addr="${addr:-$default}"
+    [[ "${addr##*:}" == "$port" ]] ||
+      { fail otelcol_targets_have_listeners "job $job scrapes :$port, $job listens on $addr"; return; }
+    nets="$(compose_networks "$compose" "$body")"
+    if [[ "$host" =~ ^[0-9.]+$ ]]; then
+      [[ "${addr%:*}" == "$host" ]] ||
+        { fail otelcol_targets_have_listeners "job $job scrapes $target, $job listens on $addr"; return; }
+      ip="$(grep -E "ipv4_address: $host( |\$|\})" <<<"$body")"
+      [[ -n "$ip" ]] || { fail otelcol_targets_have_listeners "$host is not $job's pinned address"; return; }
+    else
+      [[ "$host" == "$job" ]] ||
+        { fail otelcol_targets_have_listeners "job $job scrapes host $host"; return; }
+      [[ "${addr%:*}" == 0.0.0.0 ]] ||
+        { fail otelcol_targets_have_listeners "job $job scrapes $host by name, $job listens on $addr only"; return; }
+    fi
+    comm -12 <(sort -u <<<"$nets") <(sort -u <<<"$otel_nets") | grep -q . ||
+      { fail otelcol_targets_have_listeners "$job shares no network with otelcol"; return; }
+  done < <(awk '/job_name:/{job=$3} /targets:/{match($0, /"[^"]+"/); print job, substr($0, RSTART+1, RLENGTH-2)}' "$otel")
+  ((n > 0)) || { fail otelcol_targets_have_listeners "no scrape jobs"; return; }
+  roles="$(env -i bash -c ". '$HERE/../host/lib.sh'; echo \$VC_ROLES")"
+  for role in $roles; do
+    grep -qE "job_name: $role\$" "$otel" || { fail otelcol_targets_have_listeners "role $role not scraped"; return; }
+  done
+  ok otelcol_targets_have_listeners
+}
+
 # wal-g must not overwrite archived WAL: a retried archive_command of an
 # already uploaded segment exits 0 instead of wedging archiving
 test_walg_prevents_wal_overwrite() {

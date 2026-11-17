@@ -1,6 +1,7 @@
 //! Role `embedder`: embeds current, embeddable records under the embedding budget
 //! (spec §5.8, §5.11). With `VC_LLM_ENABLED=false` (the default) it idles: no model call, no
-//! reservation.
+//! reservation, but still serves `/metrics` + `/healthz` and writes its heartbeat (otelcol
+//! scrapes `embedder:9464`; the crawler-down alert needs the heartbeat).
 
 use std::sync::Arc;
 use std::time::Duration;
@@ -22,12 +23,13 @@ pub async fn run(ctx: Ctx) -> anyhow::Result<()> {
     wiring::obs::init_tracing(&ctx, "embedder");
     let cfg = ctx.cfg.clone();
     let mut stop = shutdown::channel();
+    let pool = ctx.pool().await?;
+    let _obs = wiring::obs::start(&ctx, "embedder", pool.clone()).await?;
     if !cfg.llm.enabled {
         tracing::info!("llm disabled: embedder idle");
         while !shutdown::sleep_or_stop(&mut stop, Duration::from_secs(3600)).await {}
         return Ok(());
     }
-    let pool = ctx.pool().await?;
     let clock: Arc<dyn Clock> = Arc::new(vc_core::SystemClock);
     let vertex =
         vc_llm::VertexClient::new(&cfg.llm, Arc::new(vc_llm::AdcToken::new()), clock.clone())?
