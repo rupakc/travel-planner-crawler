@@ -410,7 +410,11 @@ async fn robots_401_blocks_only_its_origin() {
         .await
         .unwrap();
     let r = claimed(f.pass().await.unwrap());
-    assert_eq!(r.signal, Some(KeySignal::Normal), "the key is not parked: {r:?}");
+    assert_eq!(
+        r.signal,
+        Some(KeySignal::Normal),
+        "the key is not parked: {r:?}"
+    );
     let result = |u: &vc_core::CanonicalUrl| {
         r.urls
             .iter()
