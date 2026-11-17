@@ -170,6 +170,13 @@ pub const ALERT_METRICS: &[AlertMetric] = &[
         [],
         "Age of the last successful light restore drill (base backup restored and queried)"
     ),
+    alert!(
+        "spool_quarantined",
+        "crawler_spool_quarantined_total",
+        Counter,
+        [],
+        "Sealed spool files quarantined as unreadable (their captures are not published)"
+    ),
 ];
 
 /// Cloud Monitoring type for an exposed Prometheus family name: `crawler_<x>[_total]` →
@@ -260,6 +267,9 @@ pub struct Metrics {
     pub host_units_failed: IntGauge,
     /// `crawler_backup_restore_age_seconds`.
     pub backup_restore_age_seconds: FloatGauge,
+    /// `crawler_spool_quarantined_total`: sealed spool files the fetcher's segment roller
+    /// quarantined (spool-quarantine alert).
+    pub spool_quarantined: Counter,
     /// `crawler_queue_items{kind,state}` (not alerted; for dashboards).
     pub queue_items: Family<Labels, Gauge>,
     /// `crawler_processor_skipped_total{reason}`: captures the processor acked without
@@ -287,6 +297,7 @@ impl Metrics {
         let deploy_drift_seconds = FloatGauge::default();
         let host_units_failed = IntGauge::default();
         let backup_restore_age_seconds = FloatGauge::default();
+        let spool_quarantined = Counter::default();
         let queue_items = Family::<Labels, Gauge>::default();
         let processor_skipped = Family::<Labels, Counter>::default();
 
@@ -373,6 +384,11 @@ impl Metrics {
             backup_restore_age_seconds.0.clone(),
         );
         reg.register(
+            "crawler_spool_quarantined",
+            help("crawler_spool_quarantined"),
+            spool_quarantined.clone(),
+        );
+        reg.register(
             "crawler_queue_items",
             "Work items per kind and state",
             queue_items.clone(),
@@ -404,6 +420,7 @@ impl Metrics {
             deploy_drift_seconds,
             host_units_failed,
             backup_restore_age_seconds,
+            spool_quarantined,
             queue_items,
             processor_skipped,
         }

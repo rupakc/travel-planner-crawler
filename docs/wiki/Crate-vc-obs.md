@@ -24,7 +24,7 @@ Exposed as `crawler_<name>` and shipped as `custom.googleapis.com/crawler/<name>
 `wal_archive_age_seconds`, `base_backup_age_seconds`, `restore_drill_ok`,
 `restore_drill_age_seconds`, `llm_month_spend_ratio`, `parked_keys_ratio`,
 `tls_cert_days_left`, `llm_config_invalid`, `deploy_drift_seconds`, `host_units_failed`,
-`backup_restore_age_seconds`.
+`backup_restore_age_seconds`, `spool_quarantined` (counter).
 
 `ops::export_ops` sets these from Postgres. A gauge whose source is missing or stale is
 **unset**, not zero, so the policy's absence condition fires (an alert that checks only a

@@ -344,6 +344,8 @@ pub struct Fetcher {
     _own_lock: Option<std::fs::File>,
     /// When the stale-pending sweep last ran.
     last_sweep: std::sync::Mutex<Option<std::time::Instant>>,
+    /// The roller's quarantine total already exported (`crawler_spool_quarantined_total`).
+    quarantined_seen: std::sync::atomic::AtomicU64,
 }
 
 /// Takes the exclusive lock of a spool dir (`None`: held by a live fetcher, or unavailable).
@@ -423,6 +425,7 @@ impl Fetcher {
             p: parts,
             _own_lock: own_lock,
             last_sweep: std::sync::Mutex::new(None),
+            quarantined_seen: std::sync::atomic::AtomicU64::new(0),
         }
     }
 
@@ -482,7 +485,11 @@ impl Fetcher {
                 self.p.clock.clone(),
                 &self.p.cfg.store,
             );
-            let ms = roller.flush().await?;
+            let ms = roller.flush().await;
+            if let Some(m) = &self.p.metrics {
+                m.spool_quarantined.inc_by(roller.quarantined_total());
+            }
+            let ms = ms?;
             let c: u64 = ms.iter().map(|m| m.captures.len() as u64).sum();
             tracing::info!(dir = %dir.display(), captures = c, "fetcher: adopted an orphaned spool");
             n += c;
@@ -595,6 +602,14 @@ impl Fetcher {
         if let Some(m) = &self.p.metrics {
             m.backpressure
                 .set(i64::from(self.p.roller.should_pause_fetchers()));
+            // The roller's total is cumulative: export only what is new since the last call.
+            let total = self.p.roller.quarantined_total();
+            let seen = self
+                .quarantined_seen
+                .swap(total, std::sync::atomic::Ordering::Relaxed);
+            if total > seen {
+                m.spool_quarantined.inc_by(total - seen);
+            }
         }
         let ms = r?;
         let n: u64 = ms.iter().map(|m| m.captures.len() as u64).sum();

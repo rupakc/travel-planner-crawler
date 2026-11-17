@@ -122,7 +122,7 @@ committed; with the LLM off (the default): ≈ $74 / $56.
   `base_backup_age_seconds`, `restore_drill_ok` (0/1), `restore_drill_age_seconds`,
   `llm_month_spend_ratio`, `parked_keys_ratio`, `tls_cert_days_left`,
   `llm_config_invalid` (0/1), `deploy_drift_seconds`, `host_units_failed`,
-  `backup_restore_age_seconds`. Disk usage
+  `backup_restore_age_seconds`, `spool_quarantined` (cumulative). Disk usage
   comes from the Ops Agent. The role metrics reach Cloud Monitoring through the
   `otelcol` compose service (`deploy/otelcol/config.yaml`): it scrapes each role's
   `:9464` and renames `crawler_<x>[_total]` to `custom.googleapis.com/crawler/<x>`; the

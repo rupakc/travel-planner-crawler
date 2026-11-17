@@ -88,6 +88,7 @@ DRY RUN: nothing is called. project=voyager-prod-ohzkl quota project: voyager-pr
   gcloud  --project=voyager-prod-ohzkl  --quiet  monitoring  policies  create  --policy-from-file=<work>/parked-keys.json
   gcloud  --project=voyager-prod-ohzkl  --quiet  monitoring  policies  create  --policy-from-file=<work>/restore-drill.json
   gcloud  --project=voyager-prod-ohzkl  --quiet  monitoring  policies  create  --policy-from-file=<work>/spool-backpressure.json
+  gcloud  --project=voyager-prod-ohzkl  --quiet  monitoring  policies  create  --policy-from-file=<work>/spool-quarantine.json
   gcloud  --project=voyager-prod-ohzkl  --quiet  monitoring  policies  create  --policy-from-file=<work>/tls-expiry.json
 
 ==> Budget (re-asserted)
