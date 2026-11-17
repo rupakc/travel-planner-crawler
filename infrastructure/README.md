@@ -67,8 +67,11 @@ json-file logs with DEBUG/TRACE dropped on the VM.
 
 The LLM's monthly cap defaults to **$30** (`VC_LLM_MONTHLY_USD`, down from the spec's
 $40) until batch prediction is wired (half price) or the 1-year e2-standard-2 commitment
-is bought. Raise it in `host.local.env` only after one of those, and keep
-`VC_PROJECT_CAP_USD` at least twice the new cap.
+is bought. Raise it only after one of those: put `VC_LLM_MONTHLY_USD=…` in
+`/var/lib/voyager-crawler/deploy/host.local.env` (compose passes it to every role; unset,
+the $30 default applies), keep `VC_PROJECT_CAP_USD` at least twice the new cap, and
+restart as in owner step 3. The daily cap (`VC_LLM_DAILY_USD`, $1.50, not forwarded)
+still bounds each day.
 
 Estimate (USD/month, go-live review): e2-standard-2 48.92 on demand (30.82 with the
 1-year commitment), disks + snapshots 13.50, static external IP 3.65, GCS 5–8, LLM ≤ 30
