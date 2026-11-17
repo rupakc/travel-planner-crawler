@@ -1,5 +1,5 @@
 //! DNS resolution for the SSRF guard: resolved once per hop, every address checked, the first
-//! one pinned for the connection (spec §5.2).
+//! IPv4 address (else the first address) pinned for the connection (spec §5.2).
 
 use std::collections::HashMap;
 use std::net::IpAddr;
@@ -10,7 +10,7 @@ use hickory_resolver::TokioResolver;
 use vc_core::fetch::FetchError;
 
 /// Resolves a host name to IP addresses. The permit client checks **every** returned address
-/// with `Policy::ssrf_check` and connects only to the first (pinned).
+/// with `Policy::ssrf_check` and connects only to one (pinned: the first IPv4, else the first).
 #[async_trait]
 pub trait Resolve: Send + Sync + std::fmt::Debug {
     /// The addresses of `host` (a DNS name, never an IP literal).

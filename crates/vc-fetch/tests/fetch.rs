@@ -52,7 +52,11 @@ impl Env {
             .with("site.test", IpAddr::from(LOOPBACK))
             .with("www.site.test", IpAddr::from(LOOPBACK))
             .with("other.test", IpAddr::from(LOOPBACK))
-            .with("internal.site.test", IpAddr::from([10, 0, 0, 5]));
+            .with("internal.site.test", IpAddr::from([10, 0, 0, 5]))
+            // Dual-stack: AAAA first (hickory's default order), the server listens on IPv4.
+            .with("dual.site.test", IpAddr::from(std::net::Ipv6Addr::LOCALHOST))
+            .with("dual.site.test", IpAddr::from(LOOPBACK));
+        policy.allow_ip(IpAddr::from(std::net::Ipv6Addr::LOCALHOST));
         let client = ReqwestPermitClient::new(config, frontier.clone(), policy.clone())
             .with_clock(Arc::new(clock.clone()))
             .with_resolver(Arc::new(resolver));
@@ -111,6 +115,28 @@ fn gzip(data: &[u8]) -> Vec<u8> {
 
 fn page(url: CanonicalUrl) -> FetchRequest {
     FetchRequest::get(url, RequestPurpose::Page)
+}
+
+/// A dual-stack host whose resolver lists the AAAA address first is pinned to its IPv4
+/// address: the production VM has no IPv6 route (GCE default network) and BOT.md publishes
+/// one IPv4 egress address, so a pinned IPv6 address fails every request on the host.
+#[tokio::test]
+async fn dual_stack_host_pins_ipv4() {
+    let env = Env::new().await;
+    Mock::given(method("GET"))
+        .and(path("/robots.txt"))
+        .respond_with(ResponseTemplate::new(200).set_body_string("User-agent: *\nAllow: /\n"))
+        .mount(&env.server)
+        .await;
+    let u = env.url("dual.site.test", "/robots.txt");
+    let claim = env.claim(&u, "", &["dual.site.test"]).await;
+    let ex = env
+        .client
+        .fetch(&claim.permit, FetchRequest::get(u, RequestPurpose::Robots))
+        .await
+        .expect("an IPv4-reachable dual-stack host is fetched");
+    assert_eq!(ex.status, StatusCode::OK);
+    assert_eq!(ex.peer_ip, Some(IpAddr::from(LOOPBACK)));
 }
 
 #[tokio::test]
