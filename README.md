@@ -108,7 +108,6 @@ Still not done:
 | Monthly full restore drill on a Spot VM | Template and account exist; the weekly in-place equivalence drill runs instead. |
 | Parquet export of partitions older than 12 months | Stub: the maintenance job only lists due partitions. |
 | Contract (destructive) migrations | The mechanism exists (`vcrawl migrate --contract`); none written yet. |
-| Embedder and api metrics in Cloud Monitoring | Both log. The embedder serves no `/metrics` and writes no heartbeat; the api's `/metrics` is localhost-only, so otelcol cannot scrape either. |
 
 ## Quick start (development)
 

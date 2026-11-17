@@ -170,8 +170,10 @@ drill and the compose file against fakes. It covers, among others: unsigned imag
 transient cosign and migrate failures retried, rollback, the min-schema gate (deploy and
 rollback), drift and TLS heartbeats, unit outcome heartbeats, the restore drill's isolation
 and cleanup, the WAL overwrite guard, Docker waiting for the data disk, the Ops Agent
-config, Chromium's network flags, and the fetcher's metrics address off the `render`
-network. `infrastructure/tests/test_bootstrap.sh` compares a `--dry-run` with a golden
+config, Chromium's network flags, the fetcher's metrics address off the `render`
+network, and that every otelcol scrape target has a matching role listener (address, port,
+shared network). `crates/vcrawl/tests/role_metrics.rs` runs each long-running role and
+scrapes its `/metrics` and `/healthz`. `infrastructure/tests/test_bootstrap.sh` compares a `--dry-run` with a golden
 transcript, checks that a second run re-asserts policies, channel, budget and firewall,
 and that a dry run calls nothing.
 
