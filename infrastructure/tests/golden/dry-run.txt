@@ -24,7 +24,7 @@ DRY RUN: nothing is called. project=voyager-prod-ohzkl quota project: voyager-pr
   gcloud  --project=voyager-prod-ohzkl  --quiet  secrets  create  crawler-api-tls-cert  --replication-policy=automatic  --labels=app=voyager-crawler
   # generate 32 random bytes (base64url) → <work>/crawler-pg-password
   gcloud  --project=voyager-prod-ohzkl  --quiet  secrets  versions  add  crawler-pg-password  --data-file=<work>/crawler-pg-password
-  # generate 32 random bytes (base64url) → <work>/crawler-api-token-voyager
+  # generate voyager.32 random bytes (base64url) → <work>/crawler-api-token-voyager
   gcloud  --project=voyager-prod-ohzkl  --quiet  secrets  versions  add  crawler-api-token-voyager  --data-file=<work>/crawler-api-token-voyager
 
 ==> Static IPs
