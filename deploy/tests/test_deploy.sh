@@ -587,6 +587,30 @@ test_otelcol_targets_have_listeners() {
   ok otelcol_targets_have_listeners
 }
 
+# MIG autohealing probes https://<host>:8443/healthz (infrastructure/bootstrap.sh): in the
+# single-process topology vcrawl runs the api (`vcrawl run`, all roles), publishes 8443 on
+# the host, and that /healthz is the whole process's health (crates/vcrawl/src/roles/api.rs).
+# shutdown.sh stops it with `-t 25`: vcrawl's grace must end before that.
+test_api_healthz_on_host_8443() {
+  local compose="$HERE/../compose.yaml" vc grace stop_t
+  vc="$(compose_service "$compose" vcrawl)"
+  grep -qxF '    command: ["run"]' <<<"$vc" ||
+    { fail api_healthz_on_host_8443 "vcrawl does not run every role (api included)"; return; }
+  grep -qE '^      VC_API_BIND: 0\.0\.0\.0:8443$' <<<"$vc" ||
+    { fail api_healthz_on_host_8443 "the api does not listen on :8443 in the container"; return; }
+  # shellcheck disable=SC2016 # the literal compose expression
+  grep -qF 'ports: ["${VC_API_BIND:?VC_API_BIND is set by first-boot.sh}:8443:8443"]' <<<"$vc" ||
+    { fail api_healthz_on_host_8443 "8443 not published on the host"; return; }
+  grep -qF 'with_health' "$HERE/../../crates/vcrawl/src/roles/api.rs" ||
+    { fail api_healthz_on_host_8443 "the api's /healthz does not report the process health"; return; }
+  grace="$(sed -n 's/^ *shutdown_grace_s: \([0-9]*\),$/\1/p' "$HERE/../../crates/vc-config/src/sections/vcrawl.rs")"
+  stop_t="$(grep -oE 'STOP_TIMEOUT="\$\{[A-Z_]*:-[0-9]+' "$HERE/../host/shutdown.sh" | grep -oE '[0-9]+$' || true)"
+  stop_t="${stop_t:-25}"
+  [[ -n "$grace" ]] && ((grace + 3 <= stop_t)) ||
+    { fail api_healthz_on_host_8443 "shutdown_grace_s '$grace' does not end before stop -t $stop_t"; return; }
+  ok api_healthz_on_host_8443
+}
+
 # wal-g must not overwrite archived WAL: a retried archive_command of an
 # already uploaded segment exits 0 instead of wedging archiving
 test_walg_prevents_wal_overwrite() {

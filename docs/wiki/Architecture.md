@@ -71,7 +71,7 @@ network: the fetcher answers each of its requests itself. See
 one tokio runtime, one Postgres pool sized for the roles (about 19 connections), one
 `/metrics` + `/healthz` listener with a heartbeat per role (`crawler_heartbeat{role}`). A
 failed role is restarted inside the process with a backoff while `/healthz` reports it down;
-SIGTERM stops everything within 25 s (fetches in flight finish, the spool is flushed, leases
+SIGTERM stops everything within about 20 s (inside the host's `docker compose stop -t 25`) (fetches in flight finish, the spool is flushed, leases
 are released).
 
 Memory (Spot e2-medium, 4 GB, plus a 2 GB swap file as a safety net only): Postgres

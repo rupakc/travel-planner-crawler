@@ -171,7 +171,7 @@ services:
     # Every role in one process (`vcrawl run`, crates/vcrawl/src/run.rs): one tokio
     # runtime, one Postgres pool sized for the roles, one /metrics + /healthz on the
     # metrics network, heartbeats per role. SIGTERM: fetches in flight finish, the
-    # spool is flushed, leases are released, within vcrawl.shutdown_grace_s (25 s).
+    # spool is flushed, leases are released, within vcrawl.shutdown_grace_s (20 s; shutdown.sh stops with -t 25).
     <<: *role
     command: ["run"]
     secrets: [pg_password, api_token_voyager, api_tls_key, api_tls_cert]

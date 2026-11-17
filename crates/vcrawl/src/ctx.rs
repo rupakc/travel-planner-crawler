@@ -30,6 +30,9 @@ pub struct Ctx {
     /// `true` under `vcrawl run`: the supervisor serves `/metrics` + `/healthz` for every role
     /// of the process, so a role starts only its heartbeat ([`wiring::obs::start`]).
     pub(crate) shared_obs: bool,
+    /// Under `vcrawl run`: every role's health, which the api role's `/healthz` (port 8443,
+    /// the MIG autohealing check) reports too.
+    pub(crate) roles_health: Option<Arc<Vec<wiring::obs::RoleHealth>>>,
 }
 
 impl Ctx {
@@ -52,6 +55,7 @@ impl Ctx {
             db: Arc::new(OnceCell::new()),
             shutdown: None,
             shared_obs: false,
+            roles_health: None,
         }
     }
 

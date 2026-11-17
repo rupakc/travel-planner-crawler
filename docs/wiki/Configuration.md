@@ -285,7 +285,7 @@ Settings of the `vcrawl` binary itself (its roles and admin commands).
 | `recrawl_min_s` | 3600 | shortest recrawl interval (the source cadence is the longest) |
 | `recrawl_default_s` | 604800 (7 days) | recrawl interval without a source or with `on_demand` cadence |
 | `health_timeout_s` | 5 | per-dependency timeout of `vcrawl health` |
-| `shutdown_grace_s` | 25 | `vcrawl run`: time a SIGTERM leaves the roles to finish (fetches in flight end, the spool is flushed, leases are released) before the rest is aborted; compose's `stop_grace_period` is 30 s |
+| `shutdown_grace_s` | 20 | `vcrawl run`: time a SIGTERM leaves the roles to finish (fetches in flight end, the spool is flushed, leases are released) before the rest is aborted; inside the host's `docker compose stop -t 25` (shutdown.sh) and compose's 30 s `stop_grace_period` |
 | `run_pool_max` | 0 | `vcrawl run`: size of the one shared pool; 0 = the roles' sum (scheduler 2, fetcher 2 + concurrency/2, processor 1 + concurrency, embedder 1, api 4, maintenance 3: 19 in production) |
 | `source_allowlist` | unset | go-live ramp: a file of source ids (`#` comments; relative to `sources.dir`). The scheduler seeds only those, the fetcher fetches nothing for other sources' URLs (released for an hour). A fresh VM sets `VC_VCRAWL_SOURCE_ALLOWLIST=/app/sources/ramp-1.txt` once in `host.local.env`; unreadable = fail closed |
 

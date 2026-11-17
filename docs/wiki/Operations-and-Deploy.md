@@ -133,7 +133,7 @@ flowchart LR
 6. Roll the services in `VC_ROLES` **one at a time** (just `vcrawl` now), waiting for each
    one's progress-based health check (up to 7 minutes). Unhealthy: every rolled service goes
    back to the previous digest, and the new one is held. `docker stop` gives `vcrawl` 30 s;
-   it stops in 25 (in-flight fetches finish, spool flushed, leases released).
+   it stops in about 20 s, inside `shutdown.sh`'s `stop -t 25` (in-flight fetches finish, spool flushed, leases released).
 7. Success: the new digest is recorded; the old one becomes the rollback target.
 
 Every tick also writes a `deploy` heartbeat row: the running and the `:prod` digest, since

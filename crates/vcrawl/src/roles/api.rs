@@ -54,7 +54,12 @@ pub async fn run_with_tls_dir(ctx: Ctx, dir: &Path) -> anyhow::Result<()> {
     } else {
         None
     };
-    let state = api::state(pool, cfg.api.clone(), cfg.index.clone(), places, qe);
+    let mut state = api::state(pool, cfg.api.clone(), cfg.index.clone(), places, qe);
+    // Under `vcrawl run`, the API's /healthz (the MIG autohealing check on port 8443) is the
+    // whole process's health: 503 while any role is down or stalled.
+    if let Some(roles) = ctx.roles_health.clone() {
+        state = state.with_health(Arc::new(move || wiring::obs::roles_health(&roles).0 == 200));
+    }
     let mut stop = ctx.stop();
     let stopped = async move {
         let _ = stop.wait_for(|s| *s).await;
