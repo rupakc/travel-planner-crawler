@@ -363,6 +363,12 @@ iam() {
     --role=roles/storage.objectCreator >/dev/null
   g storage buckets add-iam-policy-binding "gs://$OPS_BUCKET" --member="serviceAccount:$RUNTIME_SA" \
     --role=roles/storage.objectViewer >/dev/null
+  # wal-g uploads to GCS in chunks, composes them, then deletes the chunks: it needs
+  # objects.delete. Only under walg/ (an IAM condition); the bucket keeps deleted
+  # versions 7 days, so nothing it removes is unrecoverable.
+  g storage buckets add-iam-policy-binding "gs://$OPS_BUCKET" --member="serviceAccount:$RUNTIME_SA" \
+    --role=roles/storage.objectUser \
+    --condition="expression=resource.name.startsWith('projects/_/buckets/$OPS_BUCKET/objects/walg/'),title=walg-prefix-only,description=wal-g chunk compose cleanup under walg/ only" >/dev/null
   g storage buckets add-iam-policy-binding "gs://$OPS_BUCKET" --member="serviceAccount:$DRILL_SA" \
     --role=roles/storage.objectViewer >/dev/null
   project_binding "$RUNTIME_SA" roles/logging.logWriter
