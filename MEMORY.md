@@ -93,3 +93,12 @@ plan = `docs/superpowers/plans/2026-11-15-voyager-crawler.md`, r1–r5 = `docs/r
   stop), in one `vcrawl` container; limits sum to 3.3 GB and the E2E job fails above a
   3.2 GB measured peak. otelcol is kept (≈ 50 MB) rather than a Cloud Monitoring exporter
   in vcrawl. (crates/vcrawl/src/run.rs, deploy/compose.yaml, e2e/mem-sampler.sh)
+- 2026-11-17: adapter captures become records through each adapter's own record mapping
+  (`vc_sources::adapters::records`, method `adapter`), not the content handlers: ECB → fx_rate
+  observations `fx:EUR:<ccy>`; Canada, State Dept and FCDO country pages → `advisory`;
+  OurAirports → `airport` (large/medium, scheduled service or IATA only); Wikivoyage →
+  geo-tagged `place` (country from the place resolver). Dump batches never stale records
+  (all batches share the dump URL). `admin reprocess --source` re-queues captures.
+  (crates/vc-sources/src/adapters/records.rs, crates/vcrawl/tests/adapter_records.rs)
+- 2026-11-17: the permit client pins the first IPv4 address of a host (AAAA came first and the
+  VM has no IPv6 route: every dual-stack host failed). (crates/vc-fetch/src/lib.rs, #107)

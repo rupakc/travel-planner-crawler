@@ -61,3 +61,4 @@ fail = { workspace = true, features = ["failpoints"] }
 vc-store = { workspace = true, features = ["failpoints"] }
 tempfile = { workspace = true }
 reqwest = { workspace = true }
+bzip2 = { workspace = true }

@@ -46,6 +46,8 @@ pub struct FilePlaceResolver {
     keys: Arc<Vec<(Box<str>, u32)>>,
     /// Folded country name → ISO code.
     countries: Arc<HashMap<String, [u8; 2]>>,
+    /// ISO code → English name (the file's `name` column).
+    names: Arc<HashMap<String, String>>,
     /// `CC.code` → admin1 name.
     admin1: Arc<HashMap<String, String>>,
 }
@@ -127,6 +129,7 @@ impl FilePlaceResolver {
         keys.sort_unstable();
         keys.dedup();
         let mut cmap = HashMap::new();
+        let mut names = HashMap::new();
         for (n, line) in data_lines(countries).enumerate() {
             let line = line?;
             let f: Vec<&str> = line.split('\t').collect();
@@ -134,6 +137,9 @@ impl FilePlaceResolver {
                 .first()
                 .and_then(|c| cc(c))
                 .ok_or_else(|| bad("countries", n))?;
+            if let Some(name) = f.get(1).map(|s| s.trim()).filter(|s| !s.is_empty()) {
+                names.insert(cc_str(code), name.to_string());
+            }
             cmap.insert(fold(&cc_str(code)), code);
             for name in f.iter().skip(1).flat_map(|s| s.split('|')) {
                 let k = fold(name);
@@ -153,6 +159,7 @@ impl FilePlaceResolver {
             rows: Arc::new(rows),
             keys: Arc::new(keys),
             countries: Arc::new(cmap),
+            names: Arc::new(names),
             admin1: Arc::new(amap),
         })
     }
@@ -183,6 +190,11 @@ impl FilePlaceResolver {
     /// The ISO code for a country hint given as a code or a name (any language GeoNames knows).
     pub fn country_code(&self, hint: &str) -> Option<String> {
         self.countries.get(&fold(hint)).map(|c| cc_str(*c))
+    }
+
+    /// ISO 3166-1 alpha-2 code → English country name, for every country in the file.
+    pub fn country_names(&self) -> HashMap<String, String> {
+        self.names.as_ref().clone()
     }
 
     fn lookup(&self, key: &str) -> Vec<u32> {

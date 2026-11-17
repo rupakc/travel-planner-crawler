@@ -211,6 +211,7 @@ Operator commands use the `vcrawl` image and the database, like the `migrate` se
 | `vcrawl admin purge` with `--url`, `--url-prefix`, `--host`, `--author`, `--source` or `--record` | remove data everywhere (raw, text tier, records, held records, LLM cache); marked done after the 21-day backup window |
 | `vcrawl admin rebuild-captures` (`--dry-run`, `--verify`, `--prefix`) | disaster recovery: rebuild `segments` and `captures` rows from the CDXJ objects |
 | `vcrawl admin reextract --kind <kind>` | queue re-extraction for a kind (a 200-capture canary by default) |
+| `vcrawl admin reprocess --source <id> [--source …] [--dry-run]` | hand a source's committed captures back to the processor after a processor fix (no fetch; idempotent) |
 | `vcrawl migrate` (`--contract`, `--print-schema`) | apply migrations; see [Data Model](Data-Model) |
 | `vcrawl health` | the container health check |
 
