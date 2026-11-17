@@ -14,27 +14,30 @@ seeds:
 - https://databank.worldbank.org/data/download/WDI_CSV.zip
 sitemaps: []
 feeds: []
-adapter: null
+adapter: wdi_csv
 include: []
 exclude: []
 max_depth: 0
 kinds:
-- tip
+- price_level
 llm_kinds: []
 render: never
-cadence: quarterly
+cadence: yearly
 min_delay_s: 5
 daily_budget: 300
 politeness_key: null
-enabled: false
+enabled: true
 needs_key: false
 key_secret: null
 max_retention_days: null
 display_requirements: null
-notes: 'databank robots.txt redirects to an error page (missing, allowed). api.worldbank.org robots answers
+notes: databank robots.txt redirects to an error page (missing, allowed). api.worldbank.org robots answers
   502 (disallow); data.worldbank.org 403 and datacatalogfiles 401 (do-not-crawl). Download URL from public
-  docs, not fetched. ''licenses datasets under the Creative Commons Attribution 4.0''. | Disabled: adapter
-  pending: WDI CSV zip filter (PA.NUS.PPPC.RF and PPP rows); verify the download URL first'
+  docs, not fetched. 'licenses datasets under the Creative Commons Attribution 4.0'. Re-checked 2026-11-18
+  with VoyagerBot - databank.worldbank.org/robots.txt 302 to ddperror.aspx?msg=404 (no robots, allowed);
+  the download host databankfiles.worldbank.org/robots.txt answers 400 (an Azure blob error; a 4xx other
+  than 401/403 = no robots, allowed). The catalogue's own copy on datacatalogfiles.worldbank.org stays
+  do-not-crawl (401). Only PA.NUS.PPPC.RF rows of WDICSV.csv are kept.
 relevance:
   sections:
   - tips

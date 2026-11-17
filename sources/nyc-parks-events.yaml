@@ -14,7 +14,7 @@ seeds:
 - https://data.cityofnewyork.us/resource/fudw-fgrp.json
 sitemaps: []
 feeds: []
-adapter: null
+adapter: json_events
 include: []
 exclude: []
 max_depth: 0
@@ -26,14 +26,15 @@ cadence: daily
 min_delay_s: 5
 daily_budget: 300
 politeness_key: null
-enabled: false
+enabled: true
 needs_key: false
 key_secret: null
 max_retention_days: null
 display_requirements: null
-notes: 'robots 200, Crawl-delay 1, 54 Disallows (/resource not among them). ''there are no restrictions
-  on the use of Open Data'' (search snippet). | Disabled: adapter pending: Socrata SODA reader; confirm
-  the dataset id'
+notes: robots 200, Crawl-delay 1, 54 Disallows (/resource not among them; re-checked 2026-11-18). 'there
+  are no restrictions on the use of Open Data' (search snippet). Columns per the dataset's columns.json
+  (event_id, title, date, start_time, location_description, description, snippet, cost_free, url); only
+  rows dated today or later are requested.
 relevance:
   sections:
   - events

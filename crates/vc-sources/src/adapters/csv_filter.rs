@@ -28,6 +28,7 @@ pub(crate) struct CsvFilter {
     required: &'static [&'static str],
     keep: fn(&Row<'_>) -> bool,
     cols: Option<HashMap<String, usize>>,
+    zip_member: super::zip_stream::MemberPick,
 }
 
 impl CsvFilter {
@@ -41,7 +42,14 @@ impl CsvFilter {
             required,
             keep,
             cols: None,
+            zip_member: &[],
         }
+    }
+
+    /// Reads this member when the dump is a ZIP archive.
+    pub(crate) fn with_zip_member(mut self, pick: super::zip_stream::MemberPick) -> Self {
+        self.zip_member = pick;
+        self
     }
 }
 
@@ -68,6 +76,10 @@ impl DumpFilter for CsvFilter {
 
     fn output(&self) -> OutputKind {
         OutputKind::Csv
+    }
+
+    fn zip_member(&self) -> super::zip_stream::MemberPick {
+        self.zip_member
     }
 
     fn filter(&mut self, unit: &[u8]) -> Result<Unit> {

@@ -11,30 +11,30 @@ licence:
   url: https://creativecommons.org/licenses/by/4.0/
 method: api
 seeds:
-- https://ec.europa.eu/eurostat/api/dissemination/statistics/1.0/data/prc_ppp_ind?format=JSON
+- https://ec.europa.eu/eurostat/api/dissemination/statistics/1.0/data/prc_ppp_ind?format=JSON&lang=EN&na_item=PLI_EU27_2020&sinceTimePeriod=2015
 sitemaps: []
 feeds: []
-adapter: null
+adapter: eurostat_jsonstat
 include: []
 exclude: []
 max_depth: 0
 kinds:
-- tip
+- price_level
 llm_kinds: []
 render: never
 cadence: yearly
 min_delay_s: 5
 daily_budget: 300
 politeness_key: null
-enabled: false
+enabled: true
 needs_key: false
 key_secret: null
 max_retention_days: null
 display_requirements: null
 notes: 'robots: * disallows the old /eurostat/SDMX/diss-web/rest/ and search paths, not /eurostat/api/.
   ''Reuse ... for commercial or non-commercial purposes is authorised provided the source is acknowledged.''
-  | Disabled: adapter pending: Eurostat JSON-stat reader; country indicators map to the tip kind until
-  a country_indicator kind exists'
+  Re-checked 2026-11-18: robots 200, /eurostat/api/ allowed. JSON-stat 2.0; price level indices only (na_item
+  PLI_EU27_2020, EU27_2020 = 100), from 2015.'
 relevance:
   sections:
   - tips

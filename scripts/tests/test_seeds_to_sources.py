@@ -461,7 +461,7 @@ def test_terms_and_bot_wall_sources_are_off(generated):
 
 def test_batch2_off_sources_say_why(generated):
     prefixes = ("adapter pending", "needs an API key", "needs an account", "terms not yet confirmed",
-                "licence:", "robots.txt", "access route", "owner decision")
+                "licence:", "robots.txt", "access route", "owner decision", "dataset retired")
     for sid in s2s.SOURCE_CLASS:
         spec = generated[sid]
         if spec["enabled"]:
@@ -470,13 +470,24 @@ def test_batch2_off_sources_say_why(generated):
         assert reason.startswith(prefixes), (sid, reason)
 
 
-def test_batch2_api_and_dump_sources_stay_off(generated):
-    # No new adapter ships in this batch: every api/dump source is off.
+# Batch-2 api/dump sources that run on the open-data adapters (2026-11-18).
+OPEN_DATA_ADAPTERS = {
+    "openholidays": "openholidays",
+    "nyc-parks-events": "json_events",
+    "stockholm-open-api": "json_events",
+    "eurostat-prices": "eurostat_jsonstat",
+    "worldbank-wdi-bulk": "wdi_csv",
+}
+
+
+def test_batch2_api_and_dump_sources_run_only_on_an_adapter(generated):
+    # An api/dump source is on only with a built-in adapter; every other one stays off.
     for sid in s2s.SOURCE_CLASS:
         spec = generated[sid]
         if spec["method"] in ("api", "dump"):
-            assert spec["enabled"] is False, sid
-            assert spec["adapter"] is None, sid
+            want = OPEN_DATA_ADAPTERS.get(sid)
+            assert spec["adapter"] == want, sid
+            assert spec["enabled"] is (want is not None), sid
         if spec["needs_key"]:
             assert spec["enabled"] is False and spec["key_secret"] == f"crawler-src-{sid}-key", sid
 
@@ -486,10 +497,11 @@ def test_batch2_enabled_sources_are_polite_and_scoped(generated):
         spec = generated[sid]
         if not spec["enabled"]:
             continue
-        assert spec["method"] in ("html", "rss", "sitemap"), sid
+        assert spec["method"] in ("html", "rss", "sitemap") or sid in OPEN_DATA_ADAPTERS, sid
         assert spec["daily_budget"] <= 500 and spec["max_depth"] <= 2 and spec["min_delay_s"] >= 5, sid
-        assert spec["licence"]["class"] in ("open", "facts_only"), sid
-        assert spec["cadence"] in ("daily", "h12", "weekly", "monthly", "quarterly"), sid
+        assert spec["licence"]["class"] in ("open", "facts_only") or (
+            sid == "openholidays" and spec["licence"]["class"] == "share_alike"), sid
+        assert spec["cadence"] in ("daily", "h12", "weekly", "monthly", "quarterly", "yearly"), sid
         # Every include regex is pinned to the source's own host.
         hosts = {u.split("/")[2] for u in spec["seeds"] + spec["sitemaps"] + spec["feeds"]}
         for r in spec["include"]:
@@ -536,8 +548,9 @@ def test_ramp_2_extends_ramp_1_with_enabled_runnable_sources():
         assert not list(v.iter_errors(spec)), sid
     for sid in r2[len(r1):]:
         assert committed[sid]["method"] in ("html", "rss", "sitemap"), sid
-    # Every source this batch enables is in ramp-2.
-    on = {sid for sid in s2s.SOURCE_CLASS if committed[sid]["enabled"]}
+    # Every html/rss/sitemap source this batch enables is in ramp-2 (the open-data adapter
+    # sources come with ramp-3).
+    on = {sid for sid in s2s.SOURCE_CLASS if committed[sid]["enabled"]} - set(OPEN_DATA_ADAPTERS)
     assert on <= set(r2), sorted(on - set(r2))
 
 
@@ -554,3 +567,43 @@ def test_scam_safety_sources(generated):
     sr = generated["smartraveller"]
     assert any("scammers" in u for u in sr["seeds"]) and not sr["include"]
     assert "two networks 2026-11-17" in sr["notes"]
+
+
+def test_ramp_3_is_ramp_2_plus_the_open_data_sources():
+    committed = {p.stem: yaml.safe_load(p.read_text()) for p in (ROOT / "sources").glob("*.yaml")}
+    r2, r3 = _ramp("ramp-2.txt"), _ramp("ramp-3.txt")
+    assert len(r3) == len(set(r3))
+    assert r3[: len(r2)] == r2
+    assert set(r3[len(r2):]) == set(OPEN_DATA_ADAPTERS)
+    v = _validator()
+    for sid in r3:
+        spec = committed[sid]
+        assert spec["enabled"] is True, sid
+        assert not list(v.iter_errors(spec)), sid
+    for sid, adapter in OPEN_DATA_ADAPTERS.items():
+        assert committed[sid]["adapter"] == adapter, sid
+
+
+def test_open_data_sources_2026_11_18(generated):
+    oh = generated["openholidays"]
+    assert oh["seeds"] == ["https://openholidaysapi.org/Countries"]
+    assert oh["kinds"] == ["public_holiday"] and oh["cadence"] == "monthly"
+    assert oh["licence"]["class"] == "share_alike" and oh["licence"]["spdx"] == "ODbL-1.0"
+    for sid in ("eurostat-prices", "worldbank-wdi-bulk"):
+        spec = generated[sid]
+        assert spec["kinds"] == ["price_level"] and spec["cadence"] == "yearly", sid
+        assert spec["source_class"] == "official" and spec["licence"]["spdx"] == "CC-BY-4.0", sid
+    assert "na_item=PLI_EU27_2020" in generated["eurostat-prices"]["seeds"][0]
+    assert generated["worldbank-wdi-bulk"]["method"] == "dump"
+    sth = generated["stockholm-open-api"]
+    assert sth["seeds"] == ["https://www.visitstockholm.com/api/public-v1/events/?format=json"]
+    assert generated["nyc-parks-events"]["seeds"] == ["https://data.cityofnewyork.us/resource/fudw-fgrp.json"]
+    # Still off, each with its reason.
+    for sid, why in (("bcn-opendata-agenda", "disallows /data/api*"),
+                     ("madrid-agenda", "disallows /api/"),
+                     ("toronto-events", "Retired"),
+                     ("taiwan-tourism-od", "answers 500"),
+                     ("datagovhk", "www.lcsd.gov.hk")):
+        spec = generated[sid]
+        assert spec["enabled"] is False and why in " ".join(spec["notes"].split()), sid
+    assert {"public_holiday", "price_level"} <= s2s.KINDS

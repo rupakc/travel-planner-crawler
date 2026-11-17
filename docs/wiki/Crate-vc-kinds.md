@@ -12,13 +12,15 @@ code. Each one is three files, which this crate loads, checks and turns into `Ki
 Path: `crates/vc-kinds`. Dependencies: `jsonschema`, `toml`. Status: wired; the processor
 loads the registry at startup.
 
-## The 20 v1 kinds
+## The 22 v1 kinds
 
 `activity`, `advisory`, `airport`, `article`, `attraction`, `cheapest_fare`,
-`emergency_numbers`, `event`, `fx_rate`, `hotel`, `packing_hint`, `place`, `qa_thread`,
-`route`, `sim_offer`, `tip`, `transport_option`, `visa_rule`, `walking_tour`,
-`weather_normal`. `cheapest_fare` (series `fare:<ORIG>:<DEST>:<YYYY-MM>`, cached fares, not
-live prices), `fx_rate` and `weather_normal` are observations; the rest are records.
+`emergency_numbers`, `event`, `fx_rate`, `hotel`, `packing_hint`, `place`, `price_level`,
+`public_holiday`, `qa_thread`, `route`, `sim_offer`, `tip`, `transport_option`, `visa_rule`,
+`walking_tour`, `weather_normal`. `cheapest_fare` (series `fare:<ORIG>:<DEST>:<YYYY-MM>`,
+cached fares, not live prices), `fx_rate`, `price_level` (series
+`price_level:<ISO2>:<category>:<basis>`) and `weather_normal` are observations; the rest are
+records. `price_level` and `public_holiday` were added on 2026-11-18 (open-data adapters).
 
 ## What the loader refuses
 
@@ -54,7 +56,7 @@ verbatim quotes), all verbatim-checked.
 
 - `tests/registry.rs` (the real files): `every_kind_has_schema_prompt_policy_fixture`,
   `schemas_are_valid_draft2020`, `fixture_records_validate`,
-  `high_stakes_kinds_official_only`, `fx_rate_and_weather_normal_are_observations`,
+  `high_stakes_kinds_official_only`, `fx_rate_weather_normal_cheapest_fare_and_price_level_are_observations`,
   `series_keys_render_from_fixtures`, `verbatim_pointers_are_concrete_and_cover_provenance`,
   `prompts_treat_page_as_untrusted_and_pair_city_with_country`,
   `every_city_field_is_paired_with_a_country_field`,

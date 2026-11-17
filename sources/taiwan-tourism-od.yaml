@@ -37,8 +37,10 @@ max_retention_days: null
 display_requirements: null
 notes: 'media.taiwan.net.tw robots 404 (allow); data.gov.tw robots answered 500 (disallow); eng.taiwan.net.tw
   serves an HTML noindex page as robots.txt (do not crawl). ''available free of charge, nonexclusive'';
-  images need permission. | Disabled: adapter pending: Taiwan tourism JSON dump reader; verify the file
-  names on data.gov.tw'
+  images need permission. | Disabled: robots.txt of data.gov.tw answers 500 again (re-checked 2026-11-18):
+  disallowed until readable, so the file names cannot be verified there (media.taiwan.net.tw, robots 404,
+  serves the files); also adapter pending: a json_events mapping for XML_Head/Infos/Info (Chinese names;
+  a Region to English city table)'
 relevance:
   sections:
   - events

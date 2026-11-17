@@ -1,0 +1,41 @@
+[
+ {
+  "event_id": "201001",
+  "title": "Shakespeare in the Park: Twelfth Night",
+  "date": "2026-11-20T00:00:00.000",
+  "start_time": "7:30 pm",
+  "end_time": "10:00 pm",
+  "location_description": "Delacorte Theater, Central Park",
+  "description": "<p>Free outdoor performance.&nbsp;Line up early.</p>",
+  "snippet": "Free outdoor theatre in Central Park.",
+  "cost_free": "1",
+  "must_see": "1",
+  "url": "https://www.nycgovparks.org/events/2026/11/20/twelfth-night",
+  "notice": "0"
+ },
+ {
+  "event_id": "201002",
+  "title": "Urban Park Rangers: Bird Walk",
+  "date": "2026-11-21T00:00:00.000",
+  "start_time": "8:00 am",
+  "location_description": "Inwood Hill Park",
+  "description": "Guided bird walk.",
+  "cost_free": "1",
+  "url": "https://www.nycgovparks.org/events/2026/11/21/bird-walk"
+ },
+ {
+  "event_id": "201003",
+  "title": "Ice Skating Lessons",
+  "date": "2026-11-22T00:00:00.000",
+  "start_time": "10:00 am",
+  "location_description": "Lasker Rink",
+  "cost_free": "0",
+  "cost_description": "$15 per class",
+  "url": "https://www.nycgovparks.org/events/2026/11/22/skating"
+ },
+ {
+  "event_id": "201004",
+  "date": "2026-11-23T00:00:00.000",
+  "description": "A row without a title is skipped."
+ }
+]

@@ -32,8 +32,11 @@ key_secret: null
 max_retention_days: null
 display_requirements: null
 notes: 'robots 200, Crawl-delay 10, 34 Disallows (/egob/catalogo not among them). Credit ''Origen de los
-  datos: Ayuntamiento de Madrid'' and keep the update date. | Disabled: adapter pending: Madrid agenda
-  JSON reader'
+  datos: Ayuntamiento de Madrid'' and keep the update date. | Disabled: robots.txt of datos.madrid.es
+  (the portal moved to CKAN) disallows /api/, /dataset/*/resource/* and /resource/* for * (checked 2026-11-18),
+  so the dataset files cannot be fetched; the legacy /egob/catalogo/ JSON path is not disallowed, but
+  the dataset page no longer lists it: re-check the file URL first, then add a json_events mapping for
+  its @graph items'
 relevance:
   sections:
   - events

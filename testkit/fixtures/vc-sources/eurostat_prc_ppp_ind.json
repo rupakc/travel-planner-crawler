@@ -1,0 +1,109 @@
+{
+ "version": "2.0",
+ "class": "dataset",
+ "label": "Purchasing power parities (PPPs), price level indices and real expenditures for ESA 2010 aggregates",
+ "source": "ESTAT",
+ "updated": "2026-06-18T23:00:00+0200",
+ "value": {
+  "0": 67.9,
+  "1": 68.6,
+  "3": 77.5,
+  "9": 85.1,
+  "13": 81.2,
+  "15": 75.3,
+  "17": 100.0
+ },
+ "status": {
+  "1": "p",
+  "3": "p",
+  "9": "p",
+  "13": "p",
+  "15": "p",
+  "17": "p"
+ },
+ "id": [
+  "freq",
+  "na_item",
+  "ppp_cat",
+  "geo",
+  "time"
+ ],
+ "size": [
+  1,
+  1,
+  3,
+  3,
+  2
+ ],
+ "dimension": {
+  "freq": {
+   "label": "Time frequency",
+   "category": {
+    "index": {
+     "A": 0
+    },
+    "label": {
+     "A": "Annual"
+    }
+   }
+  },
+  "na_item": {
+   "label": "National accounts indicator (ESA 2010)",
+   "category": {
+    "index": {
+     "PLI_EU27_2020": 0
+    },
+    "label": {
+     "PLI_EU27_2020": "Price level indices (EU27_2020=100)"
+    }
+   }
+  },
+  "ppp_cat": {
+   "label": "Analytical categories for purchasing power parities (PPPs) calculation",
+   "category": {
+    "index": {
+     "GDP": 0,
+     "A0107": 1,
+     "A0111": 2
+    },
+    "label": {
+     "GDP": "Gross domestic product",
+     "A0107": "Transport",
+     "A0111": "Restaurants and hotels"
+    }
+   }
+  },
+  "geo": {
+   "label": "Geopolitical entity (reporting)",
+   "category": {
+    "index": {
+     "EL": 0,
+     "PT": 1,
+     "EU27_2020": 2
+    },
+    "label": {
+     "EL": "Greece",
+     "PT": "Portugal",
+     "EU27_2020": "European Union - 27 countries (from 2020)"
+    }
+   }
+  },
+  "time": {
+   "label": "Time",
+   "category": {
+    "index": {
+     "2023": 0,
+     "2024": 1
+    },
+    "label": {
+     "2023": "2023",
+     "2024": "2024"
+    }
+   }
+  }
+ },
+ "extension": {
+  "id": "PRC_PPP_IND",
+  "lang": "EN"
+ }
+}

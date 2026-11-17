@@ -2189,26 +2189,33 @@ seeds:
   - id: eurostat-prices
     category: tips
     name: Eurostat price level indices (PPP)
-    url: https://ec.europa.eu/eurostat/api/dissemination/statistics/1.0/data/prc_ppp_ind?format=JSON
+    url: https://ec.europa.eu/eurostat/api/dissemination/statistics/1.0/data/prc_ppp_ind?format=JSON&lang=EN&na_item=PLI_EU27_2020&sinceTimePeriod=2015
     method: api
     license: CC BY 4.0
     cadence: yearly
     needs_key: false
     allowed: true
     notes: 'robots: * disallows the old /eurostat/SDMX/diss-web/rest/ and search paths, not /eurostat/api/.
-      ''Reuse ... for commercial or non-commercial purposes is authorised provided the source is acknowledged.'''
+      ''Reuse ... for commercial or non-commercial purposes is authorised provided the source is acknowledged.''
+      Re-checked 2026-11-18: robots 200, /eurostat/api/ allowed. JSON-stat 2.0; price level indices only
+      (na_item PLI_EU27_2020, EU27_2020 = 100), from 2015.'
   - id: worldbank-wdi-bulk
     category: tips
     name: World Bank WDI bulk CSV (price level ratio, PPP)
     url: https://databank.worldbank.org/data/download/WDI_CSV.zip
     method: dump
     license: CC BY 4.0
-    cadence: quarterly
+    cadence: yearly
     needs_key: false
     allowed: true
     notes: databank robots.txt redirects to an error page (missing, allowed). api.worldbank.org robots answers
       502 (disallow); data.worldbank.org 403 and datacatalogfiles 401 (do-not-crawl). Download URL from
-      public docs, not fetched. 'licenses datasets under the Creative Commons Attribution 4.0'.
+      public docs, not fetched. 'licenses datasets under the Creative Commons Attribution 4.0'. Re-checked
+      2026-11-18 with VoyagerBot - databank.worldbank.org/robots.txt 302 to ddperror.aspx?msg=404 (no
+      robots, allowed); the download host databankfiles.worldbank.org/robots.txt answers 400 (an Azure blob
+      error; a 4xx other than 401/403 = no robots, allowed). The catalogue's own copy on
+      datacatalogfiles.worldbank.org stays do-not-crawl (401). Only PA.NUS.PPPC.RF rows of WDICSV.csv
+      are kept.
   - id: datagovhk
     category: places
     name: DATA.GOV.HK (museums, facilities and events)
@@ -2307,8 +2314,10 @@ seeds:
     cadence: daily
     needs_key: false
     allowed: true
-    notes: robots 200, Crawl-delay 1, 54 Disallows (/resource not among them). 'there are no restrictions
-      on the use of Open Data' (search snippet).
+    notes: robots 200, Crawl-delay 1, 54 Disallows (/resource not among them; re-checked 2026-11-18). 'there
+      are no restrictions on the use of Open Data' (search snippet). Columns per the dataset's columns.json
+      (event_id, title, date, start_time, location_description, description, snippet, cost_free, url);
+      only rows dated today or later are requested.
   - id: korea-tourapi
     category: events
     name: Korea Tourism Organization TourAPI 4.0 (English)
@@ -2369,26 +2378,29 @@ seeds:
   - id: openholidays
     category: events
     name: OpenHolidays API (public and school holidays)
-    url: https://openholidaysapi.org/PublicHolidays
+    url: https://openholidaysapi.org/Countries
     method: api
     license: ODbL 1.0
     cadence: monthly
     needs_key: false
     allowed: true
-    notes: robots 404 (allow). No terms on the site; data reported as ODbL and code as AGPL. share_alike,
-      never merged.
+    notes: robots 404 (allow; re-checked 2026-11-18). No terms on the site; the data repository
+      github.com/openpotato/openholidaysapi.data is ODbL-1.0 (its LICENSE, checked 2026-11-18) and the service
+      code AGPL. share_alike, never merged. /Countries fans out to /PublicHolidays and /SchoolHolidays per
+      country for this year and next.
   - id: stockholm-open-api
     category: events
     name: Visit Stockholm Open API
-    url: https://api.visitstockholm.com/
+    url: https://www.visitstockholm.com/api/public-v1/events/?format=json
     method: api
     license: CC BY 4.0
     cadence: daily
     needs_key: false
     allowed: true
     notes: www.visitstockholm.com robots 200; api.visitstockholm.com/robots.txt 200, * disallows /admin/,
-      /cms/ (checked 2026-11-17). 'Texts ... via the website or the API are under CC BY 4.0' (credit Stockholm
-      Business Region AB).
+      /cms/ (checked 2026-11-17; api host re-checked 2026-11-18). 'Texts ... via the website or the API are under
+      CC BY 4.0' (credit Stockholm Business Region AB). The public events list is keyless
+      (www.visitstockholm.com/api/public-v1/events/, paged by page number); images are not shared.
   - id: germany-kg
     category: events
     name: German National Tourist Board Knowledge Graph

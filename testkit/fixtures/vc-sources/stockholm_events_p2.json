@@ -1,0 +1,63 @@
+{
+ "count": 3,
+ "meta": {
+  "categories": [
+   {
+    "slug": "exhibitions",
+    "title": "Exhibitions",
+    "icon": "",
+    "subcategories": []
+   }
+  ],
+  "subcategories": []
+ },
+ "next": null,
+ "previous": 1,
+ "total_pages": 2,
+ "current_page": 2,
+ "results": [
+  {
+   "id": "edd6c9c1-13aa-4397-ad7a-41ca97ef7103",
+   "title": {
+    "en": "Christmas Market",
+    "sv": "Julmarknad"
+   },
+   "description": {
+    "en": "<p>Christmas Market at Stortorget.</p>",
+    "sv": "<p>Julmarknad.</p>"
+   },
+   "external_website_url": "https://example.org/christmas-market",
+   "url": "https://www.visitstockholm.com/events/christmas-market/next/",
+   "address": "Stora Nygatan 10",
+   "venue_name": "Stortorget",
+   "zip_code": "111 27",
+   "city": "Stockholm",
+   "location": {
+    "latitude": 59.32494688747681,
+    "longitude": 18.0679269684795
+   },
+   "created_at": "2026-11-05T16:57:05.917458+01:00",
+   "modified_at": "2026-11-10T13:50:24.173956+01:00",
+   "start_date": "2026-11-28",
+   "end_date": "2026-12-23",
+   "start_time": null,
+   "end_time": null,
+   "categories": [
+    {
+     "title": "Markets",
+     "slug": "markets",
+     "subcategories": []
+    }
+   ],
+   "schedule": {
+    "range": {
+     "start": "2026-11-28",
+     "end": "2026-12-23",
+     "excluded": []
+    },
+    "dates": []
+   },
+   "closest_station": "Gamla stan"
+  }
+ ]
+}

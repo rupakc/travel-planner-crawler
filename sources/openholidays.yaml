@@ -11,32 +11,29 @@ licence:
   url: https://opendatacommons.org/licenses/odbl/1-0/
 method: api
 seeds:
-- https://openholidaysapi.org/PublicHolidays
-- https://openholidaysapi.org/SchoolHolidays
-- https://openholidaysapi.org/Subdivisions
+- https://openholidaysapi.org/Countries
 sitemaps: []
 feeds: []
-adapter: null
+adapter: openholidays
 include: []
 exclude: []
 max_depth: 0
 kinds:
-- event
+- public_holiday
 llm_kinds: []
 render: never
 cadence: monthly
 min_delay_s: 5
 daily_budget: 300
 politeness_key: null
-enabled: false
+enabled: true
 needs_key: false
 key_secret: null
 max_retention_days: null
 display_requirements: null
-notes: 'robots 404 (allow). No terms on the site; data reported as ODbL and code as AGPL. share_alike,
-  never merged. | Disabled: adapter pending: OpenHolidays per-country reader (needs countryIsoCode and
-  date-range parameters); public holidays map to the event kind; licence: ODbL is reported, not stated
-  on the site'
+notes: robots 404 (allow; re-checked 2026-11-18). No terms on the site; the data repository github.com/openpotato/openholidaysapi.data
+  is ODbL-1.0 (its LICENSE, checked 2026-11-18) and the service code AGPL. share_alike, never merged.
+  /Countries fans out to /PublicHolidays and /SchoolHolidays per country for this year and next.
 relevance:
   sections:
   - events

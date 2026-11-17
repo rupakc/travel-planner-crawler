@@ -80,6 +80,19 @@ storage = "record"
 source_classes = ["official", "reference", "editorial", "commercial_api"]
 verbatim = ["/official_tourism_url", "/source_url", "/as_of", "/evidence/*"]
 
+[kinds.price_level]
+version = 1
+storage = "observation"
+source_classes = ["official", "reference"]
+verbatim = ["/index", "/source_url", "/as_of", "/evidence/*"]
+series_key = "price_level:{country_code}:{category}:{basis}"
+
+[kinds.public_holiday]
+version = 1
+storage = "record"
+source_classes = ["official", "reference", "commercial_api"]
+verbatim = ["/start_date", "/end_date", "/source_url", "/as_of", "/evidence/*"]
+
 [kinds.qa_thread]
 version = 1
 storage = "record"

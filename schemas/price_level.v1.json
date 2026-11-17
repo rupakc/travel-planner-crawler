@@ -1,0 +1,117 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/rupakc/travel-planner-crawler/schemas/price_level.v1.json",
+  "title": "Price level",
+  "description": "One record: one country's published price level for one reference year and one spending category, relative to a stated basis (EU27_2020 = 100, or US = 1). Voyager use: budget planner and Travel Ease cost guidance (how expensive a country is).",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "country": {
+      "type": "string",
+      "maxLength": 80,
+      "description": "Country in English (e.g. \"Portugal\")."
+    },
+    "country_code": {
+      "type": "string",
+      "maxLength": 2,
+      "description": "ISO 3166-1 alpha-2 country code of `country`.",
+      "pattern": "^[A-Z]{2}$"
+    },
+    "year": {
+      "type": "integer",
+      "minimum": 1950,
+      "maximum": 2100,
+      "description": "Reference year of the figure."
+    },
+    "date": {
+      "type": "string",
+      "maxLength": 10,
+      "description": "First day of the reference year (YYYY-01-01): the observation time of the series.",
+      "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$"
+    },
+    "index": {
+      "type": "number",
+      "minimum": 0,
+      "description": "The price level exactly as published, on `basis`."
+    },
+    "basis": {
+      "type": "string",
+      "enum": [
+        "eu27_2020_100",
+        "us_1"
+      ],
+      "description": "`eu27_2020_100` = index, EU27 (2020 composition) = 100 (Eurostat); `us_1` = ratio of the PPP conversion factor to the market exchange rate, United States = 1 (World Bank)."
+    },
+    "category": {
+      "type": "string",
+      "enum": [
+        "gdp",
+        "actual_individual_consumption",
+        "household_consumption",
+        "food_non_alcoholic_beverages",
+        "alcoholic_beverages_tobacco",
+        "clothing_footwear",
+        "housing",
+        "transport",
+        "communication",
+        "recreation_culture",
+        "restaurants_hotels"
+      ],
+      "description": "Spending category the price level covers."
+    },
+    "category_code": {
+      "type": "string",
+      "maxLength": 20,
+      "description": "The publisher's own code of the category (e.g. a Eurostat `ppp_cat` code)."
+    },
+    "category_label": {
+      "type": "string",
+      "maxLength": 160,
+      "description": "The publisher's own label of the category."
+    },
+    "indicator_code": {
+      "type": "string",
+      "maxLength": 40,
+      "description": "The publisher's indicator code (e.g. \"PLI_EU27_2020\", \"PA.NUS.PPPC.RF\")."
+    },
+    "flags": {
+      "type": "string",
+      "maxLength": 10,
+      "description": "The publisher's status flags on the value (e.g. \"p\" provisional, \"e\" estimated)."
+    },
+    "publisher": {
+      "type": "string",
+      "maxLength": 120,
+      "description": "Who publishes it (e.g. \"Eurostat\")."
+    },
+    "source_url": {
+      "type": "string",
+      "maxLength": 2048,
+      "description": "The page's own link for this item (official site, booking or detail page), copied verbatim from the page.",
+      "pattern": "^https?://[^\\s]+$"
+    },
+    "as_of": {
+      "type": "string",
+      "maxLength": 10,
+      "description": "The \"last updated\", \"valid from\" or publication date the page itself states for this information (YYYY-MM-DD).",
+      "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$"
+    },
+    "evidence": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "maxLength": 300,
+        "description": "A verbatim quote from the page."
+      },
+      "maxItems": 3,
+      "description": "Up to 3 short verbatim quotes from the page that support the most important facts."
+    }
+  },
+  "required": [
+    "country_code",
+    "year",
+    "index",
+    "basis",
+    "category"
+  ]
+}

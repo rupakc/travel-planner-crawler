@@ -1,0 +1,34 @@
+[
+ {
+  "isoCode": "DE",
+  "name": [
+   {
+    "language": "EN",
+    "text": "Germany"
+   },
+   {
+    "language": "DE",
+    "text": "Deutschland"
+   }
+  ],
+  "officialLanguages": [
+   "DE"
+  ]
+ },
+ {
+  "isoCode": "PT",
+  "name": [
+   {
+    "language": "EN",
+    "text": "Portugal"
+   },
+   {
+    "language": "PT",
+    "text": "Portugal"
+   }
+  ],
+  "officialLanguages": [
+   "PT"
+  ]
+ }
+]

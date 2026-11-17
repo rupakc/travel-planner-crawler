@@ -1,0 +1,26 @@
+{
+  "name": "Epiphany",
+  "local_name": "Heilige Drei Könige",
+  "type": "public",
+  "start_date": "2027-01-06",
+  "end_date": "2027-01-06",
+  "half_day": false,
+  "country": "Germany",
+  "country_code": "DE",
+  "nationwide": false,
+  "regional_scope": "regional",
+  "subdivisions": [
+    {
+      "code": "DE-BW",
+      "name": "BW"
+    },
+    {
+      "code": "DE-BY",
+      "name": "BY"
+    },
+    {
+      "code": "DE-ST",
+      "name": "ST"
+    }
+  ]
+}
