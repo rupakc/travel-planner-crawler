@@ -26,6 +26,19 @@ mutations() {
   grep -E ' (create|update|add|add-iam-policy-binding|enable|delete|add-resource-policies|add-metadata) ' "$CALLS" || true
 }
 
+# wal-g's chunked GCS upload deletes its chunks: the runtime needs objects.delete,
+# but only under walg/ (never the whole -ops bucket). Found on the first real boot.
+test_walg_delete_scoped_to_prefix() {
+  local out
+  out="$(CRAWLER_ALERT_EMAIL=example@example.com PATH="/usr/bin:/bin" bash "$SCRIPT" --dry-run 2>&1)"
+  grep -q "roles/storage.objectUser .*startsWith('projects/_/buckets/voyager-crawler-ops/objects/walg/')" <<<"$(tr -s ' ' <<<"$out" | sed 's/\\//g')" ||
+    { fail walg_delete_scoped_to_prefix "no objectUser binding conditioned to walg/"; return; }
+  if tr -s ' ' <<<"$out" | grep 'roles/storage.objectUser' | grep -qv 'objects/walg/'; then
+    fail walg_delete_scoped_to_prefix "an objectUser binding without the walg/ condition"; return
+  fi
+  ok walg_delete_scoped_to_prefix
+}
+
 test_dry_run_golden() {
   setup
   local out="$T/out"
@@ -162,7 +175,7 @@ test_no_drill_or_vertex_agent_bindings() {
   export FAKE_EXIST=0
   PATH="$HERE/fakes:$PATH" bash "$SCRIPT" >"$T/out" 2>&1 || { fail no_drill_or_vertex_agent_bindings "exit $?"; return; }
   local bad
-  bad="$(grep -E 'roles/voyagerCrawlerDrill|iam.serviceAccountUser|gcp-sa-aiplatform|storage.objectUser|services identity create' "$CALLS" || true)"
+  bad="$(grep -E 'roles/voyagerCrawlerDrill|iam.serviceAccountUser|gcp-sa-aiplatform|storage.objectUser|services identity create' "$CALLS" | grep -v "storage.objectUser --condition=expression=resource.name.startsWith('projects/_/buckets/voyager-crawler-ops/objects/walg/')" || true)"
   [[ -z "$bad" ]] && ok no_drill_or_vertex_agent_bindings || fail no_drill_or_vertex_agent_bindings "$bad"
 }
 
