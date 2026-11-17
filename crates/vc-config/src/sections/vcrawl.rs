@@ -38,6 +38,13 @@ pub struct VcrawlConfig {
     /// sources and the fetcher skips (and releases) claimed URLs of any other source. Unset or
     /// empty = every enabled source. A set but unreadable file fails closed.
     pub source_allowlist: Option<String>,
+    /// `vcrawl run`: seconds a SIGTERM leaves the roles to finish (in-flight fetches end, the
+    /// spool is flushed, leases are released) before the rest is aborted (25; compose's
+    /// `stop_grace_period` is 30 s).
+    pub shutdown_grace_s: u64,
+    /// `vcrawl run`: size of the one shared Postgres pool; 0 = the sum of the chosen roles'
+    /// needs (`vcrawl::run::pool_size`).
+    pub run_pool_max: u32,
 }
 
 impl Default for VcrawlConfig {
@@ -57,6 +64,8 @@ impl Default for VcrawlConfig {
             recrawl_default_s: 7 * 24 * 3600,
             health_timeout_s: 5,
             source_allowlist: None,
+            shutdown_grace_s: 25,
+            run_pool_max: 0,
         }
     }
 }

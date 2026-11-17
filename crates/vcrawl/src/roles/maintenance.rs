@@ -32,7 +32,7 @@ use serde::Serialize;
 use sqlx::PgPool;
 use vc_core::store::BlobStore;
 use vc_core::{Clock, SystemClock};
-use vc_obs::{HeartbeatWriter, Metrics, ProgressTracker};
+use vc_obs::Metrics;
 
 use vc_core::policy::Policy;
 
@@ -670,52 +670,23 @@ SELECT jsonb_build_object(
   'dead_work', (SELECT count(*) FROM work_items WHERE state = 'dead'))
 FROM b";
 
-/// Runs the `maintenance` role until SIGTERM / Ctrl-C.
+/// Runs the `maintenance` role until SIGTERM / Ctrl-C (or `vcrawl run`'s shutdown).
 pub async fn run(ctx: Ctx) -> anyhow::Result<()> {
     let cfg = ctx.cfg.clone();
-    if let Err(e) = vc_obs::init_tracing(&cfg.obs, "maintenance") {
-        eprintln!("maintenance: tracing not installed: {e}");
-    }
-    let pool = crate::wiring::db::ops_pool(&cfg, 4).await?;
+    crate::wiring::obs::init_tracing(&ctx, "maintenance");
+    // Its own small pool, unless the process already has one (`vcrawl run`, tests).
+    let pool = match ctx.pool_if_set() {
+        Some(p) => p,
+        None => crate::wiring::db::ops_pool(&cfg, 4).await?,
+    };
     let store = vc_store::blob_store_from_config(&cfg.store).await?;
     let clock: Arc<dyn Clock> = Arc::new(SystemClock);
-    let metrics = Arc::new(Metrics::new(
-        clock.clone(),
-        vc_obs::heartbeat_freshness(&cfg.obs),
-    ));
-    let tracker = Arc::new(ProgressTracker::new(
-        clock.clone(),
-        StdDuration::from_secs(cfg.obs.progress_window_s.max(60)),
-    ));
-    let mut tasks = Vec::new();
-    if let Some(l) = vc_obs::bind_metrics(&cfg.obs).await? {
-        tasks.push(tokio::spawn({
-            let (m, t) = (metrics.clone(), tracker.clone());
-            async move {
-                let _ = vc_obs::server::serve(l, m, t).await;
-            }
-        }));
-    }
-    let instance = cfg
-        .vcrawl
-        .instance
-        .clone()
-        .or_else(|| std::env::var("HOSTNAME").ok())
-        .unwrap_or_else(|| "maintenance".into());
-    let hb = HeartbeatWriter::new(
-        pool.clone(),
-        "maintenance",
-        &instance,
-        tracker.clone(),
-        metrics.clone(),
-    );
-    tasks.push(tokio::spawn(
-        hb.run(StdDuration::from_secs(cfg.obs.heartbeat_s.max(1))),
-    ));
+    let (metrics, tracker) = (ctx.metrics.clone(), ctx.tracker.clone());
+    let _obs = crate::wiring::obs::start(&ctx, "maintenance", pool.clone()).await?;
     // Alert gauges from Postgres + the hourly stale LLM settle (crate::obs_jobs)
-    tasks.push(tokio::spawn(
+    let ops = tokio::spawn(
         crate::obs_jobs::OpsJobs::new(pool.clone(), metrics.clone(), &cfg, clock.clone()).run(),
-    ));
+    );
     let agentic = agentic_from_config(&cfg, &pool, &store).await?;
     let m = Maintenance {
         pool,
@@ -726,6 +697,7 @@ pub async fn run(ctx: Ctx) -> anyhow::Result<()> {
         ephemeral_days: cfg.store.ephemeral_days,
     };
     let mut sched = Schedule::default();
+    let mut stop = ctx.stop();
     let mut tick = tokio::time::interval(StdDuration::from_secs(60));
     tick.set_missed_tick_behavior(tokio::time::MissedTickBehavior::Delay);
     tracing::info!("maintenance: started");
@@ -736,12 +708,10 @@ pub async fn run(ctx: Ctx) -> anyhow::Result<()> {
                 let ran = m.tick(&mut sched, clock.now()).await;
                 tracker.record_progress(ran.len().max(1) as u64);
             }
-            r = shutdown() => break r,
+            _ = async { let _ = stop.wait_for(|s| *s).await; } => break Ok(()),
         }
     };
-    for t in tasks {
-        t.abort();
-    }
+    ops.abort();
     tracing::info!("maintenance: stopped");
     res
 }
@@ -788,20 +758,5 @@ impl vc_core::llm::LlmClient for DisabledLlm {
         _req: vc_core::llm::LlmRequest,
     ) -> vc_core::Result<vc_core::llm::LlmResponse> {
         Err(vc_core::llm::LlmError::Disabled.into())
-    }
-}
-
-async fn shutdown() -> anyhow::Result<()> {
-    #[cfg(unix)]
-    {
-        let mut term = tokio::signal::unix::signal(tokio::signal::unix::SignalKind::terminate())?;
-        tokio::select! {
-            _ = term.recv() => Ok(()),
-            r = tokio::signal::ctrl_c() => Ok(r?),
-        }
-    }
-    #[cfg(not(unix))]
-    {
-        Ok(tokio::signal::ctrl_c().await?)
     }
 }

@@ -16,7 +16,7 @@ use vc_core::extract::PlaceResolver;
 use vc_index::QueryEmbedder;
 
 use crate::Ctx;
-use crate::data::{api, embed, shutdown};
+use crate::data::{api, embed};
 use crate::wiring;
 
 /// Runs the `api` role until shutdown.
@@ -55,7 +55,11 @@ pub async fn run_with_tls_dir(ctx: Ctx, dir: &Path) -> anyhow::Result<()> {
         None
     };
     let state = api::state(pool, cfg.api.clone(), cfg.index.clone(), places, qe);
-    vc_api::tls::serve(state, tls, shutdown::signal())
+    let mut stop = ctx.stop();
+    let stopped = async move {
+        let _ = stop.wait_for(|s| *s).await;
+    };
+    vc_api::tls::serve(state, tls, stopped)
         .await
         .context("api server")
 }

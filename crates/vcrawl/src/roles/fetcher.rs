@@ -86,13 +86,7 @@ pub async fn run(ctx: Ctx) -> anyhow::Result<()> {
     let parts = FetcherParts::from_ctx(&ctx, pool.clone()).await?;
     let fetcher = Arc::new(Fetcher::new(parts));
     let _obs = wiring::obs::start(&ctx, "fetcher", pool).await?;
-    let (tx, rx) = watch::channel(false);
-    tokio::spawn(async move {
-        shutdown_signal().await;
-        tracing::info!("fetcher: shutting down");
-        let _ = tx.send(true);
-    });
-    fetcher.run_until(rx).await?;
+    fetcher.run_until(ctx.stop()).await?;
     Ok(())
 }
 
@@ -359,6 +353,9 @@ pub struct Fetcher {
     quarantined_seen: std::sync::atomic::AtomicU64,
     /// `vcrawl.source_allowlist` (`None`: every source).
     allowlist: Option<SourceAllowlist>,
+    /// Set on shutdown: a claim in progress stops before its next request (no new pacing
+    /// wait starts) and is completed with the rest `NotAttempted`, which releases the lease.
+    stopping: watch::Sender<bool>,
 }
 
 /// Takes the exclusive lock of a spool dir (`None`: held by a live fetcher, or unavailable).
@@ -445,6 +442,41 @@ impl Fetcher {
             last_sweep: std::sync::Mutex::new(None),
             quarantined_seen: std::sync::atomic::AtomicU64::new(0),
             allowlist,
+            stopping: watch::channel(false).0,
+        }
+    }
+
+    /// Asks every claim in progress to stop before its next request ([`Fetcher::run_until`]
+    /// does this when its shutdown flag flips). Requests already sent finish and are spooled.
+    pub fn request_stop(&self) {
+        self.stopping.send_replace(true);
+    }
+
+    fn is_stopping(&self) -> bool {
+        *self.stopping.borrow()
+    }
+
+    /// Waits out the key's pacing before the next request of a claim. `true` when shutdown
+    /// came first (the request is not made). A wait the lease cannot cover is left to the
+    /// permit client, which refuses it at once.
+    async fn pace_or_stop(&self, p: &ClaimPermit) -> bool {
+        let mut stop = self.stopping.subscribe();
+        if *stop.borrow() {
+            return true;
+        }
+        let Some(end) = p.last_request_end() else {
+            return false;
+        };
+        let wait = p.delay().saturating_sub(end.elapsed());
+        if wait.is_zero() || wait >= p.remaining(self.p.clock.now()) {
+            return false;
+        }
+        let stopped = async move {
+            let _ = stop.wait_for(|s| *s).await;
+        };
+        tokio::select! {
+            _ = tokio::time::sleep(wait) => self.is_stopping(),
+            _ = stopped => true,
         }
     }
 
@@ -544,6 +576,16 @@ impl Fetcher {
     /// Replays the spool on start, then runs the workers and the roller until `shutdown` turns
     /// true; flushes the spool on the way out.
     pub async fn run_until(self: &Arc<Self>, shutdown: watch::Receiver<bool>) -> Result<()> {
+        let forward = {
+            let me = self.clone();
+            let mut s = shutdown.clone();
+            tokio::spawn(async move {
+                if s.wait_for(|v| *v).await.is_ok() {
+                    tracing::info!("fetcher: shutting down");
+                    me.request_stop();
+                }
+            })
+        };
         if let Err(e) = self.tick_roller().await {
             tracing::warn!(error_class = ?e.class(), error = %e, "fetcher: spool replay failed");
         }
@@ -592,6 +634,7 @@ impl Fetcher {
             let _ = w.await;
         }
         let _ = roller.await;
+        forward.abort();
         self.p.roller.flush().await.map(|_| ())
     }
 
@@ -706,6 +749,10 @@ impl Fetcher {
             }
         }
         for origin in &robots_due {
+            if self.pace_or_stop(&permit).await {
+                run.stop = true;
+                break;
+            }
             match self.refresh_robots(&mut run, origin).await {
                 Ok(()) => {}
                 Err(Error::LeaseLost(_)) => run.stop = true,
@@ -716,7 +763,7 @@ impl Fetcher {
             }
         }
         for u in &urls {
-            if run.stop || self.p.raw_bytes.exhausted().await? {
+            if run.stop || self.p.raw_bytes.exhausted().await? || self.pace_or_stop(&permit).await {
                 break;
             }
             match self.fetch_one(&mut run, u).await {
