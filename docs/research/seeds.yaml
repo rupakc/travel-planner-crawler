@@ -570,7 +570,7 @@ seeds:
     cadence: "daily"
     needs_key: false
     allowed: true
-    notes: "timed out to honest UA 2026-11-15; retry politely, never evade"
+    notes: "timed out to honest UA 2026-11-15; robots.txt timed out again from two networks 2026-11-17, which the crawler treats as unavailable (disallow): nothing is fetched until it answers; retry politely, never evade"
   - id: passport-index-dataset
     category: "visa"
     name: "ilyankou/passport-index-dataset"
@@ -3095,3 +3095,38 @@ seeds:
     allowed: true
     notes: 'Site terms: ''shall not use any automated means (e.g., scraping, robots...)'' except its Data
       Applications; robots blocks every major AI bot.'
+  # --- Travel safety / scam avoidance (owner request, vetted 2026-11-17) ------------------
+  - id: travelerset-scams
+    category: tips
+    name: Travelerset common travel scams
+    url: https://travelerset.com/blog/common-travel-scams-and-how-to-avoid-them
+    method: html
+    license: copyright; robots allows
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'robots.txt (2026-11-17): 200, * allowed; blocks AI bots, so the AI reservation applies (title
+      and link only, no LLM). Terms: "Do not ... scrape it at a rate that degrades it for others"; no
+      republishing whole articles (facts_only).'
+  - id: avoidtravelscam
+    category: tips
+    name: AvoidTravelScam.com guides
+    url: https://avoidtravelscam.com/resources/
+    method: html
+    license: copyright; robots allows
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'robots.txt (2026-11-17) allows *; terms https://avoidtravelscam.com/terms/ have no scraping or
+      AI clause.'
+  - id: twopassportspacked-scams
+    category: tips
+    name: Two Passports Packed common travel scams
+    url: https://twopassportspacked.com/common-travel-scams/
+    method: html
+    license: copyright; robots allows
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'robots.txt (2026-11-17) allows *; terms https://twopassportspacked.com/terms-of-use/ have no
+      scraping ban. Flat /<slug>/ URLs with no scam/safety section, so the seed page only (depth 0).'

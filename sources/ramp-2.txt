@@ -104,3 +104,8 @@ visitnamibia               # places: Namibia Tourism Board (sitemap, facts only,
 visitdubai                 # events/places/itinerary: Visit Dubai (DET) (sitemap, facts only, weekly, <= 300/day; terms owner-accepted)
 visitseoul                 # activities/places: Visit Seoul (sitemap, facts only, weekly, <= 300/day; terms owner-accepted)
 destinationcanada          # activities/itinerary: Destination Canada (sitemap, facts only, weekly, <= 300/day; terms owner-accepted)
+
+# --- scam safety (2026-11-17) ---
+travelerset-scams          # tips: Travelerset common travel scams (html, facts only, monthly, <= 30/day; robots reserves AI use: title and link only)
+avoidtravelscam            # tips: AvoidTravelScam.com scam guides (html, facts only, monthly, <= 50/day)
+twopassportspacked-scams   # tips: Two Passports Packed common travel scams, seed page only (html, facts only, monthly, <= 10/day)

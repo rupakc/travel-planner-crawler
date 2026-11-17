@@ -2213,6 +2213,53 @@ _src(
 )
 
 
+# ---------------------------------------------------------------------------------------
+# Travel safety / scam avoidance (owner request; vetted 2026-11-17 with VoyagerBot's UA).
+# Editorial pages, facts only, one page deep at most, inside their article/guide section.
+# ---------------------------------------------------------------------------------------
+_SCAMS_WHY = "Common travel scams and safety advice for the Travel tips section."
+_src(
+    'travelerset-scams',
+    ['tips'],
+    _SCAMS_WHY,
+    cls='editorial',
+    kinds=['tip'],
+    llm=['tip'],
+    depth=1,
+    budget=30,
+    delay=10,
+    include=[r'^https://travelerset\.com/blog/'],
+)
+_src(
+    'avoidtravelscam',
+    ['tips'],
+    _SCAMS_WHY,
+    cls='editorial',
+    kinds=['tip'],
+    llm=['tip'],
+    depth=1,
+    budget=50,
+    seeds=['https://avoidtravelscam.com/scams/'],
+    include=[r'^https://avoidtravelscam\.com/(?:scams|resources|destinations|blog)/'],
+    exclude=[r'^https://avoidtravelscam\.com/blog/report-travel-scams/'],
+)
+_src(
+    'twopassportspacked-scams',
+    ['tips'],
+    _SCAMS_WHY,
+    cls='editorial',
+    kinds=['tip'],
+    llm=['tip'],
+    depth=0,
+    budget=10,
+)
+# Smartraveller's scam-safety article. An include would narrow the whole source's crawl, so
+# it is an extra seed only.
+EXTRA_SEEDS["smartraveller"] = [
+    "https://www.smartraveller.gov.au/news-and-updates/stop-check-protect-and-keep-scammers-out-your-travel-plans",
+]
+
+
 METHODS = {"html", "rss", "sitemap", "api", "dump"}
 
 

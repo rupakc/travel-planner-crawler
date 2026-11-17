@@ -400,6 +400,10 @@ BATCH2_DENIED = [
     "https://www.iata.org/en/", "https://www.mea.gov.in/", "https://www.exteriores.gob.es/",
     "https://download.gtfs.de/germany/fv_free/latest.zip", "https://static.data.gov.hk/td/x.zip",
     "https://www.ireland.ie/en/", "https://www.transportation.gov/", "https://whatson.cityofsydney.nsw.gov.au/",
+    # scam-safety research 2026-11-17: 403 to an honest bot
+    "https://www.worldpackers.com/articles/travel-scams", "https://www.moneycrashers.com/travel-scams/",
+    "https://www.eurochange.co.uk/travel-money/guides", "https://travelersunited.org/",
+    "https://consumer.ftc.gov/articles/travel-scams",
 ]
 
 # Hosts the crawler uses (or will use) that no denylist entry may catch.
@@ -416,6 +420,12 @@ APPROVED = [
     "https://www.gaultmillau.com/", "https://data.gov.hk/en-data/", "https://gtfs.de/", "https://smartraveller.gov.au/",
     "https://wwwnc.cdc.gov/travel", "https://www.iatatravelcentre.com.example/", "https://chile.travel/",
     "https://www.spain.info/en/", "https://www.australia.com/en/", "https://freewalkingtour.com/",
+    # scam-safety sources (2026-11-17) and ftc.gov outside consumer.ftc.gov
+    "https://travelerset.com/blog/common-travel-scams-and-how-to-avoid-them",
+    "https://avoidtravelscam.com/resources/", "https://avoidtravelscam.com/scams/",
+    "https://twopassportspacked.com/common-travel-scams/",
+    "https://www.smartraveller.gov.au/news-and-updates/stop-check-protect-and-keep-scammers-out-your-travel-plans",
+    "https://www.ftc.gov/", "https://ftc.gov/", "https://reportfraud.ftc.gov/",
 ]
 
 
@@ -529,3 +539,18 @@ def test_ramp_2_extends_ramp_1_with_enabled_runnable_sources():
     # Every source this batch enables is in ramp-2.
     on = {sid for sid in s2s.SOURCE_CLASS if committed[sid]["enabled"]}
     assert on <= set(r2), sorted(on - set(r2))
+
+
+def test_scam_safety_sources(generated):
+    for sid in ("travelerset-scams", "avoidtravelscam", "twopassportspacked-scams"):
+        spec = generated[sid]
+        assert spec["enabled"] and spec["method"] == "html" and spec["category"] == "tips", sid
+        assert spec["licence"]["class"] == "facts_only" and spec["source_class"] == "editorial", sid
+        assert spec["cadence"] == "monthly" and spec["daily_budget"] <= 50, sid
+        assert spec["max_depth"] <= 1 and spec["relevance"]["sections"] == ["tips"], sid
+        if spec["max_depth"] > 0:
+            assert spec["include"], f"{sid}: a depth-1 source must pin its article section"
+    assert generated["twopassportspacked-scams"]["max_depth"] == 0
+    sr = generated["smartraveller"]
+    assert any("scammers" in u for u in sr["seeds"]) and not sr["include"]
+    assert "two networks 2026-11-17" in sr["notes"]
