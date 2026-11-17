@@ -136,3 +136,15 @@ plan = `docs/superpowers/plans/2026-11-15-voyager-crawler.md`, r1–r5 = `docs/r
   (its robots.txt times out = disallow until it answers). worldpackers, moneycrashers,
   eurochange, travelersunited and consumer.ftc.gov (exact host, not ftc.gov) denylisted for
   403s. (scripts/seeds_to_sources.py "Travel safety", policy/denylist.yaml)
+- 2026-11-18: open-data adapters. New kinds `public_holiday` (record) and `price_level`
+  (observation, series `price_level:<ISO2>:<category>:<basis>`, basis `eu27_2020_100` or
+  `us_1`, observed at `<year>-01-01`). Adapters: `openholidays` (/Countries → Public/School
+  holidays per country, this year + next), `json_events` (one generic paged-JSON event adapter:
+  per-endpoint field mappings in `MAPPINGS`, Socrata offset or page-number paging, resumable),
+  `eurostat_jsonstat` (JSON-stat 2.0, PLI_EU27_2020), `wdi_csv` (streams WDI_CSV.zip; new
+  streaming ZIP member reader in dump.rs, `zip_stream.rs`). On: openholidays, nyc-parks-events,
+  stockholm-open-api (keyless www.visitstockholm.com/api/public-v1/events/), eurostat-prices,
+  worldbank-wdi-bulk; listed in sources/ramp-3.txt (prod stays on ramp-2 until the owner
+  switches). Off with reasons: bcn (robots disallows /data/api*), madrid (robots disallows the
+  CKAN downloads), toronto (dataset retired), taiwan (data.gov.tw robots 500), datagovhk (LCSD
+  XML on another host). (crates/vc-sources/src/adapters/, scripts/seeds_to_sources.py)

@@ -38,6 +38,7 @@ KINDS = {
     "advisory", "sim_offer", "transport_option", "emergency_numbers", "fx_rate",
     "weather_normal", "tip", "packing_hint", "article", "qa_thread", "airport", "route",
     "cheapest_fare",  # observation series fare:<ORIG>:<DEST>:<YYYY-MM> (added 2026-11-17)
+    "public_holiday", "price_level",  # added 2026-11-18 with the open-data adapters
 }
 
 
@@ -348,6 +349,12 @@ ADAPTERS = {
     "ourairports": "ourairports_csv",
     "se-dump": "se_travel_dump",
     "travelpayouts": "travelpayouts_fares",
+    # Open-data adapters (2026-11-18).
+    "openholidays": "openholidays",
+    "nyc-parks-events": "json_events",
+    "stockholm-open-api": "json_events",
+    "eurostat-prices": "eurostat_jsonstat",
+    "worldbank-wdi-bulk": "wdi_csv",
 }
 
 # Template URLs in seeds.yaml -> a concrete, fetchable entry URL (template kept in notes).
@@ -677,8 +684,9 @@ MAX_RETENTION_DAYS = {
 #   "licence: ..."                 licence class not settled
 #   "robots.txt ..."               robots.txt answers 401/403/5xx, redirects or times out
 #   "owner decision: ..."          the owner must decide (sg-customs-travellers)
-# Kinds: customs rules map to tip/packing_hint, hospitals to place, public holidays to event
-# and country price indicators to tip (no new kinds; all such sources are off for now).
+# Kinds: customs rules map to tip/packing_hint, hospitals to place. Since 2026-11-18 public
+# holidays have their own `public_holiday` kind and country price indicators `price_level`
+# (observations), and five keyless api/dump sources run on the open-data adapters (ADAPTERS).
 # ---------------------------------------------------------------------------------------
 EXTRA_SEEDS: dict[str, list[str]] = {}
 EXTRA_FEEDS: dict[str, list[str]] = {}
@@ -1328,8 +1336,7 @@ _src(
     ['tips', 'itinerary'],
     'Official relative price levels for restaurants and hotels, food and transport per European country, for Travel tips cost guidance and itinerary budgets.',
     cls='official',
-    kinds=['tip'],
-    off='adapter pending: Eurostat JSON-stat reader; country indicators map to the tip kind until a country_indicator kind exists',
+    kinds=['price_level'],
     attribution='Source: Eurostat',
 )
 _src(
@@ -1337,8 +1344,7 @@ _src(
     ['tips', 'itinerary'],
     'Price level ratio and purchasing-power parity for every country, for Travel tips cost guidance and itinerary budgets.',
     cls='official',
-    kinds=['tip'],
-    off='adapter pending: WDI CSV zip filter (PA.NUS.PPPC.RF and PPP rows); verify the download URL first',
+    kinds=['price_level'],
     attribution='The World Bank, World Development Indicators, CC BY 4.0',
 )
 _src(
@@ -1347,7 +1353,7 @@ _src(
     'Official opening hours and admission of Hong Kong museums and attractions, plus cultural programmes and major events, for Places to see and Events.',
     cls='official',
     kinds=['attraction', 'event'],
-    off='adapter pending: DATA.GOV.HK CKAN dataset reader (pick LCSD museum and facility hours, LCSD programmes, HKTB events)',
+    off='adapter pending: the LCSD cultural programme data are three linked XML tables (events, dates, venues; data dictionary www.lcsd.gov.hk/datagovhk/event/data_dictionary.pdf) served from www.lcsd.gov.hk, not data.gov.hk; needs a per-dataset XML join reader and a robots.txt check of www.lcsd.gov.hk (json_events reads JSON lists only; checked 2026-11-18)',
 )
 _src(
     'auswaertiges-amt-opendata',
@@ -1389,7 +1395,7 @@ _src(
     "Barcelona city council's cultural and leisure agenda, for the Events section.",
     cls='official',
     kinds=['event'],
-    off='adapter pending: CKAN package_show reader (resolve the resource URL, then a JSON/CSV event reader); confirm the package id',
+    off='robots.txt of opendata-ajuntament.barcelona.cat disallows /data/api* and /*?* for * (re-checked 2026-11-18): no allowed route to the CKAN API or its resources; re-check before writing a mapping',
     delay=10,
 )
 _src(
@@ -1398,7 +1404,7 @@ _src(
     'Free and municipal cultural events in Madrid for the Events section.',
     cls='official',
     kinds=['event'],
-    off='adapter pending: Madrid agenda JSON reader',
+    off='robots.txt of datos.madrid.es (the portal moved to CKAN) disallows /api/, /dataset/*/resource/* and /resource/* for * (checked 2026-11-18), so the dataset files cannot be fetched; the legacy /egob/catalogo/ JSON path is not disallowed, but the dataset page no longer lists it: re-check the file URL first, then add a json_events mapping for its @graph items',
     delay=10,
     attribution='Origen de los datos: Ayuntamiento de Madrid',
 )
@@ -1408,7 +1414,7 @@ _src(
     'Festivals and events listed by the City of Toronto, for the Events section.',
     cls='official',
     kinds=['event'],
-    off='adapter pending: CKAN package_show reader (resolve the resource URL, then a JSON/CSV event reader); confirm the package is still live',
+    off='dataset retired: open.toronto.ca lists festivals-events as Retired with no resources (checked 2026-11-18); nothing to read until the City republishes it',
     attribution='Contains information licensed under the Open Government Licence – Toronto',
 )
 _src(
@@ -1417,7 +1423,6 @@ _src(
     'Free events in New York City parks (tours, concerts, festivals) for Events and Activities.',
     cls='official',
     kinds=['event'],
-    off='adapter pending: Socrata SODA reader; confirm the dataset id',
 )
 _src(
     'korea-tourapi',
@@ -1434,7 +1439,7 @@ _src(
     'Every Taiwanese tourism event, listed restaurant and scenic spot, for Events, Activities and Places to see.',
     cls='official',
     kinds=['event', 'place', 'attraction'],
-    off='adapter pending: Taiwan tourism JSON dump reader; verify the file names on data.gov.tw',
+    off='robots.txt of data.gov.tw answers 500 again (re-checked 2026-11-18): disallowed until readable, so the file names cannot be verified there (media.taiwan.net.tw, robots 404, serves the files); also adapter pending: a json_events mapping for XML_Head/Infos/Info (Chinese names; a Region to English city table)',
     seeds=['https://media.taiwan.net.tw/XMLReleaseALL_public/restaurant_C_f.json', 'https://media.taiwan.net.tw/XMLReleaseALL_public/scenic_spot_C_f.json'],
 )
 _src(
@@ -1474,9 +1479,7 @@ _src(
     ['events', 'tips'],
     'Public and school holidays by region for about 36 countries (crowds and closures), for Events and Travel tips.',
     cls='reference',
-    kinds=['event'],
-    off='adapter pending: OpenHolidays per-country reader (needs countryIsoCode and date-range parameters); public holidays map to the event kind; licence: ODbL is reported, not stated on the site',
-    seeds=['https://openholidaysapi.org/SchoolHolidays', 'https://openholidaysapi.org/Subdivisions'],
+    kinds=['public_holiday'],
     attribution='OpenHolidays API, ODbL 1.0',
 )
 _src(
@@ -1484,8 +1487,7 @@ _src(
     ['events', 'activities', 'itinerary'],
     'Official Stockholm events, curated guides and activities for Events, Activities and the itinerary.',
     cls='official',
-    kinds=['event', 'activity', 'attraction'],
-    off='adapter pending: Visit Stockholm API reader (events, guides, activities)',
+    kinds=['event'],
     attribution='Stockholm Business Region AB, CC BY 4.0',
 )
 _src(

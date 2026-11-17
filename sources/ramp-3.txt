@@ -1,0 +1,112 @@
+# Go-live ramp, step 3 (2026-11-18): ramp-2 plus the five keyless api/dump sources that run
+# on the open-data adapters (openholidays, json_events, eurostat_jsonstat, wdi_csv). Not live
+# until the owner switches the allowlist with
+# VC_VCRAWL_SOURCE_ALLOWLIST=/app/sources/ramp-3.txt (see ramp-1.txt and go-live.md §6, §11).
+#
+# Format: one source id per line (= sources/<id>.yaml); `#` starts a comment.
+# Every id here must exist and be enabled (scripts/tests check it).
+
+# --- ramp-1 ---
+ecb-eurofxref              # forex: one small XML a day from the ECB, free reuse with attribution; exercises the ecb_fx dump adapter
+canada-travel-json         # visa/advisory/emergency: one official Global Affairs Canada JSON a day (OGL-Canada); canada_advisories adapter
+state-dept-advisories-api  # advisory: one public-domain JSON array of every US advisory every 6 h; state_dept_advisories adapter
+fcdo-atom                  # advisory: GOV.UK's hourly Atom change feed (OGL v3), built for polling; key www.gov.uk
+fcdo-content-api           # visa/advisory/emergency: GOV.UK Content API, one JSON per country (OGL v3), driven by the Atom feed; same key
+cdc-travel                 # tips/packing: CDC destination pages (public domain), weekly; robots Crawl-delay 20 tests delay handling
+ourairports                # airports: one public-domain CSV a week from GitHub Pages; ourairports_csv adapter
+wikivoyage-dump            # places/activities/tips: the monthly Wikivoyage dump (CC BY-SA, share_alike path): a few requests a month, in the 02-05 UTC dump window
+
+# --- batch 2 ---
+eu-etias-ees               # visa: EU ETIAS and EES official site (html, open licence, weekly, <= 100/day)
+eu-home-visa-policy        # visa: EU DG HOME visa policy (Schengen lists) (sitemap, open licence, weekly, <= 300/day)
+ircc-entry-requirements    # visa: IRCC entry requirements by country (Canada) (html, facts only, weekly, <= 100/day)
+india-evisa                # visa: Indian e-Visa (eligible countries and types) (html, facts only, monthly, <= 100/day; terms owner-accepted)
+nia-china-visa-free        # visa: China NIA visa-free transit and entry (html, facts only, weekly, <= 100/day; terms owner-accepted)
+uae-visa-uae               # visa: UAE government portal: visas (html, facts only, monthly, <= 100/day; terms owner-accepted)
+thai-evisa                 # visa: Thailand e-Visa (sitemap, facts only, monthly, <= 100/day; terms owner-accepted)
+korea-keta                 # visa: Korea K-ETA (eligible countries) (html, facts only, monthly, <= 100/day; terms owner-accepted)
+korea-visa-portal          # visa: Korea Visa Portal (visa-free entry) (html, facts only, monthly, <= 100/day; terms owner-accepted)
+nz-immigration             # visa: Immigration New Zealand (NZeTA, visa waiver) (sitemap, open licence, weekly, <= 300/day)
+cbp-travel                 # visa/tips/packing: US CBP travel (Visa Waiver Program, ESTA, customs) (html, open licence, weekly, <= 300/day)
+brazil-mre-visas           # visa: Brazil MRE visa regime table (html, facts only, monthly, <= 100/day; terms owner-accepted)
+vietnam-evisa              # visa: Vietnam e-Visa (sitemap, facts only, monthly, <= 100/day; terms owner-accepted)
+malaysia-imi-visa          # visa: Malaysia Immigration: visa requirement by country (html, facts only, monthly, <= 100/day; terms owner-accepted)
+eu-customs-travellers      # tips/packing: EU Taxation and Customs Union: travellers (sitemap, open licence, monthly, <= 200/day)
+eu-food-pets-travel        # tips/packing: EU DG SANTE: pets and personal food imports (sitemap, open licence, monthly, <= 150/day)
+govuk-customs              # tips/packing: GOV.UK: bringing goods, cash, food and pets into the UK (html, open licence, weekly, <= 100/day)
+aphis-pet-travel           # tips/packing: USDA APHIS Pet Travel (html, open licence, monthly, <= 200/day)
+abf-travellers             # tips/packing: Australian Border Force: travellers (html, facts only, monthly, <= 150/day; terms owner-accepted)
+cbsa-travellers            # tips/packing: CBSA (Canada): travellers (html, facts only, monthly, <= 150/day)
+cfia-travellers            # tips/packing: CFIA (Canada): food, plants and pets for travellers (html, facts only, monthly, <= 100/day)
+japan-customs-passengers   # tips/packing: Japan Customs: passengers (sitemap, open licence, monthly, <= 150/day)
+japan-maff-aqs             # tips/packing: MAFF Animal Quarantine Service (Japan) (html, open licence, monthly, <= 150/day)
+sg-customs-travellers      # tips/packing: Singapore Customs: travellers (sitemap, facts only, monthly, <= 100/day; terms owner-accepted)
+dubai-customs-passengers   # tips/packing: Dubai Customs: passengers (html, facts only, monthly, <= 100/day; terms owner-accepted)
+cbic-baggage               # tips/packing: CBIC (India): baggage and travellers (sitemap, facts only, monthly, <= 100/day; terms owner-accepted)
+nz-customs-travellers      # tips/packing: New Zealand Customs: travellers (sitemap, facts only, monthly, <= 150/day; terms owner-accepted)
+hk-customs-travellers      # tips/packing: Hong Kong Customs: travellers (html, facts only, monthly, <= 100/day; terms owner-accepted)
+korea-customs-travellers   # tips/packing: Korea Customs Service: travellers (html, facts only, monthly, <= 100/day; terms owner-accepted)
+mfat-embassies             # emergency_card: NZ MFAT embassies and high commissions (html, open licence, quarterly, <= 300/day)
+freewalkingtour-com        # walking_tours: FreeWalkingTour.com (Walkative) (sitemap, facts only, monthly, <= 300/day)
+neweuropetours             # walking_tours: SANDEMANs NEW Europe (sitemap, facts only, monthly, <= 200/day)
+nps-site                   # places/activities/itinerary: US National Park Service (nps.gov) (sitemap, open licence, weekly, <= 500/day)
+visitscotland              # itinerary/activities/events: VisitScotland (sitemap, facts only, weekly, <= 300/day)
+visitgreece                # itinerary/events/activities: Visit Greece (GNTO) (sitemap, facts only, weekly, <= 300/day)
+visitcalifornia            # itinerary/activities/events: Visit California (sitemap, facts only, weekly, <= 300/day)
+nyctourism                 # events/activities/itinerary: New York City Tourism + Conventions (sitemap, facts only, weekly, <= 300/day)
+wien-info                  # events/activities/itinerary: WienTourismus (Vienna Tourist Board) (sitemap, facts only, weekly, <= 300/day)
+visitqatar                 # events/activities/itinerary: Visit Qatar (Qatar Tourism) (sitemap, facts only, weekly, <= 300/day)
+gotokyo                    # places/events/activities: GO TOKYO (Tokyo Convention & Visitors Bureau) (sitemap, facts only, weekly, <= 300/day)
+australia-com              # itinerary/places/activities: Tourism Australia (australia.com) (sitemap, facts only, weekly, <= 300/day)
+france-fr                  # itinerary/places/activities: France.fr (Atout France) (sitemap, facts only, weekly, <= 300/day)
+gaultmillau                # activities/places: Gault&Millau (sitemap, facts only, weekly, <= 300/day)
+discoverireland            # events/activities/itinerary: Discover Ireland (Fáilte Ireland) (sitemap, facts only, weekly, <= 300/day)
+iamsterdam                 # events/activities/places: I amsterdam (amsterdam&partners) (sitemap, facts only, daily, <= 300/day)
+incredibleindia            # places/itinerary/events: Incredible India (Ministry of Tourism) (sitemap, facts only, monthly, <= 300/day)
+melbourne-whatson          # events/activities: What's On Melbourne (City of Melbourne) (sitemap, facts only, daily, <= 300/day)
+spain-info                 # itinerary/events/activities: Spain.info (Turespaña) (sitemap, facts only, weekly, <= 300/day)
+experienceoman             # places/activities/itinerary: Experience Oman (Ministry of Heritage & Tourism) (sitemap, facts only, monthly, <= 300/day)
+argentina-travel           # places/activities/itinerary: Argentina.travel (INPROTUR) (html, facts only, monthly, <= 300/day)
+visitlisboa                # events/itinerary/activities: Visit Lisboa (Turismo de Lisboa) (html, facts only, daily, <= 300/day)
+visitphilly                # events/itinerary/activities: Visit Philadelphia (html, facts only, daily, <= 300/day)
+sydney-com                 # activities/events/places: Sydney.com (Destination NSW) (sitemap, facts only, weekly, <= 300/day)
+secretldn                  # events/places: Secret London (rss, facts only, h12, <= 50/day; terms owner-accepted)
+worlds50best               # activities: The World's 50 Best (restaurants, bars, hotels) (html, facts only, weekly, <= 300/day; terms owner-accepted)
+laliste                    # activities: La Liste (sitemap, facts only, weekly, <= 300/day; terms owner-accepted)
+oad-guides                 # activities: OAD (Opinionated About Dining) (html, facts only, weekly, <= 300/day; terms owner-accepted)
+visitberlin                # events/places: visitBerlin (sitemap, facts only, weekly, <= 300/day; terms owner-accepted)
+discoverlosangeles         # activities/events: Discover Los Angeles (sitemap, facts only, weekly, <= 300/day; terms owner-accepted)
+chile-travel               # itinerary/events/activities: Chile Travel (Sernatur) (sitemap, facts only, weekly, <= 300/day; terms owner-accepted)
+goturkiye                  # places/itinerary/events: Go Türkiye (sitemap, facts only, weekly, <= 300/day; terms owner-accepted)
+philippines-travel         # places/activities: Philippines Department of Tourism (sitemap, facts only, weekly, <= 300/day; terms owner-accepted)
+peru-travel                # places/itinerary: PromPerú (peru.travel) (sitemap, facts only, weekly, <= 300/day; terms owner-accepted)
+srilanka-travel            # places: Sri Lanka Tourism (sitemap, facts only, weekly, <= 300/day; terms owner-accepted)
+tanzania-tourism           # places: Tanzania Tourist Board (sitemap, facts only, weekly, <= 300/day; terms owner-accepted)
+visitrwanda                # itinerary/events/places: Visit Rwanda (sitemap, facts only, weekly, <= 300/day; terms owner-accepted)
+visitsaudi                 # events/places: Visit Saudi (sitemap, facts only, weekly, <= 300/day; terms owner-accepted)
+visitjordan                # places: Visit Jordan (html, facts only, weekly, <= 300/day; terms owner-accepted)
+visiticeland               # places/activities: Visit Iceland (sitemap, facts only, weekly, <= 300/day; terms owner-accepted)
+visitdenmark               # places/itinerary: VisitDenmark (sitemap, facts only, weekly, <= 300/day; terms owner-accepted)
+visitcopenhagen            # activities/places: Visit Copenhagen (sitemap, facts only, weekly, <= 300/day; terms owner-accepted)
+visitsweden                # places/itinerary: Visit Sweden (sitemap, facts only, weekly, <= 300/day; terms owner-accepted)
+visitcostarica             # itinerary/activities: Visit Costa Rica (ICT) (sitemap, facts only, weekly, <= 300/day; terms owner-accepted)
+holland-com                # places: Holland.com (NBTC) (sitemap, facts only, weekly, <= 300/day; terms owner-accepted)
+budapestinfo               # places: Budapest Info (sitemap, facts only, weekly, <= 300/day; terms owner-accepted)
+visitabudhabi              # events/places: Visit Abu Dhabi (sitemap, facts only, weekly, <= 300/day; terms owner-accepted)
+visitmaldives              # places: Visit Maldives (html, facts only, weekly, <= 300/day; terms owner-accepted)
+visitnamibia               # places: Namibia Tourism Board (sitemap, facts only, weekly, <= 300/day; terms owner-accepted)
+visitdubai                 # events/places/itinerary: Visit Dubai (DET) (sitemap, facts only, weekly, <= 300/day; terms owner-accepted)
+visitseoul                 # activities/places: Visit Seoul (sitemap, facts only, weekly, <= 300/day; terms owner-accepted)
+destinationcanada          # activities/itinerary: Destination Canada (sitemap, facts only, weekly, <= 300/day; terms owner-accepted)
+
+# --- scam safety (2026-11-17) ---
+travelerset-scams          # tips: Travelerset common travel scams (html, facts only, monthly, <= 30/day; robots reserves AI use: title and link only)
+avoidtravelscam            # tips: AvoidTravelScam.com scam guides (html, facts only, monthly, <= 50/day)
+twopassportspacked-scams   # tips: Two Passports Packed common travel scams, seed page only (html, facts only, monthly, <= 10/day)
+
+# --- ramp-3: open-data adapters (2026-11-18) ---
+openholidays               # events/tips: public + school holidays per country, this year and next (OpenHolidays API, ODbL share_alike, monthly, ~73 requests/month); openholidays adapter -> public_holiday
+nyc-parks-events           # events: NYC Parks events dated today or later (NYC Open Data Socrata, open, daily, <= 5 pages/run); json_events adapter -> event
+stockholm-open-api         # events: Visit Stockholm public events list (CC BY 4.0, daily, ~45 pages, 5/run, resumes); json_events adapter -> event
+eurostat-prices            # tips/itinerary: Eurostat price level indices EU27_2020=100 per country and category since 2015 (CC BY 4.0, yearly, 1 request); eurostat_jsonstat -> price_level
+worldbank-wdi-bulk         # tips/itinerary: World Bank WDI price level ratio (US=1) per country since 2000 (CC BY 4.0, yearly, one ~270 MB zip streamed in the dump window); wdi_csv -> price_level

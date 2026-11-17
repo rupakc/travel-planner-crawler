@@ -1,0 +1,27 @@
+[
+ {
+  "id": "2e2c5d4e-3c0a-4a8e-9a43-0b5b9f6f0001",
+  "startDate": "2026-07-09",
+  "endDate": "2026-08-22",
+  "type": "School",
+  "name": [
+   {
+    "language": "EN",
+    "text": "Summer holidays"
+   },
+   {
+    "language": "DE",
+    "text": "Sommerferien"
+   }
+  ],
+  "nationwide": false,
+  "regionalScope": "Regional",
+  "temporalScope": "FullDay",
+  "subdivisions": [
+   {
+    "code": "DE-BE",
+    "shortName": "BE"
+   }
+  ]
+ }
+]

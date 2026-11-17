@@ -84,6 +84,8 @@ pub(crate) enum Compression {
     Gzip,
     /// bzip2 (multi-stream).
     Bzip2,
+    /// A ZIP archive: one member is read ([`DumpFilter::zip_member`]).
+    Zip,
 }
 
 impl Compression {
@@ -92,6 +94,8 @@ impl Compression {
         let p = u.as_url().path();
         if p.ends_with(".bz2") {
             Compression::Bzip2
+        } else if p.to_ascii_lowercase().ends_with(".zip") {
+            Compression::Zip
         } else if p.ends_with(".gz") {
             Compression::Gzip
         } else {
@@ -107,6 +111,7 @@ pub(crate) struct Decoder {
     bz: bzip2::Decompress,
     bz_ended: bool,
     bz_started: bool,
+    zip: Option<super::zip_stream::ZipStream>,
 }
 
 impl Decoder {
@@ -117,12 +122,26 @@ impl Decoder {
             bz: bzip2::Decompress::new(false),
             bz_ended: false,
             bz_started: false,
+            zip: None,
         }
+    }
+
+    /// A decoder that reads the member `pick` names when the dump is a ZIP archive.
+    pub(crate) fn with_zip_member(kind: Compression, pick: super::zip_stream::MemberPick) -> Self {
+        let mut d = Decoder::new(kind);
+        if kind == Compression::Zip {
+            d.zip = Some(super::zip_stream::ZipStream::new(pick));
+        }
+        d
     }
 
     pub(crate) fn push(&mut self, mut input: &[u8], out: &mut Vec<u8>) -> Result<()> {
         match self.kind {
             Compression::Identity => out.extend_from_slice(input),
+            Compression::Zip => self
+                .zip
+                .get_or_insert_with(|| super::zip_stream::ZipStream::new(&[]))
+                .push(input, out)?,
             Compression::Gzip => {
                 use std::io::Write;
                 let gz = self
@@ -169,6 +188,10 @@ impl Decoder {
     pub(crate) fn finish(&mut self, out: &mut Vec<u8>) -> Result<()> {
         match self.kind {
             Compression::Identity => Ok(()),
+            Compression::Zip => self
+                .zip
+                .get_or_insert_with(|| super::zip_stream::ZipStream::new(&[]))
+                .finish(),
             Compression::Gzip => {
                 use std::io::Write;
                 if let Some(gz) = self.gz.as_mut() {
@@ -389,6 +412,10 @@ pub(crate) trait DumpFilter: Send {
     fn output(&self) -> OutputKind;
     /// One unit in, at most one out.
     fn filter(&mut self, unit: &[u8]) -> Result<Unit>;
+    /// For a ZIP dump: the member to read (base file names; empty = the first member).
+    fn zip_member(&self) -> super::zip_stream::MemberPick {
+        &[]
+    }
 }
 
 struct Batcher {
@@ -508,7 +535,7 @@ pub(crate) async fn run_dump(
     }
 
     let mut sha = Sha256::new();
-    let mut decoder = Decoder::new(Compression::from_url(&url));
+    let mut decoder = Decoder::with_zip_member(Compression::from_url(&url), filter.zip_member());
     let mut splitter = Splitter::new(filter.split(), settings.max_unit_bytes);
     let mut batcher = Batcher {
         kind: filter.output(),

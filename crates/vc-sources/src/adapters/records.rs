@@ -22,7 +22,8 @@ use serde_json::{Map, Value, json};
 use vc_core::{CanonicalUrl, Error, Result};
 
 use super::{
-    canada_advisories, ecb_fx, fcdo_content_api, state_dept_advisories, travelpayouts_fares,
+    canada_advisories, ecb_fx, eurostat_jsonstat, fcdo_content_api, iso3, json_events,
+    openholidays, state_dept_advisories, travelpayouts_fares,
 };
 
 /// Bumped when a mapping changes (part of the extractor version string of adapter records).
@@ -45,10 +46,14 @@ pub struct AdapterItem {
 pub const MAPPED: &[&str] = &[
     "canada_advisories",
     "ecb_fx",
+    "eurostat_jsonstat",
     "fcdo_content_api",
+    "json_events",
+    "openholidays",
     "ourairports_csv",
     "state_dept_advisories",
     "travelpayouts_fares",
+    "wdi_csv",
     "wikivoyage_dump",
 ];
 
@@ -58,10 +63,14 @@ pub fn records(adapter: &str, url: &CanonicalUrl, body: &[u8]) -> Option<Result<
     Some(match adapter {
         "canada_advisories" => canada(body),
         "ecb_fx" => ecb(body),
+        "eurostat_jsonstat" => eurostat(body),
         "fcdo_content_api" => fcdo(url, body),
+        "json_events" => json_event_items(url, body),
+        "openholidays" => holidays(url, body),
         "ourairports_csv" => ourairports(body),
         "state_dept_advisories" => state_dept(body),
         "travelpayouts_fares" => travelpayouts(url, body),
+        "wdi_csv" => wdi(body),
         "wikivoyage_dump" => wikivoyage(body),
         _ => return None,
     })
@@ -406,6 +415,365 @@ fn fcdo(url: &CanonicalUrl, body: &[u8]) -> Result<Vec<AdapterItem>> {
             ),
         ]),
     }])
+}
+
+// ---------------------------------------------------------------------------------------------
+// OpenHolidays → public_holiday records
+// ---------------------------------------------------------------------------------------------
+
+/// The English text of a localized list, else the first one.
+fn english(t: &[openholidays::LocalizedText]) -> Option<String> {
+    t.iter()
+        .find(|x| x.language.eq_ignore_ascii_case("en"))
+        .or_else(|| t.first())
+        .map(|x| x.text.trim().to_string())
+        .filter(|x| !x.is_empty())
+}
+
+/// The first non-English text of a localized list.
+fn local(t: &[openholidays::LocalizedText]) -> Option<String> {
+    t.iter()
+        .find(|x| !x.language.eq_ignore_ascii_case("en"))
+        .map(|x| x.text.trim().to_string())
+        .filter(|x| !x.is_empty())
+}
+
+fn query(url: &CanonicalUrl, name: &str) -> Option<String> {
+    url.as_url()
+        .query_pairs()
+        .find(|(k, _)| k.eq_ignore_ascii_case(name))
+        .map(|(_, v)| v.into_owned())
+}
+
+fn holidays(url: &CanonicalUrl, body: &[u8]) -> Result<Vec<AdapterItem>> {
+    let path = url.as_url().path().trim_end_matches('/');
+    if !openholidays::HOLIDAY_PATHS.contains(&path) {
+        return Ok(Vec::new()); // the country list carries no holidays
+    }
+    // Holidays do not name their country: the request does.
+    let Some(code) = query(url, "countryIsoCode").as_deref().and_then(iso2) else {
+        return Err(Error::Invalid("openholidays: no countryIsoCode".into()));
+    };
+    let mut out = Vec::new();
+    for h in openholidays::parse_holidays(body)? {
+        let kind = match h.kind.as_str() {
+            "Public" => "public",
+            "Bank" => "bank",
+            "Optional" => "optional",
+            "School" => "school",
+            _ => continue, // BackToSchool / EndOfLessons: single school days, not travel-relevant
+        };
+        let (Some(start), Some(end)) = (day(&h.start_date), day(&h.end_date)) else {
+            continue;
+        };
+        let Some(name) = english(&h.name) else {
+            continue;
+        };
+        let subdivisions: Vec<Value> = h
+            .subdivisions
+            .iter()
+            .flatten()
+            .chain(h.groups.iter().flatten())
+            .filter(|r| !r.code.trim().is_empty() && r.code.len() <= 20)
+            .take(60)
+            .map(|r| {
+                obj(vec![
+                    ("code", s(r.code.clone())),
+                    ("name", s(r.short_name.clone())),
+                ])
+            })
+            .collect();
+        out.push(AdapterItem {
+            kind: "public_holiday",
+            id: Some(format!("openholidays:{}", h.id)),
+            series_key: None,
+            data: obj(vec![
+                ("name", s(name.chars().take(160).collect::<String>())),
+                (
+                    "local_name",
+                    local(&h.name).map(|n| json!(n.chars().take(160).collect::<String>())),
+                ),
+                ("type", s(kind)),
+                ("start_date", s(start)),
+                ("end_date", s(end)),
+                (
+                    "half_day",
+                    h.temporal_scope.as_deref().map(|t| json!(t == "HalfDay")),
+                ),
+                ("country_code", s(code.clone())),
+                ("nationwide", Some(json!(h.nationwide))),
+                (
+                    "regional_scope",
+                    h.regional_scope
+                        .as_deref()
+                        .map(str::to_ascii_lowercase)
+                        .filter(|r| matches!(r.as_str(), "national" | "regional" | "local"))
+                        .map(Value::String),
+                ),
+                (
+                    "subdivisions",
+                    (!subdivisions.is_empty()).then_some(Value::Array(subdivisions)),
+                ),
+                (
+                    "comment",
+                    h.comment
+                        .as_deref()
+                        .and_then(english)
+                        .map(|c| json!(c.chars().take(300).collect::<String>())),
+                ),
+            ]),
+        });
+    }
+    Ok(out)
+}
+
+// ---------------------------------------------------------------------------------------------
+// Open-data event lists → event records
+// ---------------------------------------------------------------------------------------------
+
+fn json_event_items(url: &CanonicalUrl, body: &[u8]) -> Result<Vec<AdapterItem>> {
+    let Some(m) = json_events::mapping_for(url) else {
+        return Err(Error::Invalid(
+            "json_events: no mapping for this endpoint".into(),
+        ));
+    };
+    Ok(json_events::parse(m, body)?
+        .items
+        .iter()
+        .filter_map(|it| json_events::event(m, it))
+        .map(|(id, data)| AdapterItem {
+            kind: "event",
+            id,
+            series_key: None,
+            data,
+        })
+        .collect())
+}
+
+// ---------------------------------------------------------------------------------------------
+// Price levels: Eurostat (EU27_2020 = 100) and the World Bank (US = 1) → price_level
+// ---------------------------------------------------------------------------------------------
+
+/// Voyager's spending categories, by the publisher's English label.
+const PRICE_CATEGORIES: &[(&str, &[&str])] = &[
+    ("gdp", &["gross domestic product"]),
+    (
+        "actual_individual_consumption",
+        &["actual individual consumption"],
+    ),
+    (
+        "household_consumption",
+        &["household final consumption expenditure"],
+    ),
+    (
+        "food_non_alcoholic_beverages",
+        &["food and non-alcoholic beverages"],
+    ),
+    (
+        "alcoholic_beverages_tobacco",
+        &[
+            "alcoholic beverages and tobacco",
+            "alcoholic beverages, tobacco and narcotics",
+        ],
+    ),
+    ("clothing_footwear", &["clothing and footwear"]),
+    (
+        "housing",
+        &["housing, water, electricity, gas and other fuels"],
+    ),
+    ("transport", &["transport"]),
+    (
+        "communication",
+        &[
+            "communication",
+            "communications",
+            "information and communication",
+        ],
+    ),
+    (
+        "recreation_culture",
+        &["recreation and culture", "recreation, sport and culture"],
+    ),
+    (
+        "restaurants_hotels",
+        &[
+            "restaurants and hotels",
+            "restaurants and accommodation services",
+        ],
+    ),
+];
+
+/// The category of a publisher label (exact match after case and space folding).
+pub fn price_category(label: &str) -> Option<&'static str> {
+    let l = label
+        .split_whitespace()
+        .collect::<Vec<_>>()
+        .join(" ")
+        .to_lowercase();
+    PRICE_CATEGORIES
+        .iter()
+        .find(|(_, labels)| labels.contains(&l.as_str()))
+        .map(|(c, _)| *c)
+}
+
+/// Eurostat's country codes that differ from ISO 3166-1 (Greece, United Kingdom).
+fn eurostat_country(geo: &str) -> Option<String> {
+    match geo {
+        "EL" => Some("GR".into()),
+        "UK" => Some("GB".into()),
+        g if g.len() == 2 => iso2(g),
+        _ => None, // aggregates: EU27_2020, EA20, …
+    }
+}
+
+fn price_item(
+    code: &str,
+    year: i32,
+    index: f64,
+    basis: &str,
+    category: &str,
+    extra: Vec<(&str, Option<Value>)>,
+) -> AdapterItem {
+    let mut fields = vec![
+        ("country_code", s(code)),
+        ("year", Some(json!(year))),
+        ("date", s(format!("{year:04}-01-01"))),
+        (
+            "index",
+            serde_json::Number::from_f64(index).map(Value::Number),
+        ),
+        ("basis", s(basis)),
+        ("category", s(category)),
+    ];
+    fields.extend(extra);
+    AdapterItem {
+        kind: "price_level",
+        id: Some(format!("{code}:{category}:{basis}:{year}")),
+        series_key: Some(format!("price_level:{code}:{category}:{basis}")),
+        data: obj(fields),
+    }
+}
+
+fn eurostat(body: &[u8]) -> Result<Vec<AdapterItem>> {
+    let cube = eurostat_jsonstat::parse(body)?;
+    let (Some(geo), Some(time)) = (cube.dim("geo"), cube.dim("time")) else {
+        return Err(Error::Invalid("eurostat: no geo/time dimension".into()));
+    };
+    let (na, cat) = (cube.dim("na_item"), cube.dim("ppp_cat"));
+    let as_of = cube.updated.as_deref().and_then(day);
+    let mut out = Vec::new();
+    for c in &cube.cells {
+        // Price level indices only (EU27_2020 = 100).
+        let indicator = na.map(|i| c.coords[i].as_str()).unwrap_or_default();
+        if indicator != "PLI_EU27_2020" {
+            continue;
+        }
+        let Some(code) = eurostat_country(&c.coords[geo]) else {
+            continue;
+        };
+        let Ok(year) = c.coords[time].trim().parse::<i32>() else {
+            continue;
+        };
+        let (cat_code, cat_label) = match cat {
+            Some(i) => (
+                Some(c.coords[i].clone()),
+                cube.label(i, &c.coords[i]).map(str::to_string),
+            ),
+            None => (None, Some("Gross domestic product".to_string())),
+        };
+        let Some(category) = cat_label.as_deref().and_then(price_category) else {
+            continue;
+        };
+        out.push(price_item(
+            &code,
+            year,
+            c.value,
+            "eu27_2020_100",
+            category,
+            vec![
+                ("category_code", cat_code.map(Value::String)),
+                ("category_label", cat_label.map(Value::String)),
+                ("indicator_code", s(indicator)),
+                ("flags", c.status.clone().map(Value::String)),
+                ("publisher", s("Eurostat")),
+                ("as_of", as_of.clone().map(Value::String)),
+            ],
+        ));
+    }
+    Ok(out)
+}
+
+/// Earliest year of the WDI rows turned into observations.
+pub const WDI_FROM_YEAR: i32 = 2000;
+
+fn wdi(body: &[u8]) -> Result<Vec<AdapterItem>> {
+    let mut r = csv::ReaderBuilder::new()
+        .has_headers(true)
+        .flexible(true)
+        .from_reader(body);
+    let headers = r
+        .headers()
+        .map_err(|e| Error::Invalid(format!("wdi csv: {e}")))?
+        .clone();
+    let col = |n: &str| {
+        headers
+            .iter()
+            .position(|h| h.trim_start_matches('\u{feff}') == n)
+    };
+    let (Some(cc), Some(ic)) = (col("Country Code"), col("Indicator Code")) else {
+        return Err(Error::Invalid("wdi csv: missing columns".into()));
+    };
+    let name = col("Indicator Name");
+    let years: Vec<(usize, i32)> = headers
+        .iter()
+        .enumerate()
+        .filter_map(|(i, h)| {
+            let h = h.trim();
+            (h.len() == 4)
+                .then(|| h.parse::<i32>().ok())
+                .flatten()
+                .filter(|y| *y >= WDI_FROM_YEAR)
+                .map(|y| (i, y))
+        })
+        .collect();
+    let mut out = Vec::new();
+    for rec in r.records() {
+        let Ok(rec) = rec else { continue };
+        let indicator = rec.get(ic).unwrap_or_default().trim();
+        if indicator != "PA.NUS.PPPC.RF" {
+            continue;
+        }
+        let Some(code) = iso3::alpha2(rec.get(cc).unwrap_or_default()) else {
+            continue; // aggregates and unknown codes
+        };
+        for (i, year) in &years {
+            let Some(v) = rec
+                .get(*i)
+                .and_then(|v| v.trim().parse::<f64>().ok())
+                .filter(|v| v.is_finite() && *v > 0.0)
+            else {
+                continue;
+            };
+            out.push(price_item(
+                code,
+                *year,
+                v,
+                "us_1",
+                "gdp",
+                vec![
+                    ("category_code", s("GDP")),
+                    (
+                        "category_label",
+                        name.and_then(|n| rec.get(n))
+                            .map(|n| json!(n.trim().chars().take(160).collect::<String>())),
+                    ),
+                    ("indicator_code", s(indicator)),
+                    ("publisher", s("World Bank, World Development Indicators")),
+                ],
+            ));
+        }
+    }
+    Ok(out)
 }
 
 // ---------------------------------------------------------------------------------------------

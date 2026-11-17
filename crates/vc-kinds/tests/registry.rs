@@ -50,11 +50,8 @@ fn every_kind_has_schema_prompt_policy_fixture() {
     let ids: Vec<String> = reg.all().iter().map(|k| k.id.to_string()).collect();
     let mut expected: Vec<String> = V1_KINDS.iter().map(|s| s.to_string()).collect();
     expected.sort();
-    assert_eq!(
-        ids, expected,
-        "registry holds exactly the 20 v1 kinds, sorted"
-    );
-    assert_eq!(ids.len(), 20);
+    assert_eq!(ids, expected, "registry holds exactly the v1 kinds, sorted");
+    assert_eq!(ids.len(), V1_KINDS.len());
 
     for k in reg.all() {
         let id = k.id.to_string();
@@ -158,10 +155,10 @@ fn high_stakes_kinds_official_only() {
 // --- further tests ---
 
 #[test]
-fn fx_rate_weather_normal_and_cheapest_fare_are_observations() {
+fn fx_rate_weather_normal_cheapest_fare_and_price_level_are_observations() {
     let reg = registry();
     for k in reg.all() {
-        let obs = ["cheapest_fare", "fx_rate", "weather_normal"].contains(&&*k.id.0);
+        let obs = ["cheapest_fare", "fx_rate", "price_level", "weather_normal"].contains(&&*k.id.0);
         let want = if obs {
             KindStorage::Observation
         } else {
@@ -201,6 +198,18 @@ fn series_keys_render_from_fixtures() {
     );
     // A record kind has no series key.
     assert_eq!(reg.series_key(&KindId::new("event"), &w, Some(1)), None);
+    assert_eq!(
+        reg.series_key(&KindId::new("public_holiday"), &w, Some(1)),
+        None
+    );
+    // Price levels: one series per country, category and basis (the year is the time axis).
+    let pl = json!({"country_code": "PT", "year": 2024, "index": 88.4,
+        "basis": "eu27_2020_100", "category": "restaurants_hotels"});
+    assert_eq!(
+        reg.series_key(&KindId::new("price_level"), &pl, None)
+            .as_deref(),
+        Some("price_level:PT:restaurants_hotels:eu27_2020_100")
+    );
 }
 
 #[test]

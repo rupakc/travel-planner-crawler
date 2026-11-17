@@ -146,7 +146,9 @@ A **kind** is a type of record. Each kind is defined by data, not code (see
 | `article` | record | blogs and news: headline, ≤ 300-char excerpt, facts, link |
 | `qa_thread` | record | Stack Exchange Travel only, with attribution |
 | `airport`, `route` | record | |
+| `public_holiday` | record | public, bank and school holidays per country/subdivision (added 2026-11-18) |
 | `fx_rate`, `weather_normal` | observation | time series |
+| `price_level` | observation | country price level per year and category, series `price_level:<ISO2>:<category>:<basis>` (`eu27_2020_100` Eurostat, `us_1` World Bank; added 2026-11-18) |
 
 Every v1 schema carries `source_url`, `as_of` and `evidence` (up to three verbatim quotes),
 all verbatim-checked. Fields that name a city are paired with a country field.

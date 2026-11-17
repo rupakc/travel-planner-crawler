@@ -11,31 +11,30 @@ licence:
   url: https://creativecommons.org/licenses/by/4.0/
 method: api
 seeds:
-- https://api.visitstockholm.com/
+- https://www.visitstockholm.com/api/public-v1/events/?format=json
 sitemaps: []
 feeds: []
-adapter: null
+adapter: json_events
 include: []
 exclude: []
 max_depth: 0
 kinds:
 - event
-- activity
-- attraction
 llm_kinds: []
 render: never
 cadence: daily
 min_delay_s: 5
 daily_budget: 300
 politeness_key: null
-enabled: false
+enabled: true
 needs_key: false
 key_secret: null
 max_retention_days: null
 display_requirements: null
-notes: 'www.visitstockholm.com robots 200; api.visitstockholm.com/robots.txt 200, * disallows /admin/,
-  /cms/ (checked 2026-11-17). ''Texts ... via the website or the API are under CC BY 4.0'' (credit Stockholm
-  Business Region AB). | Disabled: adapter pending: Visit Stockholm API reader (events, guides, activities)'
+notes: www.visitstockholm.com robots 200; api.visitstockholm.com/robots.txt 200, * disallows /admin/,
+  /cms/ (checked 2026-11-17; api host re-checked 2026-11-18). 'Texts ... via the website or the API are
+  under CC BY 4.0' (credit Stockholm Business Region AB). The public events list is keyless (www.visitstockholm.com/api/public-v1/events/,
+  paged by page number); images are not shared.
 relevance:
   sections:
   - events

@@ -1,0 +1,16 @@
+{
+  "country": "Portugal",
+  "country_code": "PT",
+  "year": 2024,
+  "date": "2024-01-01",
+  "index": 88.4,
+  "basis": "eu27_2020_100",
+  "category": "restaurants_hotels",
+  "category_code": "A0111",
+  "category_label": "Restaurants and hotels",
+  "indicator_code": "PLI_EU27_2020",
+  "flags": "p",
+  "publisher": "Eurostat",
+  "source_url": "https://ec.europa.eu/eurostat/databrowser/view/prc_ppp_ind/default/table",
+  "as_of": "2026-06-18"
+}

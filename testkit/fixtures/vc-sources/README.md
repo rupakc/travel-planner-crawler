@@ -30,3 +30,16 @@ response format. Values are illustrative.
 | `wikidata_emergency_numbers.srj`, `wikidata_empty.srj` | `query.wikidata.org/robots.txt` disallows `/sparql` for `*` | W3C SPARQL 1.1 Query Results JSON Format |
 | `nager_available_countries.json`, `nager_public_holidays_2026_fr.json` | `date.nager.at/robots.txt` redirects to `nagerholidays.com/robots.txt`, which disallows `/api/v` | Nager.Date v3 `CountryV3Dto` / `PublicHolidayV3Dto` (dates are the real 2026 French holidays) |
 | `mobility_feeds_v2.csv` | `files.mobilitydatabase.org/robots.txt` disallows `/` | Mobility Database catalog CSV columns (MobilityData spreadsheet schema v2); `example.org` URLs |
+
+### Open-data adapters (2026-11-18)
+
+Built from documentation, not fetched: only each host's robots.txt was requested (once, as
+VoyagerBot). Values are illustrative unless noted.
+
+| File | Source (adapter) | Based on |
+|---|---|---|
+| `openholidays_countries.json`, `openholidays_public_de.json`, `openholidays_school_de.json` | OpenHolidays API (`openholidays`) | the API's OpenAPI document (`CountryResponse`, `HolidayResponse`, `LocalizedText`, `SubdivisionReference`); dates are the real 2026 German ones |
+| `nyc_parks_events.json` | NYC Parks Events Listing, Socrata `fudw-fgrp` (`json_events`) | the dataset's `columns.json` field names |
+| `stockholm_events_p1.json`, `stockholm_events_p2.json` | Visit Stockholm public events list (`json_events`) | the DRF browsable page of `/api/public-v1/events/` (keys, nesting, paging fields); `example.org` organiser URLs |
+| `eurostat_prc_ppp_ind.json` | Eurostat dissemination API, `prc_ppp_ind` (`eurostat_jsonstat`) | JSON-stat 2.0 as the API returns it (sparse `value`/`status` objects keyed by flat index) |
+| `wdi_csv.zip` | World Bank `WDI_CSV.zip` (`wdi_csv`) | the bulk download's layout: `WDICSV.csv` (Country Name, Country Code, Indicator Name, Indicator Code, one column per year) plus metadata members; written with Python `zipfile` (deflate) |

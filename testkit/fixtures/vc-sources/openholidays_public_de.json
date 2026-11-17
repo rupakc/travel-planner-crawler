@@ -1,0 +1,104 @@
+[
+ {
+  "id": "1d1c5d4e-3c0a-4a8e-9a43-0b5b9f6f0001",
+  "startDate": "2026-01-01",
+  "endDate": "2026-01-01",
+  "type": "Public",
+  "name": [
+   {
+    "language": "EN",
+    "text": "New Year's Day"
+   },
+   {
+    "language": "DE",
+    "text": "Neujahr"
+   }
+  ],
+  "nationwide": true,
+  "regionalScope": "National",
+  "temporalScope": "FullDay"
+ },
+ {
+  "id": "1d1c5d4e-3c0a-4a8e-9a43-0b5b9f6f0002",
+  "startDate": "2026-01-06",
+  "endDate": "2026-01-06",
+  "type": "Public",
+  "name": [
+   {
+    "language": "EN",
+    "text": "Epiphany"
+   },
+   {
+    "language": "DE",
+    "text": "Heilige Drei Könige"
+   }
+  ],
+  "nationwide": false,
+  "regionalScope": "Regional",
+  "temporalScope": "FullDay",
+  "subdivisions": [
+   {
+    "code": "DE-BW",
+    "shortName": "BW"
+   },
+   {
+    "code": "DE-BY",
+    "shortName": "BY"
+   },
+   {
+    "code": "DE-ST",
+    "shortName": "ST"
+   }
+  ]
+ },
+ {
+  "id": "1d1c5d4e-3c0a-4a8e-9a43-0b5b9f6f0003",
+  "startDate": "2026-12-24",
+  "endDate": "2026-12-24",
+  "type": "Optional",
+  "name": [
+   {
+    "language": "EN",
+    "text": "Christmas Eve"
+   },
+   {
+    "language": "DE",
+    "text": "Heiligabend"
+   }
+  ],
+  "nationwide": true,
+  "regionalScope": "National",
+  "temporalScope": "HalfDay",
+  "comment": [
+   {
+    "language": "EN",
+    "text": "Shops close at noon."
+   },
+   {
+    "language": "DE",
+    "text": "Geschäfte schließen mittags."
+   }
+  ]
+ },
+ {
+  "id": "1d1c5d4e-3c0a-4a8e-9a43-0b5b9f6f0004",
+  "startDate": "2026-08-10",
+  "endDate": "2026-08-10",
+  "type": "BackToSchool",
+  "name": [
+   {
+    "language": "EN",
+    "text": "Back to school"
+   }
+  ],
+  "nationwide": false,
+  "regionalScope": "Regional",
+  "temporalScope": "FullDay",
+  "subdivisions": [
+   {
+    "code": "DE-BE",
+    "shortName": "BE"
+   }
+  ]
+ }
+]
