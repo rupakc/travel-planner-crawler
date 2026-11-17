@@ -58,7 +58,10 @@ async fn disabled_source_stays_disabled_when_its_spec_changes() {
     vc_sources::seed_sources(&pool, &[restricted], true)
         .await
         .unwrap();
-    assert_eq!(state(&pool, "ops-a").await.0, false);
+    assert!(
+        !state(&pool, "ops-a").await.0,
+        "restricted is never enabled"
+    );
 }
 
 #[tokio::test]
