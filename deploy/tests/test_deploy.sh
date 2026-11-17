@@ -769,6 +769,7 @@ test_restore_drill() {
   local inner="$HERE/../host/restore-drill-inner.sh"
   grep -qF 'archive_mode=off' "$inner" && grep -qF 'standby.signal' "$inner" &&
     grep -qF 'default_transaction_read_only=on' "$inner" && grep -qF "wal-g backup-fetch \"\$D\" LATEST" "$inner" &&
+    grep -qF "max_connections=\$(ctl max_connections)" "$inner" && ! grep -qE 'max_connections=[0-9]' "$inner" &&
     ok restore_drill || fail restore_drill "inner script settings"
 }
 

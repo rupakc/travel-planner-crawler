@@ -12,10 +12,15 @@ chmod 0700 "$D"
 # A hot standby: read-only, replays the archived WAL up to the newest segment
 touch "$D/standby.signal"
 printf 'local all all trust\n' >/drill/hba.conf
+# A hot standby refuses to start with any of these below the primary's values,
+# so read them from the restored control file instead of guessing.
+ctl() { pg_controldata "$D" | sed -n "s/^$1 setting: *//p"; }
 pg_ctl -D "$D" -w -t 3600 -l /drill/postgres.log start -o "\
  -c hba_file=/drill/hba.conf -c listen_addresses='' -c unix_socket_directories=/drill \
  -c port=5433 -c archive_mode=off -c hot_standby=on -c default_transaction_read_only=on \
- -c shared_buffers=64MB -c max_connections=10 -c max_wal_senders=0 \
+ -c shared_buffers=64MB -c max_connections=$(ctl max_connections) \
+ -c max_wal_senders=$(ctl max_wal_senders) -c max_worker_processes=$(ctl max_worker_processes) \
+ -c max_prepared_transactions=$(ctl max_prepared_xacts) -c max_locks_per_transaction=$(ctl max_locks_per_xact) \
  -c restore_command='/usr/local/bin/wal-g wal-fetch %f %p'" ||
   { tail -n 50 /drill/postgres.log >&2; exit 1; }
 trap 'pg_ctl -D "$D" -m fast -w stop >/dev/null 2>&1 || true' EXIT
