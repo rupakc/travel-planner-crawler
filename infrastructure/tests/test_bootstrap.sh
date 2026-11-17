@@ -83,7 +83,7 @@ test_fresh_project_creates_everything() {
     "instance-templates create voyager-crawler-spot-" "instance-groups managed create voyager-crawler-mig" \
     "instance-groups managed create-instance voyager-crawler-mig --zone=us-east1-b --instance=voyager-crawler" \
     "monitoring channels create" "email_address=alerts@example.invalid" \
-    "billing budgets create" "--budget-amount=9000INR" \
+    "billing budgets create" "--budget-amount=3000INR" \
     "--notifications-rule-monitoring-notification-channels=projects/voyager-prod-ohzkl/notificationChannels/42"; do
     grep -qF -- "$want" "$CALLS" || { fail fresh_project_creates_everything "missing: $want"; return; }
   done
@@ -142,7 +142,7 @@ test_second_run_reasserts() {
   [[ "$(grep -c 'monitoring policies update projects/voyager-prod-ohzkl/alertPolicies/7 --policy-from-file=' "$CALLS")" == "$n" ]] ||
     { fail second_run_reasserts "policy updates: $(grep -c 'monitoring policies update' "$CALLS"), want $n"; return; }
   for want in "monitoring channels update projects/voyager-prod-ohzkl/notificationChannels/42 --update-channel-labels=email_address=new-owner@example.invalid" \
-    "billing budgets update billingAccounts/010A0B-F39593-14A899/budgets/b1 --billing-account=010A0B-F39593-14A899 --budget-amount=9000INR" \
+    "billing budgets update billingAccounts/010A0B-F39593-14A899/budgets/b1 --billing-account=010A0B-F39593-14A899 --budget-amount=3000INR" \
     "--clear-threshold-rules --add-threshold-rule=percent=0.5 --add-threshold-rule=percent=0.9 --add-threshold-rule=percent=1.0 --notifications-rule-monitoring-notification-channels=projects/voyager-prod-ohzkl/notificationChannels/42" \
     "compute firewall-rules update allow-crawler-api --priority=900 --rules=tcp:8443" \
     "compute firewall-rules update allow-crawler-iap-ssh --priority=900 --rules=tcp:22" \
