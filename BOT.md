@@ -23,7 +23,7 @@ VoyagerBot/<version> (+https://github.com/rupakc/travel-planner-crawler/blob/mai
 ```
 
 - **robots.txt token:** `VoyagerBot`
-- **Egress IP:** `<egress-ip>`. VoyagerBot crawls only from this one static address in
+- **Egress IP:** `35.211.58.107`. VoyagerBot crawls only from this one static address in
   Google Cloud (us-east1). It is published here before the first crawl. Requests that claim
   to be VoyagerBot from any other address are not ours: please report them.
 
