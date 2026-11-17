@@ -14,22 +14,24 @@ images but has **no cloud credentials**: the VM pulls and verifies images itself
 `infrastructure/bootstrap.sh` creates all of this. It is idempotent and has `--dry-run`.
 A second run creates nothing, and **re-asserts** settings that may have drifted: IAM
 bindings, custom-role permissions, bucket settings and labels, firewall rules (all but
-direction and action), the log bucket's retention and sink filter, the alert channel's
-email (`CRAWLER_ALERT_EMAIL`), every alert policy (updated from its file) and the budget.
+direction and action), the health check, the group's autohealing and template, the log
+bucket's retention and sink filter, the alert channel's email (`CRAWLER_ALERT_EMAIL`),
+every alert policy (updated from its file) and the budget.
 Every resource is labelled `app=voyager-crawler`.
 
 | Kind | Name | Notes |
 |---|---|---|
-| VM | `voyager-crawler` | e2-standard-2 (2 vCPU, 8 GB), Debian 12, Shielded VM, OS Login, auto-restart, deletion protection |
-| Data disk | `crawler-data` | 100 GB pd-balanced at `/var/lib/voyager-crawler` (Postgres data, spool, deploy state); daily snapshots kept 7 days |
+| VM | `voyager-crawler` in the stateful group `voyager-crawler-mig` | e2-medium (2 shared vCPUs, 4 GB), Spot this month (standard + 1-year commitment next), Debian 12, 10 GB boot disk, Shielded VM, OS Login; from the template `voyager-crawler-spot-<hash>`. The group recreates it after a preemption or 15 min of failed `/healthz`, with the same name, disks and IPs |
+| Data disk | `crawler-data` | 30 GB pd-balanced at `/var/lib/voyager-crawler` (Postgres data, spool, deploy state); stateful in the group; no snapshots (wal-g PITR + the weekly drill) |
 | IPs | `crawler-internal-ip`, `crawler-external-ip` | static internal (the API, in the TLS cert); static external (the crawl identity in BOT.md) |
 | Buckets | `voyager-crawler-raw`, `voyager-crawler-ops` | raw segments and text; backups and batch I/O |
 | Service accounts | `crawler-runtime`, `crawler-drill` | the VM; the monthly restore-drill VM (not wired yet) |
 | Custom roles | `voyagerCrawlerVertex`, `voyagerCrawlerDrill` | Vertex predict and batch jobs; create/delete only `crawler-drill-*` instances. The drill role is **not bound yet** |
 | Instance template | `crawler-drill-template` | Spot e2-standard-2 for the future monthly drill, max 4 h, deleted on stop |
 | Secrets | `crawler-pg-password`, `crawler-api-token-voyager`, `crawler-api-tls-key`, `crawler-api-tls-cert` | the TLS pair is a self-signed P-256 cert for the internal IP, 2 years |
-| Firewall | `allow-crawler-api`, `allow-crawler-iap-ssh`, `deny-crawler-ingress` | 8443 only from the app VM's account; SSH only through IAP; everything else denied |
-| Monitoring | channel "Voyager crawler alerts" + 12 alert policies | its own email channel, so the app's channel stays quiet |
+| Health check | `crawler-healthz` | HTTPS `/healthz` on 8443, for autohealing only |
+| Firewall | `allow-crawler-api`, `allow-crawler-iap-ssh`, `allow-crawler-health-check`, `deny-crawler-ingress` | 8443 only from the app VM's account and Google's health-check probers; SSH only through IAP; everything else denied |
+| Monitoring | channel "Voyager crawler alerts" + 14 alert policies | its own email channel, so the app's channel stays quiet |
 | Logs | bucket and sink `voyager-crawler-logs` | us-east1, 30-day retention, INFO and up; excluded from `_Default`, so logs are stored once |
 | Budget | `voyager-crawler` | ₹9,000/month on the label, alerts at 50, 90 and 100 % |
 
@@ -38,6 +40,7 @@ CRAWLER_ALERT_EMAIL=… infrastructure/bootstrap.sh --dry-run   # print every co
 CRAWLER_ALERT_EMAIL=… infrastructure/bootstrap.sh             # provision
 infrastructure/bootstrap.sh --rotate-tls                                    # new API key and cert
 infrastructure/bootstrap.sh --update-host                                   # push a changed deploy/ to the VM
+infrastructure/bootstrap.sh --update-host --standard                        # Spot → standard VM
 ```
 
 ## Containers on the VM
@@ -152,7 +155,7 @@ ends the hold. Exit codes: 0 done, 1 failure (retried next tick), 3 refused.
 | Watchdog (every 2 min) | restarts services that are unhealthy, exited or stuck restarting; after 3 failed restarts in 30 minutes it reboots the VM, at most once per 2 hours; never during a deploy |
 | systemd `OnFailure=` | every crawler unit reports its outcome: a failure runs `voyager-crawler-failed@.service`, a success runs `unit-status.sh ok`. Both write a `heartbeats ('host', 'unit:<unit>')` row; the maintenance role exports `host_units_failed` |
 | Docker start | `docker.service` waits for the data disk (`RequiresMountsFor=/var/lib/voyager-crawler`), so containers never start on an empty mount point |
-| GCE | automatic restart and live migration on host maintenance |
+| GCE | Spot: a preempted VM is stopped (the shutdown script stops the crawler, then Postgres, within ~30 s) and the group recreates it when capacity allows; the group also recreates it after 15 min of failed `/healthz`. Standard (next month): automatic restart and live migration |
 
 `vcrawl health` is the container health check. It passes when Postgres answers
 `SELECT 1` and the role's own `/healthz` answers 200 within `vcrawl.health_timeout_s`.
@@ -164,7 +167,6 @@ It writes nothing.
 |---|---|---|
 | WAL archiving | continuous | wal-g streams Postgres WAL to `gs://voyager-crawler-ops/walg/`. `WALG_PREVENT_WAL_OVERWRITE=true`: a retried upload of an identical segment succeeds; a different one fails loudly |
 | Base backup | weekly, Saturdays 03:15 UTC, always full | `voyager-crawler-basebackup.timer`; backups and WAL expire after 14 days by lifecycle, so the two newest base backups and the WAL since the older one are kept |
-| Disk snapshot | daily | kept 7 days |
 | Light restore drill | Sundays 05:30 UTC | `deploy/host/restore-drill.sh`, see below |
 | Equivalence drill | weekly, maintenance role | rebuilds the newest segments' capture rows from CDXJ in memory and compares them with the database; exports `restore_drill_ok` |
 | Full restore drill | monthly, **not wired** | a throwaway Spot VM would restore the latest backup + WAL and delete itself |

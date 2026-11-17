@@ -1,30 +1,33 @@
 # Cost
 
-The crawler runs on one VM in the same GCP project as Voyager (`voyager-prod-ohzkl`,
-us-east1). This page gives the monthly estimate from the go-live review
-(`infrastructure/README.md`). All amounts are USD per month.
+The crawler runs on one e2-medium VM in the same GCP project as Voyager
+(`voyager-prod-ohzkl`, us-east1): a **Spot** VM this month, then a standard VM with a
+1-year commitment. The VM is the single instance of a stateful managed instance group,
+so a preempted VM comes back with the same disks and IPs. All amounts are USD per month,
+from Cloud Billing catalog list prices (us-east1, November 2026); details in
+`infrastructure/README.md`.
 
 ## Line items
 
-| Item | On demand | With a 1-year commitment | Notes |
+| Item | This month: Spot | Next month: standard, 1-year commitment | Notes |
 |---|---|---|---|
-| VM, e2-standard-2 (2 vCPU, 8 GB) | 48.92 | 30.82 | Decide on the commitment after 8 weeks. |
-| Disks and snapshots | 13.50 | 13.50 | |
-| Static external IP | 3.65 | 3.65 | The one published crawl IP. |
-| GCS (raw and ops buckets) | 5–8 | 5–8 | Segments move to Coldline after 90 days. |
+| VM, e2-medium (2 shared vCPUs, 4 GB; billed as 1 vCPU) | about 14 | about 15.4 | Spot: core $0.012440/h, RAM $0.001666/GiB·h (Spot prices can change daily). On demand would be about 24.5 (core $0.021812/h, RAM $0.002924/GiB·h). A commitment covers standard VMs only. |
+| Disks: 10 GB boot + 30 GB data, pd-balanced | about 4 | about 4 | $0.10/GiB·month. No snapshots: wal-g backups to GCS and a weekly restore drill instead. |
+| Static external IP | about 2–3.65 | about 3.65 | The one published crawl IP. Cheaper on a Spot VM; $0.01/h while the VM is stopped. |
+| GCS (raw and ops buckets) | about 2–4 | about 2–4 | Segments move to Coldline after 90 days; weekly full base backups, kept 14 days. |
+| Other | about 1 | about 1 | Logging and monitoring inside the free tiers, egress; the autohealing health check is free. |
 | Gemini on Vertex AI | 0–30 | 0–30 | Hard monthly cap, embeddings included. Off by default. |
-| Logging and monitoring | about 1–2 | about 1–2 | Crawler INFO logs (1–3 GiB) fit the project's 50 GiB free tier; custom metrics fit the free 150 MiB; no process metrics. |
-| Egress | about 1 | about 1 | |
 
 ## Totals
 
-| Case | On demand | With a 1-year commitment |
+| Case | This month: Spot | Next month: standard, 1-year commitment |
 |---|---|---|
-| LLM off (the default) | about 74 | about 56 |
-| Typical (LLM spend $15–25) | about 90–99 | about 71–81 |
-| Worst case (LLM at the full $30 cap) | about 104 | about 86 |
+| LLM off (the default) | about 23–27 | about 25–28 |
+| Worst case (LLM at the full $30 cap) | about 53–57 | about 55–58 |
 
-The first 8 weeks run on demand.
+A preemption costs nothing extra: a stopped VM bills only its disks and IP. If Spot
+capacity runs out for hours, `infrastructure/bootstrap.sh --update-host --standard`
+moves the VM to on demand (about 24.5 a month, prorated) until the commitment.
 
 ## The LLM cap
 
