@@ -1,0 +1,63 @@
+{
+ "type": "FeatureCollection",
+ "features": [
+  {
+   "type": "Feature",
+   "id": "WCANLAGEOGD.683584",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     16.33842195,
+     48.17764084
+    ]
+   },
+   "geometry_name": "SHAPE",
+   "properties": {
+    "OBJECTID": 683584,
+    "BEZIRK": 12,
+    "STRASSE": "Aßmayergasse / Karl-Löwe-Gasse",
+    "ONR": null,
+    "TELEFON": "+43 (1) 546 48",
+    "OEFFNUNGSZEIT": "Mo-So: 0-24 Uhr",
+    "INFORMATION": "https://www.wien.gv.at/umwelt/ma48/sauberestadt/wc/",
+    "ABTEILUNG": "M48",
+    "KATEGORIE": "Pissoir",
+    "SE_ANNO_CAD_DATA": null
+   }
+  },
+  {
+   "type": "Feature",
+   "id": "WCANLAGEOGD.683586",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     16.22842203,
+     48.20727525
+    ]
+   },
+   "geometry_name": "SHAPE",
+   "properties": {
+    "OBJECTID": 683586,
+    "BEZIRK": 14,
+    "STRASSE": "Hauptstraße/bei der Kirche Mariabrunn",
+    "ONR": null,
+    "TELEFON": "+43 (1) 546 48",
+    "OEFFNUNGSZEIT": "Mo-So: 0-24 Uhr ",
+    "INFORMATION": "https://www.wien.gv.at/umwelt/ma48/sauberestadt/wc/",
+    "ABTEILUNG": "M48",
+    "KATEGORIE": "WC-Anlage mit Euro-Key-Behindertenkabine und ohne Wartepersonal",
+    "SE_ANNO_CAD_DATA": null
+   }
+  }
+ ],
+ "totalFeatures": 2,
+ "numberMatched": 2,
+ "numberReturned": 2,
+ "timeStamp": "2026-11-18T11:08:22.066Z",
+ "crs": {
+  "type": "name",
+  "properties": {
+   "name": "urn:ogc:def:crs:EPSG::4326"
+  }
+ }
+}

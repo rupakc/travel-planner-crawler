@@ -1,0 +1,89 @@
+[
+ {
+  "n_mero_inscripci": "ATB-000001",
+  "r_tol": "Atenea Calabria",
+  "tipus_de_via": "Carrer",
+  "nom_de_la_via": "Calabria",
+  "numero": "129",
+  "codi_postal": "08015",
+  "municipi": "Barcelona",
+  "comarca": "Barcelonès",
+  "tipus_establiment": "Apartaments Turístics",
+  "categoria": "Sense categoritzar"
+ },
+ {
+  "n_mero_inscripci": "ATB-000002",
+  "r_tol": "Voramar",
+  "tipus_de_via": "Carrer",
+  "nom_de_la_via": "Barques",
+  "numero": "2",
+  "codi_postal": "08860",
+  "municipi": "Castelldefels",
+  "comarca": "Baix Llobregat",
+  "tipus_establiment": "Apartaments Turístics",
+  "categoria": "Sense categoritzar"
+ },
+ {
+  "n_mero_inscripci": "ATB-000003",
+  "r_tol": "Gutenberg",
+  "tipus_de_via": "Passatge",
+  "nom_de_la_via": "Gutenberg",
+  "numero": "7",
+  "codi_postal": "08001",
+  "municipi": "Barcelona",
+  "comarca": "Barcelonès",
+  "tipus_establiment": "Apartaments Turístics",
+  "categoria": "Sense categoritzar"
+ },
+ {
+  "n_mero_inscripci": "HB-000002",
+  "r_tol": "Suizo",
+  "tipus_de_via": "Plaça",
+  "nom_de_la_via": "Del Ángel",
+  "numero": "12",
+  "codi_postal": "08002",
+  "municipi": "Barcelona",
+  "comarca": "Barcelonès",
+  "tipus_establiment": "Hotels",
+  "grup": "Hotel",
+  "categoria": "3 estrelles"
+ },
+ {
+  "n_mero_inscripci": "HB-000005",
+  "r_tol": "Hostal Abrevadero",
+  "tipus_de_via": "Carrer",
+  "nom_de_la_via": "Vila i Vilà",
+  "numero": "79",
+  "codi_postal": "08004",
+  "municipi": "Barcelona",
+  "comarca": "Barcelonès",
+  "tipus_establiment": "Hotels",
+  "grup": "Hostal o pensió",
+  "categoria": "No aplica"
+ },
+ {
+  "n_mero_inscripci": "HB-000006",
+  "r_tol": "Hostal Valls",
+  "tipus_de_via": "Carrer",
+  "nom_de_la_via": "Laforja",
+  "numero": "82",
+  "codi_postal": "08021",
+  "municipi": "Barcelona",
+  "comarca": "Barcelonès",
+  "tipus_establiment": "Hotels",
+  "grup": "Hostal o pensió",
+  "categoria": "No aplica"
+ },
+ {
+  "n_mero_inscripci": "KB-000004",
+  "r_tol": "CAMPING EL TORO AZUL",
+  "tipus_de_via": "Carretera",
+  "nom_de_la_via": "NACIONAL 2",
+  "numero": "658",
+  "codi_postal": "08350",
+  "municipi": "Arenys de Mar",
+  "comarca": "Maresme",
+  "tipus_establiment": "Càmpings",
+  "categoria": "2 estrelles"
+ }
+]

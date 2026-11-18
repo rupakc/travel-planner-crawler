@@ -1,0 +1,55 @@
+{
+ "type": "FeatureCollection",
+ "features": [
+  {
+   "type": "Feature",
+   "id": "WLANWIENATOGD.5852994",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     16.35357404,
+     48.21662606
+    ]
+   },
+   "geometry_name": "SHAPE",
+   "properties": {
+    "OBJECTID": 5852994,
+    "NAME": "Altes AKH",
+    "ADRESSE": "9., Altes AKH (2) ",
+    "WEITERE_INFORMATIONEN": "https://digitales.wien.gv.at/site/e-government/#wlan",
+    "ANBIETER": "https://digitales.wien.gv.at/site/e-government/#multimediastationen",
+    "SE_ANNO_CAD_DATA": null
+   }
+  },
+  {
+   "type": "Feature",
+   "id": "WLANWIENATOGD.5852996",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     16.35846813,
+     48.21443646
+    ]
+   },
+   "geometry_name": "SHAPE",
+   "properties": {
+    "OBJECTID": 5852996,
+    "NAME": "Votivpark",
+    "ADRESSE": "9., Waehringerstrasse 8 ",
+    "WEITERE_INFORMATIONEN": "https://digitales.wien.gv.at/site/e-government/#wlan",
+    "ANBIETER": "https://digitales.wien.gv.at/site/e-government/#multimediastationen",
+    "SE_ANNO_CAD_DATA": null
+   }
+  }
+ ],
+ "totalFeatures": 2,
+ "numberMatched": 2,
+ "numberReturned": 2,
+ "timeStamp": "2026-11-18T11:08:28.455Z",
+ "crs": {
+  "type": "name",
+  "properties": {
+   "name": "urn:ogc:def:crs:EPSG::4326"
+  }
+ }
+}

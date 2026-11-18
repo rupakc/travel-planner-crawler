@@ -1,0 +1,79 @@
+{
+ "type": "FeatureCollection",
+ "bbox": [
+  8.479895,
+  47.337612,
+  8.596814,
+  47.422374
+ ],
+ "features": [
+  {
+   "geometry": {
+    "coordinates": [
+     8.534558,
+     47.35022
+    ],
+    "type": "Point"
+   },
+   "id": "poi_zueriwc_rs_view.1",
+   "properties": {
+    "adr_inter": null,
+    "adresse": "Mythenquai 309",
+    "adrzus_int": null,
+    "behindertenparkplatz": null,
+    "bemerkung": "Rollstuhlgängiges-WC Fr. 1.--, Eurokey oder Kreditkartenzahlung möglich, Multifunktions-WC kostenlos benutzbar",
+    "da": "Umwelt- und Gesundheitsschutz",
+    "datum": "202412161145",
+    "datum_cms": null,
+    "dep": "Gesundheits- und Umweltdepartement (GUD)",
+    "erforderlichedokumente": null,
+    "gebuehren": "Rollstuhlgängiges-WC Fr. 1.--, Eurokey oder Kreditkartenzahlung möglich, Multifunktions-WC kostenlos benutzbar",
+    "geometrie_gdo": null,
+    "hausnummer": "309",
+    "hindernisfreiheit": "0__",
+    "infrastruktur": ";Rollstuhlgängiges-WC Fr. 1.--, Eurokey oder Kreditkartenzahlung möglich, Multifunktions-WC kostenlos benutzbar",
+    "isbetriebsferien_gebaeude": "1",
+    "isbetriebsferien_schalter": "0",
+    "kategorie": "WC (rollstuhlgängig)",
+    "kommentar": "3 Multifunktions- und 1 Rollstuhlgängiges-WC mit Eurokey, Wickeltisch.",
+    "kreis": 2,
+    "name": "Landiwiese (rollstuhlgängig)",
+    "namenzus": null,
+    "objectid": 1,
+    "oeffnungsz": "24 h",
+    "oeffnungszeiten_gebaeude_di": "n.a.",
+    "oeffnungszeiten_gebaeude_do": "n.a.",
+    "oeffnungszeiten_gebaeude_fr": "n.a.",
+    "oeffnungszeiten_gebaeude_mi": "n.a.",
+    "oeffnungszeiten_gebaeude_mo": "n.a.",
+    "oeffnungszeiten_gebaeude_sa": "n.a.",
+    "oeffnungszeiten_gebaeude_so": "n.a.",
+    "oeffnungszeiten_schalter_di": "n.a.",
+    "oeffnungszeiten_schalter_do": "n.a.",
+    "oeffnungszeiten_schalter_fr": "n.a.",
+    "oeffnungszeiten_schalter_mi": "n.a.",
+    "oeffnungszeiten_schalter_mo": "n.a.",
+    "oeffnungszeiten_schalter_sa": "n.a.",
+    "oeffnungszeiten_schalter_so": "n.a.",
+    "ort": "Zürich",
+    "plz": "8002",
+    "poi_id": "wcr13861",
+    "postadresse": null,
+    "publish_internet": "1",
+    "standort": "Mythenquai 309 / unter der Fussgängerbrücke",
+    "strasse": "Mythenquai",
+    "suchen": "Toilette, Toiletten",
+    "tel": "+41 44 412 43 65",
+    "tel2": null,
+    "typ": null,
+    "www": "https://www.stadt-zuerich.ch/zueriwc",
+    "zahlungsmittel_internet": "NULL;NULL;",
+    "zahlungsmittel_schalter": "NULL;NULL;",
+    "zahlungsmittel_telefon": "NULL;NULL;",
+    "zvv_label": "Mythenquai 309",
+    "zvv_link": "https://www.zvv.ch/de/fahrplan-und-informationen/fahrplan.html?toname=Zürich, Mythenquai 309"
+   },
+   "type": "Feature"
+  }
+ ]
+}

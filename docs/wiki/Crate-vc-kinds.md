@@ -12,9 +12,9 @@ code. Each one is three files, which this crate loads, checks and turns into `Ki
 Path: `crates/vc-kinds`. Dependencies: `jsonschema`, `toml`. Status: wired; the processor
 loads the registry at startup.
 
-## The 27 v1 kinds
+## The 28 v1 kinds
 
-`activity`, `advisory`, `airport`, `article`, `attraction`, `cheapest_fare`, `embassy`,
+`activity`, `advisory`, `airport`, `amenity`, `article`, `attraction`, `cheapest_fare`, `embassy`,
 `emergency_numbers`, `event`, `fx_rate`, `hotel`, `medical_facility`, `packing_hint`, `place`,
 `price_level`, `public_holiday`, `qa_thread`, `restaurant`, `route`, `sim_offer`, `tip`, `transit_item`,
 `transport_option`, `visa_reference`, `visa_rule`, `walking_tour`, `weather_normal`. `cheapest_fare` (series
@@ -37,6 +37,9 @@ Added 2026-11-18 (adapter-only, no source lists them as `llm_kinds`):
   (UK FSA FHRS/FHIS, NYC DOHMH letter grades, Toronto DineSafe), with its latest published
   rating or inspection result and that rating's date (`hygiene.rating_date`, required), `official`
   only. The licence attribution comes from the source spec like every record's.
+- `amenity`: one public toilet, drinking fountain or free public Wi-Fi spot as a city lists it
+  (NYC Public Restrooms, Vienna and Zürich open data), with hours, operator and stated
+  wheelchair access, `official` only. Mapped by the generic `socrata` and `wfs_geojson` readers.
 
 ## What the loader refuses
 

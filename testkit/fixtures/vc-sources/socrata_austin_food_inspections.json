@@ -1,0 +1,62 @@
+[
+ {
+  "facility_id": "177708",
+  "restaurant_name": "BC - Nasha Restaurant",
+  "address": "3944 S FM 620 Rd Bldg 1 # 110 Bee Cave, TX 78738-7000",
+  "zip_code": "78738-7000",
+  "inspection_date": "2026-04-01T00:00:00.000",
+  "score": "94.000000",
+  "lat": "30.311030",
+  "lng": "-97.946630"
+ },
+ {
+  "facility_id": "177709",
+  "restaurant_name": "La Fresita Sweets LLC",
+  "address": "7200 Elroy Rd Del Valle, TX 78617-2324",
+  "zip_code": "78617-2324",
+  "inspection_date": "2026-05-20T00:00:00.000",
+  "score": "86.000000",
+  "lat": "30.155630",
+  "lng": "-97.641230"
+ },
+ {
+  "facility_id": "177715",
+  "restaurant_name": "Golden Boy",
+  "address": "111 Congress Ave Austin, TX 78701-4050",
+  "zip_code": "78701-4050",
+  "inspection_date": "2026-09-22T00:00:00.000",
+  "score": "88.000000",
+  "lat": "30.263740",
+  "lng": "-97.743650"
+ },
+ {
+  "facility_id": "177715",
+  "restaurant_name": "Golden Boy",
+  "address": "111 Congress Ave Austin, TX 78701-4050",
+  "zip_code": "78701-4050",
+  "inspection_date": "2025-08-27T00:00:00.000",
+  "score": "88.000000",
+  "lat": "30.263740",
+  "lng": "-97.743650"
+ },
+ {
+  "facility_id": "177719",
+  "restaurant_name": "Wahoos Fish Tacos",
+  "address": "3509 FM 620 N Austin, TX 78734-2112",
+  "zip_code": "78734-2112",
+  "inspection_date": "2026-03-12T00:00:00.000",
+  "score": "87.000000",
+  "lat": "30.396280",
+  "lng": "-97.932430"
+ },
+ {
+  "facility_id": "177720",
+  "restaurant_name": "Patio, The",
+  "address": "5973 Hi Line Rd Austin, TX 78734-1150",
+  "zip_code": "78734-1150",
+  "inspection_date": "2025-07-17T00:00:00.000",
+  "score": "97.000000",
+  "lat": "30.431820",
+  "lng": "-97.941340"
+ }
+]

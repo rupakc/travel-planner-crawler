@@ -65,3 +65,21 @@ path was requested), then trimmed. The structure of every file is unchanged exce
 | `nyc_restaurant_inspections.json` | NYC Open Data Socrata `43nn-pn8j` (`nyc_restaurant_inspections`), the adapter's own grouped query with `$limit=6` | fetched whole (robots.txt: Crawl-delay 1, `/resource` allowed) | NYC Open Data terms of use (DOHMH) |
 | `toronto_dinesafe_package.json` | CKAN `package_show?id=dinesafe` (`toronto_dinesafe`) | fetched (robots.txt allows `/api/`); `result` cut to identity and licence fields and each resource's id, name, format, `datastore_active`, url | Open Government Licence – Toronto |
 | `toronto_dinesafe_page.json` | CKAN `datastore_search` on the datastore resource, the adapter's distinct field list with `limit=6` | fetched whole | Open Government Licence – Toronto |
+
+### Generic open-data readers: socrata, udata_resource, wfs_geojson (2026-11-18)
+
+Fetched once each with the VoyagerBot identity after each host's robots.txt (Socrata hosts:
+Crawl-delay 1, `/resource/` allowed; www.data.gouv.fr allows `/api/1/datasets/`; the Atout France,
+Vienna and Zürich hosts have no robots rules), then trimmed. Personal columns of the registers were
+never requested.
+
+| File | Source (adapter) | How it was obtained | Licence of the content |
+|---|---|---|---|
+| `socrata_chicago_food_inspections.json` | Chicago Data Portal `4ijn-s7e5` (`socrata`), the mapping's `$select`/`$where`/`$order` with `$limit=7` | fetched whole (two licences, seven inspections) | City of Chicago data terms |
+| `socrata_austin_food_inspections.json` | City of Austin `ecmv-9xxi` (`socrata`), the mapping's query with `$limit=6` | fetched whole | public domain |
+| `socrata_catalonia_tourism_register.json` | Generalitat de Catalunya `t2h3-cgys` (`socrata`), the mapping's `$select` | assembled from three queries with that `$select`: the first 3 rows of the mapping's filter, 3 hotels/hostals and 1 campsite | Catalonia open data terms (unconfirmed; facts only) |
+| `socrata_nyc_public_restrooms.json` | NYC Open Data `i7jb-7jku` (`socrata`), the mapping's query with `$limit=5` (plus `:id`) | fetched whole | NYC Open Data terms of use |
+| `udata_atout_france_dataset.json` | www.data.gouv.fr `/api/1/datasets/hebergements-touristiques-classes-en-france/` (`udata_resource`) | fetched; cut to identity, licence and each resource's id, title, format, type, url, `last_modified` | Licence Ouverte 2.0 |
+| `udata_atout_france_classes.csv` | Atout France `hebergements_classes.csv` (`udata_resource`) | one download (3.7 MB, 21,362 rows); header plus the first 3 rows and the first campsite, tourist residence, holiday village and collective hostel | Licence Ouverte 2.0 |
+| `wfs_wien_sights.json`, `wfs_wien_museums.json`, `wfs_wien_toilets.json`, `wfs_wien_wifi.json` | data.wien.gv.at WFS `GetFeature` for `ogdwien:SEHENSWUERDIGOGD`, `MUSEUMOGD`, `WCANLAGEOGD`, `WLANWIENATOGD` (`wfs_geojson`) | fetched; first 3 / 2 / (first, first with an accessible cabin) / 2 features kept | CC BY 4.0, Stadt Wien – data.wien.gv.at |
+| `wfs_zuerich_wc.json`, `wfs_zuerich_wc_rs.json` | www.ogd.stadt-zuerich.ch WFS `GetFeature` for `poi_zueriwc_view` and `poi_zueriwc_rs_view` (`wfs_geojson`) | fetched; first feature kept, staff/e-mail/fax properties removed | CC0, Stadt Zürich |

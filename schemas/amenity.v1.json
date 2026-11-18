@@ -1,0 +1,122 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/rupakc/travel-planner-crawler/schemas/amenity.v1.json",
+  "title": "Amenity (official public-amenity listing)",
+  "description": "One record: one public amenity a traveller looks for on the street, as a city or public body lists it: a public toilet, a drinking fountain or a free public Wi-Fi spot, with its location, opening hours and wheelchair access. Voyager use: travel tips and getting around (where to find a toilet or free Wi-Fi near the itinerary).",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "name": {
+      "type": "string",
+      "maxLength": 160,
+      "description": "The amenity's name or location as the listing writes it (e.g. \"Heckscher Playground\", \"Bürkliplatz\")."
+    },
+    "amenity_type": {
+      "type": "string",
+      "enum": [
+        "toilet",
+        "drinking_water",
+        "wifi_hotspot",
+        "other"
+      ],
+      "description": "What the amenity is: a public toilet, a drinking-water fountain, a free public Wi-Fi spot, or other."
+    },
+    "description": {
+      "type": "string",
+      "maxLength": 600,
+      "description": "The listing's own remarks as written (e.g. \"Attended, closed at night, free of charge\")."
+    },
+    "address": {
+      "type": "string",
+      "maxLength": 240,
+      "description": "Street address or street corner as written."
+    },
+    "district": {
+      "type": "string",
+      "maxLength": 120,
+      "description": "Borough or district as written."
+    },
+    "city": {
+      "type": "string",
+      "maxLength": 120,
+      "description": "City in English. Always paired with `country`."
+    },
+    "country": {
+      "type": "string",
+      "maxLength": 80,
+      "description": "Country in English (e.g. \"Austria\"). Required whenever `city` is set."
+    },
+    "country_code": {
+      "type": "string",
+      "maxLength": 2,
+      "description": "ISO 3166-1 alpha-2 country code of `country`.",
+      "pattern": "^[A-Z]{2}$"
+    },
+    "lat": {
+      "type": "number",
+      "description": "Latitude in decimal degrees, only if the listing states coordinates.",
+      "minimum": -90,
+      "maximum": 90
+    },
+    "lng": {
+      "type": "number",
+      "description": "Longitude in decimal degrees, only if the listing states coordinates.",
+      "minimum": -180,
+      "maximum": 180
+    },
+    "opening_hours": {
+      "type": "string",
+      "maxLength": 240,
+      "description": "Opening hours as written (days and times)."
+    },
+    "wheelchair_accessible": {
+      "type": "boolean",
+      "description": "Stated wheelchair access (true only when the listing says so; false when it says it is not accessible)."
+    },
+    "operator": {
+      "type": "string",
+      "maxLength": 120,
+      "description": "Who runs it, as written (e.g. \"NYC Parks\")."
+    },
+    "phone": {
+      "type": "string",
+      "maxLength": 32,
+      "description": "Phone number. As written on the page (digits, spaces, +, -, (, ), .).",
+      "pattern": "^\\+?[0-9][0-9 ().\\-/]{1,30}$"
+    },
+    "info_url": {
+      "type": "string",
+      "maxLength": 2048,
+      "description": "The listing's information page for the amenity, copied verbatim.",
+      "pattern": "^https?://[^\\s]+$"
+    },
+    "source_url": {
+      "type": "string",
+      "maxLength": 2048,
+      "description": "The page's own link for this item (official site or detail page), copied verbatim from the page.",
+      "pattern": "^https?://[^\\s]+$"
+    },
+    "as_of": {
+      "type": "string",
+      "maxLength": 10,
+      "description": "The \"last updated\", \"valid from\" or publication date the page itself states for this information (YYYY-MM-DD).",
+      "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$"
+    },
+    "evidence": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "maxLength": 300,
+        "description": "A verbatim quote from the page."
+      },
+      "maxItems": 3,
+      "description": "Up to 3 short verbatim quotes from the page that support the most important facts."
+    }
+  },
+  "required": [
+    "name",
+    "amenity_type",
+    "city",
+    "country"
+  ]
+}

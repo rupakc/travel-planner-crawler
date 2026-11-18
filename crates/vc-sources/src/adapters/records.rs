@@ -24,8 +24,8 @@ use vc_core::{CanonicalUrl, Error, Result};
 use super::{
     canada_advisories, canada_offices, countries, ecb_fx, enwiki_visa, eurostat_jsonstat,
     fcdo_content_api, fsa_fhrs, govuk_medical_lists, govuk_world_orgs, html_text, iso3,
-    json_events, nyc_restaurant_inspections, openholidays, phone, state_dept_advisories,
-    state_dept_country_info, toronto_dinesafe, travelpayouts_fares,
+    json_events, nyc_restaurant_inspections, openholidays, phone, socrata, state_dept_advisories,
+    state_dept_country_info, toronto_dinesafe, travelpayouts_fares, udata_resource, wfs_geojson,
 };
 
 /// Bumped when a mapping changes (part of the extractor version string of adapter records).
@@ -60,11 +60,14 @@ pub const MAPPED: &[&str] = &[
     "openholidays",
     "gtfs_static",
     "ourairports_csv",
+    "socrata",
     "state_dept_advisories",
     "state_dept_country_info",
     "toronto_dinesafe",
     "travelpayouts_fares",
+    "udata_resource",
     "wdi_csv",
+    "wfs_geojson",
     "wikivoyage_dump",
 ];
 
@@ -86,11 +89,14 @@ pub fn records(adapter: &str, url: &CanonicalUrl, body: &[u8]) -> Option<Result<
         "openholidays" => holidays(url, body),
         "gtfs_static" => gtfs(body),
         "ourairports_csv" => ourairports(body),
+        "socrata" => rows(socrata::items(url, body)),
         "state_dept_advisories" => state_dept(body),
         "state_dept_country_info" => state_dept_info(body),
         "toronto_dinesafe" => restaurants(toronto_dinesafe::items(url, body)),
         "travelpayouts_fares" => travelpayouts(url, body),
+        "udata_resource" => rows(udata_resource::items(url, body)),
         "wdi_csv" => wdi(body),
+        "wfs_geojson" => rows(wfs_geojson::items(url, body)),
         "wikivoyage_dump" => wikivoyage(body),
         _ => return None,
     })
@@ -506,6 +512,20 @@ fn restaurants(items: Result<Vec<(String, Value)>>) -> Result<Vec<AdapterItem>> 
         .map(|(id, data)| AdapterItem {
             kind: "restaurant",
             id: Some(id),
+            series_key: None,
+            data,
+        })
+        .collect())
+}
+
+/// Records of the mapping-driven open-data readers (`socrata`, `udata_resource`,
+/// `wfs_geojson`): each row names its own kind ([`super::row_map`]).
+fn rows(items: Result<Vec<(Option<String>, &'static str, Value)>>) -> Result<Vec<AdapterItem>> {
+    Ok(items?
+        .into_iter()
+        .map(|(id, kind, data)| AdapterItem {
+            kind,
+            id,
             series_key: None,
             data,
         })
