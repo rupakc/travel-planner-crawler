@@ -33,13 +33,15 @@ cadence: weekly
 min_delay_s: 5
 daily_budget: 300
 politeness_key: null
-enabled: true
+enabled: false
 needs_key: false
 key_secret: null
 max_retention_days: null
 display_requirements: null
 notes: 'HOLD (research 2026-11-17): terms not found. Blocker was: terms not found. Terms unconfirmed;
-  owner accepted for non-commercial use 2026-11-17.'
+  owner accepted for non-commercial use 2026-11-17. | Disabled: bot wall: https://philippines.travel/sitemap.xml
+  served a challenge page to VoyagerBot in production on 2026-11-18. Do not retry another way; philippines.travel
+  is denylisted. Philippine places come from Wikivoyage, OSM and UNESCO.'
 relevance:
   sections:
   - places

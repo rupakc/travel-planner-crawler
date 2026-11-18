@@ -246,6 +246,24 @@ fn batch2_entries_are_denied() {
         "https://mfat.govt.nz/",
         "https://secretldn.com/feed/",
         "https://www.secretldn.com/",
+        // bot walls met in production, 2026-11-18
+        "https://philippines.travel/sitemap.xml",
+        "https://www.philippines.travel/",
+        "https://www.dubaicustoms.gov.ae/en/",
+        "https://dubaicustoms.gov.ae/",
+        // alternatives research 2026-11-18: refused, challenged or terms forbid copying
+        "https://www.visitoslo.com/sitemaps-1-sitemap.xml",
+        "https://dados.gov.br/",
+        "https://www.sanparks.org/",
+        "https://www.biosecurity.govt.nz/",
+        "https://www.data.govt.nz/",
+        "https://www.dubai.ae/",
+        "https://www.us.emb-japan.go.jp/",
+        "https://intramuros.gov.ph/",
+        "https://www.agenziadoganemonopoli.gov.it/",
+        "https://www.newzealand.com/",
+        "https://www.douane.gouv.fr/",
+        "https://www.mfa.gov.sg/",
     ] {
         assert!(denied(u).is_some(), "{u} must be denied");
     }
@@ -287,6 +305,21 @@ fn approved_hosts_stay_allowed() {
         "https://www.smartraveller.gov.au/news-and-updates/stop-check-protect-and-keep-scammers-out-your-travel-plans",
         "https://www.ftc.gov/",
         "https://reportfraud.ftc.gov/",
+        // alternatives to bot-walled sites (2026-11-18); denied siblings stay apart
+        "https://www.safetravel.govt.nz/destinations/japan",
+        "https://europa.eu/youreurope/citizens/travel/carry/index_en.htm",
+        "https://www.revenue.ie/en/customs/individuals/info-travelling-duty-free/index.aspx",
+        "https://icp.gov.ae/sitemap.xml",
+        "https://egymonuments.gov.eg/en/sitemap.aspx",
+        "https://kws.go.ke/wp-sitemap-posts-park-1.xml",
+        "https://dirco.gov.za/page-sitemap.xml",
+        "https://www.capetown.gov.za/sitemap.xml",
+        "https://cadataapi.state.gov/api/CountryTravelInformation",
+        "https://api.ratings.food.gov.uk/Establishments",
+        "https://data.cityofnewyork.us/resource/43nn-pn8j.json",
+        "https://catalogue.data.govt.nz/",
+        "https://www.customs.gov.sg/",
+        "https://www.gov.ph/",
     ] {
         assert_eq!(denied(u), None, "{u} must stay allowed");
     }

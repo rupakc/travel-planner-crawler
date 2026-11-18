@@ -373,3 +373,48 @@ entries:
   - host: secretldn.com
     reason: "/feed/ served a challenge (HTTP 202) to VoyagerBot in production, 2026-11-17: bot wall"
     source: seed:secretldn
+  # --- Bot walls met in production (2026-11-18) -----------------------------------------
+  - host: philippines.travel
+    reason: "/sitemap.xml served a challenge page to VoyagerBot in production, 2026-11-18: bot wall"
+    source: seed:philippines-travel
+  - host: dubaicustoms.gov.ae
+    reason: "/en/ served a challenge page to VoyagerBot in production, 2026-11-18: bot wall"
+    source: seed:dubai-customs-passengers
+  # --- Alternatives research 2026-11-18: refused, challenged or terms forbid copying -----
+  - host: visitoslo.com
+    reason: sitemap answers 403 to VoyagerBot (robots.txt 200), 2026-11-18
+    source: research 2026-11-18 alternatives SKIP
+  - host: dados.gov.br
+    reason: robots.txt answers 401 to VoyagerBot, 2026-11-18
+    source: research 2026-11-18 alternatives SKIP
+  - host: sanparks.org
+    reason: robots.txt answers 403 to VoyagerBot, 2026-11-18
+    source: research 2026-11-18 alternatives SKIP
+  - host: biosecurity.govt.nz
+    reason: Incapsula challenge on robots.txt (MPI, same wall as mpi.govt.nz), 2026-11-18
+    source: research 2026-11-18 alternatives SKIP
+  # Exact host only: catalogue.data.govt.nz answers normally.
+  - host: www.data.govt.nz
+    reason: Incapsula challenge on robots.txt, 2026-11-18
+    source: research 2026-11-18 alternatives SKIP
+  - host: dubai.ae
+    reason: robots.txt answers 403 (Access Denied) to VoyagerBot, 2026-11-18
+    source: research 2026-11-18 alternatives SKIP
+  - host: us.emb-japan.go.jp
+    reason: robots.txt answers 403 (Access Denied) to VoyagerBot, 2026-11-18
+    source: research 2026-11-18 alternatives SKIP
+  - host: intramuros.gov.ph
+    reason: robots.txt answers 403 to VoyagerBot, 2026-11-18
+    source: research 2026-11-18 alternatives SKIP
+  - host: agenziadoganemonopoli.gov.it
+    reason: robots.txt answers 403 (Access Denied) to VoyagerBot, 2026-11-18
+    source: research 2026-11-18 alternatives SKIP
+  - host: newzealand.com
+    reason: robots.txt answers 403 (Access Denied) to VoyagerBot, 2026-11-18
+    source: research 2026-11-18 alternatives SKIP
+  - host: douane.gouv.fr
+    reason: "Mentions légales: 'Toute copie de page du site doit avoir obtenu l'autorisation du directeur de la publication'; commercial use prohibited"
+    source: research 2026-11-18 alternatives SKIP
+  - host: mfa.gov.sg
+    reason: "Terms §6: 'caching and links to, and the framing of The Website or any of its contents are prohibited'; no commercial reproduction"
+    source: research 2026-11-18 alternatives SKIP

@@ -191,3 +191,12 @@ plan = `docs/superpowers/plans/2026-11-15-voyager-crawler.md`, r1–r5 = `docs/r
   new `FetchError::Connect` (TLS handshake failures included: no HTTP answer was received, and
   pages over the same handshake fail and back off anyway). (crates/vc-policy/src/lib.rs,
   crates/vcrawl/src/roles/fetcher.rs, BOT.md)
+- 2026-11-18: alternatives to bot-walled sites (owner: "the DATA those sites would have given, from
+  other legitimate sources"). On: safetravel-nz (NZ advice + embassy per country, CC BY 4.0; replaces
+  mfat-embassies), eu-youreurope-travel and revenue-ie-travellers (EU/Irish allowances, CC BY 4.0;
+  replace eu-customs-travellers). Off with reason: icp-uae-customs, egymonuments, kws-parks (terms not
+  found), dirco-sa, capetown-gov (owner decision), state-dept-country-info (cadataapi
+  CountryTravelInformation; replaces travel.state.gov + usembassy.gov), fsa-food-hygiene,
+  nyc-restaurant-inspections, toronto-dinesafe (adapters pending). philippines-travel and
+  dubai-customs-passengers off after production challenges; 14 hosts denylisted.
+  (scripts/seeds_to_sources.py, policy/denylist.yaml)

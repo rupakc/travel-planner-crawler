@@ -46,7 +46,6 @@ cfia-travellers            # tips/packing: CFIA (Canada): food, plants and pets 
 japan-customs-passengers   # tips/packing: Japan Customs: passengers (sitemap, open licence, monthly, <= 150/day)
 japan-maff-aqs             # tips/packing: MAFF Animal Quarantine Service (Japan) (html, open licence, monthly, <= 150/day)
 sg-customs-travellers      # tips/packing: Singapore Customs: travellers (sitemap, facts only, monthly, <= 100/day; terms owner-accepted)
-dubai-customs-passengers   # tips/packing: Dubai Customs: passengers (html, facts only, monthly, <= 100/day; terms owner-accepted)
 cbic-baggage               # tips/packing: CBIC (India): baggage and travellers (sitemap, facts only, monthly, <= 100/day; terms owner-accepted)
 nz-customs-travellers      # tips/packing: New Zealand Customs: travellers (sitemap, facts only, monthly, <= 150/day; terms owner-accepted)
 hk-customs-travellers      # tips/packing: Hong Kong Customs: travellers (html, facts only, monthly, <= 100/day; terms owner-accepted)
@@ -81,7 +80,6 @@ visitberlin                # events/places: visitBerlin (sitemap, facts only, we
 discoverlosangeles         # activities/events: Discover Los Angeles (sitemap, facts only, weekly, <= 300/day; terms owner-accepted)
 chile-travel               # itinerary/events/activities: Chile Travel (Sernatur) (sitemap, facts only, weekly, <= 300/day; terms owner-accepted)
 goturkiye                  # places/itinerary/events: Go Türkiye (sitemap, facts only, weekly, <= 300/day; terms owner-accepted)
-philippines-travel         # places/activities: Philippines Department of Tourism (sitemap, facts only, weekly, <= 300/day; terms owner-accepted)
 peru-travel                # places/itinerary: PromPerú (peru.travel) (sitemap, facts only, weekly, <= 300/day; terms owner-accepted)
 srilanka-travel            # places: Sri Lanka Tourism (sitemap, facts only, weekly, <= 300/day; terms owner-accepted)
 tanzania-tourism           # places: Tanzania Tourist Board (sitemap, facts only, weekly, <= 300/day; terms owner-accepted)
@@ -106,3 +104,8 @@ destinationcanada          # activities/itinerary: Destination Canada (sitemap, 
 travelerset-scams          # tips: Travelerset common travel scams (html, facts only, monthly, <= 30/day; robots reserves AI use: title and link only)
 avoidtravelscam            # tips: AvoidTravelScam.com scam guides (html, facts only, monthly, <= 50/day)
 twopassportspacked-scams   # tips: Two Passports Packed common travel scams, seed page only (html, facts only, monthly, <= 10/day)
+
+# --- alternatives to bot-walled sites (2026-11-18) ---
+safetravel-nz              # tips/emergency_card: NZ MFAT SafeTravel advice + embassy per country (sitemap, open licence CC BY 4.0, daily, <= 300/day)
+eu-youreurope-travel       # tips/packing: Your Europe: EU allowances when travelling (html, open licence CC BY 4.0, monthly, <= 50/day, delay 10 s)
+revenue-ie-travellers      # tips/packing: Revenue (Ireland): duty-free allowances (html, open licence CC BY 4.0, monthly, <= 50/day)

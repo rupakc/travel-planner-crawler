@@ -1278,6 +1278,9 @@ _src(
     depth=1,
     budget=100,
     include=['^https://www\\.dubaicustoms\\.gov\\.ae/(?:en/)'],
+    off=('bot wall: https://www.dubaicustoms.gov.ae/en/ served a challenge page to VoyagerBot in '
+         'production on 2026-11-18. Do not retry another way; dubaicustoms.gov.ae is denylisted. '
+         'UAE allowances: icp-uae-customs (federal customs) once its terms are confirmed.'),
 )
 _src(
     'cbic-baggage',
@@ -1999,6 +2002,9 @@ _src(
     depth=1,
     budget=300,
     delay=5,
+    off=('bot wall: https://philippines.travel/sitemap.xml served a challenge page to VoyagerBot in '
+         'production on 2026-11-18. Do not retry another way; philippines.travel is denylisted. '
+         'Philippine places come from Wikivoyage, OSM and UNESCO.'),
 )
 _src(
     'peru-travel',
@@ -2320,6 +2326,160 @@ _src(
 EXTRA_SEEDS["smartraveller"] = [
     "https://www.smartraveller.gov.au/news-and-updates/stop-check-protect-and-keep-scammers-out-your-travel-plans",
 ]
+
+
+# ---------------------------------------------------------------------------------------
+# Alternatives to sites that refused or challenged VoyagerBot (owner request 2026-11-18:
+# "the DATA those sites would have given, from other legitimate sources"). Each was vetted
+# with one robots.txt request (VoyagerBot UA, 2 s apart), one sample page and its terms.
+# ---------------------------------------------------------------------------------------
+_src(
+    'safetravel-nz',
+    ['tips', 'emergency_card'],
+    'Official New Zealand travel advice per country (safety level, local laws, health) and the '
+    'responsible New Zealand embassy, for Travel tips and the Emergency card.',
+    cls='official',
+    kinds=['advisory', 'emergency_numbers', 'tip'],
+    llm=['advisory', 'emergency_numbers', 'tip'],
+    depth=1,
+    budget=300,
+    include=[r'^https://www\.safetravel\.govt\.nz/(?:destinations|before-you-go|while-you-re-away)(?:/|$)'],
+    attribution='© Crown copyright, New Zealand MFAT (SafeTravel), CC BY 4.0',
+)
+_src(
+    'eu-youreurope-travel',
+    ['tips', 'packing'],
+    'EU duty-free allowances for alcohol, tobacco and cash, and the rules for food, pets and '
+    'luggage when entering the EU, for Travel tips and Packing.',
+    cls='official',
+    kinds=['tip', 'packing_hint'],
+    llm=['tip', 'packing_hint'],
+    depth=1,
+    budget=50,
+    delay=10,
+    include=[r'^https://europa\.eu/youreurope/citizens/travel/(?:carry|entry-exit)/[^?#]*index_en\.htm$'],
+    attribution='© European Union, Your Europe, CC BY 4.0',
+)
+_src(
+    'revenue-ie-travellers',
+    ['tips', 'packing'],
+    "Ireland's duty-free allowances and customs rules for travellers arriving from outside and "
+    "within the EU, for Travel tips and Packing.",
+    cls='official',
+    kinds=['tip', 'packing_hint'],
+    llm=['tip', 'packing_hint'],
+    depth=2,
+    budget=50,
+    include=[r'^https://www\.revenue\.ie/en/customs/individuals/info-travelling-duty-free/'],
+    attribution='© Office of the Revenue Commissioners, CC BY 4.0',
+)
+_src(
+    'icp-uae-customs',
+    ['tips', 'packing'],
+    'UAE federal customs rules for travellers (allowances, cash declaration, banned and '
+    'restricted items), for Travel tips and Packing.',
+    cls='official',
+    kinds=['tip', 'packing_hint'],
+    llm=['tip', 'packing_hint'],
+    depth=1,
+    budget=100,
+    off='terms not yet confirmed: no terms-of-use page found on icp.gov.ae (2026-11-18); robots.txt allows us',
+)
+_src(
+    'egymonuments',
+    ['places', 'activities'],
+    "Official opening hours, tickets and descriptions of Egypt's monuments, museums and "
+    "archaeological sites, for Places to see and Activities.",
+    cls='official',
+    kinds=['attraction', 'event'],
+    llm=['attraction', 'event'],
+    depth=1,
+    budget=200,
+    include=[r'^https://egymonuments\.gov\.eg/en/(?:monuments|museums|archaeological-sites|sunken-monuments|events)/'],
+    off='terms not yet confirmed: only a privacy policy found on egymonuments.gov.eg (2026-11-18); robots.txt allows us',
+)
+_src(
+    'kws-parks',
+    ['places', 'activities'],
+    "Kenya's national parks and reserves with entry, opening times and activities, for Places "
+    "to see and Activities.",
+    cls='official',
+    kinds=['attraction', 'activity'],
+    llm=['attraction', 'activity'],
+    depth=1,
+    budget=100,
+    off='terms not yet confirmed: no terms of use found on kws.go.ke (2026-11-18); robots.txt allows us',
+)
+_src(
+    'dirco-sa',
+    ['emergency_card', 'visa'],
+    'Official contacts of South African missions abroad and foreign missions in South Africa, '
+    'plus consular advice, for the Emergency card and Visa.',
+    cls='official',
+    kinds=['emergency_numbers', 'tip'],
+    llm=['emergency_numbers', 'tip'],
+    depth=1,
+    budget=200,
+    include=[r'^https://dirco\.gov\.za/(?:south-african-representation-abroad|foreign-representation-in-south-africa|consular-services|advice-for-south-african-citizens-travelling-abroad|sa-missions)'],
+    off=('owner decision: DIRCO terms allow reproduction "on request", free of charge, not for '
+         'financial gain, with source and URL acknowledged; the owner must ask DIRCO or accept '
+         'facts-only use for a free app'),
+)
+_src(
+    'capetown-gov',
+    ['places', 'activities', 'events'],
+    "Cape Town's official beaches, nature reserves, parks and city events, for Places to see, "
+    "Activities and Events.",
+    cls='official',
+    kinds=['attraction', 'event'],
+    llm=['attraction', 'event'],
+    depth=1,
+    budget=200,
+    off=('owner decision: City of Cape Town terms prohibit redistribution or reproduction except '
+         'personal non-commercial use; written permission from cct.webmaster@capetown.gov.za needed'),
+)
+_src(
+    'state-dept-country-info',
+    ['visa', 'emergency_card', 'tips'],
+    'Official US country information (entry, exit and visa requirements, embassy and consulate '
+    'contacts, health, local laws), for Visa, the Emergency card and Travel tips.',
+    cls='official',
+    kinds=['visa_rule', 'embassy', 'tip'],
+    budget=300,
+    off=('adapter pending: CountryTravelInformation JSON reader (all-countries list, then /{tag}; '
+         'HTML fragments per field), on the cadataapi.state.gov host the advisories adapter already uses'),
+)
+_src(
+    'fsa-food-hygiene',
+    ['activities'],
+    'Official food hygiene ratings of UK restaurants, cafes and takeaways (name, address, rating), '
+    'for food in Activities.',
+    cls='official',
+    kinds=['place'],
+    budget=300,
+    off=('adapter pending: FHRS API v2 reader (keyless, header x-api-version: 2, paged '
+         'Establishments by local authority) or the per-authority open-data XML files'),
+)
+_src(
+    'nyc-restaurant-inspections',
+    ['activities'],
+    'Every New York City restaurant with cuisine, address and inspection grade, for food in '
+    'Activities.',
+    cls='official',
+    kinds=['place'],
+    budget=300,
+    off=('adapter pending: a Socrata reader for places (json_events maps event lists only); '
+         'one row per inspection, so group by camis'),
+)
+_src(
+    'toronto-dinesafe',
+    ['activities'],
+    'Every Toronto food premises with address and inspection status, for food in Activities.',
+    cls='official',
+    kinds=['place'],
+    budget=300,
+    off='adapter pending: CKAN package_show, then the DineSafe datastore resource (JSON/CSV) reader',
+)
 
 
 METHODS = {"html", "rss", "sitemap", "api", "dump"}
