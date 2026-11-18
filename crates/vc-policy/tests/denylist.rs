@@ -491,3 +491,50 @@ fn approved_hosts_stay_allowed() {
         assert_eq!(denied(u), None, "{u} must stay allowed");
     }
 }
+
+/// Hidden gems research 2026-11-18: terms/robots bans and hijacked or parked official tourism
+/// domains are denied; hosts next to them that sources use stay allowed. Hosts that only
+/// answered 403 or a challenge to research (laptop IP) are not on the list.
+#[test]
+fn hidden_gems_entries_are_denied_and_neighbours_are_not() {
+    for u in [
+        "https://www.gotobermuda.com/",
+        "https://www.visitgozo.com/",
+        "https://www.iledere.com/",
+        "https://www.visittci.com/",
+        "https://www.les-plus-beaux-villages-de-france.org/",
+        "https://www.bradtguides.com/",
+        "https://www.parconazionalepantelleria.it/",
+        "https://www.menorca.es/",
+        "https://www.iatlanticas.es/",
+        "https://www.ats.aq/",
+        "https://www.visituganda.com/",
+        "https://www.tz-vis.hr/",
+        "https://www.lastovo-tz.net/",
+        "https://www.socotraisland.org/",
+        "https://www.visitamazonas.com.br/",
+        "https://www.timsnepal.com/",
+        "https://www.visitrajaampat.com/",
+        "https://www.ethiopia.travel/",
+        "https://www.visitnaxos.gr/",
+        "https://visitfolegandros.gr/",
+        "https://www.tongaholiday.com/",
+        "https://www.visitmarshallislands.com/lander",
+        "https://www.discovernauru.com/",
+        "https://www.visitcuracao.com/",
+        "https://www.kosrae.com/",
+    ] {
+        assert!(denied(u).is_some(), "{u} must be denied");
+    }
+    for u in [
+        "https://visithvar.hr/",
+        "https://visitkorcula.eu/",
+        "https://www.visitmadeira.com/en",
+        "https://www.experiencealula.com/",
+        "https://www.visit-micronesia.fm/",
+        "https://www.visitsaaremaa.ee/",
+        "https://www.visitjeju.net/",
+    ] {
+        assert_eq!(denied(u), None, "{u} must stay allowed");
+    }
+}

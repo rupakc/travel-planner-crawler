@@ -739,3 +739,83 @@ entries:
   - host: saigoneer.com
     reason: "Terms: users may not 'copy, scrape, reproduce, republish ... Website content', 2026-11-18"
     source: research 2026-11-18 corpus Asia-Pacific SKIP
+  # --- hidden gems, small islands and remote places (research 2026-11-18) ---------------
+  # Terms that ban robots/scraping/text mining, and robots.txt that disallows / for every bot
+  # but a few named ones. Hosts that only answered 403, a challenge or timed out to research
+  # (a laptop IP) are NOT listed here; they are simply not added.
+  - host: visitgozo.com
+    reason: "T&C: 'not to use any page-scrape, robot, spider or other automatic device', 2026-11-18"
+    source: research 2026-11-18 hidden gems SKIP
+  - host: iledere.com
+    reason: "CGU: 'Toute reproduction ... extraction, diffusion, scraping ... strictement interdite', 2026-11-18"
+    source: research 2026-11-18 hidden gems SKIP
+  - host: visittci.com
+    reason: "Terms: no 'robot, spider, or other automatic device ... to access the Website', 2026-11-18"
+    source: research 2026-11-18 hidden gems SKIP
+  - host: les-plus-beaux-villages-de-france.org
+    reason: "Terms: no 'text mining or other form of extraction of all or part of the Content', 2026-11-18"
+    source: research 2026-11-18 hidden gems SKIP
+  - host: bradtguides.com
+    reason: "T&C: no 'use of data mining, robots or similar data gathering and extraction tools', 2026-11-18"
+    source: research 2026-11-18 hidden gems SKIP
+  - host: parconazionalepantelleria.it
+    reason: "robots.txt: 'User-agent: * Disallow: /', 2026-11-18"
+    source: research 2026-11-18 hidden gems SKIP
+  # menorca.es only (Consell Insular de Menorca tourism); other Balearic hosts are separate.
+  - host: menorca.es
+    reason: "robots.txt: 'User-agent: * Disallow: /', 2026-11-18"
+    source: research 2026-11-18 hidden gems SKIP
+  - host: iatlanticas.es
+    reason: "robots.txt: 'User-agent: * Disallow: /', 2026-11-18"
+    source: research 2026-11-18 hidden gems SKIP
+  - host: ats.aq
+    reason: "robots.txt: 'User-agent: * Disallow: /' (only named bots allowed; VoyagerBot is not), 2026-11-18"
+    source: research 2026-11-18 hidden gems SKIP
+  # Hijacked or parked official tourism domains: the content is spam or a for-sale page.
+  - host: visituganda.com
+    reason: domain hijacked/parked; never crawl (parked page, robots.txt '* Disallow /', 2026-11-18)
+    source: research 2026-11-18 hidden gems SKIP
+  - host: tz-vis.hr
+    reason: domain hijacked/parked; never crawl (Vis tourist board domain serves gambling spam, 2026-11-18)
+    source: research 2026-11-18 hidden gems SKIP
+  - host: lastovo-tz.net
+    reason: domain hijacked/parked; never crawl (Lastovo tourist board domain serves spam, 2026-11-18)
+    source: research 2026-11-18 hidden gems SKIP
+  - host: socotraisland.org
+    reason: domain hijacked/parked; never crawl (slot spam, 2026-11-18)
+    source: research 2026-11-18 hidden gems SKIP
+  - host: visitamazonas.com.br
+    reason: domain hijacked/parked; never crawl (gambling spam, 2026-11-18)
+    source: research 2026-11-18 hidden gems SKIP
+  - host: timsnepal.com
+    reason: domain hijacked/parked; never crawl (now an unrelated business, 2026-11-18)
+    source: research 2026-11-18 hidden gems SKIP
+  - host: visitrajaampat.com
+    reason: domain hijacked/parked; never crawl (parked at Hostinger, 2026-11-18)
+    source: research 2026-11-18 hidden gems SKIP
+  - host: ethiopia.travel
+    reason: domain hijacked/parked; never crawl (parked, 2026-11-18)
+    source: research 2026-11-18 hidden gems SKIP
+  - host: visitnaxos.gr
+    reason: domain hijacked/parked; never crawl (parked, 2026-11-18)
+    source: research 2026-11-18 hidden gems SKIP
+  - host: visitfolegandros.gr
+    reason: domain hijacked/parked; never crawl (parked, 2026-11-18)
+    source: research 2026-11-18 hidden gems SKIP
+  - host: tongaholiday.com
+    reason: domain hijacked/parked; never crawl (parked, 2026-11-18)
+    source: research 2026-11-18 hidden gems SKIP
+  # Parked GoDaddy for-sale domains found at onboarding 2026-11-18: robots.txt allows all, the
+  # sitemap lists only /lander, which answers 307 to forsale.godaddy.com.
+  - host: visitmarshallislands.com
+    reason: domain hijacked/parked; never crawl (GoDaddy for-sale lander, onboarding 2026-11-18)
+    source: research 2026-11-18 hidden gems onboarding
+  - host: discovernauru.com
+    reason: domain hijacked/parked; never crawl (GoDaddy for-sale lander, onboarding 2026-11-18)
+    source: research 2026-11-18 hidden gems onboarding
+  - host: visitcuracao.com
+    reason: domain hijacked/parked; never crawl (GoDaddy for-sale lander, onboarding 2026-11-18)
+    source: research 2026-11-18 hidden gems onboarding
+  - host: kosrae.com
+    reason: domain hijacked/parked; never crawl (GoDaddy for-sale lander, onboarding 2026-11-18)
+    source: research 2026-11-18 hidden gems onboarding

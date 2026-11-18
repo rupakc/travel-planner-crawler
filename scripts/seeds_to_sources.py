@@ -224,6 +224,11 @@ LICENCES: dict[str, tuple[str, str | None, str | None]] = {
     "JMA Terms of Use (compatible with CC BY 4.0)": (
         "open", "CC-BY-4.0", "https://www.jma.go.jp/jma/en/copyright.html",
     ),
+    # --- Hidden gems, small islands and remote places (research 2026-11-18) ----------------
+    "Personal-use-only terms; facts only (owner accepted)": COPYRIGHT,
+    "Terms forbid storage/redistribution": COPYRIGHT,  # such sources stay off
+    "South Australian Tourism Commission copyright (reuse with acknowledgement)": ("open", None, None),
+    "Xunta de Galicia reuse terms (attribution)": ("open", None, None),
 }
 
 # Attribution strings (sources.md §18). Default: "<name>".
@@ -8835,6 +8840,7 @@ _src(
     kinds=['place', 'attraction', 'activity'],
     llm=['attraction', 'activity'],
     depth=2,
+    off="terms forbid automated access: visittci.com terms say no 'robot, spider, or other automatic device ... to access the Website' (hidden gems research 2026-11-18); denylisted",
     budget=100,
 )
 _src(
@@ -12342,6 +12348,992 @@ _src(
     off='re-test from the crawler VM before enabling (robots.txt gave no response during research from a European IP; content and terms unchecked)',
     depth=2,
     budget=50,
+)
+
+# ---------------------------------------------------------------------------------------
+# Hidden gems, small islands and remote places (research vetted 2026-11-18 with VoyagerBot's
+# UA; owner rules of 2026-11-18). Terms not found -> facts only, "owner accepted for
+# non-commercial use 2026-11-18"; terms limited to personal/non-commercial use -> on, facts only,
+# same acceptance; terms that forbid storing content in databases/retrieval systems or
+# redistribution -> off. Crawl-delays become min_delay_s; AI-reserved robots.txt (or
+# Content-Signal ai-train=no) -> no LLM kinds. Off reasons: "re-test from the crawler VM" (the
+# research laptop could not reach the site, or got a firewall page; not denylisted),
+# "terms forbid storage/redistribution", "meta robots", "seed unresolved", "adapter pending".
+# Parked/hijacked official domains are denylisted instead of added.
+# Hidden gems part 1 (2026-11-18): Asia, Pacific, Indian Ocean, Australia/NZ, Antarctica, Africa, Middle East, Russia, Caucasus.
+_src(
+    'tb-kiribati',
+    ['places', 'activities', 'getting_around', 'tips'],
+    'Official Kiribati islands, sights, getting there and around; almost no other source covers the outer atolls, for Places to see, Activities, Local transportation and Travel tips.',
+    cls='official',
+    kinds=['place', 'attraction', 'activity', 'transport_option', 'tip'],
+    llm=['attraction', 'activity', 'transport_option', 'tip'],
+    depth=1,
+    budget=100,
+    seeds=['https://kiribatitourism.gov.ki/'],
+)
+_src(
+    'tb-fsm',
+    ['places', 'activities', 'tips'],
+    'Official FSM (Yap, Chuuk, Pohnpei, Kosrae) sights, entry and tips, for Places to see, Activities and Travel tips.',
+    cls='official',
+    kinds=['place', 'attraction', 'activity', 'tip'],
+    llm=['attraction', 'activity', 'tip'],
+    depth=1,
+    budget=50,
+    seeds=['https://visit-micronesia.fm/'],
+)
+_src(
+    'tb-yap',
+    ['places', 'activities', 'events'],
+    'Yap Visitors Bureau: manta diving, stone money villages, Yap Day events, etiquette, for Places to see, Activities and Events.',
+    cls='official',
+    kinds=['place', 'attraction', 'activity', 'event'],
+    llm=['attraction', 'activity', 'event'],
+    depth=1,
+    budget=100,
+    seeds=['https://visityap.com/'],
+)
+_src(
+    'tb-pohnpei',
+    ['places', 'activities'],
+    'Pohnpei Visitors Bureau: Nan Madol, waterfalls, diving, for Places to see and Activities.',
+    cls='official',
+    kinds=['place', 'attraction', 'activity'],
+    llm=['attraction', 'activity'],
+    depth=2,
+    budget=100,
+)
+_src(
+    'tb-cook-islands',
+    ['places', 'activities', 'events', 'hotels', 'tips'],
+    'Official Cook Islands (Rarotonga, Aitutaki, outer islands) sights, events, stays, for Places to see, Activities, Events, Hotels and Travel tips.',
+    cls='official',
+    kinds=['place', 'attraction', 'activity', 'event', 'hotel', 'tip'],
+    llm=['attraction', 'activity', 'event', 'hotel', 'tip'],
+    depth=1,
+    budget=100,
+    seeds=['https://cookislands.travel/de/node/1'],
+    include=['^https?://cookislands\\.travel/de/'],
+)
+_src(
+    'gov-tokelau',
+    ['tips', 'getting_around', 'visa'],
+    'Government of Tokelau: the only official source on entry permits and the ferry to Tokelau, for Travel tips, Local transportation and Visa.',
+    cls='official',
+    kinds=['tip', 'transport_option', 'visa_rule'],
+    llm=['tip', 'transport_option', 'visa_rule'],
+    depth=1,
+    budget=100,
+    seeds=['https://www.tokelau.org.nz/'],
+)
+_src(
+    'tb-american-samoa',
+    ['places', 'activities', 'events'],
+    "American Samoa Visitors Bureau (redirects to www.visitamericansamoa.org): Manu'a, NP of American Samoa, events, for Places to see, Activities and Events.",
+    cls='official',
+    kinds=['place', 'attraction', 'activity', 'event'],
+    llm=['attraction', 'activity', 'event'],
+    depth=1,
+    budget=100,
+    seeds=['https://www.visitamericansamoa.org/'],
+)
+_src(
+    'tb-norfolk-island',
+    ['places', 'activities', 'events', 'getting_around'],
+    'Norfolk Island Tourism: heritage sites, events, how to get there, for Places to see, Activities, Events and Local transportation.',
+    cls='official',
+    kinds=['place', 'attraction', 'activity', 'event', 'transport_option'],
+    llm=['attraction', 'activity', 'event', 'transport_option'],
+    depth=1,
+    budget=50,
+    seeds=['https://www.norfolkisland.com.au/'],
+)
+_src(
+    'tb-lord-howe',
+    ['places', 'activities', 'getting_around'],
+    'Lord Howe Island Tourism Association: visitor cap, walks, getting there, for Places to see, Activities and Local transportation.',
+    cls='official',
+    kinds=['place', 'attraction', 'activity', 'transport_option'],
+    llm=['attraction', 'activity', 'transport_option'],
+    depth=2,
+    budget=100,
+)
+_src(
+    'tb-christmas-island',
+    ['places', 'activities', 'events', 'weather'],
+    'Christmas Island Tourism: red crab migration calendar, sights, access, for Places to see, Activities, Events and Weather.',
+    cls='official',
+    kinds=['place', 'attraction', 'activity', 'event', 'tip'],
+    llm=['attraction', 'activity', 'event', 'tip'],
+    depth=1,
+    budget=100,
+    seeds=['https://www.christmas.net.au/'],
+)
+_src(
+    'tb-cocos-keeling',
+    ['places', 'activities', 'getting_around'],
+    'Cocos (Keeling) Islands Tourism: islands, ferry/flights, activities, for Places to see, Activities and Local transportation.',
+    cls='official',
+    kinds=['place', 'attraction', 'activity', 'transport_option'],
+    llm=['attraction', 'activity', 'transport_option'],
+    depth=1,
+    budget=100,
+    seeds=['https://cocoskeelingislands.com.au/'],
+)
+_src(
+    'tb-pitcairn',
+    ['places', 'getting_around', 'visa', 'tips'],
+    'Pitcairn Islands Tourism: visa/landing rules, supply-ship access, stays; the only official source, for Places to see, Local transportation, Visa and Travel tips.',
+    cls='official',
+    kinds=['place', 'attraction', 'transport_option', 'visa_rule', 'tip'],
+    llm=['attraction', 'transport_option', 'visa_rule', 'tip'],
+    depth=1,
+    budget=100,
+    seeds=['https://www.visitpitcairn.pn/'],
+)
+_src(
+    'tb-mayotte',
+    ['places', 'activities', 'events'],
+    'Mayotte tourism (AaDTM), for Places to see, Activities and Events.',
+    cls='official',
+    kinds=['place', 'attraction', 'activity', 'event'],
+    llm=['attraction', 'activity', 'event'],
+    depth=1,
+    budget=100,
+    seeds=['https://www.mayotte-tourisme.com/'],
+)
+_src(
+    'tb-lakshadweep',
+    ['places', 'visa', 'getting_around', 'hotels'],
+    'SPORTS Lakshadweep: permits, packages, islands, for Places to see, Visa, Local transportation and Hotels.',
+    cls='official',
+    kinds=['place', 'attraction', 'visa_rule', 'transport_option', 'hotel'],
+    llm=['attraction', 'visa_rule', 'transport_option', 'hotel'],
+    depth=2,
+    budget=100,
+)
+_src(
+    'tb-ogasawara',
+    ['places', 'activities', 'getting_around'],
+    'Ogasawara Village Tourism Association (6-day boat access only), for Places to see, Activities and Local transportation.',
+    cls='official',
+    kinds=['place', 'attraction', 'activity', 'transport_option'],
+    llm=['attraction', 'activity', 'transport_option'],
+    depth=1,
+    budget=100,
+    seeds=['https://www.ogasawaramura.com/'],
+)
+_src(
+    'tb-tokyo-islands',
+    ['places', 'activities', 'getting_around'],
+    'Tokyo Islands (Izu & Ogasawara) official portal, for Places to see, Activities and Local transportation.',
+    cls='official',
+    kinds=['place', 'attraction', 'activity', 'transport_option'],
+    llm=['attraction', 'activity', 'transport_option'],
+    depth=1,
+    budget=100,
+    seeds=['https://www.tokyo-islands.com/'],
+)
+_src(
+    'tb-sado',
+    ['places', 'activities', 'events'],
+    'Sado tourism navi, for Places to see, Activities and Events.',
+    cls='official',
+    kinds=['place', 'attraction', 'activity', 'event'],
+    llm=['attraction', 'activity', 'event'],
+    depth=1,
+    budget=100,
+    seeds=['https://www.visitsado.com/'],
+)
+_src(
+    'tb-oki',
+    ['places', 'activities'],
+    'Oki Islands UNESCO Geopark, for Places to see and Activities.',
+    cls='official',
+    kinds=['place', 'attraction', 'activity'],
+    llm=['attraction', 'activity'],
+    depth=1,
+    budget=100,
+    seeds=['https://www.oki-geopark.jp/'],
+)
+_src(
+    'tb-japan-beautiful-villages',
+    ['places', 'activities'],
+    'The Most Beautiful Villages in Japan association (japan-utsukushii-mura.com), for Places to see and Activities.',
+    cls='official',
+    kinds=['place', 'attraction', 'activity'],
+    llm=['attraction', 'activity'],
+    depth=1,
+    budget=50,
+    seeds=['https://japan-utsukushii-mura.com/'],
+)
+_src(
+    'tb-tohoku',
+    ['places', 'activities', 'events', 'itinerary'],
+    'Tohoku Tourism Promotion Organization, for Places to see, Activities, Events and the itinerary.',
+    cls='official',
+    kinds=['place', 'attraction', 'activity', 'event'],
+    llm=['attraction', 'activity', 'event'],
+    depth=1,
+    budget=100,
+    seeds=['https://www.tohokukanko.jp/'],
+)
+_src(
+    'tb-kumano',
+    ['walking_tours', 'activities', 'places', 'hotels'],
+    'Tanabe City Kumano Tourism Bureau: Kumano Kodo routes, lodging, walking tours, for Walking tours, Activities, Places to see and Hotels.',
+    cls='official',
+    kinds=['walking_tour', 'activity', 'place', 'attraction', 'hotel'],
+    llm=['walking_tour', 'activity', 'attraction', 'hotel'],
+    depth=1,
+    budget=100,
+    seeds=['https://www.tb-kumano.jp/'],
+)
+_src(
+    'tb-shikoku',
+    ['places', 'activities', 'itinerary'],
+    'Shikoku Tourism (official): incl. 88-temple route, for Places to see, Activities and the itinerary.',
+    cls='official',
+    kinds=['place', 'attraction', 'activity'],
+    llm=['attraction', 'activity'],
+    depth=2,
+    budget=100,
+)
+_src(
+    'ev-setouchi-triennale',
+    ['events', 'places'],
+    'Setouchi Triennale: art festival across Inland Sea islands, for Events and Places to see.',
+    cls='official',
+    kinds=['event', 'place', 'attraction'],
+    llm=['event', 'attraction'],
+    depth=1,
+    budget=100,
+    seeds=['https://setouchi-artfest.jp/'],
+)
+_src(
+    'tb-jeju',
+    ['places', 'activities', 'events'],
+    'Visit Jeju (incl. Udo, Marado), for Places to see, Activities and Events.',
+    cls='official',
+    kinds=['place', 'attraction', 'activity', 'event'],
+    llm=['attraction', 'activity', 'event'],
+    off="re-test from the crawler VM: robots.txt answered a web-firewall block page ('contrary to the Web firewall security policies') at onboarding 2026-11-18 from a laptop IP; not denylisted",
+    depth=2,
+    budget=100,
+)
+_src(
+    'tb-penghu',
+    ['places', 'activities', 'events'],
+    'Penghu National Scenic Area, for Places to see, Activities and Events.',
+    cls='official',
+    kinds=['place', 'attraction', 'activity', 'event'],
+    llm=['attraction', 'activity', 'event'],
+    depth=1,
+    budget=100,
+    seeds=['https://www.penghu-nsa.gov.tw/'],
+)
+_src(
+    'tb-matsu',
+    ['places', 'activities', 'events'],
+    'Matsu National Scenic Area, for Places to see, Activities and Events.',
+    cls='official',
+    kinds=['place', 'attraction', 'activity', 'event'],
+    llm=['attraction', 'activity', 'event'],
+    depth=1,
+    budget=100,
+    seeds=['https://www.matsu-nsa.gov.tw/zh-TW'],
+)
+_src(
+    'tb-taiwan-east-coast',
+    ['places', 'activities'],
+    'East Coast NSA (Green Island, Orchid Island), for Places to see and Activities.',
+    cls='official',
+    kinds=['place', 'attraction', 'activity'],
+    llm=['attraction', 'activity'],
+    depth=1,
+    budget=100,
+    seeds=['https://www.eastcoast-nsa.gov.tw/en/'],
+    include=['^https?://www\\.eastcoast-nsa\\.gov\\.tw/en/'],
+)
+_src(
+    'tb-langkawi',
+    ['places', 'activities', 'events'],
+    'Langkawi Development Authority tourism, for Places to see, Activities and Events.',
+    cls='official',
+    kinds=['place', 'attraction', 'activity', 'event'],
+    llm=['attraction', 'activity', 'event'],
+    depth=1,
+    budget=50,
+    seeds=['https://naturallylangkawi.my/'],
+)
+_src(
+    'cbt-kyrgyzstan',
+    ['activities', 'hotels', 'places'],
+    'CBT Kyrgyzstan: homestays, guides, yurt camps, for Activities, Hotels and Places to see.',
+    cls='reference',
+    kinds=['activity', 'hotel', 'place', 'attraction'],
+    llm=['activity', 'hotel', 'attraction'],
+    depth=1,
+    budget=100,
+    seeds=['https://cbtkyrgyzstan.kg/'],
+)
+_src(
+    'ref-pamirs',
+    ['places', 'activities', 'getting_around', 'visa'],
+    'META Pamirs guide: GBAO permit, Pamir Highway transport, homestays, for Places to see, Activities, Local transportation and Visa.',
+    cls='reference',
+    kinds=['place', 'attraction', 'activity', 'transport_option', 'tip'],
+    llm=['attraction', 'activity', 'transport_option', 'tip'],
+    depth=1,
+    budget=50,
+    seeds=['https://pamirs.org/'],
+)
+_src(
+    'tb-kamchatka',
+    ['places', 'activities'],
+    'Kamchatka tourism portal, for Places to see and Activities.',
+    cls='official',
+    kinds=['place', 'attraction', 'activity'],
+    llm=['attraction', 'activity'],
+    depth=1,
+    budget=100,
+    seeds=['https://visitkamchatka.ru/'],
+)
+_src(
+    'ref-iaato',
+    ['tips', 'places', 'activities'],
+    'IAATO: Antarctic visitor guidelines, site guidelines, statistics, for Travel tips, Places to see and Activities.',
+    cls='reference',
+    kinds=['tip', 'place', 'attraction', 'activity'],
+    llm=['tip', 'attraction', 'activity'],
+    depth=2,
+    budget=100,
+)
+_src(
+    'gov-south-georgia',
+    ['visa', 'tips', 'places'],
+    'South Georgia & South Sandwich Is: visitor permits, landing rules, for Visa, Travel tips and Places to see.',
+    cls='official',
+    kinds=['visa_rule', 'tip', 'place', 'attraction'],
+    llm=['visa_rule', 'tip', 'attraction'],
+    depth=1,
+    budget=50,
+    seeds=['https://gov.gs/'],
+)
+_src(
+    'tb-stewart-island',
+    ['places', 'activities'],
+    'Stewart Island Promotion, for Places to see and Activities.',
+    cls='reference',
+    kinds=['place', 'attraction', 'activity'],
+    llm=['attraction', 'activity'],
+    depth=1,
+    budget=100,
+    seeds=['https://www.stewartisland.co.nz/'],
+)
+_src(
+    'tb-chatham-islands',
+    ['places', 'activities', 'getting_around'],
+    'Visit Chatham Islands (visitchathamislands.com), for Places to see, Activities and Local transportation.',
+    cls='official',
+    kinds=['place', 'attraction', 'activity', 'transport_option'],
+    llm=['attraction', 'activity', 'transport_option'],
+    depth=1,
+    budget=50,
+    seeds=['https://visitchathamislands.com'],
+)
+_src(
+    'tb-eswatini',
+    ['places', 'activities', 'events'],
+    'Eswatini Tourism Authority, for Places to see, Activities and Events.',
+    cls='official',
+    kinds=['place', 'attraction', 'activity', 'event'],
+    llm=['attraction', 'activity', 'event'],
+    depth=1,
+    budget=100,
+    seeds=['https://www.thekingdomofeswatini.com/'],
+)
+_src(
+    'ref-japan-onsen-assoc',
+    ['places', 'activities'],
+    'Japan Spa Association: onsen, hot-spring etiquette, news, for Places to see and Activities.',
+    cls='reference',
+    kinds=['place', 'attraction', 'activity'],
+    llm=['attraction', 'activity'],
+    depth=1,
+    budget=50,
+    seeds=['https://www.spa.or.jp/'],
+)
+_src(
+    'tr-tokai-kisen',
+    ['getting_around'],
+    'Tokai Kisen: Izu Islands ships, schedules, service status, for Local transportation.',
+    cls='official',
+    kinds=['transport_option'],
+    llm=['transport_option'],
+    depth=1,
+    budget=100,
+    seeds=['https://www.tokaikisen.co.jp/'],
+)
+_src(
+    'tr-ogasawara-kaiun',
+    ['getting_around'],
+    'Ogasawara Kaiun: Ogasawara Maru schedule (only access to Chichijima), for Local transportation.',
+    cls='official',
+    kinds=['transport_option'],
+    llm=['transport_option'],
+    depth=2,
+    budget=100,
+)
+_src(
+    'guide-wanderlush',
+    ['places', 'itinerary', 'tips'],
+    'Wander-Lush: Caucasus, Balkans, Central Asia guides, for Places to see, the itinerary and Travel tips.',
+    cls='editorial',
+    kinds=['place', 'attraction', 'tip'],
+    llm=['attraction', 'tip'],
+    depth=1,
+    budget=100,
+    seeds=['https://wander-lush.org/'],
+)
+_src(
+    'tb-ishigaki',
+    ['places', 'activities'],
+    'Ishigaki City Tourism Association (Yaeyama), for Places to see and Activities.',
+    cls='official',
+    kinds=['place', 'attraction', 'activity'],
+    llm=['attraction', 'activity'],
+    depth=1,
+    budget=50,
+    seeds=['https://yaeyama.or.jp/'],
+)
+_src(
+    'tb-goto',
+    ['places', 'activities'],
+    'Goto Islands official tourism, for Places to see and Activities.',
+    cls='official',
+    kinds=['place', 'attraction', 'activity'],
+    llm=['attraction', 'activity'],
+    depth=1,
+    budget=100,
+    seeds=['https://goto.nagasaki-tabinet.com/'],
+)
+_src(
+    'gov-kinmen',
+    ['places', 'activities'],
+    'Kinmen County Government (tourism pages), for Places to see and Activities.',
+    cls='official',
+    kinds=['place', 'attraction', 'activity'],
+    llm=['attraction', 'activity'],
+    depth=1,
+    budget=100,
+    seeds=['https://www.kinmen.gov.tw/'],
+)
+_src(
+    'tb-labuan-bajo',
+    ['places', 'activities', 'events'],
+    'BPOLBF Labuan Bajo / Flores (bpolbf.kemenpar.go.id), for Places to see, Activities and Events.',
+    cls='official',
+    kinds=['place', 'attraction', 'activity', 'event'],
+    llm=['attraction', 'activity', 'event'],
+    depth=2,
+    budget=100,
+)
+_src(
+    'np-komodo',
+    ['places', 'activities', 'tips'],
+    'Komodo National Park: entry fees, rules, for Places to see, Activities and Travel tips.',
+    cls='official',
+    kinds=['place', 'attraction', 'activity', 'tip'],
+    llm=['attraction', 'activity', 'tip'],
+    depth=2,
+    budget=100,
+)
+_src(
+    'gov-leh-permit',
+    ['visa', 'tips'],
+    'Leh District Protected Area Permit system: inner line/PAP rules for Ladakh, for Visa and Travel tips.',
+    cls='official',
+    kinds=['visa_rule', 'tip'],
+    llm=['visa_rule', 'tip'],
+    depth=1,
+    budget=100,
+    seeds=['https://www.lahdclehpermit.in/'],
+)
+_src(
+    'gov-leh',
+    ['places', 'visa', 'tips'],
+    'District Leh (Ladakh): tourism, permits, notices, for Places to see, Visa and Travel tips.',
+    cls='official',
+    kinds=['place', 'attraction', 'visa_rule', 'tip'],
+    llm=['attraction', 'visa_rule', 'tip'],
+    depth=2,
+    budget=100,
+)
+_src(
+    'tb-pakistan',
+    ['places', 'activities'],
+    'Pakistan Tourism (incl. Gilgit-Baltistan), for Places to see and Activities.',
+    cls='official',
+    kinds=['place', 'attraction', 'activity'],
+    llm=['attraction', 'activity'],
+    depth=2,
+    budget=100,
+)
+_src(
+    'gov-gilgit-baltistan',
+    ['places', 'tips'],
+    'Gilgit-Baltistan Government notices (NOC/permits), for Places to see and Travel tips.',
+    cls='official',
+    kinds=['place', 'attraction', 'tip'],
+    llm=['attraction', 'tip'],
+    depth=2,
+    budget=100,
+)
+_src(
+    'tb-cape-verde',
+    ['places', 'activities'],
+    'Turismo Cabo Verde (official), for Places to see and Activities.',
+    cls='official',
+    kinds=['place', 'attraction', 'activity'],
+    llm=['attraction', 'activity'],
+    depth=1,
+    budget=100,
+    seeds=['https://www.turismo.cv/'],
+)
+_src(
+    'tb-tuvalu',
+    ['places', 'tips'],
+    'Timeless Tuvalu: official Tuvalu tourism, for Places to see and Travel tips.',
+    cls='official',
+    kinds=['place', 'attraction', 'tip'],
+    llm=['attraction', 'tip'],
+    depth=1,
+    budget=50,
+    seeds=['https://www.timelesstuvalu.com/'],
+)
+_src(
+    'gov-torres-strait',
+    ['places', 'tips'],
+    'Torres Strait Regional Authority: island visit protocols/permits, for Places to see and Travel tips.',
+    cls='official',
+    kinds=['place', 'attraction', 'tip'],
+    llm=['attraction', 'tip'],
+    depth=1,
+    budget=100,
+    seeds=['https://www.tsra.gov.au/'],
+    attribution='© Torres Strait Regional Authority, CC BY 4.0',
+)
+_src(
+    'blog-kimberley',
+    ['places', 'activities'],
+    'Kimberley Australia travel guide (Broome, Gibb River Road), for Places to see and Activities.',
+    cls='editorial',
+    kinds=['place', 'attraction', 'activity'],
+    llm=['attraction', 'activity'],
+    depth=1,
+    budget=50,
+    seeds=['https://www.kimberleyaustralia.com/'],
+)
+_src(
+    'tb-flinders-island',
+    ['places', 'activities'],
+    'Flinders Island tourism, for Places to see and Activities.',
+    cls='reference',
+    kinds=['place', 'attraction', 'activity'],
+    llm=['attraction', 'activity'],
+    depth=2,
+    budget=100,
+)
+_src(
+    'tb-great-barrier',
+    ['places', 'activities'],
+    'Great Barrier Island (Aotea) tourism, for Places to see and Activities.',
+    cls='official',
+    kinds=['place', 'attraction', 'activity'],
+    llm=['attraction', 'activity'],
+    depth=1,
+    budget=50,
+    seeds=['https://www.greatbarrierisland.nz/'],
+)
+_src(
+    'gov-dasta',
+    ['places', 'activities', 'events'],
+    'DASTA Thailand: designated sustainable-tourism areas (Koh Chang, Nan, Loei, Sukhothai) and community tourism, for Places to see, Activities and Events.',
+    cls='official',
+    kinds=['place', 'attraction', 'activity', 'event'],
+    llm=['attraction', 'activity', 'event'],
+    depth=2,
+    budget=100,
+    include=['^https?://www\\.dasta\\.or\\.th/th/'],
+)
+_src(
+    'np-con-dao',
+    ['places', 'activities', 'tips'],
+    'Côn Đảo National Park: turtle watching, permits, trails, for Places to see, Activities and Travel tips.',
+    cls='official',
+    kinds=['place', 'attraction', 'activity', 'tip'],
+    depth=1,
+    budget=100,
+    seeds=['https://www.condaopark.com.vn/'],
+)
+_src(
+    'museum-solovki',
+    ['places', 'events', 'getting_around'],
+    'Solovetsky Museum-Reserve: visiting, transport, events, for Places to see, Events and Local transportation.',
+    cls='official',
+    kinds=['place', 'attraction', 'event', 'transport_option'],
+    llm=['attraction', 'event', 'transport_option'],
+    depth=1,
+    budget=100,
+    seeds=['https://solovky.ru/'],
+)
+_src(
+    'gov-taaf',
+    ['places', 'getting_around', 'tips'],
+    'TAAF: Kerguelen, Crozet, Scattered Islands; Marion Dufresne passenger voyages, for Places to see, Local transportation and Travel tips.',
+    cls='official',
+    kinds=['place', 'attraction', 'transport_option', 'tip'],
+    llm=['attraction', 'transport_option', 'tip'],
+    depth=1,
+    budget=100,
+    seeds=['https://taaf.fr/'],
+)
+_src(
+    'gov-bat',
+    ['tips', 'visa', 'places'],
+    'British Antarctic Territory: visitor permits, Port Lockroy, news, for Travel tips, Visa and Places to see.',
+    cls='official',
+    kinds=['tip', 'visa_rule', 'place', 'attraction'],
+    llm=['tip', 'visa_rule', 'attraction'],
+    depth=1,
+    budget=50,
+    seeds=['https://www.britishantarcticterritory.org.uk/'],
+)
+_src(
+    'ref-ntnc',
+    ['activities', 'places', 'tips'],
+    'NTNC: Annapurna, Manaslu, Gaurishankar conservation areas (ACAP permit), for Activities, Places to see and Travel tips.',
+    cls='official',
+    kinds=['activity', 'place', 'attraction', 'tip'],
+    llm=['activity', 'attraction', 'tip'],
+    depth=2,
+    budget=100,
+)
+_src(
+    'np-rapa-nui',
+    ['places', 'visa', 'tips'],
+    "Ma'u Henua Rapa Nui National Park (rapanuinationalpark.com): tickets, rules, for Places to see, Visa and Travel tips.",
+    cls='official',
+    kinds=['place', 'attraction', 'visa_rule', 'tip'],
+    llm=['attraction', 'visa_rule', 'tip'],
+    depth=1,
+    budget=100,
+    seeds=['https://www.rapanuinationalpark.com/'],
+)
+_src(
+    'ref-shikoku-henro',
+    ['walking_tours', 'itinerary', 'places'],
+    'Shikoku 88 Temple Pilgrimage Association, for Walking tours, the itinerary and Places to see.',
+    cls='official',
+    kinds=['walking_tour', 'place', 'attraction'],
+    llm=['walking_tour', 'attraction'],
+    depth=1,
+    budget=50,
+    seeds=['https://88shikokuhenro.jp/'],
+)
+_src(
+    'blog-hikinginjapan',
+    ['activities', 'places', 'walking_tours'],
+    'Hiking in Japan: rural trails, mountain huts, for Activities, Places to see and Walking tours.',
+    cls='editorial',
+    kinds=['activity', 'place', 'attraction', 'walking_tour'],
+    llm=['activity', 'attraction', 'walking_tour'],
+    depth=1,
+    budget=50,
+    seeds=['https://hikinginjapan.com/'],
+)
+_src(
+    'tb-miyakojima',
+    ['places', 'activities', 'events'],
+    'Miyakojima Tourism Association, for Places to see, Activities and Events.',
+    cls='official',
+    kinds=['place', 'attraction', 'activity', 'event'],
+    llm=['attraction', 'activity', 'event'],
+    depth=1,
+    budget=100,
+    seeds=['https://miyako-guide.net/'],
+)
+_src(
+    'tb-naoshima',
+    ['places', 'activities', 'getting_around'],
+    'Naoshima Tourism Association (art island, ferries), for Places to see, Activities and Local transportation.',
+    cls='official',
+    kinds=['place', 'attraction', 'activity', 'transport_option'],
+    llm=['attraction', 'activity', 'transport_option'],
+    depth=1,
+    budget=100,
+    seeds=['https://naoshima.net/ja/'],
+    include=['^https?://naoshima\\.net/ja/'],
+)
+_src(
+    'tb-iki',
+    ['places', 'activities'],
+    'Iki Island tourism navi, for Places to see and Activities.',
+    cls='official',
+    kinds=['place', 'attraction', 'activity'],
+    llm=['attraction', 'activity'],
+    depth=1,
+    budget=100,
+    seeds=['https://www.ikikankou.com/'],
+)
+_src(
+    'tb-tsushima',
+    ['places', 'activities'],
+    'Tsushima tourism association, for Places to see and Activities.',
+    cls='official',
+    kinds=['place', 'attraction', 'activity'],
+    llm=['attraction', 'activity'],
+    depth=1,
+    budget=100,
+    seeds=['https://www.tsushima-net.org/'],
+)
+_src(
+    'tb-rishiri',
+    ['places', 'activities'],
+    'Rishiri island tourism, for Places to see and Activities.',
+    cls='official',
+    kinds=['place', 'attraction', 'activity'],
+    llm=['attraction', 'activity'],
+    depth=1,
+    budget=100,
+    seeds=['https://www.rishiri-plus.jp/'],
+)
+_src(
+    'ref-shiretoko',
+    ['places', 'activities', 'tips'],
+    'Shiretoko Nature Foundation: bear safety, trail status, for Places to see, Activities and Travel tips.',
+    cls='official',
+    kinds=['place', 'attraction', 'activity', 'tip'],
+    llm=['attraction', 'activity', 'tip'],
+    depth=1,
+    budget=100,
+    seeds=['https://www.shiretoko.or.jp/'],
+)
+_src(
+    'gov-ulleung',
+    ['places', 'getting_around', 'activities'],
+    'Ulleung County (Ulleungdo, Dokdo ferries), for Places to see, Local transportation and Activities.',
+    cls='official',
+    kinds=['place', 'attraction', 'transport_option', 'activity'],
+    llm=['attraction', 'transport_option', 'activity'],
+    off="re-test from the crawler VM: robots.txt answered a web-firewall block page ('contrary to the Web firewall security policies') at onboarding 2026-11-18 from a laptop IP; not denylisted",
+    depth=2,
+    budget=100,
+)
+_src(
+    'guide-tioman',
+    ['places', 'activities'],
+    'Tioman Island info, for Places to see and Activities.',
+    cls='editorial',
+    kinds=['place', 'attraction', 'activity'],
+    llm=['attraction', 'activity'],
+    depth=2,
+    budget=100,
+)
+_src(
+    'gov-lord-howe-board',
+    ['tips', 'getting_around', 'places'],
+    'Lord Howe Island Board: visitor cap, biosecurity, walks, for Travel tips, Local transportation and Places to see.',
+    cls='official',
+    kinds=['tip', 'transport_option', 'place', 'attraction'],
+    llm=['tip', 'transport_option', 'attraction'],
+    depth=1,
+    budget=100,
+    seeds=['https://www.lhib.nsw.gov.au/'],
+)
+_src(
+    'ref-nma',
+    ['activities', 'tips'],
+    'Nepal Mountaineering Association: trekking peaks, royalties, for Activities and Travel tips.',
+    cls='official',
+    kinds=['activity', 'tip'],
+    llm=['activity', 'tip'],
+    depth=2,
+    budget=100,
+)
+_src(
+    'tb-andaman-nicobar',
+    ['places', 'visa', 'getting_around'],
+    'Andaman & Nicobar Directorate of Tourism: islands, permits (RAP), ferries, for Places to see, Visa and Local transportation.',
+    cls='official',
+    kinds=['place', 'attraction', 'visa_rule', 'transport_option'],
+    llm=['attraction', 'visa_rule', 'transport_option'],
+    depth=1,
+    budget=100,
+    seeds=['https://tourism.andamannicobar.gov.in/'],
+)
+_src(
+    'tb-arunachal',
+    ['places', 'visa', 'activities'],
+    'Arunachal Tourism: ILP/PAP permits, festivals, for Places to see, Visa and Activities.',
+    cls='official',
+    kinds=['place', 'attraction', 'visa_rule', 'activity'],
+    llm=['attraction', 'visa_rule', 'activity'],
+    depth=2,
+    budget=100,
+)
+_src(
+    'tb-amami',
+    ['places', 'activities'],
+    'Amami Oshima tourism, for Places to see and Activities.',
+    cls='official',
+    kinds=['place', 'attraction', 'activity'],
+    llm=['attraction', 'activity'],
+    depth=2,
+    budget=100,
+)
+_src(
+    'guide-capeverdeislands',
+    ['places', 'activities'],
+    'Cape Verde Islands travel info (private), for Places to see and Activities.',
+    cls='editorial',
+    kinds=['place', 'attraction', 'activity'],
+    llm=['attraction', 'activity'],
+    depth=2,
+    budget=100,
+)
+_src(
+    'tb-king-island',
+    ['places', 'activities'],
+    'King Island Tourism, for Places to see and Activities.',
+    cls='official',
+    kinds=['place', 'attraction', 'activity'],
+    llm=['attraction', 'activity'],
+    off='terms forbid storage/redistribution ("You must not: copy or use, in whole or in part, any Content")',
+    depth=2,
+    budget=100,
+)
+_src(
+    'gov-aad',
+    ['tips', 'places'],
+    'Australian Antarctic Program: visitor rules, Macquarie/Heard islands, for Travel tips and Places to see.',
+    cls='official',
+    kinds=['tip', 'place', 'attraction'],
+    llm=['tip', 'attraction'],
+    depth=2,
+    budget=100,
+)
+_src(
+    'tb-setouchi',
+    ['places', 'activities'],
+    'Seto Inland Sea islands, art islands and cycling routes, for Places to see and Activities.',
+    cls='official',
+    kinds=['place', 'attraction', 'activity'],
+    llm=['attraction', 'activity'],
+    off='re-test from the crawler VM: TLS error at research 2026-11-18 (not banned, not denylisted)',
+    depth=2,
+    budget=100,
+)
+_src(
+    'tb-zanzibar',
+    ['places', 'activities'],
+    'Official Zanzibar and Pemba sights and visitor rules, for Places to see and Activities.',
+    cls='official',
+    kinds=['place', 'attraction', 'activity'],
+    llm=['attraction', 'activity'],
+    off='re-test from the crawler VM: unreachable at research 2026-11-18 (not banned, not denylisted)',
+    depth=2,
+    budget=100,
+)
+_src(
+    'tb-rebun',
+    ['places', 'activities'],
+    'Rebun Island flower trails, ferries and sights, for Places to see and Activities.',
+    cls='official',
+    kinds=['place', 'attraction', 'activity'],
+    llm=['attraction', 'activity'],
+    off='re-test from the crawler VM: unreachable at research 2026-11-18 (not banned, not denylisted)',
+    depth=2,
+    budget=100,
+)
+_src(
+    'gov-wakatobi',
+    ['places'],
+    'Wakatobi islands marine park and regency visitor information, for Places to see.',
+    cls='official',
+    kinds=['place', 'attraction'],
+    llm=['attraction'],
+    off='re-test from the crawler VM: unreachable at research 2026-11-18 (not banned, not denylisted)',
+    depth=2,
+    budget=100,
+)
+_src(
+    'museum-kizhi',
+    ['places', 'events'],
+    'Kizhi island wooden churches, opening times and boat access, for Places to see and Events.',
+    cls='official',
+    kinds=['place', 'attraction', 'event'],
+    llm=['attraction', 'event'],
+    off='re-test from the crawler VM: unreachable at research 2026-11-18 (not banned, not denylisted)',
+    depth=2,
+    budget=100,
+)
+_src(
+    'tb-chuuk',
+    ['places', 'activities'],
+    'Chuuk Lagoon wreck diving and island sights, for Places to see and Activities.',
+    cls='official',
+    kinds=['place', 'attraction', 'activity'],
+    llm=['attraction', 'activity'],
+    off='re-test from the crawler VM: connection closed without a response at research 2026-11-18 (not banned, not denylisted)',
+    depth=2,
+    budget=100,
+)
+_src(
+    'tb-himachal-hptdc',
+    ['hotels', 'places'],
+    'Himachal Pradesh state tourism stays and remote valleys (Spiti, Kinnaur), for Hotels and Places to see.',
+    cls='official',
+    kinds=['hotel', 'place', 'attraction'],
+    llm=['hotel', 'attraction'],
+    off='re-test from the crawler VM: DNS failure at research 2026-11-18 (not banned, not denylisted)',
+    depth=2,
+    budget=100,
+)
+_src(
+    'tb-seychelles',
+    ['places', 'activities', 'events'],
+    'Official Seychelles outer islands, sights and events, for Places to see, Activities and Events.',
+    cls='official',
+    kinds=['place', 'attraction', 'activity', 'event'],
+    llm=['attraction', 'activity', 'event'],
+    off='re-test from the crawler VM: robots.txt 522 at research 2026-11-18 (not banned, not denylisted)',
+    depth=2,
+    budget=100,
+)
+_src(
+    'tb-yakushima',
+    ['places', 'activities'],
+    'Yakushima cedar forest trails, access and sights, for Places to see and Activities.',
+    cls='official',
+    kinds=['place', 'attraction', 'activity'],
+    llm=['attraction', 'activity'],
+    off='re-test from the crawler VM: home page 520 at research 2026-11-18 (not banned, not denylisted)',
+    depth=2,
+    budget=100,
+)
+_src(
+    'tb-kangaroo-island',
+    ['places', 'activities'],
+    'Kangaroo Island wildlife, sights and ferry access, for Places to see and Activities.',
+    cls='official',
+    kinds=['place', 'attraction', 'activity'],
+    llm=['attraction', 'activity'],
+    off='re-test from the crawler VM: home page 404 at research 2026-11-18 (not banned, not denylisted)',
+    depth=2,
+    budget=100,
 )
 
 
