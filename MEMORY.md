@@ -215,3 +215,15 @@ plan = `docs/superpowers/plans/2026-11-15-voyager-crawler.md`, r1–r5 = `docs/r
   Toronto reads the CKAN datastore API (robots.txt disallows `/download/`). Licence
   attributions set per source (FSA: "… Open Government Licence v3.0 — Food Standards Agency").
   (crates/vc-sources/src/adapters/{state_dept_country_info,fsa_fhrs,nyc_restaurant_inspections,toronto_dinesafe,inspections}.rs)
+- 2026-11-18: sustainable/eco and budget travel sources (owner: "add all relevant sites"). 116
+  rows: 92 on (html/rss/sitemap, facts only unless CC BY/public domain/EU reuse; terms not found =
+  "owner accepted for non-commercial use 2026-11-18"; Crawl-delays as min_delay_s, budgets <= 200,
+  AI-reserved robots = no LLM kinds; all in ramp-2 and ramp-3), 24 off: adapter pending (ONTD night
+  trains, Big Mac CSV, data.gov.sg hawker centres, EU Ecolabel ECAT, data.gouv.fr ecolabel,
+  flixbus-gtfs whose download goes to the 403 origin gtfs.gis.flix.tech), needs an API key (DOC NZ,
+  Green Seal, ICAO carbon, Seoul Wi-Fi), owner decision (adeac-bandera-azul: personal-use terms),
+  seed unresolved (10, one onboarding request per host), bot wall at onboarding (Ecotourism Kenya,
+  Leave No Trace), relevance (TheSmartLocal: lifestyle, not travel). unesco-whc off: UNESCO terms
+  ban automated access; unesco.org denylisted with 52 other terms-ban/403/challenge hosts. 37
+  travel publications added to TRAVEL_PUBLICATIONS. (scripts/seeds_to_sources.py,
+  policy/denylist.yaml, crates/vc-sources/src/relevance.rs, sources/ramp-2.txt, ramp-3.txt)

@@ -3320,3 +3320,1311 @@ seeds:
       200, "Allow: /api/" (re-checked 2026-11-18; /dataset/*/resource/*/download/* is disallowed, so the
       adapter toronto_dinesafe reads the datastore through /api/3/action/datastore_search, 2000 distinct
       rows per page, latest inspection per establishment). Open Government Licence – Toronto.'
+  # --- Sustainable/eco and budget travel (research 2026-11-18, owner request "add all relevant sites") ---
+  - id: gstc-certified-hotels
+    category: hotels
+    name: GSTC Certified Hotels Directory
+    url: https://www.gstc.org/certified-hotels-directory/
+    method: html
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'robots.txt (research 2026-11-18): 200, * allows all, Crawl-delay: 600 (one request per 10 min, so a small
+      budget). Terms page is an unfilled template (''ENTER YOUR SITE TERMS AND CONDITIONS HERE''); no automated-access
+      clause; ''All Rights Reserved''. If the directory is JavaScript-only, render or drop. Terms unconfirmed; owner
+      accepted for non-commercial use 2026-11-18.'
+  - id: green-tourism-members
+    category: hotels
+    name: Green Tourism (UK) certified members
+    url: https://www.green-tourism.com/our-members/
+    method: html
+    license: Copyright; terms not found
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'robots.txt (research 2026-11-18): 200, ''User-agent: * Disallow:'' (empty). Only a privacy policy; no
+      terms or scraping clause; footer ''All Rights Reserved''. Onboarding check 2026-11-18: the listing is paged
+      (/our-members/page/N/) and links members'' own sites, so only the listing pages are read. Terms unconfirmed;
+      owner accepted for non-commercial use 2026-11-18.'
+  - id: ecotourism-au-greentravelguide
+    category: activities
+    name: Ecotourism Australia Green Travel Guide
+    url: https://greentravelguide.org/
+    method: html
+    license: Copyright; terms not found
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'robots.txt (research 2026-11-18): greentravelguide.org 200 with Crawl-delay: 10; ecotourism.org.au ''Disallow:''
+      empty. The T&C IP clause binds members (''Members, certified, applying or engaged operators and destinations
+      must not use ... the information provided via the services''); no automated-access clause. Terms unconfirmed;
+      owner accepted for non-commercial use 2026-11-18.'
+  - id: ontd-night-trains
+    category: getting_around
+    name: Back-on-Track Open Night Train Database
+    url: https://back-on-track-eu.github.io/night-train-data/data/latest/view_ontd_list.json
+    method: dump
+    license: ODbL 1.0
+    cadence: daily
+    needs_key: false
+    allowed: true
+    notes: 'Files regenerated twice a day (view_ontd_list, view_ontd_details, view_ontd_cities, routes, stops, trips,
+      trip_stop, agencies, calendar, calendar_dates, classes .json). github.io robots.txt 404 (allowed). README: ''Data
+      licence: ODbL 1.0 ... Use the data in a website or app: .../data/latest/<file>.json (stable address, open to
+      any website)''; contents DbCL 1.0.'
+  - id: doc-nz-parks
+    category: places
+    name: 'NZ Department of Conservation: places, Great Walks, know before you go'
+    url: https://www.doc.govt.nz/parks-and-recreation/places-to-go/
+    method: html
+    license: CC BY 4.0
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'robots.txt (research 2026-11-18): 200; disallows only /admin/ /bin/ /api/. ''the material on this website
+      is Crown Copyright and can be reused under the terms of the Creative Commons Attribution 4.0 International Licence
+      (CC BY 4.0)''.'
+  - id: nsw-national-parks
+    category: places
+    name: NSW National Parks and Wildlife Service
+    url: https://www.nationalparks.nsw.gov.au/things-to-do
+    method: html
+    license: CC BY 4.0
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'robots.txt (research 2026-11-18): 200, no blanket disallow. ''it is licensed under the Creative Commons
+      Attribution 4.0 International (CC BY 4.0)''; images, video and databases are excluded (text facts only).'
+  - id: alpine-pearls
+    category: places
+    name: Alpine Pearls (car-free Alpine holiday villages)
+    url: https://www.alpine-pearls.com/en/sitemap.xml
+    method: sitemap
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'robots.txt (research 2026-11-18): 200; sitemaps per language. Imprint: ''The content and graphic ... is
+      protected by copyright. Written permission must be gained in advance'' (reproduction; facts only); no automated-access
+      clause.'
+  - id: la-clef-verte
+    category: hotels
+    name: La Clef Verte (Green Key France) labelled establishments
+    url: https://www.laclefverte.org/etablissement
+    method: html
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'robots.txt (research 2026-11-18): 200. Mentions légales: ''toute reproduction partielle ou totale du présent
+      site ... est strictement interdite sans autorisation'' (reproduction, not access; facts only); no crawling clause.
+      Onboarding check 2026-11-18: the establishment list is /etablissement (filters ?types[0]=N).'
+  - id: blueflag-global-news
+    category: places
+    name: 'Blue Flag International: awarded-sites announcements'
+    url: https://www.blueflag.global/sitemap.xml
+    method: sitemap
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'robots.txt (research 2026-11-18): 200; disallows /config /search /account. No terms page found (Squarespace
+      site). Terms unconfirmed; owner accepted for non-commercial use 2026-11-18.'
+  - id: pavillon-bleu-fr
+    category: places
+    name: Pavillon Bleu (Blue Flag France)
+    url: https://pavillonbleu.org/laureats-sitemap.xml
+    method: sitemap
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'robots.txt (research 2026-11-18): 200 (www redirects to the apex). ''L''ensemble de ce site relève de
+      la législation française et internationale sur le droit d''auteur''; no automated-access clause. Onboarding
+      check 2026-11-18: the sitemap index lists laureats-sitemap.xml (the award-winning beaches and ports). Terms
+      unconfirmed; owner accepted for non-commercial use 2026-11-18.'
+  - id: beachawards-ie
+    category: places
+    name: An Taisce Beach Awards (Blue Flag and Green Coast, Ireland)
+    url: https://beachawards.ie/sitemap_index.xml
+    method: sitemap
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'robots.txt (research 2026-11-18): 200. No terms page found. Onboarding check 2026-11-18: the index lists
+      only page-sitemap.xml (beach and award pages). Terms unconfirmed; owner accepted for non-commercial use 2026-11-18.'
+  - id: adeac-bandera-azul
+    category: places
+    name: ADEAC Bandera Azul (Blue Flag Spain)
+    url: https://www.adeac.es/
+    method: html
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'robots.txt (research 2026-11-18): 200; Drupal default disallows only.'
+  - id: blueflag-gr
+    category: places
+    name: Blue Flag Greece (HSPN)
+    url: https://www.blueflag.gr/el
+    method: html
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'robots.txt (research 2026-11-18): 200. No terms page found.'
+  - id: bandeira-azul-pt
+    category: places
+    name: Bandeira Azul (Blue Flag Portugal, ABAAE)
+    url: https://bandeiraazul.abaae.pt/galardoados/galardoados-2026/
+    method: html
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'robots.txt (research 2026-11-18): 200; only SEO bots blocked. No terms page found. Onboarding check 2026-11-18:
+      the award lists are /galardoados/galardoados-<year>/. Terms unconfirmed; owner accepted for non-commercial use
+      2026-11-18.'
+  - id: mavi-bayrak-tr
+    category: places
+    name: Mavi Bayrak (Blue Flag Türkiye, TÜRÇEV)
+    url: https://www.mavibayrak.org.tr/
+    method: html
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'robots.txt (research 2026-11-18): 200; disallows /images/ /pdf/ /admin/. No terms page found.'
+  - id: vakinn-is
+    category: hotels
+    name: Vakinn (Icelandic Tourist Board quality and environmental certification)
+    url: https://www.vakinn.is/en
+    method: html
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'robots.txt (research 2026-11-18): 200, Crawl-delay: 5. No terms page found. Terms unconfirmed; owner accepted
+      for non-commercial use 2026-11-18.'
+  - id: botswana-ecocert
+    category: hotels
+    name: 'Botswana Tourism Organisation: eco-tourism certification'
+    url: https://www.botswanatourism.co.bw/eco-tourism-certification-application-process
+    method: html
+    license: Copyright; terms not found
+    cadence: quarterly
+    needs_key: false
+    allowed: true
+    notes: 'robots.txt (research 2026-11-18): 200. Disclaimer only.'
+  - id: cst-costa-rica
+    category: hotels
+    name: 'CST: Certificado de Sostenibilidad Turística (ICT) portal'
+    url: https://turismo-sostenible.co.cr/
+    method: html
+    license: Copyright; terms not found
+    cadence: quarterly
+    needs_key: false
+    allowed: true
+    notes: 'robots.txt (research 2026-11-18): 200, no rules for *. Terms URL soft-404s. ict.go.cr has an AI-bot block
+      and is not used.'
+  - id: ecotourism-kenya-ecorated
+    category: hotels
+    name: Ecotourism Kenya eco-rated facilities
+    url: https://www.ecotourismkenya.org/
+    method: html
+    license: Copyright; terms not found
+    cadence: quarterly
+    needs_key: false
+    allowed: true
+    notes: 'robots.txt (research 2026-11-18): 200 but AI reservation (GPTBot/ClaudeBot/CCBot/Google-Extended blocked,
+      Content-Signal ai-train=no).'
+  - id: green-leaf-eco
+    category: hotels
+    name: Green Leaf Eco Standard (Africa)
+    url: https://greenleafecostandard.net/wp-sitemap.xml
+    method: sitemap
+    license: Copyright; terms not found
+    cadence: quarterly
+    needs_key: false
+    allowed: true
+    notes: 'robots.txt (research 2026-11-18): 200. No terms page found. Onboarding check 2026-11-18: a small WordPress
+      site (posts and pages sitemaps). Terms unconfirmed; owner accepted for non-commercial use 2026-11-18.'
+  - id: nordic-swan-hotels
+    category: hotels
+    name: 'Nordic Swan Ecolabel: hotels, restaurants, conference venues'
+    url: https://www.nordic-swan-ecolabel.org/sitemaps.xml
+    method: sitemap
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'robots.txt (research 2026-11-18): 200 on the .org and the national sites. No terms page found.'
+  - id: umweltzeichen-tourism
+    category: hotels
+    name: 'Österreichisches Umweltzeichen: tourism businesses'
+    url: https://www.umweltzeichen.at/de/uz-sitemap.xml
+    method: sitemap
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'robots.txt (research 2026-11-18): 200. No terms page found.'
+  - id: viabono
+    category: hotels
+    name: Viabono (German eco-hotels)
+    url: https://www.viabono.de/sitemap.xml
+    method: sitemap
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'robots.txt (research 2026-11-18): 200. Impressum only; no clause. Onboarding check 2026-11-18: the sitemap
+      lists about 5,600 certified-business pages under /details/. Terms unconfirmed; owner accepted for non-commercial
+      use 2026-11-18.'
+  - id: legambiente-turismo
+    category: hotels
+    name: Legambiente Turismo (Italian eco-label)
+    url: https://www.legambienteturismo.it/wp-sitemap-posts-gd_place-1.xml
+    method: sitemap
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'robots.txt (research 2026-11-18): 200. The legal-notes page answered 500; no terms read. Onboarding check
+      2026-11-18: member structures are the gd_place post type (their own sitemap). Terms unconfirmed; owner accepted
+      for non-commercial use 2026-11-18.'
+  - id: tourcert
+    category: activities
+    name: TourCert certified companies and destinations
+    url: https://tourcert.org/sitemap_index.xml
+    method: sitemap
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'robots.txt (research 2026-11-18): 200. Impressum only.'
+  - id: travelife-hotels
+    category: hotels
+    name: Travelife for Accommodation (certified hotels)
+    url: https://travelifestaybetter.com/sitemap.xml
+    method: sitemap
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'robots.txt (research 2026-11-18): 200. Privacy policy only.'
+  - id: biosphere-certified
+    category: hotels
+    name: Biosphere Sustainable (certified entities and destinations)
+    url: https://www.biospheresustainable.com/sitemap.xml.gz
+    method: sitemap
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'robots.txt (research 2026-11-18): 200 after a redirect; disallows /mant/ /user_guide/. No legal page found.
+      Onboarding check 2026-11-18: about 2,300 certified companies (/en/community/) and 32 destinations (/en/destination/),
+      English pages only. Terms unconfirmed; owner accepted for non-commercial use 2026-11-18.'
+  - id: greenglobe-members
+    category: hotels
+    name: Green Globe certified members
+    url: https://www.greenglobe.com/sitemap.xml
+    method: sitemap
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'robots.txt (research 2026-11-18): 200. No terms page found. Onboarding check 2026-11-18: members are listed
+      by region (/<region>-members) and certifications announced under /news/. Terms unconfirmed; owner accepted for
+      non-commercial use 2026-11-18.'
+  - id: earthcheck
+    category: places
+    name: EarthCheck certified destinations and operations
+    url: https://earthcheck.org/sitemap_index.xml
+    method: sitemap
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'robots.txt (research 2026-11-18): 200. Privacy policy only.'
+  - id: greenkey-global-ca
+    category: hotels
+    name: Green Key Global (Canada hotel eco-rating)
+    url: https://greenkeyglobal.com/sitemap_index.xml
+    method: sitemap
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'robots.txt (research 2026-11-18): 200. Privacy policy only.'
+  - id: the-long-run
+    category: hotels
+    name: The Long Run (conservation-led nature lodges)
+    url: https://www.thelongrun.org/sitemap.xml
+    method: sitemap
+    license: Copyright; terms not found
+    cadence: quarterly
+    needs_key: false
+    allowed: true
+    notes: 'robots.txt (research 2026-11-18): 200. No terms page found. Onboarding check 2026-11-18: members under
+      /accommodation-site-members, /travel-businesses, /ger-members and /group-members. Terms unconfirmed; owner accepted
+      for non-commercial use 2026-11-18.'
+  - id: green-pearls
+    category: hotels
+    name: Green Pearls Unique Places
+    url: https://www.greenpearls.com/hotel-sitemap.xml
+    method: sitemap
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'robots.txt (research 2026-11-18): 200. No terms page found. Onboarding check 2026-11-18: hotels, restaurants
+      and destinations each have their own sitemap. Terms unconfirmed; owner accepted for non-commercial use 2026-11-18.'
+  - id: regenerative-travel
+    category: hotels
+    name: Regenerative Travel (member hotels and magazine)
+    url: https://regenerativetravel.com/sitemap.xml
+    method: sitemap
+    license: Copyright; terms not found
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'robots.txt (research 2026-11-18): 200 (www redirects to the apex). The terms URL returns the home page;
+      no clause found. Onboarding check 2026-11-18: /hotels, /destinations and /magazine sections. Terms unconfirmed;
+      owner accepted for non-commercial use 2026-11-18.'
+  - id: goodtravel-guide
+    category: tips
+    name: Good Travel Guide
+    url: https://goodtravel.guide/wp-sitemap.xml
+    method: sitemap
+    license: Copyright; terms not found
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'robots.txt (research 2026-11-18): 200. Privacy policy only; no clause. Terms unconfirmed; owner accepted
+      for non-commercial use 2026-11-18.'
+  - id: ecophiles
+    category: blogs
+    name: Ecophiles (green travel magazine)
+    url: https://ecophiles.com/feed/
+    method: rss
+    license: Copyright; terms not found
+    cadence: daily
+    needs_key: false
+    allowed: true
+    notes: 'robots.txt (research 2026-11-18): allowed. No terms page or no automated-access clause found. Terms unconfirmed;
+      owner accepted for non-commercial use 2026-11-18.'
+  - id: hanen-ecotourism-norway
+    category: hotels
+    name: HANEN / Ecotourism Norway members
+    url: https://www.hanen.no/hanen_member-sitemap1.xml
+    method: sitemap
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'robots.txt (research 2026-11-18): 200 (ecotourismnorway.no redirects to hanen.no). Privacy policy only.
+      Onboarding check 2026-11-18: members in hanen_member-sitemap1..3.xml. Terms unconfirmed; owner accepted for
+      non-commercial use 2026-11-18.'
+  - id: lnt-org
+    category: tips
+    name: Leave No Trace (US)
+    url: https://lnt.org/why/7-principles/
+    method: html
+    license: Copyright; terms not found
+    cadence: quarterly
+    needs_key: false
+    allowed: true
+    notes: 'robots.txt (research 2026-11-18): 200. Brand guide: the principles must carry ''© Leave No Trace: www.LNT.org''
+      and not be altered.'
+  - id: galapagos-park
+    category: tips
+    name: Dirección del Parque Nacional Galápagos
+    url: https://galapagos.gob.ec/wp-sitemap-posts-page-1.xml
+    method: sitemap
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'robots.txt (research 2026-11-18): 200. No terms page found. Onboarding check 2026-11-18: visitor rules,
+      fees and visitor sites are WordPress pages (their own sitemap). Terms unconfirmed; owner accepted for non-commercial
+      use 2026-11-18.'
+  - id: doc-nz-api
+    category: places
+    name: DOC NZ API (tracks, huts, campsites, alerts)
+    url: https://api.doc.govt.nz/v2/tracks
+    method: api
+    license: CC BY 4.0
+    cadence: weekly
+    needs_key: true
+    allowed: true
+    notes: Structured version of doc-nz-parks. robots.txt 404 (research 2026-11-18).
+  - id: eu-ecolabel-ecat
+    category: hotels
+    name: EU Ecolabel tourist accommodation catalogue (ECAT)
+    url: https://environment.ec.europa.eu/topics/circular-economy/eu-ecolabel_en
+    method: api
+    license: EU reuse policy (attribution)
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: Map and list app over a European Commission backend; no bulk export seen (research 2026-11-18).
+  - id: data-gouv-ecolabel-fr
+    category: hotels
+    name: 'data.gouv.fr: Ecolabel européen, hébergements touristiques français'
+    url: https://www.data.gouv.fr/datasets/ecolabel-europeen-hebergements-touristiques-francais
+    method: dump
+    license: Licence Ouverte 2.0
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'robots.txt (research 2026-11-18): 200 with sitemaps. ''proposés par l''Éditeur sont sous Licence Ouverte''.'
+  - id: greenseal-api
+    category: hotels
+    name: Green Seal certified hotels and lodging (API)
+    url: https://greenseal.org/
+    method: api
+    license: Partner ToS
+    cadence: monthly
+    needs_key: true
+    allowed: true
+    notes: 'robots.txt (research 2026-11-18): Crawl-delay 20. US Green Seal GS-33 lodging.'
+  - id: icao-carbon
+    category: flights
+    name: ICAO Carbon Emissions Calculator data
+    url: https://www.icao.int/environmental-protection/CarbonOffset
+    method: api
+    license: Partner ToS
+    cadence: yearly
+    needs_key: true
+    allowed: true
+    notes: The ICAO website itself is for personal, non-commercial use only; the methodology data is supplied under
+      a Data Supply License Agreement (research 2026-11-18).
+  - id: blog-indietraveller
+    category: blogs
+    name: Indie Traveller
+    url: https://www.indietraveller.co/feed/
+    method: rss
+    license: Copyright; terms not found
+    cadence: daily
+    needs_key: false
+    allowed: true
+    notes: 'robots.txt (research 2026-11-18): allowed. robots.txt reserves AI use (AI crawlers blocked), so title
+      and link only: no LLM kinds. No terms page or no automated-access clause found. Terms unconfirmed; owner accepted
+      for non-commercial use 2026-11-18.'
+  - id: blog-bemusedbackpacker
+    category: blogs
+    name: The Bemused Backpacker
+    url: https://bemusedbackpacker.com/feed/
+    method: rss
+    license: Copyright; terms not found
+    cadence: daily
+    needs_key: false
+    allowed: true
+    notes: 'robots.txt (research 2026-11-18): allowed. No terms page or no automated-access clause found. Terms unconfirmed;
+      owner accepted for non-commercial use 2026-11-18.'
+  - id: blog-backpackerbanter
+    category: blogs
+    name: Backpacker Banter
+    url: https://www.backpackerbanter.com/feed
+    method: rss
+    license: Copyright; terms not found
+    cadence: daily
+    needs_key: false
+    allowed: true
+    notes: 'robots.txt (research 2026-11-18): allowed. No terms page or no automated-access clause found. Terms unconfirmed;
+      owner accepted for non-commercial use 2026-11-18.'
+  - id: blog-twomonkeys
+    category: blogs
+    name: Two Monkeys Travel Group
+    url: https://twomonkeystravelgroup.com/feed/
+    method: rss
+    license: Copyright; terms not found
+    cadence: daily
+    needs_key: false
+    allowed: true
+    notes: 'robots.txt (research 2026-11-18): allowed. Crawl-delay 1 (our 5 s floor wins). No terms page or no automated-access
+      clause found. Terms unconfirmed; owner accepted for non-commercial use 2026-11-18.'
+  - id: blog-travelfreak
+    category: blogs
+    name: TravelFreak
+    url: https://www.travelfreak.com/feed
+    method: rss
+    license: Copyright; terms not found
+    cadence: daily
+    needs_key: false
+    allowed: true
+    notes: 'robots.txt (research 2026-11-18): allowed. No terms page or no automated-access clause found. Terms unconfirmed;
+      owner accepted for non-commercial use 2026-11-18.'
+  - id: blog-savvybackpacker
+    category: blogs
+    name: The Savvy Backpacker
+    url: https://thesavvybackpacker.com/feed/
+    method: rss
+    license: Copyright; terms not found
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'robots.txt (research 2026-11-18): allowed. No terms page or no automated-access clause found. Terms unconfirmed;
+      owner accepted for non-commercial use 2026-11-18.'
+  - id: blog-budgettraveller
+    category: blogs
+    name: The Budget Traveller
+    url: https://budgettraveller.org/feed/
+    method: rss
+    license: Copyright; terms not found
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'robots.txt (research 2026-11-18): allowed. No terms page or no automated-access clause found. Terms unconfirmed;
+      owner accepted for non-commercial use 2026-11-18.'
+  - id: blog-nomadicnotes
+    category: blogs
+    name: Nomadic Notes
+    url: https://www.nomadicnotes.com/feed/
+    method: rss
+    license: Copyright; terms not found
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'robots.txt (research 2026-11-18): allowed. No terms page or no automated-access clause found. Terms unconfirmed;
+      owner accepted for non-commercial use 2026-11-18.'
+  - id: blog-thriftynomads
+    category: blogs
+    name: Thrifty Nomads
+    url: https://thriftynomads.com/sitemap_index.xml
+    method: sitemap
+    license: Copyright; terms not found
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'robots.txt (research 2026-11-18): allowed. /feed/ redirects to the home page, so the sitemap is read (posts
+      only). No terms page or no automated-access clause found. Terms unconfirmed; owner accepted for non-commercial
+      use 2026-11-18.'
+  - id: blog-expertvagabond
+    category: blogs
+    name: Expert Vagabond
+    url: https://expertvagabond.com/sitemap_index.xml
+    method: sitemap
+    license: Copyright; terms not found
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'robots.txt (research 2026-11-18): allowed. /feed/ redirects to the home page, so the sitemap is read (posts
+      only). No terms page or no automated-access clause found. Terms unconfirmed; owner accepted for non-commercial
+      use 2026-11-18.'
+  - id: blog-backpackingislife
+    category: blogs
+    name: Backpacking Is Life
+    url: https://backpackingislife.com/feed/
+    method: rss
+    license: Copyright; terms not found
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'robots.txt (research 2026-11-18): allowed. No terms page or no automated-access clause found. Terms unconfirmed;
+      owner accepted for non-commercial use 2026-11-18.'
+  - id: blog-hippieinheels
+    category: blogs
+    name: Hippie in Heels
+    url: https://hippie-inheels.com/feed/
+    method: rss
+    license: Copyright; terms not found
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'robots.txt (research 2026-11-18): allowed. No terms page or no automated-access clause found. Terms unconfirmed;
+      owner accepted for non-commercial use 2026-11-18.'
+  - id: blog-wheregoesrose
+    category: blogs
+    name: Where Goes Rose
+    url: https://www.wheregoesrose.com/feed/
+    method: rss
+    license: Copyright; terms not found
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'robots.txt (research 2026-11-18): allowed. No terms page or no automated-access clause found. Terms unconfirmed;
+      owner accepted for non-commercial use 2026-11-18.'
+  - id: blog-gobackpacking
+    category: blogs
+    name: Go Backpacking
+    url: https://gobackpacking.com/feed/
+    method: rss
+    license: Copyright; terms not found
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'robots.txt (research 2026-11-18): allowed. GPTBot blocked (partial AI reservation). robots.txt reserves
+      AI use (AI crawlers blocked), so title and link only: no LLM kinds. No terms page or no automated-access clause
+      found. Terms unconfirmed; owner accepted for non-commercial use 2026-11-18.'
+  - id: blog-neverendingvoyage
+    category: blogs
+    name: Never Ending Voyage
+    url: https://www.neverendingvoyage.com/feed/
+    method: rss
+    license: Copyright; terms not found
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'robots.txt (research 2026-11-18): allowed. No terms page or no automated-access clause found. Terms unconfirmed;
+      owner accepted for non-commercial use 2026-11-18.'
+  - id: blog-seasia
+    category: blogs
+    name: SEAsia.co
+    url: https://seasia.co/feed
+    method: rss
+    license: Copyright; terms not found
+    cadence: daily
+    needs_key: false
+    allowed: true
+    notes: 'robots.txt (research 2026-11-18): allowed. No terms page or no automated-access clause found. Terms unconfirmed;
+      owner accepted for non-commercial use 2026-11-18.'
+  - id: blog-eurocheapo
+    category: blogs
+    name: EuroCheapo
+    url: https://www.eurocheapo.com/blog/feed/
+    method: rss
+    license: Copyright; terms not found
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'robots.txt (research 2026-11-18): allowed. Crawl-delay: 30; CCBot blocked. robots.txt reserves AI use
+      (AI crawlers blocked), so title and link only: no LLM kinds. No terms page or no automated-access clause found.
+      Terms unconfirmed; owner accepted for non-commercial use 2026-11-18.'
+  - id: blog-tokyocheapo
+    category: blogs
+    name: Tokyo Cheapo
+    url: https://tokyocheapo.com/feed/
+    method: rss
+    license: Copyright; terms not found
+    cadence: daily
+    needs_key: false
+    allowed: true
+    notes: 'robots.txt (research 2026-11-18): allowed. GPTBot and Google-Extended blocked. robots.txt reserves AI
+      use (AI crawlers blocked), so title and link only: no LLM kinds. No terms page or no automated-access clause
+      found. Terms unconfirmed; owner accepted for non-commercial use 2026-11-18.'
+  - id: blog-japancheapo
+    category: blogs
+    name: Japan Cheapo
+    url: https://japancheapo.com/feed/
+    method: rss
+    license: Copyright; terms not found
+    cadence: daily
+    needs_key: false
+    allowed: true
+    notes: 'robots.txt (research 2026-11-18): allowed. Same robots.txt as Tokyo Cheapo (GPTBot and Google-Extended
+      blocked). robots.txt reserves AI use (AI crawlers blocked), so title and link only: no LLM kinds. No terms page
+      or no automated-access clause found. Terms unconfirmed; owner accepted for non-commercial use 2026-11-18.'
+  - id: blog-vietnamcoracle
+    category: blogs
+    name: Vietnam Coracle
+    url: https://www.vietnamcoracle.com/feed/
+    method: rss
+    license: Copyright; terms not found
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'robots.txt (research 2026-11-18): allowed. All major AI crawlers blocked; Crawl-delay: 10. robots.txt
+      reserves AI use (AI crawlers blocked), so title and link only: no LLM kinds. No terms page or no automated-access
+      clause found. Terms unconfirmed; owner accepted for non-commercial use 2026-11-18.'
+  - id: blog-thesmartlocal
+    category: blogs
+    name: TheSmartLocal
+    url: https://thesmartlocal.com/feed/
+    method: rss
+    license: Copyright; terms not found
+    cadence: daily
+    needs_key: false
+    allowed: true
+    notes: 'robots.txt (research 2026-11-18): allowed. No terms page or no automated-access clause found. Terms unconfirmed;
+      owner accepted for non-commercial use 2026-11-18.'
+  - id: blog-viajenaviagem
+    category: blogs
+    name: Viaje na Viagem (BR)
+    url: https://www.viajenaviagem.com/feed/
+    method: rss
+    license: Copyright; terms not found
+    cadence: daily
+    needs_key: false
+    allowed: true
+    notes: 'robots.txt (research 2026-11-18): allowed. No terms page or no automated-access clause found. Terms unconfirmed;
+      owner accepted for non-commercial use 2026-11-18.'
+  - id: deals-melhoresdestinos
+    category: blogs
+    name: Melhores Destinos (BR)
+    url: https://www.melhoresdestinos.com.br/sitemap_index.xml
+    method: sitemap
+    license: Copyright; terms not found
+    cadence: 12h
+    needs_key: false
+    allowed: true
+    notes: 'robots.txt (research 2026-11-18): allowed. /feed/ is disallowed by robots.txt, so the sitemap is read.
+      No terms page or no automated-access clause found. Terms unconfirmed; owner accepted for non-commercial use
+      2026-11-18.'
+  - id: blog-360meridianos
+    category: blogs
+    name: 360meridianos (BR)
+    url: https://www.360meridianos.com/feed/
+    method: rss
+    license: Copyright; terms not found
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'robots.txt (research 2026-11-18): allowed. No terms page or no automated-access clause found. Terms unconfirmed;
+      owner accepted for non-commercial use 2026-11-18.'
+  - id: blog-elviajerofeliz
+    category: blogs
+    name: El Viajero Feliz (ES)
+    url: https://elviajerofeliz.com/feed/
+    method: rss
+    license: Copyright; terms not found
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'robots.txt (research 2026-11-18): allowed. No terms page or no automated-access clause found. Terms unconfirmed;
+      owner accepted for non-commercial use 2026-11-18.'
+  - id: mag-mexicodesconocido
+    category: blogs
+    name: México Desconocido
+    url: https://www.mexicodesconocido.com.mx/feed
+    method: rss
+    license: Copyright; terms not found
+    cadence: daily
+    needs_key: false
+    allowed: true
+    notes: 'robots.txt (research 2026-11-18): allowed. Crawl-delay: 10; CCBot, PerplexityBot and Bytespider blocked.
+      robots.txt reserves AI use (AI crawlers blocked), so title and link only: no LLM kinds. No terms page or no
+      automated-access clause found. Terms unconfirmed; owner accepted for non-commercial use 2026-11-18.'
+  - id: blog-southamericabackpacker
+    category: blogs
+    name: South America Backpacker
+    url: https://southamericabackpacker.com/feed/
+    method: rss
+    license: Copyright; terms not found
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'robots.txt (research 2026-11-18): allowed. No terms page or no automated-access clause found. Terms unconfirmed;
+      owner accepted for non-commercial use 2026-11-18.'
+  - id: blog-generationvoyage
+    category: blogs
+    name: Generation Voyage (FR)
+    url: https://generationvoyage.fr/feed/
+    method: rss
+    license: Copyright; terms not found
+    cadence: daily
+    needs_key: false
+    allowed: true
+    notes: 'robots.txt (research 2026-11-18): allowed. No terms page or no automated-access clause found. Terms unconfirmed;
+      owner accepted for non-commercial use 2026-11-18.'
+  - id: blog-instinctvoyageur
+    category: blogs
+    name: Instinct Voyageur (FR)
+    url: https://feeds.feedburner.com/InstinctVoyageur
+    method: rss
+    license: Copyright; terms not found
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'robots.txt (research 2026-11-18): allowed. The site''s /feed/ redirects to this FeedBurner feed. No terms
+      page or no automated-access clause found. Terms unconfirmed; owner accepted for non-commercial use 2026-11-18.'
+  - id: blog-phototravellers
+    category: blogs
+    name: Phototravellers (DE)
+    url: https://phototravellers.de/feed/
+    method: rss
+    license: Copyright; terms not found
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'robots.txt (research 2026-11-18): allowed. No terms page or no automated-access clause found. Terms unconfirmed;
+      owner accepted for non-commercial use 2026-11-18.'
+  - id: deals-urlaubstracker
+    category: blogs
+    name: Urlaubstracker (DE)
+    url: https://www.urlaubstracker.de/feed/
+    method: rss
+    license: Copyright; terms not found
+    cadence: 12h
+    needs_key: false
+    allowed: true
+    notes: 'robots.txt (research 2026-11-18): allowed. No terms page or no automated-access clause found. Terms unconfirmed;
+      owner accepted for non-commercial use 2026-11-18.'
+  - id: deals-travelpirates
+    category: blogs
+    name: TravelPirates
+    url: https://www.travelpirates.com/feed
+    method: rss
+    license: Copyright; terms not found
+    cadence: 12h
+    needs_key: false
+    allowed: true
+    notes: 'robots.txt (research 2026-11-18): allowed. Content-Signal: ai-train=yes, search=yes, ai-input=yes. No
+      terms page or no automated-access clause found. Terms unconfirmed; owner accepted for non-commercial use 2026-11-18.'
+  - id: deals-urlaubspiraten
+    category: blogs
+    name: Urlaubspiraten (DE)
+    url: https://www.urlaubspiraten.de/feed
+    method: rss
+    license: Copyright; terms not found
+    cadence: 12h
+    needs_key: false
+    allowed: true
+    notes: 'robots.txt (research 2026-11-18): allowed. Same robots.txt as TravelPirates. No terms page or no automated-access
+      clause found. Terms unconfirmed; owner accepted for non-commercial use 2026-11-18.'
+  - id: deals-viajerospiratas
+    category: blogs
+    name: Viajeros Piratas (ES)
+    url: https://www.viajerospiratas.es/feed
+    method: rss
+    license: Copyright; terms not found
+    cadence: 12h
+    needs_key: false
+    allowed: true
+    notes: 'robots.txt (research 2026-11-18): allowed. Same robots.txt as TravelPirates. No terms page or no automated-access
+      clause found. Terms unconfirmed; owner accepted for non-commercial use 2026-11-18.'
+  - id: deals-dollarflightclub
+    category: blogs
+    name: Dollar Flight Club
+    url: https://dollarflightclub.com/feed/
+    method: rss
+    license: Copyright; terms not found
+    cadence: daily
+    needs_key: false
+    allowed: true
+    notes: 'robots.txt (research 2026-11-18): allowed. The only automated-access clause is in giveaway terms, about
+      contest entries. No terms page or no automated-access clause found. Terms unconfirmed; owner accepted for non-commercial
+      use 2026-11-18.'
+  - id: deals-thriftytraveler
+    category: blogs
+    name: Thrifty Traveler
+    url: https://thriftytraveler.com/feed/
+    method: rss
+    license: Copyright; terms not found
+    cadence: daily
+    needs_key: false
+    allowed: true
+    notes: 'robots.txt (research 2026-11-18): allowed. No terms page or no automated-access clause found. Terms unconfirmed;
+      owner accepted for non-commercial use 2026-11-18.'
+  - id: deals-jacksflightclub
+    category: blogs
+    name: Jack's Flight Club
+    url: https://jacksflightclub.com/sitemap_index.xml
+    method: sitemap
+    license: Copyright; terms not found
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'robots.txt (research 2026-11-18): allowed. /feed/ answers 404, so the sitemap is read (blog only). No
+      terms page or no automated-access clause found. Terms unconfirmed; owner accepted for non-commercial use 2026-11-18.'
+  - id: deals-fly4free
+    category: blogs
+    name: Fly4free
+    url: https://www.fly4free.com/feed/
+    method: rss
+    license: Copyright; terms not found
+    cadence: 12h
+    needs_key: false
+    allowed: true
+    notes: 'robots.txt (research 2026-11-18): allowed. No terms page or no automated-access clause found. Terms unconfirmed;
+      owner accepted for non-commercial use 2026-11-18.'
+  - id: deals-theflightdeal
+    category: blogs
+    name: The Flight Deal
+    url: https://www.theflightdeal.com/feed/
+    method: rss
+    license: Copyright; terms not found
+    cadence: 12h
+    needs_key: false
+    allowed: true
+    notes: 'robots.txt (research 2026-11-18): allowed. No terms page or no automated-access clause found. Terms unconfirmed;
+      owner accepted for non-commercial use 2026-11-18.'
+  - id: blog-frequentmiler
+    category: blogs
+    name: Frequent Miler
+    url: https://frequentmiler.com/feed/
+    method: rss
+    license: Copyright; terms not found
+    cadence: daily
+    needs_key: false
+    allowed: true
+    notes: 'robots.txt (research 2026-11-18): allowed. GPTBot, ClaudeBot, CCBot and Bytespider blocked. robots.txt
+      reserves AI use (AI crawlers blocked), so title and link only: no LLM kinds. No terms page or no automated-access
+      clause found. Terms unconfirmed; owner accepted for non-commercial use 2026-11-18.'
+  - id: blog-pointhacks
+    category: blogs
+    name: Point Hacks (AU)
+    url: https://www.pointhacks.com.au/feed/
+    method: rss
+    license: Copyright; terms not found
+    cadence: daily
+    needs_key: false
+    allowed: true
+    notes: 'robots.txt (research 2026-11-18): allowed. Content-Signal: ai-train=yes, search=yes, ai-input=yes. No
+      terms page or no automated-access clause found. Terms unconfirmed; owner accepted for non-commercial use 2026-11-18.'
+  - id: blog-princeoftravel
+    category: blogs
+    name: Prince of Travel (CA)
+    url: https://princeoftravel.com/feed/
+    method: rss
+    license: Copyright; terms not found
+    cadence: daily
+    needs_key: false
+    allowed: true
+    notes: 'robots.txt (research 2026-11-18): allowed. No terms page or no automated-access clause found. Terms unconfirmed;
+      owner accepted for non-commercial use 2026-11-18.'
+  - id: blog-chicagoonthecheap
+    category: events
+    name: Chicago on the Cheap
+    url: https://chicagoonthecheap.com/feed/
+    method: rss
+    license: Copyright; terms not found
+    cadence: daily
+    needs_key: false
+    allowed: true
+    notes: 'robots.txt (research 2026-11-18): allowed. Crawl-delay: 10. No terms page or no automated-access clause
+      found. Terms unconfirmed; owner accepted for non-commercial use 2026-11-18.'
+  - id: blog-bootsnall
+    category: blogs
+    name: BootsnAll
+    url: https://www.bootsnall.com/sitemap/articles.xml
+    method: sitemap
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'robots.txt (research 2026-11-18): allowed. Crawl-delay: 10; /feed answers 404, so the article sitemap
+      is read. No terms page or no automated-access clause found. Terms unconfirmed; owner accepted for non-commercial
+      use 2026-11-18.'
+  - id: ref-priceoftravel
+    category: tips
+    name: Price of Travel (Backpacker Index)
+    url: https://www.priceoftravel.com/feed
+    method: rss
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'robots.txt (research 2026-11-18): allowed. GPTBot, CCBot and anthropic-ai blocked; numbers only via a
+      non-LLM parser. robots.txt reserves AI use (AI crawlers blocked), so title and link only: no LLM kinds. No terms
+      page or no automated-access clause found. Terms unconfirmed; owner accepted for non-commercial use 2026-11-18.'
+  - id: news-aeroroutes
+    category: news
+    name: AeroRoutes
+    url: https://www.aeroroutes.com/eng?format=rss
+    method: rss
+    license: Copyright; terms not found
+    cadence: daily
+    needs_key: false
+    allowed: true
+    notes: 'robots.txt (research 2026-11-18): allowed. Blocks only /search, /api and /static. No terms page or no
+      automated-access clause found. Terms unconfirmed; owner accepted for non-commercial use 2026-11-18.'
+  - id: bazbus
+    category: getting_around
+    name: Baz Bus (South Africa)
+    url: https://bazbus.com/sitemap_index.xml
+    method: sitemap
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'robots.txt (research 2026-11-18): allowed; the feed is empty, so the sitemap is read. /terms-conditions/
+      and /legal-notice/: no automated-access clause. Terms unconfirmed; owner accepted for non-commercial use 2026-11-18.'
+  - id: blog-coasttocoast
+    category: blogs
+    name: Coast to Coast (Africa backpacker guide)
+    url: https://coasttocoast.co.za/feed/
+    method: rss
+    license: Copyright; terms not found
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'robots.txt (research 2026-11-18): allowed. www.coastingafrica.com redirects here. No terms page or no
+      automated-access clause found. Terms unconfirmed; owner accepted for non-commercial use 2026-11-18.'
+  - id: walking-freetoursbyfoot
+    category: walking_tours
+    name: Free Tours by Foot
+    url: https://freetoursbyfoot.com/sitemaps.xml
+    method: sitemap
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'robots.txt (research 2026-11-18): allowed; /feed/ disallowed, so the sitemap is read. robots.txt reserves
+      AI use (AI crawlers blocked), so title and link only: no LLM kinds. /disclaimer/: no clause. Terms unconfirmed;
+      owner accepted for non-commercial use 2026-11-18.'
+  - id: walking-strawberrytours
+    category: walking_tours
+    name: Strawberry Tours
+    url: https://strawberrytours.com/sitemap.xml
+    method: sitemap
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'robots.txt (research 2026-11-18): allowed. /terms-and-conditions/: only GDPR ''automated information''
+      wording; no access clause. Terms unconfirmed; owner accepted for non-commercial use 2026-11-18.'
+  - id: official-prague-eu
+    category: places
+    name: Prague City Tourism
+    url: https://prague.eu/page-sitemap.xml
+    method: sitemap
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'robots.txt (research 2026-11-18): allowed; Crawl-delay: 600 (one request per 10 min, so English pages
+      only and a small budget). robots.txt reserves AI use (AI crawlers blocked), so title and link only: no LLM kinds.
+      /en/terms-and-conditions/ (e-shop T&Cs): no access clause. Terms unconfirmed; owner accepted for non-commercial
+      use 2026-11-18.'
+  - id: official-romapass
+    category: activities
+    name: Roma Pass
+    url: https://www.romapass.it/en/
+    method: html
+    license: Copyright; terms not found
+    cadence: quarterly
+    needs_key: false
+    allowed: true
+    notes: 'robots.txt (research 2026-11-18): allowed. /terms-of-use/ is empty (JavaScript); no clause found. Terms
+      unconfirmed; owner accepted for non-commercial use 2026-11-18.'
+  - id: official-berlin-welcomecard
+    category: activities
+    name: Berlin WelcomeCard
+    url: https://www.berlin-welcomecard.de/en
+    method: html
+    license: Copyright; terms not found
+    cadence: quarterly
+    needs_key: false
+    allowed: true
+    notes: 'robots.txt (research 2026-11-18): allowed. No terms page found. Terms unconfirmed; owner accepted for
+      non-commercial use 2026-11-18.'
+  - id: official-parismusees
+    category: places
+    name: Paris Musées
+    url: https://www.parismusees.paris.fr/en/les-musees-de-la-ville-de-paris
+    method: html
+    license: Copyright; terms not found
+    cadence: quarterly
+    needs_key: false
+    allowed: true
+    notes: 'robots.txt (research 2026-11-18): allowed. robots.txt reserves AI use (AI crawlers blocked), so title
+      and link only: no LLM kinds. No terms page found. Onboarding check 2026-11-18: the /en/gratuite guess was 404;
+      the museum list is /en/les-musees-de-la-ville-de-paris. Terms unconfirmed; owner accepted for non-commercial
+      use 2026-11-18.'
+  - id: official-inah
+    category: places
+    name: 'INAH (Mexico): museums and archaeological sites'
+    url: https://www.inah.gob.mx/
+    method: html
+    license: Copyright; terms not found
+    cadence: quarterly
+    needs_key: false
+    allowed: true
+    notes: 'robots.txt (research 2026-11-18): allowed. No terms page found. Terms unconfirmed; owner accepted for
+      non-commercial use 2026-11-18.'
+  - id: official-nycparks-events
+    category: events
+    name: NYC Parks events (RSS)
+    url: https://www.nycgovparks.org/xml/events_300_rss.xml
+    method: rss
+    license: Copyright; terms not found
+    cadence: daily
+    needs_key: false
+    allowed: true
+    notes: 'robots.txt (research 2026-11-18): allowed. Plain RSS of free public events in NYC parks for the next 14
+      days; complements nyc-parks-events (NYC Open Data). NYC content terms not confirmed. Terms unconfirmed; owner
+      accepted for non-commercial use 2026-11-18.'
+  - id: flixbus-gtfs
+    category: getting_around
+    name: FlixBus/FlixTrain Europe GTFS (transport.data.gouv.fr)
+    url: https://transport.data.gouv.fr/resources/11681
+    method: dump
+    license: ODbL 1.0
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'transport.data.gouv.fr robots.txt (2026-11-18): allows / (disallows /backoffice/, /validation/*, /login/*,
+      /resources/conversions/*). Resource 11681 is the GTFS ''Horaires Flixbus Europe'' of the dataset ''Réseau européen
+      FlixBus et FlixTrain'', ODbL. The flixbus.com website is denylisted (terms ban screen scraping).'
+  - id: official-japanrailpass
+    category: getting_around
+    name: Japan Rail Pass (JR Group)
+    url: https://japanrailpass.net/en/
+    method: html
+    license: Copyright; terms not found
+    cadence: quarterly
+    needs_key: false
+    allowed: true
+    notes: 'robots.txt (research 2026-11-18): 404 (allowed). No terms page found. Terms unconfirmed; owner accepted
+      for non-commercial use 2026-11-18.'
+  - id: official-korail-pass
+    category: getting_around
+    name: KORAIL Pass
+    url: https://www.korail.com/ebizbf/EbizBfKrPassAbout.do
+    method: html
+    license: Copyright; terms not found
+    cadence: quarterly
+    needs_key: false
+    allowed: true
+    notes: 'Onboarding check 2026-11-18: www.letskorail.com/ebizbf/EbizBfKrPassAbout.do answers 301 to the same path
+      on www.korail.com, whose robots.txt is ''User-agent: * Disallow:'' (everything allowed); the seed is the korail.com
+      URL. No terms page found. Terms unconfirmed; owner accepted for non-commercial use 2026-11-18.'
+  - id: official-bvg
+    category: getting_around
+    name: 'BVG Berlin: tickets and fares'
+    url: https://www.bvg.de/.rest/sitemap/pages/bvg-beta/en?templateType=bvg-core:pages/ticketDetail
+    method: sitemap
+    license: Copyright; terms not found
+    cadence: quarterly
+    needs_key: false
+    allowed: true
+    notes: 'robots.txt (research 2026-11-18): allowed. /terms-of-use/ is JavaScript; no clause found. Onboarding check
+      2026-11-18: the English sitemap index has one sitemap per page template; ticketDetail and productOverview hold
+      tickets and fares. Terms unconfirmed; owner accepted for non-commercial use 2026-11-18.'
+  - id: official-octopus
+    category: getting_around
+    name: Octopus Hong Kong
+    url: https://www.octopus.com.hk/en/consumer/index.html
+    method: html
+    license: Copyright; terms not found
+    cadence: quarterly
+    needs_key: false
+    allowed: true
+    notes: 'robots.txt (research 2026-11-18): allowed. No terms page found. Onboarding check 2026-11-18: /en/ answers
+      302 to /en/consumer/index.html. Terms unconfirmed; owner accepted for non-commercial use 2026-11-18.'
+  - id: official-myciti
+    category: getting_around
+    name: MyCiTi Cape Town
+    url: https://www.myciti.org.za/en/home/
+    method: html
+    license: Copyright; terms not found
+    cadence: quarterly
+    needs_key: false
+    allowed: true
+    notes: 'robots.txt (research 2026-11-18): 404 (allowed). No terms page found. Onboarding check 2026-11-18: /en/
+      answers 302 to /en/home/. Terms unconfirmed; owner accepted for non-commercial use 2026-11-18.'
+  - id: official-turismo-ba
+    category: walking_tours
+    name: 'Buenos Aires Ciudad (tourism): free guided visits'
+    url: https://turismo.buenosaires.gob.ar/es/agrupador-noticias/visitas-guiadas
+    method: html
+    license: Copyright; terms not found
+    cadence: quarterly
+    needs_key: false
+    allowed: true
+    notes: 'robots.txt (research 2026-11-18): allowed, Crawl-delay: 10. No terms page found. Onboarding check 2026-11-18:
+      the article guess gave 500; the city''s guided-visits list is /es/agrupador-noticias/visitas-guiadas and routes
+      are under /es/recorrido/. Terms unconfirmed; owner accepted for non-commercial use 2026-11-18.'
+  - id: official-isic
+    category: tips
+    name: ISIC (International Student Identity Card)
+    url: https://www.isic.org/feed/
+    method: rss
+    license: Copyright; terms not found
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'robots.txt (research 2026-11-18): allowed. /about/terms-of-use/: no clause found. Terms unconfirmed; owner
+      accepted for non-commercial use 2026-11-18.'
+  - id: official-eyca
+    category: tips
+    name: European Youth Card (EYCA) discounts
+    url: https://eyca.org/discounts
+    method: html
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'robots.txt (research 2026-11-18): allowed. No terms page found. Terms unconfirmed; owner accepted for
+      non-commercial use 2026-11-18.'
+  - id: official-discovereu
+    category: getting_around
+    name: DiscoverEU (European Youth Portal)
+    url: https://youth.europa.eu/discovereu_en
+    method: html
+    license: EU reuse policy (attribution)
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'robots.txt (research 2026-11-18): allowed (europa.eu hosts are separate politeness keys). Commission reuse
+      policy (Decision 2011/833/EU, CC BY 4.0).'
+  - id: official-hihostels
+    category: hotels
+    name: Hostelling International
+    url: https://www.hihostels.com/sitemap.xml
+    method: sitemap
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'robots.txt (research 2026-11-18): allowed. /support/terms-of-use: no access clause found. Terms unconfirmed;
+      owner accepted for non-commercial use 2026-11-18.'
+  - id: official-cfpb-money
+    category: forex
+    name: 'CFPB: money transfers and fees abroad'
+    url: https://www.consumerfinance.gov/consumer-tools/money-transfers/
+    method: html
+    license: US public domain
+    cadence: quarterly
+    needs_key: false
+    allowed: true
+    notes: 'robots.txt (research 2026-11-18): allowed. US federal government work (public domain).'
+  - id: official-vzbv-reise
+    category: tips
+    name: 'Verbraucherzentrale: Reise & Mobilität'
+    url: https://www.verbraucherzentrale.de/wissen/reise-mobilitaet
+    method: html
+    license: Copyright; terms not found
+    cadence: quarterly
+    needs_key: false
+    allowed: true
+    notes: 'robots.txt (research 2026-11-18): allowed. Impressum: no clause. Terms unconfirmed; owner accepted for
+      non-commercial use 2026-11-18.'
+  - id: official-citizensadvice-holidays
+    category: tips
+    name: 'Citizens Advice: holiday cancellations and compensation'
+    url: https://www.citizensadvice.org.uk/consumer/holiday-cancellations-and-compensation/
+    method: html
+    license: Copyright; terms not found
+    cadence: quarterly
+    needs_key: false
+    allowed: true
+    notes: 'robots.txt (research 2026-11-18): allowed. Terms page not located; no clause found. Terms unconfirmed;
+      owner accepted for non-commercial use 2026-11-18.'
+  - id: bigmac-index
+    category: forex
+    name: The Economist Big Mac index
+    url: https://raw.githubusercontent.com/TheEconomist/big-mac-data/master/output-data/big-mac-full-index.csv
+    method: dump
+    license: CC BY 4.0
+    cadence: quarterly
+    needs_key: false
+    allowed: true
+    notes: 'Repo updated 2026-08. README: ''The data generated by The Economist are available under the Creative Commons
+      Attribution 4.0 International License''.'
+  - id: sg-hawker-centres
+    category: places
+    name: NEA hawker centres and closure dates (data.gov.sg)
+    url: https://api-production.data.gov.sg/v2/public/api/datasets/d_4a086da0a5553be1d89383cd90d07ecd/poll-download
+    method: api
+    license: Singapore Open Data Licence 1.0
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: Datasets d_4a086da0a5553be1d89383cd90d07ecd (GeoJSON) and d_bda4baa634dd1cc7a6c7cad5f19e2d68 (closures).
+      robots.txt allows all; the API host's robots.txt is 404 (research 2026-11-18).
+  - id: seoul-wifi
+    category: sim
+    name: 'Seoul Open Data: public Wi-Fi hotspots'
+    url: https://data.seoul.go.kr/
+    method: api
+    license: KOGL Type 1 (attribution)
+    cadence: monthly
+    needs_key: true
+    allowed: true
+    notes: 'robots.txt allows / (research 2026-11-18). The OpenAPI host (openapi.seoul.go.kr) serves on port 8088,
+      which the SSRF guard (ports 80/443 only) refuses: a 443 route is needed.'
