@@ -55,6 +55,12 @@ Path: `crates/vc-core`. Main dependencies: `url`, `psl`, `blake3`, `ulid`, `chro
   `RobotsUnavailable`, `RateLimited { status, retry_after }` (a 429/503 from an adapter, a
   render or robots.txt; the fetcher backs the key off) and `ServerError { status }` (other
   5xx; counted toward the key's server-error run). Both new variants are transient.
+  `Connect` (2026-11-18, transient) is a `send()` failure before any status line: refused,
+  reset or closed connection, TLS handshake, a reply that is not HTTP. `is_no_response()`
+  is `Timeout | Dns | Connect`: on robots.txt that means `RobotsStatus::NoResponse`.
+- **`RobotsStatus`**: `Ok`, `NotFound`, `Unauthorized`, `Challenge`, `Unavailable` (an HTTP
+  5xx/429 answer: disallow all) and `NoResponse` (no answer at all: treated as missing, owner
+  decision 2026-11-18).
 - **`UsePolicy`**: `{raw, index, llm, embed, serve, train}` with a `meet` operation (the
   minimum of each dimension), `ALLOW_ALL` and `DENY_ALL`. Signals can only restrict.
 - **`LicenceClass`** (`open`, `share_alike`, `facts_only`, `api_terms`, `restricted`) and
@@ -89,5 +95,5 @@ Idempotent (`canon(canon(u)) == canon(u)`, a property test) and conservative:
 
 ## Limits
 
-Frozen after P0; changes since then are additive only (`raise_delay`, the two `FetchError`
-variants). No hard-coded entity kinds (they come from data; see [vc-kinds](Crate-vc-kinds)).
+Frozen after P0; changes since then are additive only (`raise_delay`, the `FetchError`
+variants `RateLimited`, `ServerError`, `Connect`, `RobotsStatus::NoResponse`). No hard-coded entity kinds (they come from data; see [vc-kinds](Crate-vc-kinds)).

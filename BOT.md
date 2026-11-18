@@ -39,8 +39,14 @@ or try to get past a bot challenge.
   - A robots.txt that answers 401 or 403 means **do not crawl** that host at all, which is
     stricter than RFC 9309 requires. A bot challenge on robots.txt stops us on every host
     of that site.
-  - A server error (5xx) or network failure means *disallow everything* until we can
-    read it again.
+  - A server error (5xx) means *disallow everything* until we can read it again.
+  - If robots.txt does not respond at all (the connection times out, is refused or is
+    dropped before any answer), we treat it as missing (allow), and try again within
+    6 hours. If we have read your robots.txt before, its last rules still apply. A server
+    error still means disallow. (RFC 9309 asks crawlers to assume a complete disallow for
+    an unreachable robots.txt; we deliberately do not, because a site that never answers
+    for robots.txt would otherwise never be crawled. Pages of such a site are still paced
+    and backed off like any other.)
 - **Rate limits.**
   - At most **one request in flight per site**. Sub-domains of one registrable domain
     count as one site, except under umbrella domains that host independent organisations

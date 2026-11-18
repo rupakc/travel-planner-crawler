@@ -52,7 +52,8 @@ The crawler follows RFC 9309, with stricter rules where the RFC leaves room.
 | 429 or 503 | Back the key off like any rate limit (below), honouring `Retry-After`. |
 | 404 or 410 | Allow everything. |
 | **401, 403, or a bot-challenge page** | **Do not crawl the whole key.** (Stricter than the RFC.) |
-| 5xx or network error | Disallow everything, retry with back-off. After 30 days of errors, use the last good copy. |
+| 5xx | Disallow everything, retry with back-off. After 30 days of errors, use the last good copy. |
+| **No response at all** (connect/read timeout, connection refused, reset or closed before a status line, TLS handshake failure, DNS failure) | **Treat as missing: allow everything** (the last good copy, if one was ever read, still applies). Re-read after 6 hours. Owner decision 2026-11-18, deliberately laxer than RFC 9309 §2.3.1.4; revisit later. |
 
 - A group named `VoyagerBot/1.0` (any version, any case) also applies to us: the
   `/version` part is ignored. `VoyagerBotX` does not match.

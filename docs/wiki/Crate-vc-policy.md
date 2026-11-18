@@ -27,8 +27,15 @@ wired; every role that fetches or renders builds one `VoyagerPolicy`.
 
 - robots.txt: 2xx parse (first 500 KiB, lines up to 16 KiB); 404/410 allow all; 401 or 403
   disallow every path of that origin (other hosts of the key keep their own robots.txt);
-  a challenge blocks the whole key; 5xx or network error disallow all, and after 30 days use
-  the last good copy. Crawl-delay is capped at 1 hour. robots.txt itself is always allowed
+  a challenge blocks the whole key; 5xx or 429 (or a fetch refused locally: SSRF, scope)
+  disallow all, and after 30 days use the last good copy. **No response at all**
+  (`RobotsStatus::NoResponse`: connect/read timeout, connection refused/reset/closed before a
+  status line, TLS handshake failure, DNS failure) is treated as no robots.txt (allow all),
+  except that the last good copy, if one was ever read, still governs at any age. This is an
+  owner decision of 2026-11-18 that deliberately departs from RFC 9309 §2.3.1.4 ("unreachable
+  → assume complete disallow"), to be revisited; the fetcher re-reads such an entry after
+  `robots_no_response_ttl_s` (6 h), and rules read later apply (newly disallowed paths are
+  tombstoned). Crawl-delay is capped at 1 hour. robots.txt itself is always allowed
   unless the key is blocked.
 - AI-bot block (GPTBot, ClaudeBot, CCBot, Google-Extended) with `*` allowed: AI reservation.
 - A newly disallowed path yields tombstones for its records.
@@ -51,7 +58,9 @@ See [Configuration](Configuration).
 ## Tests
 
 - `tests/robots.rs`: Google's robots test corpus, status cases (`robots_401_403_blocks_key`,
-  `robots_5xx_disallows`, `robots_5xx_uses_last_good_after_30_days_only`, `robots_404_allows`),
+  `robots_5xx_disallows`, `robots_5xx_uses_last_good_after_30_days_only`, `robots_404_allows`,
+  `robots_no_response_allows_all`, `robots_no_response_keeps_the_last_good_rules`,
+  `robots_no_response_then_rules_tombstones_newly_disallowed`),
   `ai_bot_block_sets_ai_reservation`, **`robots_refresh_tombstones`**, group precedence,
   `voyagerbot_group_with_version_matches_us`, `normalize_is_idempotent_with_bare_percent`
   (a nightly fuzz finding), wildcards, BOM and line endings, truncation, a proptest that the

@@ -71,6 +71,7 @@ fn robots_state(s: RobotsStatus) -> &'static str {
         RobotsStatus::Unauthorized => "unauthorized",
         RobotsStatus::Challenge => "challenge",
         RobotsStatus::Unavailable => "unavailable",
+        RobotsStatus::NoResponse => "no_response",
     }
 }
 
@@ -81,6 +82,7 @@ fn parse_robots_state(s: &str) -> Option<RobotsStatus> {
         "unauthorized" => RobotsStatus::Unauthorized,
         "challenge" => RobotsStatus::Challenge,
         "unavailable" => RobotsStatus::Unavailable,
+        "no_response" => RobotsStatus::NoResponse,
         _ => return None,
     })
 }

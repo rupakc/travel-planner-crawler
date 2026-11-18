@@ -886,25 +886,48 @@ impl Fetcher {
             Err(FetchError::DeadlineExceeded) => {
                 return Err(Error::LeaseLost(p.lease_lost(LeaseLostReason::Expired)));
             }
+            // Owner decision 2026-11-18 (laxer than RFC 9309 §2.3.1.4): no response at all
+            // (timeout, DNS, connection refused/reset/closed before a status line, TLS
+            // handshake) → treated as no robots.txt (allow all; the last good copy still
+            // governs). Any HTTP answer was handled above and keeps its meaning.
+            Err(e) if e.is_no_response() => {
+                tracing::info!(origin = %origin.0, error = %e, "robots.txt: no response, treated as missing");
+                let fields = serde_json::json!({
+                    "type": "robots_no_response",
+                    "url": url.as_str(),
+                    "error": match e {
+                        FetchError::Timeout => "timeout",
+                        FetchError::Dns(_) => "dns",
+                        _ => "connect",
+                    },
+                    "action": "allow_all",
+                });
+                self.spool_robots(run, &url, SpoolPayload::Metadata { fields }, None, now)
+                    .await?;
+                (RobotsStatus::NoResponse, None, None)
+            }
             Err(e) => {
                 tracing::info!(origin = %origin.0, error_class = ?e.class(), "robots.txt unavailable");
                 (RobotsStatus::Unavailable, None, None)
             }
         };
-        let ttl = if status == RobotsStatus::Unavailable {
-            chrono::Duration::hours(1)
-        } else {
-            chrono::Duration::seconds(
-                i64::try_from(self.p.cfg.policy.robots_ttl_s).unwrap_or(86_400),
-            )
+        let ttl_s =
+            |s: u64, default: i64| chrono::Duration::seconds(i64::try_from(s).unwrap_or(default));
+        let ttl = match status {
+            RobotsStatus::Unavailable => chrono::Duration::hours(1),
+            // Re-read sooner: a recovered robots.txt must govern soon.
+            RobotsStatus::NoResponse => ttl_s(self.p.cfg.policy.robots_no_response_ttl_s, 6 * 3600),
+            _ => ttl_s(self.p.cfg.policy.robots_ttl_s, 86_400),
         };
         let entry = RobotsEntry {
             origin: origin.clone(),
             status,
             http_status,
+            // The stored row keeps its last good copy (`store_robots` coalesces); carry it here
+            // too so this claim's summary (Crawl-delay, sitemaps) sees what the policy sees.
             last_good: match (&status, &body) {
                 (RobotsStatus::Ok, Some(b)) => Some((b.clone(), now)),
-                _ => None,
+                _ => old.as_ref().and_then(|o| o.last_good.clone()),
             },
             body,
             fetched_at: now,
@@ -913,7 +936,10 @@ impl Fetcher {
         self.p.frontier.store_robots(p, entry.clone()).await?;
         // Review Focus 1: paths that robots newly disallows are tombstoned.
         if let (Some(old), Some(t)) = (old, &self.p.tombstoner)
-            && matches!(old.status, RobotsStatus::Ok | RobotsStatus::NotFound)
+            && matches!(
+                old.status,
+                RobotsStatus::Ok | RobotsStatus::NotFound | RobotsStatus::NoResponse
+            )
             && entry.status == RobotsStatus::Ok
         {
             let urls = t.urls_of(p, origin).await?;

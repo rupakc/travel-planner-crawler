@@ -31,9 +31,16 @@ pub enum RobotsStatus {
     Unauthorized,
     /// The robots.txt response was a challenge page: the whole key is do-not-crawl.
     Challenge,
-    /// 5xx, 429 or a network error: disallow all; retry with back-off; after 30 days fall back
-    /// to the last good copy.
+    /// The server answered 5xx or 429, or the exchange failed after the server started to
+    /// answer (or was refused locally: SSRF, denylist, scope): disallow all; retry with
+    /// back-off; after 30 days fall back to the last good copy.
     Unavailable,
+    /// No response at all: connect or read timeout, connection refused/reset/closed before a
+    /// status line, TLS handshake failure, DNS failure. Owner decision 2026-11-18 (departs from
+    /// RFC 9309 §2.3.1.4 "unreachable → complete disallow"): treated like a missing robots.txt
+    /// (allow all), except that the last good copy, if one was ever read, still governs.
+    /// Re-read sooner than a normal entry (`robots_no_response_ttl_s`).
+    NoResponse,
 }
 
 /// A cached robots.txt entry for an origin (`origins` row).

@@ -97,6 +97,7 @@ The User-Agent is a constant in code, not a setting.
 | `denylist_path` | `policy/denylist.yaml` | never-fetch list |
 | `subresource_allowlist_path` | `policy/subresource_allowlist.yaml` | CDN hosts for renders |
 | `robots_ttl_s` | 86400 | robots.txt cache (24 h) |
+| `robots_no_response_ttl_s` | 21600 | cache of a robots.txt that got no response at all (6 h; treated as missing) |
 | `robots_max_bytes` | 512000 | parse the first 500 KiB |
 | `robots_last_good_days` | 30 | use the last good robots after this many days of 5xx |
 | `ai_bot_tokens` | GPTBot, ClaudeBot, CCBot, Google-Extended | blocking these while allowing `*` = AI reservation |

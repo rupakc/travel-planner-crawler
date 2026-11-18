@@ -214,6 +214,39 @@ async fn slow_site_adds_latency() {
     assert!((e.ended_at - e.started_at).num_milliseconds() >= 300);
 }
 
+/// `Reply::no_response()` never answers; once the client gives up, the request is logged with
+/// status 0 and the snapshot records a robots.txt with no response.
+#[tokio::test]
+async fn no_response_hangs_and_is_recorded_when_the_client_gives_up() {
+    let web = Arc::new(FakeWeb::with_sites(vec![
+        Site::new("dead", "dead.test").route("/robots.txt", Reply::no_response()),
+    ]));
+    let srv = web.clone().start().await;
+    let c = srv.client();
+    let err = c
+        .get(srv.url("dead.test", "/robots.txt"))
+        .timeout(Duration::from_millis(300))
+        .send()
+        .await
+        .unwrap_err();
+    assert!(err.is_timeout(), "{err:?}");
+    let mut entries = Vec::new();
+    for _ in 0..100 {
+        entries = srv.log().entries();
+        if !entries.is_empty() {
+            break;
+        }
+        tokio::time::sleep(Duration::from_millis(10)).await;
+    }
+    assert_eq!(entries.len(), 1);
+    assert_eq!(entries[0].status, 0);
+    assert!((entries[0].ended_at - entries[0].started_at).num_milliseconds() >= 250);
+    let snap = srv.policy_snapshot();
+    assert_eq!(snap.robots.len(), 1);
+    assert!(snap.robots[0].no_response);
+    assert_eq!(snap.robots[0].origin, "http://dead.test");
+}
+
 #[tokio::test]
 async fn admin_log_and_snapshot_round_trip_for_e2e() {
     let web = Arc::new(FakeWeb::with_default_sites());

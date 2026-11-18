@@ -149,6 +149,16 @@ impl VoyagerPolicy {
                 Some(b) => self.parsed(b),
                 None => Arc::new(ParsedRobots::default()),
             }),
+            // Owner decision 2026-11-18, deliberately laxer than RFC 9309 §2.3.1.4 (which says
+            // an unreachable robots.txt means complete disallow): when robots.txt gets no
+            // response at all (timeouts, refused/reset connections, TLS handshake, DNS), the
+            // origin is treated as having none (allow all, like 404). The last good copy, if
+            // one was ever read, still governs: rules we have seen are never dropped for a
+            // network failure. Any actual HTTP answer (5xx, 429) stays `Unavailable` below.
+            RobotsStatus::NoResponse => Ok(match &r.last_good {
+                Some((body, _)) => self.parsed(body),
+                None => Arc::new(ParsedRobots::default()),
+            }),
             RobotsStatus::Unavailable => {
                 // RFC 9309 §2.3.1.4: unreachable → disallow everything; once it has been
                 // unreachable for 30 days the last good copy governs again.

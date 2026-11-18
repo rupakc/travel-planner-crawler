@@ -453,7 +453,7 @@ impl ReqwestPermitClient {
                 }
                 Ok(Err(e)) => {
                     p.record_request_end(Instant::now());
-                    return Err(map_reqwest(&e));
+                    return Err(map_send(&e));
                 }
                 Ok(Ok(r)) => r,
             };
@@ -775,6 +775,20 @@ fn err_text(e: &reqwest::Error) -> String {
     }
 }
 
+/// An error of `send()`, i.e. before any response head arrived: a timeout, else
+/// [`FetchError::Connect`] (refused, reset or closed connection, TLS handshake, a reply that is
+/// not HTTP) unless the request itself could not be built.
+fn map_send(e: &reqwest::Error) -> FetchError {
+    if e.is_timeout() {
+        FetchError::Timeout
+    } else if e.is_builder() {
+        FetchError::Transport(err_text(e))
+    } else {
+        FetchError::Connect(err_text(e))
+    }
+}
+
+/// An error while reading a body that had started (a timeout, else a transport failure).
 fn map_reqwest(e: &reqwest::Error) -> FetchError {
     if e.is_timeout() {
         FetchError::Timeout
