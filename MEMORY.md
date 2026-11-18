@@ -272,3 +272,11 @@ plan = `docs/superpowers/plans/2026-11-15-voyager-crawler.md`, r1–r5 = `docs/r
   unconfirmed, catalogue query 403), sg-hawker-centres (signed S3 URL on another site). No CKAN
   reader: no vetted dataset needs one. (crates/vc-sources/src/adapters/{socrata,udata_resource,
   wfs_geojson,row_map}.rs, schemas/amenity.v1.json, scripts/seeds_to_sources.py)
+- 2026-11-18 Corpus expansion, Africa and the Middle East: 138 rows, 124 on, 14 off (9 adapters
+  pending, 4 relevance, Aqaba re-test); personal/non-commercial terms
+  rows on under the owner's standing rule (Wesgro, NWR, RAK, DCT Abu Dhabi, ITC Abu Dhabi, NCM
+  Saudi, Sharjah Art Foundation, SARS travellers, The National travel, Travel Africa, Istanbul
+  Clues, Zambia Tourism, Western Cape Government, eTA Kenya, Oman met); MyCiTi already enabled as
+  official-myciti; visitkzn-sa.com robots.txt read once before using its sitemap for KZN;
+  visitaqaba.com timed out (re-test); Riyadh Season enabled with render auto (JS app, no terms).
+  Seven terms-ban hosts and the hijacked visitethiopia.travel denylisted.

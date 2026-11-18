@@ -120,6 +120,11 @@ pub const TRAVEL_PUBLICATIONS: &[(&str, &str)] = &[
     ("twoweeksincostarica.com", ""),
     ("wander-argentina.org", ""),
     ("caribjournal.com", ""),
+    // Corpus expansion: Africa and the Middle East (2026-11-18): travel magazines and blogs whose URLs lack "travel".
+    ("againstthecompass.com", ""),
+    ("turkeysforlife.com", ""),
+    ("tourismupdate.com", ""),
+    ("istanbulclues.com", ""),
 ];
 
 /// Whether `url` is travel-focused: `travel` in its host, path or query, or a

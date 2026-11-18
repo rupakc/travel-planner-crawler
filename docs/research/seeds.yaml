@@ -9792,3 +9792,1584 @@ seeds:
     notes: 'Research 2026-11-18 (corpus LatAm): robots.txt: 200, Crawl-delay 2; terms: the site is for personal use
       only; users may not market its content. Terms restrict to personal/non-commercial use; owner accepted for non-commercial
       use 2026-11-18 (the site is for personal use only; users may not market its content). Facts only.'
+  # --- Corpus expansion: Africa and the Middle East (research 2026-11-18, corpus_africa_me.md) ---
+  - id: tb-visitghana
+    category: places
+    name: Ghana Tourism Authority
+    url: https://visitghana.com/wp-sitemap.xml
+    method: sitemap
+    license: Copyright; terms not found
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Africa-ME): robots.txt: WP default (wp-admin only); no AI blocks; terms: terms
+      not found. Terms unconfirmed; owner accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: tb-zimbabwetourism
+    category: places
+    name: Zimbabwe Tourism Authority
+    url: https://zimbabwetourism.net/wp-sitemap.xml
+    method: sitemap
+    license: Copyright; terms not found
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Africa-ME): robots.txt: WP default + /wp-content/uploads/wpforms/ disallowed;
+      terms: terms not found. Terms unconfirmed; owner accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: tb-utb-uganda
+    category: places
+    name: Uganda Tourism Board
+    url: https://utb.go.ug/sitemap_index.xml
+    method: sitemap
+    license: Copyright; terms not found
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Africa-ME): robots.txt: `Disallow:` empty (all allowed); terms: terms not
+      found. Terms unconfirmed; owner accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: tb-visitmalawi
+    category: places
+    name: Visit Malawi (Malawi Tourism)
+    url: https://visitmalawi.mw/wp-sitemap.xml
+    method: sitemap
+    license: Copyright; terms not found
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Africa-ME): robots.txt: WP default; /imunify-bot-check disallowed (Imunify360
+      present; watch for challenges); terms: terms not found. Terms unconfirmed; owner accepted for non-commercial
+      use 2026-11-18. Facts only.'
+  - id: tb-madagascar
+    category: places
+    name: Office National du Tourisme de Madagascar
+    url: https://madagascar-tourisme.com/fr/
+    method: html
+    license: Copyright; terms not found
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Africa-ME): robots.txt: empty robots.txt (all allowed); terms: terms not found
+      ("©Copyright 2026 Madagascar Tourisme" only). Terms unconfirmed; owner accepted for non-commercial use 2026-11-18.
+      Facts only.'
+  - id: tb-mauritiusnow
+    category: places
+    name: Mauritius Tourism Promotion Authority (consumer site)
+    url: https://www.mauritiusnow.com/sitemap.xml
+    method: sitemap
+    license: Copyright; no automated-access clause
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Africa-ME): robots.txt: WP default; terms: "Website Policy" covers cookies/statistics
+      only; no use restrictions. No automated-access clause; facts only.'
+  - id: tb-mymauritius-corp
+    category: tips
+    name: Tourism Mauritius corporate site
+    url: https://www.mymauritius.travel/
+    method: html
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Africa-ME): robots.txt: Drupal default; no sitemap; terms: terms not found.
+      Terms unconfirmed; owner accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: tb-tourism-govmu
+    category: tips
+    name: Ministry of Tourism, Mauritius
+    url: https://tourism.govmu.org/SitePages/Index.aspx
+    method: html
+    license: Copyright; no automated-access clause
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Africa-ME): robots.txt: robots 404 (allowed); terms: disclaimer only, no bans.
+      No automated-access clause; facts only.'
+  - id: tb-discovertunisia
+    category: places
+    name: Office National du Tourisme Tunisien
+    url: https://www.discovertunisia.com/sitemap.xml
+    method: sitemap
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Africa-ME): robots.txt: **Crawl-delay: 10**; Drupal default; terms: terms
+      not found. Terms unconfirmed; owner accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: tb-visitrabat
+    category: places
+    name: Visit Rabat (Rabat-Salé-Kénitra regional tourism)
+    url: https://www.visitrabat.com/wp-sitemap.xml
+    method: sitemap
+    license: Copyright; terms not found
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Africa-ME): robots.txt: WP default (/wp/wp-admin/); terms: terms not found.
+      Terms unconfirmed; owner accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: tb-benintourisme
+    category: places
+    name: Bénin Tourisme
+    url: https://benintourisme.bj/sitemap_index.xml
+    method: sitemap
+    license: Copyright; no automated-access clause
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Africa-ME): robots.txt: WP default; terms: "toute reproduction … même partielle
+      … est strictement interdite" (copyright only). No automated-access clause; facts only.'
+  - id: tb-mintoul-cm
+    category: places
+    name: Ministère du Tourisme et des Loisirs, Cameroun
+    url: https://mintoul.gov.cm/wp-sitemap.xml
+    method: sitemap
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Africa-ME): robots.txt: WP default; terms: terms not found. Terms unconfirmed;
+      owner accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: tb-tourisme-ci
+    category: events
+    name: Ministère du Tourisme, Côte d'Ivoire
+    url: https://www.tourisme.gouv.ci/
+    method: html
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Africa-ME): robots.txt: robots 404 (allowed); terms: terms not found (the
+      "Termes & Conditions" page is lorem-ipsum placeholder text). Terms unconfirmed; owner accepted for non-commercial
+      use 2026-11-18. Facts only.'
+  - id: tb-visitthegambia
+    category: places
+    name: Gambia Tourism Board
+    url: https://www.visitthegambia.gm/
+    method: html
+    license: Copyright; terms not found
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Africa-ME): robots.txt: `Disallow:` empty; terms: terms not found. Terms unconfirmed;
+      owner accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: tb-zulu-kzn
+    category: places
+    name: Tourism KwaZulu-Natal
+    url: https://visitkzn-sa.com/sitemap.xml
+    method: sitemap
+    license: Copyright; terms not found
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Africa-ME): robots.txt: disallows /*? and system dirs; sitemap lives on visitkzn-sa.com:
+      run robots on that host before the first crawl; terms: terms not found. Terms unconfirmed; owner accepted for
+      non-commercial use 2026-11-18. Facts only. Onboarding 2026-11-18: robots.txt of visitkzn-sa.com (the sitemap
+      host declared in zulu.org.za''s robots.txt) read once first: 200, User-agent * allows / (disallows /*? and system
+      dirs), lists this sitemap.'
+  - id: tb-gauteng
+    category: places
+    name: Gauteng Tourism Authority
+    url: https://www.gauteng.net/sitemap_index.xml
+    method: sitemap
+    license: Copyright; terms not found
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Africa-ME): robots.txt: WP default; terms: terms not found. Terms unconfirmed;
+      owner accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: tb-visiteasterncape
+    category: places
+    name: Eastern Cape Parks & Tourism Agency
+    url: https://visiteasterncape.co.za/
+    method: html
+    license: Copyright; terms not found
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Africa-ME): robots.txt: WP default; wp-sitemap.xml answered HTML, so crawl
+      HTML; terms: terms not found. Terms unconfirmed; owner accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: tb-golimpopo
+    category: places
+    name: Limpopo Tourism Agency
+    url: https://www.golimpopo.com/sitemap.xml
+    method: sitemap
+    license: Copyright; terms not found
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Africa-ME): robots.txt: WP hardening rules only; terms: terms page holds no
+      restrictive text (terms not found). Terms unconfirmed; owner accepted for non-commercial use 2026-11-18. Facts
+      only.'
+  - id: tb-reunion
+    category: places
+    name: Île de La Réunion Tourisme (IRT)
+    url: https://www.reunion.fr/sitemap.xml/
+    method: sitemap
+    license: Copyright; no automated-access clause
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Africa-ME): robots.txt: disallows /*/feed and parameters; Woody sitemap index;
+      terms: "L''utilisation de ces images ou photographies est interdite sans autorisation" (images only; we store
+      none). No automated-access clause; facts only.'
+  - id: tb-ktb-kenya
+    category: events
+    name: Kenya Tourism Board (corporate)
+    url: https://ktb.go.ke/
+    method: html
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Africa-ME): robots.txt: comments-only robots file with the Cloudflare content-signal
+      preamble but no signal lines (allowed); terms: terms not found. Terms unconfirmed; owner accepted for non-commercial
+      use 2026-11-18. Facts only.'
+  - id: tb-tourism-gov-za
+    category: tips
+    name: Department of Tourism, South Africa
+    url: https://www.tourism.gov.za/sitemap.xml
+    method: sitemap
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Africa-ME): robots.txt: SharePoint dirs disallowed only; terms: terms not
+      found ("Legal and Legislation" page lists acts). Terms unconfirmed; owner accepted for non-commercial use 2026-11-18.
+      Facts only.'
+  - id: gov-westerncape
+    category: tips
+    name: Western Cape Government
+    url: https://www.westerncape.gov.za/
+    method: html
+    license: Copyright; personal/non-commercial terms (owner accepted)
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Africa-ME): robots.txt: Drupal default; terms: "You may however freely reproduce
+      material subject to the following: Non-commercial…" (non-commercial reuse allowed). Terms restrict to personal/non-commercial
+      use; owner accepted for non-commercial use 2026-11-18 (''You may however freely reproduce material subject to
+      the following: Non-commercial ...''). Facts only.'
+  - id: tb-armenia-travel
+    category: places
+    name: Tourism Committee of Armenia
+    url: https://armenia.travel/sitemap.xml
+    method: sitemap
+    license: Copyright; terms not found
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Africa-ME): robots.txt: disallows /fr/articles/, /hy/articles/, query params;
+      terms: terms not found. Terms unconfirmed; owner accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: tb-visitsharjah
+    category: places
+    name: Sharjah Commerce & Tourism Development Authority
+    url: https://www.visitsharjah.com/en/sitemapxml/
+    method: sitemap
+    license: Copyright; terms not found
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Africa-ME): robots.txt: Umbraco system dirs + old campaigns disallowed; terms:
+      terms not found. Terms unconfirmed; owner accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: tb-experiencealula
+    category: places
+    name: Experience AlUla (Royal Commission for AlUla)
+    url: https://www.experiencealula.com/sitemap.xml
+    method: sitemap
+    license: Copyright; no automated-access clause
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Africa-ME): robots.txt: disallows /data/, /cart/, /things-to-do/packages/,
+      /getmedia/; terms: event-ticket T&Cs only (recording bans at events); no site-use bans. No automated-access
+      clause; facts only.'
+  - id: tb-btea-bahrain
+    category: places
+    name: Bahrain Tourism & Exhibitions Authority
+    url: https://www.btea.bh/
+    method: html
+    license: Copyright; terms not found
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Africa-ME): robots.txt: admin/identity/cms paths disallowed; terms: terms
+      not found (/terms-of-use answered 302). Terms unconfirmed; owner accepted for non-commercial use 2026-11-18.
+      Facts only.'
+  - id: tb-mot-lebanon
+    category: places
+    name: Ministry of Tourism, Lebanon
+    url: https://mot.gov.lb/sitemap_index.xml
+    method: sitemap
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Africa-ME): robots.txt: WooCommerce/WP default; terms: terms not found. Terms
+      unconfirmed; owner accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: tb-travelpalestine
+    category: places
+    name: 'Palestine Ministry of Tourism & Antiquities: Travel Palestine'
+    url: https://www.travelpalestine.ps/en
+    method: html
+    license: Copyright; terms not found
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Africa-ME): robots.txt: /admin, /login, /cart disallowed; sitemap.xml answered
+      HTML; terms: terms not found. Terms unconfirmed; owner accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: tb-itraveljerusalem
+    category: places
+    name: iTravelJerusalem (Jerusalem Development Authority)
+    url: https://www.itraveljerusalem.com/sitemap.xml
+    method: sitemap
+    license: Copyright; terms not found
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Africa-ME): robots.txt: disallows sort/paging/source params and */get-tickets;
+      terms: terms not found. Terms unconfirmed; owner accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: tb-ktb-turkey
+    category: places
+    name: Ministry of Culture and Tourism, Türkiye
+    url: https://www.ktb.gov.tr/
+    method: html
+    license: Copyright; no automated-access clause
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Africa-ME): robots.txt: `Allow: /`; terms: "tüm eserler Bakanlıktan izin alınmaksızın
+      … çoğaltılamaz, yayımlanamaz" (copyright only). No automated-access clause; facts only.'
+  - id: tb-fujairah
+    category: places
+    name: Fujairah Tourism & Antiquities Authority
+    url: https://www.fujairahtourism.ae/
+    method: html
+    license: Copyright; no automated-access clause
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Africa-ME): robots.txt: **AI-bot blocks → title+link only**; terms: T&Cs ban
+      posting infringing material and collecting personal data; no crawl ban. No automated-access clause; facts only.
+      robots.txt reserves AI use (AI crawlers blocked), so title and link only: no LLM kinds.'
+  - id: tb-visitizmir
+    category: places
+    name: Visit İzmir (İzmir Metropolitan Municipality)
+    url: https://www.visitizmir.org/
+    method: html
+    license: Copyright; terms not found
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Africa-ME): robots.txt: **AI-bot blocks (Cloudflare) → title+link only**;
+      ~30 other bots disallowed; terms: terms not found. Terms unconfirmed; owner accepted for non-commercial use
+      2026-11-18. Facts only. robots.txt reserves AI use (AI crawlers blocked), so title and link only: no LLM kinds.'
+  - id: tb-visitiran
+    category: places
+    name: Visit Iran (official travel guide)
+    url: https://www.visitiran.ir/
+    method: html
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Africa-ME): robots.txt: `Disallow:` empty; terms: terms not found. Note: Iran
+      travel advisories make this low priority. Terms unconfirmed; owner accepted for non-commercial use 2026-11-18.
+      Facts only.'
+  - id: tb-dubaiculture
+    category: places
+    name: Dubai Culture & Arts Authority
+    url: https://www.dubaiculture.gov.ae/en
+    method: html
+    license: Copyright; no automated-access clause
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Africa-ME): robots.txt: `Allow: /` (one forms path); terms: T&Cs ban posting
+      infringing material and collecting personal info; no crawl ban. No automated-access clause; facts only.'
+  - id: tb-sharjahmuseums
+    category: places
+    name: Sharjah Museums Authority
+    url: https://www.sharjahmuseums.ae/
+    method: html
+    license: Copyright; terms not found
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Africa-ME): robots.txt: `Allow: /`; terms: terms not found. Terms unconfirmed;
+      owner accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: tb-qatarmuseums
+    category: places
+    name: Qatar Museums
+    url: https://qm.org.qa/en/
+    method: html
+    license: Copyright; no automated-access clause
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Africa-ME): robots.txt: robots 404 (allowed); terms: "Materials … may not
+      be adapted, copied, reproduced, published or distributed without QM''s prior written permission" (copyright
+      only). No automated-access clause; facts only.'
+  - id: tb-katara
+    category: events
+    name: Katara Cultural Village
+    url: https://www.katara.net/en/
+    method: html
+    license: Copyright; terms not found
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Africa-ME): robots.txt: robots 404 (allowed); terms: terms not found. Terms
+      unconfirmed; owner accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: city-yerevan
+    category: events
+    name: Yerevan Municipality
+    url: https://www.yerevan.am/en/
+    method: html
+    license: Copyright; no automated-access clause
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Africa-ME): robots.txt: /uploads/pcs/ only; terms: terms of use page has no
+      restrictive text. No automated-access clause; facts only.'
+  - id: np-tanapa
+    category: places
+    name: Tanzania National Parks (TANAPA)
+    url: https://www.tanzaniaparks.go.tz/
+    method: html
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Africa-ME): robots.txt: `Disallow:` empty; terms: terms not found. Terms unconfirmed;
+      owner accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: np-ugandawildlife
+    category: places
+    name: Uganda Wildlife Authority
+    url: https://ugandawildlife.org/sitemap_index.xml
+    method: sitemap
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Africa-ME): robots.txt: WP default; terms: site terms not found (only booking
+      terms, no use restrictions). Terms unconfirmed; owner accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: np-zimparks
+    category: places
+    name: Zimbabwe Parks & Wildlife Management Authority
+    url: https://www.zimparks.org.zw/wp-sitemap.xml
+    method: sitemap
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Africa-ME): robots.txt: renamed admin path disallowed only; terms: terms not
+      found. Terms unconfirmed; owner accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: np-kznwildlife
+    category: places
+    name: Ezemvelo KZN Wildlife
+    url: https://www.kznwildlife.com/sitemap.xml
+    method: sitemap
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Africa-ME): robots.txt: `Allow: /`; terms: terms not found. Terms unconfirmed;
+      owner accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: np-capenature
+    category: places
+    name: CapeNature
+    url: https://www.capenature.co.za/sitemap.xml
+    method: sitemap
+    license: Copyright; no automated-access clause
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Africa-ME): robots.txt: /craft/ only; terms: "Privacy & Legal" index only;
+      no use restrictions found. No automated-access clause; facts only.'
+  - id: np-apa-georgia
+    category: places
+    name: Agency of Protected Areas, Georgia
+    url: https://apa.gov.ge/
+    method: html
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Africa-ME): robots.txt: robots 404 (allowed); terms: terms not found. Terms
+      unconfirmed; owner accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: np-gorongosa
+    category: places
+    name: Gorongosa National Park
+    url: https://gorongosa.org/
+    method: html
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Africa-ME): robots.txt: **Crawl-delay: 3**; disallows /*?; terms: terms not
+      found. Terms unconfirmed; owner accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: visa-etakenya
+    category: visa
+    name: Kenya Electronic Travel Authorisation
+    url: https://etakenya.go.ke/
+    method: html
+    license: Copyright; personal/non-commercial terms (owner accepted)
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Africa-ME): robots.txt: /admin/ only; terms: "You may not reproduce materials
+      on this website for commercial reasons without prior permission" (non-commercial is fine). Terms restrict to
+      personal/non-commercial use; owner accepted for non-commercial use 2026-11-18 (''You may not reproduce materials
+      on this website for commercial reasons without prior permission''). Facts only.'
+  - id: visa-tz-evisa
+    category: visa
+    name: Tanzania eVisa (Immigration)
+    url: https://visa.immigration.go.tz/
+    method: html
+    license: Copyright; no automated-access clause
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Africa-ME): robots.txt: robots 404 (allowed); terms: visa T&Cs only, no site-use
+      bans. No automated-access clause; facts only.'
+  - id: visa-tz-immigration
+    category: visa
+    name: Tanzania Immigration Services
+    url: https://www.immigration.go.tz/
+    method: html
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Africa-ME): robots.txt: `Disallow:` empty; terms: terms not found. Terms unconfirmed;
+      owner accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: visa-ug-evisa
+    category: visa
+    name: Uganda Visa/Permit portal
+    url: https://visas.immigration.go.ug/
+    method: html
+    license: Copyright; terms not found
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Africa-ME): robots.txt: robots 404 (allowed); terms: terms not found. Terms
+      unconfirmed; owner accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: visa-rw-migration
+    category: visa
+    name: Rwanda Directorate General of Immigration
+    url: https://www.migration.gov.rw/
+    method: html
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Africa-ME): robots.txt: TYPO3 system dirs only; terms: terms not found. Terms
+      unconfirmed; owner accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: visa-gh-gis
+    category: visa
+    name: Ghana Immigration Service
+    url: https://gis.gov.gh/
+    method: html
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Africa-ME): robots.txt: `Allow: /`; terms: terms not found. Terms unconfirmed;
+      owner accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: visa-ci-snedai
+    category: visa
+    name: SNEDAI e-Visa Côte d'Ivoire
+    url: https://snedai.com/wp-sitemap.xml
+    method: sitemap
+    license: Copyright; no automated-access clause
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Africa-ME): robots.txt: WP default; terms: CGU: "ne pas reproduire, copier
+      … sans autorisation préalable et écrite" (copyright only). Contractor run by SNEDAI, not a .gouv host. No automated-access
+      clause; facts only.'
+  - id: visa-et-evisa
+    category: visa
+    name: Ethiopia e-Visa
+    url: https://www.evisa.gov.et/
+    method: html
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Africa-ME): robots.txt: `Disallow:` empty; terms: terms not found. Terms unconfirmed;
+      owner accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: visa-mw-evisa
+    category: visa
+    name: Malawi e-Visa
+    url: https://www.evisa.gov.mw/
+    method: html
+    license: Copyright; terms not found
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Africa-ME): robots.txt: robots answers HTML 404 (no file, allowed); terms:
+      terms not found. Terms unconfirmed; owner accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: visa-zm-immigration
+    category: visa
+    name: Zambia Department of Immigration
+    url: https://www.zambiaimmigration.gov.zm/wp-sitemap.xml
+    method: sitemap
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Africa-ME): robots.txt: WP default; terms: terms not found. Terms unconfirmed;
+      owner accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: visa-mu-passport
+    category: visa
+    name: Passport & Immigration Office, Mauritius
+    url: https://passport.govmu.org/passport/
+    method: html
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Africa-ME): robots.txt: robots.txt redirects to a page (no file, allowed);
+      terms: terms not found. Terms unconfirmed; owner accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: visa-sc-govtas
+    category: visa
+    name: Seychelles Travel Authorisation
+    url: https://seychelles.govtas.com/sitemap_index.xml
+    method: sitemap
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Africa-ME): robots.txt: /enrollment/ disallowed; terms: terms not found. Operated
+      for the Government by a contractor (govtas.com). Terms unconfirmed; owner accepted for non-commercial use 2026-11-18.
+      Facts only.'
+  - id: visa-cv-ease
+    category: visa
+    name: Cabo Verde EASE (pre-registration)
+    url: https://www.ease.gov.cv/
+    method: html
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Africa-ME): robots.txt: robots 404 (allowed); terms: terms not found. Terms
+      unconfirmed; owner accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: visa-ma-acces
+    category: visa
+    name: Acces Maroc e-Visa
+    url: https://www.acces-maroc.ma/
+    method: html
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Africa-ME): robots.txt: robots 404 (allowed); terms: terms not found. Terms
+      unconfirmed; owner accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: visa-eg-visa2egypt
+    category: visa
+    name: Egypt e-Visa portal
+    url: https://www.visa2egypt.gov.eg/
+    method: html
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Africa-ME): robots.txt: robots 404 (allowed); terms: terms not found. Terms
+      unconfirmed; owner accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: visa-tr-evisa
+    category: visa
+    name: Türkiye e-Visa
+    url: https://www.evisa.gov.tr/en/
+    method: html
+    license: Copyright; terms not found
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Africa-ME): robots.txt: robots answers the homepage (no file, allowed); terms:
+      terms not found. Terms unconfirmed; owner accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: visa-ge-evisa
+    category: visa
+    name: Georgia e-Visa portal
+    url: https://www.evisa.gov.ge/GeoVisa/
+    method: html
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Africa-ME): robots.txt: robots 404 (allowed); terms: terms not found. Terms
+      unconfirmed; owner accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: visa-am-mfa
+    category: visa
+    name: Ministry of Foreign Affairs of Armenia
+    url: https://www.mfa.am/en/
+    method: html
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Africa-ME): robots.txt: build/css/js disallowed only; terms: terms not found.
+      Terms unconfirmed; owner accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: visa-iq-evisa
+    category: visa
+    name: Iraqi e-Visa (Directorate of Residency Affairs)
+    url: https://evisa.iq/
+    method: html
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Africa-ME): robots.txt: robots 404 (allowed); terms: terms not found. Terms
+      unconfirmed; owner accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: visa-om-rop
+    category: visa
+    name: Royal Oman Police e-Visa
+    url: https://evisa.rop.gov.om/
+    method: html
+    license: Copyright; no automated-access clause
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Africa-ME): robots.txt: robots 404 (allowed); terms: ROP copyright notice:
+      only reproducing the logo needs authorisation. No automated-access clause; facts only.'
+  - id: visa-bh-evisa
+    category: visa
+    name: Bahrain eVisa (NPRA)
+    url: https://www.evisa.gov.bh/
+    method: html
+    license: Copyright; no automated-access clause
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Africa-ME): robots.txt: robots answers HTML (no file, allowed); terms: disclaimer
+      only, no bans. No automated-access clause; facts only.'
+  - id: visa-lb-gsl
+    category: visa
+    name: General Directorate of General Security, Lebanon
+    url: https://www.general-security.gov.lb/ar
+    method: html
+    license: Copyright; no automated-access clause
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Africa-ME): robots.txt: robots 404 (allowed); terms: legal notice holds no
+      reuse ban (page is mostly navigation). No automated-access clause; facts only.'
+  - id: visa-kw-moi
+    category: visa
+    name: Kuwait Ministry of Interior
+    url: https://www.moi.gov.kw/main/
+    method: html
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Africa-ME): robots.txt: robots answers an HTML error page (no file, allowed);
+      terms: terms not found. Terms unconfirmed; owner accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: tr-krc-kenya
+    category: getting_around
+    name: Kenya Railways (Madaraka Express, Nairobi commuter)
+    url: https://krc.co.ke/wp-sitemap.xml
+    method: sitemap
+    license: Copyright; terms not found
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Africa-ME): robots.txt: WP default; terms: terms not found. Terms unconfirmed;
+      owner accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: tr-seter-dakar
+    category: getting_around
+    name: SETER (Dakar Regional Express Train)
+    url: https://seter.sn/wp-sitemap.xml
+    method: sitemap
+    license: Copyright; terms not found
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Africa-ME): robots.txt: WP default; terms: terms not found. Terms unconfirmed;
+      owner accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: tr-sncft
+    category: getting_around
+    name: SNCFT (Tunisian National Railways)
+    url: https://www.sncft.com.tn/wp-sitemap.xml
+    method: sitemap
+    license: Copyright; terms not found
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Africa-ME): robots.txt: WP default; terms: terms not found. Terms unconfirmed;
+      owner accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: tr-oncf-voyages
+    category: getting_around
+    name: ONCF Voyages (Morocco rail, Al Boraq)
+    url: https://www.oncf-voyages.ma/
+    method: html
+    license: Copyright; terms not found
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Africa-ME): robots.txt: robots 404 (allowed); terms: terms not found. Booking
+      pages are excluded. Terms unconfirmed; owner accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: tr-reavaya
+    category: getting_around
+    name: Rea Vaya BRT (Johannesburg)
+    url: https://reavaya.org.za/wp-sitemap.xml
+    method: sitemap
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Africa-ME): robots.txt: WP default; terms: terms not found. Terms unconfirmed;
+      owner accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: tr-rta-dubai
+    category: getting_around
+    name: Roads & Transport Authority Dubai
+    url: https://www.rta.ae/Sitemap.xml
+    method: sitemap
+    license: Copyright; terms not found
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Africa-ME): robots.txt: **Crawl-delay: 10**; /wps/contenthandler/ and !ut
+      paths disallowed; terms: terms not found. Terms unconfirmed; owner accepted for non-commercial use 2026-11-18.
+      Facts only.'
+  - id: tr-rakta
+    category: getting_around
+    name: RAK Transport Authority
+    url: https://www.rakta.gov.ae/sitemap_index.xml
+    method: sitemap
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Africa-ME): robots.txt: `Disallow:` empty; terms: terms not found. Terms unconfirmed;
+      owner accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: tr-srta
+    category: getting_around
+    name: Sharjah Roads & Transport Authority
+    url: https://www.srta.gov.ae/
+    method: html
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Africa-ME): robots.txt: robots 404 (allowed); terms: terms not found. Terms
+      unconfirmed; owner accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: tr-etihadrail
+    category: getting_around
+    name: Etihad Rail (passenger)
+    url: https://www.etihadrail.ae/
+    method: html
+    license: Copyright; terms not found
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Africa-ME): robots.txt: robots 404 (allowed); terms: terms page has only nav
+      links (terms not found). Terms unconfirmed; owner accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: tr-hhr
+    category: getting_around
+    name: Haramain High Speed Railway
+    url: https://www.hhr.sa/
+    method: html
+    license: Copyright; no automated-access clause
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Africa-ME): robots.txt: `Disallow:` empty; terms: passenger "general terms"
+      only (no smoking, luggage); no site-use bans. No automated-access clause; facts only.'
+  - id: tr-sar
+    category: getting_around
+    name: Saudi Arabia Railways (SAR)
+    url: https://www.sar.com.sa/
+    method: html
+    license: Copyright; no automated-access clause
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Africa-ME): robots.txt: robots answers the SPA HTML (no file, allowed); terms:
+      disclaimer: "provided … as is"; no bans. No automated-access clause; facts only.'
+  - id: tr-jett
+    category: getting_around
+    name: JETT (Jordan Express Tourist Transport)
+    url: https://jett.com.jo/sitemap.xml
+    method: sitemap
+    license: Copyright; no automated-access clause
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Africa-ME): robots.txt: `Allow: /`; terms: ticket terms only; no site-use
+      bans. No automated-access clause; facts only.'
+  - id: tr-railway-ge
+    category: getting_around
+    name: Georgian Railway
+    url: https://www.railway.ge/en/sitemap_index.xml
+    method: sitemap
+    license: Copyright; terms not found
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Africa-ME): robots.txt: WP default; terms: terms not found (terms link pointed
+      to a dead host). Terms unconfirmed; owner accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: tr-ttc-tbilisi
+    category: getting_around
+    name: Tbilisi Transport Company
+    url: https://ttc.com.ge/
+    method: html
+    license: Copyright; terms not found
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Africa-ME): robots.txt: **AI-bot blocks (Cloudflare) → title+link only**;
+      terms: terms not found. Terms unconfirmed; owner accepted for non-commercial use 2026-11-18. Facts only. robots.txt
+      reserves AI use (AI crawlers blocked), so title and link only: no LLM kinds.'
+  - id: tr-iett
+    category: getting_around
+    name: IETT (Istanbul buses, Metrobüs)
+    url: https://www.iett.istanbul/
+    method: html
+    license: Copyright; terms not found
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Africa-ME): robots.txt: /uploads/, /images/ disallowed; terms: terms not found.
+      Terms unconfirmed; owner accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: tr-tcdd
+    category: getting_around
+    name: TCDD Taşımacılık (Turkish State Railways passenger)
+    url: https://www.tcddtasimacilik.gov.tr/
+    method: html
+    license: Copyright; terms not found
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Africa-ME): robots.txt: robots answers the homepage (no file, allowed); terms:
+      terms not found. Terms unconfirmed; owner accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: tr-bakubus
+    category: getting_around
+    name: BakuBus
+    url: https://www.bakubus.az/
+    method: html
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Africa-ME): robots.txt: **Crawl-delay: 60**; terms: terms not found. Terms
+      unconfirmed; owner accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: tr-airportbaku
+    category: flights
+    name: Heydar Aliyev International Airport
+    url: https://airportbaku.com/sitemap.xml
+    method: sitemap
+    license: Copyright; no automated-access clause
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Africa-ME): robots.txt: WP default; terms: disclaimer: no use restrictions.
+      No automated-access clause; facts only.'
+  - id: tr-tbilisiairport
+    category: flights
+    name: Tbilisi International Airport (TAV Georgia)
+    url: https://www.tbilisiairport.com/
+    method: html
+    license: Copyright; terms not found
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Africa-ME): robots.txt: `Disallow:` empty; terms: terms not found. Terms unconfirmed;
+      owner accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: tr-zvartnots
+    category: flights
+    name: Zvartnots International Airport (Yerevan)
+    url: https://www.zvartnots.aero/
+    method: html
+    license: Copyright; terms not found
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Africa-ME): robots.txt: robots 404 (allowed); terms: terms not found. Terms
+      unconfirmed; owner accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: tr-bahrainairport
+    category: flights
+    name: Bahrain International Airport
+    url: https://www.bahrainairport.bh/
+    method: html
+    license: Copyright; terms not found
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Africa-ME): robots.txt: robots 404 (allowed); terms: terms not found. Terms
+      unconfirmed; owner accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: tr-dhmi
+    category: flights
+    name: DHMİ (Turkish State Airports Authority)
+    url: https://www.dhmi.gov.tr/Sayfalar/AnaSayfa.aspx
+    method: html
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Africa-ME): robots.txt: robots 404 (allowed); terms: terms not found. Terms
+      unconfirmed; owner accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: tr-digitalmatatus
+    category: getting_around
+    name: Digital Matatus (Nairobi informal transit GTFS)
+    url: https://www.digitalmatatus.com/
+    method: dump
+    license: Copyright; terms not found
+    cadence: yearly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Africa-ME): robots.txt: robots 404 (allowed); terms: terms not found; licence
+      not confirmed on the page. Terms unconfirmed; owner accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: wx-mgm-turkey
+    category: weather
+    name: Turkish State Meteorological Service
+    url: https://www.mgm.gov.tr/sitemap.xml
+    method: sitemap
+    license: Copyright; no automated-access clause
+    cadence: daily
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Africa-ME): robots.txt: /index.aspx/ only; terms: "önceden izin alınmadan
+      ve kaynak gösterilmeden … kullanılamaz" (copyright; credit "Kaynak: MGM"). No automated-access clause; facts
+      only.'
+  - id: wx-ncm-uae
+    category: weather
+    name: UAE National Center of Meteorology
+    url: https://www.ncm.gov.ae/sitemap.xml
+    method: sitemap
+    license: Copyright; no automated-access clause
+    cadence: daily
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Africa-ME): robots.txt: `Disallow: /*.html`; terms: copyright page has no
+      restrictive text. No automated-access clause; facts only.'
+  - id: wx-ims-israel
+    category: weather
+    name: Israel Meteorological Service
+    url: https://ims.gov.il/en
+    method: html
+    license: Copyright; terms not found
+    cadence: daily
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Africa-ME): robots.txt: empty robots.txt (allowed); terms: terms page is a
+      click-through with no visible text (terms not found). Terms unconfirmed; owner accepted for non-commercial use
+      2026-11-18. Facts only.'
+  - id: wx-marocmeteo
+    category: weather
+    name: Direction Générale de la Météorologie, Maroc
+    url: https://www.marocmeteo.ma/fr
+    method: html
+    license: Copyright; no automated-access clause
+    cadence: daily
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Africa-ME): robots.txt: Drupal default; terms: "Conditions légales" page has
+      no restrictive text. No automated-access clause; facts only.'
+  - id: wx-meteo-tn
+    category: weather
+    name: Institut National de la Météorologie, Tunisie
+    url: https://www.meteo.tn/
+    method: html
+    license: Copyright; terms not found
+    cadence: daily
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Africa-ME): robots.txt: Drupal default; terms: terms not found (only "conditions
+      de vente" for data sales). Terms unconfirmed; owner accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: wx-meteo-sc
+    category: weather
+    name: Seychelles Meteorological Authority
+    url: https://www.meteo.gov.sc/
+    method: html
+    license: Copyright; terms not found
+    cadence: daily
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Africa-ME): robots.txt: **Crawl-delay: 10**; admin/config paths only; terms:
+      terms not found. Terms unconfirmed; owner accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: wx-weathersa
+    category: weather
+    name: South African Weather Service
+    url: https://www.weathersa.co.za/
+    method: html
+    license: Copyright; terms not found
+    cadence: daily
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Africa-ME): robots.txt: robots 404 (allowed); terms: terms not found. Terms
+      unconfirmed; owner accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: wx-met-oman
+    category: weather
+    name: Oman Meteorology (CAA)
+    url: https://met.caa.gov.om/
+    method: html
+    license: Copyright; personal/non-commercial terms (owner accepted)
+    cadence: daily
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Africa-ME): robots.txt: met.gov.om robots 404, redirects to met.caa.gov.om;
+      onboarding 2026-11-18: met.caa.gov.om robots.txt 200, allows / (WordPress search/tag/category paths disallowed);
+      terms: Arabic terms: users must not "use information for commercial purposes without permission" (non-commercial
+      is fine). Terms restrict to personal/non-commercial use; owner accepted for non-commercial use 2026-11-18 (users
+      must not ''use information for commercial purposes without permission''). Facts only.'
+  - id: od-data-gov-qa
+    category: hotels
+    name: Qatar Open Data Portal (Opendatasoft)
+    url: https://www.data.gov.qa/api/explore/v2.1/catalog/datasets
+    method: api
+    license: Per-dataset licences (open-data portal)
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Africa-ME): robots.txt: /explore/download and per-dataset rss/atom disallowed;
+      `/api/explore/v2.1/catalog` is not disallowed; terms: terms not found.'
+  - id: od-data-gov-bh
+    category: hotels
+    name: Bahrain Open Data Portal (Opendatasoft)
+    url: https://www.data.gov.bh/api/explore/v2.1/catalog/datasets
+    method: api
+    license: Bahrain Government Open Data License
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Africa-ME): robots.txt: same ODS robots as Qatar; terms: "By using the government
+      open data, you implicitly acknowledge your agreement to … the Bahrain Government Open Data License".'
+  - id: od-izmir-acikveri
+    category: getting_around
+    name: İzmir Metropolitan Open Data (CKAN)
+    url: https://acikveri.bizizmir.com/sitemap.xml
+    method: sitemap
+    license: CC BY 4.0
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Africa-ME): robots.txt: **Crawl-delay: 10**; **`/api/` disallowed**, so use
+      the sitemap and dataset pages, not the CKAN API; terms: "tüm materyaller aksi belirtilmedikçe Creative Commons
+      Atıf 4.0 Uluslararası Lisansı ile".'
+  - id: od-data-gov-ma
+    category: hotels
+    name: Morocco Open Data Portal
+    url: https://data.gov.ma/data/fr/dataset
+    method: html
+    license: Per-dataset licences (open-data portal)
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Africa-ME): robots.txt: Drupal default; terms: "l''utilisation des jeux de
+      données/Bases de données Open Data publiés sur ce portail est soumise à [la licence]".'
+  - id: od-data-gov-tn
+    category: hotels
+    name: Tunisia Open Data Portal
+    url: https://www.data.gov.tn/fr/
+    method: html
+    license: Per-dataset licences (open-data portal)
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Africa-ME): robots.txt: robots 404 (allowed); terms: CGU defines reuse "dans
+      les libertés et les conditions prévues par cette licence".'
+  - id: ev-abudhabifestival
+    category: events
+    name: Abu Dhabi Festival
+    url: https://www.abudhabifestival.ae/sitemap.xml
+    method: sitemap
+    license: Copyright; no automated-access clause
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Africa-ME): robots.txt: /api/, /account/, /checkout/ disallowed; terms: only
+      a ticket policy page (phones/cameras banned at venues); no site-use bans. No automated-access clause; facts
+      only.'
+  - id: ev-fesfestival
+    category: events
+    name: Fès Festival of World Sacred Music
+    url: https://fesfestival.com/2026-/
+    method: html
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Africa-ME): robots.txt: 13-byte robots.txt, no rules (allowed); terms: terms
+      not found. Terms unconfirmed; owner accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: ev-gnaoua
+    category: events
+    name: Gnaoua and World Music Festival (Essaouira)
+    url: https://www.festival-gnaoua.net/sitemap_index.xml
+    method: sitemap
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Africa-ME): robots.txt: WP default; terms: terms not found. Terms unconfirmed;
+      owner accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: ev-baalbeck
+    category: events
+    name: Baalbeck International Festival
+    url: https://www.baalbeck.org.lb/feed/
+    method: rss
+    license: Copyright; terms not found
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Africa-ME): robots.txt: WP default; terms: terms not found. Terms unconfirmed;
+      owner accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: ev-capetownjazzfest
+    category: events
+    name: Cape Town International Jazz Festival
+    url: https://capetownjazzfest.com/sitemap.xml
+    method: sitemap
+    license: Copyright; no automated-access clause
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Africa-ME): robots.txt: disallows /_next/data/ and query pages; terms: business
+      booking terms only; no site-use bans. No automated-access clause; facts only.'
+  - id: ev-nationalartsfestival
+    category: events
+    name: National Arts Festival (Makhanda)
+    url: https://nationalartsfestival.co.za/
+    method: html
+    license: Copyright; no automated-access clause
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Africa-ME): robots.txt: robots 404 (allowed); terms: T&Cs cover ticketing/POPIA
+      only; no crawl ban. No automated-access clause; facts only.'
+  - id: ev-iksv
+    category: events
+    name: İstanbul Foundation for Culture and Arts (İKSV)
+    url: https://www.iksv.org/sitemap/iksv-en.xml
+    method: sitemap
+    license: Copyright; terms not found
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Africa-ME): robots.txt: `Allow: /`; terms: terms not found (only e-mail rules
+      page). Terms unconfirmed; owner accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: ev-springofculture
+    category: events
+    name: Spring of Culture (Bahrain)
+    url: https://springofculture.org/sitemap.xml
+    method: sitemap
+    license: Copyright; no automated-access clause
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Africa-ME): robots.txt: empty rules (allowed); terms: event conduct terms
+      only; no site-use bans. No automated-access clause; facts only.'
+  - id: blog-againstthecompass
+    category: blogs
+    name: Against the Compass
+    url: https://www.againstthecompass.com/feed/
+    method: rss
+    license: Copyright; terms not found
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Africa-ME): robots.txt: empty robots.txt (allowed); terms: terms not found.
+      Terms unconfirmed; owner accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: blog-turkeysforlife
+    category: blogs
+    name: Turkey's For Life
+    url: https://www.turkeysforlife.com/feed/
+    method: rss
+    license: Copyright; terms not found
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Africa-ME): robots.txt: disallows /wp-json/, ?s=, cart params; terms: privacy/disclaimer
+      page has no use restrictions (terms not found). Terms unconfirmed; owner accepted for non-commercial use 2026-11-18.
+      Facts only.'
+  - id: blog-yabangee
+    category: blogs
+    name: Yabangee (Istanbul)
+    url: https://yabangee.com/feed/
+    method: rss
+    license: Copyright; terms not found
+    cadence: daily
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Africa-ME): robots.txt: `Disallow:` empty; terms: terms not found. Terms unconfirmed;
+      owner accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: mag-theguideistanbul
+    category: places
+    name: The Guide Istanbul
+    url: https://www.theguideistanbul.com/sitemap.xml
+    method: sitemap
+    license: Copyright; no automated-access clause
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Africa-ME): robots.txt: **AI-bot blocks (Cloudflare) → title+link only**;
+      terms: Shopify-style terms: "not reproduce, duplicate, copy, sell … any portion of the Service" (copyright);
+      no bot ban. No automated-access clause; facts only. robots.txt reserves AI use (AI crawlers blocked), so title
+      and link only: no LLM kinds. An Istanbul city guide magazine (no feed), filed under places.'
+  - id: news-whatson-ae
+    category: news
+    name: What's On (UAE)
+    url: https://whatson.ae/feed/
+    method: rss
+    license: Copyright; terms not found
+    cadence: daily
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Africa-ME): robots.txt: WP default; terms: terms not found (only a privacy
+      policy linked). Terms unconfirmed; owner accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: lepetitjournal-news
+    category: news
+    name: lepetitjournal.com (francophone city editions)
+    url: https://lepetitjournal.com/sitemap/sitemap.dubai.xml
+    method: sitemap
+    license: Copyright; no automated-access clause
+    cadence: daily
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Africa-ME): robots.txt: disallows */node/*, query params; terms: CGU: "Toute
+      reproduction totale ou partielle du Site est strictement interdite" (copyright only; no bot ban). No automated-access
+      clause; facts only.'
+  - id: mag-capetownmagazine
+    category: events
+    name: Cape Town Magazine
+    url: https://www.capetownmagazine.com/sitemap.xml
+    method: sitemap
+    license: Copyright; terms not found
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Africa-ME): robots.txt: odd absolute-URL disallows for image CDNs and the
+      DE/NL events mirrors; terms: terms-of-use page has no text (terms not found). Terms unconfirmed; owner accepted
+      for non-commercial use 2026-11-18. Facts only. A Cape Town city guide magazine (no feed), filed under events.'
+  - id: news-tourismupdate
+    category: news
+    name: Tourism Update (Southern Africa travel trade)
+    url: https://tourismupdate.com/functions/generateSitemapIndex
+    method: sitemap
+    license: Copyright; terms not found
+    cadence: daily
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Africa-ME): robots.txt: allows /article/; /api/ disallowed; terms: terms not
+      found. Terms unconfirmed; owner accepted for non-commercial use 2026-11-18. Facts only. No feed is used: the
+      article sitemap is read.'
+  - id: od-data-gov-om
+    category: hotels
+    name: Oman Open Data Portal
+    url: https://data.gov.om/
+    method: api
+    license: Open Government License (Oman)
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Africa-ME): robots.txt: allowed (research 2026-11-18); terms: Open Government
+      License (Oman).'
+  - id: od-data-abudhabi
+    category: hotels
+    name: Abu Dhabi Open Data Platform
+    url: https://data.abudhabi/opendata/
+    method: api
+    license: Per-dataset licences (open-data portal)
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Africa-ME): robots.txt: allowed (research 2026-11-18); terms: Per-dataset
+      licences (open-data portal).'
+  - id: od-bayanat-ae
+    category: hotels
+    name: Bayanat (UAE federal open data)
+    url: https://bayanat.ae/
+    method: api
+    license: Per-dataset licences (open-data portal)
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Africa-ME): robots.txt: allowed (research 2026-11-18); terms: Per-dataset
+      licences (open-data portal).'
+  - id: tb-wesgro
+    category: places
+    name: Wesgro (Cape Town and Western Cape tourism)
+    url: https://www.wesgro.co.za/
+    method: html
+    license: Copyright; personal/non-commercial terms (owner accepted)
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Africa-ME): robots.txt: allowed (research 2026-11-18); terms: ''download information
+      and content from this website for your own personal, non-commercial use. You may not ... distribute''. Terms
+      restrict to personal/non-commercial use; owner accepted for non-commercial use 2026-11-18 (''download information
+      and content from this website for your own personal, non-commercial use. You may not ... distribute''). Facts
+      only.'
+  - id: np-nwr-namibia
+    category: hotels
+    name: Namibia Wildlife Resorts
+    url: https://www.nwr.com.na/
+    method: html
+    license: Copyright; personal/non-commercial terms (owner accepted)
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Africa-ME): robots.txt: allowed (research 2026-11-18); terms: use ''for anything
+      other than personal and non-commercial purposes'' is prohibited. Terms restrict to personal/non-commercial use;
+      owner accepted for non-commercial use 2026-11-18 (use ''for anything other than personal and non-commercial
+      purposes'' is prohibited). Facts only.'
+  - id: tb-visitrasalkhaimah
+    category: places
+    name: Visit Ras Al Khaimah (RAKTDA)
+    url: https://visitrasalkhaimah.com/
+    method: html
+    license: Copyright; personal/non-commercial terms (owner accepted)
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Africa-ME): robots.txt: allowed (research 2026-11-18); terms: ''reproduce
+      and display the Content for your own personal, non-commercial use''. Terms restrict to personal/non-commercial
+      use; owner accepted for non-commercial use 2026-11-18 (''reproduce and display the Content for your own personal,
+      non-commercial use''). Facts only.'
+  - id: tb-dct-abudhabi
+    category: tips
+    name: Department of Culture and Tourism Abu Dhabi
+    url: https://dct.gov.ae/
+    method: html
+    license: Copyright; personal/non-commercial terms (owner accepted)
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Africa-ME): robots.txt: allowed (research 2026-11-18); terms: ''only for your
+      personal, non-commercial use ... All other uses are prohibited''. Terms restrict to personal/non-commercial
+      use; owner accepted for non-commercial use 2026-11-18 (''only for your personal, non-commercial use ... All
+      other uses are prohibited''). Facts only.'
+  - id: tr-admobility
+    category: getting_around
+    name: Abu Dhabi Integrated Transport Centre
+    url: https://admobility.gov.ae/
+    method: html
+    license: Copyright; personal/non-commercial terms (owner accepted)
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Africa-ME): robots.txt: allowed (research 2026-11-18); terms: download/store/print
+      ''for personal non-commercial use within the user''s organisation'' (Arabic). Terms restrict to personal/non-commercial
+      use; owner accepted for non-commercial use 2026-11-18 (download/store/print ''for personal non-commercial use
+      within the user''s organisation'' (Arabic)). Facts only.'
+  - id: wx-ncm-sa
+    category: weather
+    name: Saudi National Center for Meteorology
+    url: https://ncm.gov.sa/
+    method: html
+    license: Copyright; personal/non-commercial terms (owner accepted)
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Africa-ME): robots.txt: allowed (research 2026-11-18); terms: materials for
+      ''personal, non-commercial use only'' (Arabic). Terms restrict to personal/non-commercial use; owner accepted
+      for non-commercial use 2026-11-18 (materials for ''personal, non-commercial use only'' (Arabic)). Facts only.'
+  - id: ev-sharjahart
+    category: events
+    name: Sharjah Art Foundation
+    url: https://www.sharjahart.org/
+    method: html
+    license: Copyright; personal/non-commercial terms (owner accepted)
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Africa-ME): robots.txt: allowed (research 2026-11-18); terms: ''Content may
+      only be reproduced for personal, educational or non-commercial research purposes''. Terms restrict to personal/non-commercial
+      use; owner accepted for non-commercial use 2026-11-18 (''Content may only be reproduced for personal, educational
+      or non-commercial research purposes''). Facts only.'
+  - id: customs-sars
+    category: tips
+    name: 'SARS Customs: traveller allowances'
+    url: https://www.sars.gov.za/customs-and-excise/travellers/
+    method: html
+    license: Copyright; personal/non-commercial terms (owner accepted)
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Africa-ME): robots.txt: allowed (research 2026-11-18); terms: ''used for personal,
+      educational, or non-commercial purposes only''. Terms restrict to personal/non-commercial use; owner accepted
+      for non-commercial use 2026-11-18 (''used for personal, educational, or non-commercial purposes only''). Facts
+      only.'
+  - id: news-thenational-travel
+    category: news
+    name: 'The National (UAE): travel section'
+    url: https://www.thenationalnews.com/arc/outboundfeeds/rss/category/travel/?outputType=xml
+    method: rss
+    license: Copyright; personal/non-commercial terms (owner accepted)
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Africa-ME): robots.txt: allowed (research 2026-11-18); terms: ''solely for
+      your personal, non-commercial use''. Terms restrict to personal/non-commercial use; owner accepted for non-commercial
+      use 2026-11-18 (''solely for your personal, non-commercial use''). Facts only.'
+  - id: mag-travelafrica
+    category: places
+    name: Travel Africa Magazine
+    url: https://travelafricamag.com/
+    method: html
+    license: Copyright; personal/non-commercial terms (owner accepted)
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Africa-ME): robots.txt: allowed (research 2026-11-18); terms: ''may store,
+      print and display the content ... solely for your own personal use''. Terms restrict to personal/non-commercial
+      use; owner accepted for non-commercial use 2026-11-18 (''may store, print and display the content ... solely
+      for your own personal use''). Facts only. Its /feed/ returned HTML, so the HTML pages are read.'
+  - id: blog-istanbulclues
+    category: blogs
+    name: Istanbul Clues
+    url: https://istanbulclues.com/feed/
+    method: rss
+    license: Copyright; personal/non-commercial terms (owner accepted)
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Africa-ME): robots.txt: allowed (research 2026-11-18); terms: ''read the guides
+      and share links ... for personal, non-commercial purposes''. Terms restrict to personal/non-commercial use;
+      owner accepted for non-commercial use 2026-11-18 (''read the guides and share links ... for personal, non-commercial
+      purposes''). Facts only.'
+  - id: ref-zambiatourism
+    category: places
+    name: Zambia Tourism (private portal)
+    url: https://www.zambiatourism.com/
+    method: html
+    license: Copyright; personal/non-commercial terms (owner accepted)
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Africa-ME): robots.txt: allowed (research 2026-11-18); terms: ''entitled to
+      use the website ... for your personal purposes''. Terms restrict to personal/non-commercial use; owner accepted
+      for non-commercial use 2026-11-18 (''entitled to use the website ... for your personal purposes''). Facts only.
+      Private company, not the Zambia Tourism Agency; a commercial accommodation directory, low priority.'
+  - id: ev-riyadhseason
+    category: events
+    name: Riyadh Season (events)
+    url: https://riyadhseason.com/sitemap.xml
+    method: sitemap
+    license: Copyright; terms not found
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Africa-ME): robots.txt: onboarding 2026-11-18: 200, User-agent * disallows
+      only profile and payment paths; lists /sitemap.xml; terms: not found: the home page is a 2 KB JavaScript shell
+      with no terms link (one request). Terms unconfirmed; owner accepted for non-commercial use 2026-11-18. Facts
+      only. JavaScript single-page app: render auto.'
+  - id: tb-visitaqaba
+    category: places
+    name: Visit Aqaba (ASEZA)
+    url: https://visitaqaba.com/
+    method: html
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Africa-ME): robots.txt: onboarding 2026-11-18: robots.txt timed out (no response);
+      terms: not read. Terms unconfirmed; owner accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: news-capetownetc
+    category: news
+    name: Cape Town Etc
+    url: https://www.capetownetc.com/feed/
+    method: rss
+    license: Copyright; personal/non-commercial terms (owner accepted)
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Africa-ME): robots.txt: n/a; terms: ''for educational, research or non-commercial
+      purposes only''. No automated-access clause; facts only.'

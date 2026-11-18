@@ -704,3 +704,28 @@ entries:
   - host: serviciomigraciones.cl
     reason: Terms ban 'uso de software automatizado (bots) para extraer datos', 2026-11-18
     source: research 2026-11-18 corpus LatAm SKIP
+  # --- corpus expansion: Africa and the Middle East (research 2026-11-18): terms bans, hijack ---
+  - host: georgia.travel
+    reason: "Terms ban creating 'a database by systematically downloading and storing all or any content' and 'using any mechanical or automated device', 2026-11-18"
+    source: research 2026-11-18 corpus Africa-ME SKIP
+  - host: isimangaliso.com
+    reason: Terms ban to 'scrape, harvest or systematically extract content', 2026-11-18
+    source: research 2026-11-18 corpus Africa-ME SKIP
+  - host: thesouthafrican.com
+    reason: "Terms: 'Don't use any automated means (like spiders or crawlers)', 2026-11-18"
+    source: research 2026-11-18 corpus Africa-ME SKIP
+  - host: casatramway.ma
+    reason: "CGU ban 'Extraction illégale de données' and any 'reproduction, exploitation ou extraction', 2026-11-18"
+    source: research 2026-11-18 corpus Africa-ME SKIP
+  - host: mdlbeast.com
+    reason: Terms ban bots or other automated methods to access or use the platform, 2026-11-18
+    source: research 2026-11-18 corpus Africa-ME SKIP
+  - host: geo.fr
+    reason: CGU reserve text and data mining (TDM-RESERVATION 1) against any extraction, 2026-11-18
+    source: research 2026-11-18 corpus Africa-ME SKIP
+  - host: routard.com
+    reason: CGU ban automated systems to extract and collect data (screen scraping, data mining); robots.txt blocks AI crawlers, 2026-11-18
+    source: research 2026-11-18 corpus Africa-ME SKIP
+  - host: visitethiopia.travel
+    reason: Domain hijacked/redirects to unrelated site (a gambling-style domain), 2026-11-18
+    source: research 2026-11-18 corpus Africa-ME SKIP
