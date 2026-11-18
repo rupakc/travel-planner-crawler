@@ -140,7 +140,8 @@ def test_restricted_sources_are_disabled(generated):
 def test_non_commercial_licences_are_restricted(generated):
     for s in ALLOWED:
         lic = s["license"].lower()
-        if "non-commercial" in lic or "-nc" in lic:
+        # Personal/non-commercial *terms* the owner accepted (2026-11-18) are facts only.
+        if ("non-commercial" in lic or "-nc" in lic) and "owner accepted" not in lic:
             assert generated[s["id"]]["licence"]["class"] == "restricted", s["id"]
 
 
@@ -502,7 +503,6 @@ SUSTAIN_BUDGET_OFF = {
     "sg-hawker-centres": "adapter pending", "flixbus-gtfs": "adapter pending",
     "doc-nz-api": "needs an API key", "greenseal-api": "needs an API key",
     "icao-carbon": "needs an API key", "seoul-wifi": "needs an API key",
-    "adeac-bandera-azul": "owner decision: terms restrict reuse",
     "blueflag-gr": "seed unresolved", "mavi-bayrak-tr": "seed unresolved",
     "botswana-ecocert": "seed unresolved", "cst-costa-rica": "seed unresolved",
     "nordic-swan-hotels": "seed unresolved", "umweltzeichen-tourism": "seed unresolved",
@@ -528,8 +528,15 @@ SUSTAIN_BUDGET_AI_RESERVED = {
 
 def _sustain_budget_ids():
     seeds = yaml.safe_load((ROOT / "docs" / "research" / "seeds.yaml").read_text())["seeds"]
-    i = next(n for n, s in enumerate(seeds) if s["id"] == "gstc-certified-hotels")
-    return [s["id"] for s in seeds[i:]]
+    return _batch_ids(seeds, "gstc-certified-hotels", "tb-visitcornwall")
+
+
+def _batch_ids(seeds, first, next_first=None):
+    """Ids of one research batch: from its first seed up to the next batch's first seed."""
+    ids = [s["id"] for s in seeds]
+    i = ids.index(first)
+    j = ids.index(next_first) if next_first in ids else len(ids)
+    return ids[i:j]
 
 
 def test_sustainable_and_budget_sources_2026_11_18(generated):
@@ -537,7 +544,7 @@ def test_sustainable_and_budget_sources_2026_11_18(generated):
     assert len(ids) == 116 and set(SUSTAIN_BUDGET_OFF) <= set(ids)
     r2, r3 = set(_ramp("ramp-2.txt")), set(_ramp("ramp-3.txt"))
     on = [sid for sid in ids if sid not in SUSTAIN_BUDGET_OFF]
-    assert len(on) == 92
+    assert len(on) == 93  # adeac-bandera-azul on since 2026-11-18 (personal-use terms, owner accepted)
     for sid in on:
         spec = generated[sid]
         notes = " ".join(spec["notes"].split())
@@ -630,10 +637,8 @@ def test_production_bot_walls_2026_11_18_are_off_and_out_of_every_ramp(generated
 
 # Alternatives to sites that refused or challenged VoyagerBot (vetted 2026-11-18).
 ALTERNATIVES_ON = {"safetravel-nz", "eu-youreurope-travel", "revenue-ie-travellers"}
-ALTERNATIVES_OFF = {
-    "dirco-sa": "owner decision",
-    "capetown-gov": "owner decision",
-}
+# Personal/non-commercial terms: on by the owner's standing rule of 2026-11-18 (facts only).
+ALTERNATIVES_OWNER_ACCEPTED = {"dirco-sa", "capetown-gov"}
 
 
 # Terms not found; the owner accepted them for non-commercial use on 2026-11-18.
@@ -659,12 +664,12 @@ def test_alternatives_2026_11_18(generated):
         assert "2026-11-18" in " ".join(spec["notes"].split()), sid
         assert sid in _ramp("ramp-2.txt") and sid in _ramp("ramp-3.txt"), sid
     assert generated["eu-youreurope-travel"]["min_delay_s"] >= 10  # europa.eu Crawl-delay 10
-    for sid, why in ALTERNATIVES_OFF.items():
+    for sid in ALTERNATIVES_OWNER_ACCEPTED | {"adeac-bandera-azul"}:
         spec = generated[sid]
-        reason = " ".join(spec["notes"].split()).split("Disabled: ", 1)[1]
-        assert spec["enabled"] is False and reason.startswith(why), sid
-        for ramp in ("ramp-1.txt", "ramp-2.txt", "ramp-3.txt"):
-            assert sid not in _ramp(ramp), (sid, ramp)
+        notes = " ".join(spec["notes"].split())
+        assert spec["enabled"] is True and spec["licence"]["class"] == "facts_only", sid
+        assert "Terms restrict to personal/non-commercial use; owner accepted for non-commercial use 2026-11-18" in notes, sid
+        assert sid in _ramp("ramp-2.txt") and sid in _ramp("ramp-3.txt"), sid
 
 
 def test_terms_and_bot_wall_sources_are_off(generated):
@@ -683,7 +688,7 @@ def test_terms_and_bot_wall_sources_are_off(generated):
 def test_batch2_off_sources_say_why(generated):
     prefixes = ("adapter pending", "needs an API key", "needs an account", "terms not yet confirmed",
                 "licence:", "robots.txt", "access route", "owner decision", "dataset retired",
-                "bot wall", "seed unresolved", "relevance:")
+                "bot wall", "seed unresolved", "relevance:", "re-test from the crawler VM")
     for sid in s2s.SOURCE_CLASS:
         spec = generated[sid]
         if spec["enabled"]:
@@ -924,3 +929,97 @@ def test_adapted_sources_2026_11_18(generated):
     assert wiki["seeds"] == [
         "https://dumps.wikimedia.org/enwiki/latest/enwiki-latest-pages-articles-multistream-index.txt.bz2"
     ]
+
+
+# --- Corpus expansion: Europe (research vetted 2026-11-18, corpus_europe.md) -------------
+EUROPE_OFF = {
+    **{sid: "adapter pending" for sid in (
+        "od-data-gov-uk", "od-culture-data-gouv", "od-datos-gob-es", "od-opendata-swiss", "od-data-gv-at",
+        "od-data-overheid-nl", "od-data-public-lu", "od-avoindata-fi", "od-dataportal-se", "od-podatki-gov-si",
+        "od-andmed-eesti", "od-data-europa", "od-data-gov-cz", "od-dane-gov-pl", "tr-irail", "tr-entur",
+        "tb-puglia")},
+    "api-europeana": "needs an API key", "od-data-gov-gr": "needs an API key",
+    "tr-eurostar": "owner decision", "thelocal-news": "relevance",
+    "ref-odysseus-culture-gr": "re-test from the crawler VM", "tr-intercity-pl": "re-test from the crawler VM",
+}
+EUROPE_DELAYS = {"city-toulouse": 20, "city-geneve": 10, "tb-gibraltar": 10, "blog-europeupclose": 30,
+                 "city-esmadrid": 10}
+EUROPE_AI_RESERVED = {
+    "city-dresden", "city-esmadrid", "city-ljubljana", "city-nice", "ed-inyourpocket", "np-cairngorms",
+    "tb-fjordnorway", "tb-galicia", "tb-moldova", "tb-sanmarino", "tb-sardegna", "tb-serbia", "tb-valdeloire",
+    "tb-visithungary", "tb-visitluxembourg", "tr-vy",
+}
+# Personal/non-commercial terms, on by the owner's standing rule of 2026-11-18.
+EUROPE_PERSONAL_TERMS = {
+    "city-visitbath", "city-visitbelfast", "city-visitmanchester", "city-visitcambridge", "tb-visitisleofman",
+    "tb-historicenvironment-scot", "tb-discovernorthernireland", "tb-bayern", "tr-cfr-calatori", "city-esmadrid",
+    "city-visitvalencia", "tb-sardegna", "tb-visittrentino", "city-visitbruges", "city-visitbergen",
+    "city-thisisathens", "tb-montenegro", "tr-heathrow", "tr-munich-airport",
+}
+EUROPE_PORTAL_REASON = "adapter pending: choose tourism datasets + dataset reader"
+
+
+def _corpus_batch_check(generated, ids, off, delays, ai_reserved, personal):
+    r2, r3 = set(_ramp("ramp-2.txt")), set(_ramp("ramp-3.txt"))
+    assert set(off) <= set(ids) and set(personal) <= set(ids)
+    for sid in ids:
+        spec = generated[sid]
+        notes = " ".join(spec["notes"].split())
+        assert "2026-11-18" in notes, sid
+        if sid in off:
+            reason = notes.split("Disabled: ", 1)[1]
+            assert spec["enabled"] is False and reason.startswith(off[sid]), (sid, reason)
+            assert sid not in r2 and sid not in r3, sid
+            if spec["needs_key"]:
+                assert spec["key_secret"] == f"crawler-src-{sid}-key" and "https://" in reason, sid
+            continue
+        assert spec["enabled"] is True, sid
+        assert spec["method"] in ("html", "rss", "sitemap") and not spec["needs_key"], sid
+        assert sid in r2 and sid in r3, sid
+        assert spec["daily_budget"] <= 200 and spec["max_depth"] <= 2, sid
+        assert spec["min_delay_s"] >= delays.get(sid, 5), sid
+        assert spec["cadence"] in ("daily", "weekly", "monthly", "quarterly"), sid
+        if spec["licence"]["class"] != "open":
+            assert spec["licence"]["class"] == "facts_only", sid
+        if "terms not found" in notes or "Terms unconfirmed" in notes:
+            assert "owner accepted for non-commercial use 2026-11-18" in notes, sid
+        if sid in personal:
+            assert spec["licence"]["class"] == "facts_only", sid
+            assert ("Terms restrict to personal/non-commercial use; owner accepted for non-commercial use "
+                    "2026-11-18") in notes, sid
+        if sid in ai_reserved:
+            assert spec["llm_kinds"] == [] and "no LLM kinds" in notes, sid
+        if spec["category"] in ("blogs", "news"):
+            assert spec["source_class"] == "editorial", sid
+
+
+def test_corpus_europe_2026_11_18(generated):
+    seeds = yaml.safe_load((ROOT / "docs" / "research" / "seeds.yaml").read_text())["seeds"]
+    ids = _batch_ids(seeds, "tb-visitcornwall", "CORPUS_AFTER_EUROPE")
+    assert len(ids) == 151
+    _corpus_batch_check(generated, ids, EUROPE_OFF, EUROPE_DELAYS, EUROPE_AI_RESERVED, EUROPE_PERSONAL_TERMS)
+    assert len([s for s in ids if s not in EUROPE_OFF]) == 128
+    # National open-data portals wait for a dataset reader, not an HTML crawl.
+    for sid in ids:
+        if sid.startswith("od-") and sid not in ("od-musei-italiani", "od-data-gov-gr", "od-data-gov-cz"):
+            assert EUROPE_PORTAL_REASON in generated[sid]["notes"].replace("\n", " "), sid
+    # Denylisted or already-present hosts are not added again.
+    assert "tb-nationaltrust" not in generated and "od-data-gouv-fr" not in generated
+    for url in EUROPE_DENIED:
+        assert s2s.denied(url, DENYLIST) is not None, url
+    for url in EUROPE_STAY_ALLOWED:
+        assert s2s.denied(url, DENYLIST) is None, url
+
+
+# Terms ban robots, scraping, automated access or TDM (corpus Europe 2026-11-18).
+EUROPE_DENIED = [
+    "https://www.lakedistrict.gov.uk/", "https://www.nationalrail.co.uk/", "https://visitandorra.com/",
+    "https://www.visitestonia.com/", "https://www.suedtirol.info/", "https://www.mvg.de/",
+    "https://www.publictransport.com.mt/", "https://www.bolognawelcome.com/",
+]
+EUROPE_STAY_ALLOWED = [
+    "https://visittallinn.ee/sitemap.xml", "https://www.tirol.at/sitemap.xml", "https://www.visitmalta.com/en/",
+    "https://www.translink.co.uk/sitemap.xml", "https://www.museiitaliani.it/", "https://www.oebb.at/en/",
+    "https://www.cairngorms.co.uk/",
+]
+

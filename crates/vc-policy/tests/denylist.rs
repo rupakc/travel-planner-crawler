@@ -322,6 +322,15 @@ fn batch2_entries_are_denied() {
         "https://www.nyc.gov/",
         "https://data.buenosaires.gob.ar/",
         "https://www.routesonline.com/",
+        // Corpus expansion: Europe (2026-11-18): terms bans
+        "https://www.lakedistrict.gov.uk/",
+        "https://www.nationalrail.co.uk/",
+        "https://visitandorra.com/",
+        "https://www.visitestonia.com/",
+        "https://www.suedtirol.info/",
+        "https://www.mvg.de/",
+        "https://www.publictransport.com.mt/",
+        "https://www.bolognawelcome.com/",
     ] {
         assert!(denied(u).is_some(), "{u} must be denied");
     }
@@ -390,6 +399,14 @@ fn approved_hosts_stay_allowed() {
         "https://www.green-tourism.com/our-members/",
         "https://youth.europa.eu/discovereu_en",
         "https://www.parismusees.paris.fr/en/les-musees-de-la-ville-de-paris",
+        // Corpus expansion: Europe (2026-11-18): sources next to new entries
+        "https://visittallinn.ee/sitemap.xml",
+        "https://www.tirol.at/sitemap.xml",
+        "https://www.visitmalta.com/en/",
+        "https://www.translink.co.uk/sitemap.xml",
+        "https://www.museiitaliani.it/",
+        "https://www.oebb.at/en/",
+        "https://www.cairngorms.co.uk/",
     ] {
         assert_eq!(denied(u), None, "{u} must stay allowed");
     }

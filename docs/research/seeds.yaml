@@ -3244,7 +3244,7 @@ seeds:
       alternative to dha.gov.za (robots.txt 403) for embassy contacts. robots.txt (2026-11-18): 200,
       "Disallow:" (everything allowed); sitemaps answered 200. Terms (https://dirco.gov.za/terms-and-conditions/):
       "On request, material may be reproduced free of charge ... may not be used for any financial gain ...
-      the source (including URL) and copyright status must be acknowledged."'
+      the source (including URL) and copyright status must be acknowledged." Terms restrict to personal/non-commercial use; owner accepted for non-commercial use 2026-11-18 (reproduction on request, not for financial gain, with source and URL acknowledged). Facts only, with the source and link.'
   - id: capetown-gov
     category: places
     name: City of Cape Town (parks, beaches, nature reserves, events)
@@ -3258,7 +3258,7 @@ seeds:
       robots.txt (2026-11-18): 200, "Allow: /", sitemap answered 200 (3.9 MB). Terms
       (https://www.capetown.gov.za/General/Terms-of-use): "Any redistribution or reproduction of part or
       all of the contents in any form is prohibited", except personal non-commercial use and copies for
-      personal use crediting the site; other use needs written permission (cct.webmaster@capetown.gov.za).'
+      personal use crediting the site; other use needs written permission (cct.webmaster@capetown.gov.za). Terms restrict to personal/non-commercial use; owner accepted for non-commercial use 2026-11-18 (redistribution or reproduction prohibited except personal non-commercial use). Facts only, with the source and link.'
   - id: state-dept-country-info
     category: visa
     name: US State Department Country Travel Information API
@@ -3464,7 +3464,7 @@ seeds:
     cadence: monthly
     needs_key: false
     allowed: true
-    notes: 'robots.txt (research 2026-11-18): 200; Drupal default disallows only.'
+    notes: 'robots.txt (research 2026-11-18): 200; Drupal default disallows only. Terms restrict to personal/non-commercial use; owner accepted for non-commercial use 2026-11-18 (Aviso legal: ''reproducciones privadas ... destinados únicamente al uso personal''). Facts only, with the source and link.'
   - id: blueflag-gr
     category: places
     name: Blue Flag Greece (HSPN)
@@ -4628,3 +4628,1699 @@ seeds:
     allowed: true
     notes: 'robots.txt allows / (research 2026-11-18). The OpenAPI host (openapi.seoul.go.kr) serves on port 8088,
       which the SSRF guard (ports 80/443 only) refuses: a 443 route is needed.'
+  # --- Corpus expansion: Europe (research 2026-11-18, corpus_europe.md) ---
+  - id: tb-visitcornwall
+    category: activities
+    name: Visit Cornwall
+    url: https://www.visitcornwall.com/sitemap.xml
+    method: sitemap
+    license: Copyright; no automated-access clause
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Europe): robots.txt: allowed, no delay; terms: T&C: copyright/UGC only, no
+      bot clause. No automated-access clause; facts only.'
+  - id: city-edinburgh
+    category: activities
+    name: Forever Edinburgh
+    url: https://edinburgh.org/sitemap.xml
+    method: sitemap
+    license: Copyright; no automated-access clause
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Europe): robots.txt: allowed; terms: "You may copy, reproduce, republish…"
+      (copyright clause, permissive); no bot clause. No automated-access clause; facts only.'
+  - id: city-visitglasgow
+    category: activities
+    name: Visit Glasgow (People Make Glasgow)
+    url: https://www.visitglasgow.com/sitemap.xml
+    method: sitemap
+    license: Copyright; terms not found
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Europe): robots.txt: allowed; terms: terms not found. Terms unconfirmed; owner
+      accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: city-visitliverpool
+    category: activities
+    name: Visit Liverpool
+    url: https://www.visitliverpool.com/sitemap.xml
+    method: sitemap
+    license: Copyright; terms not found
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Europe): robots.txt: allowed, Crawl-delay 2; terms: terms not found. Terms
+      unconfirmed; owner accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: tb-english-heritage
+    category: places
+    name: English Heritage
+    url: https://www.english-heritage.org.uk/visit/
+    method: html
+    license: Copyright; no automated-access clause
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Europe): robots.txt: allowed, no sitemap in robots; terms: T&C: "private and
+      non-commercial use" applies to user-content pages only; no bot clause. No automated-access clause; facts only.'
+  - id: od-data-gov-uk
+    category: events
+    name: data.gov.uk
+    url: https://www.data.gov.uk/api/action/package_search?q=tourism
+    method: api
+    license: OGL v3.0
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Europe): robots.txt: allowed; terms: Crown copyright → Open Government Licence.'
+  - id: tr-calmac
+    category: getting_around
+    name: CalMac Ferries
+    url: https://www.calmac.co.uk/sitemap.xml
+    method: sitemap
+    license: Copyright; no automated-access clause
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Europe): robots.txt: allowed; terms: T&C: copyright reservation only. No automated-access
+      clause; facts only.'
+  - id: tr-translink-ni
+    category: getting_around
+    name: Translink (Northern Ireland)
+    url: https://www.translink.co.uk/sitemap.xml
+    method: sitemap
+    license: Copyright; no automated-access clause
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Europe): robots.txt: allowed; terms: legal info: no bot clause. No automated-access
+      clause; facts only.'
+  - id: np-cairngorms
+    category: activities
+    name: Cairngorms National Park
+    url: https://cairngorms.co.uk/sitemaps-1-sitemap.xml
+    method: sitemap
+    license: Copyright; no automated-access clause
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Europe): robots.txt: allowed; Google-Extended only blocked; terms: disclaimer:
+      no bot clause. No automated-access clause; facts only. robots.txt reserves AI use (AI crawlers blocked), so
+      title and link only: no LLM kinds.'
+  - id: tb-visitguernsey
+    category: activities
+    name: Visit Guernsey
+    url: https://www.visitguernsey.com/
+    method: html
+    license: Copyright; no automated-access clause
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Europe): robots.txt: robots 404 = allowed; terms: T&C: copyright reservation
+      only. No automated-access clause; facts only.'
+  - id: city-visitdublin
+    category: activities
+    name: Visit Dublin
+    url: https://www.visitdublin.com/
+    method: html
+    license: Copyright; no automated-access clause
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Europe): robots.txt: robots 404 = allowed; terms: Fáilte Ireland terms of
+      use & disclaimer: no bot clause. No automated-access clause; facts only.'
+  - id: tr-irishrail
+    category: getting_around
+    name: Iarnród Éireann
+    url: https://www.irishrail.ie/en-ie/travel-information
+    method: html
+    license: Copyright; terms not found
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Europe): robots.txt: allowed; terms: terms not found. Terms unconfirmed; owner
+      accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: tr-transportforireland
+    category: getting_around
+    name: Transport for Ireland (NTA)
+    url: https://www.transportforireland.ie/sitemap_index.xml
+    method: sitemap
+    license: Copyright; terms not found
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Europe): robots.txt: allowed; terms: terms not found. Terms unconfirmed; owner
+      accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: tb-heritageireland
+    category: places
+    name: Heritage Ireland (OPW)
+    url: https://heritageireland.ie/wp-sitemap.xml
+    method: sitemap
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Europe): robots.txt: allowed; terms: terms not found. Terms unconfirmed; owner
+      accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: tb-provence
+    category: activities
+    name: Provence-Alpes-Côte d'Azur Tourisme
+    url: https://provence-alpes-cotedazur.com/sitemap.xml/
+    method: sitemap
+    license: Copyright; terms not found
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Europe): robots.txt: allowed; terms: terms not found. Terms unconfirmed; owner
+      accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: tb-brittany
+    category: activities
+    name: Brittany Tourism
+    url: https://www.brittanytourism.com/sitemap.xml/
+    method: sitemap
+    license: Copyright; no automated-access clause
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Europe): robots.txt: allowed; terms: legal notices: no bot clause. No automated-access
+      clause; facts only.'
+  - id: tb-normandie
+    category: activities
+    name: Normandie Tourisme
+    url: https://www.normandie-tourisme.fr/sitemap_index.xml
+    method: sitemap
+    license: Copyright; terms not found
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Europe): robots.txt: allowed, Crawl-delay 5; terms: terms not found. Terms
+      unconfirmed; owner accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: tb-occitanie
+    category: activities
+    name: Tourisme Occitanie
+    url: https://www.tourisme-occitanie.com/sitemap_index.xml
+    method: sitemap
+    license: Copyright; no automated-access clause
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Europe): robots.txt: allowed; terms: mentions: no bot clause. No automated-access
+      clause; facts only.'
+  - id: city-lyon
+    category: activities
+    name: ONLYLYON Tourisme
+    url: https://en.visiterlyon.com/
+    method: html
+    license: Copyright; no automated-access clause
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Europe): robots.txt: allowed, no sitemap; terms: legal mentions: no bot clause.
+      No automated-access clause; facts only.'
+  - id: city-bordeaux
+    category: activities
+    name: Bordeaux Tourisme
+    url: https://www.bordeaux-tourisme.com/sitemap.xml
+    method: sitemap
+    license: Copyright; no automated-access clause
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Europe): robots.txt: allowed; terms: mentions légales: no bot clause. No automated-access
+      clause; facts only.'
+  - id: tb-alsace
+    category: activities
+    name: Visit Alsace
+    url: https://www.visit.alsace/sitemap.xml
+    method: sitemap
+    license: Copyright; no automated-access clause
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Europe): robots.txt: allowed; terms: mentions légales: no bot clause. No automated-access
+      clause; facts only.'
+  - id: city-marseille
+    category: activities
+    name: Marseille Tourisme
+    url: https://www.marseille-tourisme.com/sitemap.xml/
+    method: sitemap
+    license: Copyright; no automated-access clause
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Europe): robots.txt: allowed; terms: mentions légales: no bot clause. No automated-access
+      clause; facts only.'
+  - id: city-toulouse
+    category: activities
+    name: Toulouse Tourisme
+    url: https://www.toulouse-tourisme.com/sitemap.xml
+    method: sitemap
+    license: Copyright; no automated-access clause
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Europe): robots.txt: allowed, Crawl-delay 20; terms: mentions légales: no
+      bot clause. No automated-access clause; facts only.'
+  - id: od-culture-data-gouv
+    category: places
+    name: Ministère de la Culture open data
+    url: https://culture.data.gouv.fr/sitemap.xml
+    method: api
+    license: Licence Ouverte 2.0
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Europe): robots.txt: allowed (data.culture.gouv.fr redirects here); terms:
+      terms not found.'
+  - id: tb-germany-travel
+    category: places
+    name: Germany Travel (GNTB)
+    url: https://www.germany.travel/en/
+    method: html
+    license: Copyright; no automated-access clause
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Europe): robots.txt: allowed, no sitemap; terms: legal notice: copyright reservation
+      only. No automated-access clause; facts only.'
+  - id: tb-sachsen
+    category: activities
+    name: Sachsen Tourismus
+    url: https://www.sachsen-tourismus.de/sitemap.xml
+    method: sitemap
+    license: Copyright; no automated-access clause
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Europe): robots.txt: allowed; terms: Impressum: no bot clause. No automated-access
+      clause; facts only.'
+  - id: city-hamburg
+    category: activities
+    name: Hamburg Tourismus
+    url: https://www.hamburg-travel.com/
+    method: html
+    license: Copyright; no automated-access clause
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Europe): robots.txt: allowed, no sitemap; terms: GTC (booking) only; no bot
+      clause. No automated-access clause; facts only.'
+  - id: city-cologne
+    category: activities
+    name: KölnTourismus
+    url: https://www.cologne-tourism.com/sitemap.xml
+    method: sitemap
+    license: Copyright; no automated-access clause
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Europe): robots.txt: allowed; terms: imprint: no bot clause. No automated-access
+      clause; facts only.'
+  - id: city-dresden
+    category: places
+    name: Landeshauptstadt Dresden (tourism pages)
+    url: https://www.dresden.de/en/
+    method: html
+    license: Copyright; no automated-access clause
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Europe): robots.txt: allowed, Crawl-delay 5; GPTBot partial; terms: Impressum:
+      AI used only for translation; no bot clause. No automated-access clause; facts only. robots.txt reserves AI
+      use (AI crawlers blocked), so title and link only: no LLM kinds.'
+  - id: tb-schwarzwald
+    category: activities
+    name: Schwarzwald Tourismus
+    url: https://www.schwarzwald-tourismus.info/sitemap.xml
+    method: sitemap
+    license: Copyright; no automated-access clause
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Europe): robots.txt: allowed; terms: Impressum: no bot clause. No automated-access
+      clause; facts only.'
+  - id: city-frankfurt
+    category: activities
+    name: Visit Frankfurt
+    url: https://www.visitfrankfurt.travel/en/sitemap.xml
+    method: sitemap
+    license: Copyright; no automated-access clause
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Europe): robots.txt: allowed (frankfurt-tourismus.de → here); terms: Impressum:
+      no bot clause. No automated-access clause; facts only.'
+  - id: tb-visittuscany
+    category: activities
+    name: Visit Tuscany
+    url: https://www.visittuscany.com/sitemap.xml
+    method: sitemap
+    license: Copyright; no automated-access clause
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Europe): robots.txt: allowed; terms: terms & privacy: no bot clause (third-party
+      CC content noted). No automated-access clause; facts only.'
+  - id: tb-veneto
+    category: activities
+    name: Veneto Tourism
+    url: https://www.veneto.eu/sitemap.xml
+    method: sitemap
+    license: Copyright; terms not found
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Europe): robots.txt: allowed; terms: terms not found. Terms unconfirmed; owner
+      accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: tb-visitsicily
+    category: places
+    name: Visit Sicily
+    url: https://www.visitsicily.info/sitemap.xml
+    method: sitemap
+    license: Copyright; terms not found
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Europe): robots.txt: allowed; terms: terms not found. Terms unconfirmed; owner
+      accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: city-florence
+    category: activities
+    name: Feel Florence
+    url: https://www.feelflorence.it/en
+    method: html
+    license: Copyright; terms not found
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Europe): robots.txt: allowed, no sitemap; terms: terms not found. Terms unconfirmed;
+      owner accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: tb-emilia-romagna
+    category: activities
+    name: Emilia-Romagna Turismo
+    url: https://emiliaromagnaturismo.it/en
+    method: html
+    license: CC BY (version not stated)
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Europe): robots.txt: allowed; terms: "All other content… is released under
+      the CC-BY license"; Opendata/API offered.'
+  - id: city-torino
+    category: activities
+    name: Turismo Torino e Provincia
+    url: https://turismotorino.org/sitemap_index.xml
+    method: sitemap
+    license: Copyright; no automated-access clause
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Europe): robots.txt: allowed; terms: GTC (sales): no bot clause. No automated-access
+      clause; facts only.'
+  - id: od-musei-italiani
+    category: places
+    name: Musei Italiani (MiC)
+    url: https://www.museiitaliani.it/
+    method: html
+    license: CC BY 3.0
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Europe): robots.txt: robots 404 = allowed; terms: "tutti i contenuti… licenza
+      Creative Commons Attribuzione 3.0".'
+  - id: tb-andalucia
+    category: activities
+    name: Andalucía Tourism
+    url: https://www.andalucia.org/sitemap.xml
+    method: sitemap
+    license: Copyright; terms not found
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Europe): robots.txt: allowed, Crawl-delay 2; terms: terms not found (aviso-legal
+      404; only social-media T&C seen). Terms unconfirmed; owner accepted for non-commercial use 2026-11-18. Facts
+      only.'
+  - id: tb-catalunya
+    category: activities
+    name: Catalunya Turisme
+    url: https://www.catalunya.com/sitemap-index.xml
+    method: sitemap
+    license: Copyright; terms not found
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Europe): robots.txt: allowed; terms: terms not found. Terms unconfirmed; owner
+      accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: tb-canary
+    category: activities
+    name: Hello Canary Islands
+    url: https://www.hellocanaryislands.com/sitemaps/en/sitemap.xml
+    method: sitemap
+    license: Copyright; no automated-access clause
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Europe): robots.txt: allowed (delays apply to other bots only); terms: legal
+      information: no bot clause. No automated-access clause; facts only.'
+  - id: tb-illesbalears
+    category: activities
+    name: Illes Balears Tourism
+    url: https://www.illesbalears.travel/en/
+    method: html
+    license: Copyright; no automated-access clause
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Europe): robots.txt: allowed, no sitemap; terms: aviso legal: reproduction/storage
+      reserved (copyright) — note for owner. No automated-access clause; facts only.'
+  - id: tb-euskadi
+    category: activities
+    name: Euskadi Tourism
+    url: https://tourism.euskadi.eus/
+    method: html
+    license: Copyright; terms not found
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Europe): robots.txt: allowed; terms: terms not found. Terms unconfirmed; owner
+      accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: od-datos-gob-es
+    category: events
+    name: datos.gob.es
+    url: https://datos.gob.es/apidata/catalog/dataset
+    method: api
+    license: Spanish public-sector reuse (Ley 37/2007, attribution)
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Europe): robots.txt: allowed; terms: aviso legal: reuse permitted with source
+      attribution.'
+  - id: tr-renfe
+    category: getting_around
+    name: Renfe
+    url: https://www.renfe.com/es/en/travelling-with-renfe
+    method: html
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Europe): robots.txt: allowed, no sitemap; terms: terms not found (legal link
+      pointed at insurance). Terms unconfirmed; owner accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: city-sevilla
+    category: activities
+    name: Visita Sevilla
+    url: https://visitasevilla.es/en/sitemap_index.xml
+    method: sitemap
+    license: Copyright; terms not found
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Europe): robots.txt: allowed; terms: terms not found (homepage timed out —
+      flaky host). Terms unconfirmed; owner accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: tb-galicia
+    category: activities
+    name: Turismo de Galicia
+    url: https://www.turismo.gal/sitemapindex.xml
+    method: sitemap
+    license: Reuse with attribution (Turismo de Galicia legal notice)
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Europe): robots.txt: allowed; Bytespider blocked; terms: "may be reproduced…
+      for commercial and non-commercial purposes… cite the source". robots.txt reserves AI use (AI crawlers blocked),
+      so title and link only: no LLM kinds.'
+  - id: tr-tmb
+    category: getting_around
+    name: TMB (Barcelona metro & bus)
+    url: https://www.tmb.cat/en/barcelona-transport
+    method: html
+    license: Copyright; no automated-access clause
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Europe): robots.txt: allowed; terms: avís legal: copyright reservation only
+      (TMB also has developer API with key). No automated-access clause; facts only.'
+  - id: city-porto
+    category: activities
+    name: Visit Porto
+    url: https://www.visitporto.travel/
+    method: html
+    license: Copyright; terms not found
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Europe): robots.txt: allowed; terms: terms not found. Terms unconfirmed; owner
+      accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: tb-madeira
+    category: activities
+    name: Visit Madeira
+    url: https://visitmadeira.com/sitemap.xml
+    method: sitemap
+    license: Copyright; terms not found
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Europe): robots.txt: allowed; terms: terms not found. Terms unconfirmed; owner
+      accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: tb-azores
+    category: activities
+    name: Visit Azores
+    url: https://www.visitazores.com/en
+    method: html
+    license: Copyright; terms not found
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Europe): robots.txt: allowed, no sitemap; terms: terms not found. Terms unconfirmed;
+      owner accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: tb-algarve
+    category: activities
+    name: Visit Algarve
+    url: https://www.visitalgarve.pt/en/
+    method: html
+    license: Copyright; terms not found
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Europe): robots.txt: allowed; terms: terms not found. Terms unconfirmed; owner
+      accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: tr-cp
+    category: getting_around
+    name: CP – Comboios de Portugal
+    url: https://www.cp.pt/passageiros/en
+    method: html
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Europe): robots.txt: allowed; terms: terms not found. Terms unconfirmed; owner
+      accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: city-geneve
+    category: activities
+    name: Genève Tourisme
+    url: https://www.geneve.com/en
+    method: html
+    license: Copyright; no automated-access clause
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Europe): robots.txt: allowed, Crawl-delay 10; terms: legal mentions PDF: no
+      bot clause. No automated-access clause; facts only.'
+  - id: city-luzern
+    category: activities
+    name: Luzern Tourismus
+    url: https://www.luzern.com/en/sitemap.xml
+    method: sitemap
+    license: Copyright; no automated-access clause
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Europe): robots.txt: allowed; terms: T&C (sales): no bot clause. No automated-access
+      clause; facts only.'
+  - id: od-opendata-swiss
+    category: events
+    name: opendata.swiss
+    url: https://opendata.swiss/api/3/action/package_search?q=tourismus
+    method: api
+    license: Per-dataset licences (open-data portal)
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Europe): robots.txt: robots 404 = allowed; terms: terms of use: per-dataset
+      terms symbols; filter to commercial-allowed.'
+  - id: tb-graubuenden
+    category: activities
+    name: Graubünden Ferien
+    url: https://www.graubuenden.ch/sitemap.xml
+    method: sitemap
+    license: Copyright; no automated-access clause
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Europe): robots.txt: allowed; terms: Impressum: no bot clause. No automated-access
+      clause; facts only.'
+  - id: tb-valais
+    category: activities
+    name: Valais/Wallis Promotion
+    url: https://www.valais.ch/sitemap.xml
+    method: sitemap
+    license: Copyright; no automated-access clause
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Europe): robots.txt: allowed (Crawl-delay 60 targets other bots); terms: mentions
+      légales: copyright reservation only. No automated-access clause; facts only.'
+  - id: tb-ticino
+    category: activities
+    name: Ticino Turismo
+    url: https://www.ticino.ch/sitemap.xml
+    method: sitemap
+    license: Copyright; terms not found
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Europe): robots.txt: allowed; terms: terms not found. Terms unconfirmed; owner
+      accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: tb-tirol
+    category: activities
+    name: Tirol Werbung
+    url: https://www.tirol.at/sitemap.xml
+    method: sitemap
+    license: Copyright; no automated-access clause
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Europe): robots.txt: allowed; terms: Impressum: no bot clause. No automated-access
+      clause; facts only.'
+  - id: tb-salzburgerland
+    category: activities
+    name: SalzburgerLand Tourismus
+    url: https://www.salzburgerland.com/en/
+    method: html
+    license: Copyright; no automated-access clause
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Europe): robots.txt: allowed; terms: imprint: discloses AI-generated text;
+      no bot clause. No automated-access clause; facts only. robots.txt lists 46 sitemaps; the English pages are read
+      from the home page instead.'
+  - id: city-salzburg
+    category: activities
+    name: Tourismus Salzburg
+    url: https://salzburg.info/sitemap.default.xml
+    method: sitemap
+    license: Copyright; no automated-access clause
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Europe): robots.txt: allowed; terms: legal notice: no bot clause. No automated-access
+      clause; facts only.'
+  - id: tr-oebb
+    category: getting_around
+    name: ÖBB
+    url: https://www.oebb.at/en/
+    method: html
+    license: Copyright; no automated-access clause
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Europe): robots.txt: robots 404 = allowed; terms: Nutzungsbedingungen: no
+      bot clause found. No automated-access clause; facts only.'
+  - id: od-data-gv-at
+    category: events
+    name: data.gv.at
+    url: https://www.data.gv.at/katalog/api/3/action/package_search?q=tourismus
+    method: api
+    license: Per-dataset licences (open-data portal)
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Europe): robots.txt: robots 404 = allowed; terms: terms not found.'
+  - id: tb-visitluxembourg
+    category: activities
+    name: Visit Luxembourg
+    url: https://www.visitluxembourg.com/sitemap.xml
+    method: sitemap
+    license: Copyright; no automated-access clause
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Europe): robots.txt: allowed; AI-bot block (GPTBot, ClaudeBot, CCBot…); terms:
+      Impressum: no bot clause. No automated-access clause; facts only. robots.txt reserves AI use (AI crawlers blocked),
+      so title and link only: no LLM kinds.'
+  - id: city-rotterdam
+    category: activities
+    name: Rotterdam Info
+    url: https://www.rotterdam.info/sitemap.xml
+    method: sitemap
+    license: Copyright; terms not found
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Europe): robots.txt: allowed; terms: terms not found. Terms unconfirmed; owner
+      accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: od-data-overheid-nl
+    category: events
+    name: data.overheid.nl
+    url: https://data.overheid.nl/sitemap.xml
+    method: api
+    license: Per-dataset licences (open-data portal)
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Europe): robots.txt: allowed, Crawl-delay 10; AI-bot block; terms: per-dataset
+      licences.'
+  - id: tr-irail
+    category: getting_around
+    name: iRail API (Belgian rail)
+    url: https://api.irail.be/stations/?format=json
+    method: api
+    license: Copyright; terms not found
+    cadence: daily
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Europe): robots.txt: robots 404 = allowed; terms: terms not found (send a
+      UA, 3 req/s guideline). Terms unconfirmed; owner accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: od-data-public-lu
+    category: events
+    name: data.public.lu
+    url: https://data.public.lu/api/1/datasets/?q=tourisme
+    method: api
+    license: CC0
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Europe): robots.txt: robots 404 = allowed; terms: "tout le contenu… Creative
+      Commons CC0".'
+  - id: tb-fjordnorway
+    category: activities
+    name: Fjord Norway
+    url: https://www.fjordnorway.com/sitemap.xml
+    method: sitemap
+    license: Copyright; terms not found
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Europe): robots.txt: allowed; ClaudeBot blocked only from /en/events; terms:
+      terms not found. Terms unconfirmed; owner accepted for non-commercial use 2026-11-18. Facts only. robots.txt
+      reserves AI use (AI crawlers blocked), so title and link only: no LLM kinds.'
+  - id: city-myhelsinki
+    category: activities
+    name: MyHelsinki
+    url: https://www.myhelsinki.fi/sitemap_index.xml
+    method: sitemap
+    license: Copyright; terms not found
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Europe): robots.txt: allowed; terms: terms not found. Terms unconfirmed; owner
+      accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: city-goteborg
+    category: activities
+    name: Göteborg & Co
+    url: https://www.goteborg.com/sitemap_index.xml
+    method: sitemap
+    license: Copyright; terms not found
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Europe): robots.txt: allowed; terms: terms not found. Terms unconfirmed; owner
+      accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: tb-lapland
+    category: activities
+    name: Visit Lapland (House of Lapland)
+    url: https://lapland.fi/sitemap.xml
+    method: sitemap
+    license: Copyright; terms not found
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Europe): robots.txt: allowed; terms: terms not found. Terms unconfirmed; owner
+      accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: city-aarhus
+    category: activities
+    name: VisitAarhus
+    url: https://www.visitaarhus.com/sitemap.xml
+    method: sitemap
+    license: Copyright; terms not found
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Europe): robots.txt: allowed; terms: terms not found. Terms unconfirmed; owner
+      accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: tr-vy
+    category: getting_around
+    name: Vy (Norwegian rail)
+    url: https://www.vy.no/en
+    method: html
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Europe): robots.txt: allowed; CCBot/Bytespider blocked; terms: terms not found.
+      Terms unconfirmed; owner accepted for non-commercial use 2026-11-18. Facts only. robots.txt reserves AI use
+      (AI crawlers blocked), so title and link only: no LLM kinds.'
+  - id: tr-entur
+    category: getting_around
+    name: Entur Journey Planner / NeTEx API
+    url: https://api.entur.io/journey-planner/v3/graphql
+    method: api
+    license: NLOD 2.0
+    cadence: daily
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Europe): robots.txt: robots 404 = allowed (developer.entur.org SPA); terms:
+      terms not found on homepage (NLOD per developer docs).'
+  - id: od-avoindata-fi
+    category: events
+    name: avoindata.fi
+    url: https://www.avoindata.fi/data/api/3/action/package_search?q=matkailu
+    method: api
+    license: Per-dataset licences (open-data portal)
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Europe): robots.txt: allowed, Crawl-delay 10; terms: terms not found.'
+  - id: od-dataportal-se
+    category: events
+    name: Sveriges dataportal
+    url: https://www.dataportal.se/sitemap.xml
+    method: sitemap
+    license: Per-dataset licences (open-data portal)
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Europe): robots.txt: allowed; terms: terms not found.'
+  - id: tb-faroe
+    category: activities
+    name: Visit Faroe Islands
+    url: https://visitfaroeislands.com/sitemap.xml
+    method: sitemap
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Europe): robots.txt: allowed; terms: terms not found. Terms unconfirmed; owner
+      accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: tb-poland
+    category: places
+    name: Poland Travel (POT)
+    url: https://www.poland.travel/en/sitemap_index.xml
+    method: sitemap
+    license: Copyright; terms not found
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Europe): robots.txt: allowed; terms: terms not found. Terms unconfirmed; owner
+      accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: city-krakow
+    category: activities
+    name: Kraków Travel
+    url: https://www.krakow.travel/en
+    method: html
+    license: Copyright; terms not found
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Europe): robots.txt: robots 404 = allowed; terms: terms not found. Terms unconfirmed;
+      owner accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: city-warsaw
+    category: activities
+    name: Go2Warsaw
+    url: https://go2warsaw.pl/sitemap.xml
+    method: sitemap
+    license: Copyright; terms not found
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Europe): robots.txt: allowed (warsawtour.pl → here); terms: terms not found.
+      Terms unconfirmed; owner accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: tb-czechia
+    category: places
+    name: Visit Czechia (CzechTourism)
+    url: https://www.visitczechia.com/sitemapindex
+    method: sitemap
+    license: Copyright; terms not found
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Europe): robots.txt: allowed; terms: terms not found. Terms unconfirmed; owner
+      accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: tr-cd-cz
+    category: getting_around
+    name: České dráhy
+    url: https://www.cd.cz/sitemap_pages.xml
+    method: sitemap
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Europe): robots.txt: allowed; terms: terms not found. Terms unconfirmed; owner
+      accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: tb-slovakia
+    category: places
+    name: Slovakia Travel
+    url: https://slovakia.travel/sitemap.xml
+    method: sitemap
+    license: Copyright; terms not found
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Europe): robots.txt: allowed; terms: terms not found. Terms unconfirmed; owner
+      accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: city-bratislava
+    category: events
+    name: Visit Bratislava
+    url: https://www.visitbratislava.com/sitemap_index.xml
+    method: sitemap
+    license: Copyright; terms not found
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Europe): robots.txt: allowed; terms: terms not found. Terms unconfirmed; owner
+      accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: tb-visithungary
+    category: places
+    name: Visit Hungary
+    url: https://visithungary.com/
+    method: html
+    license: Copyright; terms not found
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Europe): robots.txt: allowed; AI-bot block (robots oddly lists bud.hu sitemaps);
+      terms: terms not found. Terms unconfirmed; owner accepted for non-commercial use 2026-11-18. Facts only. robots.txt
+      reserves AI use (AI crawlers blocked), so title and link only: no LLM kinds.'
+  - id: tr-bkk
+    category: getting_around
+    name: BKK Budapest transport
+    url: https://bkk.hu/static/cache/web/sitemap.xml
+    method: sitemap
+    license: Copyright; terms not found
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Europe): robots.txt: allowed; terms: terms not found. Terms unconfirmed; owner
+      accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: tb-croatia
+    category: places
+    name: Croatia.hr (HTZ)
+    url: https://croatia.hr/sitemap_croatia.xml
+    method: sitemap
+    license: Copyright; terms not found
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Europe): robots.txt: allowed; terms: terms not found. Terms unconfirmed; owner
+      accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: city-zagreb
+    category: activities
+    name: Zagreb Tourist Board
+    url: https://www.infozagreb.hr/en
+    method: html
+    license: Copyright; no automated-access clause
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Europe): robots.txt: allowed; terms: impressum: no bot clause. No automated-access
+      clause; facts only.'
+  - id: city-dubrovnik
+    category: activities
+    name: Visit Dubrovnik
+    url: https://visitdubrovnik.hr/sitemap_index.xml
+    method: sitemap
+    license: Copyright; terms not found
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Europe): robots.txt: allowed; terms: terms not found. Terms unconfirmed; owner
+      accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: tr-jadrolinija
+    category: getting_around
+    name: Jadrolinija ferries
+    url: https://www.jadrolinija.hr/en
+    method: html
+    license: Copyright; terms not found
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Europe): robots.txt: robots 404 = allowed; terms: terms not found. Terms unconfirmed;
+      owner accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: tb-istria
+    category: activities
+    name: Istria Tourist Board
+    url: https://www.istra.hr/en
+    method: html
+    license: Copyright; terms not found
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Europe): robots.txt: allowed; terms: terms not found (only privacy found).
+      Terms unconfirmed; owner accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: city-ljubljana
+    category: activities
+    name: Visit Ljubljana
+    url: https://www.visitljubljana.com/en/
+    method: html
+    license: Copyright; terms not found
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Europe): robots.txt: allowed; AI-bot block; terms: terms not found. Terms
+      unconfirmed; owner accepted for non-commercial use 2026-11-18. Facts only. robots.txt reserves AI use (AI crawlers
+      blocked), so title and link only: no LLM kinds.'
+  - id: od-podatki-gov-si
+    category: events
+    name: OPSI (Slovenia open data)
+    url: https://podatki.gov.si/api/3/action/package_search?q=turizem
+    method: api
+    license: Per-dataset licences (open-data portal)
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Europe): robots.txt: allowed, Crawl-delay 10; terms: terms not found.'
+  - id: tb-albania
+    category: places
+    name: Albania National Agency of Tourism
+    url: https://albania.al/
+    method: html
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Europe): robots.txt: robots 404 = allowed; terms: terms not found. Terms unconfirmed;
+      owner accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: tb-serbia
+    category: places
+    name: Serbia Travel (NTOS)
+    url: https://www.serbia.travel/en
+    method: html
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Europe): robots.txt: allowed; AI-bot block; terms: terms not found. Terms
+      unconfirmed; owner accepted for non-commercial use 2026-11-18. Facts only. robots.txt reserves AI use (AI crawlers
+      blocked), so title and link only: no LLM kinds.'
+  - id: city-belgrade
+    category: activities
+    name: Tourist Organisation of Belgrade
+    url: https://www.tob.rs/en
+    method: html
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Europe): robots.txt: robots 404 = allowed; terms: terms not found. Terms unconfirmed;
+      owner accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: tb-crete
+    category: places
+    name: Incredible Crete (Region of Crete)
+    url: https://www.incrediblecrete.gr/sitemap_index.xml
+    method: sitemap
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Europe): robots.txt: allowed; terms: terms not found. Terms unconfirmed; owner
+      accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: tb-cyprus
+    category: places
+    name: Visit Cyprus (Deputy Ministry of Tourism)
+    url: https://www.visitcyprus.com/
+    method: html
+    license: Copyright; terms not found
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Europe): robots.txt: allowed; terms: terms not found (linked page 404). Terms
+      unconfirmed; owner accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: tb-malta
+    category: activities
+    name: Visit Malta
+    url: https://www.visitmalta.com/en/
+    method: html
+    license: Copyright; no automated-access clause
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Europe): robots.txt: allowed; terms: T&C: no bot clause. No automated-access
+      clause; facts only.'
+  - id: tb-bulgaria
+    category: places
+    name: Visit Bulgaria (Ministry of Tourism)
+    url: https://visitbulgaria.com/
+    method: html
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Europe): robots.txt: allowed (bulgariatravel.org → here); terms: terms not
+      found. Terms unconfirmed; owner accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: city-sofia
+    category: activities
+    name: Visit Sofia
+    url: https://www.visitsofia.bg/en/
+    method: html
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Europe): robots.txt: allowed; terms: terms not found. Terms unconfirmed; owner
+      accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: city-tallinn
+    category: activities
+    name: Visit Tallinn
+    url: https://visittallinn.ee/sitemap.xml
+    method: sitemap
+    license: Copyright; no automated-access clause
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Europe): robots.txt: allowed; terms: terms of use page: no bot clause. No
+      automated-access clause; facts only.'
+  - id: city-vilnius
+    category: activities
+    name: Go Vilnius
+    url: https://www.govilnius.lt/sitemap.xml
+    method: sitemap
+    license: Copyright; terms not found
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Europe): robots.txt: allowed; terms: terms not found. Terms unconfirmed; owner
+      accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: tb-lithuania
+    category: places
+    name: Lithuania Travel
+    url: https://lithuania.travel/en
+    method: html
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Europe): robots.txt: allowed; terms: terms not found. Terms unconfirmed; owner
+      accepted for non-commercial use 2026-11-18. Facts only. The listed /lt/sitemap is an HTML page, so the English
+      home page is the seed.'
+  - id: tb-latvia
+    category: places
+    name: Latvia Travel (LIAA)
+    url: https://www.latvia.travel/en
+    method: html
+    license: Copyright; no automated-access clause
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Europe): robots.txt: allowed; terms: terms: copyright reservation only. No
+      automated-access clause; facts only.'
+  - id: tr-elron
+    category: getting_around
+    name: Elron (Estonian rail)
+    url: https://elron.ee/en
+    method: html
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Europe): robots.txt: allowed; terms: terms not found. Terms unconfirmed; owner
+      accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: od-andmed-eesti
+    category: events
+    name: Estonian open data portal
+    url: https://andmed.eesti.ee/
+    method: api
+    license: Per-dataset licences (open-data portal)
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Europe): robots.txt: robots 404 = allowed (avaandmed.eesti.ee → here); terms:
+      terms not found.'
+  - id: tb-moldova
+    category: places
+    name: Moldova Travel
+    url: https://moldova.travel/sitemap.xml
+    method: sitemap
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Europe): robots.txt: allowed; ClaudeBot/GPTBot/Perplexity blocked; terms:
+      terms not found. Terms unconfirmed; owner accepted for non-commercial use 2026-11-18. Facts only. robots.txt
+      reserves AI use (AI crawlers blocked), so title and link only: no LLM kinds.'
+  - id: tb-monaco
+    category: activities
+    name: Visit Monaco
+    url: https://www.visitmonaco.com/en/sitemap.xml
+    method: sitemap
+    license: Copyright; terms not found
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Europe): robots.txt: allowed; terms: terms not found. Terms unconfirmed; owner
+      accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: tb-sanmarino
+    category: places
+    name: Visit San Marino
+    url: https://www.visitsanmarino.com/
+    method: html
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Europe): robots.txt: allowed; ClaudeBot Disallow /; terms: terms not found.
+      Terms unconfirmed; owner accepted for non-commercial use 2026-11-18. Facts only. robots.txt reserves AI use
+      (AI crawlers blocked), so title and link only: no LLM kinds.'
+  - id: tb-liechtenstein
+    category: activities
+    name: Liechtenstein Marketing
+    url: https://tourismus.li/sitemap.xml
+    method: sitemap
+    license: Copyright; no automated-access clause
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Europe): robots.txt: allowed; terms: Impressum: no bot clause. No automated-access
+      clause; facts only.'
+  - id: mus-vatican
+    category: places
+    name: Musei Vaticani
+    url: https://www.museivaticani.va/content/museivaticani/en.html
+    method: html
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Europe): robots.txt: allowed, Crawl-delay 2; terms: terms not found. Terms
+      unconfirmed; owner accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: tb-gibraltar
+    category: places
+    name: Visit Gibraltar
+    url: https://www.visitgibraltar.gi/sitemap.xml
+    method: sitemap
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Europe): robots.txt: allowed, Crawl-delay 10; terms: terms not found. Terms
+      unconfirmed; owner accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: od-data-europa
+    category: events
+    name: data.europa.eu
+    url: https://data.europa.eu/api/hub/search/search?q=tourism
+    method: api
+    license: EU reuse policy (attribution)
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Europe): robots.txt: allowed; terms: terms not found on homepage (EU reuse
+      Decision 2011/833).'
+  - id: ev-festivalfinder
+    category: events
+    name: Festival Finder (EFA / EFFE)
+    url: https://www.festivalfinder.eu/
+    method: html
+    license: Copyright; no automated-access clause
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Europe): robots.txt: allowed; terms: T&C: no bot clause. No automated-access
+      clause; facts only.'
+  - id: blog-europeupclose
+    category: blogs
+    name: Europe Up Close
+    url: https://www.europeupclose.com/feed/
+    method: rss
+    license: Copyright; terms not found
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Europe): robots.txt: allowed, Crawl-delay 30; terms: terms not found. Terms
+      unconfirmed; owner accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: mag-hiddeneurope
+    category: blogs
+    name: hidden europe magazine
+    url: https://www.hiddeneurope.eu/sitemap.xml
+    method: sitemap
+    license: Copyright; no automated-access clause
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Europe): robots.txt: allowed; terms: legal-stuff: no bot clause. No automated-access
+      clause; facts only.'
+  - id: mag-europeanbestdestinations
+    category: blogs
+    name: European Best Destinations
+    url: https://www.europeanbestdestinations.com/sitemap.xml
+    method: sitemap
+    license: Copyright; no automated-access clause
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Europe): robots.txt: allowed, Crawl-delay 5; terms: legal page: no bot clause.
+      No automated-access clause; facts only.'
+  - id: ed-inyourpocket
+    category: places
+    name: In Your Pocket city guides
+    url: https://www.inyourpocket.com/sitemap.xml
+    method: sitemap
+    license: Copyright; terms not found
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Europe): robots.txt: allowed; AI-bot block; terms: terms not found. Terms
+      unconfirmed; owner accepted for non-commercial use 2026-11-18. Facts only. robots.txt reserves AI use (AI crawlers
+      blocked), so title and link only: no LLM kinds.'
+  - id: tb-valdeloire
+    category: places
+    name: Val de Loire (Centre-VdL Tourisme)
+    url: https://www.valdeloire-france.com/sitemap_index.xml
+    method: sitemap
+    license: Copyright; terms not found
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Europe): robots.txt: allowed, Crawl-delay 5; AI-bot block; terms: terms not
+      found. Terms unconfirmed; owner accepted for non-commercial use 2026-11-18. Facts only. robots.txt reserves
+      AI use (AI crawlers blocked), so title and link only: no LLM kinds.'
+  - id: city-nice
+    category: activities
+    name: Explore Nice Côte d'Azur
+    url: https://www.explorenicecotedazur.com/sitemap_index.xml
+    method: sitemap
+    license: Copyright; terms not found
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Europe): robots.txt: allowed; AI-bot block; terms: terms not found. Terms
+      unconfirmed; owner accepted for non-commercial use 2026-11-18. Facts only. robots.txt reserves AI use (AI crawlers
+      blocked), so title and link only: no LLM kinds.'
+  - id: api-europeana
+    category: places
+    name: Europeana Search and Record API
+    url: https://api.europeana.eu/record/v2/search.json
+    method: api
+    license: CC0
+    cadence: monthly
+    needs_key: true
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Europe): robots.txt: allowed; terms: metadata CC0, media rights per item.'
+  - id: od-data-gov-gr
+    category: places
+    name: data.gov.gr
+    url: https://data.gov.gr/api/v1/query/
+    method: api
+    license: Per-dataset licences (open-data portal)
+    cadence: monthly
+    needs_key: true
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Europe): robots.txt: AI-bot block, Crawl-delay 10; terms: CC0/CC BY per terms
+      of use.'
+  - id: tb-puglia
+    category: places
+    name: Viaggiare in Puglia
+    url: https://www.viaggiareinpuglia.it/
+    method: html
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Europe): robots.txt: soft-404 (allowed); terms: not found. Terms unconfirmed;
+      owner accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: od-data-gov-cz
+    category: places
+    name: Czech national open data catalogue (NKOD)
+    url: https://data.gov.cz/sparql
+    method: api
+    license: Per-dataset licences (open-data portal)
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Europe): robots.txt: allowed (Bytespider blocked); terms: not found.'
+  - id: city-visitbath
+    category: activities
+    name: Visit Bath
+    url: https://visitbath.co.uk/
+    method: html
+    license: Copyright; personal/non-commercial terms (owner accepted)
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Europe): robots.txt: allowed (research 2026-11-18); terms: ''for information
+      and/or personal use only''. Terms restrict to personal/non-commercial use; owner accepted for non-commercial
+      use 2026-11-18 (''for information and/or personal use only''). Facts only.'
+  - id: city-visitbelfast
+    category: activities
+    name: Visit Belfast
+    url: https://visitbelfast.com/
+    method: html
+    license: Copyright; personal/non-commercial terms (owner accepted)
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Europe): robots.txt: allowed, Crawl-delay 2; terms: ''for information and/or
+      personal use only''. Terms restrict to personal/non-commercial use; owner accepted for non-commercial use 2026-11-18
+      (''for information and/or personal use only''). Facts only.'
+  - id: city-visitmanchester
+    category: activities
+    name: Visit Manchester
+    url: https://www.visitmanchester.com/
+    method: html
+    license: Copyright; personal/non-commercial terms (owner accepted)
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Europe): robots.txt: allowed, Crawl-delay 2; terms: ''may not copy ... except
+      for your own personal, non-commercial use''. Terms restrict to personal/non-commercial use; owner accepted for
+      non-commercial use 2026-11-18 (''may not copy ... except for your own personal, non-commercial use''). Facts
+      only.'
+  - id: city-visitcambridge
+    category: activities
+    name: Visit Cambridge
+    url: https://www.visitcambridge.org/
+    method: html
+    license: Copyright; personal/non-commercial terms (owner accepted)
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Europe): robots.txt: allowed (research 2026-11-18); terms: ''except for your
+      own personal, non-commercial use''. Terms restrict to personal/non-commercial use; owner accepted for non-commercial
+      use 2026-11-18 (''except for your own personal, non-commercial use''). Facts only.'
+  - id: tb-visitisleofman
+    category: activities
+    name: Visit Isle of Man
+    url: https://www.visitisleofman.com/
+    method: html
+    license: Copyright; personal/non-commercial terms (owner accepted)
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Europe): robots.txt: allowed (research 2026-11-18); terms: ''maintained for
+      your personal use and viewing''. Terms restrict to personal/non-commercial use; owner accepted for non-commercial
+      use 2026-11-18 (''maintained for your personal use and viewing''). Facts only.'
+  - id: tb-historicenvironment-scot
+    category: places
+    name: 'Historic Environment Scotland: places to visit'
+    url: https://www.historicenvironment.scot/visit-a-place/
+    method: html
+    license: Copyright; personal/non-commercial terms (owner accepted)
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Europe): robots.txt: allowed (research 2026-11-18); terms: ''we only provide
+      our website for domestic and private use''. Terms restrict to personal/non-commercial use; owner accepted for
+      non-commercial use 2026-11-18 (''we only provide our website for domestic and private use''). Facts only.'
+  - id: tb-discovernorthernireland
+    category: activities
+    name: Discover Northern Ireland
+    url: https://discovernorthernireland.com/
+    method: html
+    license: Copyright; personal/non-commercial terms (owner accepted)
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Europe): robots.txt: allowed, Crawl-delay 2; terms: ''may print off one copy
+      ... for your personal use''. Terms restrict to personal/non-commercial use; owner accepted for non-commercial
+      use 2026-11-18 (''may print off one copy ... for your personal use''). Facts only.'
+  - id: tb-bayern
+    category: activities
+    name: Bayern Tourismus (erlebe.bayern)
+    url: https://erlebe.bayern/
+    method: html
+    license: Copyright; personal/non-commercial terms (owner accepted)
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Europe): robots.txt: allowed (research 2026-11-18); terms: ''Downloads und
+      Kopien ... nur für den privaten, nicht kommerziellen Gebrauch''. Terms restrict to personal/non-commercial use;
+      owner accepted for non-commercial use 2026-11-18 (''Downloads und Kopien ... nur für den privaten, nicht kommerziellen
+      Gebrauch''). Facts only.'
+  - id: tr-cfr-calatori
+    category: getting_around
+    name: CFR Călători (Romanian rail)
+    url: https://www.cfrcalatori.ro/
+    method: html
+    license: Copyright; personal/non-commercial terms (owner accepted)
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Europe): robots.txt: allowed (research 2026-11-18); terms: reproductions only
+      ''destinate unei folosinţe strict personale''. Terms restrict to personal/non-commercial use; owner accepted
+      for non-commercial use 2026-11-18 (reproductions only ''destinate unei folosinţe strict personale''). Facts
+      only.'
+  - id: city-esmadrid
+    category: activities
+    name: esMADRID (Madrid tourism)
+    url: https://www.esmadrid.com/en
+    method: html
+    license: Copyright; personal/non-commercial terms (owner accepted)
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Europe): robots.txt: allowed; ByteSpider and CCBot blocked, Crawl-delay 10;
+      terms: copies ''única y exclusivamente, para su uso personal y privado''. Terms restrict to personal/non-commercial
+      use; owner accepted for non-commercial use 2026-11-18 (copies ''única y exclusivamente, para su uso personal
+      y privado''). Facts only. robots.txt reserves AI use (AI crawlers blocked), so title and link only: no LLM kinds.'
+  - id: city-visitvalencia
+    category: activities
+    name: Visit València
+    url: https://www.visitvalencia.com/en
+    method: html
+    license: Copyright; personal/non-commercial terms (owner accepted)
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Europe): robots.txt: allowed (research 2026-11-18); terms: downloads ''exclusivamente
+      a su uso personal y privado''. Terms restrict to personal/non-commercial use; owner accepted for non-commercial
+      use 2026-11-18 (downloads ''exclusivamente a su uso personal y privado''). Facts only.'
+  - id: tb-sardegna
+    category: places
+    name: Sardegna Turismo
+    url: https://www.sardegnaturismo.it/en
+    method: html
+    license: Copyright; personal/non-commercial terms (owner accepted)
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Europe): robots.txt: allowed; AI-bot block; terms: ''solo per uso personale
+      e non commerciale''. Terms restrict to personal/non-commercial use; owner accepted for non-commercial use 2026-11-18
+      (''solo per uso personale e non commerciale''). Facts only. robots.txt reserves AI use (AI crawlers blocked),
+      so title and link only: no LLM kinds.'
+  - id: tb-visittrentino
+    category: activities
+    name: Visit Trentino
+    url: https://www.visittrentino.info/en
+    method: html
+    license: Copyright; personal/non-commercial terms (owner accepted)
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Europe): robots.txt: allowed (research 2026-11-18); terms: ''Services ...
+      solely for personal and non-commercial use''. Terms restrict to personal/non-commercial use; owner accepted
+      for non-commercial use 2026-11-18 (''Services ... solely for personal and non-commercial use''). Facts only.'
+  - id: city-visitbruges
+    category: activities
+    name: Visit Bruges
+    url: https://www.visitbruges.be/en
+    method: html
+    license: Copyright; personal/non-commercial terms (owner accepted)
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Europe): robots.txt: allowed (research 2026-11-18); terms: prohibited to ''store
+      information ... except for strictly personal use''. Terms restrict to personal/non-commercial use; owner accepted
+      for non-commercial use 2026-11-18 (prohibited to ''store information ... except for strictly personal use'').
+      Facts only.'
+  - id: city-visitbergen
+    category: activities
+    name: Visit Bergen
+    url: https://en.visitbergen.com/
+    method: html
+    license: Copyright; personal/non-commercial terms (owner accepted)
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Europe): robots.txt: allowed (research 2026-11-18); terms: content ''for non-commercial,
+      personal purposes only''. Terms restrict to personal/non-commercial use; owner accepted for non-commercial use
+      2026-11-18 (content ''for non-commercial, personal purposes only''). Facts only.'
+  - id: city-thisisathens
+    category: activities
+    name: This is Athens (City of Athens)
+    url: https://www.thisisathens.org/
+    method: html
+    license: Copyright; personal/non-commercial terms (owner accepted)
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Europe): robots.txt: allowed (research 2026-11-18); terms: ''download one
+      copy ... for your personal use''. Terms restrict to personal/non-commercial use; owner accepted for non-commercial
+      use 2026-11-18 (''download one copy ... for your personal use''). Facts only.'
+  - id: tb-montenegro
+    category: places
+    name: Montenegro Travel (National Tourism Organisation)
+    url: https://www.montenegro.travel/en
+    method: html
+    license: Copyright; personal/non-commercial terms (owner accepted)
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Europe): robots.txt: allowed (research 2026-11-18); terms: ''exclusively for
+      personal or non-commercial purposes''. Terms restrict to personal/non-commercial use; owner accepted for non-commercial
+      use 2026-11-18 (''exclusively for personal or non-commercial purposes''). Facts only.'
+  - id: tr-heathrow
+    category: flights
+    name: 'Heathrow Airport: travel information'
+    url: https://www.heathrow.com/at-the-airport
+    method: html
+    license: Copyright; personal/non-commercial terms (owner accepted)
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Europe): robots.txt: allowed (research 2026-11-18); terms: ''private and personal
+      non-commercial use''. Terms restrict to personal/non-commercial use; owner accepted for non-commercial use 2026-11-18
+      (''private and personal non-commercial use''). Facts only.'
+  - id: tr-munich-airport
+    category: flights
+    name: 'Munich Airport: travel information'
+    url: https://www.munich-airport.com/
+    method: html
+    license: Copyright; personal/non-commercial terms (owner accepted)
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Europe): robots.txt: allowed (research 2026-11-18); terms: copies ''for personal,
+      private and non-commercial use''. Terms restrict to personal/non-commercial use; owner accepted for non-commercial
+      use 2026-11-18 (copies ''for personal, private and non-commercial use''). Facts only.'
+  - id: tr-eurostar
+    category: getting_around
+    name: Eurostar
+    url: https://www.eurostar.com/
+    method: html
+    license: Copyright; personal/non-commercial terms (owner accepted)
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Europe): robots.txt: n/a; terms: ''solely for your own personal and non-commercial
+      use''; scraping banned for commercial purposes. No automated-access clause; facts only.'
+  - id: thelocal-news
+    category: news
+    name: The Local (Europe)
+    url: https://www.thelocal.com/
+    method: html
+    license: Copyright; personal/non-commercial terms (owner accepted)
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Europe): robots.txt: allowed; AI-bot block; terms: ''exclusively for your
+      personal use''. No automated-access clause; facts only.'
+  - id: ref-odysseus-culture-gr
+    category: places
+    name: Odysseus (Greek Ministry of Culture monuments and museums)
+    url: https://odysseus.culture.gr/
+    method: html
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Europe): robots.txt: connection refused (no response); terms: unreadable.
+      Terms unconfirmed; owner accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: tr-intercity-pl
+    category: getting_around
+    name: PKP Intercity
+    url: https://www.intercity.pl/en/
+    method: html
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Europe): robots.txt: HTTP/2 stream error (no response); terms: unreadable.
+      Terms unconfirmed; owner accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: od-dane-gov-pl
+    category: places
+    name: dane.gov.pl (Polish open data)
+    url: https://dane.gov.pl/
+    method: api
+    license: Per-dataset licences (open-data portal)
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Europe): robots.txt: timed out (no response); terms: unreadable.'

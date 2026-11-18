@@ -585,3 +585,29 @@ entries:
   - host: routesonline.com
     reason: News RSS answers 403 to VoyagerBot, 2026-11-18
     source: research 2026-11-18 budget SKIP
+  # --- corpus expansion: Europe (research 2026-11-18): terms ban robots/scraping/TDM ---
+  - host: lakedistrict.gov.uk
+    reason: "Terms: 'must not use robots, spiders, scrapers, crawlers ... data mining and artificial intelligence', 2026-11-18"
+    source: research 2026-11-18 corpus Europe SKIP
+  - host: nationalrail.co.uk
+    reason: Terms ban screen scraping and allow personal use only, 2026-11-18
+    source: research 2026-11-18 corpus Europe SKIP
+  - host: visitandorra.com
+    reason: "Terms ban 'robot programs or any other equivalent automated process', 2026-11-18"
+    source: research 2026-11-18 corpus Europe SKIP
+  # visitestonia.com only: Visit Tallinn (visittallinn.ee) is another organisation.
+  - host: visitestonia.com
+    reason: "Terms ban 'programmes that send automatic queries' (Tourism Information System), 2026-11-18"
+    source: research 2026-11-18 corpus Europe SKIP
+  - host: suedtirol.info
+    reason: Terms ban 'systematic or automated data collection'; robots.txt blocks AI crawlers, 2026-11-18
+    source: research 2026-11-18 corpus Europe SKIP
+  - host: mvg.de
+    reason: "Terms: 'Jegliche Form von Data-Mining stellt keine gemäßigte Nutzung dar', 2026-11-18"
+    source: research 2026-11-18 corpus Europe SKIP
+  - host: publictransport.com.mt
+    reason: Terms ban scraping, data mining and harvesting, 2026-11-18
+    source: research 2026-11-18 corpus Europe SKIP
+  - host: bolognawelcome.com
+    reason: Explicit TDM reservation (art. 70-quater L.633/1941, Dir. 2019/790 art. 4) and a ban on automated scraping, 2026-11-18
+    source: research 2026-11-18 corpus Europe SKIP

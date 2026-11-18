@@ -28,14 +28,14 @@ cadence: monthly
 min_delay_s: 5
 daily_budget: 100
 politeness_key: null
-enabled: false
+enabled: true
 needs_key: false
 key_secret: null
 max_retention_days: null
 display_requirements: null
-notes: 'robots.txt (research 2026-11-18): 200; Drupal default disallows only. | Disabled: owner decision:
-  terms restrict reuse (the Aviso legal allows viewing and ''reproducciones privadas ... destinados únicamente
-  al uso personal'', i.e. personal use only); off unless ADEAC gives permission'
+notes: 'robots.txt (research 2026-11-18): 200; Drupal default disallows only. Terms restrict to personal/non-commercial
+  use; owner accepted for non-commercial use 2026-11-18 (Aviso legal: ''reproducciones privadas ... destinados
+  únicamente al uso personal''). Facts only, with the source and link.'
 relevance:
   sections:
   - places
