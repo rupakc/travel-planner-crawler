@@ -311,3 +311,12 @@ plan = `docs/superpowers/plans/2026-11-15-voyager-crawler.md`, r1–r5 = `docs/r
   Denylisted: 9 terms/robots-ban hosts and 15 hijacked or parked official tourism domains (4 GoDaddy
   for-sale landers found at onboarding); 403/challenge/timeout hosts not denylisted.
   (scripts/seeds_to_sources.py, policy/denylist.yaml, sources/ramp-2.txt, ramp-3.txt)
+- 2026-11-18: hidden gems, small islands and remote places, part 2: Atlantic, Arctic, Europe,
+  Mediterranean, Baltic/North Sea, Adriatic, Americas, Caribbean, World (130 rows from the vetted
+  research): 117 on (html/rss/sitemap, facts only unless an open licence was quoted; terms not found
+  or limited to personal/non-commercial use = "owner accepted for non-commercial use 2026-11-18";
+  terms forbidding storage in databases/retrieval systems or redistribution = off; Crawl-delays as
+  min_delay_s, budgets <= 100/day, depth <= 2, AI-reserved robots = no LLM kinds; all in ramp-2 and
+  ramp-3), 13 off (re-test from the crawler VM 5, terms forbid storage/redistribution 4, seed
+  unresolved 2, adapter pending 2). (scripts/seeds_to_sources.py, policy/denylist.yaml,
+  sources/ramp-2.txt, ramp-3.txt)

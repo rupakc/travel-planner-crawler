@@ -6424,7 +6424,10 @@ seeds:
     needs_key: false
     allowed: true
     notes: 'Research 2026-11-18 (corpus Europe): robots.txt: n/a; terms: ''solely for your own personal and non-commercial
-      use''; scraping banned for commercial purposes. No automated-access clause; facts only.'
+      use''; scraping banned for commercial purposes. No automated-access clause; facts only. Enabled 2026-11-18 under the
+      owner''s standing rule: Terms restrict to personal/non-commercial use; owner accepted for non-commercial use 2026-11-18
+      (''solely for your own personal and non-commercial use''; the scraping ban applies only ''for commercial purposes'',
+      and Voyager is non-commercial). Facts only.'
   - id: thelocal-news
     category: news
     name: The Local (Europe)
@@ -14940,3 +14943,1576 @@ seeds:
     allowed: true
     notes: 'Research 2026-11-18 (hidden gems, small islands and remote places; Australia/SA; re-vet row): home page 404
       at research from a laptop IP; robots.txt and terms not read yet.'
+  # --- Hidden gems, small islands and remote places (research 2026-11-18), part 2 ---
+  - id: tb-outer-hebrides
+    category: places
+    name: Outer Hebrides Tourism
+    url: https://www.visitouterhebrides.co.uk/sitemap.xml
+    method: sitemap
+    license: Tourism board copyright; facts only
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (hidden gems, small islands and remote places; Atlantic/Outer Hebrides): robots 200 (* group,
+      27 disallows, / allowed). Terms: T&C page: no bot/AI/personal-use clause. Terms hold no bot, AI or personal-use clause
+      (copyright only): facts only.'
+  - id: tb-isles-of-scilly
+    category: places
+    name: Visit Isles of Scilly
+    url: https://www.visitislesofscilly.com/sitemap.xml
+    method: sitemap
+    license: Tourism board copyright; facts only
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (hidden gems, small islands and remote places; Atlantic/Scilly): robots 200 (* group, 1
+      disallows, / allowed); Crawl-delay 2. Terms: T&C page: no bot/AI/personal-use clause; Crawl-delay 2. Terms hold no
+      bot, AI or personal-use clause (copyright only): facts only.'
+  - id: tb-alderney
+    category: places
+    name: Visit Alderney
+    url: https://www.visitalderney.com/sitemap-xml
+    method: sitemap
+    license: Tourism board copyright; facts only
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (hidden gems, small islands and remote places; Atlantic/Channel Is): robots 200 (* group,
+      0 disallows, / allowed). Terms: T&C page: no bot/AI clause. Terms hold no bot, AI or personal-use clause (copyright
+      only): facts only.'
+  - id: tb-sark
+    category: places
+    name: Sark Tourism
+    url: https://www.sark.co.uk/blog-feed.xml
+    method: rss
+    license: Copyright; terms not found
+    cadence: daily
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (hidden gems, small islands and remote places; Atlantic/Channel Is): robots 200 (* group,
+      1 disallows, / allowed). Terms: terms not found. Terms unconfirmed; owner accepted for non-commercial use 2026-11-18;
+      facts only.'
+  - id: tb-el-hierro
+    category: places
+    name: El Hierro Turismo (Cabildo)
+    url: https://elhierro.travel/
+    method: html
+    license: Tourism board copyright; facts only
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (hidden gems, small islands and remote places; Atlantic/Canaries): robots.txt serves HTML
+      (treated as missing). Terms: información legal page: no bot/AI clause; robots.txt returns HTML (treated as missing).
+      Terms hold no bot, AI or personal-use clause (copyright only): facts only.'
+  - id: tb-la-gomera
+    category: places
+    name: La Gomera Turismo (Cabildo)
+    url: https://lagomera.travel/
+    method: html
+    license: Tourism board copyright; facts only
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (hidden gems, small islands and remote places; Atlantic/Canaries): robots.txt serves HTML
+      (treated as missing). Terms: información legal page: no bot/AI clause; robots.txt returns HTML. Terms hold no bot,
+      AI or personal-use clause (copyright only): facts only.'
+  - id: tb-la-palma
+    category: places
+    name: La Palma Turismo (Cabildo)
+    url: https://visitlapalma.es/
+    method: html
+    license: Tourism board copyright; facts only
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (hidden gems, small islands and remote places; Atlantic/Canaries): robots.txt serves HTML
+      (treated as missing). Terms: información legal page: no bot/AI clause; robots.txt returns HTML. Terms hold no bot,
+      AI or personal-use clause (copyright only): facts only.'
+  - id: tb-st-helena
+    category: places
+    name: St Helena Tourism
+    url: https://sthelenatourism.com/feed/
+    method: rss
+    license: Copyright; terms not found
+    cadence: daily
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (hidden gems, small islands and remote places; Atlantic/St Helena): robots 200 (* group,
+      6 disallows, / allowed). Terms: terms not found. Terms unconfirmed; owner accepted for non-commercial use 2026-11-18;
+      facts only.'
+  - id: gov-ascension
+    category: tips
+    name: Ascension Island Government
+    url: https://www.ascension.gov.ac/wp-sitemap.xml
+    method: sitemap
+    license: Tourism board copyright; facts only
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (hidden gems, small islands and remote places; Atlantic/Ascension): robots 200 (* group,
+      6 disallows, / allowed). Terms: "We make most of the content on ascension.gov.ac available through feeds for other
+      websites and applications to use". Terms hold no bot, AI or personal-use clause (copyright only): facts only.'
+  - id: gov-tristan
+    category: tips
+    name: Tristan da Cunha Government
+    url: https://www.tristandc.com/visit.php
+    method: html
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (hidden gems, small islands and remote places; Atlantic/Tristan): robots 200, / DISALLOWED
+      for *. Terms: terms not found; robots: * disallows / but allows /*.php$ → include only .php pages. Terms unconfirmed;
+      owner accepted for non-commercial use 2026-11-18; facts only.'
+  - id: tb-falklands
+    category: places
+    name: Falkland Islands Tourist Board
+    url: https://www.falklandislands.com/sitemap.xml
+    method: sitemap
+    license: Copyright; terms not found
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (hidden gems, small islands and remote places; Atlantic/Falklands): robots 200 (* group,
+      27 disallows, / allowed). Terms: terms not found. Terms unconfirmed; owner accepted for non-commercial use 2026-11-18;
+      facts only.'
+  - id: tb-svalbard
+    category: places
+    name: Visit Svalbard
+    url: https://www.visitsvalbard.com/sitemap.xml
+    method: sitemap
+    license: Tourism board copyright; facts only
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (hidden gems, small islands and remote places; Arctic/Svalbard): robots 200 (* group, 27
+      disallows, / allowed). Terms: vilkår page: booking terms, no bot/AI clause. Terms hold no bot, AI or personal-use
+      clause (copyright only): facts only.'
+  - id: gov-svalbard
+    category: tips
+    name: Governor of Svalbard
+    url: https://www.sysselmesteren.no/nb/nyheter/rss
+    method: rss
+    license: Copyright; terms not found
+    cadence: daily
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (hidden gems, small islands and remote places; Arctic/Svalbard): robots 200 (* group, 8
+      disallows, / allowed); AI-bot block (gptbot,claudebot,ccbot,google-extended…) → title+link only. Terms: terms not
+      found; AI-bot block → title+link only. Terms unconfirmed; owner accepted for non-commercial use 2026-11-18; facts
+      only. robots.txt reserves content from AI crawlers: title and link only, no LLM kinds.'
+  - id: tb-westfjords
+    category: places
+    name: Westfjords Iceland
+    url: https://www.westfjords.is/en/feed
+    method: rss
+    license: Copyright; terms not found
+    cadence: daily
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (hidden gems, small islands and remote places; Arctic/Iceland): robots 200 (* group, 10
+      disallows, / allowed); Crawl-delay 5. Terms: terms not found; Crawl-delay 5. Terms unconfirmed; owner accepted for
+      non-commercial use 2026-11-18; facts only.'
+  - id: tb-east-iceland
+    category: places
+    name: Visit East Iceland
+    url: https://www.east.is/en/feed
+    method: rss
+    license: Copyright; terms not found
+    cadence: daily
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (hidden gems, small islands and remote places; Arctic/Iceland): robots 200 (* group, 10
+      disallows, / allowed); Crawl-delay 5. Terms: terms not found; Crawl-delay 5. Terms unconfirmed; owner accepted for
+      non-commercial use 2026-11-18; facts only.'
+  - id: tb-north-iceland
+    category: places
+    name: North Iceland
+    url: https://www.northiceland.is/en/feed
+    method: rss
+    license: Copyright; terms not found
+    cadence: daily
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (hidden gems, small islands and remote places; Arctic/Iceland): robots 200 (* group, 10
+      disallows, / allowed); Crawl-delay 5. Terms: terms not found; Crawl-delay 5. Terms unconfirmed; owner accepted for
+      non-commercial use 2026-11-18; facts only.'
+  - id: tb-lofoten
+    category: places
+    name: Visit Lofoten
+    url: https://visitlofoten.com/en/sitemap_index.xml
+    method: sitemap
+    license: Tourism board copyright; facts only
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (hidden gems, small islands and remote places; Arctic/Norway): robots 200 (* group, 1 disallows,
+      / allowed). Terms: bestillingsvilkår = booking terms only; seed host visitlofoten.com. Terms hold no bot, AI or personal-use
+      clause (copyright only): facts only. Onboarding: www.lofoten.info redirects to visitlofoten.com; its robots.txt read
+      2026-11-18 (200, * allows all, English sitemap index listed).'
+  - id: tb-aran-islands
+    category: places
+    name: Aran Islands Tourism
+    url: https://www.aranislands.ie/feed
+    method: rss
+    license: Tourism board copyright; facts only
+    cadence: daily
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (hidden gems, small islands and remote places; Atlantic/Ireland): robots 200 (* group, 1
+      disallows, / allowed). Terms: T&C: no bot/AI clause. Terms hold no bot, AI or personal-use clause (copyright only):
+      facts only.'
+  - id: tb-bornholm
+    category: places
+    name: Destination Bornholm
+    url: https://www.bornholminfo.dk/sitemap.xml
+    method: sitemap
+    license: Copyright; terms not found
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (hidden gems, small islands and remote places; Baltic/Denmark): robots 200 (* group, 3 disallows,
+      / allowed). Terms: terms not found; seed host www.bornholminfo.dk. Terms unconfirmed; owner accepted for non-commercial
+      use 2026-11-18; facts only. Onboarding: bornholm.info redirects to www.bornholminfo.dk; its robots.txt read 2026-11-18
+      (200, disallows /api/, /search, /taxonomy/; sitemap /sitemap.xml).'
+  - id: tb-gotland
+    category: places
+    name: Gotland.com (Region Gotland)
+    url: https://www.gotland.com/sitemap_index.xml
+    method: sitemap
+    license: Copyright; terms not found
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (hidden gems, small islands and remote places; Baltic/Sweden): robots 200 (* group, 1 disallows,
+      / allowed). Terms: terms not found. Terms unconfirmed; owner accepted for non-commercial use 2026-11-18; facts only.'
+  - id: tb-aland
+    category: places
+    name: Visit Aland
+    url: https://visitaland.com/sitemap_index.xml
+    method: sitemap
+    license: Copyright; terms not found
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (hidden gems, small islands and remote places; Baltic/Finland-Aland): robots 200 (* group,
+      1 disallows, / allowed). Terms: terms not found. Terms unconfirmed; owner accepted for non-commercial use 2026-11-18;
+      facts only.'
+  - id: tb-saaremaa
+    category: places
+    name: Visit Saaremaa
+    url: https://www.visitsaaremaa.ee/feed/
+    method: rss
+    license: Copyright; terms not found
+    cadence: daily
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (hidden gems, small islands and remote places; Baltic/Estonia): robots 200 (* group, 1 disallows,
+      / allowed). Terms: terms not found. Terms unconfirmed; owner accepted for non-commercial use 2026-11-18; facts only.'
+  - id: tb-aero
+    category: places
+    name: Visit Aero
+    url: https://www.visitaeroe.dk/sitemap.xml
+    method: sitemap
+    license: Copyright; terms not found
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (hidden gems, small islands and remote places; Baltic/Denmark): robots 200 (* group, 3 disallows,
+      / allowed). Terms: terms not found. Terms unconfirmed; owner accepted for non-commercial use 2026-11-18; facts only.'
+  - id: tb-samso
+    category: places
+    name: Visit Samso
+    url: https://www.visitsamsoe.dk/sitemap_index.xml
+    method: sitemap
+    license: Copyright; terms not found
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (hidden gems, small islands and remote places; Baltic/Denmark): robots 200 (* group, 0 disallows,
+      / allowed). Terms: terms not found. Terms unconfirmed; owner accepted for non-commercial use 2026-11-18; facts only.'
+  - id: tb-texel
+    category: places
+    name: VVV Texel
+    url: https://www.texel.net/sitemap.xml
+    method: sitemap
+    license: Tourism board copyright; facts only
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (hidden gems, small islands and remote places; North Sea/Netherlands): robots 200 (* group,
+      36 disallows, / allowed). Terms: disclaimer: "may not be published or reproduced without VVV Texel''s written consent"
+      (copyright only). Terms hold no bot, AI or personal-use clause (copyright only): facts only.'
+  - id: tb-sylt
+    category: places
+    name: Sylt Marketing
+    url: https://www.sylt.de/sitemap.xml
+    method: sitemap
+    license: Tourism board copyright; facts only
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (hidden gems, small islands and remote places; North Sea/Germany): robots 200 (* group,
+      6 disallows, / allowed). Terms: Impressum: notes AI-assisted content; no bot ban. Terms hold no bot, AI or personal-use
+      clause (copyright only): facts only.'
+  - id: tb-helgoland
+    category: places
+    name: Helgoland Tourismus
+    url: https://www.helgoland.de/feed/
+    method: rss
+    license: Tourism board copyright; facts only
+    cadence: daily
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (hidden gems, small islands and remote places; North Sea/Germany): robots 200 (* group,
+      1 disallows, / allowed). Terms: Haftungsausschluss: standard copyright clause. Terms hold no bot, AI or personal-use
+      clause (copyright only): facts only.'
+  - id: tb-ruegen
+    category: places
+    name: Ruegen Tourismus
+    url: https://www.ruegen.de/
+    method: html
+    license: Tourism board copyright; facts only
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (hidden gems, small islands and remote places; Baltic/Germany): robots 404 (allowed). Terms:
+      Impressum: no bot/AI/private-use clause; robots 404. Terms hold no bot, AI or personal-use clause (copyright only):
+      facts only.'
+  - id: tb-mljet
+    category: places
+    name: Mljet Tourist Board
+    url: https://www.mljet.hr/
+    method: html
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (hidden gems, small islands and remote places; Adriatic/Croatia): robots.txt serves HTML
+      (treated as missing). Terms: terms not found; robots.txt returns HTML. Terms unconfirmed; owner accepted for non-commercial
+      use 2026-11-18; facts only.'
+  - id: tb-korcula
+    category: places
+    name: Korcula Tourist Board
+    url: https://visitkorcula.eu/wp-sitemap.xml
+    method: sitemap
+    license: Copyright; terms not found
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (hidden gems, small islands and remote places; Adriatic/Croatia): robots 200 (* group, 6
+      disallows, / allowed). Terms: terms not found. Terms unconfirmed; owner accepted for non-commercial use 2026-11-18;
+      facts only.'
+  - id: tb-losinj
+    category: places
+    name: Losinj Tourist Board
+    url: https://www.visitlosinj.hr/sitemap.xml
+    method: sitemap
+    license: Copyright; terms not found
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (hidden gems, small islands and remote places; Adriatic/Croatia): robots 200 (* group, 4
+      disallows, / allowed). Terms: terms not found. Terms unconfirmed; owner accepted for non-commercial use 2026-11-18;
+      facts only.'
+  - id: tb-hvar
+    category: places
+    name: Hvar Tourist Board
+    url: https://visithvar.hr/wp-sitemap.xml
+    method: sitemap
+    license: Copyright; terms not found
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (hidden gems, small islands and remote places; Adriatic/Croatia): robots 200 (* group, 1
+      disallows, / allowed). Terms: terms not found. Terms unconfirmed; owner accepted for non-commercial use 2026-11-18;
+      facts only.'
+  - id: np-kornati
+    category: places
+    name: Kornati National Park
+    url: https://www.np-kornati.hr/index.php?format=feed&type=rss&lang=en
+    method: rss
+    license: Copyright; terms not found
+    cadence: daily
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (hidden gems, small islands and remote places; Adriatic/Croatia): robots 200 (* group, 14
+      disallows, / allowed). Terms: terms not found. Terms unconfirmed; owner accepted for non-commercial use 2026-11-18;
+      facts only.'
+  - id: tb-corsica
+    category: places
+    name: Visit Corsica (ATC)
+    url: https://www.visit-corsica.com/sitemap.xml
+    method: sitemap
+    license: Tourism board copyright; facts only
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (hidden gems, small islands and remote places; Mediterranean/France): robots 200 (* group,
+      84 disallows, / allowed); Crawl-delay 10. Terms: mentions légales: reproduction "formellement interdite" (copyright
+      only); Crawl-delay 10. Terms hold no bot, AI or personal-use clause (copyright only): facts only. Crawl-delay -> min_delay_s
+      10.'
+  - id: np-tuscan-archipelago
+    category: places
+    name: Arcipelago Toscano National Park
+    url: https://www.islepark.it/feed/
+    method: rss
+    license: Tourism board copyright; facts only
+    cadence: daily
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (hidden gems, small islands and remote places; Mediterranean/Italy): robots 200 (* group,
+      1 disallows, / allowed). Terms: note legali: "nulla ... potrà essere copiato, modificato o rivenduto per trarne profitto"
+      (copyright only). Terms hold no bot, AI or personal-use clause (copyright only): facts only.'
+  - id: tb-formentera
+    category: places
+    name: Formentera Turismo
+    url: https://www.formentera.es/sitemap.xml
+    method: sitemap
+    license: Tourism board copyright; facts only
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (hidden gems, small islands and remote places; Mediterranean/Spain): robots 200 (* group,
+      2 disallows, / allowed). Terms: terms (app-info): privacy/AI-assistant notice, no bot ban. Terms hold no bot, AI or
+      personal-use clause (copyright only): facts only.'
+  - id: np-port-cros
+    category: places
+    name: Port-Cros National Park (Porquerolles)
+    url: https://portcros-parcnational.fr/sitemap.xml
+    method: sitemap
+    license: Tourism board copyright; facts only
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (hidden gems, small islands and remote places; Mediterranean/France): robots 200 (* group,
+      23 disallows, / allowed). Terms: mentions légales: copyright reservation only. Terms hold no bot, AI or personal-use
+      clause (copyright only): facts only.'
+  - id: tb-belle-ile
+    category: places
+    name: Belle-Ile-en-Mer Tourisme
+    url: https://www.belle-ile.com/sitemap.xml/
+    method: sitemap
+    license: Tourism board copyright; facts only
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (hidden gems, small islands and remote places; Atlantic/France): robots 200 (* group, 22
+      disallows, / allowed). Terms: mentions légales: no bot/AI clause. Terms hold no bot, AI or personal-use clause (copyright
+      only): facts only.'
+  - id: tb-ile-yeu
+    category: places
+    name: Ile d'Yeu Tourisme
+    url: https://www.ile-yeu.fr/rss.xml
+    method: rss
+    license: Tourism board copyright; facts only
+    cadence: daily
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (hidden gems, small islands and remote places; Atlantic/France): robots 200 (* group, 41
+      disallows, / allowed). Terms: mentions légales: copyright reservation only. Terms hold no bot, AI or personal-use
+      clause (copyright only): facts only.'
+  - id: tb-saint-pierre-miquelon
+    category: places
+    name: Saint-Pierre et Miquelon Tourisme
+    url: https://www.spm-tourisme.fr/sitemap.xml/
+    method: sitemap
+    license: Tourism board copyright; facts only
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (hidden gems, small islands and remote places; Atlantic/SPM): robots 200 (* group, 22 disallows,
+      / allowed). Terms: mentions légales: no bot/AI clause. Terms hold no bot, AI or personal-use clause (copyright only):
+      facts only.'
+  - id: tb-montserrat
+    category: places
+    name: Montserrat Tourism
+    url: https://www.visitmontserrat.com/feed/
+    method: rss
+    license: Tourism board copyright; facts only
+    cadence: daily
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (hidden gems, small islands and remote places; Caribbean/Montserrat): robots 200 (* group,
+      2 disallows, / allowed). Terms: "no part of this Website may be reproduced without our prior written permission" (copyright).
+      Terms hold no bot, AI or personal-use clause (copyright only): facts only.'
+  - id: tb-saba
+    category: places
+    name: Saba Tourist Bureau
+    url: https://www.sabatourism.com/feed/
+    method: rss
+    license: Copyright; terms not found
+    cadence: daily
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (hidden gems, small islands and remote places; Caribbean/Saba): robots 200 (* group, 1 disallows,
+      / allowed). Terms: terms not found. Terms unconfirmed; owner accepted for non-commercial use 2026-11-18; facts only.'
+  - id: tb-nevis
+    category: places
+    name: Nevis Tourism Authority
+    url: https://www.nevisisland.com/sitemap.xml
+    method: sitemap
+    license: Tourism board copyright; facts only
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (hidden gems, small islands and remote places; Caribbean/Nevis): robots 200 (* group, 4
+      disallows, / allowed); Content-Signal: ai-train=no, search=yes, ai-input=yes. Terms: only UGC terms found; Content-Signal
+      ai-train=no. Terms hold no bot, AI or personal-use clause (copyright only): facts only. robots.txt reserves content
+      from AI crawlers: title and link only, no LLM kinds.'
+  - id: tb-grenada
+    category: places
+    name: Pure Grenada (Carriacou)
+    url: https://www.puregrenada.com/feed/
+    method: rss
+    license: Copyright; terms not found
+    cadence: daily
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (hidden gems, small islands and remote places; Caribbean/Grenada): robots 200 (* group,
+      10 disallows, / allowed); Crawl-delay 5. Terms: terms not found; Crawl-delay 5. Terms unconfirmed; owner accepted
+      for non-commercial use 2026-11-18; facts only.'
+  - id: tb-aysen
+    category: places
+    name: Recorre Aysen (Sernatur Aysen)
+    url: http://www.recorreaysen.cl/
+    method: html
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (hidden gems, small islands and remote places; SAmerica/Chile Patagonia): robots 200 (*
+      group, 0 disallows, / allowed); http only. Terms: terms not found. Terms unconfirmed; owner accepted for non-commercial
+      use 2026-11-18; facts only.'
+  - id: gov-noronha
+    category: tips
+    name: Fernando de Noronha Administration
+    url: https://www.noronha.pe.gov.br/feed/
+    method: rss
+    license: Copyright; terms not found
+    cadence: daily
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (hidden gems, small islands and remote places; SAmerica/Brazil): robots 200 (* group, 1
+      disallows, / allowed). Terms: terms not found. Terms unconfirmed; owner accepted for non-commercial use 2026-11-18;
+      facts only.'
+  - id: tb-haida-gwaii
+    category: places
+    name: Haida Gwaii Tourism
+    url: https://www.gohaidagwaii.ca/sitemap.xml
+    method: sitemap
+    license: Tourism board copyright; facts only
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (hidden gems, small islands and remote places; NAmerica/Canada): robots 200 (* group, 27
+      disallows, / allowed). Terms: "may not be reproduced or redistributed without ... permission" (copyright). Terms hold
+      no bot, AI or personal-use clause (copyright only): facts only.'
+  - id: tb-iles-de-la-madeleine
+    category: places
+    name: Iles de la Madeleine Tourism
+    url: http://feeds.feedburner.com/tourisme-iles-de-la-madeleine-fr
+    method: rss
+    license: Copyright; terms not found
+    cadence: daily
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (hidden gems, small islands and remote places; NAmerica/Canada): robots 200 (* group, 4
+      disallows, / allowed). Terms: terms not found. Terms unconfirmed; owner accepted for non-commercial use 2026-11-18;
+      facts only.'
+  - id: ref-aeco
+    category: tips
+    name: AECO Arctic Expedition Cruise Operators
+    url: https://aeco.no/feed/
+    method: rss
+    license: Copyright; terms not found
+    cadence: daily
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (hidden gems, small islands and remote places; Arctic): robots 200 (* group, 0 disallows,
+      / allowed). Terms: terms not found. Terms unconfirmed; owner accepted for non-commercial use 2026-11-18; facts only.'
+  - id: ref-borghi-italia
+    category: places
+    name: I Borghi piu belli d'Italia
+    url: https://borghipiubelliditalia.it/feed/
+    method: rss
+    license: Copyright; terms not found
+    cadence: daily
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (hidden gems, small islands and remote places; Europe/Italy): robots 200 (* group, 4 disallows,
+      / allowed). Terms: terms not found. Terms unconfirmed; owner accepted for non-commercial use 2026-11-18; facts only.'
+  - id: ref-pueblos-bonitos-espana
+    category: places
+    name: Los Pueblos mas Bonitos de Espana
+    url: https://lospueblosmasbonitosdeespana.org/sitemap.xml
+    method: sitemap
+    license: Tourism board copyright; facts only
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (hidden gems, small islands and remote places; Europe/Spain): robots 200 (* group, 40 disallows,
+      / allowed). Terms: aviso legal: reproduction needs authorisation (copyright). Terms hold no bot, AI or personal-use
+      clause (copyright only): facts only.'
+  - id: ref-beaux-villages-wallonie
+    category: places
+    name: Plus Beaux Villages de Wallonie
+    url: https://beauxvillages.be/sitemap_index.xml
+    method: sitemap
+    license: Tourism board copyright; facts only
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (hidden gems, small islands and remote places; Europe/Belgium): robots 200 (* group, 6 disallows,
+      / allowed). Terms: CGU: copyright reservation only. Terms hold no bot, AI or personal-use clause (copyright only):
+      facts only.'
+  - id: ref-swiss-villages
+    category: places
+    name: Plus Beaux Villages de Suisse
+    url: https://swissvillages.org/feed/?lang=fr
+    method: rss
+    license: Copyright; terms not found
+    cadence: daily
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (hidden gems, small islands and remote places; Europe/Switzerland): robots.txt serves HTML
+      (treated as missing). Terms: terms not found. Terms unconfirmed; owner accepted for non-commercial use 2026-11-18;
+      facts only.'
+  - id: ref-aldeias-historicas
+    category: places
+    name: Aldeias Historicas de Portugal
+    url: https://www.aldeiashistoricasdeportugal.com/i18n-index-sitemap.xml
+    method: sitemap
+    license: Tourism board copyright; facts only
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (hidden gems, small islands and remote places; Europe/Portugal): robots 200 (* group, 0
+      disallows, / allowed). Terms: terms page: no bot/AI clause. Terms hold no bot, AI or personal-use clause (copyright
+      only): facts only.'
+  - id: ref-aldeias-xisto
+    category: places
+    name: Aldeias do Xisto
+    url: https://aldeiasdoxisto.pt/sitemap.xml
+    method: sitemap
+    license: Copyright; terms not found
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (hidden gems, small islands and remote places; Europe/Portugal): robots 200 (* group, 2
+      disallows, / allowed). Terms: terms not found. Terms unconfirmed; owner accepted for non-commercial use 2026-11-18;
+      facts only.'
+  - id: ref-global-geoparks
+    category: places
+    name: Global Geoparks Network
+    url: https://www.globalgeoparksnetwork.org/sitemap.xml
+    method: sitemap
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (hidden gems, small islands and remote places; World): robots 200 (* group, 34 disallows,
+      / allowed). Terms: terms not found. Terms unconfirmed; owner accepted for non-commercial use 2026-11-18; facts only.'
+  - id: ref-pilgrim-office
+    category: walking_tours
+    name: Pilgrim's Reception Office Santiago
+    url: https://oficinadelperegrino.com/feed/
+    method: rss
+    license: Tourism board copyright; facts only
+    cadence: daily
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (hidden gems, small islands and remote places; Europe/Spain): robots 200 (* group, 1 disallows,
+      / allowed). Terms: aviso legal: copyright reservation only. Terms hold no bot, AI or personal-use clause (copyright
+      only): facts only.'
+  - id: ref-st-olav-ways
+    category: walking_tours
+    name: St Olav Ways (Pilegrimsleden)
+    url: https://www.pilegrimsleden.no/
+    method: html
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (hidden gems, small islands and remote places; Europe/Norway): robots 404 (allowed). Terms:
+      terms not found; robots 404. Terms unconfirmed; owner accepted for non-commercial use 2026-11-18; facts only.'
+  - id: ref-showcaves
+    category: places
+    name: Showcaves.com
+    url: https://www.showcaves.com/sitemap.xml
+    method: sitemap
+    license: Tourism board copyright; facts only
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (hidden gems, small islands and remote places; World): robots 200 (* group, 5 disallows,
+      / allowed). Terms: terms: editorial policy, no bot/AI ban. Terms hold no bot, AI or personal-use clause (copyright
+      only): facts only.'
+  - id: ref-waterfalls
+    category: places
+    name: World Waterfall Database
+    url: https://www.worldwaterfalldatabase.com/
+    method: html
+    license: Tourism board copyright; facts only
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (hidden gems, small islands and remote places; World): robots 200 (* group, 0 disallows,
+      / allowed); AI-bot block (gptbot,claudebot,ccbot,google-extended…) → title+link only; Content-Signal: search=yes,ai-train=no,use=reference.
+      Terms: "No part of this website may be reproduced ... without prior written consent" (copyright); AI-bot block + ai-train=no
+      → title+link. Terms hold no bot, AI or personal-use clause (copyright only): facts only. robots.txt reserves content
+      from AI crawlers: title and link only, no LLM kinds.'
+  - id: gov-usgs-volcanoes
+    category: tips
+    name: USGS Volcano Hazards Program
+    url: https://www.usgs.gov/programs/VHP
+    method: html
+    license: US public domain
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (hidden gems, small islands and remote places; World): robots 200 (* group, 22 disallows,
+      / allowed). Terms: USGS content is US public domain; legal page no bot clause. Open licence: US public domain. Onboarding:
+      seed https://www.usgs.gov/programs/VHP answered 200 at onboarding (2026-11-18, after robots.txt); the whole-USGS sitemap
+      is not read, only Volcano Hazards Program and volcano pages.'
+  - id: tr-northlink
+    category: getting_around
+    name: NorthLink Ferries
+    url: https://www.northlinkferries.co.uk/feed/
+    method: rss
+    license: Copyright; terms not found
+    cadence: daily
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (hidden gems, small islands and remote places; Atlantic/Scotland): robots 200 (* group,
+      6 disallows, / allowed). Terms: terms not found. Terms unconfirmed; owner accepted for non-commercial use 2026-11-18;
+      facts only.'
+  - id: tr-scilly-steamship
+    category: getting_around
+    name: Isles of Scilly Steamship
+    url: https://www.islesofscilly-travel.co.uk/sitemap.xml
+    method: sitemap
+    license: Tourism board copyright; facts only
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (hidden gems, small islands and remote places; Atlantic/Scilly): robots 200 (* group, 1
+      disallows, / allowed). Terms: T&C: no bot/AI clause. Terms hold no bot, AI or personal-use clause (copyright only):
+      facts only.'
+  - id: tr-atlanticoline
+    category: getting_around
+    name: Atlanticoline (Azores ferries)
+    url: https://www.atlanticoline.pt/sitemap.xml
+    method: sitemap
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (hidden gems, small islands and remote places; Atlantic/Azores): robots 200 (* group, 0
+      disallows, / allowed); AI-bot block (gptbot,claudebot,ccbot,google-extended…) → title+link only; Content-Signal: search=yes,ai-train=no,use=reference.
+      Terms: terms not found; AI-bot block → title+link only. Terms unconfirmed; owner accepted for non-commercial use 2026-11-18;
+      facts only. robots.txt reserves content from AI crawlers: title and link only, no LLM kinds.'
+  - id: tr-ssl-faroe
+    category: getting_around
+    name: Strandfaraskip Landsins (Faroe transport)
+    url: https://www.ssl.fo/sitemap.xml
+    method: sitemap
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (hidden gems, small islands and remote places; Atlantic/Faroe): robots 404 (allowed). Terms:
+      terms not found; robots 404. Terms unconfirmed; owner accepted for non-commercial use 2026-11-18; facts only.'
+  - id: tr-teso
+    category: getting_around
+    name: TESO (Texel ferry)
+    url: https://teso.nl/sitemap.xml
+    method: sitemap
+    license: Tourism board copyright; facts only
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (hidden gems, small islands and remote places; North Sea/Netherlands): robots 200 (* group,
+      0 disallows, / allowed). Terms: disclaimer: no bot/AI clause. Terms hold no bot, AI or personal-use clause (copyright
+      only): facts only.'
+  - id: tr-iom-steam-packet
+    category: getting_around
+    name: Isle of Man Steam Packet
+    url: https://www.steam-packet.com/sitemap.xml
+    method: sitemap
+    license: Tourism board copyright; facts only
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (hidden gems, small islands and remote places; Atlantic/Isle of Man): robots 200 (* group,
+      0 disallows, / allowed). Terms: T&C: no bot/AI clause. Terms hold no bot, AI or personal-use clause (copyright only):
+      facts only.'
+  - id: tr-aran-ferries
+    category: getting_around
+    name: Aran Island Ferries
+    url: https://www.aranislandferries.com/sitemap.xml
+    method: sitemap
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (hidden gems, small islands and remote places; Atlantic/Ireland): robots 200 (* group, 0
+      disallows, / allowed). Terms: terms not found. Terms unconfirmed; owner accepted for non-commercial use 2026-11-18;
+      facts only.'
+  - id: tr-bcferries
+    category: getting_around
+    name: BC Ferries
+    url: https://www.bcferries.com/sitemap.xml
+    method: sitemap
+    license: Tourism board copyright; facts only
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (hidden gems, small islands and remote places; NAmerica/Canada): robots 200 (* group, 8
+      disallows, / allowed); Crawl-delay 10; AI-bot block (gptbot,ccbot,perplexitybot) → title+link only. Terms: T&C: no
+      bot clause; GPTBot/CCBot/PerplexityBot blocked → title+link; Crawl-delay 10. Terms hold no bot, AI or personal-use
+      clause (copyright only): facts only. robots.txt reserves content from AI crawlers: title and link only, no LLM kinds.
+      Crawl-delay -> min_delay_s 10.'
+  - id: tr-marine-atlantic
+    category: getting_around
+    name: Marine Atlantic
+    url: https://www.marineatlantic.ca/sitemap.xml
+    method: sitemap
+    license: Tourism board copyright; facts only
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (hidden gems, small islands and remote places; NAmerica/Canada): robots 200 (* group, 22
+      disallows, / allowed). Terms: T&C: carriage terms only. Terms hold no bot, AI or personal-use clause (copyright only):
+      facts only.'
+  - id: blog-kuriositas
+    category: places
+    name: Kuriositas
+    url: https://www.kuriositas.com/feeds/posts/default
+    method: rss
+    license: Copyright; terms not found
+    cadence: daily
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (hidden gems, small islands and remote places; World): robots 200 (* group, 2 disallows,
+      / allowed). Terms: terms not found. Terms unconfirmed; owner accepted for non-commercial use 2026-11-18; facts only.'
+  - id: blog-unusualplaces
+    category: places
+    name: Unusual Places
+    url: https://unusualplaces.org/feed/
+    method: rss
+    license: Copyright; terms not found
+    cadence: daily
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (hidden gems, small islands and remote places; World): robots 200 (* group, 7 disallows,
+      / allowed). Terms: terms not found. Terms unconfirmed; owner accepted for non-commercial use 2026-11-18; facts only.'
+  - id: ref-rtp
+    category: tips
+    name: Responsible Tourism Partnership
+    url: https://responsibletourismpartnership.org/wp-sitemap.xml
+    method: sitemap
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (hidden gems, small islands and remote places; World): robots 200 (* group, 1 disallows,
+      / allowed). Terms: terms not found. Terms unconfirmed; owner accepted for non-commercial use 2026-11-18; facts only.'
+  - id: cbt-actuar
+    category: activities
+    name: ACTUAR Costa Rica rural community tourism
+    url: https://www.actuarcostarica.com/feed/
+    method: rss
+    license: Copyright; terms not found
+    cadence: daily
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (hidden gems, small islands and remote places; CAmerica/Costa Rica): robots 200 (* group,
+      1 disallows, / allowed). Terms: terms not found. Terms unconfirmed; owner accepted for non-commercial use 2026-11-18;
+      facts only.'
+  - id: tb-vesteralen
+    category: places
+    name: Visit Vesteralen
+    url: https://visitvesteralen.com/sitemap.xml
+    method: sitemap
+    license: Copyright; terms not found
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (hidden gems, small islands and remote places; Arctic/Norway): robots 200 (* group, 1 disallows,
+      / allowed). Terms: terms not found. Terms unconfirmed; owner accepted for non-commercial use 2026-11-18; facts only.'
+  - id: tb-westman-islands
+    category: places
+    name: Visit Vestmannaeyjar
+    url: https://www.visitvestmannaeyjar.is/feed/rss2
+    method: rss
+    license: Copyright; terms not found
+    cadence: daily
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (hidden gems, small islands and remote places; Arctic/Iceland): robots 200 (* group, 0 disallows,
+      / allowed); Content-Signal: search=yes, ai-input=yes, ai-train=yes. Terms: terms not found; Content-Signal search=yes,
+      ai-input=yes. Terms unconfirmed; owner accepted for non-commercial use 2026-11-18; facts only.'
+  - id: tb-foehr
+    category: places
+    name: Foehr Tourismus
+    url: https://www.foehr.de/sitemap.xml
+    method: sitemap
+    license: Tourism board copyright; facts only
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (hidden gems, small islands and remote places; North Sea/Germany): robots 200 (* group,
+      10 disallows, / allowed). Terms: Impressum: no private-use clause. Terms hold no bot, AI or personal-use clause (copyright
+      only): facts only.'
+  - id: tb-amrum
+    category: places
+    name: Amrum Touristik
+    url: https://www.amrum.de/sitemap.xml
+    method: sitemap
+    license: Tourism board copyright; facts only
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (hidden gems, small islands and remote places; North Sea/Germany): robots 200 (* group,
+      10 disallows, / allowed). Terms: Impressum: no clause. Terms hold no bot, AI or personal-use clause (copyright only):
+      facts only.'
+  - id: tb-juist
+    category: places
+    name: Juist Tourismus
+    url: https://www.juist.de/sitemap.xml
+    method: sitemap
+    license: Tourism board copyright; facts only
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (hidden gems, small islands and remote places; North Sea/Germany): robots 200 (* group,
+      2 disallows, / allowed). Terms: Impressum: no clause. Terms hold no bot, AI or personal-use clause (copyright only):
+      facts only.'
+  - id: gov-terschelling
+    category: places
+    name: VVV Terschelling
+    url: https://www.terschelling.nl/sitemap.xml
+    method: sitemap
+    license: Copyright; terms not found
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (hidden gems, small islands and remote places; North Sea/Netherlands): robots 200 (* group,
+      0 disallows, / allowed). Terms: terms not found. Terms unconfirmed; owner accepted for non-commercial use 2026-11-18;
+      facts only.'
+  - id: tb-fano
+    category: places
+    name: Visit Fano
+    url: https://visitfanoe.dk/
+    method: html
+    license: Copyright; terms not found
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (hidden gems, small islands and remote places; North Sea/Denmark): robots 404 (allowed).
+      Terms: terms not found; robots 404. Terms unconfirmed; owner accepted for non-commercial use 2026-11-18; facts only.'
+  - id: tb-hiiumaa
+    category: places
+    name: Hiiumaa
+    url: https://hiiumaa.ee/feed/
+    method: rss
+    license: Copyright; terms not found
+    cadence: daily
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (hidden gems, small islands and remote places; Baltic/Estonia): robots 200 (* group, 0 disallows,
+      / allowed). Terms: terms not found. Terms unconfirmed; owner accepted for non-commercial use 2026-11-18; facts only.'
+  - id: tb-elba
+    category: places
+    name: Visit Elba
+    url: https://visitelba.info/feed/
+    method: rss
+    license: Copyright; terms not found
+    cadence: daily
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (hidden gems, small islands and remote places; Mediterranean/Italy): robots 200 (* group,
+      0 disallows, / allowed). Terms: terms not found. Terms unconfirmed; owner accepted for non-commercial use 2026-11-18;
+      facts only.'
+  - id: np-brijuni
+    category: places
+    name: Brijuni National Park
+    url: https://www.np-brijuni.hr/sitemap.xml
+    method: sitemap
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (hidden gems, small islands and remote places; Adriatic/Croatia): robots 200 (* group, 0
+      disallows, / allowed). Terms: terms not found. Terms unconfirmed; owner accepted for non-commercial use 2026-11-18;
+      facts only.'
+  - id: gov-symi
+    category: places
+    name: Symi
+    url: https://www.symi.gr/feed/
+    method: rss
+    license: Copyright; terms not found
+    cadence: daily
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (hidden gems, small islands and remote places; Mediterranean/Greece): robots 200 (* group,
+      13 disallows, / allowed). Terms: terms not found. Terms unconfirmed; owner accepted for non-commercial use 2026-11-18;
+      facts only.'
+  - id: blog-amorgos
+    category: places
+    name: Amorgos
+    url: https://amorgos.gr/feed/
+    method: rss
+    license: Copyright; terms not found
+    cadence: daily
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (hidden gems, small islands and remote places; Mediterranean/Greece): robots 200 (* group,
+      3 disallows, / allowed). Terms: terms not found. Terms unconfirmed; owner accepted for non-commercial use 2026-11-18;
+      facts only.'
+  - id: tb-kalymnos
+    category: places
+    name: Visit Kalymnos
+    url: https://www.visitkalymnos.gr/
+    method: html
+    license: Copyright; terms not found
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (hidden gems, small islands and remote places; Mediterranean/Greece): robots 404 (allowed).
+      Terms: terms not found; robots 404; thin site. Terms unconfirmed; owner accepted for non-commercial use 2026-11-18;
+      facts only.'
+  - id: tb-lesvos
+    category: places
+    name: Visit Lesvos
+    url: https://www.visitlesvos.gr/feed/
+    method: rss
+    license: Copyright; terms not found
+    cadence: daily
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (hidden gems, small islands and remote places; Mediterranean/Greece): robots 200 (* group,
+      1 disallows, / allowed). Terms: terms not found. Terms unconfirmed; owner accepted for non-commercial use 2026-11-18;
+      facts only.'
+  - id: tb-guyana
+    category: places
+    name: Guyana Tourism Authority
+    url: https://guyanatourism.com/feed/
+    method: rss
+    license: Copyright; terms not found
+    cadence: daily
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (hidden gems, small islands and remote places; SAmerica/Guyana): robots 200 (* group, 1
+      disallows, / allowed). Terms: terms not found. Terms unconfirmed; owner accepted for non-commercial use 2026-11-18;
+      facts only.'
+  - id: blog-visitbequia
+    category: places
+    name: Bequia Tourism Association
+    url: http://www.visitbequia.net/feeds/posts/default
+    method: rss
+    license: Copyright; terms not found
+    cadence: daily
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (hidden gems, small islands and remote places; Caribbean/SVG): robots 200 (* group, 2 disallows,
+      / allowed); http only. Terms: terms not found. Terms unconfirmed; owner accepted for non-commercial use 2026-11-18;
+      facts only.'
+  - id: tb-nunavik
+    category: places
+    name: Nunavik Tourism
+    url: https://www.nunavik-tourism.com/
+    method: html
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (hidden gems, small islands and remote places; NAmerica/Canada): robots 404 (allowed). Terms:
+      terms not found; robots 404. Terms unconfirmed; owner accepted for non-commercial use 2026-11-18; facts only.'
+  - id: tb-kodiak
+    category: places
+    name: Discover Kodiak
+    url: https://kodiak.org/sitemap_index.xml
+    method: sitemap
+    license: Copyright; terms not found
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (hidden gems, small islands and remote places; NAmerica/Alaska): robots 200 (* group, 6
+      disallows, / allowed). Terms: terms not found. Terms unconfirmed; owner accepted for non-commercial use 2026-11-18;
+      facts only.'
+  - id: tb-unalaska
+    category: places
+    name: Unalaska/Dutch Harbor CVB
+    url: http://www.unalaska.org/sitemap.xml
+    method: sitemap
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (hidden gems, small islands and remote places; NAmerica/Alaska): robots 200 (* group, 2
+      disallows, / allowed). Terms: terms not found. Terms unconfirmed; owner accepted for non-commercial use 2026-11-18;
+      facts only.'
+  - id: tb-nordkapp
+    category: places
+    name: Visit Nordkapp
+    url: https://www.nordkapp.no/sitemap_index.xml
+    method: sitemap
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (hidden gems, small islands and remote places; Arctic/Norway): robots 200 (* group, 2 disallows,
+      / allowed). Terms: terms not found. Terms unconfirmed; owner accepted for non-commercial use 2026-11-18; facts only.'
+  - id: tb-tierra-del-fuego
+    category: places
+    name: Tierra del Fuego Tourism Institute (InFueTur)
+    url: https://tierradelfuego.org.ar/
+    method: html
+    license: Copyright; terms not found
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (hidden gems, small islands and remote places; SAmerica/Argentina): robots.txt serves HTML
+      (treated as missing). Terms: terms not found; robots.txt returns HTML. Terms unconfirmed; owner accepted for non-commercial
+      use 2026-11-18; facts only.'
+  - id: tb-el-chalten
+    category: places
+    name: El Chalten tourism
+    url: https://elchalten.tur.ar/feed/
+    method: rss
+    license: Copyright; terms not found
+    cadence: daily
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (hidden gems, small islands and remote places; SAmerica/Argentina): robots 404 (allowed).
+      Terms: terms not found; robots 404. Terms unconfirmed; owner accepted for non-commercial use 2026-11-18; facts only.'
+  - id: gov-bonito
+    category: places
+    name: Bonito (MS) Tourism
+    url: https://www.bonito.ms.gov.br/feed/
+    method: rss
+    license: Copyright; terms not found
+    cadence: daily
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (hidden gems, small islands and remote places; SAmerica/Brazil): robots 200 (* group, 0
+      disallows, / allowed). Terms: terms not found. Terms unconfirmed; owner accepted for non-commercial use 2026-11-18;
+      facts only.'
+  - id: tb-mato-grosso-do-sul
+    category: places
+    name: Mato Grosso do Sul Tourism (Pantanal)
+    url: https://www.turismo.ms.gov.br/wp-sitemap.xml
+    method: sitemap
+    license: Copyright; terms not found
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (hidden gems, small islands and remote places; SAmerica/Brazil): robots 200 (* group, 1
+      disallows, / allowed). Terms: terms not found. Terms unconfirmed; owner accepted for non-commercial use 2026-11-18;
+      facts only.'
+  - id: ref-acir-compostelle
+    category: walking_tours
+    name: ACIR Compostelle (French Way of St James)
+    url: https://www.chemins-compostelle.com/sitemap_index.xml
+    method: sitemap
+    license: Tourism board copyright; facts only
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (hidden gems, small islands and remote places; Europe/France): robots 200 (* group, 6 disallows,
+      / allowed). Terms: CGU: reproduction "pour un usage autre que privé" needs authorisation (copyright law). Terms hold
+      no bot, AI or personal-use clause (copyright only): facts only.'
+  - id: guide-dark-tourism
+    category: places
+    name: Dark-Tourism.com
+    url: https://www.dark-tourism.com/
+    method: html
+    license: Tourism board copyright; facts only
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (hidden gems, small islands and remote places; World): robots 200 (* group, 15 disallows,
+      / allowed). Terms: Impressum: no bot clause. Terms hold no bot, AI or personal-use clause (copyright only): facts
+      only. Advisory-risk destination (government travel advisories apply: covers advisory countries): added normally, flagged
+      here.'
+  - id: blog-monkeysandmountains
+    category: activities
+    name: Monkeys and Mountains
+    url: https://monkeysandmountains.com/feed/
+    method: rss
+    license: Tourism board copyright; facts only
+    cadence: daily
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (hidden gems, small islands and remote places; World): robots 200 (* group, 1 disallows,
+      / allowed). Terms: only tour T&C found. Terms hold no bot, AI or personal-use clause (copyright only): facts only.'
+  - id: blog-stingynomads
+    category: walking_tours
+    name: Stingy Nomads
+    url: https://stingynomads.com/feed/
+    method: rss
+    license: Tourism board copyright; facts only
+    cadence: daily
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (hidden gems, small islands and remote places; World): robots 200 (* group, 1 disallows,
+      / allowed). Terms: "must not: Republish material ... without credit ... for commercial purposes" (copyright). Terms
+      hold no bot, AI or personal-use clause (copyright only): facts only.'
+  - id: ref-norwegian-lighthouses
+    category: places
+    name: Norsk Fyrhistorisk Forening (Norwegian lighthouses)
+    url: https://fyr.no/feed/
+    method: rss
+    license: Copyright; terms not found
+    cadence: daily
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (hidden gems, small islands and remote places; Arctic/Norway): robots 200 (* group, 1 disallows,
+      / allowed). Terms: terms not found. Terms unconfirmed; owner accepted for non-commercial use 2026-11-18; facts only.'
+  - id: ref-iles-du-ponant
+    category: places
+    name: Association des Iles du Ponant
+    url: https://www.iles-du-ponant.com/sitemap.xml
+    method: sitemap
+    license: Tourism board copyright; facts only
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (hidden gems, small islands and remote places; Atlantic/France): robots 200 (* group, 1
+      disallows, / allowed). Terms: mentions légales: copyright only. Terms hold no bot, AI or personal-use clause (copyright
+      only): facts only.'
+  - id: tb-los-lagos
+    category: places
+    name: Los Lagos Region (Chiloe)
+    url: https://loslagos.travel/en/feed/
+    method: rss
+    license: Copyright; terms not found
+    cadence: daily
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (hidden gems, small islands and remote places; SAmerica/Chile): robots 200 (* group, 9 disallows,
+      / allowed); AI-bot block (bytespider) → title+link only. Terms: terms not found; Bytespider blocked. Terms unconfirmed;
+      owner accepted for non-commercial use 2026-11-18; facts only. robots.txt reserves content from AI crawlers: title
+      and link only, no LLM kinds.'
+  - id: tb-shetland
+    category: places
+    name: Promote Shetland
+    url: https://www.shetland.org/
+    method: html
+    license: Personal-use-only terms; facts only (owner accepted)
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (hidden gems, small islands and remote places; Atlantic/Shetland; owner-decision row): robots
+      200 (* group, 2 disallows, / allowed); Crawl-delay 5; AI-bot block (bytespider) → title+link only. Terms: "You may
+      print or download the content of this site for you own personal use only"; Crawl-delay 5; Bytespider blocked. Terms
+      restrict to personal/non-commercial use; owner accepted for non-commercial use 2026-11-18 ("You may print or download
+      the content of this site for you own personal use only"; Crawl-delay 5; Bytespider blocked); facts only. robots.txt
+      reserves content from AI crawlers: title and link only, no LLM kinds.'
+  - id: tb-orkney
+    category: places
+    name: Orkney.com (Orkney Islands)
+    url: https://www.orkney.com/
+    method: html
+    license: Personal-use-only terms; facts only (owner accepted)
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (hidden gems, small islands and remote places; Atlantic/Orkney; owner-decision row): robots
+      200 (* group, 3 disallows, / allowed); Crawl-delay 5; AI-bot block (bytespider) → title+link only. Terms: "You may
+      print or download the content of this site for you own personal use only"; Crawl-delay 5. Terms restrict to personal/non-commercial
+      use; owner accepted for non-commercial use 2026-11-18 ("You may print or download the content of this site for you
+      own personal use only"; Crawl-delay 5); facts only. robots.txt reserves content from AI crawlers: title and link only,
+      no LLM kinds.'
+  - id: tb-jersey
+    category: places
+    name: Visit Jersey
+    url: https://www.jersey.com/
+    method: html
+    license: Personal-use-only terms; facts only (owner accepted)
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (hidden gems, small islands and remote places; Atlantic/Channel Is; owner-decision row):
+      robots 200 (* group, 2 disallows, / allowed). Terms: "maintained for your personal use and viewing" but "may be reproduced
+      free of charge ... for research, private study". Terms restrict to personal/non-commercial use; owner accepted for
+      non-commercial use 2026-11-18 ("maintained for your personal use and viewing" but "may be reproduced free of charge
+      ... for research, private study"); facts only.'
+  - id: tb-halligen
+    category: places
+    name: Halligen (Nordfriesland)
+    url: https://www.halligen.de/
+    method: html
+    license: Personal-use-only terms; facts only (owner accepted)
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (hidden gems, small islands and remote places; North Sea/Germany; owner-decision row): robots
+      200 (* group, 16 disallows, / allowed). Terms: "Downloads und Kopien dieser Seite sind nur für den privaten, nicht
+      kommerziellen Gebrauch gestattet". Terms restrict to personal/non-commercial use; owner accepted for non-commercial
+      use 2026-11-18 ("Downloads und Kopien dieser Seite sind nur für den privaten, nicht kommerziellen Gebrauch gestattet");
+      facts only.'
+  - id: tb-borkum
+    category: places
+    name: Borkum Tourismus
+    url: https://www.borkum.de/
+    method: html
+    license: Personal-use-only terms; facts only (owner accepted)
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (hidden gems, small islands and remote places; North Sea/Germany; owner-decision row): robots
+      200 (* group, 16 disallows, / allowed). Terms: "nur für den privaten, nicht kommerziellen Gebrauch gestattet". Terms
+      restrict to personal/non-commercial use; owner accepted for non-commercial use 2026-11-18 ("nur für den privaten,
+      nicht kommerziellen Gebrauch gestattet"); facts only.'
+  - id: tb-svg
+    category: places
+    name: St Vincent & the Grenadines Tourism
+    url: https://discoversvg.com/
+    method: html
+    license: Personal-use-only terms; facts only (owner accepted)
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (hidden gems, small islands and remote places; Caribbean/SVG; owner-decision row): robots
+      200 (* group, 1 disallows, / allowed). Terms: "access the contents solely for your personal, non-commercial use".
+      Terms restrict to personal/non-commercial use; owner accepted for non-commercial use 2026-11-18 ("access the contents
+      solely for your personal, non-commercial use"); facts only.'
+  - id: tb-bahamas-out-islands
+    category: places
+    name: Bahamas Out Islands Promotion Board
+    url: https://www.myoutislands.com/
+    method: html
+    license: Personal-use-only terms; facts only (owner accepted)
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (hidden gems, small islands and remote places; Caribbean/Bahamas; owner-decision row): robots
+      200 (* group, 0 disallows, / allowed). Terms: "view and download a single copy ... for your personal, non-commercial
+      use". Terms restrict to personal/non-commercial use; owner accepted for non-commercial use 2026-11-18 ("view and download
+      a single copy ... for your personal, non-commercial use"); facts only.'
+  - id: mag-polarjournal
+    category: tips
+    name: Polar Journal
+    url: https://polarjournal.net/
+    method: html
+    license: Terms forbid storage/redistribution
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (hidden gems, small islands and remote places; Polar; owner-decision row): robots 200 (*
+      group, 1 disallows, / allowed). Terms: "replication ... storage, processing or reproduction of content in databases
+      ... requires written consent". '
+  - id: tr-orkney-ferries
+    category: getting_around
+    name: Orkney Ferries
+    url: https://www.orkneyferries.co.uk/
+    method: html
+    license: Personal-use-only terms; facts only (owner accepted)
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (hidden gems, small islands and remote places; Atlantic/Orkney; owner-decision row): robots
+      200 (* group, 3 disallows, / allowed); Crawl-delay 5; AI-bot block (bytespider) → title+link only. Terms: "print or
+      download ... for you own personal use only"; Crawl-delay 5. Terms restrict to personal/non-commercial use; owner accepted
+      for non-commercial use 2026-11-18 ("print or download ... for you own personal use only"; Crawl-delay 5); facts only.
+      robots.txt reserves content from AI crawlers: title and link only, no LLM kinds.'
+  - id: od-wdpa
+    category: places
+    name: Protected Planet (WDPA)
+    url: https://www.protectedplanet.net/
+    method: dump
+    license: Terms forbid storage/redistribution
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (hidden gems, small islands and remote places; World; owner-decision row): robots 200 (*
+      group, 9 disallows, / allowed); AI-bot block (bytespider) → title+link only. Terms: "may [not] be put to Commercial
+      Use"; "You may not redistribute the WDPCA ... Data"; non-commercial licence; would need adapter (GDB/SHP).  robots.txt
+      reserves content from AI crawlers: title and link only, no LLM kinds.'
+  - id: ref-un-tourism-villages
+    category: places
+    name: UN Tourism Best Tourism Villages
+    url: https://www.unwto.org/
+    method: html
+    license: Personal-use-only terms; facts only (owner accepted)
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (hidden gems, small islands and remote places; World; owner-decision row): robots 200 (*
+      group, 101 disallows, / allowed). Terms: UN Tourism terms of use are non-commercial (brief); terms page not located
+      at vetting. Terms restrict to personal/non-commercial use; owner accepted for non-commercial use 2026-11-18 (UN Tourism
+      terms of use are non-commercial (brief); terms page not located at vetting); facts only.'
+  - id: tb-hiddensee
+    category: places
+    name: Hiddensee
+    url: https://www.seebad-hiddensee.de/
+    method: html
+    license: Personal-use-only terms; facts only (owner accepted)
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (hidden gems, small islands and remote places; Baltic/Germany; owner-decision row): robots
+      200 (* group, 6 disallows, / allowed). Terms: "nur für den privaten, nicht kommerziellen Gebrauch gestattet". Terms
+      restrict to personal/non-commercial use; owner accepted for non-commercial use 2026-11-18 ("nur für den privaten,
+      nicht kommerziellen Gebrauch gestattet"); facts only.'
+  - id: guide-visitkythera
+    category: places
+    name: Visit Kythera
+    url: https://www.visitkythera.gr/
+    method: html
+    license: Terms forbid storage/redistribution
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (hidden gems, small islands and remote places; Mediterranean/Greece; owner-decision row):
+      robots 200 (* group, 3 disallows, / allowed). Terms: "No element ... may be ... reproduced, published, ... collected
+      ... without ... permission". '
+  - id: guide-visitikaria
+    category: places
+    name: Visit Ikaria
+    url: https://www.visitikaria.gr/
+    method: html
+    license: Terms forbid storage/redistribution
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (hidden gems, small islands and remote places; Mediterranean/Greece; owner-decision row):
+      robots 200 (* group, 36 disallows, / allowed); Crawl-delay 10. Terms: "Any copying, reproduction, ... storage ...
+      is expressly prohibited without the prior written consent"; Crawl-delay 10.  Crawl-delay -> min_delay_s 10.'
+  - id: tb-french-guiana
+    category: places
+    name: Guyane Amazonie tourism
+    url: https://www.guyane-amazonie.fr/
+    method: html
+    license: Personal-use-only terms; facts only (owner accepted)
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (hidden gems, small islands and remote places; SAmerica/French Guiana; owner-decision row):
+      robots 200 (* group, 10 disallows, / allowed); Crawl-delay 20. Terms: "utiliser ces éléments qu''à des fins exclusivement
+      privées"; Crawl-delay 20. Terms restrict to personal/non-commercial use; owner accepted for non-commercial use 2026-11-18
+      ("utiliser ces éléments qu''à des fins exclusivement privées"; Crawl-delay 20); facts only. Crawl-delay -> min_delay_s
+      20.'
+  - id: ref-nlb
+    category: places
+    name: Northern Lighthouse Board
+    url: https://www.nlb.org.uk/
+    method: html
+    license: Personal-use-only terms; facts only (owner accepted)
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (hidden gems, small islands and remote places; Europe/Scotland; owner-decision row): robots
+      200 (* group, 0 disallows, / allowed). Terms: shop terms: "solely for your private, personal and non-commercial use".
+      Terms restrict to personal/non-commercial use; owner accepted for non-commercial use 2026-11-18 (shop terms: "solely
+      for your private, personal and non-commercial use"); facts only.'
+  - id: tb-statia
+    category: places
+    name: St Eustatius Tourism Development Foundation
+    url: https://www.statia-tourism.com/
+    method: html
+    license: Personal-use-only terms; facts only (owner accepted)
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (hidden gems, small islands and remote places; Caribbean/Statia; owner-decision row): robots
+      200 (* group, 0 disallows, / allowed). Terms: "View and use the information ... for personal and non-commercial purposes".
+      Terms restrict to personal/non-commercial use; owner accepted for non-commercial use 2026-11-18 ("View and use the
+      information ... for personal and non-commercial purposes"); facts only.'
+  - id: tb-ouessant
+    category: places
+    name: Office de Tourisme d'Ouessant
+    url: https://www.ot-ouessant.fr/
+    method: html
+    license: Personal-use-only terms; facts only (owner accepted)
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (hidden gems, small islands and remote places; Atlantic/France; owner-decision row): robots
+      200 (* group, 22 disallows, / allowed); AI-bot block (gptbot,claudebot,ccbot,google-extended…) → title+link only;
+      Content-Signal: search=yes,ai-train=no,use=reference. Terms: "autorisées que pour un usage personnel et privé"; AI-bot
+      block. Terms restrict to personal/non-commercial use; owner accepted for non-commercial use 2026-11-18 ("autorisées
+      que pour un usage personnel et privé"; AI-bot block); facts only. robots.txt reserves content from AI crawlers: title
+      and link only, no LLM kinds.'
+  - id: od-natural-earth
+    category: places
+    name: Natural Earth
+    url: https://www.naturalearthdata.com/downloads/
+    method: dump
+    license: Public domain
+    cadence: yearly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (hidden gems; NEEDS-ADAPTER row): robots.txt 200 (* group, 1 disallow, / allowed). Public
+      domain (Natural Earth terms of use). Shapefile/GeoPackage zips need a reader.'
+  - id: od-ramsar-rsis
+    category: places
+    name: Ramsar Sites Information Service
+    url: https://rsis.ramsar.org/
+    method: dump
+    license: Copyright; terms not found
+    cadence: yearly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (hidden gems; NEEDS-ADAPTER row): robots.txt 200 (* group, 34 disallows, / allowed); meta
+      robots noindex, follow. Terms not found (the link was a search page). Export (CSV/XLS/SHP) via the RSIS search. Terms
+      unconfirmed; owner accepted for non-commercial use 2026-11-18.'
+  - id: ref-european-geoparks
+    category: places
+    name: European Geoparks Network
+    url: https://www.europeangeoparks.org/
+    method: html
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (hidden gems, small islands and remote places; Europe; re-vet row): TLS error at research
+      from a laptop IP; robots.txt and terms not read yet.'
+  - id: np-la-maddalena
+    category: places
+    name: La Maddalena Archipelago National Park
+    url: https://www.lamaddalenapark.it/
+    method: html
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (hidden gems, small islands and remote places; Mediterranean/Italy; re-vet row): connect
+      timeout at research from a laptop IP; robots.txt and terms not read yet.'
+  - id: tb-paraguay
+    category: places
+    name: Paraguay SENATUR
+    url: https://www.visitparaguay.travel/
+    method: html
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (hidden gems, small islands and remote places; SAmerica/Paraguay; re-vet row): robots.txt
+      526 at research from a laptop IP; robots.txt and terms not read yet.'
+  - id: tb-nicaragua
+    category: places
+    name: Nicaragua Tourism
+    url: https://www.visitnicaragua.com/
+    method: html
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (hidden gems, small islands and remote places; CAmerica/Nicaragua; re-vet row): robots.txt
+      520 at research from a laptop IP; robots.txt and terms not read yet. Advisory-risk destination (Nicaragua): added
+      normally, flagged here.'
+  - id: tb-high-coast
+    category: places
+    name: High Coast (Höga Kusten)
+    url: https://www.highcoast.net/
+    method: html
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (hidden gems, small islands and remote places; Baltic/Sweden; re-vet row): site title and
+      encoding looked compromised at research from a laptop IP; robots.txt and terms not read yet.'
