@@ -7,7 +7,7 @@
 Every website and dataset the crawler knows, grouped by the part of the Voyager app it
 feeds. A source that serves several parts is listed under each of them.
 
-**281 sources, 195 on, 86 off.**
+**281 sources, 198 on, 83 off.**
 
 - **What we take**: the traveller-facing data the source gives (its `relevance.why`).
 - **Licence**: *open* (free reuse with credit), *share-alike* (kept apart from other
@@ -83,11 +83,13 @@ is added only with the owner's approval (see CONTRIBUTING.md).
 | `destinationcanada` | `travel.destinationcanada.com` | Canadian things to do and trip ideas, for Activities and the itinerary. | facts only | yes | no |
 | `discoverireland` | `www.discoverireland.ie` | Irish events, things to do, food experiences and road trips, for Events, Activities, the itinerary and Places to see. | facts only | yes | no |
 | `discoverlosangeles` | `www.discoverlosangeles.com` | Los Angeles eat and drink, things to do and events, for Activities and Events. | facts only | yes | no |
+| `egymonuments` | `egymonuments.gov.eg` | Official opening hours, tickets and descriptions of Egypt's monuments, museums and archaeological sites, for Places to see and Activities. | facts only | yes | no |
 | `experienceoman` | `experienceoman.om` | Official Omani destinations, things to do and itineraries, for Places to see, Activities and the itinerary. | facts only | yes | no |
 | `france-fr` | `www.france.fr` | Official French inspiration, itineraries and gastronomy pages, for the itinerary, Places to see and Activities. | facts only | yes | no |
 | `gaultmillau` | `www.gaultmillau.com` | Gault&Millau restaurant ratings (name, toque rating and city as facts), for Activities and Places to see. | facts only | yes | no |
 | `gotokyo` | `www.gotokyo.org` | About 925 Tokyo spots, the event calendar and model courses, for Places to see, Events, Activities and the itinerary. | facts only | yes | no |
 | `iamsterdam` | `www.iamsterdam.com` | Amsterdam's official event agenda and restaurant and venue listings, for Events, Activities and Places to see. | facts only | yes | no |
+| `kws-parks` | `kws.go.ke` | Kenya's national parks and reserves with entry, opening times and activities, for Places to see and Activities. | facts only | yes | no |
 | `laliste` | `www.laliste.com` | La Liste restaurant rankings (names, scores and cities as facts), for Activities. | facts only | yes | no |
 | `liveriga` | `www.liveriga.com` | Riga's official tourism portal: sights, things to do, events and visitor advice, for Places to see, Activities, Events and Travel tips. | facts only | yes | no |
 | `mathallen-oslo` | `mathallenoslo.no` | Vendors, opening hours and visitor information for the Mathallen food hall in Oslo, for Places to see and Activities. | facts only | yes | no |
@@ -122,14 +124,12 @@ is added only with the owner's approval (see CONTRIBUTING.md).
 | `choosechicago` | `www.choosechicago.com` | Chicago events and things to do from the official tourism board, for Events and Activities. | facts only | no | no |
 | `culturetrip` | `theculturetrip.com` | Culture Trip destination guides (title and link only) for Places to see, Activities and Travel tips; every page times out for our bot, so off. | facts only | no | no |
 | `datatourisme-fr` | `diffuseur.datatourisme.fr` | Every French tourist office's events, restaurants, sights and walking or driving tours in one national feed, for Events, Activities, Places to see and the itinerary. | open | no | yes |
-| `egymonuments` | `egymonuments.gov.eg` | Official opening hours, tickets and descriptions of Egypt's monuments, museums and archaeological sites, for Places to see and Activities. | facts only | no | no |
 | `failte-ireland-od` | `failteireland.developer.azure-api.net` | Every Fáilte Ireland-listed attraction and activity provider in Ireland, for Places to see and Activities. | open | no | yes |
 | `fsa-food-hygiene` | `api.ratings.food.gov.uk` | Official food hygiene ratings of UK restaurants, cafes and takeaways (name, address, rating), for food in Activities. | open | no | no |
 | `germany-kg` | `open-data-germany.org` | Events, sights and tours from German regional tourist boards, for Events, Places to see and Activities. | open | no | yes |
 | `gyg-partner` | `partner.getyourguide.com` | Bookable tours and activities with prices, for the Activities section; needs affiliate approval, so off. | API terms | no | yes |
 | `hel-linkedevents` | `api.hel.fi` | Every public event in Helsinki, Espoo and Vantaa with venue, time and price, for Events and Activities. | open | no | no |
 | `korea-tourapi` | `apis.data.go.kr` | National Korean festivals, restaurants, sights and official travel courses, for Events, Activities, Places to see and the itinerary. | facts only | no | yes |
-| `kws-parks` | `kws.go.ke` | Kenya's national parks and reserves with entry, opening times and activities, for Places to see and Activities. | facts only | no | no |
 | `myswitzerland-open-data` | `opendata.myswitzerland.io` | Swiss sights, experiences and tours as structured data, for Places to see, Activities and the itinerary. | facts only | no | yes |
 | `nps-data-api` | `developer.nps.gov` | US national park things to do, events and tours as structured data, for Activities, Events and the itinerary. | facts only | no | yes |
 | `nyc-restaurant-inspections` | `data.cityofnewyork.us` | Every New York City restaurant with cuisine, address and inspection grade, for food in Activities. | open | no | no |
@@ -183,6 +183,7 @@ is added only with the owner's approval (see CONTRIBUTING.md).
 | `budapestinfo` | `www.budapestinfo.hu` | Budapest's official sights and visitor information, for Places to see. | facts only | yes | no |
 | `common-crawl` | `index.commoncrawl.org` | Index of a public web crawl, used only to discover travel pages (sights, things to do, advice) for Places to see, Activities and Travel tips. | facts only | yes | no |
 | `discoverireland` | `www.discoverireland.ie` | Irish events, things to do, food experiences and road trips, for Events, Activities, the itinerary and Places to see. | facts only | yes | no |
+| `egymonuments` | `egymonuments.gov.eg` | Official opening hours, tickets and descriptions of Egypt's monuments, museums and archaeological sites, for Places to see and Activities. | facts only | yes | no |
 | `enwiki-dump` | `dumps.wikimedia.org` | Facts from English Wikipedia: places, airport destination tables, emergency numbers and plug and voltage types, for Places to see, Flights, the Emergency card and the Packing list. | share-alike | yes | no |
 | `experienceoman` | `experienceoman.om` | Official Omani destinations, things to do and itineraries, for Places to see, Activities and the itinerary. | facts only | yes | no |
 | `france-fr` | `www.france.fr` | Official French inspiration, itineraries and gastronomy pages, for the itinerary, Places to see and Activities. | facts only | yes | no |
@@ -193,6 +194,7 @@ is added only with the owner's approval (see CONTRIBUTING.md).
 | `holland-com` | `www.holland.com` | Official Dutch destinations and sights, for Places to see. | facts only | yes | no |
 | `iamsterdam` | `www.iamsterdam.com` | Amsterdam's official event agenda and restaurant and venue listings, for Events, Activities and Places to see. | facts only | yes | no |
 | `incredibleindia` | `www.incredibleindia.gov.in` | Official Indian destinations, attractions, festivals and itineraries, for Places to see, the itinerary and Events. | facts only | yes | no |
+| `kws-parks` | `kws.go.ke` | Kenya's national parks and reserves with entry, opening times and activities, for Places to see and Activities. | facts only | yes | no |
 | `liveriga` | `www.liveriga.com` | Riga's official tourism portal: sights, things to do, events and visitor advice, for Places to see, Activities, Events and Travel tips. | facts only | yes | no |
 | `lonelyplanet-sitemaps` | `www.lonelyplanet.com` | Lonely Planet destination articles for Places to see and Travel tips (headline, link and a short excerpt only). | facts only | yes | no |
 | `mathallen-oslo` | `mathallenoslo.no` | Vendors, opening hours and visitor information for the Mathallen food hall in Oslo, for Places to see and Activities. | facts only | yes | no |
@@ -249,11 +251,9 @@ is added only with the owner's approval (see CONTRIBUTING.md).
 | `culturetrip` | `theculturetrip.com` | Culture Trip destination guides (title and link only) for Places to see, Activities and Travel tips; every page times out for our bot, so off. | facts only | no | no |
 | `datagovhk` | `data.gov.hk` | Official opening hours and admission of Hong Kong museums and attractions, plus cultural programmes and major events, for Places to see and Events. | open | no | no |
 | `datatourisme-fr` | `diffuseur.datatourisme.fr` | Every French tourist office's events, restaurants, sights and walking or driving tours in one national feed, for Events, Activities, Places to see and the itinerary. | open | no | yes |
-| `egymonuments` | `egymonuments.gov.eg` | Official opening hours, tickets and descriptions of Egypt's monuments, museums and archaeological sites, for Places to see and Activities. | facts only | no | no |
 | `failte-ireland-od` | `failteireland.developer.azure-api.net` | Every Fáilte Ireland-listed attraction and activity provider in Ireland, for Places to see and Activities. | open | no | yes |
 | `germany-kg` | `open-data-germany.org` | Events, sights and tours from German regional tourist boards, for Events, Places to see and Activities. | open | no | yes |
 | `korea-tourapi` | `apis.data.go.kr` | National Korean festivals, restaurants, sights and official travel courses, for Events, Activities, Places to see and the itinerary. | facts only | no | yes |
-| `kws-parks` | `kws.go.ke` | Kenya's national parks and reserves with entry, opening times and activities, for Places to see and Activities. | facts only | no | no |
 | `messynessychic` | `www.messynessychic.com` | Off-the-beaten-path curiosities and hidden places worldwide (headline, link and a short excerpt only), for Places to see. | facts only | no | no |
 | `myswitzerland-open-data` | `opendata.myswitzerland.io` | Swiss sights, experiences and tours as structured data, for Places to see, Activities and the itinerary. | facts only | no | yes |
 | `philippines-travel` | `philippines.travel` | Official Philippine destinations and activities, for Places to see and Activities. | facts only | no | no |
@@ -430,6 +430,7 @@ is added only with the owner's approval (see CONTRIBUTING.md).
 | `fcdo-content-api` | `www.gov.uk` | Official UK travel advice per country (entry rules, safety, local laws, emergency numbers) for Visa, Emergency card and Travel tips. | open | yes | no |
 | `govuk-customs` | `www.gov.uk` | UK duty-free allowances, the 10,000 pound cash rule, banned meat and dairy and pet entry rules, for Travel tips and Packing. | open | yes | no |
 | `hk-customs-travellers` | `www.customs.gov.hk` | Hong Kong duty-free concessions for alcohol and tobacco and the HK$120,000 cash declaration, for Travel tips and Packing. | facts only | yes | no |
+| `icp-uae-customs` | `icp.gov.ae` | UAE federal customs rules for travellers (allowances, cash declaration, banned and restricted items), for Travel tips and Packing. | facts only | yes | no |
 | `japan-customs-passengers` | `www.customs.go.jp` | Japan's duty-free allowances, prohibited items and the one-million-yen cash declaration, for Travel tips and Packing. | open | yes | no |
 | `japan-maff-aqs` | `www.maff.go.jp` | Rules and bans for bringing pets, meat and sausages into Japan, for Travel tips and Packing. | open | yes | no |
 | `korea-customs-travellers` | `www.customs.go.kr` | Korea's USD 800 duty-free allowance, alcohol and tobacco limits and prohibited items, for Travel tips and Packing. | facts only | yes | no |
@@ -468,7 +469,6 @@ is added only with the owner's approval (see CONTRIBUTING.md).
 | `culturetrip` | `theculturetrip.com` | Culture Trip destination guides (title and link only) for Places to see, Activities and Travel tips; every page times out for our bot, so off. | facts only | no | no |
 | `dubai-customs-passengers` | `www.dubaicustoms.gov.ae` | UAE duty-free allowances and banned items (medicines, e-cigarettes), for Travel tips and Packing. | facts only | no | no |
 | `eu-customs-travellers` | `taxation-customs.ec.europa.eu` | EU duty-free allowances for alcohol and tobacco, the 10,000 euro cash declaration and banned counterfeit goods, for Travel tips and Packing. | open | no | no |
-| `icp-uae-customs` | `icp.gov.ae` | UAE federal customs rules for travellers (allowances, cash declaration, banned and restricted items), for Travel tips and Packing. | facts only | no | no |
 | `ricksteves-forum` | `community.ricksteves.com` | Traveller questions and answers about trips in Europe, for Travel tips; v1 uses only the Stack Exchange dump, so off. | facts only | no | no |
 | `se-api` | `api.stackexchange.com` | Travel Stack Exchange questions and answers for Travel tips; v1 uses the data dump instead, so off. | share-alike | no | no |
 | `state-dept-country-info` | `cadataapi.state.gov` | Official US country information (entry, exit and visa requirements, embassy and consulate contacts, health, local laws), for Visa, the Emergency card and Travel tips. | open | no | no |
@@ -555,6 +555,7 @@ is added only with the owner's approval (see CONTRIBUTING.md).
 | `eu-youreurope-travel` | `europa.eu` | EU duty-free allowances for alcohol, tobacco and cash, and the rules for food, pets and luggage when entering the EU, for Travel tips and Packing. | open | yes | no |
 | `govuk-customs` | `www.gov.uk` | UK duty-free allowances, the 10,000 pound cash rule, banned meat and dairy and pet entry rules, for Travel tips and Packing. | open | yes | no |
 | `hk-customs-travellers` | `www.customs.gov.hk` | Hong Kong duty-free concessions for alcohol and tobacco and the HK$120,000 cash declaration, for Travel tips and Packing. | facts only | yes | no |
+| `icp-uae-customs` | `icp.gov.ae` | UAE federal customs rules for travellers (allowances, cash declaration, banned and restricted items), for Travel tips and Packing. | facts only | yes | no |
 | `japan-customs-passengers` | `www.customs.go.jp` | Japan's duty-free allowances, prohibited items and the one-million-yen cash declaration, for Travel tips and Packing. | open | yes | no |
 | `japan-maff-aqs` | `www.maff.go.jp` | Rules and bans for bringing pets, meat and sausages into Japan, for Travel tips and Packing. | open | yes | no |
 | `korea-customs-travellers` | `www.customs.go.kr` | Korea's USD 800 duty-free allowance, alcohol and tobacco limits and prohibited items, for Travel tips and Packing. | facts only | yes | no |
@@ -564,7 +565,6 @@ is added only with the owner's approval (see CONTRIBUTING.md).
 | `wikivoyage-dump` | `dumps.wikimedia.org` | Wikivoyage destination guides (sights, things to do, where to stay, getting around, SIM and tips) for those app sections. | share-alike | yes | no |
 | `dubai-customs-passengers` | `www.dubaicustoms.gov.ae` | UAE duty-free allowances and banned items (medicines, e-cigarettes), for Travel tips and Packing. | facts only | no | no |
 | `eu-customs-travellers` | `taxation-customs.ec.europa.eu` | EU duty-free allowances for alcohol and tobacco, the 10,000 euro cash declaration and banned counterfeit goods, for Travel tips and Packing. | open | no | no |
-| `icp-uae-customs` | `icp.gov.ae` | UAE federal customs rules for travellers (allowances, cash declaration, banned and restricted items), for Travel tips and Packing. | facts only | no | no |
 | `who-ith` | `www.who.int` | WHO health advice for travellers (vaccines, health risks) for Travel tips and the Packing list; licence restricted, so off. | restricted | no | no |
 
 ## Itinerary

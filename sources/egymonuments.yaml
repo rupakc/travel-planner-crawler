@@ -31,7 +31,7 @@ cadence: weekly
 min_delay_s: 5
 daily_budget: 200
 politeness_key: null
-enabled: false
+enabled: true
 needs_key: false
 key_secret: null
 max_retention_days: null
@@ -39,8 +39,7 @@ display_requirements: null
 notes: 'Official monuments, museums and archaeological sites (opening hours, tickets), the alternative
   to experienceegypt.eg (robots.txt 403). robots.txt (2026-11-18): 200, sitemaps only, no rules (allowed);
   the English sitemap answered 200 (133 monuments, 25 museums, 35 archaeological sites, 90 events). Only
-  a privacy policy found, no terms of use. | Disabled: terms not yet confirmed: only a privacy policy
-  found on egymonuments.gov.eg (2026-11-18); robots.txt allows us'
+  a privacy policy found, no terms of use. Terms unconfirmed; owner accepted for non-commercial use 2026-11-18.'
 relevance:
   sections:
   - places

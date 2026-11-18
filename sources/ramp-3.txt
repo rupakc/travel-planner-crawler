@@ -103,6 +103,10 @@ twopassportspacked-scams   # tips: Two Passports Packed common travel scams, see
 safetravel-nz              # tips/emergency_card: NZ MFAT SafeTravel advice + embassy per country (sitemap, open licence CC BY 4.0, daily, <= 300/day)
 eu-youreurope-travel       # tips/packing: Your Europe: EU allowances when travelling (html, open licence CC BY 4.0, monthly, <= 50/day, delay 10 s)
 revenue-ie-travellers      # tips/packing: Revenue (Ireland): duty-free allowances (html, open licence CC BY 4.0, monthly, <= 50/day)
+# Terms not found; owner accepted for non-commercial use 2026-11-18
+icp-uae-customs            # UAE federal customs: traveller allowances
+egymonuments               # Egypt monuments, museums and sites
+kws-parks                  # Kenya Wildlife Service parks
 
 # --- ramp-3: open-data adapters (2026-11-18) ---
 openholidays               # events/tips: public + school holidays per country, this year and next (OpenHolidays API, ODbL share_alike, monthly, ~73 requests/month); openholidays adapter -> public_holiday

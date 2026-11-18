@@ -3205,7 +3205,7 @@ seeds:
     notes: 'Federal UAE customs authority, the alternative to dubai-customs-passengers (challenge,
       2026-11-18). robots.txt (2026-11-18): 200, * disallows only WordPress admin, search, tag, category and
       tracking-parameter URLs; sitemap answered 200 with no challenge. No terms-of-use page found
-      (/en/terms-and-conditions/ is 404).'
+      (/en/terms-and-conditions/ is 404). Terms unconfirmed; owner accepted for non-commercial use 2026-11-18.'
   - id: egymonuments
     category: places
     name: Egypt Ministry of Tourism and Antiquities (egymonuments.gov.eg)
@@ -3218,7 +3218,7 @@ seeds:
     notes: 'Official monuments, museums and archaeological sites (opening hours, tickets), the alternative
       to experienceegypt.eg (robots.txt 403). robots.txt (2026-11-18): 200, sitemaps only, no rules
       (allowed); the English sitemap answered 200 (133 monuments, 25 museums, 35 archaeological sites, 90
-      events). Only a privacy policy found, no terms of use.'
+      events). Only a privacy policy found, no terms of use. Terms unconfirmed; owner accepted for non-commercial use 2026-11-18.'
   - id: kws-parks
     category: places
     name: Kenya Wildlife Service national parks
@@ -3230,7 +3230,7 @@ seeds:
     allowed: true
     notes: 'Official national parks and reserves (entry, opening, activities), the alternative to
       magicalkenya.com (sitemap 403). robots.txt of kws.go.ke (2026-11-18): 200, * disallows only
-      /wp-admin/; the sitemap index answered 200 and lists a park sitemap. No terms of use found.'
+      /wp-admin/; the sitemap index answered 200 and lists a park sitemap. No terms of use found. Terms unconfirmed; owner accepted for non-commercial use 2026-11-18.'
   - id: dirco-sa
     category: emergency_card
     name: South Africa DIRCO (missions abroad, consular services, visa notes)

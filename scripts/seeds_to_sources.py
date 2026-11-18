@@ -1280,7 +1280,7 @@ _src(
     include=['^https://www\\.dubaicustoms\\.gov\\.ae/(?:en/)'],
     off=('bot wall: https://www.dubaicustoms.gov.ae/en/ served a challenge page to VoyagerBot in '
          'production on 2026-11-18. Do not retry another way; dubaicustoms.gov.ae is denylisted. '
-         'UAE allowances: icp-uae-customs (federal customs) once its terms are confirmed.'),
+         'UAE allowances: icp-uae-customs (federal customs).'),
 )
 _src(
     'cbic-baggage',
@@ -2383,7 +2383,6 @@ _src(
     llm=['tip', 'packing_hint'],
     depth=1,
     budget=100,
-    off='terms not yet confirmed: no terms-of-use page found on icp.gov.ae (2026-11-18); robots.txt allows us',
 )
 _src(
     'egymonuments',
@@ -2396,7 +2395,6 @@ _src(
     depth=1,
     budget=200,
     include=[r'^https://egymonuments\.gov\.eg/en/(?:monuments|museums|archaeological-sites|sunken-monuments|events)/'],
-    off='terms not yet confirmed: only a privacy policy found on egymonuments.gov.eg (2026-11-18); robots.txt allows us',
 )
 _src(
     'kws-parks',
@@ -2408,7 +2406,6 @@ _src(
     llm=['attraction', 'activity'],
     depth=1,
     budget=100,
-    off='terms not yet confirmed: no terms of use found on kws.go.ke (2026-11-18); robots.txt allows us',
 )
 _src(
     'dirco-sa',
