@@ -29,15 +29,15 @@ cadence: monthly
 min_delay_s: 5
 daily_budget: 100
 politeness_key: null
-enabled: false
+enabled: true
 needs_key: false
 key_secret: null
 max_retention_days: null
 display_requirements: null
 notes: 'Official national parks and reserves (entry, opening, activities), the alternative to magicalkenya.com
   (sitemap 403). robots.txt of kws.go.ke (2026-11-18): 200, * disallows only /wp-admin/; the sitemap index
-  answered 200 and lists a park sitemap. No terms of use found. | Disabled: terms not yet confirmed: no
-  terms of use found on kws.go.ke (2026-11-18); robots.txt allows us'
+  answered 200 and lists a park sitemap. No terms of use found. Terms unconfirmed; owner accepted for
+  non-commercial use 2026-11-18.'
 relevance:
   sections:
   - places

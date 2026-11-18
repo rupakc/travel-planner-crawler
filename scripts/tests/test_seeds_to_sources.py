@@ -498,12 +498,25 @@ def test_production_bot_walls_2026_11_18_are_off_and_out_of_every_ramp(generated
 # Alternatives to sites that refused or challenged VoyagerBot (vetted 2026-11-18).
 ALTERNATIVES_ON = {"safetravel-nz", "eu-youreurope-travel", "revenue-ie-travellers"}
 ALTERNATIVES_OFF = {
-    "icp-uae-customs": "terms not yet confirmed", "egymonuments": "terms not yet confirmed",
-    "kws-parks": "terms not yet confirmed", "dirco-sa": "owner decision",
+    "dirco-sa": "owner decision",
     "capetown-gov": "owner decision", "state-dept-country-info": "adapter pending",
     "fsa-food-hygiene": "adapter pending", "nyc-restaurant-inspections": "adapter pending",
     "toronto-dinesafe": "adapter pending",
 }
+
+
+# Terms not found; the owner accepted them for non-commercial use on 2026-11-18.
+ACCEPTED_2026_11_18 = ("icp-uae-customs", "egymonuments", "kws-parks")
+
+
+def test_terms_unconfirmed_sources_accepted_2026_11_18(generated):
+    for sid in ACCEPTED_2026_11_18:
+        spec = generated[sid]
+        assert spec["enabled"] is True and spec["licence"]["class"] == "facts_only", sid
+        notes = " ".join(spec["notes"].split())
+        assert "owner accepted for non-commercial use 2026-11-18" in notes, sid
+        assert "Disabled:" not in notes, sid
+        assert sid in _ramp("ramp-2.txt") and sid in _ramp("ramp-3.txt"), sid
 
 
 def test_alternatives_2026_11_18(generated):

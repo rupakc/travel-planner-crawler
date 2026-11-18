@@ -39,7 +39,7 @@ notes: 'robots ok (allows /en/, /ar/, /Pages/*.aspx). Disclaimer page JavaScript
   page is JavaScript-only. Terms unconfirmed; owner accepted for non-commercial use 2026-11-17. | Disabled:
   bot wall: https://www.dubaicustoms.gov.ae/en/ served a challenge page to VoyagerBot in production on
   2026-11-18. Do not retry another way; dubaicustoms.gov.ae is denylisted. UAE allowances: icp-uae-customs
-  (federal customs) once its terms are confirmed.'
+  (federal customs).'
 relevance:
   sections:
   - tips
