@@ -1,0 +1,52 @@
+[
+ {
+  ":id": "row-uimj~smzj-x67b",
+  "facility_name": "Ben Abrams Playground",
+  "location_type": "Park",
+  "operator": "NYC Parks",
+  "hours_of_operation": "8am-4pm, Open later seasonally",
+  "accessibility": "Fully Accessible",
+  "latitude": "40.854380",
+  "longitude": "-73.869700"
+ },
+ {
+  ":id": "row-vqmg-zc37~n8hu",
+  "facility_name": "Brady Playground",
+  "location_type": "Park",
+  "operator": "NYC Parks",
+  "hours_of_operation": "8am-4pm, Open later seasonally",
+  "accessibility": "Fully Accessible",
+  "latitude": "40.851430",
+  "longitude": "-73.868600"
+ },
+ {
+  ":id": "row-xce7.ikg2-9prd",
+  "facility_name": "Waring Playground",
+  "location_type": "Park",
+  "operator": "NYC Parks",
+  "hours_of_operation": "8am-4pm, Open later seasonally",
+  "accessibility": "Fully Accessible",
+  "latitude": "40.860620",
+  "longitude": "-73.871200"
+ },
+ {
+  ":id": "row-rrfw~hi8z_8fzc",
+  "facility_name": "River Park",
+  "location_type": "Park",
+  "operator": "NYC Parks",
+  "hours_of_operation": "8am-4pm, Open later seasonally",
+  "accessibility": "Fully Accessible",
+  "latitude": "40.843170",
+  "longitude": "-73.877300"
+ },
+ {
+  ":id": "row-v4fy-bnqd.bfv8",
+  "facility_name": "Rosewood Playground",
+  "location_type": "Park",
+  "operator": "NYC Parks",
+  "hours_of_operation": "8am-4pm, Open later seasonally",
+  "accessibility": "Fully Accessible",
+  "latitude": "40.872980",
+  "longitude": "-73.871100"
+ }
+]

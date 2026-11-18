@@ -1,0 +1,13 @@
+{
+  "name": "Bürkliplatz (nicht rollstuhlgängig)",
+  "amenity_type": "toilet",
+  "description": "WC-Anlage mit Personal. Nachts geschlossen. Gebührenfrei.",
+  "address": "Bürkliplatz 1",
+  "city": "Zurich",
+  "country": "Switzerland",
+  "country_code": "CH",
+  "lat": 47.36665,
+  "lng": 8.540655,
+  "opening_hours": "Ganzjährig 6.30-21.45 Uhr geöffnet. Im Winter nur bis 20.45 Uhr.",
+  "wheelchair_accessible": false
+}

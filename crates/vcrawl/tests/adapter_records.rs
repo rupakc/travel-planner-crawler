@@ -741,3 +741,125 @@ async fn country_info_and_food_registers_reach_the_index_with_their_licence() {
         "Contains public sector information licensed under the Open Government Licence v3.0 — Food Standards Agency"
     );
 }
+
+/// The generic open-data readers (2026-11-18): (source, adapter, URL, recorded fixture, dump?).
+const OPEN_DATA_READERS: &[(&str, &str, &str, &str, bool)] = &[
+    (
+        "od-chicago-food-inspections",
+        "socrata",
+        "https://data.cityofchicago.org/resource/4ijn-s7e5.json?%24limit=2000&%24offset=0",
+        "socrata_chicago_food_inspections.json",
+        false,
+    ),
+    (
+        "od-austin-food-inspections",
+        "socrata",
+        "https://data.austintexas.gov/resource/ecmv-9xxi.json?%24limit=2000&%24offset=0",
+        "socrata_austin_food_inspections.json",
+        false,
+    ),
+    (
+        "od-catalonia-tourism-register",
+        "socrata",
+        "https://analisi.transparenciacatalunya.cat/resource/t2h3-cgys.json?%24limit=2000&%24offset=0",
+        "socrata_catalonia_tourism_register.json",
+        false,
+    ),
+    (
+        "od-nyc-public-restrooms",
+        "socrata",
+        "https://data.cityofnewyork.us/resource/i7jb-7jku.json?%24limit=2000&%24offset=0",
+        "socrata_nyc_public_restrooms.json",
+        false,
+    ),
+    (
+        "od-fr-atout-france-classes",
+        "udata_resource",
+        "https://data.classement.atout-france.fr/static/exportHebergementsClasses/hebergements_classes.csv",
+        "udata_atout_france_classes.csv",
+        true,
+    ),
+    (
+        "od-wien-ogd",
+        "wfs_geojson",
+        "https://data.wien.gv.at/daten/geo?service=WFS&request=GetFeature&version=1.1.0&typeName=ogdwien:WCANLAGEOGD&srsName=EPSG:4326&outputFormat=json",
+        "wfs_wien_toilets.json",
+        false,
+    ),
+    (
+        "od-wien-ogd",
+        "wfs_geojson",
+        "https://data.wien.gv.at/daten/geo?service=WFS&request=GetFeature&version=1.1.0&typeName=ogdwien:SEHENSWUERDIGOGD&srsName=EPSG:4326&outputFormat=json",
+        "wfs_wien_sights.json",
+        false,
+    ),
+    (
+        "od-zuerich-ogd",
+        "wfs_geojson",
+        "https://www.ogd.stadt-zuerich.ch/wfs/geoportal/Zueri_WC?service=WFS&version=1.1.0&request=GetFeature&typename=poi_zueriwc_rs_view&outputFormat=GeoJSON&srsName=EPSG:4326",
+        "wfs_zuerich_wc_rs.json",
+        false,
+    ),
+];
+
+#[test]
+fn open_data_reader_records_fit_their_schemas() {
+    let r = root();
+    let reg = vc_kinds::FileKindRegistry::load(&vc_config::KindsConfig {
+        kinds_toml: r.join("kinds.toml").display().to_string(),
+        schemas_dir: r.join("schemas").display().to_string(),
+        prompts_dir: r.join("prompts").display().to_string(),
+    })
+    .expect("kind registry");
+    for (_, adapter, url, file, _) in OPEN_DATA_READERS {
+        let u = vc_core::CanonicalUrl::parse(url).unwrap();
+        let items = vc_sources::adapters::records::records(adapter, &u, &recorded(file))
+            .expect("mapped")
+            .expect("fixture maps");
+        assert!(!items.is_empty(), "{file}: no records");
+        for it in items {
+            if let Err(e) = reg.validate(&vc_core::KindId::new(it.kind), &it.data) {
+                panic!("{file}: {} does not fit: {e:?}\n{:#}", it.kind, it.data);
+            }
+        }
+    }
+}
+
+#[tokio::test]
+async fn open_data_readers_reach_the_index_with_their_licence() {
+    let r = rig_real(false).await;
+    let mut ids: Vec<&str> = OPEN_DATA_READERS.iter().map(|c| c.0).collect();
+    ids.dedup();
+    seed_real(&r.pool, &ids).await;
+    for (source, adapter, url, file, is_dump) in OPEN_DATA_READERS {
+        let body = text(file);
+        let cap = if *is_dump {
+            dump(url, source, adapter, MediaType::Csv, &body)
+        } else {
+            api(url, source, adapter, MediaType::Json, &body)
+        };
+        let o = run(&r, cap).await;
+        assert_processed(&o);
+    }
+    for (kind, source, want, licence) in [
+        ("restaurant", "od-chicago-food-inspections", 2, "open"),
+        ("restaurant", "od-austin-food-inspections", 5, "open"),
+        ("hotel", "od-catalonia-tourism-register", 7, "facts_only"),
+        ("amenity", "od-nyc-public-restrooms", 5, "open"),
+        ("hotel", "od-fr-atout-france-classes", 7, "open"),
+        ("amenity", "od-wien-ogd", 2, "open"),
+        ("attraction", "od-wien-ogd", 3, "open"),
+        ("amenity", "od-zuerich-ogd", 1, "open"),
+    ] {
+        let rs = records_of(&r, kind, source).await;
+        assert_eq!(rs.len(), want, "{kind} {source}: {rs:?}");
+        let a = attributions(&r, kind, source).await;
+        assert_eq!(a.len(), 1, "{source}");
+        assert_eq!(a[0].0, licence, "{source}");
+        assert!(!a[0].1.is_empty(), "{source}");
+    }
+    assert_eq!(
+        attributions(&r, "amenity", "od-wien-ogd").await[0].1,
+        "Datenquelle: Stadt Wien – data.wien.gv.at, CC BY 4.0"
+    );
+}

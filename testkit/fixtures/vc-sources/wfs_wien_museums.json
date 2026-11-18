@@ -1,0 +1,55 @@
+{
+ "type": "FeatureCollection",
+ "features": [
+  {
+   "type": "Feature",
+   "id": "MUSEUMOGD.142817",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     16.38812686,
+     48.16235095
+    ]
+   },
+   "geometry_name": "SHAPE",
+   "properties": {
+    "NAME": "FK Austria Wien Museum",
+    "BEZIRK": 10,
+    "ADRESSE": "10., Horrplatz 1",
+    "WEITERE_INF": "http://www.fk-austria.at",
+    "SE_SDO_ROWID": 142817,
+    "SE_ANNO_CAD_DATA": null
+   }
+  },
+  {
+   "type": "Feature",
+   "id": "MUSEUMOGD.142818",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     16.401452,
+     48.26194507
+    ]
+   },
+   "geometry_name": "SHAPE",
+   "properties": {
+    "NAME": "Marktamtsmuseum",
+    "BEZIRK": 21,
+    "ADRESSE": "21., Floridsdorfer Markt 5",
+    "WEITERE_INF": "https://www.wien.gv.at/freizeit/einkaufen/maerkte/geschichte/marktamtsmuseum.html",
+    "SE_SDO_ROWID": 142818,
+    "SE_ANNO_CAD_DATA": null
+   }
+  }
+ ],
+ "totalFeatures": 2,
+ "numberMatched": 2,
+ "numberReturned": 2,
+ "timeStamp": "2026-11-18T11:08:15.716Z",
+ "crs": {
+  "type": "name",
+  "properties": {
+   "name": "urn:ogc:def:crs:EPSG::4326"
+  }
+ }
+}

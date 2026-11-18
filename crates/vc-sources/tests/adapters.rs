@@ -1452,8 +1452,8 @@ fn registry_lists_every_adapter_once() {
     let mut sorted = ids.clone();
     sorted.sort();
     sorted.dedup();
-    assert_eq!(sorted.len(), 26);
-    assert_eq!(ids.len(), 26);
+    assert_eq!(sorted.len(), 29);
+    assert_eq!(ids.len(), 29);
     for id in &ids {
         assert_eq!(adapters::get(id).unwrap().id(), *id);
     }

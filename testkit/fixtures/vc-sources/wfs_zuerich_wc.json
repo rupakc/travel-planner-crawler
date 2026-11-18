@@ -1,0 +1,79 @@
+{
+ "type": "FeatureCollection",
+ "bbox": [
+  8.477432,
+  47.337619,
+  8.586061,
+  47.41593
+ ],
+ "features": [
+  {
+   "geometry": {
+    "coordinates": [
+     8.540655,
+     47.36665
+    ],
+    "type": "Point"
+   },
+   "id": "poi_zueriwc_view.1",
+   "properties": {
+    "adr_inter": "",
+    "adresse": "Bürkliplatz 1",
+    "adrzus_int": "",
+    "behindertenparkplatz": "0",
+    "bemerkung": "WC-Anlage mit Personal. Nachts geschlossen. Gebührenfrei.<BR>Nächstes offenes WC beim Bürklisteg ZSG",
+    "da": "Umwelt- und Gesundheitsschutz",
+    "datum": "202511061639",
+    "datum_cms": null,
+    "dep": "Gesundheits- und Umweltdepartement (GUD)",
+    "erforderlichedokumente": "",
+    "gebuehren": "Gebührenfrei",
+    "geometrie_gdo": null,
+    "hausnummer": "1",
+    "hindernisfreiheit": "0__",
+    "infrastruktur": ";NULL",
+    "isbetriebsferien_gebaeude": "1",
+    "isbetriebsferien_schalter": "0",
+    "kategorie": "WC (nicht rollstuhlgängig)",
+    "kommentar": "Bediente Anlage.",
+    "kreis": 1,
+    "name": "Bürkliplatz (nicht rollstuhlgängig)",
+    "namenzus": "",
+    "objectid": 1,
+    "oeffnungsz": "Ganzjährig 6.30-21.45 Uhr geöffnet. Im Winter nur bis 20.45 Uhr.",
+    "oeffnungszeiten_gebaeude_di": "n.a.",
+    "oeffnungszeiten_gebaeude_do": "n.a.",
+    "oeffnungszeiten_gebaeude_fr": "n.a.",
+    "oeffnungszeiten_gebaeude_mi": "n.a.",
+    "oeffnungszeiten_gebaeude_mo": "n.a.",
+    "oeffnungszeiten_gebaeude_sa": "n.a.",
+    "oeffnungszeiten_gebaeude_so": "n.a.",
+    "oeffnungszeiten_schalter_di": "n.a.",
+    "oeffnungszeiten_schalter_do": "n.a.",
+    "oeffnungszeiten_schalter_fr": "n.a.",
+    "oeffnungszeiten_schalter_mi": "n.a.",
+    "oeffnungszeiten_schalter_mo": "n.a.",
+    "oeffnungszeiten_schalter_sa": "n.a.",
+    "oeffnungszeiten_schalter_so": "n.a.",
+    "ort": "Zürich",
+    "plz": "8001",
+    "poi_id": "wc004",
+    "postadresse": "",
+    "publish_internet": "1",
+    "standort": "Ecke Bahnhofstrasse/Bürkliplatz 1",
+    "strasse": "Bürkliplatz",
+    "suchen": "Toilette, Toiletten",
+    "tel": "+41 44 412 43 65",
+    "tel2": "",
+    "typ": "nicht rollstuhlgängig",
+    "www": "https://www.stadt-zuerich.ch/zueriwc",
+    "zahlungsmittel_internet": "NULL;NULL;",
+    "zahlungsmittel_schalter": "NULL;NULL;",
+    "zahlungsmittel_telefon": "NULL;NULL;",
+    "zvv_label": "Bürkliplatz 1",
+    "zvv_link": "https://www.zvv.ch/de/fahrplan-und-informationen/fahrplan.html?tolat=47.3666463163075&tolon=8.5406544932702&toname=Zürich, Bürkliplatz 1"
+   },
+   "type": "Feature"
+  }
+ ]
+}

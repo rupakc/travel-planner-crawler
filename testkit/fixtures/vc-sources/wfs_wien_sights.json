@@ -1,0 +1,75 @@
+{
+ "type": "FeatureCollection",
+ "features": [
+  {
+   "type": "Feature",
+   "id": "SEHENSWUERDIGOGD.643934",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     16.37367575,
+     48.21076056
+    ]
+   },
+   "geometry_name": "SHAPE",
+   "properties": {
+    "OBJECTID": 643934,
+    "NAME": "Ankeruhr",
+    "ADRESSE": "Hoher Markt 10/",
+    "WEITERE_INF": "http://www.wien.info/article.asp?IDArticle=2018",
+    "THUMBNAIL": "https://www.wien.gv.at/viennagis/bubble/ankeruhr.jpg",
+    "SE_ANNO_CAD_DATA": null
+   }
+  },
+  {
+   "type": "Feature",
+   "id": "SEHENSWUERDIGOGD.643935",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     16.40167012,
+     48.18297383
+    ]
+   },
+   "geometry_name": "SHAPE",
+   "properties": {
+    "OBJECTID": 643935,
+    "NAME": "Friedhof St. Marx",
+    "ADRESSE": "Leberstraße 6-8",
+    "WEITERE_INF": "http://www.wien.gv.at/umwelt/parks/anlagen/friedhof-st-marx.html",
+    "THUMBNAIL": "https://www.wien.gv.at/viennagis/bubble/stmarx.jpg",
+    "SE_ANNO_CAD_DATA": null
+   }
+  },
+  {
+   "type": "Feature",
+   "id": "SEHENSWUERDIGOGD.643936",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     16.29126013,
+     48.2128717
+    ]
+   },
+   "geometry_name": "SHAPE",
+   "properties": {
+    "OBJECTID": 643936,
+    "NAME": "Kuffner-Sternwarte",
+    "ADRESSE": "Johann-Staud- Straße 10",
+    "WEITERE_INF": "http://www.kuffner.ac.at",
+    "THUMBNAIL": "https://www.wien.gv.at/viennagis/bubble/sternwarte.jpg",
+    "SE_ANNO_CAD_DATA": null
+   }
+  }
+ ],
+ "totalFeatures": 3,
+ "numberMatched": 3,
+ "numberReturned": 3,
+ "timeStamp": "2026-11-18T11:08:04.718Z",
+ "crs": {
+  "type": "name",
+  "properties": {
+   "name": "urn:ogc:def:crs:EPSG::4326"
+  }
+ }
+}

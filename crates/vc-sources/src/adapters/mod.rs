@@ -48,13 +48,17 @@ pub mod openholidays;
 pub mod ourairports_csv;
 pub mod phone;
 pub mod records;
+pub mod row_map;
 pub mod se_travel_dump;
+pub mod socrata;
 pub mod state_dept_advisories;
 pub mod state_dept_country_info;
 pub mod ticketmaster_discovery;
 pub mod toronto_dinesafe;
 pub mod travelpayouts_fares;
+pub mod udata_resource;
 pub mod wdi_csv;
+pub mod wfs_geojson;
 pub mod wikidata_sparql;
 pub mod wikivoyage_dump;
 
@@ -80,12 +84,15 @@ pub static REGISTRY: &[&dyn SourceAdapter] = &[
     &openholidays::OpenHolidays,
     &ourairports_csv::OurAirportsCsv::DEFAULT,
     &se_travel_dump::SeTravelDump::DEFAULT,
+    &socrata::Socrata::DEFAULT,
     &state_dept_advisories::StateDeptAdvisories,
     &state_dept_country_info::StateDeptCountryInfo,
     &ticketmaster_discovery::TicketmasterDiscovery::DEFAULT,
     &toronto_dinesafe::TorontoDinesafe::DEFAULT,
     &travelpayouts_fares::TravelpayoutsFares::DEFAULT,
+    &udata_resource::UdataResource::DEFAULT,
     &wdi_csv::WdiCsv::DEFAULT,
+    &wfs_geojson::WfsGeojson,
     &wikidata_sparql::WikidataSparql::DEFAULT,
     &wikivoyage_dump::WikivoyageDump::DEFAULT,
 ];
@@ -112,6 +119,7 @@ pub fn resumable() -> Vec<Arc<dyn ResumableAdapter>> {
         Arc::new(fsa_fhrs::FsaFhrs::DEFAULT),
         Arc::new(json_events::JsonEvents::DEFAULT),
         Arc::new(nyc_restaurant_inspections::NycRestaurantInspections::DEFAULT),
+        Arc::new(socrata::Socrata::DEFAULT),
         Arc::new(ticketmaster_discovery::TicketmasterDiscovery::DEFAULT),
         Arc::new(toronto_dinesafe::TorontoDinesafe::DEFAULT),
         Arc::new(wikidata_sparql::WikidataSparql::DEFAULT),
@@ -170,12 +178,15 @@ pub fn registry_with(cfg: &vc_config::SourcesConfig) -> Vec<Box<dyn SourceAdapte
         Box::new(openholidays::OpenHolidays),
         Box::new(ourairports_csv::OurAirportsCsv::new(d.clone())),
         Box::new(se_travel_dump::SeTravelDump::new(d.clone())),
+        Box::new(socrata::Socrata::DEFAULT),
         Box::new(state_dept_advisories::StateDeptAdvisories),
         Box::new(state_dept_country_info::StateDeptCountryInfo),
         Box::new(ticketmaster_discovery::TicketmasterDiscovery::DEFAULT),
         Box::new(toronto_dinesafe::TorontoDinesafe::DEFAULT),
         Box::new(travelpayouts_fares::TravelpayoutsFares::DEFAULT),
+        Box::new(udata_resource::UdataResource::new(d.clone())),
         Box::new(wdi_csv::WdiCsv::new(d.clone())),
+        Box::new(wfs_geojson::WfsGeojson),
         Box::new(wikidata_sparql::WikidataSparql::DEFAULT),
         Box::new(wikivoyage_dump::WikivoyageDump::new(d)),
     ]

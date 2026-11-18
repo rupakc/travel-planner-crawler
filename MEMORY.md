@@ -258,3 +258,17 @@ plan = `docs/superpowers/plans/2026-11-15-voyager-crawler.md`, r1–r5 = `docs/r
   14 provisional no-response hosts (re-test from the crawler VM), 4 open-data portals, BCRA and
   Banxico (adapter/key), 3 general-news feeds (relevance). SAG Chile on as share_alike
   (CC BY-NC-SA 3.0 CL, kept separate). aruba.com, chilango.com, serviciomigraciones.cl denylisted.
+- 2026-11-18: generic, mapping-driven open-data readers instead of one adapter per dataset:
+  `socrata` (SODA `$select`/`$where`/`$order` paging, optional group-aligned latest-row-per-key),
+  `udata_resource` (data.gouv.fr/data.public.lu dataset API → current file, followed only on the
+  source's own sites; CSV streamed in the dump window) and `wfs_geojson` (city WFS point layers);
+  per-dataset `RowMapping` tables (`adapters/row_map.rs`). New adapter-only kind `amenity`
+  (public toilets, drinking water, free Wi-Fi; official only). 7 sources on (ramp-3): Chicago
+  and Austin food inspections, Catalonia tourism register (no holiday flats, owner columns never
+  requested; facts only, terms unread), NYC public restrooms, Atout France classified
+  accommodation, Vienna OGD, Züri WC. Off with reason: SF scores (frozen since 2021), LA County
+  and NZ DOC (ArcGIS Hub downloads fail or redirect to services1.arcgis.com, robots 403; no
+  arcgis_hub reader), HK FEHD (licence register, no hygiene result), EEA bathing water (already present off; table
+  unconfirmed, catalogue query 403), sg-hawker-centres (signed S3 URL on another site). No CKAN
+  reader: no vetted dataset needs one. (crates/vc-sources/src/adapters/{socrata,udata_resource,
+  wfs_geojson,row_map}.rs, schemas/amenity.v1.json, scripts/seeds_to_sources.py)

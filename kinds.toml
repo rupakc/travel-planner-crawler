@@ -178,3 +178,13 @@ version = 1
 storage = "record"
 source_classes = ["official"]
 verbatim = ["/hygiene/rating", "/hygiene/rating_date", "/phone", "/source_url", "/as_of", "/evidence/*"]
+
+# Added 2026-11-18 (generic open-data readers: public toilets, drinking water, free Wi-Fi).
+# Adapter-only: the socrata and wfs_geojson mappings map city registers; no source lists it as
+# an llm_kind.
+
+[kinds.amenity]
+version = 1
+storage = "record"
+source_classes = ["official"]
+verbatim = ["/phone", "/info_url", "/source_url", "/as_of", "/evidence/*"]

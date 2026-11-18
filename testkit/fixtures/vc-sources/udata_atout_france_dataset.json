@@ -1,0 +1,19 @@
+{
+ "id": "59c36c6a88ee3826d5998a35",
+ "slug": "hebergements-touristiques-classes-en-france",
+ "title": "Hébergements touristiques classés en France",
+ "license": "fr-lo",
+ "frequency": "daily",
+ "last_update": "2026-11-17T05:00:04+00:00",
+ "resources": [
+  {
+   "id": "3ce290bf-07ec-4d63-b12b-d0496193a535",
+   "title": "Listes des hébergements collectifs classés en France",
+   "format": "csv",
+   "type": "main",
+   "url": "https://data.classement.atout-france.fr/static/exportHebergementsClasses/hebergements_classes.csv",
+   "last_modified": "2026-11-17T05:00:04+00:00",
+   "filetype": "remote"
+  }
+ ]
+}

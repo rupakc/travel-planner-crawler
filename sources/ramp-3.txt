@@ -604,3 +604,12 @@ toronto-dinesafe           # activities: Toronto DineSafe latest inspection stat
 
 # --- ramp-3: North America open-data events (2026-11-18) ---
 od-chicago-events          # events: Chicago Public Library events dated today or later (City of Chicago open data, open, daily, <= 50/day); json_events adapter -> event
+
+# --- ramp-3: generic open-data readers (2026-11-18) ---
+od-chicago-food-inspections   # activities: Chicago latest inspection result per licence, last 3 years (City of Chicago terms, weekly, 2000 rows/page, 5/run, resumes); socrata -> restaurant
+od-austin-food-inspections    # activities: Austin latest inspection score per facility, last 3 years (public domain, weekly, ~10 pages); socrata -> restaurant
+od-catalonia-tourism-register # hotels: Catalonia's registered hotels, hostals, rural houses, apartment blocks, campsites; no holiday flats, no owner columns (facts only, monthly, ~4 pages); socrata -> hotel
+od-nyc-public-restrooms       # tips/getting_around: NYC public restrooms with hours and access (NYC Open Data, monthly, 1 page); socrata -> amenity
+od-fr-atout-france-classes    # hotels: every classified hotel/campsite/residence in France with stars (Licence Ouverte, weekly, dataset API + one 3.7 MB CSV in the dump window); udata_resource -> hotel
+od-wien-ogd                   # places/tips: Vienna sights, museums, public toilets, free Wi-Fi (CC BY 4.0, monthly, 4 WFS requests); wfs_geojson -> attraction, amenity
+od-zuerich-ogd                # tips: Züri WC public toilets (CC0, monthly, 2 WFS requests); wfs_geojson -> amenity

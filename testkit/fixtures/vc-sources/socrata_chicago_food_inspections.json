@@ -1,0 +1,86 @@
+[
+ {
+  "license_": "149",
+  "dba_name": "FOX'S BEVERLY PUB",
+  "facility_type": "Restaurant",
+  "address": "9956 S WESTERN AVE",
+  "city": "CHICAGO",
+  "zip": "60643",
+  "inspection_date": "2026-07-30T00:00:00.000",
+  "results": "Pass",
+  "latitude": "41.71201213322909",
+  "longitude": "-87.68193540843004"
+ },
+ {
+  "license_": "149",
+  "dba_name": "FOX'S BEVERLY PUB",
+  "facility_type": "Restaurant",
+  "address": "9956 S WESTERN AVE",
+  "city": "CHICAGO",
+  "zip": "60643",
+  "inspection_date": "2025-05-20T00:00:00.000",
+  "results": "Pass",
+  "latitude": "41.71201213322909",
+  "longitude": "-87.68193540843004"
+ },
+ {
+  "license_": "149",
+  "dba_name": "FOX'S BEVERLY PUB",
+  "facility_type": "Restaurant",
+  "address": "9956 S WESTERN AVE ",
+  "city": "CHICAGO",
+  "zip": "60643",
+  "inspection_date": "2024-10-31T00:00:00.000",
+  "results": "Pass",
+  "latitude": "41.71201213322909",
+  "longitude": "-87.68193540843004"
+ },
+ {
+  "license_": "149",
+  "dba_name": "FOX'S BEVERLY PUB",
+  "facility_type": "Restaurant",
+  "address": "9956 S WESTERN AVE ",
+  "city": "CHICAGO",
+  "zip": "60643",
+  "inspection_date": "2024-10-24T00:00:00.000",
+  "results": "Fail",
+  "latitude": "41.71201213322909",
+  "longitude": "-87.68193540843004"
+ },
+ {
+  "license_": "149",
+  "dba_name": "FOX'S BEVERLY PUB",
+  "facility_type": "Restaurant",
+  "address": "9956 S WESTERN AVE",
+  "city": "CHICAGO",
+  "zip": "60643",
+  "inspection_date": "2024-04-19T00:00:00.000",
+  "results": "Pass",
+  "latitude": "41.71201213322909",
+  "longitude": "-87.68193540843004"
+ },
+ {
+  "license_": "207",
+  "dba_name": "RIVER SHANNON",
+  "facility_type": "Restaurant",
+  "address": "425 W ARMITAGE AVE",
+  "city": "CHICAGO",
+  "zip": "60614",
+  "inspection_date": "2024-12-18T00:00:00.000",
+  "results": "Pass",
+  "latitude": "41.91819778647383",
+  "longitude": "-87.63974737355731"
+ },
+ {
+  "license_": "207",
+  "dba_name": "RIVER SHANNON",
+  "facility_type": "Restaurant",
+  "address": "425 W ARMITAGE AVE",
+  "city": "CHICAGO",
+  "zip": "60614",
+  "inspection_date": "2024-12-06T00:00:00.000",
+  "results": "Fail",
+  "latitude": "41.91819778647383",
+  "longitude": "-87.63974737355731"
+ }
+]
