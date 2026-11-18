@@ -1,0 +1,135 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/rupakc/travel-planner-crawler/schemas/medical_facility.v1.json",
+  "title": "Medical facility",
+  "description": "One record: one hospital, clinic or doctor from an official government list of medical facilities for travellers in one country, with the list's own title, link and updated date (lists can be years old; show their age). Voyager use: emergency_card (hospitals).",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "name": {
+      "type": "string",
+      "maxLength": 200,
+      "description": "Facility or practitioner name as written."
+    },
+    "country": {
+      "type": "string",
+      "maxLength": 80,
+      "description": "Country in English (e.g. \"Japan\"). Required whenever `city` is set."
+    },
+    "country_code": {
+      "type": "string",
+      "maxLength": 2,
+      "description": "ISO 3166-1 alpha-2 country code of `country`.",
+      "pattern": "^[A-Z]{2}$"
+    },
+    "city": {
+      "type": "string",
+      "maxLength": 120,
+      "description": "City in English, only when the list states it. Always paired with `country`."
+    },
+    "section": {
+      "type": "string",
+      "maxLength": 200,
+      "description": "The list section the entry appears under, as written (often a city, region or specialty)."
+    },
+    "specialty": {
+      "type": "string",
+      "maxLength": 200,
+      "description": "Specialty or services as written."
+    },
+    "address": {
+      "type": "string",
+      "maxLength": 400,
+      "description": "Address as written."
+    },
+    "phones": {
+      "type": "array",
+      "maxItems": 6,
+      "description": "Phone numbers, each exactly as written plus E.164 when it is unambiguous.",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "number": {
+            "type": "string",
+            "maxLength": 64,
+            "description": "The number exactly as written."
+          },
+          "e164": {
+            "type": "string",
+            "maxLength": 16,
+            "pattern": "^\\+[1-9][0-9]{7,14}$",
+            "description": "E.164 form, only when the written number is already in international form (never derived from a local number)."
+          }
+        },
+        "required": [
+          "number"
+        ]
+      }
+    },
+    "emails": {
+      "type": "array",
+      "maxItems": 3,
+      "description": "Email addresses as written.",
+      "items": {
+        "type": "string",
+        "maxLength": 254,
+        "pattern": "^[^@\\s]+@[^@\\s]+$"
+      }
+    },
+    "website_url": {
+      "type": "string",
+      "maxLength": 2048,
+      "description": "The facility's website, as linked by the list.",
+      "pattern": "^https?://[^\\s]+$"
+    },
+    "list_title": {
+      "type": "string",
+      "maxLength": 200,
+      "description": "Title of the list the entry comes from."
+    },
+    "list_url": {
+      "type": "string",
+      "maxLength": 2048,
+      "description": "The list's own page.",
+      "pattern": "^https?://[^\\s]+$"
+    },
+    "list_updated": {
+      "type": "string",
+      "maxLength": 10,
+      "description": "The date the list itself was last updated (YYYY-MM-DD).",
+      "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$"
+    },
+    "issuer": {
+      "type": "string",
+      "maxLength": 120,
+      "description": "The government body that publishes the list."
+    },
+    "source_url": {
+      "type": "string",
+      "maxLength": 2048,
+      "description": "The page's own link for this item (official site, booking or detail page), copied verbatim from the page.",
+      "pattern": "^https?://[^\\s]+$"
+    },
+    "as_of": {
+      "type": "string",
+      "maxLength": 10,
+      "description": "The \"last updated\", \"valid from\" or publication date the page itself states for this information (YYYY-MM-DD).",
+      "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$"
+    },
+    "evidence": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "maxLength": 300,
+        "description": "A verbatim quote from the page."
+      },
+      "maxItems": 3,
+      "description": "Up to 3 short verbatim quotes from the page that support the most important facts."
+    }
+  },
+  "required": [
+    "name",
+    "country"
+  ]
+}

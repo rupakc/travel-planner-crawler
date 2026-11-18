@@ -1,0 +1,505 @@
+{
+ "metadata": {
+  "generated": {
+   "timestamp": 1794933607,
+   "date": "2026-11-17 11:40:07"
+  }
+ },
+ "data": {
+  "900": {
+   "country": {
+    "country-id": 900,
+    "country-iso": "PT-20",
+    "eng": {
+     "name": "Azores"
+    },
+    "fra": {
+     "name": "Açores"
+    },
+    "offices-help-abroad": {
+     "eng": {
+      "opening-text": "",
+      "closing-text": "<p></p>"
+     },
+     "fra": {
+      "opening-text": "",
+      "closing-text": ""
+     }
+    }
+   },
+   "offices": [
+    {
+     "office-id": "",
+     "country-iso": "PT-20",
+     "lat": "37.74243612",
+     "lng": "-25.66861987",
+     "honorary-consul": 1,
+     "is-partner": "",
+     "has-passport-services": 0,
+     "eng": {
+      "country": "Azores",
+      "city": "Ponta Delgada",
+      "type": "Honorary consul of Canada",
+      "address": "Rua D’Agua, 28, 9500-040 Ponta Delgada, São Miguel, Azores, Portugal",
+      "postal-address": "",
+      "tel-legacy": "+351 296 281 488",
+      "emergency-toll-free-legacy": "",
+      "fax-legacy": null,
+      "email-1": "lsbon.consular@international.gc.ca",
+      "email-2": "",
+      "email-3": "",
+      "internet": "https://www.international.gc.ca/country-pays/portugal/ponta_delgada.aspx?lang=eng",
+      "note-1-title": "Office hours:",
+      "note-1-text": "Monday–Friday, 9:00 a.m.–12:30 p.m. and 2–4 p.m.",
+      "note-2-title": "Consular services",
+      "note-2-text": "This office is headed by an Honorary Consul of Canada and does not provide all consular services.<Br>For more information, contact the Embassy of Canada to Portugal.",
+      "note-3-title": "",
+      "note-3-text": "",
+      "facebook": "https://www.facebook.com/CanadainPortugal",
+      "facebook-label": "Embassy of Canada to Portugal",
+      "twitter": null,
+      "twitter-label": null
+     },
+     "fra": {
+      "country": "A&ccedil;ores",
+      "city": "Ponta Delgada",
+      "type": "Consul honoraire du Canada",
+      "address": "Rua D’Agua, 28, 9500-040 Ponta Delgada, São Miguel, Azores, Portugal",
+      "postal-address": "",
+      "tel-legacy": "+351 296 281 488",
+      "emergency-toll-free-legacy": "",
+      "fax-legacy": null,
+      "email-1": "lsbon.consular@international.gc.ca",
+      "email-2": "",
+      "email-3": "",
+      "internet": "https://www.international.gc.ca/country-pays/portugal/ponta_delgada.aspx?lang=fra",
+      "note-1-title": "Heures d’ouverture :",
+      "note-1-text": "Lundi au vendredi, de 9 h 00 à 12 h 30 et de 14 h à 16 h",
+      "note-2-title": "Services consulaires",
+      "note-2-text": "Ce bureau est dirigé par un(e) consul(e) honoraire du Canada et n’offre pas tous les services consulaires.<Br>Pour obtenir de plus amples renseignements, communiquez avec l'ambassade du Canada au Portugal.",
+      "note-3-title": "",
+      "note-3-text": "",
+      "facebook": "https://www.facebook.com/CanadaauPortugal",
+      "facebook-label": "Ambassade du Canada au Portugal",
+      "twitter": null,
+      "twitter-label": null
+     }
+    },
+    {
+     "office-id": "",
+     "country-iso": "PT-20",
+     "lat": "38.72104",
+     "lng": "-9.1458",
+     "honorary-consul": 0,
+     "is-partner": "",
+     "has-passport-services": 1,
+     "eng": {
+      "country": "Azores",
+      "city": "Lisbon",
+      "type": "Embassy of Canada",
+      "address": "Avenida da Liberdade 196-200, 3rd Floor, 1269-121 Lisbon, Portugal",
+      "postal-address": "",
+      "tel-legacy": "+351 21 316 4600",
+      "emergency-toll-free-legacy": "",
+      "fax-legacy": "+351 21 316 4693",
+      "email-1": "lsbon.consular@international.gc.ca",
+      "email-2": "",
+      "email-3": "",
+      "internet": "https://www.international.gc.ca/country-pays/portugal/lisbon-lisbonne.aspx?lang=eng",
+      "note-1-title": "",
+      "note-1-text": "",
+      "note-2-title": "",
+      "note-2-text": "",
+      "note-3-title": "",
+      "note-3-text": "",
+      "facebook": "https://www.facebook.com/CanadainPortugal/",
+      "facebook-label": "Embassy of Canada to Portugal",
+      "twitter": null,
+      "twitter-label": null
+     },
+     "fra": {
+      "country": "A&ccedil;ores",
+      "city": "Lisbonne",
+      "type": "Ambassade du Canada",
+      "address": "Avenida da Liberdade 196-200, 3e étage, 1269-121 Lisbonne, Portugal",
+      "postal-address": "",
+      "tel-legacy": "+351 21 316 4600",
+      "emergency-toll-free-legacy": "",
+      "fax-legacy": "+351 21 316 4693",
+      "email-1": "lsbon.consulaire@international.gc.ca",
+      "email-2": "",
+      "email-3": "",
+      "internet": "https://www.international.gc.ca/country-pays/portugal/lisbon-lisbonne.aspx?lang=fra",
+      "note-1-title": "",
+      "note-1-text": "",
+      "note-2-title": "",
+      "note-2-text": "",
+      "note-3-title": "",
+      "note-3-text": "",
+      "facebook": "https://www.facebook.com/CanadaauPortugal/",
+      "facebook-label": "Ambassade du Canada au Portugal",
+      "twitter": null,
+      "twitter-label": null
+     }
+    }
+   ]
+  },
+  "53000": {
+   "country": {
+    "country-id": 53000,
+    "country-iso": "TD",
+    "eng": {
+     "name": "Chad"
+    },
+    "fra": {
+     "name": "Tchad"
+    },
+    "offices-help-abroad": {
+     "eng": {
+      "opening-text": "",
+      "closing-text": ""
+     },
+     "fra": {
+      "opening-text": "",
+      "closing-text": ""
+     }
+    }
+   },
+   "offices": [
+    {
+     "office-id": "",
+     "country-iso": "TD",
+     "lat": "12.128516081677644",
+     "lng": "15.04773578317526",
+     "honorary-consul": 1,
+     "is-partner": "",
+     "has-passport-services": 0,
+     "eng": {
+      "country": "Chad",
+      "city": "N'Djamena",
+      "type": "Honorary consul of Canada",
+      "address": "3602 Ngarta Tombalbaye Avenue (in front of the 2 castles), Door 586, N'Djamena, Chad",
+      "postal-address": "P.O. Box 36, N'Djamena, Chad",
+      "tel-legacy": "(235) 22-51-33-34/(235) 66-23-73-89 (Cell)/(235) 66-93-52-60 (Ass't)",
+      "emergency-toll-free-legacy": "",
+      "fax-legacy": null,
+      "email-1": "mabroukkf@yahoo.com",
+      "email-2": "",
+      "email-3": "",
+      "internet": "https://www.international.gc.ca/country-pays/chad-tchad/ndjamena.aspx?lang=eng",
+      "note-1-title": "Consular services",
+      "note-1-text": "This office is headed by an Honorary Consul of Canada and does not provide all consular services.<Br>For more information, contact the High Commission of Canada to Cameroon.",
+      "note-2-title": "",
+      "note-2-text": "",
+      "note-3-title": "",
+      "note-3-text": "",
+      "facebook": "https://www.facebook.com/CanadainCameroon",
+      "facebook-label": "High Commission of Canada to Cameroon",
+      "twitter": "https://x.com/CanadaCameroon",
+      "twitter-label": "Canada in Cameroon"
+     },
+     "fra": {
+      "country": "Tchad",
+      "city": "N'Djamena",
+      "type": "Consul honoraire du Canada",
+      "address": "3602, avenue Ngarta Tombalbaye (en face des 2 châteaux), Porte 586, N'Djamena, Chad",
+      "postal-address": "C.P. 36, N'Djamena, Tchad",
+      "tel-legacy": "(235) 22-51-33-34/(235) 66-23-73-89 (Cell)/(235) 66-93-52-60 (Ass't)",
+      "emergency-toll-free-legacy": "",
+      "fax-legacy": null,
+      "email-1": "mabroukkf@yahoo.com",
+      "email-2": "",
+      "email-3": "",
+      "internet": "https://www.international.gc.ca/country-pays/chad-tchad/ndjamena.aspx?lang=fra",
+      "note-1-title": "Services consulaires",
+      "note-1-text": "Ce bureau est dirigé par un(e) consul(e) honoraire du Canada et n’offre pas tous les services consulaires.<Br>Pour obtenir de plus amples renseignements, communiquez avec le Haut-commissariat du Canada à au Cameroun.",
+      "note-2-title": "",
+      "note-2-text": "",
+      "note-3-title": "",
+      "note-3-text": "",
+      "facebook": "https://www.facebook.com/CanadaauCameroun",
+      "facebook-label": "Haut-commissariat du Canada au Cameroun",
+      "twitter": "https://x.com/CanadaCameroun",
+      "twitter-label": "Canada au Cameroun"
+     }
+    },
+    {
+     "office-id": "",
+     "country-iso": "TD",
+     "lat": "3.899112",
+     "lng": "11.5104",
+     "honorary-consul": 0,
+     "is-partner": "",
+     "has-passport-services": 0,
+     "eng": {
+      "country": "Chad",
+      "city": "Yaoundé",
+      "type": "High Commission of Canada",
+      "address": "607 Street 1792, \"Les Colonnades\" Building, New Bastos, Yaoundé, Cameroon",
+      "postal-address": "P.O. Box 572, Yaoundé, Cameroon",
+      "tel-legacy": null,
+      "emergency-toll-free-legacy": "",
+      "fax-legacy": null,
+      "email-1": "yunde-consul@international.gc.ca",
+      "email-2": "",
+      "email-3": "",
+      "internet": "https://www.international.gc.ca/country-pays/cameroon-cameroun/yaounde.aspx?lang=eng",
+      "note-1-title": "",
+      "note-1-text": "",
+      "note-2-title": "",
+      "note-2-text": "",
+      "note-3-title": "",
+      "note-3-text": "",
+      "facebook": "https://www.facebook.com/CanadainCameroon",
+      "facebook-label": "High Commission of Canada to Cameroon",
+      "twitter": "https://x.com/CanadaCameroon",
+      "twitter-label": "Canada in Cameroon"
+     },
+     "fra": {
+      "country": "Tchad",
+      "city": "Yaoundé",
+      "type": "Haut-commissariat du Canada",
+      "address": "607, rue 1792, Immeuble « Les Colonnades », Nouveau Bastos, Yaoundé, Cameroon",
+      "postal-address": "C.P. 572, Yaoundé, Cameroun",
+      "tel-legacy": null,
+      "emergency-toll-free-legacy": "",
+      "fax-legacy": null,
+      "email-1": "yunde-consul@international.gc.ca",
+      "email-2": "",
+      "email-3": "",
+      "internet": "https://www.international.gc.ca/country-pays/cameroon-cameroun/yaounde.aspx?lang=fra",
+      "note-1-title": "",
+      "note-1-text": "",
+      "note-2-title": "",
+      "note-2-text": "",
+      "note-3-title": "",
+      "note-3-text": "",
+      "facebook": "https://www.facebook.com/CanadaauCameroun",
+      "facebook-label": "Haut-commissariat du Canada au Cameroun",
+      "twitter": "https://x.com/CanadaCameroun",
+      "twitter-label": "Canada au Cameroun"
+     }
+    }
+   ]
+  },
+  "96000": {
+   "country": {
+    "country-id": 96000,
+    "country-iso": "GM",
+    "eng": {
+     "name": "Gambia, The"
+    },
+    "fra": {
+     "name": "Gambie"
+    },
+    "offices-help-abroad": {
+     "eng": {
+      "opening-text": "",
+      "closing-text": ""
+     },
+     "fra": {
+      "opening-text": "",
+      "closing-text": ""
+     }
+    }
+   },
+   "offices": [
+    {
+     "office-id": "",
+     "country-iso": "GM",
+     "lat": "13.475469",
+     "lng": "-16.691038",
+     "honorary-consul": 0,
+     "is-partner": "",
+     "has-passport-services": 0,
+     "eng": {
+      "country": "Gambia, The",
+      "city": "Banjul",
+      "type": "British Embassy",
+      "address": "48 Atlantic Road, Fajara, Banjul, The Gambia",
+      "postal-address": "P.O. Box 507, Banjul, The Gambia",
+      "tel-legacy": "+44 1908 51 6666",
+      "emergency-toll-free-legacy": "",
+      "fax-legacy": null,
+      "email-1": null,
+      "email-2": "",
+      "email-3": "",
+      "internet": "https://www.international.gc.ca/country-pays/gambia-gambie/banjul.aspx?lang=eng",
+      "note-1-title": "",
+      "note-1-text": "",
+      "note-2-title": "",
+      "note-2-text": "",
+      "note-3-title": "",
+      "note-3-text": "",
+      "facebook": "https://www.facebook.com/canadainsenegal/",
+      "facebook-label": "Embassy of Canada to Senegal",
+      "twitter": "https://twitter.com/CanEmbSenegal",
+      "twitter-label": "Canada in Senegal"
+     },
+     "fra": {
+      "country": "Gambie",
+      "city": "Banjul",
+      "type": "Ambassade du Royaume-Uni",
+      "address": "48 Atlantic Road, Fajara, Banjul, Gambie",
+      "postal-address": "C.P. 507, Banjul, Gambie",
+      "tel-legacy": "+44 1908 51 6666",
+      "emergency-toll-free-legacy": "",
+      "fax-legacy": null,
+      "email-1": null,
+      "email-2": "",
+      "email-3": "",
+      "internet": "https://www.international.gc.ca/country-pays/gambia-gambie/banjul.aspx?lang=fra",
+      "note-1-title": "",
+      "note-1-text": "",
+      "note-2-title": "",
+      "note-2-text": "",
+      "note-3-title": "",
+      "note-3-text": "",
+      "facebook": "https://www.facebook.com/CanadaauSenegal/",
+      "facebook-label": "Ambassade du Canada au Sénégal",
+      "twitter": "https://twitter.com/AmbCanSenegal",
+      "twitter-label": "Canada au Sénégal"
+     }
+    },
+    {
+     "office-id": "",
+     "country-iso": "GM",
+     "lat": "14.661546",
+     "lng": "-17.437567",
+     "honorary-consul": 0,
+     "is-partner": "",
+     "has-passport-services": 0,
+     "eng": {
+      "country": "Gambia, The",
+      "city": "Dakar",
+      "type": "Embassy of Canada",
+      "address": "Corner of Galliéni and Amadou Cissé Dia Streets, Dakar, Senegal",
+      "postal-address": "P.O. Box 3373, Dakar, Senegal",
+      "tel-legacy": "+221 33 889 4749",
+      "emergency-toll-free-legacy": "",
+      "fax-legacy": "+221 33 889 4740",
+      "email-1": "dakar-consular@international.gc.ca",
+      "email-2": "",
+      "email-3": "",
+      "internet": "https://www.international.gc.ca/country-pays/senegal/dakar.aspx?lang=eng",
+      "note-1-title": "",
+      "note-1-text": "",
+      "note-2-title": "",
+      "note-2-text": "",
+      "note-3-title": "",
+      "note-3-text": "",
+      "facebook": "https://www.facebook.com/canadainsenegal/",
+      "facebook-label": "Embassy of Canada to Senegal",
+      "twitter": "https://x.com/CanEmbSenegal",
+      "twitter-label": "@CanEmbSenegal"
+     },
+     "fra": {
+      "country": "Gambie",
+      "city": "Dakar",
+      "type": "Ambassade du Canada",
+      "address": "Au coin des rues Galliéni et Amadou Cissé Dia, Dakar, Sénégal.",
+      "postal-address": "C.P. 3373, Dakar, Sénégal",
+      "tel-legacy": "+221 33 889 4749",
+      "emergency-toll-free-legacy": "",
+      "fax-legacy": "+221 33 889 4740",
+      "email-1": "dakar-consulaire@international.gc.ca",
+      "email-2": "",
+      "email-3": "",
+      "internet": "https://www.international.gc.ca/country-pays/senegal/dakar.aspx?lang=fra",
+      "note-1-title": "",
+      "note-1-text": "",
+      "note-2-title": "",
+      "note-2-text": "",
+      "note-3-title": "",
+      "note-3-text": "",
+      "facebook": "https://www.facebook.com/CanadaauSenegal/",
+      "facebook-label": "Ambassade du Canada au Sénégal",
+      "twitter": "https://x.com/AmbCanSenegal",
+      "twitter-label": "@AmbCanSenegal"
+     }
+    }
+   ]
+  },
+  "120000": {
+   "country": {
+    "country-id": 120000,
+    "country-iso": "HK",
+    "eng": {
+     "name": "Hong Kong"
+    },
+    "fra": {
+     "name": "Hong Kong"
+    },
+    "offices-help-abroad": {
+     "eng": {
+      "opening-text": "",
+      "closing-text": ""
+     },
+     "fra": {
+      "opening-text": "",
+      "closing-text": ""
+     }
+    }
+   },
+   "offices": [
+    {
+     "office-id": "",
+     "country-iso": "HK",
+     "lat": "22.287647",
+     "lng": "114.213278",
+     "honorary-consul": 0,
+     "is-partner": "",
+     "has-passport-services": 1,
+     "eng": {
+      "country": "Hong Kong",
+      "city": "Hong Kong",
+      "type": "Consulate General of Canada",
+      "address": "9th Floor, Berkshire House, 25 Westlands Road, Quarry Bay, Hong Kong",
+      "postal-address": "9th Floor, Berkshire House, 25 Westlands Road, Quarry Bay, Hong Kong",
+      "tel-legacy": "(852) 3719 4700 (this line is not for immigration/visa; ce numéro n'est pas pour l'immigration/visa)",
+      "emergency-toll-free-legacy": "",
+      "fax-legacy": "(852) 2847 7561",
+      "email-1": "hkongcanadaconsul@international.gc.ca",
+      "email-2": "",
+      "email-3": "",
+      "internet": "https://www.international.gc.ca/country-pays/hong_kong/hong_kong.aspx?lang=eng",
+      "note-1-title": "",
+      "note-1-text": "",
+      "note-2-title": "",
+      "note-2-text": "",
+      "note-3-title": "",
+      "note-3-text": "",
+      "facebook": "https://www.facebook.com/CanadainHKandMacao",
+      "facebook-label": "Consulate General of Canada in Hong Kong and Macao",
+      "twitter": "https://x.com/CanCGHongKong",
+      "twitter-label": "@CanCGHongKong"
+     },
+     "fra": {
+      "country": "Hong Kong",
+      "city": "Hong Kong",
+      "type": "Consulat général du Canada",
+      "address": "9e étage, Berkshire House, 25, chemin Westlands, Quarry Bay, Hong Kong",
+      "postal-address": "9e étage, Berkshire House, 25, chemin Westlands, Quarry Bay, Hong Kong",
+      "tel-legacy": "(852) 3719 4700 (this line is not for immigration/visa; ce numéro n'est pas pour l'immigration/visa)",
+      "emergency-toll-free-legacy": "",
+      "fax-legacy": "(852) 2847 7561",
+      "email-1": "hkongcanadaconsul@international.gc.ca",
+      "email-2": "",
+      "email-3": "",
+      "internet": "https://www.international.gc.ca/country-pays/hong_kong/hong_kong.aspx?lang=fra",
+      "note-1-title": "",
+      "note-1-text": "",
+      "note-2-title": "",
+      "note-2-text": "",
+      "note-3-title": "",
+      "note-3-text": "",
+      "facebook": "https://www.facebook.com/CanadaaHKetMacao",
+      "facebook-label": "Consulat général du Canada à Hong Kong et Macao",
+      "twitter": "https://x.com/CGCanHongKong",
+      "twitter-label": "@CGCanHongKong"
+     }
+    }
+   ]
+  }
+ }
+}

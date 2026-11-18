@@ -40,6 +40,8 @@ KINDS = {
     "cheapest_fare",  # observation series fare:<ORIG>:<DEST>:<YYYY-MM> (added 2026-11-17)
     "public_holiday", "price_level",  # added 2026-11-18 with the open-data adapters
     "transit_item",
+    # 2026-11-18: adapter-only kinds for official embassy/medical lists and Wikipedia visa tables.
+    "embassy", "medical_facility", "visa_reference",
 }
 
 
@@ -383,6 +385,11 @@ ADAPTERS = {
     "eurostat-prices": "eurostat_jsonstat",
     "worldbank-wdi-bulk": "wdi_csv",
     **{sid: "gtfs_static" for sid in GTFS_FEEDS},
+    # 2026-11-18: official embassy and medical lists, Wikipedia visa tables.
+    "govuk-world-orgs": "govuk_world_orgs",
+    "canada-offices-json": "canada_offices",
+    "govuk-medical-lists": "govuk_medical_lists",
+    "enwiki-visa-requirements": "enwiki_visa",
 }
 
 # Template URLs in seeds.yaml -> a concrete, fetchable entry URL (template kept in notes).
@@ -394,6 +401,12 @@ SEED_URL_OVERRIDE = {
     # CKAN permalinks / resources: the zip itself (the dataset page stays in the notes).
     "opentransportdata-swiss": "https://data.opentransportdata.swiss/dataset/timetable-2026-gtfs2020/permalink",
     "vic-gtfs": "https://opendata.transport.vic.gov.au/dataset/3f4e292e-7f8a-4ffe-831f-1953be0fe448/resource/8af7737c-5c9e-4022-aa98-911aa04370a7/download/gtfs.zip",
+    # The multistream index: the adapter filters it to the visa articles' streams and fetches
+    # only those (one Range request each), never the 27 GB dump.
+    "enwiki-visa-requirements": (
+        "https://dumps.wikimedia.org/enwiki/latest/"
+        "enwiki-latest-pages-articles-multistream-index.txt.bz2"
+    ),
 }
 
 TIMEOUT_AI = (
@@ -1118,8 +1131,9 @@ _src(
     ['visa'],
     'About 199 passport-by-destination tables (visa-free, eVisa, visa on arrival, days) used only to cross-check official visa rules in the Visa section.',
     cls='reference',
-    kinds=[],
-    off="adapter pending: enwiki dump extractor for the 'Visa requirements for X citizens' tables (reference class cannot yield visa_rule; cross-check only)",
+    # Reference class cannot yield visa_rule: cross-check records of their own kind.
+    kinds=['visa_reference'],
+    budget=400,
     attribution='Text from Wikipedia contributors, CC BY-SA 4.0',
 )
 _src(
@@ -1308,8 +1322,8 @@ _src(
     ['emergency_card'],
     'Official British embassy, high-commission and consulate addresses, phones and hours in every country, for the Emergency card.',
     cls='official',
-    kinds=['emergency_numbers'],
-    off='adapter pending: GOV.UK search + Content API walker for worldwide organisations (411 offices)',
+    kinds=['embassy'],
+    budget=500,
     delay=10,
 )
 _src(
@@ -1317,8 +1331,9 @@ _src(
     ['emergency_card'],
     "Official UK lists of English-speaking hospitals, clinics and doctors per country, for the Emergency card's hospitals.",
     cls='official',
-    kinds=['place'],
-    off='adapter pending: GOV.UK Content API collection walker (collection, then per-country publications and HTML attachments); hospitals map to the place kind until a medical_facility kind exists',
+    # Facilities from HTML lists; one link-level article per country list (with its date).
+    kinds=['medical_facility', 'article'],
+    budget=400,
     delay=10,
 )
 _src(
@@ -1326,8 +1341,7 @@ _src(
     ['emergency_card'],
     'Official Canadian embassy and consulate addresses, phones and office hours in every country, for the Emergency card.',
     cls='official',
-    kinds=['emergency_numbers'],
-    off='adapter pending: offices JSON reader (one list; map to emergency_numbers.embassies)',
+    kinds=['embassy'],
 )
 _src(
     'mfat-embassies',

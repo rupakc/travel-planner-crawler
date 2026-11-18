@@ -38,18 +38,21 @@ pub use policy::{HIGH_STAKES_KINDS, MIN_REFERENCE_AGREEMENT, OFFICIAL_ONLY_KINDS
 pub use schema_lint::DRAFT_2020_12;
 
 /// The entity kinds of v1 (spec §5.7: 19; plus `cheapest_fare` from 2026-11-17 and
-/// `price_level`, `public_holiday`, `transit_item` from 2026-11-18), sorted.
-pub const V1_KINDS: [&str; 23] = [
+/// `price_level`, `public_holiday`, `transit_item`, `embassy`, `medical_facility`,
+/// `visa_reference` from 2026-11-18), sorted.
+pub const V1_KINDS: [&str; 26] = [
     "activity",
     "advisory",
     "airport",
     "article",
     "attraction",
     "cheapest_fare",
+    "embassy",
     "emergency_numbers",
     "event",
     "fx_rate",
     "hotel",
+    "medical_facility",
     "packing_hint",
     "place",
     "price_level",
@@ -60,6 +63,7 @@ pub const V1_KINDS: [&str; 23] = [
     "tip",
     "transit_item",
     "transport_option",
+    "visa_reference",
     "visa_rule",
     "walking_tour",
     "weather_normal",

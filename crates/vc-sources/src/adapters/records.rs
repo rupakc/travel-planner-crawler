@@ -22,8 +22,9 @@ use serde_json::{Map, Value, json};
 use vc_core::{CanonicalUrl, Error, Result};
 
 use super::{
-    canada_advisories, ecb_fx, eurostat_jsonstat, fcdo_content_api, iso3, json_events,
-    openholidays, state_dept_advisories, travelpayouts_fares,
+    canada_advisories, canada_offices, countries, ecb_fx, enwiki_visa, eurostat_jsonstat,
+    fcdo_content_api, govuk_medical_lists, govuk_world_orgs, html_text, iso3, json_events,
+    openholidays, phone, state_dept_advisories, travelpayouts_fares,
 };
 
 /// Bumped when a mapping changes (part of the extractor version string of adapter records).
@@ -45,9 +46,13 @@ pub struct AdapterItem {
 /// The adapters that have a record mapping.
 pub const MAPPED: &[&str] = &[
     "canada_advisories",
+    "canada_offices",
     "ecb_fx",
+    "enwiki_visa",
     "eurostat_jsonstat",
     "fcdo_content_api",
+    "govuk_medical_lists",
+    "govuk_world_orgs",
     "json_events",
     "openholidays",
     "gtfs_static",
@@ -63,9 +68,13 @@ pub const MAPPED: &[&str] = &[
 pub fn records(adapter: &str, url: &CanonicalUrl, body: &[u8]) -> Option<Result<Vec<AdapterItem>>> {
     Some(match adapter {
         "canada_advisories" => canada(body),
+        "canada_offices" => canada_offices_records(body),
         "ecb_fx" => ecb(body),
+        "enwiki_visa" => enwiki_visa_records(url, body),
         "eurostat_jsonstat" => eurostat(body),
         "fcdo_content_api" => fcdo(url, body),
+        "govuk_medical_lists" => govuk_medical(url, body),
+        "govuk_world_orgs" => govuk_orgs(url, body),
         "json_events" => json_event_items(url, body),
         "openholidays" => holidays(url, body),
         "gtfs_static" => gtfs(body),
@@ -773,6 +782,491 @@ fn wdi(body: &[u8]) -> Result<Vec<AdapterItem>> {
                     ("publisher", s("World Bank, World Development Indicators")),
                 ],
             ));
+        }
+    }
+    Ok(out)
+}
+
+// ---------------------------------------------------------------------------------------------
+// Embassies and consulates: GOV.UK worldwide organisations, Global Affairs Canada offices
+// ---------------------------------------------------------------------------------------------
+
+/// The `mission_type` of an office title; `None` for offices that give travellers no
+/// consular help (missions to international bodies, delegations, trade offices).
+pub fn mission_type(title: &str) -> Option<&'static str> {
+    let t = title.to_lowercase();
+    if [
+        "permanent mission",
+        "delegation",
+        "mission to",
+        "representation to",
+        "trade office",
+    ]
+    .iter()
+    .any(|w| t.contains(w))
+    {
+        return None;
+    }
+    Some(if t.contains("honorary") {
+        "honorary_consulate"
+    } else if t.contains("consular agency") {
+        "consular_agency"
+    } else if t.contains("consulate general") || t.contains("consulate-general") {
+        "consulate_general"
+    } else if t.contains("deputy high commission") {
+        "other"
+    } else if t.contains("high commission") {
+        "high_commission"
+    } else if t.contains("embassy") {
+        "embassy"
+    } else if t.contains("consulate") || t.contains("consul") {
+        "consulate"
+    } else if t.contains("representative office") || t.contains("office") {
+        "representative_office"
+    } else {
+        "other"
+    })
+}
+
+/// What a labelled phone number is for.
+fn phone_type(label: &str) -> &'static str {
+    let l = label.to_lowercase();
+    if l.contains("fax") {
+        "fax"
+    } else if l.contains("emergenc")
+        || l.contains("24 hour")
+        || l.contains("24/7")
+        || l.contains("out of hours")
+    {
+        "emergency"
+    } else if l.is_empty()
+        || [
+            "telephone",
+            "tel",
+            "phone",
+            "switchboard",
+            "main",
+            "general",
+        ]
+        .iter()
+        .any(|w| l.contains(w))
+    {
+        "main"
+    } else {
+        "other"
+    }
+}
+
+fn phone_items(field: &str, kind: &'static str, label: Option<&str>) -> Vec<Value> {
+    phone::parse(field)
+        .into_iter()
+        .map(|p| {
+            let label = label
+                .map(str::to_string)
+                .filter(|l| !l.trim().is_empty())
+                .or(p.note.clone());
+            obj(vec![
+                ("type", s(kind)),
+                (
+                    "label",
+                    label.filter(|l| l.chars().count() <= 160).and_then(s),
+                ),
+                ("number", s(p.raw)),
+                ("e164", p.e164.map(Value::String)),
+            ])
+        })
+        .collect()
+}
+
+fn web_url(u: Option<&str>) -> Option<Value> {
+    u.map(str::trim)
+        .filter(|u| (u.starts_with("https://") || u.starts_with("http://")) && u.len() <= 2048)
+        .filter(|u| !u.contains(char::is_whitespace))
+        .map(|u| json!(u))
+}
+
+fn emails(list: &[String]) -> Option<Value> {
+    let v: Vec<Value> = list
+        .iter()
+        .map(|m| m.trim())
+        .filter(|m| {
+            m.len() <= 254
+                && m.matches('@').count() == 1
+                && !m.starts_with('@')
+                && !m.ends_with('@')
+                && !m.contains(char::is_whitespace)
+        })
+        .take(3)
+        .map(|m| json!(m))
+        .collect();
+    (!v.is_empty()).then_some(Value::Array(v))
+}
+
+fn short(t: Option<String>, max: usize) -> Option<Value> {
+    t.map(|t| t.trim().to_string())
+        .filter(|t| !t.is_empty() && t.chars().count() <= max)
+        .map(Value::String)
+}
+
+/// A unique id within one capture: repeats get `#2`, `#3`…
+fn unique(seen: &mut HashSet<String>, id: String) -> String {
+    if seen.insert(id.clone()) {
+        return id;
+    }
+    (2..)
+        .map(|n| format!("{id}#{n}"))
+        .find(|c| seen.insert(c.clone()))
+        .unwrap_or(id)
+}
+
+fn govuk_orgs(url: &CanonicalUrl, body: &[u8]) -> Result<Vec<AdapterItem>> {
+    if !url
+        .as_url()
+        .path()
+        .starts_with(govuk_world_orgs::ORG_PREFIX)
+    {
+        return Ok(Vec::new()); // search pages list organisations, they carry no offices
+    }
+    let org = govuk_world_orgs::parse_org(body)?;
+    let mut out = Vec::new();
+    for o in org.offices {
+        let Some(mtype) = mission_type(&o.title) else {
+            continue;
+        };
+        let country = o.country.clone().or_else(|| org.world_location.clone());
+        let Some(country) = country.filter(|c| c.chars().count() <= 80) else {
+            continue;
+        };
+        let code = o
+            .country_code
+            .clone()
+            .filter(|c| countries::name(c).is_some())
+            .or_else(|| countries::iso2(&country).map(str::to_string));
+        let phones: Vec<Value> = o
+            .phones
+            .iter()
+            .flat_map(|p| phone_items(&p.number, phone_type(&p.title), Some(&p.title)))
+            .take(6)
+            .collect();
+        let as_of = o
+            .contact_updated_at
+            .as_deref()
+            .or(o.updated_at.as_deref())
+            .and_then(day);
+        out.push(AdapterItem {
+            kind: "embassy",
+            id: Some(format!("govuk:{}", o.content_id)),
+            series_key: None,
+            data: obj(vec![
+                ("name", short(Some(o.title.clone()), 160)),
+                ("mission_type", s(mtype)),
+                ("of_country", s("United Kingdom")),
+                ("of_country_code", s("GB")),
+                ("country", s(country)),
+                ("country_code", code.map(Value::String)),
+                ("city", short(o.city.clone(), 120)),
+                ("address", short(o.address.clone(), 400)),
+                (
+                    "phones",
+                    (!phones.is_empty()).then_some(Value::Array(phones)),
+                ),
+                ("emails", emails(&o.emails)),
+                ("website_url", web_url(o.web_url.as_deref())),
+                ("contact_form_url", web_url(o.contact_form_url.as_deref())),
+                ("hours", short(o.hours.clone(), 400)),
+                ("source_url", web_url(o.web_url.as_deref())),
+                ("as_of", as_of.map(Value::String)),
+            ]),
+        });
+    }
+    Ok(out)
+}
+
+static OF_COUNTRY_CUT: LazyLock<Regex> =
+    LazyLock::new(|| Regex::new(r"(?i)\s+(?:to|in|at)\s+.*$").expect("regex"));
+
+/// The sending country of a Global Affairs Canada office type ("Embassy of Canada",
+/// "High Commission of Australia", "British Embassy").
+pub fn sending_country(office_type: &str) -> Option<&'static str> {
+    if office_type.to_lowercase().starts_with("british ") {
+        return Some("GB");
+    }
+    office_type.split(" of ").skip(1).find_map(|tail| {
+        let name = OF_COUNTRY_CUT.replace(tail.trim(), "");
+        countries::iso2(&name)
+    })
+}
+
+static HOURS_TITLE: LazyLock<Regex> =
+    LazyLock::new(|| Regex::new(r"(?i)\bhours\b").expect("regex"));
+
+fn canada_offices_records(body: &[u8]) -> Result<Vec<AdapterItem>> {
+    let list = canada_offices::parse(body)?;
+    let as_of = list.generated.as_deref().and_then(day);
+    let mut seen = HashSet::new();
+    let mut out = Vec::new();
+    for o in list.offices {
+        let Some(mtype) = mission_type(&o.office_type) else {
+            continue;
+        };
+        let mtype = if o.honorary {
+            "honorary_consulate"
+        } else {
+            mtype
+        };
+        let Some(of_code) = sending_country(&o.office_type) else {
+            continue; // unknown sending country: never guessed
+        };
+        let (code, region) = match o.list_iso.split_once('-') {
+            Some((c, _)) => (iso2(c), Some(o.list_country.clone())),
+            None => (iso2(&o.list_iso), None),
+        };
+        let Some(code) = code.filter(|c| countries::name(c).is_some()) else {
+            continue;
+        };
+        let country = countries::name(&code)
+            .map(str::to_string)
+            .unwrap_or_else(|| o.list_country.clone());
+        let mut phones = Vec::new();
+        for (field, kind) in [
+            (&o.tel, "main"),
+            (&o.emergency, "emergency"),
+            (&o.fax, "fax"),
+        ] {
+            if let Some(f) = field {
+                phones.extend(phone_items(f, kind, None));
+            }
+        }
+        phones.truncate(6);
+        let mut hours = None;
+        let mut notes = Vec::new();
+        for (title, text) in &o.notes {
+            let body = html_text::one_line(text);
+            if body.is_empty() {
+                continue;
+            }
+            if hours.is_none() && HOURS_TITLE.is_match(title) {
+                hours = Some(body);
+                continue;
+            }
+            let t = html_text::one_line(title);
+            let note = if t.is_empty() {
+                body
+            } else {
+                format!("{}: {body}", t.trim_end_matches(':').trim())
+            };
+            if note.chars().count() <= 400 {
+                notes.push(json!(note));
+            }
+        }
+        notes.truncate(4);
+        let name = match o.city.as_deref() {
+            Some(c) => format!("{} in {c}", o.office_type),
+            None => o.office_type.clone(),
+        };
+        let id = unique(
+            &mut seen,
+            format!(
+                "gac:{}:{}:{}",
+                o.list_iso,
+                countries::fold(o.city.as_deref().unwrap_or_default()),
+                countries::fold(&o.office_type)
+            ),
+        );
+        out.push(AdapterItem {
+            kind: "embassy",
+            id: Some(id),
+            series_key: None,
+            data: obj(vec![
+                ("name", short(Some(name), 160)),
+                ("mission_type", s(mtype)),
+                ("of_country", countries::name(of_code).and_then(s)),
+                ("of_country_code", s(of_code)),
+                ("country", s(country)),
+                ("country_code", s(code)),
+                ("region", short(region, 120)),
+                ("city", short(o.city.clone(), 120)),
+                ("address", short(o.address.clone(), 400)),
+                ("lat", o.lat.map(|v| json!(v))),
+                ("lng", o.lng.map(|v| json!(v))),
+                (
+                    "phones",
+                    (!phones.is_empty()).then_some(Value::Array(phones)),
+                ),
+                ("emails", emails(&o.emails)),
+                ("website_url", web_url(o.website.as_deref())),
+                ("hours", short(hours, 400)),
+                ("passport_services", o.passport_services.map(Value::Bool)),
+                ("notes", (!notes.is_empty()).then_some(Value::Array(notes))),
+                ("source_url", web_url(o.website.as_deref())),
+                ("as_of", as_of.clone().map(Value::String)),
+            ]),
+        });
+    }
+    Ok(out)
+}
+
+// ---------------------------------------------------------------------------------------------
+// FCDO medical lists → article (one per country list) and medical_facility records
+// ---------------------------------------------------------------------------------------------
+
+/// The FCDO, as the issuer of the medical lists.
+const FCDO: &str = "Foreign, Commonwealth & Development Office";
+
+fn govuk_medical(url: &CanonicalUrl, body: &[u8]) -> Result<Vec<AdapterItem>> {
+    use govuk_medical_lists::{Row, WEB_ORIGIN, country_of_title, row_of};
+    match row_of(url) {
+        Some(Row::Publication) => {
+            let p = govuk_medical_lists::parse_publication(body)?;
+            let Some(country) = p.country.clone() else {
+                return Ok(Vec::new());
+            };
+            let updated = p.updated_at.as_deref().and_then(day);
+            let link = format!("{WEB_ORIGIN}{}", p.base_path);
+            let summary = format!(
+                "Official FCDO list of English-speaking doctors and medical facilities in {country}, for information only{}.",
+                updated
+                    .as_deref()
+                    .map(|d| format!("; last updated {d}"))
+                    .unwrap_or_default()
+            );
+            Ok(vec![AdapterItem {
+                kind: "article",
+                id: Some(format!("fcdo-medical-list:{}", p.base_path)),
+                series_key: None,
+                data: obj(vec![
+                    ("headline", short(Some(p.title.clone()), 200)),
+                    ("summary", short(Some(summary), 600)),
+                    ("article_type", s("guide")),
+                    ("topics", Some(json!(["health", "safety"]))),
+                    ("country_code", countries::iso2(&country).map(|c| json!(c))),
+                    ("country", short(Some(country), 80)),
+                    (
+                        "published_date",
+                        p.first_published_at
+                            .as_deref()
+                            .and_then(day)
+                            .map(Value::String),
+                    ),
+                    ("updated_date", updated.clone().map(Value::String)),
+                    ("source_url", web_url(Some(&link))),
+                    ("as_of", updated.map(Value::String)),
+                ]),
+            }])
+        }
+        Some(Row::List) => {
+            let l = govuk_medical_lists::parse_list(body)?;
+            let Some(country) = l
+                .parent_title
+                .as_deref()
+                .and_then(country_of_title)
+                .filter(|c| c.chars().count() <= 80)
+            else {
+                return Ok(Vec::new()); // no country we can name: nothing is guessed
+            };
+            let code = countries::iso2(&country);
+            let list_url = format!("{WEB_ORIGIN}{}", l.base_path);
+            let updated = l.updated_at.as_deref().and_then(day);
+            let list_title = l.parent_title.clone().unwrap_or_else(|| l.title.clone());
+            let mut seen = HashSet::new();
+            let mut out = Vec::new();
+            for f in l.facilities {
+                let phones: Vec<Value> = f
+                    .phones
+                    .iter()
+                    .map(|p| {
+                        obj(vec![
+                            ("number", s(p.raw.clone())),
+                            ("e164", p.e164.clone().map(Value::String)),
+                        ])
+                    })
+                    .collect();
+                let id = unique(
+                    &mut seen,
+                    format!("fcdo-medical:{}:{}", l.base_path, countries::fold(&f.name)),
+                );
+                out.push(AdapterItem {
+                    kind: "medical_facility",
+                    id: Some(id),
+                    series_key: None,
+                    data: obj(vec![
+                        ("name", short(Some(f.name), 200)),
+                        ("country", s(country.clone())),
+                        ("country_code", code.map(|c| json!(c))),
+                        ("section", short(f.section, 200)),
+                        ("specialty", short(f.specialty, 200)),
+                        ("address", short(f.address, 400)),
+                        (
+                            "phones",
+                            (!phones.is_empty()).then_some(Value::Array(phones)),
+                        ),
+                        ("emails", emails(&f.emails)),
+                        ("website_url", web_url(f.website.as_deref())),
+                        ("list_title", short(Some(list_title.clone()), 200)),
+                        ("list_url", web_url(Some(&list_url))),
+                        ("list_updated", updated.clone().map(Value::String)),
+                        ("issuer", s(FCDO)),
+                        ("source_url", web_url(Some(&list_url))),
+                        ("as_of", updated.clone().map(Value::String)),
+                    ]),
+                });
+            }
+            Ok(out)
+        }
+        _ => Ok(Vec::new()), // the collection only lists publications
+    }
+}
+
+// ---------------------------------------------------------------------------------------------
+// Wikipedia "Visa requirements for X citizens" → visa_reference (cross-check only)
+// ---------------------------------------------------------------------------------------------
+
+fn enwiki_visa_records(url: &CanonicalUrl, body: &[u8]) -> Result<Vec<AdapterItem>> {
+    if enwiki_visa::stream_range(url).is_none() {
+        return Ok(Vec::new()); // the filtered index: stream offsets, no rules
+    }
+    let mut out = Vec::new();
+    for a in enwiki_visa::parse_stream(body)? {
+        let mut seen = HashSet::new();
+        let as_of = a.timestamp.as_deref().and_then(day);
+        for r in &a.rows {
+            let dest_key = r
+                .destination_code
+                .clone()
+                .unwrap_or_else(|| countries::fold(&r.destination));
+            if !seen.insert(dest_key.clone()) {
+                continue; // a destination listed twice: the first row wins
+            }
+            out.push(AdapterItem {
+                kind: "visa_reference",
+                id: Some(format!("enwiki:{}:{dest_key}", a.nationality_code)),
+                series_key: None,
+                data: obj(vec![
+                    ("nationality", s(a.nationality.clone())),
+                    ("nationality_code", s(a.nationality_code.clone())),
+                    (
+                        "destination_country",
+                        short(Some(r.destination.clone()), 80),
+                    ),
+                    (
+                        "destination_country_code",
+                        r.destination_code.clone().map(Value::String),
+                    ),
+                    ("requirement", s(r.requirement)),
+                    (
+                        "requirement_text",
+                        short(Some(r.requirement_text.clone()), 160),
+                    ),
+                    ("max_stay_days", r.max_stay_days.map(|d| json!(d))),
+                    ("allowed_stay_text", short(r.allowed_stay.clone(), 160)),
+                    ("notes", short(r.notes.clone(), 600)),
+                    ("article_title", short(Some(a.title.clone()), 200)),
+                    ("revision_id", a.rev_id.map(|r| json!(r))),
+                    ("provenance", s("wikipedia")),
+                    ("source_url", web_url(Some(&a.url))),
+                    ("as_of", as_of.clone().map(Value::String)),
+                ]),
+            });
         }
     }
     Ok(out)

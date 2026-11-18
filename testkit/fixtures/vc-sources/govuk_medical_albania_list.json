@@ -1,0 +1,34 @@
+{
+ "base_path": "/government/publications/albania-list-of-medical-facilities/list-of-english-speaking-medical-facilities-for-british-nationals-in-albania--2",
+ "content_id": "05712645-0751-4084-8ecf-e9f215c58992",
+ "description": null,
+ "document_type": "html_publication",
+ "first_published_at": "2020-06-05T18:43:05+01:00",
+ "locale": "en",
+ "phase": "live",
+ "public_updated_at": "2026-03-17T12:43:36+00:00",
+ "schema_name": "html_publication",
+ "title": "List of medical facilities in Albania",
+ "updated_at": "2026-11-12T12:02:09+00:00",
+ "details": {
+  "body": "<div class=\"govspeak\"><h2 id=\"disclaimer\">Disclaimer</h2>\n\n<p>The following list of medical facilities/practitioners has been prepared by the British Embassy Tirana for the convenience of British Nationals who may require these services and assistance in Albania. It is provided on the understanding that we (the British Embassy) do not assume or undertake any legal responsibility, to you, or those affected, if you choose to take it into account when instructing a medical facility or practitioner.</p>\n\n<p>Further and alternatively, we cannot accept any liability to any person or company for any financial loss or damage arising from the use of this information or from any failure to give information.</p>\n\n<p>Our aim is to provide our customers with as much relevant information to enable them to make better informed decisions but our lists are not recommendations and should not be treated as such.</p>\n\n<h2 id=\"list-of-medical-facilities-in-albania\">List of medical facilities in Albania</h2>\n\n<table>\n  <thead>\n    <tr>\n      <th scope=\"col\">Name</th>\n      <th scope=\"col\">Email</th>\n      <th scope=\"col\">Telephone Number</th>\n      <th scope=\"col\">Address</th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <td><a rel=\"external\" href=\"https://www.spitaliamerikan.com\">American Hospital Tirana</a></td>\n      <td> </td>\n      <td>00355 4235 7535</td>\n      <td>Prane Spitalit Ushtarak, Laprake</td>\n    </tr>\n    <tr>\n      <td><a rel=\"external\" href=\"https://www.spitaliamerikan.com\">American Hospital Durres</a></td>\n      <td> </td>\n      <td>00355 5222233</td>\n      <td>Rruga Ahmet Ramzoti, Durres</td>\n    </tr>\n    <tr>\n      <td><a rel=\"external\" href=\"https://www.spitaliamerikan.com\">American Hospital Fier</a></td>\n      <td> </td>\n      <td>00355 34232121</td>\n      <td>Lagjja 1 Maji, Rr Cameria</td>\n    </tr>\n    <tr>\n      <td><a rel=\"external\" href=\"https://spitaligjerman.com/\">German Hospital Tirana</a></td>\n      <td><a href=\"mailto:info@spitaligjerman.com\">info@spitaligjerman.com</a></td>\n      <td>00355 422 74 577</td>\n      <td>Rr. Nikolla Lena / Rr. e Kavajes</td>\n    </tr>\n    <tr>\n      <td><a rel=\"external\" href=\"http://www.hygeia.al\">Hygea Hospital Tirana</a></td>\n      <td><a href=\"mailto:info@hygeia.al\">info@hygeia.al</a></td>\n      <td>00355 4 2380640</td>\n      <td>Km 1 i Rruges Dytesore te Autostrades Tirane-Durres</td>\n    </tr>\n    <tr>\n      <td><a rel=\"external\" href=\"https://shendetesiaime.gov.al/tirana/spitalet-universitare/spitali-universitar-nene-tereza/\">NENE TEREZA PUBLIC HOSPITAL - Q.S.U.T</a></td>\n      <td> </td>\n      <td>00355 4 234 9209</td>\n      <td>Rruga e Dibrës 372, Tirane</td>\n    </tr>\n  </tbody>\n</table>\n\n<h2 id=\"feedback\">Feedback</h2>\n\n<p>If you decide to use any of the service providers on this list, we would like to hear from you. While there is no obligation on your part to provide feedback on the services you receive, any feedback you can give us is helpful.</p>\n\n<div class=\"contact contact\" id=\"contact_4513\">\n    <p class=\"govuk-body\">British Embassy Tirana</p>\n\n    <p class=\"govuk-body govuk-!-margin-bottom-4\">\n      Rruga Skenderbeg 12<br>Tirana<br>Albania\n    </p>\n\n    <div>\n\n\n        <p class=\"govuk-body govuk-!-margin-bottom-4\">\n          Telephone +355 4 223 4973/4/5 // +44 20 7008 5000\n        </p>\n        <p class=\"govuk-body govuk-!-margin-bottom-4\">\n          Fax +355 4 224 7697\n        </p>\n    </div>\n\n    <p class=\"govuk-body\">Use our contact form for consular enquiries:<br><a href=\"http://www.gov.uk/contact-consulate-tirana\" class=\"govuk-link\">www.gov.uk/contact-consulate-tirana</a><br>For enquiries that are not about consular issues, email: <a href=\"mailto:british.embassytirana@fcdo.gov.uk\" class=\"govuk-link\">british.embassytirana@fcdo.gov.uk</a></p>\n\n</div>\n\n</div>"
+ },
+ "links": {
+  "parent": [
+   {
+    "api_path": "/api/content/government/publications/albania-list-of-medical-facilities",
+    "api_url": "https://www.gov.uk/api/content/government/publications/albania-list-of-medical-facilities",
+    "base_path": "/government/publications/albania-list-of-medical-facilities",
+    "content_id": "f0e4e79b-9d3d-4934-b7b0-dc272d7d461d",
+    "document_type": "guidance",
+    "links": {},
+    "locale": "en",
+    "public_updated_at": "2026-03-17T12:43:36Z",
+    "schema_name": "publication",
+    "title": "Albania: medical facilities",
+    "web_url": "https://www.gov.uk/government/publications/albania-list-of-medical-facilities",
+    "withdrawn": false
+   }
+  ]
+ }
+}

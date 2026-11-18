@@ -148,3 +148,24 @@ storage = "observation"
 source_classes = ["official", "reference"]
 verbatim = ["/period", "/source_url", "/as_of", "/evidence/*"]
 series_key = "weather_normal:{place_id}:{month:02}"
+
+# Added 2026-11-18 (official embassy, medical and Wikipedia visa sources). Adapter-only kinds:
+# the source adapters map structured data; no source lists them as llm_kinds.
+
+[kinds.embassy]
+version = 1
+storage = "record"
+source_classes = ["official"]
+verbatim = ["/phones/*/number", "/website_url", "/contact_form_url", "/source_url", "/as_of", "/evidence/*"]
+
+[kinds.medical_facility]
+version = 1
+storage = "record"
+source_classes = ["official"]
+verbatim = ["/phones/*/number", "/website_url", "/list_url", "/list_updated", "/source_url", "/as_of", "/evidence/*"]
+
+[kinds.visa_reference]
+version = 1
+storage = "record"
+source_classes = ["reference"]
+verbatim = ["/max_stay_days", "/source_url", "/as_of", "/evidence/*"]

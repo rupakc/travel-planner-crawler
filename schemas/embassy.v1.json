@@ -1,0 +1,186 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/rupakc/travel-planner-crawler/schemas/embassy.v1.json",
+  "title": "Embassy or consulate",
+  "description": "One record: one diplomatic or consular office of one country (`of_country`) that serves travellers in another country (`country`): its address, phones, opening hours and official contact links, from the sending government's own list. Voyager use: emergency_card (embassy contacts per nationality and destination).",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "name": {
+      "type": "string",
+      "maxLength": 160,
+      "description": "Office name as written (e.g. \"British Embassy Bangkok\")."
+    },
+    "mission_type": {
+      "type": "string",
+      "enum": [
+        "embassy",
+        "high_commission",
+        "consulate_general",
+        "consulate",
+        "honorary_consulate",
+        "consular_agency",
+        "representative_office",
+        "other"
+      ],
+      "description": "Kind of office."
+    },
+    "of_country": {
+      "type": "string",
+      "maxLength": 80,
+      "description": "Whose office it is (the sending country), in English."
+    },
+    "of_country_code": {
+      "type": "string",
+      "maxLength": 2,
+      "description": "ISO 3166-1 alpha-2 of `of_country`.",
+      "pattern": "^[A-Z]{2}$"
+    },
+    "country": {
+      "type": "string",
+      "maxLength": 80,
+      "description": "The country whose travellers' list names this office (the destination it serves), in English. The office itself may sit in a neighbouring country; see `address`."
+    },
+    "country_code": {
+      "type": "string",
+      "maxLength": 2,
+      "description": "ISO 3166-1 alpha-2 country code of `country`.",
+      "pattern": "^[A-Z]{2}$"
+    },
+    "region": {
+      "type": "string",
+      "maxLength": 120,
+      "description": "Region of `country` the list is for, if it is one (e.g. \"Azores\")."
+    },
+    "city": {
+      "type": "string",
+      "maxLength": 120,
+      "description": "City of the office in English. Always paired with `country`."
+    },
+    "address": {
+      "type": "string",
+      "maxLength": 400,
+      "description": "Street address as written."
+    },
+    "lat": {
+      "type": "number",
+      "minimum": -90,
+      "maximum": 90,
+      "description": "Latitude, only when the source states coordinates."
+    },
+    "lng": {
+      "type": "number",
+      "minimum": -180,
+      "maximum": 180,
+      "description": "Longitude, only when the source states coordinates."
+    },
+    "phones": {
+      "type": "array",
+      "maxItems": 6,
+      "description": "Phone numbers, each exactly as written plus E.164 when it is unambiguous.",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "type": {
+            "type": "string",
+            "enum": [
+              "main",
+              "emergency",
+              "fax",
+              "other"
+            ],
+            "description": "What the number is for."
+          },
+          "label": {
+            "type": "string",
+            "maxLength": 160,
+            "description": "The source's own label for the number, as written."
+          },
+          "number": {
+            "type": "string",
+            "maxLength": 64,
+            "description": "The number exactly as written."
+          },
+          "e164": {
+            "type": "string",
+            "maxLength": 16,
+            "pattern": "^\\+[1-9][0-9]{7,14}$",
+            "description": "E.164 form, only when the written number is already in international form (never derived from a local number)."
+          }
+        },
+        "required": [
+          "type",
+          "number"
+        ]
+      }
+    },
+    "emails": {
+      "type": "array",
+      "maxItems": 3,
+      "description": "Email addresses as written.",
+      "items": {
+        "type": "string",
+        "maxLength": 254,
+        "pattern": "^[^@\\s]+@[^@\\s]+$"
+      }
+    },
+    "website_url": {
+      "type": "string",
+      "maxLength": 2048,
+      "description": "The office's own web page.",
+      "pattern": "^https?://[^\\s]+$"
+    },
+    "contact_form_url": {
+      "type": "string",
+      "maxLength": 2048,
+      "description": "The official online contact or emergency contact page, when the source gives one instead of (or besides) a phone.",
+      "pattern": "^https?://[^\\s]+$"
+    },
+    "hours": {
+      "type": "string",
+      "maxLength": 400,
+      "description": "Opening hours as written."
+    },
+    "passport_services": {
+      "type": "boolean",
+      "description": "Whether the source says the office issues passports or emergency travel documents."
+    },
+    "notes": {
+      "type": "array",
+      "maxItems": 4,
+      "description": "The source's own notes on the office (e.g. \"honorary consul: limited consular services\"), as written.",
+      "items": {
+        "type": "string",
+        "maxLength": 400
+      }
+    },
+    "source_url": {
+      "type": "string",
+      "maxLength": 2048,
+      "description": "The page's own link for this item (official site, booking or detail page), copied verbatim from the page.",
+      "pattern": "^https?://[^\\s]+$"
+    },
+    "as_of": {
+      "type": "string",
+      "maxLength": 10,
+      "description": "The \"last updated\", \"valid from\" or publication date the page itself states for this information (YYYY-MM-DD).",
+      "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$"
+    },
+    "evidence": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "maxLength": 300,
+        "description": "A verbatim quote from the page."
+      },
+      "maxItems": 3,
+      "description": "Up to 3 short verbatim quotes from the page that support the most important facts."
+    }
+  },
+  "required": [
+    "name",
+    "of_country",
+    "country"
+  ]
+}

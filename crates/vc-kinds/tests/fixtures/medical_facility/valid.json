@@ -1,0 +1,15 @@
+{
+  "name": "German Hospital Tirana",
+  "country": "Albania",
+  "country_code": "AL",
+  "section": "List of medical facilities in Albania",
+  "address": "Rr. Nikolla Lena / Rr. e Kavajes",
+  "phones": [{"number": "00355 422 74 577", "e164": "+35542274577"}],
+  "emails": ["info@spitaligjerman.com"],
+  "website_url": "https://spitaligjerman.com/",
+  "list_title": "List of medical facilities in Albania",
+  "list_url": "https://www.gov.uk/government/publications/albania-list-of-medical-facilities/list-of-english-speaking-medical-facilities-for-british-nationals-in-albania--2",
+  "list_updated": "2026-03-17",
+  "issuer": "Foreign, Commonwealth & Development Office",
+  "as_of": "2026-03-17"
+}

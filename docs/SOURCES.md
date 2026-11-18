@@ -7,7 +7,7 @@
 Every website and dataset the crawler knows, grouped by the part of the Voyager app it
 feeds. A source that serves several parts is listed under each of them.
 
-**269 sources, 193 on, 76 off.**
+**269 sources, 197 on, 72 off.**
 
 - **What we take**: the traveller-facing data the source gives (its `relevance.why`).
 - **Licence**: *open* (free reuse with credit), *share-alike* (kept apart from other
@@ -335,6 +335,7 @@ is added only with the owner's approval (see CONTRIBUTING.md).
 | `brazil-mre-visas` | `www.gov.br` | Brazil's visa requirement table by nationality, for the Visa section. | facts only | yes | no |
 | `canada-travel-json` | `data.international.gc.ca` | Official Canadian travel advice per country (entry rules, safety level, emergency contacts) for Visa and the Emergency card. | open | yes | no |
 | `cbp-travel` | `www.cbp.gov` | Visa Waiver Program countries and ESTA rules for Visa, plus US duty-free limits, prohibited and agricultural items and the $10,000 cash declaration for Travel tips and Packing. | open | yes | no |
+| `enwiki-visa-requirements` | `dumps.wikimedia.org` | About 199 passport-by-destination tables (visa-free, eVisa, visa on arrival, days) used only to cross-check official visa rules in the Visa section. | share-alike | yes | no |
 | `eu-etias-ees` | `travel-europe.europa.eu` | Who needs ETIAS, its fee, validity and start date, and EES biometric registration at Schengen borders, for the Visa section. | open | yes | no |
 | `eu-home-visa-policy` | `home-affairs.ec.europa.eu` | The Schengen visa-required and visa-free nationality lists, airport transit visas and visa waiver agreements, for the Visa section. | open | yes | no |
 | `eu-visa-reg` | `eur-lex.europa.eu` | The EU's official lists of nationalities that need a visa for the Schengen area, for the Visa section. | open | yes | no |
@@ -355,7 +356,6 @@ is added only with the owner's approval (see CONTRIBUTING.md).
 | `vietnam-evisa` | `evisa.gov.vn` | Vietnam's e-Visa rules and ports of entry, for the Visa section. | facts only | yes | no |
 | `au-homeaffairs-visas` | `immi.homeaffairs.gov.au` | Which passports qualify for Australia's ETA or eVisitor and the visitor visa rules, for the Visa section. | open | no | no |
 | `auswaertiges-amt-opendata` | `www.auswaertiges-amt.de` | German embassy and consulate contacts, health leaflets and travel warnings per country, for the Emergency card, Visa and Travel tips. | API terms | no | no |
-| `enwiki-visa-requirements` | `dumps.wikimedia.org` | About 199 passport-by-destination tables (visa-free, eVisa, visa on arrival, days) used only to cross-check official visa rules in the Visa section. | share-alike | no | no |
 | `passport-index-dataset` | `github.com` | Visa requirements by passport, only as a cross-check for the Visa section; provenance unclear, so off. | restricted | no | no |
 | `state-dept-advisories-rss` | `travel.state.gov` | US travel advisory changes per country for the Visa section; travel.state.gov blocks our bot, so off. | open | no | no |
 | `state-dept-country-pages` | `travel.state.gov` | US entry rules and embassy contacts per country for Visa and the Emergency card; travel.state.gov blocks our bot, so off. | open | no | no |
@@ -462,14 +462,14 @@ is added only with the owner's approval (see CONTRIBUTING.md).
 
 | Source | Website | What we take | Licence | On | Key |
 |---|---|---|---|---|---|
+| `canada-offices-json` | `data.international.gc.ca` | Official Canadian embassy and consulate addresses, phones and office hours in every country, for the Emergency card. | open | yes | no |
 | `canada-travel-json` | `data.international.gc.ca` | Official Canadian travel advice per country (entry rules, safety level, emergency contacts) for Visa and the Emergency card. | open | yes | no |
 | `enwiki-dump` | `dumps.wikimedia.org` | Facts from English Wikipedia: places, airport destination tables, emergency numbers and plug and voltage types, for Places to see, Flights, the Emergency card and the Packing list. | share-alike | yes | no |
 | `fcdo-content-api` | `www.gov.uk` | Official UK travel advice per country (entry rules, safety, local laws, emergency numbers) for Visa, Emergency card and Travel tips. | open | yes | no |
+| `govuk-medical-lists` | `www.gov.uk` | Official UK lists of English-speaking hospitals, clinics and doctors per country, for the Emergency card's hospitals. | open | yes | no |
+| `govuk-world-orgs` | `www.gov.uk` | Official British embassy, high-commission and consulate addresses, phones and hours in every country, for the Emergency card. | open | yes | no |
 | `mfat-embassies` | `www.mfat.govt.nz` | Official New Zealand embassy and consulate contacts per country, for the Emergency card. | open | yes | no |
 | `auswaertiges-amt-opendata` | `www.auswaertiges-amt.de` | German embassy and consulate contacts, health leaflets and travel warnings per country, for the Emergency card, Visa and Travel tips. | API terms | no | no |
-| `canada-offices-json` | `data.international.gc.ca` | Official Canadian embassy and consulate addresses, phones and office hours in every country, for the Emergency card. | open | no | no |
-| `govuk-medical-lists` | `www.gov.uk` | Official UK lists of English-speaking hospitals, clinics and doctors per country, for the Emergency card's hospitals. | open | no | no |
-| `govuk-world-orgs` | `www.gov.uk` | Official British embassy, high-commission and consulate addresses, phones and hours in every country, for the Emergency card. | open | no | no |
 | `healthsites-io` | `healthsites.io` | Hospitals and clinics worldwide with names, addresses and phones, for the Emergency card's hospitals. | share-alike | no | yes |
 | `state-dept-country-pages` | `travel.state.gov` | US entry rules and embassy contacts per country for Visa and the Emergency card; travel.state.gov blocks our bot, so off. | open | no | no |
 | `usembassy-list` | `www.usembassy.gov` | US embassy and consulate addresses and phone numbers per country, for the Emergency card. | open | no | no |

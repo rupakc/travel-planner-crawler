@@ -1,0 +1,46 @@
+{
+ "base_path": "/government/publications/albania-list-of-medical-facilities",
+ "content_id": "f0e4e79b-9d3d-4934-b7b0-dc272d7d461d",
+ "description": "List of medical facilities for British nationals in Albania.",
+ "document_type": "guidance",
+ "first_published_at": "2015-06-25T00:00:00+01:00",
+ "locale": "en",
+ "phase": "live",
+ "public_updated_at": "2026-03-17T12:43:36+00:00",
+ "schema_name": "publication",
+ "title": "Albania: medical facilities",
+ "updated_at": "2026-11-12T12:25:22+00:00",
+ "details": {
+  "attachments": [
+   {
+    "attachment_type": "html",
+    "command_paper_number": "",
+    "hoc_paper_number": "",
+    "id": "9188452",
+    "isbn": "",
+    "title": "List of medical facilities in Albania",
+    "unique_reference": "",
+    "unnumbered_command_paper": false,
+    "unnumbered_hoc_paper": false,
+    "url": "/government/publications/albania-list-of-medical-facilities/list-of-english-speaking-medical-facilities-for-british-nationals-in-albania--2"
+   }
+  ],
+  "body": "<div class=\"govspeak\"><p>The Foreign, Commonwealth and Development Office (FCDO) provides lists of service providers for information only, to assist British nationals who may need support overseas. These lists are not exhaustive, and are subject to change at any time. None of the service providers are endorsed or recommended by the FCDO. You should research whether a service provider will be suitable. The FCDO does not accept any liability arising to any person for any loss or damage suffered through using these service providers or this information.</p>\n\n</div></p></div>",
+  "first_public_at": "2015-06-25T00:00:00.000+01:00"
+ },
+ "links": {
+  "world_locations": [
+   {
+    "analytics_identifier": "WL2",
+    "content_id": "5e9ece18-7706-11e4-a3cb-005056011aef",
+    "document_type": "world_location",
+    "links": {},
+    "locale": "en",
+    "public_updated_at": "2020-09-02T07:27:15Z",
+    "schema_name": "world_location",
+    "title": "Albania",
+    "withdrawn": false
+   }
+  ]
+ }
+}

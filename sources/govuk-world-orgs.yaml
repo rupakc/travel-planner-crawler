@@ -14,26 +14,25 @@ seeds:
 - https://www.gov.uk/api/search.json?filter_format=worldwide_organisation&count=1000&fields=title,link
 sitemaps: []
 feeds: []
-adapter: null
+adapter: govuk_world_orgs
 include: []
 exclude: []
 max_depth: 0
 kinds:
-- emergency_numbers
+- embassy
 llm_kinds: []
 render: never
 cadence: monthly
 min_delay_s: 10
-daily_budget: 300
+daily_budget: 500
 politeness_key: null
-enabled: false
+enabled: true
 needs_key: false
 key_secret: null
 max_retention_days: null
 display_requirements: null
 notes: 'robots: * disallows only /*/print$ and /search/all*, so /api/ is allowed; same key as fcdo-content-api.
-  ''published under the Open Government Licence (OGL)''. | Disabled: adapter pending: GOV.UK search +
-  Content API walker for worldwide organisations (411 offices)'
+  ''published under the Open Government Licence (OGL)''.'
 relevance:
   sections:
   - emergency_card

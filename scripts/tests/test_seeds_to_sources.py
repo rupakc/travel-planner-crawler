@@ -470,6 +470,15 @@ def test_batch2_off_sources_say_why(generated):
         assert reason.startswith(prefixes), (sid, reason)
 
 
+# Batch-2 api/dump sources whose official/Wikipedia adapters shipped on 2026-11-18 (not in a
+# ramp file yet).
+ADAPTED_2026_11_18 = {
+    "govuk-world-orgs": "govuk_world_orgs",
+    "canada-offices-json": "canada_offices",
+    "govuk-medical-lists": "govuk_medical_lists",
+    "enwiki-visa-requirements": "enwiki_visa",
+}
+
 # Batch-2 api/dump sources that run on the open-data adapters (2026-11-18).
 OPEN_DATA_ADAPTERS = {
     "openholidays": "openholidays",
@@ -487,7 +496,7 @@ def test_batch2_api_and_dump_sources_run_only_on_an_adapter(generated):
         if sid in s2s.GTFS_FEEDS:
             continue
         if spec["method"] in ("api", "dump"):
-            want = OPEN_DATA_ADAPTERS.get(sid)
+            want = OPEN_DATA_ADAPTERS.get(sid) or ADAPTED_2026_11_18.get(sid)
             assert spec["adapter"] == want, sid
             assert spec["enabled"] is (want is not None), sid
         if spec["needs_key"]:
@@ -499,10 +508,12 @@ def test_batch2_enabled_sources_are_polite_and_scoped(generated):
         spec = generated[sid]
         if not spec["enabled"] or sid in s2s.GTFS_FEEDS:
             continue
-        assert spec["method"] in ("html", "rss", "sitemap") or sid in OPEN_DATA_ADAPTERS, sid
+        assert spec["method"] in ("html", "rss", "sitemap") or sid in OPEN_DATA_ADAPTERS \
+            or sid in ADAPTED_2026_11_18, sid
         assert spec["daily_budget"] <= 500 and spec["max_depth"] <= 2 and spec["min_delay_s"] >= 5, sid
         assert spec["licence"]["class"] in ("open", "facts_only") or (
-            sid == "openholidays" and spec["licence"]["class"] == "share_alike"), sid
+            sid in ("openholidays", "enwiki-visa-requirements")
+            and spec["licence"]["class"] == "share_alike"), sid
         assert spec["cadence"] in ("daily", "h12", "weekly", "monthly", "quarterly", "yearly"), sid
         # Every include regex is pinned to the source's own host.
         hosts = {u.split("/")[2] for u in spec["seeds"] + spec["sitemaps"] + spec["feeds"]}
@@ -552,7 +563,7 @@ def test_ramp_2_extends_ramp_1_with_enabled_runnable_sources():
         assert committed[sid]["method"] in ("html", "rss", "sitemap"), sid
     # Every html/rss/sitemap source this batch enables is in ramp-2 (the open-data adapter
     # sources come with ramp-3).
-    on = {sid for sid in s2s.SOURCE_CLASS if committed[sid]["enabled"]} - set(OPEN_DATA_ADAPTERS) - set(s2s.GTFS_FEEDS)
+    on = {sid for sid in s2s.SOURCE_CLASS if committed[sid]["enabled"]} - set(OPEN_DATA_ADAPTERS) - set(s2s.GTFS_FEEDS) - set(ADAPTED_2026_11_18)
     assert on <= set(r2), sorted(on - set(r2))
 
 
@@ -633,3 +644,23 @@ def test_gtfs_feeds_run_on_the_gtfs_adapter(generated):
     for sid in ("gtfs-de", "hk-td-gtfs"):
         assert "403" in generated[sid]["notes"], sid
     assert "terms not yet confirmed" in generated["mta-gtfs"]["notes"]
+
+
+def test_adapted_sources_2026_11_18(generated):
+    # Official embassy and medical lists, and Wikipedia visa tables, through their own adapters
+    # and adapter-only kinds; Wikipedia stays reference/share-alike and never yields visa_rule.
+    kinds = {
+        "govuk-world-orgs": ["embassy"],
+        "canada-offices-json": ["embassy"],
+        "govuk-medical-lists": ["medical_facility", "article"],
+        "enwiki-visa-requirements": ["visa_reference"],
+    }
+    for sid, k in kinds.items():
+        spec = generated[sid]
+        assert spec["kinds"] == k and spec["llm_kinds"] == [], sid
+        assert spec["source_class"] == ("reference" if sid.startswith("enwiki") else "official"), sid
+    wiki = generated["enwiki-visa-requirements"]
+    assert wiki["licence"]["class"] == "share_alike"
+    assert wiki["seeds"] == [
+        "https://dumps.wikimedia.org/enwiki/latest/enwiki-latest-pages-articles-multistream-index.txt.bz2"
+    ]

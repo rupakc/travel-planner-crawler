@@ -27,16 +27,23 @@ pub(crate) mod iso3;
 pub(crate) mod zip_stream;
 
 pub mod canada_advisories;
+pub mod canada_offices;
+pub mod countries;
 pub mod ecb_fx;
+pub mod enwiki_visa;
 pub mod eurostat_jsonstat;
 pub mod fcdo_content_api;
+pub mod govuk_medical_lists;
+pub mod govuk_world_orgs;
 pub mod gtfs_static;
+pub mod html_text;
 pub mod json_events;
 pub mod met_norway;
 pub mod mobility_database_catalog;
 pub mod nager_holidays;
 pub mod openholidays;
 pub mod ourairports_csv;
+pub mod phone;
 pub mod records;
 pub mod se_travel_dump;
 pub mod state_dept_advisories;
@@ -51,9 +58,13 @@ pub use dump::DumpSettings;
 /// Every built-in adapter, with default settings.
 pub static REGISTRY: &[&dyn SourceAdapter] = &[
     &canada_advisories::CanadaAdvisories,
+    &canada_offices::CanadaOfficesAdapter,
     &ecb_fx::EcbFx,
+    &enwiki_visa::EnwikiVisa::DEFAULT,
     &eurostat_jsonstat::EurostatJsonStat,
     &fcdo_content_api::FcdoContentApi,
+    &govuk_medical_lists::GovukMedicalLists,
+    &govuk_world_orgs::GovukWorldOrgs,
     &json_events::JsonEvents::DEFAULT,
     &gtfs_static::GtfsStatic::DEFAULT,
     &met_norway::MetNorway,
@@ -126,9 +137,13 @@ pub fn registry_with(cfg: &vc_config::SourcesConfig) -> Vec<Box<dyn SourceAdapte
     let d = DumpSettings::from_config(cfg);
     vec![
         Box::new(canada_advisories::CanadaAdvisories),
+        Box::new(canada_offices::CanadaOfficesAdapter),
         Box::new(ecb_fx::EcbFx),
+        Box::new(enwiki_visa::EnwikiVisa::new(d.clone())),
         Box::new(eurostat_jsonstat::EurostatJsonStat),
         Box::new(fcdo_content_api::FcdoContentApi),
+        Box::new(govuk_medical_lists::GovukMedicalLists),
+        Box::new(govuk_world_orgs::GovukWorldOrgs),
         Box::new(json_events::JsonEvents::DEFAULT),
         Box::new(gtfs_static::GtfsStatic::new(
             gtfs_static::GtfsSettings::from_config(cfg),

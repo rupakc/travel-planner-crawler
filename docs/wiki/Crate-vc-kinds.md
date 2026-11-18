@@ -12,17 +12,27 @@ code. Each one is three files, which this crate loads, checks and turns into `Ki
 Path: `crates/vc-kinds`. Dependencies: `jsonschema`, `toml`. Status: wired; the processor
 loads the registry at startup.
 
-## The 23 v1 kinds
+## The 26 v1 kinds
 
-`activity`, `advisory`, `airport`, `article`, `attraction`, `cheapest_fare`,
-`emergency_numbers`, `event`, `fx_rate`, `hotel`, `packing_hint`, `place`, `price_level`,
-`public_holiday`, `qa_thread`, `route`, `sim_offer`, `tip`, `transit_item`,
-`transport_option`, `visa_rule`, `walking_tour`, `weather_normal`. `cheapest_fare` (series `fare:<ORIG>:<DEST>:<YYYY-MM>`,
-cached fares, not live prices), `fx_rate`, `price_level` (series
+`activity`, `advisory`, `airport`, `article`, `attraction`, `cheapest_fare`, `embassy`,
+`emergency_numbers`, `event`, `fx_rate`, `hotel`, `medical_facility`, `packing_hint`, `place`,
+`price_level`, `public_holiday`, `qa_thread`, `route`, `sim_offer`, `tip`, `transit_item`,
+`transport_option`, `visa_reference`, `visa_rule`, `walking_tour`, `weather_normal`. `cheapest_fare` (series
+`fare:<ORIG>:<DEST>:<YYYY-MM>`, cached fares, not live prices), `fx_rate`, `price_level` (series
 `price_level:<ISO2>:<category>:<basis>`) and `weather_normal` are observations; the rest are
 records. `price_level` and `public_holiday` were added on 2026-11-18 (open-data adapters).
 `transit_item` (2026-11-18) is one public-transport operator, line or station from a GTFS
 feed (`gtfs_static`): GTFS gives no city, which `transport_option` requires.
+
+Added 2026-11-18 (adapter-only, no source lists them as `llm_kinds`):
+
+- `embassy`: one office of one country serving travellers in another (address, phones as
+  written plus E.164 only when written internationally, hours, contact form), `official` only.
+- `medical_facility`: one hospital, clinic or doctor from an official list, with the list's
+  title, link and own updated date (`list_updated`; some lists are years old), `official` only.
+- `visa_reference`: one passport-by-destination row from a reference work (Wikipedia),
+  `reference` only, `provenance: wikipedia`. Cross-check data for `visa_rule`, never the
+  answer (a reference source can never produce `visa_rule`).
 
 ## What the loader refuses
 

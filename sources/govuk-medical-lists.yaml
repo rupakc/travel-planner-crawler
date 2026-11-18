@@ -14,27 +14,26 @@ seeds:
 - https://www.gov.uk/api/content/government/collections/doctors-and-medical-facilities-worldwide-list
 sitemaps: []
 feeds: []
-adapter: null
+adapter: govuk_medical_lists
 include: []
 exclude: []
 max_depth: 0
 kinds:
-- place
+- medical_facility
+- article
 llm_kinds: []
 render: never
 cadence: quarterly
 min_delay_s: 10
-daily_budget: 300
+daily_budget: 400
 politeness_key: null
-enabled: false
+enabled: true
 needs_key: false
 key_secret: null
 max_retention_days: null
 display_requirements: null
-notes: 'Same host and robots as govuk-world-orgs. Lists are ''for information only''; keep each list''s
-  Updated date as as_of. | Disabled: adapter pending: GOV.UK Content API collection walker (collection,
-  then per-country publications and HTML attachments); hospitals map to the place kind until a medical_facility
-  kind exists'
+notes: Same host and robots as govuk-world-orgs. Lists are 'for information only'; keep each list's Updated
+  date as as_of.
 relevance:
   sections:
   - emergency_card

@@ -14,25 +14,24 @@ seeds:
 - https://data.international.gc.ca/travel-voyage/opendata-offices-list-alpha-eng.json
 sitemaps: []
 feeds: []
-adapter: null
+adapter: canada_offices
 include: []
 exclude: []
 max_depth: 0
 kinds:
-- emergency_numbers
+- embassy
 llm_kinds: []
 render: never
 cadence: weekly
 min_delay_s: 5
 daily_budget: 300
 politeness_key: null
-enabled: false
+enabled: true
 needs_key: false
 key_secret: null
 max_retention_days: null
 display_requirements: null
-notes: 'robots 404 (allowed); same host as canada-travel-json. open.canada.ca dataset 6661f0f8, OGL-Canada.
-  | Disabled: adapter pending: offices JSON reader (one list; map to emergency_numbers.embassies)'
+notes: robots 404 (allowed); same host as canada-travel-json. open.canada.ca dataset 6661f0f8, OGL-Canada.
 relevance:
   sections:
   - emergency_card

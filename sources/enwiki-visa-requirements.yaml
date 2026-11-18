@@ -11,28 +11,28 @@ licence:
   url: https://creativecommons.org/licenses/by-sa/4.0/
 method: dump
 seeds:
-- https://dumps.wikimedia.org/enwiki/latest/
+- https://dumps.wikimedia.org/enwiki/latest/enwiki-latest-pages-articles-multistream-index.txt.bz2
 sitemaps: []
 feeds: []
-adapter: null
+adapter: enwiki_visa
 include: []
 exclude: []
 max_depth: 0
-kinds: []
+kinds:
+- visa_reference
 llm_kinds: []
 render: never
 cadence: monthly
 min_delay_s: 5
-daily_budget: 300
+daily_budget: 400
 politeness_key: null
-enabled: false
+enabled: true
 needs_key: false
 key_secret: null
 max_retention_days: null
 display_requirements: null
 notes: 'Existing enwiki dump; titles ''Visa requirements for * citizens'' (about 199 articles). No new
-  host. | Disabled: adapter pending: enwiki dump extractor for the ''Visa requirements for X citizens''
-  tables (reference class cannot yield visa_rule; cross-check only)'
+  host. | URL template: https://dumps.wikimedia.org/enwiki/latest/'
 relevance:
   sections:
   - visa

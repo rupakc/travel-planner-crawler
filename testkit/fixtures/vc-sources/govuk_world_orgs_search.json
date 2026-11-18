@@ -1,0 +1,37 @@
+{
+ "results": [
+  {
+   "title": "British Embassy Bangkok",
+   "link": "/world/organisations/british-embassy-bangkok",
+   "index": "govuk",
+   "es_score": null,
+   "_id": "/world/organisations/british-embassy-bangkok",
+   "elasticsearch_type": "edition",
+   "document_type": "edition"
+  },
+  {
+   "title": "British High Commission New Delhi",
+   "link": "/world/organisations/british-high-commission-new-delhi",
+   "index": "govuk",
+   "es_score": null,
+   "_id": "/world/organisations/british-high-commission-new-delhi",
+   "elasticsearch_type": "edition",
+   "document_type": "edition"
+  },
+  {
+   "title": "British Embassy Washington",
+   "link": "/world/organisations/british-embassy-washington",
+   "index": "govuk",
+   "es_score": null,
+   "_id": "/world/organisations/british-embassy-washington",
+   "elasticsearch_type": "edition",
+   "document_type": "edition"
+  }
+ ],
+ "total": 411,
+ "start": 0,
+ "aggregates": {},
+ "suggested_queries": [],
+ "suggested_autocomplete": [],
+ "es_cluster": "A"
+}
