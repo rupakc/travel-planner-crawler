@@ -694,3 +694,13 @@ entries:
   - host: southwest.com
     reason: Terms ban 'deep-link, page-scrape, robot, crawl, index, spider', 2026-11-18
     source: research 2026-11-18 corpus thematic SKIP
+  # --- corpus expansion: Latin America (research 2026-11-18): terms ban robots/scraping ---
+  - host: aruba.com
+    reason: Terms ban 'any use of data mining, robots, or similar data gathering and extraction tools', 2026-11-18
+    source: research 2026-11-18 corpus LatAm SKIP
+  - host: chilango.com
+    reason: "Terms ban 'técnicas de scraping, extracción de datos o cualquier uso automatizado' and AI training, 2026-11-18"
+    source: research 2026-11-18 corpus LatAm SKIP
+  - host: serviciomigraciones.cl
+    reason: Terms ban 'uso de software automatizado (bots) para extraer datos', 2026-11-18
+    source: research 2026-11-18 corpus LatAm SKIP

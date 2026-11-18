@@ -251,3 +251,10 @@ plan = `docs/superpowers/plans/2026-11-15-voyager-crawler.md`, r1–r5 = `docs/r
   no-response hosts to re-test from the crawler VM, United and KLM included). Nine terms-ban hosts
   denylisted (nparks.gov.sg among them). Incheon (robots Disallow: / except /ap_en/) not added;
   Parks Canada, USFS, BLM and SFO already came with the North America batch.
+- 2026-11-18 Corpus expansion, Latin America and the Caribbean: 108 rows, 85 on (the 12 LatAm
+  OWNER-DECISION rows on by the owner's decision: gob.mx SECTUR/INM/CONANP, Cervantino, Medellín
+  Travel, Migración Colombia, TransMilenio (no LLM kinds), PeruRail (HTML; /feed/ disallowed),
+  Visit Jamaica, Bonaire, TCI, Los Cabos; official-inah stays on under the same rule). 23 off:
+  14 provisional no-response hosts (re-test from the crawler VM), 4 open-data portals, BCRA and
+  Banxico (adapter/key), 3 general-news feeds (relevance). SAG Chile on as share_alike
+  (CC BY-NC-SA 3.0 CL, kept separate). aruba.com, chilango.com, serviciomigraciones.cl denylisted.
