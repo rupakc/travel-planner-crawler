@@ -43,7 +43,9 @@ or try to get past a bot challenge.
     read it again.
 - **Rate limits.**
   - At most **one request in flight per site**. Sub-domains of one registrable domain
-    count as one site.
+    count as one site, except under umbrella domains that host independent organisations
+    on separate servers (`europa.eu`, listed in
+    [`policy/key_splits.yaml`](policy/key_splits.yaml)): there each host is its own site.
   - At least **5 seconds** between requests to the same site, or your `Crawl-delay` if it
     is longer. When your server slows down we slow down too: the gap grows to 10 × your
     recent response time (up to 1 hour).

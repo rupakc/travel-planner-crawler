@@ -361,3 +361,15 @@ entries:
   - host: consumer.ftc.gov
     reason: robots.txt/pages answer 403 to an honest bot, 2026-11-17
     source: research 2026-11-17 scam-safety SKIP
+  # --- Bot walls met in production (ramp-2, 2026-11-17 23:30 UTC) ----------------------
+  # Exact host only: europa.eu hosts many independent EU bodies (policy/key_splits.yaml);
+  # www.ecb.europa.eu, travel-europe, home-affairs.ec, food.ec, eur-lex stay allowed.
+  - host: taxation-customs.ec.europa.eu
+    reason: "/travelling_en answered 403 to VoyagerBot in production, 2026-11-17 (robots.txt 200 and allows us): bot wall"
+    source: seed:eu-customs-travellers
+  - host: mfat.govt.nz
+    reason: "/en/embassies served a challenge page (HTTP 200) to VoyagerBot in production, 2026-11-17: bot wall"
+    source: seed:mfat-embassies
+  - host: secretldn.com
+    reason: "/feed/ served a challenge (HTTP 202) to VoyagerBot in production, 2026-11-17: bot wall"
+    source: seed:secretldn

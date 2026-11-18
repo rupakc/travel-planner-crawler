@@ -303,7 +303,7 @@ pub fn denylisted(host: &str, pattern: &str) -> bool {
     let host = host.trim_end_matches('.').to_ascii_lowercase();
     let pattern = pattern.trim().to_ascii_lowercase();
     if let Some(brand) = pattern.strip_suffix(".*") {
-        let reg = PolitenessKey::for_host(&host).0;
+        let reg = PolitenessKey::registrable(&host);
         return reg.split('.').next() == Some(brand) && reg.contains('.');
     }
     host == pattern || host.ends_with(&format!(".{pattern}"))

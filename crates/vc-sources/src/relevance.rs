@@ -73,7 +73,7 @@ pub fn travel_focused(url: &url::Url) -> bool {
     if host.contains("travel") || rest.contains("travel") {
         return true;
     }
-    let reg = PolitenessKey::for_host(&host).0;
+    let reg = PolitenessKey::registrable(&host);
     TRAVEL_PUBLICATIONS
         .iter()
         .any(|(d, prefix)| reg == *d && url.path().starts_with(prefix))

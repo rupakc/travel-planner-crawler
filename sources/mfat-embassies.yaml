@@ -28,14 +28,16 @@ cadence: quarterly
 min_delay_s: 5
 daily_budget: 300
 politeness_key: null
-enabled: true
+enabled: false
 needs_key: false
 key_secret: null
 max_retention_days: null
 display_requirements: null
 notes: 'robots: * disallows only /admin, /dev, /Security, site search and change pages. ''Website copyright
   statement is licensed under the Creative Commons Attribution 4.0 International licence... free to copy,
-  distribute and adapt the work, as long as you attribute the work to the Crown''.'
+  distribute and adapt the work, as long as you attribute the work to the Crown''. | Disabled: bot wall:
+  https://www.mfat.govt.nz/en/embassies served a challenge page (HTTP 200) to VoyagerBot in production
+  on 2026-11-17 23:30 UTC. Do not retry another way; mfat.govt.nz is denylisted.'
 relevance:
   sections:
   - emergency_card

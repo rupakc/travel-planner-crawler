@@ -271,7 +271,7 @@ pub fn deny_match<'a>(dl: &'a Denylist, url: &CanonicalUrl) -> Option<&'a DenyEn
     dl.entries.iter().find(|e| {
         let host_hit = match e.brand() {
             Some(brand) => {
-                let reg = PolitenessKey::for_host(&host).0;
+                let reg = PolitenessKey::registrable(&host);
                 reg.split('.').next() == Some(brand) && reg.contains('.')
             }
             None => under(&host, &e.host.to_ascii_lowercase()),

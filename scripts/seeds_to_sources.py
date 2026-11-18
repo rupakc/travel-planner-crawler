@@ -728,6 +728,8 @@ MAX_RETENTION_DAYS = {
 #   "licence: ..."                 licence class not settled
 #   "robots.txt ..."               robots.txt answers 401/403/5xx, redirects or times out
 #   "owner decision: ..."          the owner must decide (sg-customs-travellers)
+#   "bot wall: ..."                a page answered 401/403 or a challenge to VoyagerBot in
+#                                  production (date, status, URL); the host is denylisted
 # Kinds: customs rules map to tip/packing_hint, hospitals to place. Since 2026-11-18 public
 # holidays have their own `public_holiday` kind and country price indicators `price_level`
 # (observations), and five keyless api/dump sources run on the open-data adapters (ADAPTERS).
@@ -1148,6 +1150,11 @@ _src(
     seeds=['https://taxation-customs.ec.europa.eu/travelling_en'],
     include=['^https://taxation-customs\\.ec\\.europa\\.eu/(?:travelling|customs-4/customs-security/cash-controls)'],
     attribution='© European Union, DG TAXUD, CC BY 4.0',
+    off=('bot wall: https://taxation-customs.ec.europa.eu/travelling_en answered HTTP 403 to VoyagerBot '
+         'in production on 2026-11-17 23:30 UTC (its robots.txt answers 200 and allows us; '
+         'verified with one request). Do not retry another way; taxation-customs.ec.europa.eu is '
+         'denylisted (exact host; the other europa.eu hosts are separate politeness keys, '
+         'policy/key_splits.yaml).'),
 )
 _src(
     'eu-food-pets-travel',
@@ -1354,6 +1361,9 @@ _src(
     budget=300,
     include=['^https://www\\.mfat\\.govt\\.nz/(?:en/embassies/)'],
     attribution='© Crown copyright, New Zealand MFAT, CC BY 4.0',
+    off=('bot wall: https://www.mfat.govt.nz/en/embassies served a challenge page (HTTP 200) to '
+         'VoyagerBot in production on 2026-11-17 23:30 UTC. Do not retry another way; '
+         'mfat.govt.nz is denylisted.'),
 )
 _src(
     'freewalkingtour-com',
@@ -1837,6 +1847,9 @@ _src(
     kinds=['article', 'event'],
     depth=1,
     budget=50,
+    off=('bot wall: https://secretldn.com/feed/ served a challenge (HTTP 202) to VoyagerBot in '
+         'production on 2026-11-17 23:30 UTC. Do not retry another way; secretldn.com is '
+         'denylisted.'),
 )
 _src(
     'nps-data-api',

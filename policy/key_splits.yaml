@@ -1,0 +1,29 @@
+# Registrable domains whose politeness key is the full host, not the registrable domain.
+# Compiled into vc-core (`PolitenessKey::for_host`, include_str!), so every place that derives
+# a key — frontier, fetcher, scope (`source_keys`), the politeness oracle — agrees.
+#
+# By default one registrable domain (Public Suffix List) is one politeness key: one robots
+# decision per origin, but one delay, one request in flight, one budget and one park for the
+# whole site. That is right for one organisation's site and wrong for an umbrella domain that
+# hosts many independent organisations on separate servers with separate policies: a 403 from
+# one of them must not stop the others, and they do not share a server we could overload.
+#
+# Entry: {domain, reason}
+#   domain  a registrable domain (exactly what the PSL gives for its hosts; no subdomains).
+#           Every host under it becomes its own key (lowercase, no trailing dot).
+#   reason  why the hosts are independent (who runs them).
+#
+# Adding an entry makes the crawler's per-key limits apply per host (more parallel requests
+# to the umbrella domain overall, still one in flight and >= min delay per host), so it needs
+# the owner's approval in the PR. A migration must re-key existing frontier rows (see
+# migrations/1104_key_split_europa_eu.sql).
+version: 1
+splits:
+  - domain: europa.eu
+    reason: >-
+      Umbrella domain of the EU institutions and agencies. The European Central Bank
+      (www.ecb.europa.eu), the Commission's DGs (taxation-customs.ec.europa.eu,
+      home-affairs.ec.europa.eu, food.ec.europa.eu), the Publications Office (eur-lex.europa.eu)
+      and travel-europe.europa.eu are run by separate bodies on separate servers with separate
+      access policies. 2026-11-17: a 403 from taxation-customs.ec.europa.eu parked europa.eu and
+      stopped the ECB's daily FX file.

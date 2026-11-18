@@ -32,12 +32,16 @@ cadence: monthly
 min_delay_s: 5
 daily_budget: 200
 politeness_key: null
-enabled: true
+enabled: false
 needs_key: false
 key_secret: null
 max_retention_days: null
 display_requirements: null
-notes: robots ok; sitemap. 'licensed under the Creative Commons Attribution 4.0 International (CC BY 4.0)'.
+notes: 'robots ok; sitemap. ''licensed under the Creative Commons Attribution 4.0 International (CC BY
+  4.0)''. | Disabled: bot wall: https://taxation-customs.ec.europa.eu/travelling_en answered HTTP 403
+  to VoyagerBot in production on 2026-11-17 23:30 UTC (its robots.txt answers 200 and allows us; verified
+  with one request). Do not retry another way; taxation-customs.ec.europa.eu is denylisted (exact host;
+  the other europa.eu hosts are separate politeness keys, policy/key_splits.yaml).'
 relevance:
   sections:
   - tips

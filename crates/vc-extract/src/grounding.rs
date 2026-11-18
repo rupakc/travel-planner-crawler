@@ -269,7 +269,7 @@ impl SourceEvidence {
             month_days,
             text_urls,
             link_urls,
-            own_key: page.politeness_key(),
+            own_key: PolitenessKey(PolitenessKey::registrable(page.host())),
         }
     }
 
@@ -307,7 +307,7 @@ impl SourceEvidence {
     /// The URL rule alone (scheme, own domain or page link), without the verbatim test.
     pub fn check_url_domain(&self, s: &str, strict_domain: bool) -> Result<(), GroundFailure> {
         let (norm, host) = normalise_url(s).ok_or(GroundFailure::BadScheme)?;
-        if PolitenessKey::for_host(&host) == self.own_key {
+        if PolitenessKey::registrable(&host) == self.own_key.0 {
             return Ok(());
         }
         if !strict_domain && self.link_urls.contains(&norm) {

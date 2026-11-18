@@ -7,7 +7,7 @@
 Every website and dataset the crawler knows, grouped by the part of the Voyager app it
 feeds. A source that serves several parts is listed under each of them.
 
-**269 sources, 197 on, 72 off.**
+**269 sources, 194 on, 75 off.**
 
 - **What we take**: the traveller-facing data the source gives (its `relevance.why`).
 - **Licence**: *open* (free reuse with credit), *share-alike* (kept apart from other
@@ -215,7 +215,6 @@ is added only with the owner's approval (see CONTRIBUTING.md).
 | `peru-travel` | `www.peru.travel` | Official Peruvian destinations and itineraries, for Places to see and the itinerary. | facts only | yes | no |
 | `philippines-travel` | `philippines.travel` | Official Philippine destinations and activities, for Places to see and Activities. | facts only | yes | no |
 | `rub-og-stub` | `www.spisrubogstub.dk` | Opening hours, menus and booking information for Rub & Stub, a social restaurant in Copenhagen, for Activities and Places to see. | facts only | yes | no |
-| `secretldn` | `secretldn.com` | London what's-on and hidden gems (headline, link and a short excerpt only), for Events and Places to see. | facts only | yes | no |
 | `srilanka-travel` | `www.srilanka.travel` | Official Sri Lankan attractions and destinations, for Places to see. | facts only | yes | no |
 | `sydney-com` | `www.sydney.com` | Sydney food and drink, things to do and events, for Activities, Events and Places to see. | facts only | yes | no |
 | `tanzania-tourism` | `tanzaniatourism.go.tz` | Official Tanzanian destinations and parks, for Places to see. | facts only | yes | no |
@@ -250,6 +249,7 @@ is added only with the owner's approval (see CONTRIBUTING.md).
 | `messynessychic` | `www.messynessychic.com` | Off-the-beaten-path curiosities and hidden places worldwide (headline, link and a short excerpt only), for Places to see. | facts only | no | no |
 | `myswitzerland-open-data` | `opendata.myswitzerland.io` | Swiss sights, experiences and tours as structured data, for Places to see, Activities and the itinerary. | facts only | no | yes |
 | `ridb` | `ridb.recreation.gov` | US federal recreation areas, campgrounds, tours and activities, for Activities and Places to see. | open | no | yes |
+| `secretldn` | `secretldn.com` | London what's-on and hidden gems (headline, link and a short excerpt only), for Events and Places to see. | facts only | no | no |
 | `taiwan-tourism-od` | `media.taiwan.net.tw` | Every Taiwanese tourism event, listed restaurant and scenic spot, for Events, Activities and Places to see. | open | no | no |
 | `tat-data-api` | `tatdataapi.io` | Thai events, attractions and activities as structured data, for Events, Places to see and Activities. | facts only | no | yes |
 | `unesco-whc` | `whc.unesco.org` | UNESCO World Heritage Sites with descriptions and locations for Places to see; licence unverified, so off. | restricted | no | no |
@@ -287,7 +287,6 @@ is added only with the owner's approval (see CONTRIBUTING.md).
 | `openholidays` | `openholidaysapi.org` | Public and school holidays by region for about 36 countries (crowds and closures), for Events and Travel tips. | share-alike | yes | no |
 | `paris-quefaire` | `opendata.paris.fr` | Official Paris city events and things to do with dates and venues, for Events and Activities. | share-alike | yes | no |
 | `seatgeek` | `api.seatgeek.com` | Concerts, sports and theatre events with dates and venues, for the Events section. | API terms | yes | yes |
-| `secretldn` | `secretldn.com` | London what's-on and hidden gems (headline, link and a short excerpt only), for Events and Places to see. | facts only | yes | no |
 | `spain-info` | `www.spain.info` | Spain's official routes, gastronomy and event calendar, for the itinerary, Events and Activities. | facts only | yes | no |
 | `stockholm-open-api` | `www.visitstockholm.com` | Official Stockholm events, curated guides and activities for Events, Activities and the itinerary. | open | yes | no |
 | `sydney-com` | `www.sydney.com` | Sydney food and drink, things to do and events, for Activities, Events and Places to see. | facts only | yes | no |
@@ -321,6 +320,7 @@ is added only with the owner's approval (see CONTRIBUTING.md).
 | `openagenda-api` | `api.openagenda.com` | Event agendas from French, Belgian and Swiss cities and regions, for the Events section. | open | no | yes |
 | `parisjetaime` | `parisjetaime.com` | Paris events and things to do from the official tourist office, for Events and Activities. | facts only | no | no |
 | `predicthq` | `api.predicthq.com` | Events and public holidays worldwide for the Events section; paid only, so off. | API terms | no | yes |
+| `secretldn` | `secretldn.com` | London what's-on and hidden gems (headline, link and a short excerpt only), for Events and Places to see. | facts only | no | no |
 | `taiwan-tourism-od` | `media.taiwan.net.tw` | Every Taiwanese tourism event, listed restaurant and scenic spot, for Events, Activities and Places to see. | open | no | no |
 | `tat-data-api` | `tatdataapi.io` | Thai events, attractions and activities as structured data, for Events, Places to see and Activities. | facts only | no | yes |
 | `timeout-blog-rss` | `www.timeout.com` | Time Out city articles (what's on, things to do, new openings) for Events and Activities. | facts only | no | no |
@@ -413,7 +413,6 @@ is added only with the owner's approval (see CONTRIBUTING.md).
 | `cfia-travellers` | `inspection.canada.ca` | Which food, plants and animals travellers may bring into Canada, for Travel tips and Packing. | facts only | yes | no |
 | `common-crawl` | `index.commoncrawl.org` | Index of a public web crawl, used only to discover travel pages (sights, things to do, advice) for Places to see, Activities and Travel tips. | facts only | yes | no |
 | `dubai-customs-passengers` | `www.dubaicustoms.gov.ae` | UAE duty-free allowances and banned items (medicines, e-cigarettes), for Travel tips and Packing. | facts only | yes | no |
-| `eu-customs-travellers` | `taxation-customs.ec.europa.eu` | EU duty-free allowances for alcohol and tobacco, the 10,000 euro cash declaration and banned counterfeit goods, for Travel tips and Packing. | open | yes | no |
 | `eu-food-pets-travel` | `food.ec.europa.eu` | The EU pet passport, rabies and microchip rules and the ban on meat and dairy in luggage from outside the EU, for Travel tips and Packing. | open | yes | no |
 | `eurostat-prices` | `ec.europa.eu` | Official relative price levels for restaurants and hotels, food and transport per European country, for Travel tips cost guidance and itinerary budgets. | open | yes | no |
 | `fcdo-content-api` | `www.gov.uk` | Official UK travel advice per country (entry rules, safety, local laws, emergency numbers) for Visa, Emergency card and Travel tips. | open | yes | no |
@@ -453,6 +452,7 @@ is added only with the owner's approval (see CONTRIBUTING.md).
 | `auswaertiges-amt-opendata` | `www.auswaertiges-amt.de` | German embassy and consulate contacts, health leaflets and travel warnings per country, for the Emergency card, Visa and Travel tips. | API terms | no | no |
 | `calendarific` | `calendarific.com` | Public holidays in about 230 countries (closures and crowds), for Events and Travel tips. | API terms | no | yes |
 | `culturetrip` | `theculturetrip.com` | Culture Trip destination guides (title and link only) for Places to see, Activities and Travel tips; every page times out for our bot, so off. | facts only | no | no |
+| `eu-customs-travellers` | `taxation-customs.ec.europa.eu` | EU duty-free allowances for alcohol and tobacco, the 10,000 euro cash declaration and banned counterfeit goods, for Travel tips and Packing. | open | no | no |
 | `ricksteves-forum` | `community.ricksteves.com` | Traveller questions and answers about trips in Europe, for Travel tips; v1 uses only the Stack Exchange dump, so off. | facts only | no | no |
 | `se-api` | `api.stackexchange.com` | Travel Stack Exchange questions and answers for Travel tips; v1 uses the data dump instead, so off. | share-alike | no | no |
 | `tasteatlas` | `www.tasteatlas.com` | Traditional dishes and where to eat them by region, for Activities and Travel tips. | facts only | no | no |
@@ -468,9 +468,9 @@ is added only with the owner's approval (see CONTRIBUTING.md).
 | `fcdo-content-api` | `www.gov.uk` | Official UK travel advice per country (entry rules, safety, local laws, emergency numbers) for Visa, Emergency card and Travel tips. | open | yes | no |
 | `govuk-medical-lists` | `www.gov.uk` | Official UK lists of English-speaking hospitals, clinics and doctors per country, for the Emergency card's hospitals. | open | yes | no |
 | `govuk-world-orgs` | `www.gov.uk` | Official British embassy, high-commission and consulate addresses, phones and hours in every country, for the Emergency card. | open | yes | no |
-| `mfat-embassies` | `www.mfat.govt.nz` | Official New Zealand embassy and consulate contacts per country, for the Emergency card. | open | yes | no |
 | `auswaertiges-amt-opendata` | `www.auswaertiges-amt.de` | German embassy and consulate contacts, health leaflets and travel warnings per country, for the Emergency card, Visa and Travel tips. | API terms | no | no |
 | `healthsites-io` | `healthsites.io` | Hospitals and clinics worldwide with names, addresses and phones, for the Emergency card's hospitals. | share-alike | no | yes |
+| `mfat-embassies` | `www.mfat.govt.nz` | Official New Zealand embassy and consulate contacts per country, for the Emergency card. | open | no | no |
 | `state-dept-country-pages` | `travel.state.gov` | US entry rules and embassy contacts per country for Visa and the Emergency card; travel.state.gov blocks our bot, so off. | open | no | no |
 | `usembassy-list` | `www.usembassy.gov` | US embassy and consulate addresses and phone numbers per country, for the Emergency card. | open | no | no |
 | `wikidata-aviation` | `query.wikidata.org` | Airlines, airports and emergency numbers from Wikidata for Flights and the Emergency card; robots.txt disallows us, so off. | open | no | no |
@@ -532,7 +532,6 @@ is added only with the owner's approval (see CONTRIBUTING.md).
 | `cfia-travellers` | `inspection.canada.ca` | Which food, plants and animals travellers may bring into Canada, for Travel tips and Packing. | facts only | yes | no |
 | `dubai-customs-passengers` | `www.dubaicustoms.gov.ae` | UAE duty-free allowances and banned items (medicines, e-cigarettes), for Travel tips and Packing. | facts only | yes | no |
 | `enwiki-dump` | `dumps.wikimedia.org` | Facts from English Wikipedia: places, airport destination tables, emergency numbers and plug and voltage types, for Places to see, Flights, the Emergency card and the Packing list. | share-alike | yes | no |
-| `eu-customs-travellers` | `taxation-customs.ec.europa.eu` | EU duty-free allowances for alcohol and tobacco, the 10,000 euro cash declaration and banned counterfeit goods, for Travel tips and Packing. | open | yes | no |
 | `eu-food-pets-travel` | `food.ec.europa.eu` | The EU pet passport, rabies and microchip rules and the ban on meat and dairy in luggage from outside the EU, for Travel tips and Packing. | open | yes | no |
 | `govuk-customs` | `www.gov.uk` | UK duty-free allowances, the 10,000 pound cash rule, banned meat and dairy and pet entry rules, for Travel tips and Packing. | open | yes | no |
 | `hk-customs-travellers` | `www.customs.gov.hk` | Hong Kong duty-free concessions for alcohol and tobacco and the HK$120,000 cash declaration, for Travel tips and Packing. | facts only | yes | no |
@@ -542,6 +541,7 @@ is added only with the owner's approval (see CONTRIBUTING.md).
 | `nz-customs-travellers` | `www.customs.govt.nz` | New Zealand's allowances, the NZD 10,000 cash rule and the biosecurity food declaration, for Travel tips and Packing. | facts only | yes | no |
 | `sg-customs-travellers` | `www.customs.gov.sg` | Singapore's GST relief, duty-free concession, no duty-free cigarettes and prohibited goods (chewing gum, e-cigarettes), for Travel tips and Packing. | facts only | yes | no |
 | `wikivoyage-dump` | `dumps.wikimedia.org` | Wikivoyage destination guides (sights, things to do, where to stay, getting around, SIM and tips) for those app sections. | share-alike | yes | no |
+| `eu-customs-travellers` | `taxation-customs.ec.europa.eu` | EU duty-free allowances for alcohol and tobacco, the 10,000 euro cash declaration and banned counterfeit goods, for Travel tips and Packing. | open | no | no |
 | `who-ith` | `www.who.int` | WHO health advice for travellers (vaccines, health risks) for Travel tips and the Packing list; licence restricted, so off. | restricted | no | no |
 
 ## Itinerary

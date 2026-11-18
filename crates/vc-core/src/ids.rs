@@ -250,18 +250,59 @@ pub struct OriginKey(pub String);
 #[serde(transparent)]
 pub struct PolitenessKey(pub String);
 
+/// `policy/key_splits.yaml`, compiled in: registrable domains that are umbrellas for
+/// independent organisations, whose hosts are keyed one by one.
+const KEY_SPLITS_YAML: &str = include_str!("../../../policy/key_splits.yaml");
+
+/// The `domain:` values of `policy/key_splits.yaml` (lowercase). A minimal line reader, so
+/// vc-core needs no YAML dependency: every `- domain: <value>` line is one entry. A test
+/// checks it against a full YAML parse.
+fn parse_key_splits(yaml: &str) -> Vec<String> {
+    yaml.lines()
+        .filter_map(|l| l.trim().strip_prefix("- domain:"))
+        .map(|v| {
+            v.trim()
+                .trim_matches(|c| c == '"' || c == '\'')
+                .trim_end_matches('.')
+                .to_ascii_lowercase()
+        })
+        .filter(|d| !d.is_empty())
+        .collect()
+}
+
+/// The split registrable domains, read once.
+fn key_splits() -> &'static [String] {
+    static SPLITS: std::sync::LazyLock<Vec<String>> =
+        std::sync::LazyLock::new(|| parse_key_splits(KEY_SPLITS_YAML));
+    &SPLITS
+}
+
 impl PolitenessKey {
     /// The default key for a host: its registrable domain per the Public Suffix List, or the
     /// host itself (lowercased, without a trailing dot) for IPs, `localhost` and unknown
-    /// suffixes.
+    /// suffixes. Hosts under a split domain (`policy/key_splits.yaml`, e.g. `europa.eu`) are
+    /// their own key: `www.ecb.europa.eu` and `taxation-customs.ec.europa.eu` are separate.
     pub fn for_host(host: &str) -> Self {
         let h = host.trim_end_matches('.').to_ascii_lowercase();
-        if h.parse::<std::net::IpAddr>().is_ok() || h.starts_with('[') {
+        let reg = Self::registrable(&h);
+        if reg != h && key_splits().contains(&reg) {
             return PolitenessKey(h);
         }
+        PolitenessKey(reg)
+    }
+
+    /// The registrable domain of a host per the Public Suffix List (lowercased, no trailing
+    /// dot), or the host itself for IPs, `localhost` and unknown suffixes. Unlike
+    /// [`PolitenessKey::for_host`] it ignores key splits: use it where the question is "which
+    /// organisation/brand" (denylist brands, publishers), not "which politeness unit".
+    pub fn registrable(host: &str) -> String {
+        let h = host.trim_end_matches('.').to_ascii_lowercase();
+        if h.parse::<std::net::IpAddr>().is_ok() || h.starts_with('[') {
+            return h;
+        }
         match psl::domain_str(&h) {
-            Some(d) => PolitenessKey(d.to_string()),
-            None => PolitenessKey(h),
+            Some(d) => d.to_string(),
+            None => h,
         }
     }
 }
@@ -401,6 +442,63 @@ mod tests {
             "example.co.uk"
         );
         assert_eq!(PolitenessKey::for_host("127.0.0.1").0, "127.0.0.1");
+    }
+
+    #[test]
+    fn split_domains_are_keyed_per_host() {
+        let ecb = PolitenessKey::for_host("www.ecb.europa.eu");
+        let taxud = PolitenessKey::for_host("taxation-customs.ec.europa.eu");
+        assert_ne!(ecb, taxud);
+        assert_eq!(ecb.0, "www.ecb.europa.eu");
+        assert_eq!(
+            PolitenessKey::for_host("Taxation-Customs.EC.europa.eu.").0,
+            "taxation-customs.ec.europa.eu"
+        );
+        assert_eq!(PolitenessKey::for_host("europa.eu").0, "europa.eu");
+        // Registrable domains still answer "which organisation", splits or not.
+        assert_eq!(PolitenessKey::registrable("www.ecb.europa.eu"), "europa.eu");
+        // Everything else is unchanged.
+        assert_eq!(
+            PolitenessKey::for_host("www.example.co.uk").0,
+            "example.co.uk"
+        );
+        assert_eq!(
+            PolitenessKey::for_host("en.wikivoyage.org").0,
+            "wikivoyage.org"
+        );
+        // A look-alike is not a split domain.
+        assert_eq!(
+            PolitenessKey::for_host("www.noteuropa.eu").0,
+            "noteuropa.eu"
+        );
+    }
+
+    #[test]
+    fn key_splits_file_parses_and_holds_registrable_domains() {
+        #[derive(serde::Deserialize)]
+        struct Entry {
+            domain: String,
+            reason: String,
+        }
+        #[derive(serde::Deserialize)]
+        struct File {
+            version: u32,
+            splits: Vec<Entry>,
+        }
+        let f: File = serde_norway::from_str(KEY_SPLITS_YAML).expect("key_splits.yaml parses");
+        assert_eq!(f.version, 1);
+        let full: Vec<String> = f.splits.iter().map(|e| e.domain.clone()).collect();
+        assert_eq!(parse_key_splits(KEY_SPLITS_YAML), full);
+        assert!(full.contains(&"europa.eu".to_string()));
+        for e in &f.splits {
+            assert_eq!(
+                PolitenessKey::registrable(&e.domain),
+                e.domain,
+                "{} must be a registrable domain",
+                e.domain
+            );
+            assert!(e.reason.len() >= 20, "{} needs a reason", e.domain);
+        }
     }
 
     #[test]

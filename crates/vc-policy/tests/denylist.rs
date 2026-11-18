@@ -240,6 +240,12 @@ fn batch2_entries_are_denied() {
         "https://www.eurochange.co.uk/travel-money/guides",
         "https://travelersunited.org/",
         "https://consumer.ftc.gov/articles/travel-scams",
+        // bot walls met in production, 2026-11-17
+        "https://taxation-customs.ec.europa.eu/travelling_en",
+        "https://www.mfat.govt.nz/en/embassies",
+        "https://mfat.govt.nz/",
+        "https://secretldn.com/feed/",
+        "https://www.secretldn.com/",
     ] {
         assert!(denied(u).is_some(), "{u} must be denied");
     }
@@ -257,9 +263,15 @@ fn approved_hosts_stay_allowed() {
         "https://www.canada.ca/en/immigration-refugees-citizenship/",
         "https://www.cbp.gov/travel/",
         "https://home-affairs.ec.europa.eu/",
+        // europa.eu: only taxation-customs.ec.europa.eu is denied (2026-11-17)
+        "https://www.ecb.europa.eu/stats/eurofxref/eurofxref-daily.xml",
+        "https://travel-europe.europa.eu/en/etias",
+        "https://home-affairs.ec.europa.eu/policies/schengen/visa-policy_en",
+        "https://food.ec.europa.eu/animals/movement-pets_en",
+        "https://eur-lex.europa.eu/eli/reg/2018/1806",
+        "https://ec.europa.eu/eurostat/api/dissemination/statistics/1.0/data/prc_ppp_ind",
         "https://www.immigration.govt.nz/",
         "https://www.customs.govt.nz/",
-        "https://www.mfat.govt.nz/en/embassies",
         "https://www.customs.go.jp/english/",
         "https://www.maff.go.jp/aqs/english/",
         "https://www.nps.gov/sitemap.xml",
