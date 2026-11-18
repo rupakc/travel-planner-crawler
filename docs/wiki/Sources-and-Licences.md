@@ -134,7 +134,7 @@ politeness applies to each.
 | `canada_advisories` | Global Affairs Canada travel advice JSON | advisory level and text per country |
 | `ecb_fx` | ECB euro reference rates XML | daily, 90-day and historical |
 | `fcdo_content_api` | UK FCDO advice via the GOV.UK Content API | |
-| `gtfs_static` | Any GTFS Schedule zip (one feed per source seed; zips of zips too), streamed with a size cap (`gtfs_max_bytes`) | keeps agencies, routes, stations, fares and feed validity as `transit_item` records, never `stop_times`/`trips`; conditional GET (an unchanged feed is one 304); provider keys in the header or query each host expects, never stored; `ET-Client-Name` for Entur |
+| `gtfs_static` | Any GTFS Schedule zip (one feed per source seed; zips of zips too), streamed with a size cap (`gtfs_max_bytes`) | keeps agencies, routes, stations, fares and feed validity as `transit_item` records, never `stop_times`/`trips`; conditional GET (an unchanged feed is one 304); provider keys in the header or query each host expects, never stored; `ET-Client-Name` for Entur; a seed that answers JSON (udata/CKAN dataset) or HTML is an index: the newest zip it names, on the same politeness key, is downloaded (`resolve_latest`, e.g. Luxembourg) |
 | `met_norway` | MET Norway Locationforecast 2.0 | coordinates at most 4 decimals, as MET requires |
 | `mobility_database_catalog` | Mobility Database `feeds_v2.csv` (CC0), streamed | keeps active GTFS Schedule feeds; its source is disabled (robots.txt) |
 | `nager_holidays` | Nager.Date public holidays | countries, then one row per year and country; its source is disabled (robots.txt) |
@@ -143,7 +143,7 @@ politeness applies to each.
 | `state_dept_advisories` | US State Department advisories API | |
 | `ticketmaster_discovery` | Ticketmaster Discovery API v2 | the API key never reaches the spool; no key = no request; resumable |
 | `wikidata_sparql` | Wikidata SPARQL, paginated | emergency numbers, plug types, voltage; resumable; the `wikidata-aviation` source is disabled (robots.txt) |
-| `wikivoyage_dump` | English Wikivoyage pages-articles (CC BY-SA 4.0), bzip2 streamed | main-namespace pages |
+| `wikivoyage_dump` | Wikivoyage pages-articles of 23 language editions (CC BY-SA 4.0), bzip2 streamed; edition from the dump URL | main-namespace pages, with each edition's listing templates (`see`, `vCard`, `voir`, `zobacz`…) mapped to language-neutral listings (`EDITIONS` table) |
 
 Adapters that answer 429 or 503 back the key off with their `Retry-After`; other 5xx
 count toward parking (see [Politeness and Robots](Politeness-and-Robots)).

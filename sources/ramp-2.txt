@@ -854,3 +854,5 @@ tb-nelsontasman            # places/activities/events: Nelson Tasman (html, fact
 ev-esplanade-sg            # events: Esplanade (Singapore) (html, facts only, weekly, <= 100/day; terms owner-accepted)
 tb-sltda                   # tips/hotels: Sri Lanka Tourism Development Authority (html, facts only, weekly, <= 100/day; terms owner-accepted)
 ev-broadsheet              # events/activities: Broadsheet (Australia) (html, facts only, weekly, <= 100/day; terms owner-accepted; robots reserves AI use: title and link only)
+# --- open data: html (2026-11-18) ---
+jma-climate-normals         # weather/packing: JMA monthly climate normals 1991-2020, 21 main-city stations (html seeds only, CC BY 4.0-compatible terms, yearly, <= 30/day)

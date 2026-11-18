@@ -26,6 +26,12 @@
 //! body (manifest `skipped: over_size_cap`); a body that grows past it is cut by the permit
 //! client. Inflated bytes are capped too (zip bombs).
 //!
+//! "Latest file" feeds: when the leased URL answers JSON or HTML instead of a zip, it is an
+//! index (a udata/CKAN dataset, or a page of date-stamped zips) whose current zip changes name
+//! with every release. The index (at most [`INDEX_MAX_BYTES`]) is spooled raw, the newest zip it
+//! names is resolved ([`resolve_latest`]) and downloaded under the same permit, only when it is
+//! on the leased URL's politeness key; the leased row keeps the index's validators.
+//!
 //! Keys (sources off until the owner registers one) go where each provider wants them
 //! ([`auth_for`]); query keys are stripped from every stored URL. Entur asks every client to
 //! identify itself with `ET-Client-Name` ([`ENTUR_CLIENT_NAME`]); the value is fixed, never
@@ -834,6 +840,135 @@ fn status_error(status: u16, retry: Option<String>) -> Error {
     }
 }
 
+// ---------------------------------------------------------------------------------------------
+// "Latest file" resolver (an index that names the current zip)
+// ---------------------------------------------------------------------------------------------
+
+/// Largest index (JSON or HTML) read when the leased URL lists the current feed instead of
+/// serving it.
+pub const INDEX_MAX_BYTES: usize = 8 * 1024 * 1024;
+
+/// Whether a response is an index to resolve (JSON or HTML) rather than the feed itself.
+fn is_index(content_type: Option<&str>) -> bool {
+    let Some(ct) = content_type else {
+        return false;
+    };
+    let ct = ct
+        .split(';')
+        .next()
+        .unwrap_or("")
+        .trim()
+        .to_ascii_lowercase();
+    ct == "application/json" || ct.ends_with("+json") || ct == "text/html"
+}
+
+static HREF_ZIP: std::sync::LazyLock<regex::Regex> = std::sync::LazyLock::new(|| {
+    regex::Regex::new(r#"(?i)href\s*=\s*["']([^"'#\s]+?\.zip(?:\?[^"'#\s]*)?)["']"#).expect("regex")
+});
+
+fn when(s: &str) -> Option<chrono::NaiveDateTime> {
+    let s = s.trim();
+    chrono::DateTime::parse_from_rfc3339(s)
+        .map(|d| d.naive_utc())
+        .or_else(|_| chrono::NaiveDateTime::parse_from_str(s, "%Y-%m-%dT%H:%M:%S%.f"))
+        .ok()
+        .or_else(|| {
+            chrono::NaiveDate::parse_from_str(s.get(..10)?, "%Y-%m-%d")
+                .ok()?
+                .and_hms_opt(0, 0, 0)
+        })
+}
+
+/// The current feed an index names (pure; exposed for tests).
+///
+/// - **JSON**: a udata dataset (`resources[]`, e.g. data.public.lu, data.gouv.fr) or a CKAN
+///   `package_show` result (`result.resources[]`). Zip resources (format `zip`/`gtfs`, MIME
+///   `application/zip`, or a `.zip` path) are candidates; when resources carry a `type`, only
+///   `main` ones count (udata keeps old releases and documentation next to them). The newest by
+///   `last_modified`, `created_at`, `metadata_modified` or `created` wins; on a tie, the first
+///   listed.
+/// - **HTML**: the `.zip` links of the page; one distinct link is the feed, several are taken to
+///   be date-stamped releases and the one whose file name sorts last wins.
+///
+/// Relative links are resolved against the index URL. `None` when nothing qualifies.
+pub fn resolve_latest(
+    index: &CanonicalUrl,
+    content_type: Option<&str>,
+    body: &[u8],
+) -> Option<CanonicalUrl> {
+    let ct = content_type.unwrap_or("").to_ascii_lowercase();
+    if ct.contains("json") {
+        let v: Value = serde_json::from_slice(body).ok()?;
+        let res = v
+            .get("resources")
+            .or_else(|| v.get("result").and_then(|r| r.get("resources")))?
+            .as_array()?;
+        let is_zip = |r: &Value| {
+            let f = |k: &str| {
+                r.get(k)
+                    .and_then(Value::as_str)
+                    .unwrap_or("")
+                    .trim()
+                    .to_ascii_lowercase()
+            };
+            let path_zip = url::Url::parse(&f("url"))
+                .map(|u| u.path().ends_with(".zip"))
+                .unwrap_or(false);
+            matches!(f("format").as_str(), "zip" | "gtfs")
+                || f("mime") == "application/zip"
+                || f("mimetype") == "application/zip"
+                || path_zip
+        };
+        let typed = res.iter().any(|r| r.get("type").is_some());
+        let mut best: Option<(Option<chrono::NaiveDateTime>, &str)> = None;
+        for r in res {
+            if !is_zip(r) || (typed && r.get("type").and_then(Value::as_str) != Some("main")) {
+                continue;
+            }
+            let Some(u) = r
+                .get("url")
+                .and_then(Value::as_str)
+                .filter(|u| !u.is_empty())
+            else {
+                continue;
+            };
+            let t = [
+                "last_modified",
+                "created_at",
+                "metadata_modified",
+                "created",
+            ]
+            .iter()
+            .find_map(|k| r.get(*k).and_then(Value::as_str).and_then(when));
+            if best.as_ref().is_none_or(|(bt, _)| t > *bt) {
+                best = Some((t, u));
+            }
+        }
+        return index.join(best?.1).ok();
+    }
+    if ct.contains("html") {
+        let text = String::from_utf8_lossy(body);
+        let links = HREF_ZIP
+            .captures_iter(&text)
+            .filter_map(|c| index.join(&super::common::xml_unescape(&c[1])).ok());
+        let name = |u: &CanonicalUrl| {
+            u.as_url()
+                .path_segments()
+                .and_then(|mut s| s.next_back())
+                .unwrap_or("")
+                .to_string()
+        };
+        let mut best: Option<CanonicalUrl> = None;
+        for l in links {
+            if best.as_ref().is_none_or(|b| name(&l) > name(b)) {
+                best = Some(l);
+            }
+        }
+        return best;
+    }
+    None
+}
+
 /// The status capture of the leased URL: a primary `metadata` record carrying the response's
 /// status and validators (and, for a 200, the zip's SHA-256 as its payload hash), so the
 /// frontier sends `If-None-Match` / `If-Modified-Since` next time. It has no body, so the
@@ -867,6 +1002,89 @@ async fn append_status(
         .await?;
     report.records += 1;
     Ok(())
+}
+
+fn head_value<'a>(head: &'a vc_core::fetch::ResponseHead, name: &str) -> Option<&'a str> {
+    head.headers.get(name).and_then(|v| v.to_str().ok())
+}
+
+impl GtfsStatic {
+    /// Reads an index response (at most [`INDEX_MAX_BYTES`]), spools it raw (a `manifest`-role
+    /// `response`: kept for provenance, never mapped to records), and returns the feed it names
+    /// with the index's validators. The feed must be on the leased URL's politeness key (the
+    /// permit's scope); anything else is refused, never followed.
+    async fn resolve(
+        &self,
+        ctx: &mut AdapterCtx<'_>,
+        stream: vc_core::fetch::LimitedBodyStream,
+        report: &mut AdapterReport,
+    ) -> Result<(CanonicalUrl, Validators)> {
+        let head = stream.head;
+        let mut body = stream.body;
+        let mut buf: Vec<u8> = Vec::new();
+        while let Some(chunk) = body.next().await {
+            let chunk = chunk.map_err(Error::Fetch)?;
+            if buf.len() + chunk.len() > INDEX_MAX_BYTES {
+                return Err(Error::Invalid(format!(
+                    "gtfs_static: index larger than {INDEX_MAX_BYTES} bytes"
+                )));
+            }
+            buf.extend_from_slice(&chunk);
+        }
+        drop(body);
+        report.bytes += buf.len() as u64;
+        let ct = head_value(&head, "content-type").map(str::to_string);
+        let validators = Validators {
+            etag: head_value(&head, "etag").map(str::to_string),
+            last_modified: head_value(&head, "last-modified").map(str::to_string),
+        };
+        let media = if ct.as_deref().is_some_and(|c| c.contains("html")) {
+            MediaType::Html
+        } else {
+            MediaType::Json
+        };
+        let body = Bytes::from(buf);
+        let ex = vc_core::fetch::Exchange {
+            url: head.url.clone(),
+            redirects: head.redirects.clone(),
+            method: http::Method::GET,
+            request_headers: head.request_headers.clone(),
+            status: head.status,
+            response_headers: head.headers.clone(),
+            body: body.clone(),
+            original_encoding: head.original_encoding.clone(),
+            truncated: false,
+            peer_ip: head.peer_ip,
+            started_at: head.started_at,
+            ended_at: ctx.clock.now(),
+            purpose: RequestPurpose::Dump,
+        };
+        let m = meta(
+            ctx,
+            &head.url,
+            CaptureRole::Manifest,
+            media,
+            Some(head.status.as_u16()),
+            &body,
+            validators.clone(),
+        );
+        ctx.sink
+            .append(SpoolRecord {
+                meta: m,
+                payload: SpoolPayload::Response(ex),
+            })
+            .await?;
+        report.records += 1;
+        let target = resolve_latest(&head.url, ct.as_deref(), &body)
+            .ok_or_else(|| Error::Invalid("gtfs_static: the index names no zip feed".into()))?;
+        if target.politeness_key() != ctx.url.url.politeness_key() {
+            return Err(Error::Invalid(format!(
+                "gtfs_static: the index names a feed on another site ({})",
+                target.host()
+            )));
+        }
+        Ok((target, validators))
+    }
 }
 
 #[async_trait::async_trait]
@@ -926,19 +1144,45 @@ impl SourceAdapter for GtfsStatic {
         }
 
         report.requests += 1;
-        let stream = ctx
+        let mut stream = ctx
             .client
             .stream(ctx.permit, req)
             .await
             .map_err(|e| Error::Fetch(super::common::redact_fetch_error(e, KEY_PARAMS)))?;
+        // The leased URL may be an index (udata/CKAN JSON or an HTML page) that names the
+        // current zip, whose file name changes with every release: resolve it, then download
+        // that zip under the same permit. The index is spooled raw first; the leased row keeps
+        // the index's validators (an unchanged index costs one request and a 304).
+        let mut index: Option<(CanonicalUrl, Validators)> = None;
+        if stream.head.status.is_success() && is_index(head_value(&stream.head, "content-type")) {
+            let target = match self.resolve(ctx, stream, &mut report).await {
+                Ok(t) => t,
+                Err(e) => {
+                    let m = json!({
+                        "type": "dump_manifest", "adapter": adapter, "url": leased.as_str(),
+                        "filter_version": FILTER_VERSION, "started_at": started.to_rfc3339(),
+                        "licence": &ctx.source.licence, "complete": false,
+                        "error": format!("{:?}", e.class()),
+                        "error_detail": match &e { Error::Invalid(m) => Some(m.clone()), _ => None },
+                    });
+                    append_manifest(ctx, &leased, m, &mut report).await?;
+                    return Err(e);
+                }
+            };
+            let mut req = FetchRequest::get(target.0.clone(), RequestPurpose::Dump);
+            req.max_body_bytes = s.max_bytes;
+            req.accept = Some("application/zip, application/octet-stream;q=0.9, */*;q=0.1".into());
+            report.requests += 1;
+            stream = ctx
+                .client
+                .stream(ctx.permit, req)
+                .await
+                .map_err(Error::Fetch)?;
+            index = Some(target);
+        }
         let head = stream.head;
         let mut body = stream.body;
-        let header = |n: &str| {
-            head.headers
-                .get(n)
-                .and_then(|v| v.to_str().ok())
-                .map(str::to_string)
-        };
+        let header = |n: &str| head_value(&head, n).map(str::to_string);
         let status = head.status.as_u16();
         let validators = Validators {
             etag: header("etag"),
@@ -958,6 +1202,15 @@ impl SourceAdapter for GtfsStatic {
             "started_at": started.to_rfc3339(),
             "licence": lic,
         });
+        // The leased row's validators: the index's when it was resolved, else the zip's.
+        let validators = match index {
+            Some((resolved, index_validators)) => {
+                manifest["resolved_from_index"] = true.into();
+                manifest["resolved_url"] = resolved.as_str().into();
+                index_validators
+            }
+            None => validators,
+        };
 
         if status == 304 {
             drop(body);

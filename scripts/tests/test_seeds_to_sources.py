@@ -864,7 +864,7 @@ def test_batch2_api_and_dump_sources_run_only_on_an_adapter(generated):
             continue
         if spec["method"] in ("api", "dump"):
             want = (OPEN_DATA_ADAPTERS.get(sid) or ADAPTED_2026_11_18.get(sid)
-                    or COUNTRY_INFO_AND_FOOD.get(sid)
+                    or COUNTRY_INFO_AND_FOOD.get(sid) or WIKIVOYAGE_EDITIONS.get(sid)
                     or OPEN_DATA_READERS.get(sid, (None,))[0])
             assert spec["adapter"] == want, sid
             assert spec["enabled"] is (want is not None), sid
@@ -878,10 +878,12 @@ def test_batch2_enabled_sources_are_polite_and_scoped(generated):
         if not spec["enabled"] or sid in s2s.GTFS_FEEDS:
             continue
         assert spec["method"] in ("html", "rss", "sitemap") or sid in OPEN_DATA_ADAPTERS \
-            or sid in ADAPTED_2026_11_18 or sid in COUNTRY_INFO_AND_FOOD or sid in OPEN_DATA_READERS, sid
+            or sid in ADAPTED_2026_11_18 or sid in COUNTRY_INFO_AND_FOOD or sid in OPEN_DATA_READERS \
+            or sid in WIKIVOYAGE_EDITIONS, sid
         assert spec["daily_budget"] <= 500 and spec["max_depth"] <= 2 and spec["min_delay_s"] >= 5, sid
         assert spec["licence"]["class"] in ("open", "facts_only") or (
-            sid in ("openholidays", "enwiki-visa-requirements") + tuple(CORPUS_SHARE_ALIKE)
+            (sid in ("openholidays", "enwiki-visa-requirements") + tuple(CORPUS_SHARE_ALIKE)
+             or sid in WIKIVOYAGE_EDITIONS)
             and spec["licence"]["class"] == "share_alike"), sid
         assert spec["cadence"] in ("daily", "h12", "weekly", "monthly", "quarterly", "yearly"), sid
         # Every include regex is pinned to the source's own host.
@@ -936,7 +938,7 @@ def test_ramp_2_extends_ramp_1_with_enabled_runnable_sources():
     # sources come with ramp-3).
     on = ({sid for sid in s2s.SOURCE_CLASS if committed[sid]["enabled"]} - set(OPEN_DATA_ADAPTERS)
           - set(s2s.GTFS_FEEDS) - set(ADAPTED_2026_11_18) - set(COUNTRY_INFO_AND_FOOD)
-          - set(OPEN_DATA_READERS))
+          - set(OPEN_DATA_READERS) - set(WIKIVOYAGE_EDITIONS))
     assert on <= set(r2), sorted(on - set(r2))
 
 
@@ -961,7 +963,7 @@ def test_ramp_3_is_ramp_2_plus_the_open_data_sources():
     assert len(r3) == len(set(r3))
     assert r3[: len(r2)] == r2
     assert set(r3[len(r2):]) == (set(OPEN_DATA_ADAPTERS) | s2s.GTFS_ON | set(COUNTRY_INFO_AND_FOOD)
-                                 | set(OPEN_DATA_READERS))
+                                 | set(OPEN_DATA_READERS) | set(WIKIVOYAGE_EDITIONS))
     v = _validator()
     for sid in r3:
         spec = committed[sid]
@@ -1010,7 +1012,10 @@ def test_gtfs_feeds_run_on_the_gtfs_adapter(generated):
         if spec["needs_key"]:
             assert spec["enabled"] is False and spec["key_secret"] == f"crawler-src-{sid}-key", sid
         if spec["enabled"]:
-            assert spec["licence"]["class"] in ("open", "api_terms"), sid
+            notes = " ".join(spec["notes"].split())
+            assert spec["licence"]["class"] in ("open", "api_terms") or (
+                spec["licence"]["class"] == "facts_only" and "Terms not found" in notes
+                and "owner decision 2026-11-17" in notes), sid
             assert not spec["needs_key"], sid
             assert all(u.startswith("https://") for u in spec["seeds"]), sid
     # robots.txt Crawl-Delay 10 on data.opentransportdata.swiss.
@@ -1367,7 +1372,7 @@ AP_PERSONAL_TERMS = {
 
 def test_corpus_asia_pacific_2026_11_18(generated):
     seeds = yaml.safe_load((ROOT / "docs" / "research" / "seeds.yaml").read_text())["seeds"]
-    ids = _batch_ids(seeds, "tb-osaka-info", "CORPUS_AFTER_ASIA_PACIFIC")
+    ids = _batch_ids(seeds, "tb-osaka-info", "prague-pid-gtfs")
     assert len(ids) == 183
     _corpus_batch_check(generated, ids, AP_OFF, AP_DELAYS, AP_AI_RESERVED, AP_PERSONAL_TERMS)
     assert len([s for s in ids if s not in AP_OFF]) == 141
@@ -1388,3 +1393,67 @@ AP_DENIED = ["https://www.visit-fsm.org/", "https://www.visitkiribati.travel/", 
 AP_STAY_ALLOWED = ["https://www.roots.gov.sg/sitemap-pages.xml", "https://www.wellingtonnz.com/",
                    "https://admin.wellingtonnz.com/sitemap.xml", "https://visithcmc.vn/feed/"]
 
+
+# Open data at scale (research 2026-11-18): GTFS feeds, Wikivoyage editions, JMA normals.
+WIKIVOYAGE_EDITIONS = {
+    f"wikivoyage-dump-{c}": "wikivoyage_dump"
+    for c in ("de fr es it pt nl pl ru uk zh ja sv fi he fa vi tr el cs id hi bn").split()
+}
+GTFS_OPEN_DATA_ON = {
+    "prague-pid-gtfs", "budapest-bkk-gtfs", "mbta-gtfs", "cta-gtfs", "king-county-metro-gtfs",
+    "ireland-nta-gtfs", "lithuania-gtfs", "luxembourg-gtfs",
+}
+
+
+def test_open_data_gtfs_feeds_2026_11_18(generated):
+    assert GTFS_OPEN_DATA_ON <= s2s.GTFS_ON
+    for sid in GTFS_OPEN_DATA_ON:
+        spec = generated[sid]
+        assert spec["enabled"] and spec["adapter"] == "gtfs_static", sid
+        assert spec["source_class"] == "official" and len(spec["seeds"]) == 1, sid
+        assert sid in _ramp("ramp-3.txt") and sid not in _ramp("ramp-2.txt"), sid
+    # One merged national feed for Lithuania instead of 61 municipal zips.
+    assert generated["lithuania-gtfs"]["seeds"] == ["https://www.visimarsrutai.lt/gtfs/gtfs_all.zip"]
+    # Luxembourg's zip name changes weekly: the seed is the udata index the adapter resolves.
+    lu = generated["luxembourg-gtfs"]
+    assert lu["seeds"][0].startswith("https://data.public.lu/api/1/datasets/")
+    assert lu["licence"]["spdx"] == "CC-BY-4.0"
+    assert generated["ireland-nta-gtfs"]["licence"]["attribution"].startswith("National Transport Authority")
+    for sid in ("mbta-gtfs", "cta-gtfs", "king-county-metro-gtfs"):
+        assert generated[sid]["licence"]["class"] == "api_terms" and generated[sid]["licence"]["url"], sid
+    for sid in ("mbta-gtfs", "cta-gtfs"):
+        assert generated[sid]["display_requirements"], sid
+    # STM's zip redirects into a robots-disallowed path: off with the reason.
+    stm = generated["stm-montreal-gtfs"]
+    assert stm["enabled"] is False and "stm-montreal-gtfs" not in s2s.GTFS_ON
+    assert "Disallow: /*getcontentasset" in " ".join(stm["notes"].split())
+
+
+def test_wikivoyage_editions_2026_11_18(generated):
+    assert len(WIKIVOYAGE_EDITIONS) == 22
+    for sid in WIKIVOYAGE_EDITIONS:
+        code = sid.rsplit("-", 1)[1]
+        spec = generated[sid]
+        assert spec["enabled"] and spec["adapter"] == "wikivoyage_dump", sid
+        assert spec["licence"]["class"] == "share_alike" and spec["licence"]["spdx"] == "CC-BY-SA-4.0", sid
+        assert f"{code}.wikivoyage.org" in spec["licence"]["attribution"], sid
+        assert spec["seeds"] == [
+            f"https://dumps.wikimedia.org/{code}wikivoyage/latest/{code}wikivoyage-latest-pages-articles.xml.bz2"
+        ], sid
+        assert spec["cadence"] == "monthly" and spec["method"] == "dump", sid
+        assert spec["kinds"] == ["place", "attraction", "hotel"] and spec["llm_kinds"] == [], sid
+        assert sid in _ramp("ramp-3.txt") and sid not in _ramp("ramp-2.txt"), sid
+
+
+def test_jma_normals_and_bathing_water_2026_11_18(generated):
+    jma = generated["jma-climate-normals"]
+    assert jma["enabled"] and jma["method"] == "html" and jma["max_depth"] == 0
+    assert len(jma["seeds"]) == 21 and all("/stats/etrn/view/nml_sfc_ym.php?" in u for u in jma["seeds"])
+    assert jma["kinds"] == ["weather_normal"] and jma["source_class"] == "official"
+    assert jma["licence"]["spdx"] == "CC-BY-4.0" and jma["cadence"] == "yearly"
+    assert "jma-climate-normals" in _ramp("ramp-2.txt") and "jma-climate-normals" in _ramp("ramp-3.txt")
+    bw = generated["ea-bathing-water-profiles"]
+    reason = " ".join(bw["notes"].split()).split("Disabled: ", 1)[1]
+    assert bw["enabled"] is False and reason.startswith("robots.txt") and "/doc/" in reason
+    for ramp in ("ramp-1.txt", "ramp-2.txt", "ramp-3.txt"):
+        assert "ea-bathing-water-profiles" not in _ramp(ramp)

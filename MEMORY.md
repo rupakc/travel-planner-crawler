@@ -287,3 +287,17 @@ plan = `docs/superpowers/plans/2026-11-15-voyager-crawler.md`, r1–r5 = `docs/r
   visit-fsm.org and visitkiribati.travel denylisted as hijacked domains; saigoneer.com for a
   scraping ban. Not added: english.visitbeijing.com.cn, www.airport.kr, www.tourismlaos.org,
   data.gov.au (robots.txt Disallow: /); nparks.gov.sg is denylisted (thematic batch).
+- 2026-11-18: open data at scale. GTFS on gtfs_static: Prague PID, Budapest BKK, MBTA, CTA, King
+  County Metro, Ireland NTA (all operators), Lithuania (one merged gtfs_all.zip instead of 61
+  municipal zips), Luxembourg; STM Montréal off (its zip 302s into robots-disallowed
+  /getcontentasset/). gtfs_static gained a "latest file" resolver: a seed answering JSON
+  (udata/CKAN) or HTML is an index, spooled raw; its newest main zip is downloaded only on the
+  same politeness key, and the row keeps the index's validators. wikivoyage_dump reads any
+  edition (edition from the dump URL; filter v2 adds `lang` and language-neutral `listings` from
+  each edition's listing templates, EDITIONS table read from the 2026-11-01 dumps); records add
+  attraction (see) and hotel (sleep) per listing, ids `<lang>wikivoyage:<page>:<wikidata|name>`.
+  22 more editions on (one share_alike source each, monthly, no LLM kinds, ~327 MB/month). JMA
+  normals: 21 verified station pages (html, depth 0, yearly). EA bathing-water profiles off: the
+  page is script-driven from robots-disallowed /doc/. Adapter sources in ramp-3, JMA in ramp-2.
+  (crates/vc-sources/src/adapters/{gtfs_static,wikivoyage_dump,records}.rs,
+  scripts/seeds_to_sources.py, sources/ramp-2.txt, ramp-3.txt)

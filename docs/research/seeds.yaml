@@ -13479,3 +13479,407 @@ seeds:
     allowed: true
     notes: 'Research 2026-11-18 (corpus Asia-Pacific): robots.txt: no response from the research host (TLS); terms:
       not checked. Terms unconfirmed; owner accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: prague-pid-gtfs
+    category: getting_around
+    name: Prague Integrated Transport (PID) GTFS
+    url: https://data.pid.cz/PID_GTFS.zip
+    method: dump
+    license: CC BY 4.0
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'data.pid.cz/robots.txt 404 (allowed, checked 2026-11-18). pid.cz/o-systemu/opendata: ''Data, která lze
+      stáhnout přímo zde z webu, jsou … opatřena licencí CC-BY'' (ROPID). 46 MB zip, rebuilt daily (Last-Modified
+      and ETag sent: conditional GET).'
+  - id: budapest-bkk-gtfs
+    category: getting_around
+    name: BKK Budapest GTFS
+    url: https://go.bkk.hu/api/static/v1/public-gtfs/budapest_gtfs.zip
+    method: dump
+    license: Copyright; terms not found
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'go.bkk.hu/robots.txt answers 200 with the SPA''s HTML (no rules: allowed, checked 2026-11-18). Terms not
+      found (bkk.hu/apps/docs 404): facts only, owner decision 2026-11-17 (unconfirmed terms accepted for non-commercial
+      use). 62 MB zip, daily; ETag/Last-Modified sent.'
+  - id: mbta-gtfs
+    category: getting_around
+    name: MBTA (Boston) GTFS
+    url: https://cdn.mbta.com/MBTA_GTFS.zip
+    method: dump
+    license: MassDOT Developers License Agreement
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'cdn.mbta.com/robots.txt 200 and empty (allowed, checked 2026-11-18). MassDOT Developers License Agreement
+      (cdn.mbta.com …/mbta-massdot-develop-license-agreement.pdf, read 2026-11-18) 3.1: ''non-exclusive, limited,
+      and revocable rights to use, reproduce, and redistribute the Data''; 4.1: ''Clearly acknowledge MassDOT as the
+      provider of the Data'', do not represent yourself as MassDOT. 22 MB zip.'
+  - id: cta-gtfs
+    category: getting_around
+    name: Chicago Transit Authority GTFS
+    url: https://www.transitchicago.com/downloads/sch_data/google_transit.zip
+    method: dump
+    license: CTA Developer License Agreement
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'www.transitchicago.com/robots.txt disallows /search/, /news/ and query patterns, not /downloads/ (checked
+      2026-11-18). CTA Developer License (transitchicago.com/developers/terms/, read 2026-11-18) I: licence to use
+      and display CTA Data ''for the sole purpose of assisting mass transportation (i.e., bus or rail) riders or in
+      furtherance of promoting public transportation''; III: no implied affiliation or endorsement; credit line optional
+      (''Data provided by Chicago Transit Authority''). 51 MB zip.'
+  - id: stm-montreal-gtfs
+    category: getting_around
+    name: STM Montréal GTFS
+    url: https://www.stm.info/sites/default/files/gtfs/gtfs_stm.zip
+    method: dump
+    license: Copyright; terms not found
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'www.stm.info/robots.txt (checked 2026-11-18): ''Disallow: /*getcontentasset''. The zip URL answers 302
+      to /getcontentasset/38dcb679-…/gtfs_stm.zip, a path robots.txt disallows. Licence (CC BY 4.0 per the French
+      developer page) not confirmed: the English page answers ''english-unavailable''.'
+  - id: king-county-metro-gtfs
+    category: getting_around
+    name: King County Metro (Seattle) GTFS
+    url: https://metro.kingcounty.gov/GTFS/google_transit.zip
+    method: dump
+    license: King County transit data terms of use
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'metro.kingcounty.gov/robots.txt has 31 disallows, none for /GTFS/ (checked 2026-11-18). Transit Data Terms
+      of Use (kingcounty.gov/en/dept/metro/rider-tools/mobile-and-web-apps, read 2026-11-18): ''King County grants
+      you a limited, revocable license to use, reproduce, and redistribute the Data in accordance with these Terms'';
+      data AS IS. Includes Sound Transit Link light rail, Seattle Streetcar and the Water Taxi. 10.8 MB zip, about
+      monthly.'
+  - id: ireland-nta-gtfs
+    category: getting_around
+    name: Transport for Ireland GTFS (all operators)
+    url: https://www.transportforireland.ie/transitData/Data/GTFS_All.zip
+    method: dump
+    license: CC BY 4.0
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'www.transportforireland.ie/robots.txt: ''Disallow:'' empty (allowed, checked 2026-11-18). transitData/PT_Data.html:
+      ''This data is licensed under CC BY 4.0 and is attributed to the National Transport Authority''. 182 MB zip
+      (under the 600 MiB gtfs_max_bytes), daily.'
+  - id: lithuania-gtfs
+    category: getting_around
+    name: Lithuania national GTFS (visimarsrutai.lt, all operators)
+    url: https://www.visimarsrutai.lt/gtfs/gtfs_all.zip
+    method: dump
+    license: Copyright; terms not found
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'www.visimarsrutai.lt/robots.txt 404 (allowed, checked 2026-11-18). /gtfs/ lists 61 per-municipality zips
+      plus gtfs_all.zip, the merged national feed (''Visi Operatoriai'', 74 operators, 74 MB, rebuilt daily): one
+      seed instead of 61. Terms not found: facts only, owner decision 2026-11-17 (unconfirmed terms accepted for non-commercial
+      use).'
+  - id: luxembourg-gtfs
+    category: getting_around
+    name: Luxembourg national GTFS (data.public.lu)
+    url: https://data.public.lu/api/1/datasets/horaires-et-arrets-des-transport-publics-gtfs/
+    method: dump
+    license: CC BY 4.0
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'data.public.lu/robots.txt 404, download.data.public.lu/robots.txt ''Allow: /'' (checked 2026-11-18). Dataset
+      licence cc-by (udata API); site content CC0. The zip''s name changes with every weekly release (gtfs-YYYYMMDD-YYYYMMDD.zip,
+      16 MB): the seed is the udata dataset JSON, and gtfs_static resolves its newest main zip resource (same politeness
+      key public.lu) before downloading it.'
+  - id: wikivoyage-dump-de
+    category: places
+    name: Wikivoyage dump (de, German)
+    url: https://dumps.wikimedia.org/dewikivoyage/latest/dewikivoyage-latest-pages-articles.xml.bz2
+    method: dump
+    license: CC BY-SA 4.0
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'dumps.wikimedia.org/robots.txt 404 (allowed, checked 2026-11-18); WMF terms forbid only abusive automated
+      use. pages-articles.xml.bz2 of 2026-11-01: 72903711 bytes, streamed and filtered on the fly (never stored whole),
+      in the 02-05 UTC dump window. German listing templates mapped in wikivoyage_dump::EDITIONS.'
+  - id: wikivoyage-dump-fr
+    category: places
+    name: Wikivoyage dump (fr, French)
+    url: https://dumps.wikimedia.org/frwikivoyage/latest/frwikivoyage-latest-pages-articles.xml.bz2
+    method: dump
+    license: CC BY-SA 4.0
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'dumps.wikimedia.org/robots.txt 404 (allowed, checked 2026-11-18); WMF terms forbid only abusive automated
+      use. pages-articles.xml.bz2 of 2026-11-01: 27110868 bytes, streamed and filtered on the fly (never stored whole),
+      in the 02-05 UTC dump window. French listing templates mapped in wikivoyage_dump::EDITIONS.'
+  - id: wikivoyage-dump-es
+    category: places
+    name: Wikivoyage dump (es, Spanish)
+    url: https://dumps.wikimedia.org/eswikivoyage/latest/eswikivoyage-latest-pages-articles.xml.bz2
+    method: dump
+    license: CC BY-SA 4.0
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'dumps.wikimedia.org/robots.txt 404 (allowed, checked 2026-11-18); WMF terms forbid only abusive automated
+      use. pages-articles.xml.bz2 of 2026-11-01: 22514848 bytes, streamed and filtered on the fly (never stored whole),
+      in the 02-05 UTC dump window. Spanish listing templates mapped in wikivoyage_dump::EDITIONS.'
+  - id: wikivoyage-dump-it
+    category: places
+    name: Wikivoyage dump (it, Italian)
+    url: https://dumps.wikimedia.org/itwikivoyage/latest/itwikivoyage-latest-pages-articles.xml.bz2
+    method: dump
+    license: CC BY-SA 4.0
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'dumps.wikimedia.org/robots.txt 404 (allowed, checked 2026-11-18); WMF terms forbid only abusive automated
+      use. pages-articles.xml.bz2 of 2026-11-01: 51492037 bytes, streamed and filtered on the fly (never stored whole),
+      in the 02-05 UTC dump window. Italian listing templates mapped in wikivoyage_dump::EDITIONS.'
+  - id: wikivoyage-dump-pt
+    category: places
+    name: Wikivoyage dump (pt, Portuguese)
+    url: https://dumps.wikimedia.org/ptwikivoyage/latest/ptwikivoyage-latest-pages-articles.xml.bz2
+    method: dump
+    license: CC BY-SA 4.0
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'dumps.wikimedia.org/robots.txt 404 (allowed, checked 2026-11-18); WMF terms forbid only abusive automated
+      use. pages-articles.xml.bz2 of 2026-11-01: 9451906 bytes, streamed and filtered on the fly (never stored whole),
+      in the 02-05 UTC dump window. Portuguese listing templates mapped in wikivoyage_dump::EDITIONS.'
+  - id: wikivoyage-dump-nl
+    category: places
+    name: Wikivoyage dump (nl, Dutch)
+    url: https://dumps.wikimedia.org/nlwikivoyage/latest/nlwikivoyage-latest-pages-articles.xml.bz2
+    method: dump
+    license: CC BY-SA 4.0
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'dumps.wikimedia.org/robots.txt 404 (allowed, checked 2026-11-18); WMF terms forbid only abusive automated
+      use. pages-articles.xml.bz2 of 2026-11-01: 6689744 bytes, streamed and filtered on the fly (never stored whole),
+      in the 02-05 UTC dump window. Dutch listing templates mapped in wikivoyage_dump::EDITIONS.'
+  - id: wikivoyage-dump-pl
+    category: places
+    name: Wikivoyage dump (pl, Polish)
+    url: https://dumps.wikimedia.org/plwikivoyage/latest/plwikivoyage-latest-pages-articles.xml.bz2
+    method: dump
+    license: CC BY-SA 4.0
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'dumps.wikimedia.org/robots.txt 404 (allowed, checked 2026-11-18); WMF terms forbid only abusive automated
+      use. pages-articles.xml.bz2 of 2026-11-01: 21464721 bytes, streamed and filtered on the fly (never stored whole),
+      in the 02-05 UTC dump window. Polish listing templates mapped in wikivoyage_dump::EDITIONS.'
+  - id: wikivoyage-dump-ru
+    category: places
+    name: Wikivoyage dump (ru, Russian)
+    url: https://dumps.wikimedia.org/ruwikivoyage/latest/ruwikivoyage-latest-pages-articles.xml.bz2
+    method: dump
+    license: CC BY-SA 4.0
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'dumps.wikimedia.org/robots.txt 404 (allowed, checked 2026-11-18); WMF terms forbid only abusive automated
+      use. pages-articles.xml.bz2 of 2026-11-01: 31101664 bytes, streamed and filtered on the fly (never stored whole),
+      in the 02-05 UTC dump window. Russian listing templates mapped in wikivoyage_dump::EDITIONS.'
+  - id: wikivoyage-dump-uk
+    category: places
+    name: Wikivoyage dump (uk, Ukrainian)
+    url: https://dumps.wikimedia.org/ukwikivoyage/latest/ukwikivoyage-latest-pages-articles.xml.bz2
+    method: dump
+    license: CC BY-SA 4.0
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'dumps.wikimedia.org/robots.txt 404 (allowed, checked 2026-11-18); WMF terms forbid only abusive automated
+      use. pages-articles.xml.bz2 of 2026-11-01: 4536442 bytes, streamed and filtered on the fly (never stored whole),
+      in the 02-05 UTC dump window. Ukrainian listing templates mapped in wikivoyage_dump::EDITIONS.'
+  - id: wikivoyage-dump-zh
+    category: places
+    name: Wikivoyage dump (zh, Chinese)
+    url: https://dumps.wikimedia.org/zhwikivoyage/latest/zhwikivoyage-latest-pages-articles.xml.bz2
+    method: dump
+    license: CC BY-SA 4.0
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'dumps.wikimedia.org/robots.txt 404 (allowed, checked 2026-11-18); WMF terms forbid only abusive automated
+      use. pages-articles.xml.bz2 of 2026-11-01: 14449233 bytes, streamed and filtered on the fly (never stored whole),
+      in the 02-05 UTC dump window. Chinese listing templates mapped in wikivoyage_dump::EDITIONS.'
+  - id: wikivoyage-dump-ja
+    category: places
+    name: Wikivoyage dump (ja, Japanese)
+    url: https://dumps.wikimedia.org/jawikivoyage/latest/jawikivoyage-latest-pages-articles.xml.bz2
+    method: dump
+    license: CC BY-SA 4.0
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'dumps.wikimedia.org/robots.txt 404 (allowed, checked 2026-11-18); WMF terms forbid only abusive automated
+      use. pages-articles.xml.bz2 of 2026-11-01: 6309390 bytes, streamed and filtered on the fly (never stored whole),
+      in the 02-05 UTC dump window. Japanese listing templates mapped in wikivoyage_dump::EDITIONS.'
+  - id: wikivoyage-dump-sv
+    category: places
+    name: Wikivoyage dump (sv, Swedish)
+    url: https://dumps.wikimedia.org/svwikivoyage/latest/svwikivoyage-latest-pages-articles.xml.bz2
+    method: dump
+    license: CC BY-SA 4.0
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'dumps.wikimedia.org/robots.txt 404 (allowed, checked 2026-11-18); WMF terms forbid only abusive automated
+      use. pages-articles.xml.bz2 of 2026-11-01: 2658497 bytes, streamed and filtered on the fly (never stored whole),
+      in the 02-05 UTC dump window. Swedish listing templates mapped in wikivoyage_dump::EDITIONS.'
+  - id: wikivoyage-dump-fi
+    category: places
+    name: Wikivoyage dump (fi, Finnish)
+    url: https://dumps.wikimedia.org/fiwikivoyage/latest/fiwikivoyage-latest-pages-articles.xml.bz2
+    method: dump
+    license: CC BY-SA 4.0
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'dumps.wikimedia.org/robots.txt 404 (allowed, checked 2026-11-18); WMF terms forbid only abusive automated
+      use. pages-articles.xml.bz2 of 2026-11-01: 2507214 bytes, streamed and filtered on the fly (never stored whole),
+      in the 02-05 UTC dump window. Finnish listing templates mapped in wikivoyage_dump::EDITIONS.'
+  - id: wikivoyage-dump-he
+    category: places
+    name: Wikivoyage dump (he, Hebrew)
+    url: https://dumps.wikimedia.org/hewikivoyage/latest/hewikivoyage-latest-pages-articles.xml.bz2
+    method: dump
+    license: CC BY-SA 4.0
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'dumps.wikimedia.org/robots.txt 404 (allowed, checked 2026-11-18); WMF terms forbid only abusive automated
+      use. pages-articles.xml.bz2 of 2026-11-01: 13163939 bytes, streamed and filtered on the fly (never stored whole),
+      in the 02-05 UTC dump window. Hebrew listing templates mapped in wikivoyage_dump::EDITIONS.'
+  - id: wikivoyage-dump-fa
+    category: places
+    name: Wikivoyage dump (fa, Persian)
+    url: https://dumps.wikimedia.org/fawikivoyage/latest/fawikivoyage-latest-pages-articles.xml.bz2
+    method: dump
+    license: CC BY-SA 4.0
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'dumps.wikimedia.org/robots.txt 404 (allowed, checked 2026-11-18); WMF terms forbid only abusive automated
+      use. pages-articles.xml.bz2 of 2026-11-01: 4740193 bytes, streamed and filtered on the fly (never stored whole),
+      in the 02-05 UTC dump window. Persian listing templates mapped in wikivoyage_dump::EDITIONS.'
+  - id: wikivoyage-dump-vi
+    category: places
+    name: Wikivoyage dump (vi, Vietnamese)
+    url: https://dumps.wikimedia.org/viwikivoyage/latest/viwikivoyage-latest-pages-articles.xml.bz2
+    method: dump
+    license: CC BY-SA 4.0
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'dumps.wikimedia.org/robots.txt 404 (allowed, checked 2026-11-18); WMF terms forbid only abusive automated
+      use. pages-articles.xml.bz2 of 2026-11-01: 4813784 bytes, streamed and filtered on the fly (never stored whole),
+      in the 02-05 UTC dump window. Vietnamese listing templates mapped in wikivoyage_dump::EDITIONS.'
+  - id: wikivoyage-dump-tr
+    category: places
+    name: Wikivoyage dump (tr, Turkish)
+    url: https://dumps.wikimedia.org/trwikivoyage/latest/trwikivoyage-latest-pages-articles.xml.bz2
+    method: dump
+    license: CC BY-SA 4.0
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'dumps.wikimedia.org/robots.txt 404 (allowed, checked 2026-11-18); WMF terms forbid only abusive automated
+      use. pages-articles.xml.bz2 of 2026-11-01: 1535921 bytes, streamed and filtered on the fly (never stored whole),
+      in the 02-05 UTC dump window. Turkish listing templates mapped in wikivoyage_dump::EDITIONS.'
+  - id: wikivoyage-dump-el
+    category: places
+    name: Wikivoyage dump (el, Greek)
+    url: https://dumps.wikimedia.org/elwikivoyage/latest/elwikivoyage-latest-pages-articles.xml.bz2
+    method: dump
+    license: CC BY-SA 4.0
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'dumps.wikimedia.org/robots.txt 404 (allowed, checked 2026-11-18); WMF terms forbid only abusive automated
+      use. pages-articles.xml.bz2 of 2026-11-01: 2244728 bytes, streamed and filtered on the fly (never stored whole),
+      in the 02-05 UTC dump window. Greek listing templates mapped in wikivoyage_dump::EDITIONS.'
+  - id: wikivoyage-dump-cs
+    category: places
+    name: Wikivoyage dump (cs, Czech)
+    url: https://dumps.wikimedia.org/cswikivoyage/latest/cswikivoyage-latest-pages-articles.xml.bz2
+    method: dump
+    license: CC BY-SA 4.0
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'dumps.wikimedia.org/robots.txt 404 (allowed, checked 2026-11-18); WMF terms forbid only abusive automated
+      use. pages-articles.xml.bz2 of 2026-11-01: 1193421 bytes, streamed and filtered on the fly (never stored whole),
+      in the 02-05 UTC dump window. Czech listing templates mapped in wikivoyage_dump::EDITIONS.'
+  - id: wikivoyage-dump-id
+    category: places
+    name: Wikivoyage dump (id, Indonesian)
+    url: https://dumps.wikimedia.org/idwikivoyage/latest/idwikivoyage-latest-pages-articles.xml.bz2
+    method: dump
+    license: CC BY-SA 4.0
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'dumps.wikimedia.org/robots.txt 404 (allowed, checked 2026-11-18); WMF terms forbid only abusive automated
+      use. pages-articles.xml.bz2 of 2026-11-01: 3351143 bytes, streamed and filtered on the fly (never stored whole),
+      in the 02-05 UTC dump window. Indonesian listing templates mapped in wikivoyage_dump::EDITIONS.'
+  - id: wikivoyage-dump-hi
+    category: places
+    name: Wikivoyage dump (hi, Hindi)
+    url: https://dumps.wikimedia.org/hiwikivoyage/latest/hiwikivoyage-latest-pages-articles.xml.bz2
+    method: dump
+    license: CC BY-SA 4.0
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'dumps.wikimedia.org/robots.txt 404 (allowed, checked 2026-11-18); WMF terms forbid only abusive automated
+      use. pages-articles.xml.bz2 of 2026-11-01: 1027105 bytes, streamed and filtered on the fly (never stored whole),
+      in the 02-05 UTC dump window. Hindi listing templates mapped in wikivoyage_dump::EDITIONS.'
+  - id: wikivoyage-dump-bn
+    category: places
+    name: Wikivoyage dump (bn, Bengali)
+    url: https://dumps.wikimedia.org/bnwikivoyage/latest/bnwikivoyage-latest-pages-articles.xml.bz2
+    method: dump
+    license: CC BY-SA 4.0
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'dumps.wikimedia.org/robots.txt 404 (allowed, checked 2026-11-18); WMF terms forbid only abusive automated
+      use. pages-articles.xml.bz2 of 2026-11-01: 21363536 bytes, streamed and filtered on the fly (never stored whole),
+      in the 02-05 UTC dump window. Bengali listing templates mapped in wikivoyage_dump::EDITIONS.'
+  - id: jma-climate-normals
+    category: weather
+    name: JMA climate normals 1991-2020 (major cities)
+    url: https://www.data.jma.go.jp/stats/etrn/view/nml_sfc_ym.php?prec_no=44&block_no=47662&year=&month=&day=&view=
+    method: html
+    license: JMA Terms of Use (compatible with CC BY 4.0)
+    cadence: yearly
+    needs_key: false
+    allowed: true
+    notes: 'www.data.jma.go.jp/robots.txt 404 (allowed, checked 2026-11-18). JMA Terms of Use (jma.go.jp/jma/en/copyright.html):
+      ''The Terms of Use are compatible with the Creative Commons Attribution License 4.0 … Content … may be used
+      under the CC License''. 21 first-class station normals pages (monthly 1991-2020 normals, Japanese HTML tables),
+      each fetched once and checked 2026-11-18; the station picker is script-driven, so the pages are seeds and nothing
+      is followed.'
+  - id: ea-bathing-water-profiles
+    category: places
+    name: Environment Agency bathing water profiles (England)
+    url: https://environment.data.gov.uk/bwq/profiles/
+    method: html
+    license: OGL v3.0
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: environment.data.gov.uk/robots.txt (checked 2026-11-18) disallows /doc/, /data/, /water-quality; /bwq/profiles/
+      is allowed. Content OGL v3.0.
