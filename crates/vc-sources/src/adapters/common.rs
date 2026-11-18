@@ -106,6 +106,9 @@ pub(crate) struct Fetch<'a> {
     pub range: Option<(u64, u64)>,
     /// Cap on the body (0 = the purpose's default).
     pub max_body_bytes: u64,
+    /// Plain, non-secret request headers an API requires (e.g. FHRS `x-api-version: 2`); kept
+    /// in the stored request like any other header.
+    pub headers: &'a [(&'static str, &'static str)],
 }
 
 /// Removes a secret header from the request headers an exchange keeps (they are written to the
@@ -139,6 +142,12 @@ pub(crate) async fn fetch_raw(
         && let Ok(v) = format!("bytes={start}-{}", end - 1).try_into()
     {
         req.headers.insert("range", v);
+    }
+    for (name, value) in opts.headers {
+        let v = value
+            .parse()
+            .map_err(|_| Error::Invalid(format!("header {name} is not a valid header value")))?;
+        req.headers.insert(*name, v);
     }
     if let Some((name, value)) = opts.secret_header {
         let v = value

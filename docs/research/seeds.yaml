@@ -3265,7 +3265,7 @@ seeds:
     url: https://cadataapi.state.gov/api/CountryTravelInformation
     method: api
     license: US public domain
-    cadence: weekly
+    cadence: daily
     needs_key: false
     allowed: true
     notes: 'The travel.state.gov country pages (entry, exit and visa requirements, embassy and consulate
@@ -3273,20 +3273,26 @@ seeds:
       https://cadataapi.state.gov/, 2026-11-18): /api/CountryTravelInformation (all countries) and
       /{tag}. robots.txt answers 404 (allowed). US Government work, public domain. Replaces
       state-dept-country-pages and usembassy-list (both bot walls). Only listed /api/ paths may be
-      requested: other paths on this host answer a Cloudflare block page.'
+      requested: other paths on this host answer a Cloudflare block page. Adapter state_dept_country_info
+      (2026-11-18): one conditional request a day to the all-countries list (~6 MB, 211 countries), never
+      /{tag} or any other path; tags are FIPS 10-4 codes. One fixture request was made with the VoyagerBot
+      UA on 2026-11-18.'
   - id: fsa-food-hygiene
     category: activities
     name: UK Food Standards Agency food hygiene ratings (FHRS API)
     url: https://api.ratings.food.gov.uk/Establishments
     method: api
     license: OGL v3.0
-    cadence: monthly
+    cadence: weekly
     needs_key: false
     allowed: true
     notes: 'Official hygiene ratings of every UK restaurant, cafe and takeaway (name, address, rating,
       date), an open alternative to Michelin, The Infatuation and HappyCow (terms ban bots). robots.txt of
       api.ratings.food.gov.uk answers 404 (allowed, 2026-11-18). Open Government Licence v3; keyless API
-      that needs the header x-api-version: 2.'
+      that needs the header x-api-version: 2. Adapter fsa_fhrs (2026-11-18): 23 tourist-city local
+      authorities (central London boroughs, Edinburgh, Glasgow, Manchester, Liverpool, Birmingham,
+      Bristol, Brighton, York, Oxford, Cambridge, Cardiff, Belfast, Bath) x restaurants/cafes, pubs/bars
+      and takeaways, 1000 per page, about 100 requests a week (robots.txt re-checked 2026-11-18: 404).'
   - id: nyc-restaurant-inspections
     category: activities
     name: NYC DOHMH restaurant inspection results (NYC Open Data)
@@ -3298,7 +3304,9 @@ seeds:
     allowed: true
     notes: 'Every New York City restaurant with cuisine, address and inspection grade, an open alternative
       to restaurant guides that ban bots. Same host and robots.txt as nyc-parks-events (Crawl-delay 1;
-      /resource not disallowed, re-checked 2026-11-18).'
+      /resource not disallowed, re-checked 2026-11-18). Adapter nyc_restaurant_inspections (2026-11-18):
+      letter-graded rows of the last three years, grouped server-side, 2000 rows per page, latest grade
+      per CAMIS.'
   - id: toronto-dinesafe
     category: activities
     name: City of Toronto DineSafe (restaurant inspections)
@@ -3309,4 +3317,6 @@ seeds:
     needs_key: false
     allowed: true
     notes: 'Every Toronto food premises with address and inspection status. ckan0 robots.txt (2026-11-18):
-      200, "Allow: /api/". Open Government Licence – Toronto.'
+      200, "Allow: /api/" (re-checked 2026-11-18; /dataset/*/resource/*/download/* is disallowed, so the
+      adapter toronto_dinesafe reads the datastore through /api/3/action/datastore_search, 2000 distinct
+      rows per page, latest inspection per establishment). Open Government Licence – Toronto.'

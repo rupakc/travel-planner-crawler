@@ -7,14 +7,14 @@ source_class: official
 licence:
   class: open
   spdx: null
-  attribution: US State Department Country Travel Information API
+  attribution: US Department of State, Bureau of Consular Affairs (travel.state.gov)
   url: null
 method: api
 seeds:
 - https://cadataapi.state.gov/api/CountryTravelInformation
 sitemaps: []
 feeds: []
-adapter: null
+adapter: state_dept_country_info
 include: []
 exclude: []
 max_depth: 0
@@ -24,11 +24,11 @@ kinds:
 - tip
 llm_kinds: []
 render: never
-cadence: weekly
+cadence: daily
 min_delay_s: 5
 daily_budget: 300
 politeness_key: null
-enabled: false
+enabled: true
 needs_key: false
 key_secret: null
 max_retention_days: null
@@ -37,9 +37,10 @@ notes: 'The travel.state.gov country pages (entry, exit and visa requirements, e
   health, local laws) as JSON on the same public API host as the advisories (listed on https://cadataapi.state.gov/,
   2026-11-18): /api/CountryTravelInformation (all countries) and /{tag}. robots.txt answers 404 (allowed).
   US Government work, public domain. Replaces state-dept-country-pages and usembassy-list (both bot walls).
-  Only listed /api/ paths may be requested: other paths on this host answer a Cloudflare block page. |
-  Disabled: adapter pending: CountryTravelInformation JSON reader (all-countries list, then /{tag}; HTML
-  fragments per field), on the cadataapi.state.gov host the advisories adapter already uses'
+  Only listed /api/ paths may be requested: other paths on this host answer a Cloudflare block page. Adapter
+  state_dept_country_info (2026-11-18): one conditional request a day to the all-countries list (~6 MB,
+  211 countries), never /{tag} or any other path; tags are FIPS 10-4 codes. One fixture request was made
+  with the VoyagerBot UA on 2026-11-18.'
 relevance:
   sections:
   - visa

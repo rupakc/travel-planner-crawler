@@ -1,0 +1,140 @@
+{
+ "help": "https://ckan0.cf.opendata.inter.prod-toronto.ca/api/3/action/help_show?name=datastore_search",
+ "success": true,
+ "result": {
+  "distinct": true,
+  "fields": [
+   {
+    "id": "estId",
+    "type": "text",
+    "info": {
+     "notes": "Establishment ID - this will contain either a legacy id or a new one, depending on the system this data currently lives in."
+    }
+   },
+   {
+    "id": "estName",
+    "type": "text",
+    "info": {
+     "notes": "Establishment Name"
+    }
+   },
+   {
+    "id": "address",
+    "type": "text",
+    "info": {
+     "notes": "Address of Establishment"
+    }
+   },
+   {
+    "id": "inspectionStatus",
+    "type": "text",
+    "info": {
+     "notes": "Status of the inspection (ex: Pass)"
+    }
+   },
+   {
+    "id": "phone",
+    "type": "text",
+    "info": {
+     "notes": "Establishment phone number"
+    }
+   },
+   {
+    "id": "inspectionDate",
+    "type": "date",
+    "info": {
+     "notes": "Date of inspection"
+    }
+   },
+   {
+    "id": "latitude",
+    "type": "text",
+    "info": {
+     "notes": ""
+    }
+   },
+   {
+    "id": "longitude",
+    "type": "text",
+    "info": {
+     "notes": ""
+    }
+   }
+  ],
+  "include_total": true,
+  "limit": 6,
+  "offset": 0,
+  "records_format": "objects",
+  "resource_id": "75dbb3ff-8281-4f03-9de2-bd1214761302",
+  "sort": "estId asc,inspectionDate desc",
+  "total_estimation_threshold": null,
+  "records": [
+   {
+    "estId": "001Vo000013PoSaIAK",
+    "estName": "GALERIA PILATES",
+    "address": "998 Queen St E None M4M 1K1",
+    "inspectionStatus": "Pass",
+    "phone": "4374211171",
+    "inspectionDate": "2025-05-01",
+    "latitude": "43.66133456",
+    "longitude": "-79.33952183"
+   },
+   {
+    "estId": "001Vo000013PoSaIAK",
+    "estName": "GALERIA PILATES",
+    "address": "998 Queen St E None M4M 1K1",
+    "inspectionStatus": "Pass",
+    "phone": "4374211171",
+    "inspectionDate": "2025-11-20",
+    "latitude": "43.66133456",
+    "longitude": "-79.33952183"
+   },
+   {
+    "estId": "001Vo000013PoSaIAK",
+    "estName": "GALERIA PILATES",
+    "address": "998 Queen St E None M4M 1K1",
+    "inspectionStatus": "Pass",
+    "phone": "4374211171",
+    "inspectionDate": "2026-02-25",
+    "latitude": "43.66133456",
+    "longitude": "-79.33952183"
+   },
+   {
+    "estId": "001Vo000013PoSbIAK",
+    "estName": "BURRITO BOYZ",
+    "address": "489 Queen St W None M5V 2B4",
+    "inspectionStatus": "Pass",
+    "phone": "6479074342",
+    "inspectionDate": "2025-10-28",
+    "latitude": "43.64821059",
+    "longitude": "-79.39820772"
+   },
+   {
+    "estId": "001Vo000013PoSbIAK",
+    "estName": "BURRITO BOYZ",
+    "address": "489 Queen St W None M5V 2B4",
+    "inspectionStatus": "Pass",
+    "phone": "6479074342",
+    "inspectionDate": "2026-02-17",
+    "latitude": "43.64821059",
+    "longitude": "-79.39820772"
+   },
+   {
+    "estId": "001Vo000013PoSbIAK",
+    "estName": "BURRITO BOYZ",
+    "address": "489 Queen St W None M5V 2B4",
+    "inspectionStatus": "Pass",
+    "phone": "6479074342",
+    "inspectionDate": "2026-07-16",
+    "latitude": "43.64821059",
+    "longitude": "-79.39820772"
+   }
+  ],
+  "_links": {
+   "start": "/api/3/action/datastore_search?resource_id=75dbb3ff-8281-4f03-9de2-bd1214761302&fields=estId%2CestName%2Caddress%2CinspectionStatus%2Cphone%2CinspectionDate%2Clatitude%2Clongitude&distinct=true&sort=estId+asc%2CinspectionDate+desc&limit=6",
+   "next": "/api/3/action/datastore_search?resource_id=75dbb3ff-8281-4f03-9de2-bd1214761302&fields=estId%2CestName%2Caddress%2CinspectionStatus%2Cphone%2CinspectionDate%2Clatitude%2Clongitude&distinct=true&sort=estId+asc%2CinspectionDate+desc&limit=6&offset=6"
+  },
+  "total": 86069,
+  "total_was_estimated": false
+ }
+}

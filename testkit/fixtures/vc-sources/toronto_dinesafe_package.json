@@ -1,0 +1,83 @@
+{
+ "help": "https://ckan0.cf.opendata.inter.prod-toronto.ca/api/3/action/help_show?name=package_show",
+ "success": true,
+ "result": {
+  "id": "b6b4f3fb-2e2c-47e7-931d-b87d22806948",
+  "name": "dinesafe",
+  "title": "Dinesafe™",
+  "license_id": "open-government-licence-toronto",
+  "license_title": "open-government-licence-toronto",
+  "owner_division": "Toronto Public Health",
+  "refresh_rate": "Daily",
+  "last_refreshed": "2026-11-18 08:17:26.26985",
+  "metadata_modified": "2026-11-18T08:17:27.963819",
+  "is_retired": false,
+  "state": "active",
+  "resources": [
+   {
+    "id": "8d98cc2e-8898-4335-968a-ebeb09b72cc1",
+    "name": "Dinesafe.xml",
+    "format": "XML",
+    "datastore_active": false,
+    "url": "https://ckan0.cf.opendata.inter.prod-toronto.ca/dataset/b6b4f3fb-2e2c-47e7-931d-b87d22806948/resource/8d98cc2e-8898-4335-968a-ebeb09b72cc1/download/dinesafe.xml",
+    "last_modified": "2026-11-18T08:17:24.981897"
+   },
+   {
+    "id": "e9df9d33-727e-4758-9a84-67ebefec1453",
+    "name": "Dinesafe.json",
+    "format": "JSON",
+    "datastore_active": false,
+    "url": "https://ckan0.cf.opendata.inter.prod-toronto.ca/dataset/b6b4f3fb-2e2c-47e7-931d-b87d22806948/resource/e9df9d33-727e-4758-9a84-67ebefec1453/download/dinesafe.json",
+    "last_modified": "2026-11-18T08:17:26.269850"
+   },
+   {
+    "id": "c0a5f6b0-534a-47c3-867d-d4b5cc84a656",
+    "name": "Dinesafe Historical Data",
+    "format": "ZIP",
+    "datastore_active": false,
+    "url": "https://ckan0.cf.opendata.inter.prod-toronto.ca/dataset/b6b4f3fb-2e2c-47e7-931d-b87d22806948/resource/c0a5f6b0-534a-47c3-867d-d4b5cc84a656/download/dinesafe-historical-data.zip",
+    "last_modified": "2026-07-06T13:07:17.168414"
+   },
+   {
+    "id": "af0f5b8a-4b73-4a50-8781-65e949792b40",
+    "name": "Dinesafe.csv",
+    "format": "CSV",
+    "datastore_active": false,
+    "url": "https://ckan0.cf.opendata.inter.prod-toronto.ca/dataset/b6b4f3fb-2e2c-47e7-931d-b87d22806948/resource/af0f5b8a-4b73-4a50-8781-65e949792b40/download/dinesafe.csv",
+    "last_modified": "2026-11-18T08:17:23.115111"
+   },
+   {
+    "id": "b7bc9da4-5beb-4df8-bc3d-f634bc64782f",
+    "name": "Dinesafe™.csv",
+    "format": "CSV",
+    "datastore_active": false,
+    "url": "https://ckan0.cf.opendata.inter.prod-toronto.ca/dataset/b6b4f3fb-2e2c-47e7-931d-b87d22806948/resource/b7bc9da4-5beb-4df8-bc3d-f634bc64782f/download/dinesafe.csv",
+    "last_modified": "2026-07-08T21:00:32.773986"
+   },
+   {
+    "id": "78263fdb-46d1-42f3-a41c-329e9d66e24c",
+    "name": "Dinesafe™.xml",
+    "format": "XML",
+    "datastore_active": false,
+    "url": "https://ckan0.cf.opendata.inter.prod-toronto.ca/dataset/b6b4f3fb-2e2c-47e7-931d-b87d22806948/resource/78263fdb-46d1-42f3-a41c-329e9d66e24c/download/dinesafe.xml",
+    "last_modified": "2026-07-08T21:00:34.081091"
+   },
+   {
+    "id": "6ede3f57-3df9-46c0-9e9b-f2eb88c81626",
+    "name": "Dinesafe™.json",
+    "format": "JSON",
+    "datastore_active": false,
+    "url": "https://ckan0.cf.opendata.inter.prod-toronto.ca/dataset/b6b4f3fb-2e2c-47e7-931d-b87d22806948/resource/6ede3f57-3df9-46c0-9e9b-f2eb88c81626/download/dinesafe.json",
+    "last_modified": "2026-07-08T21:00:35.295866"
+   },
+   {
+    "id": "75dbb3ff-8281-4f03-9de2-bd1214761302",
+    "name": "Dinesafe",
+    "format": "JSON",
+    "datastore_active": true,
+    "url": "https://ckan0.cf.opendata.inter.prod-toronto.ca/datastore/dump/75dbb3ff-8281-4f03-9de2-bd1214761302",
+    "last_modified": null
+   }
+  ]
+ }
+}

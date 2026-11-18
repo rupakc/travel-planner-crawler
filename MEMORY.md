@@ -200,3 +200,18 @@ plan = `docs/superpowers/plans/2026-11-15-voyager-crawler.md`, r1–r5 = `docs/r
   nyc-restaurant-inspections, toronto-dinesafe (adapters pending). philippines-travel and
   dubai-customs-passengers off after production challenges; 14 hosts denylisted.
   (scripts/seeds_to_sources.py, policy/denylist.yaml)
+- 2026-11-18: **US country information and official food-hygiene registers on** (ramp-3).
+  `state_dept_country_info`: one conditional daily request to cadataapi.state.gov's listed
+  `/api/CountryTravelInformation` (the adapter refuses any other path before sending: other paths
+  answer a Cloudflare block); tags are FIPS 10-4 (`FIPS_ISO2`); maps the US embassy block →
+  `embassy` (phones as written, E.164 only when written with +), the entry text → `visa_rule`
+  for US passports only when stated plainly (conditional sentences skipped, contradictions →
+  `other`, nothing stated → no rule; deciding sentences kept as `evidence`), titled paragraphs of
+  local laws/health/safety → `tip`. New adapter-only kind `restaurant` (official only; required
+  `hygiene.{scheme, rating, rating_date}`). `fsa_fhrs` (23 tourist-city authorities x
+  restaurants/pubs/takeaways, `x-api-version: 2` via the new `Fetch.headers`), and
+  `nyc_restaurant_inspections` / `toronto_dinesafe` with group-aligned offset paging (a full
+  page's last establishment waits for the next page; the record mapping makes the same cut).
+  Toronto reads the CKAN datastore API (robots.txt disallows `/download/`). Licence
+  attributions set per source (FSA: "… Open Government Licence v3.0 — Food Standards Agency").
+  (crates/vc-sources/src/adapters/{state_dept_country_info,fsa_fhrs,nyc_restaurant_inspections,toronto_dinesafe,inspections}.rs)

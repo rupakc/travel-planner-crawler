@@ -1,0 +1,88 @@
+{
+ "establishments": [
+  {
+   "AddressLine1": "56 West Smithfield",
+   "AddressLine2": "London",
+   "AddressLine3": "",
+   "AddressLine4": "",
+   "BusinessName": "56 WS Wine Bar & Shop",
+   "BusinessType": "Pub/bar/nightclub",
+   "BusinessTypeID": 7843,
+   "ChangesByServerID": 0,
+   "Distance": null,
+   "FHRSID": 1571131,
+   "LocalAuthorityBusinessID": "PI/000039391",
+   "LocalAuthorityCode": "508",
+   "LocalAuthorityEmailAddress": "publicprotection@cityoflondon.gov.uk",
+   "LocalAuthorityName": "City of London Corporation",
+   "LocalAuthorityWebSite": "http://www.cityoflondon.gov.uk/Corporation/homepage.htm",
+   "NewRatingPending": false,
+   "Phone": "",
+   "PostCode": "EC1A 9DS",
+   "RatingDate": "2022-11-22T00:00:00",
+   "RatingKey": "fhrs_5_en-gb",
+   "RatingValue": "5",
+   "RightToReply": "",
+   "SchemeType": "FHRS",
+   "geocode": {
+    "longitude": "-0.100426",
+    "latitude": "51.518179"
+   },
+   "scores": {
+    "Hygiene": 5,
+    "Structural": 5,
+    "ConfidenceInManagement": 5
+   }
+  },
+  {
+   "AddressLine1": "1 New Fetter Lane",
+   "AddressLine2": "London",
+   "AddressLine3": "",
+   "AddressLine4": "",
+   "BusinessName": "Dovetail Bars Ltd",
+   "BusinessType": "Pub/bar/nightclub",
+   "BusinessTypeID": 7843,
+   "ChangesByServerID": 0,
+   "Distance": null,
+   "FHRSID": 2014762,
+   "LocalAuthorityBusinessID": "26/00665/COMM",
+   "LocalAuthorityCode": "508",
+   "LocalAuthorityEmailAddress": "publicprotection@cityoflondon.gov.uk",
+   "LocalAuthorityName": "City of London Corporation",
+   "LocalAuthorityWebSite": "http://www.cityoflondon.gov.uk/Corporation/homepage.htm",
+   "NewRatingPending": false,
+   "Phone": "",
+   "PostCode": "EC4A 1AN",
+   "RatingDate": "1901-01-01T00:00:00",
+   "RatingKey": "fhrs_awaitinginspection_en-gb",
+   "RatingValue": "AwaitingInspection",
+   "RightToReply": "",
+   "SchemeType": "FHRS",
+   "geocode": {
+    "longitude": "-0.107822",
+    "latitude": "51.516782"
+   },
+   "scores": {
+    "Hygiene": null,
+    "Structural": null,
+    "ConfidenceInManagement": null
+   }
+  }
+ ],
+ "meta": {
+  "dataSource": "ElasticSearch",
+  "extractDate": "2026-11-18T08:43:26.4660769+00:00",
+  "itemCount": 2,
+  "returncode": "OK",
+  "totalCount": 5,
+  "totalPages": 2,
+  "pageSize": 3,
+  "pageNumber": 2
+ },
+ "links": [
+  {
+   "rel": "self",
+   "href": "https://api.ratings.food.gov.uk/establishments?localauthorityid=95&businesstypeid=7843&pagenumber=1&pagesize=1000"
+  }
+ ]
+}

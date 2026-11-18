@@ -50,3 +50,18 @@ VoyagerBot). Values are illustrative unless noted.
 | `stockholm_events_p1.json`, `stockholm_events_p2.json` | Visit Stockholm public events list (`json_events`) | the DRF browsable page of `/api/public-v1/events/` (keys, nesting, paging fields); `example.org` organiser URLs |
 | `eurostat_prc_ppp_ind.json` | Eurostat dissemination API, `prc_ppp_ind` (`eurostat_jsonstat`) | JSON-stat 2.0 as the API returns it (sparse `value`/`status` objects keyed by flat index) |
 | `wdi_csv.zip` | World Bank `WDI_CSV.zip` (`wdi_csv`) | the bulk download's layout: `WDICSV.csv` (Country Name, Country Code, Indicator Name, Indicator Code, one column per year) plus metadata members; written with Python `zipfile` (deflate) |
+
+### US country information and food-hygiene registers (2026-11-18)
+
+Fetched once each with the VoyagerBot identity (after each host's robots.txt; cadataapi.state.gov's
+robots.txt answers 404 and was not re-requested, and only its listed `/api/CountryTravelInformation`
+path was requested), then trimmed. The structure of every file is unchanged except where noted.
+
+| File | Source (adapter) | How it was obtained | Licence of the content |
+|---|---|---|---|
+| `state_dept_country_info.json` | `cadataapi.state.gov/api/CountryTravelInformation` (`state_dept_country_info`) | one request (5.9 MB, 211 countries); 4 kept (AF, AS, HK, JA); local laws, health and safety cut before their fourth titled paragraph, transport and description to 300 characters, the other entry texts to 6000 characters | US Government work, public domain |
+| `fsa_establishments_p1.json` | FHRS API `/Establishments?localAuthorityId=120&businessTypeId=1&pageSize=3` (`fsa_fhrs`) | fetched with `x-api-version: 2` (robots.txt 404); `meta` edited to page 1 of 2, `links` cut to `self` | Open Government Licence v3.0, Food Standards Agency |
+| `fsa_establishments_p2.json` | FHRS API, City of London pubs and bars, `pageSize=1000` | fetched; 2 of 193 establishments kept (one rated, one awaiting inspection), `meta` edited to page 2 of 2 | Open Government Licence v3.0, Food Standards Agency |
+| `nyc_restaurant_inspections.json` | NYC Open Data Socrata `43nn-pn8j` (`nyc_restaurant_inspections`), the adapter's own grouped query with `$limit=6` | fetched whole (robots.txt: Crawl-delay 1, `/resource` allowed) | NYC Open Data terms of use (DOHMH) |
+| `toronto_dinesafe_package.json` | CKAN `package_show?id=dinesafe` (`toronto_dinesafe`) | fetched (robots.txt allows `/api/`); `result` cut to identity and licence fields and each resource's id, name, format, `datastore_active`, url | Open Government Licence – Toronto |
+| `toronto_dinesafe_page.json` | CKAN `datastore_search` on the datastore resource, the adapter's distinct field list with `limit=6` | fetched whole | Open Government Licence – Toronto |

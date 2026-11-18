@@ -7,26 +7,27 @@ source_class: official
 licence:
   class: open
   spdx: OGL-UK-3.0
-  attribution: Contains public sector information licensed under the Open Government Licence v3.0
+  attribution: Contains public sector information licensed under the Open Government Licence v3.0 — Food
+    Standards Agency
   url: https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/
 method: api
 seeds:
 - https://api.ratings.food.gov.uk/Establishments
 sitemaps: []
 feeds: []
-adapter: null
+adapter: fsa_fhrs
 include: []
 exclude: []
 max_depth: 0
 kinds:
-- place
+- restaurant
 llm_kinds: []
 render: never
-cadence: monthly
+cadence: weekly
 min_delay_s: 5
 daily_budget: 300
 politeness_key: null
-enabled: false
+enabled: true
 needs_key: false
 key_secret: null
 max_retention_days: null
@@ -34,8 +35,10 @@ display_requirements: null
 notes: 'Official hygiene ratings of every UK restaurant, cafe and takeaway (name, address, rating, date),
   an open alternative to Michelin, The Infatuation and HappyCow (terms ban bots). robots.txt of api.ratings.food.gov.uk
   answers 404 (allowed, 2026-11-18). Open Government Licence v3; keyless API that needs the header x-api-version:
-  2. | Disabled: adapter pending: FHRS API v2 reader (keyless, header x-api-version: 2, paged Establishments
-  by local authority) or the per-authority open-data XML files'
+  2. Adapter fsa_fhrs (2026-11-18): 23 tourist-city local authorities (central London boroughs, Edinburgh,
+  Glasgow, Manchester, Liverpool, Birmingham, Bristol, Brighton, York, Oxford, Cambridge, Cardiff, Belfast,
+  Bath) x restaurants/cafes, pubs/bars and takeaways, 1000 per page, about 100 requests a week (robots.txt
+  re-checked 2026-11-18: 404).'
 relevance:
   sections:
   - activities

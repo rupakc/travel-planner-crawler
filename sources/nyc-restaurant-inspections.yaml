@@ -7,34 +7,34 @@ source_class: official
 licence:
   class: open
   spdx: null
-  attribution: NYC DOHMH restaurant inspection results (NYC Open Data)
+  attribution: NYC Department of Health and Mental Hygiene, via NYC Open Data
   url: null
 method: api
 seeds:
 - https://data.cityofnewyork.us/resource/43nn-pn8j.json
 sitemaps: []
 feeds: []
-adapter: null
+adapter: nyc_restaurant_inspections
 include: []
 exclude: []
 max_depth: 0
 kinds:
-- place
+- restaurant
 llm_kinds: []
 render: never
 cadence: weekly
 min_delay_s: 5
-daily_budget: 300
+daily_budget: 200
 politeness_key: null
-enabled: false
+enabled: true
 needs_key: false
 key_secret: null
 max_retention_days: null
 display_requirements: null
 notes: 'Every New York City restaurant with cuisine, address and inspection grade, an open alternative
   to restaurant guides that ban bots. Same host and robots.txt as nyc-parks-events (Crawl-delay 1; /resource
-  not disallowed, re-checked 2026-11-18). | Disabled: adapter pending: a Socrata reader for places (json_events
-  maps event lists only); one row per inspection, so group by camis'
+  not disallowed, re-checked 2026-11-18). Adapter nyc_restaurant_inspections (2026-11-18): letter-graded
+  rows of the last three years, grouped server-side, 2000 rows per page, latest grade per CAMIS.'
 relevance:
   sections:
   - activities

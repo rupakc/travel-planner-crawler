@@ -42,6 +42,8 @@ KINDS = {
     "transit_item",
     # 2026-11-18: adapter-only kinds for official embassy/medical lists and Wikipedia visa tables.
     "embassy", "medical_facility", "visa_reference",
+    # 2026-11-18: official food-hygiene registers (adapter-only).
+    "restaurant",
 }
 
 
@@ -390,6 +392,11 @@ ADAPTERS = {
     "canada-offices-json": "canada_offices",
     "govuk-medical-lists": "govuk_medical_lists",
     "enwiki-visa-requirements": "enwiki_visa",
+    # 2026-11-18: US country information; official food-hygiene registers.
+    "state-dept-country-info": "state_dept_country_info",
+    "fsa-food-hygiene": "fsa_fhrs",
+    "nyc-restaurant-inspections": "nyc_restaurant_inspections",
+    "toronto-dinesafe": "toronto_dinesafe",
 }
 
 # Template URLs in seeds.yaml -> a concrete, fetchable entry URL (template kept in notes).
@@ -2443,8 +2450,7 @@ _src(
     cls='official',
     kinds=['visa_rule', 'embassy', 'tip'],
     budget=300,
-    off=('adapter pending: CountryTravelInformation JSON reader (all-countries list, then /{tag}; '
-         'HTML fragments per field), on the cadataapi.state.gov host the advisories adapter already uses'),
+    attribution='US Department of State, Bureau of Consular Affairs (travel.state.gov)',
 )
 _src(
     'fsa-food-hygiene',
@@ -2452,10 +2458,10 @@ _src(
     'Official food hygiene ratings of UK restaurants, cafes and takeaways (name, address, rating), '
     'for food in Activities.',
     cls='official',
-    kinds=['place'],
+    kinds=['restaurant'],
     budget=300,
-    off=('adapter pending: FHRS API v2 reader (keyless, header x-api-version: 2, paged '
-         'Establishments by local authority) or the per-authority open-data XML files'),
+    attribution=('Contains public sector information licensed under the Open Government Licence '
+                 'v3.0 — Food Standards Agency'),
 )
 _src(
     'nyc-restaurant-inspections',
@@ -2463,19 +2469,19 @@ _src(
     'Every New York City restaurant with cuisine, address and inspection grade, for food in '
     'Activities.',
     cls='official',
-    kinds=['place'],
-    budget=300,
-    off=('adapter pending: a Socrata reader for places (json_events maps event lists only); '
-         'one row per inspection, so group by camis'),
+    kinds=['restaurant'],
+    budget=200,
+    attribution='NYC Department of Health and Mental Hygiene, via NYC Open Data',
 )
 _src(
     'toronto-dinesafe',
     ['activities'],
     'Every Toronto food premises with address and inspection status, for food in Activities.',
     cls='official',
-    kinds=['place'],
+    kinds=['restaurant'],
     budget=300,
-    off='adapter pending: CKAN package_show, then the DineSafe datastore resource (JSON/CSV) reader',
+    attribution=('Contains information licensed under the Open Government Licence – Toronto '
+                 '(Toronto Public Health, DineSafe)'),
 )
 
 

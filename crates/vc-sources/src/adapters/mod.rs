@@ -23,6 +23,7 @@ pub(crate) mod common;
 pub(crate) mod csv_filter;
 pub mod dump;
 pub(crate) mod gtfs_zip;
+pub mod inspections;
 pub(crate) mod iso3;
 pub(crate) mod zip_stream;
 
@@ -33,6 +34,7 @@ pub mod ecb_fx;
 pub mod enwiki_visa;
 pub mod eurostat_jsonstat;
 pub mod fcdo_content_api;
+pub mod fsa_fhrs;
 pub mod govuk_medical_lists;
 pub mod govuk_world_orgs;
 pub mod gtfs_static;
@@ -41,13 +43,16 @@ pub mod json_events;
 pub mod met_norway;
 pub mod mobility_database_catalog;
 pub mod nager_holidays;
+pub mod nyc_restaurant_inspections;
 pub mod openholidays;
 pub mod ourairports_csv;
 pub mod phone;
 pub mod records;
 pub mod se_travel_dump;
 pub mod state_dept_advisories;
+pub mod state_dept_country_info;
 pub mod ticketmaster_discovery;
+pub mod toronto_dinesafe;
 pub mod travelpayouts_fares;
 pub mod wdi_csv;
 pub mod wikidata_sparql;
@@ -63,6 +68,7 @@ pub static REGISTRY: &[&dyn SourceAdapter] = &[
     &enwiki_visa::EnwikiVisa::DEFAULT,
     &eurostat_jsonstat::EurostatJsonStat,
     &fcdo_content_api::FcdoContentApi,
+    &fsa_fhrs::FsaFhrs::DEFAULT,
     &govuk_medical_lists::GovukMedicalLists,
     &govuk_world_orgs::GovukWorldOrgs,
     &json_events::JsonEvents::DEFAULT,
@@ -70,11 +76,14 @@ pub static REGISTRY: &[&dyn SourceAdapter] = &[
     &met_norway::MetNorway,
     &mobility_database_catalog::MobilityDatabaseCatalog::DEFAULT,
     &nager_holidays::NagerHolidays,
+    &nyc_restaurant_inspections::NycRestaurantInspections::DEFAULT,
     &openholidays::OpenHolidays,
     &ourairports_csv::OurAirportsCsv::DEFAULT,
     &se_travel_dump::SeTravelDump::DEFAULT,
     &state_dept_advisories::StateDeptAdvisories,
+    &state_dept_country_info::StateDeptCountryInfo,
     &ticketmaster_discovery::TicketmasterDiscovery::DEFAULT,
+    &toronto_dinesafe::TorontoDinesafe::DEFAULT,
     &travelpayouts_fares::TravelpayoutsFares::DEFAULT,
     &wdi_csv::WdiCsv::DEFAULT,
     &wikidata_sparql::WikidataSparql::DEFAULT,
@@ -100,8 +109,11 @@ pub trait ResumableAdapter: SourceAdapter {
 /// The built-in adapters that resume, with default settings.
 pub fn resumable() -> Vec<Arc<dyn ResumableAdapter>> {
     vec![
+        Arc::new(fsa_fhrs::FsaFhrs::DEFAULT),
         Arc::new(json_events::JsonEvents::DEFAULT),
+        Arc::new(nyc_restaurant_inspections::NycRestaurantInspections::DEFAULT),
         Arc::new(ticketmaster_discovery::TicketmasterDiscovery::DEFAULT),
+        Arc::new(toronto_dinesafe::TorontoDinesafe::DEFAULT),
         Arc::new(wikidata_sparql::WikidataSparql::DEFAULT),
     ]
 }
@@ -142,6 +154,7 @@ pub fn registry_with(cfg: &vc_config::SourcesConfig) -> Vec<Box<dyn SourceAdapte
         Box::new(enwiki_visa::EnwikiVisa::new(d.clone())),
         Box::new(eurostat_jsonstat::EurostatJsonStat),
         Box::new(fcdo_content_api::FcdoContentApi),
+        Box::new(fsa_fhrs::FsaFhrs::DEFAULT),
         Box::new(govuk_medical_lists::GovukMedicalLists),
         Box::new(govuk_world_orgs::GovukWorldOrgs),
         Box::new(json_events::JsonEvents::DEFAULT),
@@ -153,11 +166,14 @@ pub fn registry_with(cfg: &vc_config::SourcesConfig) -> Vec<Box<dyn SourceAdapte
             d.clone(),
         )),
         Box::new(nager_holidays::NagerHolidays),
+        Box::new(nyc_restaurant_inspections::NycRestaurantInspections::DEFAULT),
         Box::new(openholidays::OpenHolidays),
         Box::new(ourairports_csv::OurAirportsCsv::new(d.clone())),
         Box::new(se_travel_dump::SeTravelDump::new(d.clone())),
         Box::new(state_dept_advisories::StateDeptAdvisories),
+        Box::new(state_dept_country_info::StateDeptCountryInfo),
         Box::new(ticketmaster_discovery::TicketmasterDiscovery::DEFAULT),
+        Box::new(toronto_dinesafe::TorontoDinesafe::DEFAULT),
         Box::new(travelpayouts_fares::TravelpayoutsFares::DEFAULT),
         Box::new(wdi_csv::WdiCsv::new(d.clone())),
         Box::new(wikidata_sparql::WikidataSparql::DEFAULT),

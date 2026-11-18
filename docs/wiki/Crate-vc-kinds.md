@@ -12,11 +12,11 @@ code. Each one is three files, which this crate loads, checks and turns into `Ki
 Path: `crates/vc-kinds`. Dependencies: `jsonschema`, `toml`. Status: wired; the processor
 loads the registry at startup.
 
-## The 26 v1 kinds
+## The 27 v1 kinds
 
 `activity`, `advisory`, `airport`, `article`, `attraction`, `cheapest_fare`, `embassy`,
 `emergency_numbers`, `event`, `fx_rate`, `hotel`, `medical_facility`, `packing_hint`, `place`,
-`price_level`, `public_holiday`, `qa_thread`, `route`, `sim_offer`, `tip`, `transit_item`,
+`price_level`, `public_holiday`, `qa_thread`, `restaurant`, `route`, `sim_offer`, `tip`, `transit_item`,
 `transport_option`, `visa_reference`, `visa_rule`, `walking_tour`, `weather_normal`. `cheapest_fare` (series
 `fare:<ORIG>:<DEST>:<YYYY-MM>`, cached fares, not live prices), `fx_rate`, `price_level` (series
 `price_level:<ISO2>:<category>:<basis>`) and `weather_normal` are observations; the rest are
@@ -33,6 +33,10 @@ Added 2026-11-18 (adapter-only, no source lists them as `llm_kinds`):
 - `visa_reference`: one passport-by-destination row from a reference work (Wikipedia),
   `reference` only, `provenance: wikipedia`. Cross-check data for `visa_rule`, never the
   answer (a reference source can never produce `visa_rule`).
+- `restaurant`: one place that serves food as an official food-safety register lists it
+  (UK FSA FHRS/FHIS, NYC DOHMH letter grades, Toronto DineSafe), with its latest published
+  rating or inspection result and that rating's date (`hygiene.rating_date`, required), `official`
+  only. The licence attribution comes from the source spec like every record's.
 
 ## What the loader refuses
 
