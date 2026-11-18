@@ -2125,8 +2125,9 @@ _src(
     llm=['attraction', 'activity', 'event'],
     depth=1,
     budget=300,
-    delay=5,
+    delay=20,
     sitemaps=['https://visitrwanda.com/wp-sitemap-posts-news-and-event-1.xml', 'https://visitrwanda.com/wp-sitemap-posts-destinations-1.xml'],
+    off='5xx at 5 s; re-enable after a slower re-test',
 )
 _src(
     'visitsaudi',
@@ -3577,6 +3578,8 @@ _src(
     depth=1,
     budget=50,
     delay=10,
+    off=('bot wall: chicagoonthecheap.com served a challenge page to VoyagerBot in production at '
+         'ramp end on 2026-11-18. Do not retry another way; chicagoonthecheap.com is denylisted.'),
 )
 _src(
     'blog-bootsnall',
@@ -3639,6 +3642,8 @@ _src(
     kinds=['walking_tour', 'article'],
     depth=1,
     budget=100,
+    off=('bot wall: freetoursbyfoot.com served a challenge page to VoyagerBot in production at '
+         'ramp end on 2026-11-18. Do not retry another way; freetoursbyfoot.com is denylisted.'),
 )
 _src(
     'walking-strawberrytours',
@@ -3715,6 +3720,8 @@ _src(
     llm=['event'],
     depth=1,
     budget=100,
+    off=('bot wall: robots.txt of www.nycgovparks.org answered with a challenge (HTTP 405) to '
+         'VoyagerBot in production on 2026-11-18. Do not retry another way; nycgovparks.org is denylisted.'),
 )
 _src(
     'flixbus-gtfs',

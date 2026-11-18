@@ -182,8 +182,12 @@ data disk, so pgdata above about 13 GB leaves the drill without room.
    archiving fails?
 
 **Fix.** `pg_wal` large → fix archiving first (backup age). Spool large → backpressure.
-Docker images on the boot disk → `sudo docker image prune -f` (dangling images only; keep
-the image named in `/var/lib/voyager-crawler/deploy/previous`, the rollback target). Real growth →
+Docker images on the boot disk → every successful deploy now prunes old crawler images
+itself (`prune_old_images` in `deploy.sh`: keeps the running image, the rollback target in
+`/var/lib/voyager-crawler/deploy/previous` and anything a container uses). In an emergency,
+by hand: `sudo docker images ghcr.io/rupakc/voyager-crawler --digests` and `sudo docker rmi
+<id>` for each image that is neither in `image.env` nor in `previous` (never `docker image
+prune -f`: digest-pinned images are untagged, so it would delete the rollback target). Real growth →
 plan a disk resize with the owner: `gcloud compute disks resize crawler-data --size=…
 --zone=us-east1-b --project=voyager-prod-ohzkl`, then `sudo resize2fs
 /dev/disk/by-id/google-crawler-data` on the VM (the disk stays in the group's

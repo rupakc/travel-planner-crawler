@@ -325,6 +325,25 @@ record() {
   return 0
 }
 
+# prune_old_images — free the 10 GB boot disk: remove local $VC_REPO_IMAGE
+# images that are neither the running digest nor the rollback target in
+# $VC_STATE/previous, nor used by any container. `docker rmi` by ID without -f,
+# so anything Docker still needs stays; failures never fail the deploy.
+prune_old_images() {
+  local keep_cur keep_prev used id digest n=0
+  keep_cur="$(current_image)"
+  keep_prev="$(cat "$VC_STATE/previous" 2>/dev/null || true)"
+  used=" $(docker ps -a --format '{{.Image}}' 2>/dev/null | tr '\n' ' ') "
+  while read -r id digest; do
+    [[ -n "$id" ]] || continue
+    case "$VC_REPO_IMAGE@$digest" in "$keep_cur" | "$keep_prev") continue ;; esac
+    [[ "$used" == *" $id "* || "$used" == *" $VC_REPO_IMAGE@$digest "* ]] && continue
+    docker rmi "$id" >/dev/null 2>&1 && n=$((n + 1))
+  done < <(docker images "$VC_REPO_IMAGE" --format '{{.ID}} {{.Digest}}' 2>/dev/null)
+  log "pruned $n old image(s)"
+  return 0
+}
+
 base_up() {
   local ref="$1"
   # shellcheck disable=SC2086 # a list of service names
@@ -391,6 +410,7 @@ deploy_once() {
   record "$ref" "$cur"
   report "$new"
   log "deployed $ref (previous: ${cur:-none})"
+  prune_old_images
 }
 
 rollback() {

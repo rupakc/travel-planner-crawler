@@ -20,7 +20,8 @@ setup() {
   export VC_RETRY_SLEEP=0 VC_DATA="$T/data"
   unset VC_ROLES FAKE_PROD_DIGEST FAKE_RUNNING FAKE_UNHEALTHY_DIGEST FAKE_MIGRATE_RC FAKE_SIGNED \
     FAKE_LABEL_SCHEMA FAKE_LABEL_MIN_SCHEMA FAKE_PS_A FAKE_LOCKED VC_NOW FAKE_DB_SCHEMA \
-    FAKE_COSIGN_TRANSIENT FAKE_LABEL_MIGRATIONS FAKE_DB_MIGRATIONS FAKE_MIGRATE_FAILS FAKE_BEAT_RC FAKE_DRILL_OUT FAKE_DRILL_RC VC_DRILL_NO_CHOWN
+    FAKE_COSIGN_TRANSIENT FAKE_LABEL_MIGRATIONS FAKE_DB_MIGRATIONS FAKE_MIGRATE_FAILS FAKE_BEAT_RC FAKE_DRILL_OUT FAKE_DRILL_RC VC_DRILL_NO_CHOWN \
+    FAKE_IMAGES FAKE_PS_IMAGES FAKE_RMI_FAIL
   mkdir -p "$VC_STATE" "$VC_SECRETS_DIR" "$FAKE_STATE" "$VC_OPT"
   : >"$CALLS"
   echo "VC_API_BIND=10.142.0.9" >"$VC_STATE/host.env"
@@ -283,6 +284,34 @@ test_first_deploy() {
   has "up -d postgres chromium" || { fail first_deploy "base services not started"; return; }
   [[ "$(cat "$VC_STATE/image.env")" == "VC_IMAGE=$IMG@$NEW" && ! -f "$VC_STATE/previous" ]] &&
     ok first_deploy || fail first_deploy "state"
+}
+
+# A successful deploy prunes old crawler images, keeping the new image, the
+# rollback target (previous) and anything a container uses; rmi never -f
+test_deploy_prunes_old_images() {
+  setup
+  running_on "$OLD"
+  local GONE USED BUSY
+  GONE=sha256:$(printf 'c%.0s' {1..64})
+  USED=sha256:$(printf 'd%.0s' {1..64})
+  BUSY=sha256:$(printf 'e%.0s' {1..64})
+  export FAKE_PROD_DIGEST="$NEW" FAKE_SIGNED="$NEW" FAKE_PS_IMAGES="idused
+" FAKE_RMI_FAIL=idbusy
+  export FAKE_IMAGES="idnew $NEW
+idold $OLD
+idgone $GONE
+idused $USED
+idbusy $BUSY
+"
+  bash "$DEPLOY" 2>"$T/err"
+  local rc=$?
+  [[ $rc == 0 ]] || { fail deploy_prunes_old_images "exit $rc: $(cat "$T/err")"; return; }
+  has "rmi idgone" || { fail deploy_prunes_old_images "old image not removed"; return; }
+  { has "rmi idnew" || has "rmi idold" || has "rmi idused"; } &&
+    { fail deploy_prunes_old_images "removed a kept image"; return; }
+  grep -q -- 'rmi -f' "$CALLS" && { fail deploy_prunes_old_images "used rmi -f"; return; }
+  grep -q 'pruned 1 old image' "$T/err" && ok deploy_prunes_old_images ||
+    fail deploy_prunes_old_images "log: $(grep pruned "$T/err")"
 }
 
 test_manual_rollback_respects_min_schema() {
