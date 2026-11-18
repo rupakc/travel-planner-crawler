@@ -3149,3 +3149,164 @@ seeds:
     allowed: true
     notes: 'robots.txt (2026-11-17) allows *; terms https://twopassportspacked.com/terms-of-use/ have no
       scraping ban. Flat /<slug>/ URLs with no scam/safety section, so the seed page only (depth 0).'
+  # --- Alternatives to sites that refused or challenged VoyagerBot (vetted 2026-11-18) ----
+  - id: safetravel-nz
+    category: visa
+    name: SafeTravel (New Zealand MFAT travel advice)
+    url: https://www.safetravel.govt.nz/sitemap.xml
+    method: sitemap
+    license: CC BY 4.0
+    cadence: daily
+    needs_key: false
+    allowed: true
+    notes: 'Replaces mfat-embassies (www.mfat.govt.nz challenge, 2026-11-17): every destination page names
+      the responsible New Zealand embassy or high commission. robots.txt (2026-11-18): 200, "User-agent: *
+      Disallow:" (everything allowed), sitemap listed; sitemap and a destination page answered 200 with no
+      challenge. https://www.safetravel.govt.nz/copyright: "This copyright material is licensed under the
+      Creative Commons Attribution 4.0 International licence"; no clause on automated access or AI.'
+  - id: eu-youreurope-travel
+    category: tips
+    name: 'Your Europe: what you can carry when travelling'
+    url: https://europa.eu/youreurope/citizens/travel/carry/index_en.htm
+    method: html
+    license: CC BY 4.0
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Replaces eu-customs-travellers (taxation-customs.ec.europa.eu 403, 2026-11-17): the same EU
+      duty-free allowances (alcohol, tobacco, cash, food, pets, luggage). robots.txt of europa.eu
+      (2026-11-18): 200, * group disallows only /youreurope/citizensACC|DEV and other non-travel paths,
+      Crawl-delay 10; no AI-bot blocks. A page answered 200 with no challenge. Commission legal notice
+      (https://commission.europa.eu/legal-notice_en): content owned by the EU "is licensed under the
+      Creative Commons Attribution 4.0 International (CC BY 4.0) licence"; no automated-access clause.'
+  - id: revenue-ie-travellers
+    category: tips
+    name: 'Revenue (Ireland): travelling and duty-free allowances'
+    url: https://www.revenue.ie/en/customs/individuals/info-travelling-duty-free/index.aspx
+    method: html
+    license: CC BY 4.0
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'National EU customs authority, a second official source for EU allowances (arrivals from
+      outside and within the EU). robots.txt (2026-11-18) answers 200 with an HTML page (no rules: allowed);
+      the travel page answered 200 with no challenge. Re-use of PSI
+      (https://www.revenue.ie/en/corporate/using-revenue/reuse-of-public-sector-information/index.aspx):
+      free re-use with attribution under the PSI licence / CC BY 4.0, commercial use included.'
+  - id: icp-uae-customs
+    category: tips
+    name: 'UAE ICP (Federal Authority for Identity, Citizenship, Customs and Port Security): travellers'
+    url: https://icp.gov.ae/sitemap.xml
+    method: sitemap
+    license: Government site; terms unverified
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Federal UAE customs authority, the alternative to dubai-customs-passengers (challenge,
+      2026-11-18). robots.txt (2026-11-18): 200, * disallows only WordPress admin, search, tag, category and
+      tracking-parameter URLs; sitemap answered 200 with no challenge. No terms-of-use page found
+      (/en/terms-and-conditions/ is 404).'
+  - id: egymonuments
+    category: places
+    name: Egypt Ministry of Tourism and Antiquities (egymonuments.gov.eg)
+    url: https://egymonuments.gov.eg/en/sitemap.aspx
+    method: sitemap
+    license: Government site; terms unverified
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'Official monuments, museums and archaeological sites (opening hours, tickets), the alternative
+      to experienceegypt.eg (robots.txt 403). robots.txt (2026-11-18): 200, sitemaps only, no rules
+      (allowed); the English sitemap answered 200 (133 monuments, 25 museums, 35 archaeological sites, 90
+      events). Only a privacy policy found, no terms of use.'
+  - id: kws-parks
+    category: places
+    name: Kenya Wildlife Service national parks
+    url: https://kws.go.ke/wp-sitemap-posts-park-1.xml
+    method: sitemap
+    license: Government site; terms unverified
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Official national parks and reserves (entry, opening, activities), the alternative to
+      magicalkenya.com (sitemap 403). robots.txt of kws.go.ke (2026-11-18): 200, * disallows only
+      /wp-admin/; the sitemap index answered 200 and lists a park sitemap. No terms of use found.'
+  - id: dirco-sa
+    category: emergency_card
+    name: South Africa DIRCO (missions abroad, consular services, visa notes)
+    url: https://dirco.gov.za/page-sitemap.xml
+    method: sitemap
+    license: copyright
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Official South African missions abroad and foreign representation in South Africa, the
+      alternative to dha.gov.za (robots.txt 403) for embassy contacts. robots.txt (2026-11-18): 200,
+      "Disallow:" (everything allowed); sitemaps answered 200. Terms (https://dirco.gov.za/terms-and-conditions/):
+      "On request, material may be reproduced free of charge ... may not be used for any financial gain ...
+      the source (including URL) and copyright status must be acknowledged."'
+  - id: capetown-gov
+    category: places
+    name: City of Cape Town (parks, beaches, nature reserves, events)
+    url: https://www.capetown.gov.za/sitemap.xml
+    method: sitemap
+    license: copyright
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Official city information, the alternative to capetown.travel (Cloudflare challenge).
+      robots.txt (2026-11-18): 200, "Allow: /", sitemap answered 200 (3.9 MB). Terms
+      (https://www.capetown.gov.za/General/Terms-of-use): "Any redistribution or reproduction of part or
+      all of the contents in any form is prohibited", except personal non-commercial use and copies for
+      personal use crediting the site; other use needs written permission (cct.webmaster@capetown.gov.za).'
+  - id: state-dept-country-info
+    category: visa
+    name: US State Department Country Travel Information API
+    url: https://cadataapi.state.gov/api/CountryTravelInformation
+    method: api
+    license: US public domain
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'The travel.state.gov country pages (entry, exit and visa requirements, embassy and consulate
+      locations, health, local laws) as JSON on the same public API host as the advisories (listed on
+      https://cadataapi.state.gov/, 2026-11-18): /api/CountryTravelInformation (all countries) and
+      /{tag}. robots.txt answers 404 (allowed). US Government work, public domain. Replaces
+      state-dept-country-pages and usembassy-list (both bot walls). Only listed /api/ paths may be
+      requested: other paths on this host answer a Cloudflare block page.'
+  - id: fsa-food-hygiene
+    category: activities
+    name: UK Food Standards Agency food hygiene ratings (FHRS API)
+    url: https://api.ratings.food.gov.uk/Establishments
+    method: api
+    license: OGL v3.0
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Official hygiene ratings of every UK restaurant, cafe and takeaway (name, address, rating,
+      date), an open alternative to Michelin, The Infatuation and HappyCow (terms ban bots). robots.txt of
+      api.ratings.food.gov.uk answers 404 (allowed, 2026-11-18). Open Government Licence v3; keyless API
+      that needs the header x-api-version: 2.'
+  - id: nyc-restaurant-inspections
+    category: activities
+    name: NYC DOHMH restaurant inspection results (NYC Open Data)
+    url: https://data.cityofnewyork.us/resource/43nn-pn8j.json
+    method: api
+    license: NYC Open Data terms
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'Every New York City restaurant with cuisine, address and inspection grade, an open alternative
+      to restaurant guides that ban bots. Same host and robots.txt as nyc-parks-events (Crawl-delay 1;
+      /resource not disallowed, re-checked 2026-11-18).'
+  - id: toronto-dinesafe
+    category: activities
+    name: City of Toronto DineSafe (restaurant inspections)
+    url: https://ckan0.cf.opendata.inter.prod-toronto.ca/api/3/action/package_show?id=dinesafe
+    method: api
+    license: OGL-Toronto
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'Every Toronto food premises with address and inspection status. ckan0 robots.txt (2026-11-18):
+      200, "Allow: /api/". Open Government Licence – Toronto.'

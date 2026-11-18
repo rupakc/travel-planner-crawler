@@ -407,6 +407,14 @@ BATCH2_DENIED = [
     # bot walls met in production, 2026-11-17
     "https://taxation-customs.ec.europa.eu/travelling_en", "https://www.mfat.govt.nz/en/embassies",
     "https://mfat.govt.nz/", "https://secretldn.com/feed/", "https://www.secretldn.com/",
+    # bot walls met in production, 2026-11-18
+    "https://philippines.travel/sitemap.xml", "https://www.dubaicustoms.gov.ae/en/",
+    # alternatives research 2026-11-18
+    "https://www.visitoslo.com/", "https://dados.gov.br/", "https://www.sanparks.org/",
+    "https://www.biosecurity.govt.nz/", "https://www.data.govt.nz/", "https://www.dubai.ae/",
+    "https://www.us.emb-japan.go.jp/", "https://intramuros.gov.ph/",
+    "https://www.agenziadoganemonopoli.gov.it/", "https://www.newzealand.com/",
+    "https://www.douane.gouv.fr/", "https://www.mfa.gov.sg/",
 ]
 
 # Hosts the crawler uses (or will use) that no denylist entry may catch.
@@ -434,6 +442,15 @@ APPROVED = [
     "https://twopassportspacked.com/common-travel-scams/",
     "https://www.smartraveller.gov.au/news-and-updates/stop-check-protect-and-keep-scammers-out-your-travel-plans",
     "https://www.ftc.gov/", "https://ftc.gov/", "https://reportfraud.ftc.gov/",
+    # alternatives to bot-walled sites (2026-11-18)
+    "https://www.safetravel.govt.nz/destinations/japan",
+    "https://europa.eu/youreurope/citizens/travel/carry/index_en.htm",
+    "https://www.revenue.ie/en/customs/individuals/info-travelling-duty-free/index.aspx",
+    "https://icp.gov.ae/sitemap.xml", "https://egymonuments.gov.eg/en/sitemap.aspx",
+    "https://kws.go.ke/wp-sitemap-posts-park-1.xml", "https://dirco.gov.za/page-sitemap.xml",
+    "https://www.capetown.gov.za/sitemap.xml", "https://cadataapi.state.gov/api/CountryTravelInformation",
+    "https://api.ratings.food.gov.uk/Establishments", "https://data.cityofnewyork.us/resource/43nn-pn8j.json",
+    "https://catalogue.data.govt.nz/", "https://www.customs.gov.sg/",
 ]
 
 
@@ -464,6 +481,46 @@ def test_production_bot_walls_2026_11_17_are_off_and_out_of_every_ramp(generated
         for ramp in ("ramp-1.txt", "ramp-2.txt", "ramp-3.txt"):
             assert sid not in _ramp(ramp), (sid, ramp)
         assert any(e["host"] == host for e in DENYLIST), host
+
+
+def test_production_bot_walls_2026_11_18_are_off_and_out_of_every_ramp(generated):
+    for sid, host in (("philippines-travel", "philippines.travel"),
+                      ("dubai-customs-passengers", "dubaicustoms.gov.ae")):
+        spec = generated[sid]
+        notes = " ".join(spec["notes"].split())
+        assert spec["enabled"] is False, sid
+        assert "2026-11-18" in notes and "bot wall" in notes and host in notes, sid
+        for ramp in ("ramp-1.txt", "ramp-2.txt", "ramp-3.txt"):
+            assert sid not in _ramp(ramp), (sid, ramp)
+        assert any(e["host"] == host for e in DENYLIST), host
+
+
+# Alternatives to sites that refused or challenged VoyagerBot (vetted 2026-11-18).
+ALTERNATIVES_ON = {"safetravel-nz", "eu-youreurope-travel", "revenue-ie-travellers"}
+ALTERNATIVES_OFF = {
+    "icp-uae-customs": "terms not yet confirmed", "egymonuments": "terms not yet confirmed",
+    "kws-parks": "terms not yet confirmed", "dirco-sa": "owner decision",
+    "capetown-gov": "owner decision", "state-dept-country-info": "adapter pending",
+    "fsa-food-hygiene": "adapter pending", "nyc-restaurant-inspections": "adapter pending",
+    "toronto-dinesafe": "adapter pending",
+}
+
+
+def test_alternatives_2026_11_18(generated):
+    for sid in ALTERNATIVES_ON:
+        spec = generated[sid]
+        assert spec["enabled"] is True and spec["source_class"] == "official", sid
+        assert spec["licence"]["class"] == "open" and spec["licence"]["spdx"] == "CC-BY-4.0", sid
+        assert spec["include"] and spec["daily_budget"] <= 300, sid
+        assert "2026-11-18" in " ".join(spec["notes"].split()), sid
+        assert sid in _ramp("ramp-2.txt") and sid in _ramp("ramp-3.txt"), sid
+    assert generated["eu-youreurope-travel"]["min_delay_s"] >= 10  # europa.eu Crawl-delay 10
+    for sid, why in ALTERNATIVES_OFF.items():
+        spec = generated[sid]
+        reason = " ".join(spec["notes"].split()).split("Disabled: ", 1)[1]
+        assert spec["enabled"] is False and reason.startswith(why), sid
+        for ramp in ("ramp-1.txt", "ramp-2.txt", "ramp-3.txt"):
+            assert sid not in _ramp(ramp), (sid, ramp)
 
 
 def test_terms_and_bot_wall_sources_are_off(generated):
