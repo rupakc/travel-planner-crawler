@@ -104,6 +104,10 @@ pub const TRAVEL_PUBLICATIONS: &[(&str, &str)] = &[
     ("pointhacks.com.au", ""),
     ("bootsnall.com", ""),
     ("coasttocoast.co.za", ""),
+    // Corpus expansion: Europe (2026-11-18): travel magazines and blogs whose URLs lack "travel".
+    ("europeupclose.com", ""),
+    ("hiddeneurope.eu", ""),
+    ("europeanbestdestinations.com", ""),
 ];
 
 /// Whether `url` is travel-focused: `travel` in its host, path or query, or a

@@ -227,3 +227,14 @@ plan = `docs/superpowers/plans/2026-11-15-voyager-crawler.md`, r1–r5 = `docs/r
   ban automated access; unesco.org denylisted with 52 other terms-ban/403/challenge hosts. 37
   travel publications added to TRAVEL_PUBLICATIONS. (scripts/seeds_to_sources.py,
   policy/denylist.yaml, crates/vc-sources/src/relevance.rs, sources/ramp-2.txt, ramp-3.txt)
+- 2026-11-18 Owner standing rule: sources whose terms restrict use to personal and/or
+  non-commercial use are ENABLED (facts only; note "terms restrict to personal/non-commercial use;
+  owner accepted for non-commercial use 2026-11-18 (<clause>)"), because Voyager is non-commercial.
+  Explicit bans on robots/scraping/automated access/TDM/AI still mean off + denylist; robots.txt,
+  AI-bot blocks and disallowed feeds stay binding. Applied to adeac-bandera-azul, capetown-gov,
+  dirco-sa. (scripts/seeds_to_sources.py, docs/research/seeds.yaml)
+- 2026-11-18 Corpus expansion, Europe: 151 rows from the vetted research; 128 on (html/rss/sitemap,
+  ramp-2 and ramp-3), 23 off with reason (national open-data portals: adapter pending, choose
+  tourism datasets + dataset reader; API keys; no-response hosts: re-test from the crawler VM;
+  Eurostar: scraping clause, owner to confirm; The Local: relevance). Eight terms-ban hosts
+  denylisted; 403/challenge hosts from the research laptop are not denylisted.

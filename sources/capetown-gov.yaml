@@ -29,7 +29,7 @@ cadence: monthly
 min_delay_s: 5
 daily_budget: 200
 politeness_key: null
-enabled: false
+enabled: true
 needs_key: false
 key_secret: null
 max_retention_days: null
@@ -38,9 +38,9 @@ notes: 'Official city information, the alternative to capetown.travel (Cloudflar
   (2026-11-18): 200, "Allow: /", sitemap answered 200 (3.9 MB). Terms (https://www.capetown.gov.za/General/Terms-of-use):
   "Any redistribution or reproduction of part or all of the contents in any form is prohibited", except
   personal non-commercial use and copies for personal use crediting the site; other use needs written
-  permission (cct.webmaster@capetown.gov.za). | Disabled: owner decision: City of Cape Town terms prohibit
-  redistribution or reproduction except personal non-commercial use; written permission from cct.webmaster@capetown.gov.za
-  needed'
+  permission (cct.webmaster@capetown.gov.za). Terms restrict to personal/non-commercial use; owner accepted
+  for non-commercial use 2026-11-18 (redistribution or reproduction prohibited except personal non-commercial
+  use). Facts only, with the source and link.'
 relevance:
   sections:
   - places

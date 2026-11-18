@@ -31,7 +31,7 @@ cadence: monthly
 min_delay_s: 5
 daily_budget: 200
 politeness_key: null
-enabled: false
+enabled: true
 needs_key: false
 key_secret: null
 max_retention_days: null
@@ -40,9 +40,9 @@ notes: 'Official South African missions abroad and foreign representation in Sou
   to dha.gov.za (robots.txt 403) for embassy contacts. robots.txt (2026-11-18): 200, "Disallow:" (everything
   allowed); sitemaps answered 200. Terms (https://dirco.gov.za/terms-and-conditions/): "On request, material
   may be reproduced free of charge ... may not be used for any financial gain ... the source (including
-  URL) and copyright status must be acknowledged." | Disabled: owner decision: DIRCO terms allow reproduction
-  "on request", free of charge, not for financial gain, with source and URL acknowledged; the owner must
-  ask DIRCO or accept facts-only use for a free app'
+  URL) and copyright status must be acknowledged." Terms restrict to personal/non-commercial use; owner
+  accepted for non-commercial use 2026-11-18 (reproduction on request, not for financial gain, with source
+  and URL acknowledged). Facts only, with the source and link.'
 relevance:
   sections:
   - emergency_card
