@@ -168,7 +168,8 @@ def test_blogs_and_news_are_facts_only_editorial(generated):
 
 BLOGS_WITHOUT_A_FEED = {"blog-thriftynomads", "blog-expertvagabond", "blog-bootsnall", "blog-outsideonline",
                         "blog-twoweekscr",  # robots.txt disallows */feed/ (2026-11-18)
-                        "news-tourismupdate"}  # no feed; article sitemap (2026-11-18)
+                        "news-tourismupdate",  # no feed; article sitemap (2026-11-18)
+                        "blog-insidekyoto"}  # post sitemap only (2026-11-18)
 
 
 def test_wikipedia_and_wikidata_are_reference_not_official(generated):
@@ -1184,7 +1185,7 @@ THEMATIC_STAY_ALLOWED = [
 
 
 # Corpus sources whose licence is share_alike (never merged with other licences).
-CORPUS_SHARE_ALIKE = {"customs-sag-cl", "blog-caravanistan"}
+CORPUS_SHARE_ALIKE = {"customs-sag-cl", "guide-caravanistan"}  # caravanistan: CC BY-SA 4.0
 
 
 # --- Corpus expansion: Latin America and the Caribbean (research vetted 2026-11-18) -------
@@ -1304,7 +1305,7 @@ AFRICA_PERSONAL_TERMS = {
 
 def test_corpus_africa_me_2026_11_18(generated):
     seeds = yaml.safe_load((ROOT / "docs" / "research" / "seeds.yaml").read_text())["seeds"]
-    ids = _batch_ids(seeds, "tb-visitghana", "CORPUS_AFTER_AFRICA")
+    ids = _batch_ids(seeds, "tb-visitghana", "tb-osaka-info")
     assert len(ids) == 138
     _corpus_batch_check(generated, ids, AFRICA_OFF, AFRICA_DELAYS, AFRICA_AI_RESERVED, AFRICA_PERSONAL_TERMS)
     assert len([s for s in ids if s not in AFRICA_OFF]) == 124
@@ -1326,4 +1327,64 @@ AFRICA_DENIED = ["https://georgia.travel/", "https://www.isimangaliso.com/", "ht
                  "https://www.routard.com/", "https://visitethiopia.travel/"]
 AFRICA_STAY_ALLOWED = ["https://visitkzn-sa.com/sitemap.xml", "https://www.capetownmagazine.com/sitemap.xml",
                        "https://www.oncf-voyages.ma/", "https://www.railway.ge/en/sitemap_index.xml"]
+
+
+# --- Corpus expansion: Asia-Pacific (research vetted 2026-11-18, corpus_asia_pacific.md) ---
+AP_OFF = {
+    "api-cwa-taiwan": "needs an API key", "api-metlink-nz": "needs an API key",
+    "api-tdx-taiwan": "needs an API key", "gov-kemenparekraf": "re-test from the crawler VM",
+    "gov-mct-china": "re-test from the crawler VM", "gov-mot-cambodia": "adapter pending",
+    "gov-tourism-mm": "re-test from the crawler VM", "np-knps-korea": "re-test from the crawler VM",
+    "od-data-gov-mo": "adapter pending", "od-data-gov-sg": "adapter pending",
+    "od-data-qld": "adapter pending", "tb-discoverkyrgyzstan": "re-test from the crawler VM",
+    "tb-hanoi-tourism": "re-test from the crawler VM", "tb-himachal": "re-test from the crawler VM",
+    "tb-jktourism": "re-test from the crawler VM", "tb-kyoto-travel": "re-test from the crawler VM",
+    "tb-mongolia-travel": "adapter pending", "tb-puducherry": "re-test from the crawler VM",
+    "tb-punjab-pk": "re-test from the crawler VM", "tb-rajasthan": "re-test from the crawler VM",
+    "tb-sikkim": "re-test from the crawler VM", "tb-tamilnadu": "re-test from the crawler VM",
+    "tb-tonga": "re-test from the crawler VM", "tb-visitjogja": "re-test from the crawler VM",
+    "tb-visitkl": "re-test from the crawler VM", "tb-vnat": "adapter pending",
+    "tb-wbtourism": "re-test from the crawler VM", "tr-delhi-metro": "adapter pending",
+    "tr-indianrailways": "re-test from the crawler VM", "tr-krl-jakarta": "re-test from the crawler VM",
+    "tr-myrapid": "re-test from the crawler VM", "tr-railway-lk": "re-test from the crawler VM",
+    "tr-seoul-metro": "re-test from the crawler VM", "tr-srt-thailand": "re-test from the crawler VM",
+    "tr-td-hk": "re-test from the crawler VM", "tr-transperth": "re-test from the crawler VM",
+    "visa-evisa-kh": "re-test from the crawler VM", "visa-evisa-uz": "adapter pending",
+    "visa-immigration-ph": "re-test from the crawler VM", "visa-laoevisa": "re-test from the crawler VM",
+    "wx-jma": "adapter pending", "wx-metservice-nz": "adapter pending",
+}
+AP_DELAYS = {"blog-insidekyoto": 10, "gov-nepal-motca": 10, "np-dnpwc-nepal": 10, "tr-great-journeys-nz": 60}
+AP_AI_RESERVED = {
+    "blog-insidekyoto", "ev-broadsheet", "mag-hongkongcheapo", "tb-kazakhstan", "tb-sabah",
+    "tb-south-australia", "tb-tahiti", "tb-tourism-malaysia-corp", "tr-mrta",
+}
+AP_PERSONAL_TERMS = {
+    "ev-broadsheet", "ev-esplanade-sg", "ev-vivid-sydney", "np-wa-exploreparks", "ref-japan-guide",
+    "tb-aucklandnz", "tb-macao-tourism", "tb-nelsontasman", "tb-rotoruanz", "tb-sltda", "tb-taiwan-tourism",
+    "tb-tasmania", "tb-visitcanberra", "tb-visitnsw", "wx-nea-sg",
+}
+
+
+def test_corpus_asia_pacific_2026_11_18(generated):
+    seeds = yaml.safe_load((ROOT / "docs" / "research" / "seeds.yaml").read_text())["seeds"]
+    ids = _batch_ids(seeds, "tb-osaka-info", "CORPUS_AFTER_ASIA_PACIFIC")
+    assert len(ids) == 183
+    _corpus_batch_check(generated, ids, AP_OFF, AP_DELAYS, AP_AI_RESERVED, AP_PERSONAL_TERMS)
+    assert len([s for s in ids if s not in AP_OFF]) == 141
+    # Wellington's sitemap lives on admin.wellingtonnz.com, whose robots.txt was read first.
+    wl = generated["tb-wellington"]
+    assert wl["sitemaps"] == ["https://admin.wellingtonnz.com/sitemap.xml"]
+    assert "robots.txt of admin.wellingtonnz.com" in " ".join(wl["notes"].split())
+    # robots.txt Disallow: / hosts, denylisted hosts and duplicates are not added.
+    for sid in ("np-nparks-sg", "tr-narita-airport", "tr-changi", "np-doc-nz", "np-nsw-parks"):
+        assert sid not in generated or generated[sid]["enabled"] is False, sid
+    for url in AP_DENIED:
+        assert s2s.denied(url, DENYLIST) is not None, url
+    for url in AP_STAY_ALLOWED:
+        assert s2s.denied(url, DENYLIST) is None, url
+
+
+AP_DENIED = ["https://www.visit-fsm.org/", "https://www.visitkiribati.travel/", "https://saigoneer.com/"]
+AP_STAY_ALLOWED = ["https://www.roots.gov.sg/sitemap-pages.xml", "https://www.wellingtonnz.com/",
+                   "https://admin.wellingtonnz.com/sitemap.xml", "https://visithcmc.vn/feed/"]
 

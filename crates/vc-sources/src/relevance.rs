@@ -125,6 +125,10 @@ pub const TRAVEL_PUBLICATIONS: &[(&str, &str)] = &[
     ("turkeysforlife.com", ""),
     ("tourismupdate.com", ""),
     ("istanbulclues.com", ""),
+    // Corpus expansion: Asia-Pacific (2026-11-18): travel magazines and blogs whose URLs lack "travel".
+    ("hongkongcheapo.com", ""),
+    ("insidekyoto.com", ""),
+    ("caravanistan.com", ""),
 ];
 
 /// Whether `url` is travel-focused: `travel` in its host, path or query, or a

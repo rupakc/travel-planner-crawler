@@ -11373,3 +11373,2109 @@ seeds:
     allowed: true
     notes: 'Research 2026-11-18 (corpus Africa-ME): robots.txt: n/a; terms: ''for educational, research or non-commercial
       purposes only''. No automated-access clause; facts only.'
+  # --- Corpus expansion: Asia-Pacific (research 2026-11-18, corpus_asia_pacific.md) ---
+  - id: tb-osaka-info
+    category: places
+    name: Osaka Convention & Tourism Bureau (OSAKA-INFO)
+    url: https://osaka-info.jp/sitemap.xml
+    method: sitemap
+    license: Copyright; no automated-access clause
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Asia-Pacific): robots.txt: robots 200, path allowed (no rules; robots path
+      returns HTML 404 page); terms: site policy https://osaka-info.jp/en/octb-site-policy/ read: no robot/scraping/AI
+      clause. No automated-access clause; facts only.'
+  - id: tb-visit-hokkaido
+    category: places
+    name: Hokkaido Tourism Organization
+    url: https://www.visit-hokkaido.jp/en/
+    method: html
+    license: Copyright; no automated-access clause
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Asia-Pacific): robots.txt: robots 200, path allowed (empty Disallow); terms:
+      /en/terms read (privacy-style policy): no robot/AI clause. No automated-access clause; facts only.'
+  - id: tb-visit-okinawa
+    category: places
+    name: Okinawa Convention & Visitors Bureau (Visit Okinawa Japan)
+    url: https://visitokinawajapan.com/sitemap_index.xml
+    method: sitemap
+    license: Copyright; terms not found
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Asia-Pacific): robots.txt: robots 200, path allowed (empty Disallow); terms:
+      terms not found. Terms unconfirmed; owner accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: tb-dive-hiroshima
+    category: places
+    name: Hiroshima Prefecture tourism (Dive! Hiroshima)
+    url: https://dive-hiroshima.com/sitemap.xml
+    method: sitemap
+    license: Copyright; terms not found
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Asia-Pacific): robots.txt: robots 200, path allowed; terms: terms not found
+      (footer link not located). Terms unconfirmed; owner accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: tb-visit-nara
+    category: places
+    name: Nara Visitors Bureau (Visit Nara)
+    url: https://www.visitnara.jp/
+    method: html
+    license: Copyright; no automated-access clause
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Asia-Pacific): robots.txt: robots 200, path allowed (/admin/ only); terms:
+      https://www.visitnara.jp/terms-of-use/ read: no robot/AI clause. No automated-access clause; facts only.'
+  - id: tb-visit-kanazawa
+    category: places
+    name: Kanazawa City Tourism Association
+    url: https://visitkanazawa.jp/en/
+    method: html
+    license: Copyright; no automated-access clause
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Asia-Pacific): robots.txt: robots 404 (allow all); terms: "Such information
+      cannot be reprinted, reproduced ... without the permission of the copyright holder, except as permitted by copyright
+      law" (copyright reservation only). No automated-access clause; facts only.'
+  - id: tb-visit-kyushu
+    category: places
+    name: Kyushu Tourism Organization (Visit Kyushu)
+    url: https://www.visit-kyushu.com/sitemap.xml
+    method: sitemap
+    license: Copyright; terms not found
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Asia-Pacific): robots.txt: robots 404 (allow all); terms: terms not found.
+      Terms unconfirmed; owner accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: tb-go-nagano
+    category: places
+    name: Nagano Prefecture tourism (Go Nagano)
+    url: https://www.go-nagano.net/sitemap.xml
+    method: sitemap
+    license: Copyright; terms not found
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Asia-Pacific): robots.txt: robots 200, path allowed (HubSpot preview paths
+      only); terms: terms not found. Terms unconfirmed; owner accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: tb-go-fukuoka
+    category: places
+    name: Fukuoka City tourism (Go Fukuoka / yokanavi)
+    url: https://gofukuoka.jp/
+    method: html
+    license: Copyright; terms not found
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Asia-Pacific): robots.txt: yokanavi.com and gofukuoka.jp robots 200; * group
+      disallows only /qr.php, /icon.php, /thumb.php; Crawl-delay 120 only for Baidu/Yeti; terms: terms not found.
+      Terms unconfirmed; owner accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: tb-nikko
+    category: places
+    name: Nikko City Tourism Association
+    url: https://www.nikko-kankou.org/sitemap.xml
+    method: sitemap
+    license: Copyright; no automated-access clause
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Asia-Pacific): robots.txt: robots 200, path allowed (empty Disallow); terms:
+      /notices page read: copyright line only. No automated-access clause; facts only.'
+  - id: tb-hakone
+    category: places
+    name: Hakone Town Tourism Association
+    url: https://www.hakone.or.jp/sitemap.xml
+    method: sitemap
+    license: Copyright; terms not found
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Asia-Pacific): robots.txt: robots 200, path allowed; terms: terms not found.
+      Terms unconfirmed; owner accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: tr-jr-west
+    category: getting_around
+    name: JR West (global site)
+    url: https://www.westjr.co.jp/global/en/
+    method: html
+    license: Copyright; no automated-access clause
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Asia-Pacific): robots.txt: robots 200, path allowed (one path disallowed);
+      terms: "use ... without permission ... is prohibited, with the exception of personal use and other uses allowed
+      by the copyright law" (copyright reservation). No automated-access clause; facts only.'
+  - id: tr-jr-central
+    category: getting_around
+    name: JR Central (Tokaido Shinkansen global site)
+    url: https://global.jr-central.co.jp/en/
+    method: html
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Asia-Pacific): robots.txt: robots 404 (allow all); terms: terms not found.
+      Terms unconfirmed; owner accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: tr-jr-kyushu
+    category: getting_around
+    name: JR Kyushu (English)
+    url: https://www.jrkyushu.co.jp/english/
+    method: html
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Asia-Pacific): robots.txt: robots 404 (allow all); terms: terms not found.
+      Terms unconfirmed; owner accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: tr-osaka-metro
+    category: getting_around
+    name: Osaka Metro (English)
+    url: https://subway.osakametro.co.jp/en/
+    method: html
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Asia-Pacific): robots.txt: robots 404 (allow all); terms: terms not found
+      (conditions of carriage page only). Terms unconfirmed; owner accepted for non-commercial use 2026-11-18. Facts
+      only.'
+  - id: tr-haneda-airport
+    category: getting_around
+    name: Tokyo International Airport (Haneda)
+    url: https://www.tokyo-haneda.com/sitemap.xml
+    method: sitemap
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Asia-Pacific): robots.txt: robots 404 (allow all); terms: terms link is a
+      PDF (site_resource/information/pdf/000017892.pdf), not parsed; treat as terms not found. Terms unconfirmed;
+      owner accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: mag-hongkongcheapo
+    category: blogs
+    name: Hong Kong Cheapo
+    url: https://hongkongcheapo.com/
+    method: html
+    license: Copyright; no automated-access clause
+    cadence: daily
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Asia-Pacific): robots.txt: robots 200, path allowed; same rules as tokyocheapo.com
+      (GPTBot, Google-Extended blocked); terms: same publisher terms as tokyocheapo.com (no robot/AI clause). No automated-access
+      clause; facts only. robots.txt reserves AI use (AI crawlers blocked), so title and link only: no LLM kinds.'
+  - id: blog-insidekyoto
+    category: blogs
+    name: Inside Kyoto
+    url: https://www.insidekyoto.com/post-sitemap.xml
+    method: sitemap
+    license: Copyright; terms not found
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Asia-Pacific): robots.txt: robots 200, path allowed; Crawl-delay up to 10
+      s; AI-bot block (GPTBot, ClaudeBot, anthropic-ai, CCBot, Google-Extended, Bytespider) → title + link only; Disallow
+      /*?*; terms: terms not found. Terms unconfirmed; owner accepted for non-commercial use 2026-11-18. Facts only.
+      robots.txt reserves AI use (AI crawlers blocked), so title and link only: no LLM kinds. No feed is used: the
+      post sitemap is read.'
+  - id: tb-visitkorea-en
+    category: places
+    name: Korea Tourism Organization (VisitKorea, English)
+    url: https://english.visitkorea.or.kr/sitemap_accommodations.xml
+    method: sitemap
+    license: Copyright; terms not found
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Asia-Pacific): robots.txt: robots 200, path allowed (Disallow /totalSearch/search.do
+      only); terms: terms not found (footer link is JavaScript; footer: ''Copyright Korea Tourism Organization. All
+      Rights Reserved.''; KTO TourAPI already via apis.data.go.kr). Terms unconfirmed; owner accepted for non-commercial
+      use 2026-11-18. Facts only.'
+  - id: tb-visitbusan
+    category: places
+    name: Busan Tourism Organization (Visit Busan)
+    url: https://www.visitbusan.net/index.do
+    method: html
+    license: Copyright; terms not found
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Asia-Pacific): robots.txt: robots 200, path allowed (Allow: /); terms: terms
+      not found. Terms unconfirmed; owner accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: wx-kma
+    category: weather
+    name: Korea Meteorological Administration (English)
+    url: https://www.kma.go.kr/sitemap.xml
+    method: html
+    license: Copyright; terms not found
+    cadence: daily
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Asia-Pacific): robots.txt: robots 200, path allowed (/kma/sch disallowed);
+      terms: terms not found. Terms unconfirmed; owner accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: tb-meet-in-shanghai
+    category: places
+    name: Shanghai tourism portal (Meet in Shanghai)
+    url: https://www.meet-in-shanghai.net/sitemap-en.xml
+    method: sitemap
+    license: Copyright; terms not found
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Asia-Pacific): robots.txt: robots 404 (allow all); terms: terms not found.
+      Terms unconfirmed; owner accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: gov-shanghai-en
+    category: visa
+    name: Shanghai Municipal Government (English)
+    url: https://english.shanghai.gov.cn/
+    method: html
+    license: Copyright; terms not found
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Asia-Pacific): robots.txt: robots 404 (allow all); terms: terms not found.
+      Terms unconfirmed; owner accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: gov-beijing-en
+    category: tips
+    name: Beijing Municipal Government (English)
+    url: https://english.beijing.gov.cn/
+    method: html
+    license: Copyright; terms not found
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Asia-Pacific): robots.txt: robots 200, path allowed (/sd disallowed); terms:
+      terms not found. Terms unconfirmed; owner accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: tb-taiwan-tourism
+    category: places
+    name: Taiwan Tourism Administration (English)
+    url: https://eng.taiwan.net.tw/sitemap.xml
+    method: sitemap
+    license: Copyright; personal/non-commercial terms (owner accepted)
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Asia-Pacific): robots.txt: robots 200, path allowed (robots returns an HTML
+      page: no rules); terms: "When using the content of this website for personal/non-commercial purposes, please
+      source the information appropriately" (non-commercial reuse with credit; Voyager is non-commercial - flag for
+      owner). Terms restrict to personal/non-commercial use; owner accepted for non-commercial use 2026-11-18 (''When
+      using the content of this website for personal/non-commercial purposes, please source the information appropriately'').
+      Facts only.'
+  - id: tr-thsrc
+    category: getting_around
+    name: Taiwan High Speed Rail
+    url: https://en.thsrc.com.tw/sitemap.xml
+    method: sitemap
+    license: Copyright; no automated-access clause
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Asia-Pacific): robots.txt: robots 404 (allow all); terms: copyright page read:
+      trademark reservation only. No automated-access clause; facts only.'
+  - id: tr-taiwan-railway
+    category: getting_around
+    name: Taiwan Railway (TRA)
+    url: https://www.railway.gov.tw/tra-tip-web/tip?lang=EN_US
+    method: html
+    license: Copyright; no automated-access clause
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Asia-Pacific): robots.txt: robots 404 (allow all); terms: terms page tipF14
+      read: no robot/AI clause. No automated-access clause; facts only.'
+  - id: tr-taipei-metro
+    category: getting_around
+    name: Taipei Metro (English)
+    url: https://english.metro.taipei/sitemap.xml
+    method: sitemap
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Asia-Pacific): robots.txt: robots 404 (allow all); terms: terms not found.
+      Terms unconfirmed; owner accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: np-taiwan
+    category: places
+    name: Taiwan National Park Service (English)
+    url: https://www.nps.gov.tw/en/
+    method: html
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Asia-Pacific): robots.txt: robots 200, path allowed (robots returns HTML:
+      no rules); home is small, may need render; terms: terms not found. Terms unconfirmed; owner accepted for non-commercial
+      use 2026-11-18. Facts only.'
+  - id: wx-cwa-taiwan
+    category: weather
+    name: Central Weather Administration Taiwan (English)
+    url: https://www.cwa.gov.tw/eng/
+    method: html
+    license: Copyright; terms not found
+    cadence: daily
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Asia-Pacific): robots.txt: robots 404 (allow all); terms: terms not found.
+      Terms unconfirmed; owner accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: visa-boca-tw
+    category: visa
+    name: Bureau of Consular Affairs Taiwan
+    url: https://www.boca.gov.tw/sitemap.xml
+    method: sitemap
+    license: Copyright; no automated-access clause
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Asia-Pacific): robots.txt: robots 200, path allowed; terms: policy page read:
+      no robot/AI clause. No automated-access clause; facts only.'
+  - id: visa-nia-tw
+    category: visa
+    name: National Immigration Agency Taiwan (English)
+    url: https://www.immigration.gov.tw/sitemap.xml
+    method: sitemap
+    license: Copyright; no automated-access clause
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Asia-Pacific): robots.txt: robots 200, path allowed; terms: policy page read:
+      no robot/AI clause. No automated-access clause; facts only.'
+  - id: tb-tainan
+    category: places
+    name: Tainan City tourism (Travel Tainan)
+    url: https://www.twtainan.net/en/
+    method: html
+    license: Copyright; terms not found
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Asia-Pacific): robots.txt: robots 404 (allow all); terms: terms not found.
+      Terms unconfirmed; owner accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: tr-mtr-hk
+    category: getting_around
+    name: MTR Corporation (Hong Kong)
+    url: https://www.mtr.com.hk/en/customer/main/index.html
+    method: html
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Asia-Pacific): robots.txt: robots 200, path allowed (corporate/investor paths
+      disallowed); home fetch timed out; terms: terms not found. Terms unconfirmed; owner accepted for non-commercial
+      use 2026-11-18. Facts only.'
+  - id: tr-hkia
+    category: getting_around
+    name: Hong Kong International Airport
+    url: https://www.hongkongairport.com/sitemap.xml
+    method: sitemap
+    license: Copyright; no automated-access clause
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Asia-Pacific): robots.txt: robots 200, path allowed (/eng/, /chi/ legacy paths
+      disallowed); terms: https://www.hongkongairport.com/en/terms-of-use.page read: no robot/AI clause. No automated-access
+      clause; facts only.'
+  - id: visa-immd-hk
+    category: visa
+    name: Hong Kong Immigration Department
+    url: https://www.immd.gov.hk/eng/services/visas/visit-transit/visit-visa-entry-permit.html
+    method: html
+    license: Copyright; terms not found
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Asia-Pacific): robots.txt: robots 404 (allow all); terms: terms not found
+      (HK gov ''Important notices'' page not fetched). Terms unconfirmed; owner accepted for non-commercial use 2026-11-18.
+      Facts only.'
+  - id: ev-lcsd-hk
+    category: events
+    name: Leisure and Cultural Services Department (HK)
+    url: https://www.lcsd.gov.hk/en/sitemap.xml
+    method: sitemap
+    license: Copyright; no automated-access clause
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Asia-Pacific): robots.txt: robots 200, path allowed (/beach/, /golf/, artist
+      pages disallowed); terms: https://www.lcsd.gov.hk/en/condition/index.html read: no robot/AI clause. No automated-access
+      clause; facts only.'
+  - id: wx-hko
+    category: weather
+    name: Hong Kong Observatory
+    url: https://www.hko.gov.hk/en/
+    method: html
+    license: Copyright; terms not found
+    cadence: daily
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Asia-Pacific): robots.txt: robots 200, path allowed (/aviat/, /cis/, /dfs/
+      etc. disallowed - include only allowed paths); terms: terms not found. Terms unconfirmed; owner accepted for
+      non-commercial use 2026-11-18. Facts only.'
+  - id: tr-dsat-macao
+    category: getting_around
+    name: Macao Transport Bureau (DSAT)
+    url: https://www.dsat.gov.mo/dsat/index.aspx
+    method: html
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Asia-Pacific): robots.txt: robots 200, path allowed (/dsat_bres/ disallowed);
+      terms: terms not found. Terms unconfirmed; owner accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: visa-psp-macao
+    category: visa
+    name: Macao Public Security Police (immigration)
+    url: https://www.fsm.gov.mo/psp/eng/
+    method: html
+    license: Copyright; terms not found
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Asia-Pacific): robots.txt: robots 200, path allowed; terms: terms not found.
+      Terms unconfirmed; owner accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: official-tatnews
+    category: events
+    name: TAT Newsroom (Tourism Authority of Thailand)
+    url: https://www.tatnews.org/feed/
+    method: rss
+    license: Copyright; terms not found
+    cadence: daily
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Asia-Pacific): robots.txt: robots 200, path allowed (empty Disallow); terms:
+      terms not found. Terms unconfirmed; owner accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: tr-bts-bangkok
+    category: getting_around
+    name: BTS Skytrain Bangkok
+    url: https://www.bts.co.th/eng/
+    method: html
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Asia-Pacific): robots.txt: robots 404 (allow all); terms: terms not found.
+      Terms unconfirmed; owner accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: tr-mrta
+    category: getting_around
+    name: Mass Rapid Transit Authority of Thailand
+    url: https://www.mrta.co.th/en/
+    method: html
+    license: Copyright; no automated-access clause
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Asia-Pacific): robots.txt: robots 200, path allowed; AI-bot block (GPTBot,
+      ClaudeBot, CCBot, Google-Extended, Bytespider) → title + link only; terms: https://www.mrta.co.th/en/conditions
+      read: no robot/AI clause. No automated-access clause; facts only. robots.txt reserves AI use (AI crawlers blocked),
+      so title and link only: no LLM kinds.'
+  - id: tr-airports-thailand
+    category: getting_around
+    name: Airports of Thailand (AOT)
+    url: https://www.airportthai.co.th/en/feed/
+    method: rss
+    license: Copyright; terms not found
+    cadence: daily
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Asia-Pacific): robots.txt: robots 200, path allowed (empty Disallow); terms:
+      governance page read: no robot/AI clause; dedicated terms not found. Terms unconfirmed; owner accepted for non-commercial
+      use 2026-11-18. Facts only.'
+  - id: tb-danang
+    category: places
+    name: Da Nang Tourism (Da Nang Fantasticity)
+    url: https://danangfantasticity.com/sitemap.xml
+    method: sitemap
+    license: Copyright; terms not found
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Asia-Pacific): robots.txt: robots 404 (allow all); terms: terms not found.
+      Terms unconfirmed; owner accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: tb-visit-hcmc
+    category: places
+    name: Ho Chi Minh City Department of Tourism (Visit HCMC)
+    url: https://visithcmc.vn/feed/
+    method: rss
+    license: Copyright; terms not found
+    cadence: daily
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Asia-Pacific): robots.txt: robots 200, path allowed (wp-admin, search disallowed);
+      terms: terms not found. Terms unconfirmed; owner accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: tb-hoi-an-heritage
+    category: places
+    name: Hoi An Centre for Cultural Heritage Management
+    url: http://www.hoianworldheritage.org.vn/vi/news/rss.hwh
+    method: rss
+    license: Copyright; terms not found
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Asia-Pacific): robots.txt: robots 200, path allowed; terms: terms not found.
+      Terms unconfirmed; owner accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: tr-vietnam-railways
+    category: getting_around
+    name: Vietnam Railways (DSVN)
+    url: https://dsvn.vn/
+    method: html
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Asia-Pacific): robots.txt: robots 404 (allow all); terms: terms not found.
+      Terms unconfirmed; owner accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: tb-tourism-cambodia
+    category: places
+    name: Tourism Cambodia portal
+    url: https://tourismcambodia.org/sitemap.xml
+    method: sitemap
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Asia-Pacific): robots.txt: robots 200, path allowed (/hotel/, /stays/ disallowed);
+      terms: terms not found. Terms unconfirmed; owner accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: tb-angkor-enterprise
+    category: activities
+    name: Angkor Enterprise (Angkor pass)
+    url: https://www.angkorenterprise.gov.kh/en
+    method: html
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Asia-Pacific): robots.txt: robots 200, path allowed; terms: terms not found.
+      Terms unconfirmed; owner accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: tb-sabah
+    category: places
+    name: Sabah Tourism Board
+    url: https://www.sabahtourism.com/sitemap.xml
+    method: sitemap
+    license: Copyright; terms not found
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Asia-Pacific): robots.txt: robots 200, path allowed; AI-bot block (GPTBot,
+      ClaudeBot, CCBot, Google-Extended, Bytespider) → title + link only; terms: terms not found. Terms unconfirmed;
+      owner accepted for non-commercial use 2026-11-18. Facts only. robots.txt reserves AI use (AI crawlers blocked),
+      so title and link only: no LLM kinds.'
+  - id: tb-tourism-malaysia-corp
+    category: events
+    name: Tourism Malaysia (corporate site)
+    url: https://www.tourism.gov.my/
+    method: html
+    license: Copyright; no automated-access clause
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Asia-Pacific): robots.txt: robots 200, path allowed; AI-bot block → title
+      + link only; terms: "may not be copied, reproduced or imitated ... unless expressly permitted" (copyright reservation;
+      no robot clause). No automated-access clause; facts only. robots.txt reserves AI use (AI crawlers blocked),
+      so title and link only: no LLM kinds.'
+  - id: tb-mypenang
+    category: places
+    name: Penang Global Tourism (mypenang)
+    url: https://mypenang.gov.my/
+    method: html
+    license: Copyright; terms not found
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Asia-Pacific): robots.txt: robots 404 (allow all); terms: terms not found.
+      Terms unconfirmed; owner accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: np-perhilitan
+    category: places
+    name: PERHILITAN (Malaysia wildlife & national parks)
+    url: https://www.wildlife.gov.my/feed/
+    method: rss
+    license: Copyright; terms not found
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Asia-Pacific): robots.txt: robots 200, path allowed; terms: terms not found.
+      Terms unconfirmed; owner accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: tr-ktmb
+    category: getting_around
+    name: KTM Berhad (Malaysian railway)
+    url: https://www.ktmb.com.my/
+    method: html
+    license: Copyright; no automated-access clause
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Asia-Pacific): robots.txt: robots 200, path allowed (empty Disallow); terms:
+      e-ticket policy page read: no robot/AI clause. No automated-access clause; facts only.'
+  - id: tr-malaysia-airports
+    category: getting_around
+    name: Malaysia Airports (KLIA etc.)
+    url: https://www.malaysiaairports.com.my/sitemap.xml
+    method: sitemap
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Asia-Pacific): robots.txt: robots 200, path allowed; terms: terms not found.
+      Terms unconfirmed; owner accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: tb-brunei
+    category: places
+    name: Brunei Tourism
+    url: https://www.bruneitourism.com/sitemap_index.xml
+    method: sitemap
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Asia-Pacific): robots.txt: robots 200, path allowed; terms: terms not found.
+      Terms unconfirmed; owner accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: ev-roots-sg
+    category: places
+    name: Roots.sg (National Heritage Board)
+    url: https://www.roots.gov.sg/sitemap-pages.xml
+    method: sitemap
+    license: Copyright; no automated-access clause
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Asia-Pacific): robots.txt: robots 200, path allowed; terms: https://www.roots.gov.sg/terms-of-use
+      read: no robot/AI clause. No automated-access clause; facts only.'
+  - id: ev-nhb-sg
+    category: places
+    name: National Heritage Board Singapore
+    url: https://www.nhb.gov.sg/sitemap.xml
+    method: sitemap
+    license: Copyright; no automated-access clause
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Asia-Pacific): robots.txt: robots 200, path allowed (empty Disallow); terms:
+      https://www.nhb.gov.sg/contents/terms-of-use read: no robot/AI clause. No automated-access clause; facts only.'
+  - id: wx-nea-sg
+    category: weather
+    name: National Environment Agency Singapore
+    url: https://www.nea.gov.sg/sitemap.xml
+    method: sitemap
+    license: Copyright; personal/non-commercial terms (owner accepted)
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Asia-Pacific): robots.txt: robots 200, path allowed (/search disallowed);
+      terms: "You may use, hyperlink, copy and distribute the Contents solely for personal, internal, non-commercial
+      or informational purposes". Terms restrict to personal/non-commercial use; owner accepted for non-commercial
+      use 2026-11-18 (''use, hyperlink, copy and distribute the Contents solely for personal, internal, non-commercial
+      or informational purposes''). Facts only.'
+  - id: tr-smrt
+    category: getting_around
+    name: SMRT (Singapore MRT/bus)
+    url: https://www.smrt.com.sg/sitemap.xml
+    method: sitemap
+    license: Copyright; no automated-access clause
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Asia-Pacific): robots.txt: robots 200, path allowed (*.aspx etc. disallowed);
+      terms: https://www.smrt.com.sg/terms-of-use/ read: no robot/AI clause. No automated-access clause; facts only.'
+  - id: tr-sbs-transit
+    category: getting_around
+    name: SBS Transit
+    url: https://www.sbstransit.com.sg/
+    method: html
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Asia-Pacific): robots.txt: robots 200, path allowed (robots returns HTML 404
+      page: no rules); terms: terms not found. Terms unconfirmed; owner accepted for non-commercial use 2026-11-18.
+      Facts only.'
+  - id: pl-gardens-by-the-bay
+    category: activities
+    name: Gardens by the Bay
+    url: https://www.gardensbythebay.com.sg/en.sitemap.xml
+    method: sitemap
+    license: Copyright; no automated-access clause
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Asia-Pacific): robots.txt: robots 200, path allowed; terms: terms: contents
+      "protected by copyright" (reservation only, no robot/AI clause). No automated-access clause; facts only.'
+  - id: pl-sentosa
+    category: activities
+    name: Sentosa Development Corporation
+    url: https://www.sentosa.com.sg/sitemap.xml
+    method: sitemap
+    license: Copyright; terms not found
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Asia-Pacific): robots.txt: robots 200, path allowed (tracking/search params
+      disallowed); terms: terms not found. Terms unconfirmed; owner accepted for non-commercial use 2026-11-18. Facts
+      only.'
+  - id: tb-bali-disparda
+    category: places
+    name: Bali Provincial Tourism Office (Disparda Bali)
+    url: https://disparda.baliprov.go.id/sitemap.xml
+    method: sitemap
+    license: Copyright; terms not found
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Asia-Pacific): robots.txt: robots 200, path allowed (empty Disallow); terms:
+      terms not found. Terms unconfirmed; owner accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: tb-enjoy-jakarta
+    category: events
+    name: Jakarta Tourism (Enjoy Jakarta)
+    url: https://jakarta-tourism.go.id/sitemap.xml
+    method: sitemap
+    license: Copyright; no automated-access clause
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Asia-Pacific): robots.txt: jakarta-tourism.go.id and enjoy.jakarta.go.id robots
+      200, no Disallow; terms: https://enjoy.jakarta.go.id/terms-condition read: no robot/AI clause. No automated-access
+      clause; facts only. The sitemap lives on jakarta-tourism.go.id (robots.txt read in research: 200, no Disallow).'
+  - id: visa-imigrasi-id
+    category: visa
+    name: Directorate General of Immigration Indonesia
+    url: https://imigrasi.go.id/sitemap.xml
+    method: sitemap
+    license: Copyright; terms not found
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Asia-Pacific): robots.txt: robots 200, path allowed; terms: terms not found.
+      Terms unconfirmed; owner accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: wx-bmkg
+    category: weather
+    name: BMKG (Indonesian meteorology agency)
+    url: https://www.bmkg.go.id/sitemap.xml
+    method: sitemap
+    license: Copyright; terms not found
+    cadence: daily
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Asia-Pacific): robots.txt: robots 200, path allowed (/api, /alerts disallowed);
+      terms: terms not found. Terms unconfirmed; owner accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: tr-jakarta-mrt
+    category: getting_around
+    name: MRT Jakarta
+    url: https://jakartamrt.co.id/en
+    method: html
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Asia-Pacific): robots.txt: robots 200, path allowed (empty Disallow); home
+      is a small shell, may need render; terms: terms not found. Terms unconfirmed; owner accepted for non-commercial
+      use 2026-11-18. Facts only.'
+  - id: tr-lrta-ph
+    category: getting_around
+    name: Light Rail Transit Authority (Manila)
+    url: https://www.lrta.gov.ph/feed/
+    method: rss
+    license: Copyright; terms not found
+    cadence: daily
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Asia-Pacific): robots.txt: robots 200, path allowed (empty Disallow); terms:
+      terms not found. Terms unconfirmed; owner accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: tr-miaa-ph
+    category: getting_around
+    name: Manila International Airport Authority (NAIA)
+    url: https://www.miaa.gov.ph/index.php?format=feed&type=rss
+    method: rss
+    license: Copyright; terms not found
+    cadence: daily
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Asia-Pacific): robots.txt: robots 200, path allowed (Joomla system paths disallowed);
+      terms: terms not found. Terms unconfirmed; owner accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: visa-etravel-ph
+    category: visa
+    name: eTravel Philippines (arrival registration)
+    url: https://etravel.gov.ph/
+    method: html
+    license: Copyright; no automated-access clause
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Asia-Pacific): robots.txt: robots 404 (allow all); terms: data policy read:
+      no robot/AI clause. No automated-access clause; facts only.'
+  - id: wx-pagasa
+    category: weather
+    name: PAGASA (Philippine weather)
+    url: https://www.pagasa.dost.gov.ph/
+    method: html
+    license: Copyright; terms not found
+    cadence: daily
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Asia-Pacific): robots.txt: robots 404 (allow all); terms: terms not found.
+      Terms unconfirmed; owner accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: tb-kerala
+    category: places
+    name: Kerala Tourism
+    url: https://www.keralatourism.org/sitemap.xml
+    method: sitemap
+    license: Copyright; terms not found
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Asia-Pacific): robots.txt: robots 200, path allowed (admin, /videos/ etc.
+      disallowed); terms: terms not found. Terms unconfirmed; owner accepted for non-commercial use 2026-11-18. Facts
+      only.'
+  - id: tb-madhya-pradesh
+    category: places
+    name: Madhya Pradesh Tourism
+    url: https://www.mptourism.com/sitemap.xml
+    method: sitemap
+    license: Copyright; no automated-access clause
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Asia-Pacific): robots.txt: robots 200, path allowed; terms: https://www.mptourism.com/disclaimer.php
+      read: no robot/AI clause. No automated-access clause; facts only.'
+  - id: tb-karnataka
+    category: places
+    name: Karnataka Tourism
+    url: https://karnatakatourism.org/sitemap.xml
+    method: sitemap
+    license: Copyright; no automated-access clause
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Asia-Pacific): robots.txt: robots 200, path allowed (some /kn/ pages disallowed);
+      terms: https://karnatakatourism.org/en/terms-conditions/ read: property of the department; no robot/AI clause.
+      No automated-access clause; facts only.'
+  - id: tb-uttarakhand
+    category: places
+    name: Uttarakhand Tourism
+    url: https://uttarakhandtourism.gov.in/sitemap.xml
+    method: sitemap
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Asia-Pacific): robots.txt: robots 200, path allowed; terms: terms not found.
+      Terms unconfirmed; owner accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: tb-maharashtra
+    category: places
+    name: Maharashtra Tourism
+    url: https://maharashtratourism.gov.in/feed/
+    method: rss
+    license: Copyright; terms not found
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Asia-Pacific): robots.txt: robots 200, path allowed (empty Disallow); terms:
+      terms not found. Terms unconfirmed; owner accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: tb-odisha
+    category: places
+    name: Odisha Tourism
+    url: https://odishatourism.gov.in/en
+    method: html
+    license: Copyright; no automated-access clause
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Asia-Pacific): robots.txt: robots 200, path allowed (/search, /login disallowed);
+      terms: https://odishatourism.gov.in/en/disclaimer read: no robot/AI clause. No automated-access clause; facts
+      only.'
+  - id: tb-meghalaya
+    category: places
+    name: Meghalaya Tourism
+    url: https://www.meghalayatourism.in/sitemap.xml
+    method: sitemap
+    license: Copyright; no automated-access clause
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Asia-Pacific): robots.txt: robots 200, path allowed; terms: https://www.meghalayatourism.in/terms-and-conditions/
+      read: no robot/AI clause. No automated-access clause; facts only.'
+  - id: pl-asi
+    category: places
+    name: Archaeological Survey of India
+    url: https://asi.nic.in/
+    method: html
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Asia-Pacific): robots.txt: robots 200 (no rules, curl recv error after body);
+      terms: terms not found. Terms unconfirmed; owner accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: wx-imd
+    category: weather
+    name: India Meteorological Department (Mausam)
+    url: https://mausam.imd.gov.in/
+    method: html
+    license: Copyright; no automated-access clause
+    cadence: daily
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Asia-Pacific): robots.txt: robots 404 (allow all); terms: https://mausam.imd.gov.in/responsive/disclaimer.php
+      read: no robot/AI clause. No automated-access clause; facts only.'
+  - id: tb-nepal-ntb
+    category: places
+    name: Nepal Tourism Board
+    url: https://ntb.gov.np/
+    method: html
+    license: Copyright; terms not found
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Asia-Pacific): robots.txt: robots 200, path allowed (empty Disallow); terms:
+      terms not found. Terms unconfirmed; owner accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: visa-nepal-immigration
+    category: visa
+    name: Department of Immigration Nepal
+    url: https://immigration.gov.np/
+    method: html
+    license: Copyright; terms not found
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Asia-Pacific): robots.txt: robots 200, path allowed (empty Disallow); terms:
+      terms not found. Terms unconfirmed; owner accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: np-dnpwc-nepal
+    category: places
+    name: Department of National Parks and Wildlife Conservation Nepal
+    url: https://dnpwc.gov.np/sitemap.xml
+    method: sitemap
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Asia-Pacific): robots.txt: robots 200, path allowed; Crawl-delay 10; terms:
+      terms not found. Terms unconfirmed; owner accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: gov-nepal-motca
+    category: tips
+    name: Ministry of Culture, Tourism and Civil Aviation Nepal
+    url: https://www.tourism.gov.np/sitemap.xml
+    method: sitemap
+    license: Copyright; terms not found
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Asia-Pacific): robots.txt: robots 200, path allowed; Crawl-delay 10; terms:
+      terms not found. Terms unconfirmed; owner accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: tb-bhutan
+    category: visa
+    name: Department of Tourism Bhutan (bhutan.travel)
+    url: https://bhutan.travel/sitemap.xml
+    method: sitemap
+    license: Copyright; no automated-access clause
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Asia-Pacific): robots.txt: robots 200, path allowed; terms: https://bhutan.travel/terms
+      read: "No portion of the website is intended to offer a license ... to use a photograph, registered brand, or
+      logo" (no robot/AI clause). No automated-access clause; facts only.'
+  - id: visa-eta-lk
+    category: visa
+    name: Sri Lanka ETA
+    url: https://www.eta.gov.lk/slvisa/
+    method: html
+    license: Copyright; terms not found
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Asia-Pacific): robots.txt: robots 404 (allow all); terms: terms not found.
+      Terms unconfirmed; owner accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: visa-immigration-lk
+    category: visa
+    name: Department of Immigration & Emigration Sri Lanka
+    url: https://www.immigration.gov.lk/
+    method: html
+    license: Copyright; terms not found
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Asia-Pacific): robots.txt: robots 404 (allow all); terms: terms not found.
+      Terms unconfirmed; owner accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: np-dwc-lk
+    category: places
+    name: Department of Wildlife Conservation Sri Lanka
+    url: https://www.dwc.gov.lk/?feed=rss2
+    method: rss
+    license: Copyright; no automated-access clause
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Asia-Pacific): robots.txt: robots 404 (allow all); terms: policy page ?page_id=207
+      read: no robot/AI clause. No automated-access clause; facts only.'
+  - id: tr-airport-lk
+    category: getting_around
+    name: Airport & Aviation Services Sri Lanka
+    url: https://www.airport.lk/
+    method: html
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Asia-Pacific): robots.txt: robots 404 (allow all); terms: terms not found.
+      Terms unconfirmed; owner accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: visa-maldives-immigration
+    category: visa
+    name: Maldives Immigration
+    url: https://immigration.gov.mv/sitemap.xml
+    method: sitemap
+    license: Copyright; no automated-access clause
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Asia-Pacific): robots.txt: robots 200, path allowed; Crawl-delay 1; /api/
+      etc. disallowed; terms: https://www.immigration.gov.mv/terms read: no robot/AI clause. No automated-access clause;
+      facts only.'
+  - id: tb-bangladesh-tb
+    category: places
+    name: Bangladesh Tourism Board
+    url: https://tourismboard.gov.bd/
+    method: html
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Asia-Pacific): robots.txt: robots 404 (allow all); terms: terms not found.
+      Terms unconfirmed; owner accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: tb-parjatan-bd
+    category: places
+    name: Bangladesh Parjatan Corporation
+    url: https://parjatan.gov.bd/
+    method: html
+    license: Copyright; no automated-access clause
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Asia-Pacific): robots.txt: robots 404 (allow all); terms: policies page read:
+      no robot/AI clause. No automated-access clause; facts only.'
+  - id: tr-pakrail
+    category: getting_around
+    name: Pakistan Railways
+    url: https://www.pakrail.gov.pk/
+    method: html
+    license: Copyright; no automated-access clause
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Asia-Pacific): robots.txt: robots 404 (allow all); terms: https://www.pakrail.gov.pk/TermsAndConditions.aspx
+      read: ticketing rules only ("No User is allowed to book tickets for commercial purpose"); no robot clause. No
+      automated-access clause; facts only.'
+  - id: tb-uzbekistan
+    category: places
+    name: Uzbekistan Tourism Committee (uzbekistan.travel)
+    url: https://uzbekistan.travel/en/
+    method: html
+    license: Copyright; terms not found
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Asia-Pacific): robots.txt: robots 404 (allow all); terms: terms URL /en/terms-of-use/
+      answered 404: terms not found. Terms unconfirmed; owner accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: tb-kazakhstan
+    category: places
+    name: Kazakh Tourism (kazakhstan.travel)
+    url: https://kazakhstan.travel/sitemap.xml
+    method: sitemap
+    license: Copyright; no automated-access clause
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Asia-Pacific): robots.txt: robots 200, path allowed; AI-bot block → title
+      + link only; /cabinet/, /api/ disallowed; terms: https://kazakhstan.travel/ru/terms read: no robot/AI clause.
+      No automated-access clause; facts only. robots.txt reserves AI use (AI crawlers blocked), so title and link
+      only: no LLM kinds.'
+  - id: visa-kyrgyz-evisa
+    category: visa
+    name: Kyrgyz Republic eVisa portal
+    url: https://www.evisa.e-gov.kg/
+    method: html
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Asia-Pacific): robots.txt: robots 404 (allow all); terms: terms not found.
+      Terms unconfirmed; owner accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: guide-caravanistan
+    category: blogs
+    name: Caravanistan (Silk Road travel guide)
+    url: https://caravanistan.com/feed/
+    method: rss
+    license: CC BY-SA 4.0
+    cadence: daily
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Asia-Pacific): robots.txt: robots.txt redirect loop (no response = allowed
+      per owner rule); terms: "Caravanistan is licensed under a Creative Commons Attribution-ShareAlike 4.0 International
+      License". Licence CC BY-SA 4.0: share_alike, kept separate. robots.txt redirect loop = no response, allowed
+      by the owner rule.'
+  - id: visa-mongolia-immigration
+    category: visa
+    name: Immigration Agency of Mongolia
+    url: https://www.immigration.gov.mn/sitemap.xml
+    method: sitemap
+    license: Copyright; no automated-access clause
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Asia-Pacific): robots.txt: robots 404 (allow all); terms: https://www.immigration.gov.mn/legal/
+      read: no robot/AI clause. No automated-access clause; facts only.'
+  - id: tb-tasmania
+    category: places
+    name: Tourism Tasmania (Discover Tasmania)
+    url: https://www.discovertasmania.com.au/en/sitemap.xml
+    method: sitemap
+    license: Copyright; personal/non-commercial terms (owner accepted)
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Asia-Pacific): robots.txt: robots 200, path allowed (search, util disallowed);
+      terms: "grants users ... a licence to download, print and otherwise reproduce the information for non-commercial
+      purposes only" (non-commercial reuse allowed; flag for owner). Terms restrict to personal/non-commercial use;
+      owner accepted for non-commercial use 2026-11-18 (''a licence to download, print and otherwise reproduce the
+      information for non-commercial purposes only''). Facts only.'
+  - id: tb-western-australia
+    category: places
+    name: Tourism Western Australia
+    url: https://www.westernaustralia.com/sitemap.xml
+    method: sitemap
+    license: Copyright; no automated-access clause
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Asia-Pacific): robots.txt: robots 200, path allowed; terms: terms-of-use read
+      (de locale): no robot/AI clause. No automated-access clause; facts only.'
+  - id: tb-northern-territory
+    category: places
+    name: Tourism NT (northernterritory.com)
+    url: https://northernterritory.com/sitemapindex.xml
+    method: sitemap
+    license: Copyright; no automated-access clause
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Asia-Pacific): robots.txt: robots 200, path allowed (/_esi_/, atdw-template
+      disallowed); terms: https://northernterritory.com/find-out-more/terms-of-use read: no robot/AI clause. No automated-access
+      clause; facts only.'
+  - id: tb-south-australia
+    category: places
+    name: South Australian Tourism Commission
+    url: https://southaustralia.com/sitemap.xml
+    method: sitemap
+    license: Copyright; no automated-access clause
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Asia-Pacific): robots.txt: robots 200, path allowed; AI-bot block (GPTBot,
+      ClaudeBot, Google-Extended, CCBot) → title + link only; terms: "copyright material on this website may be reproduced,
+      or made available online or electronically" (subject to third-party restrictions). No automated-access clause;
+      facts only. robots.txt reserves AI use (AI crawlers blocked), so title and link only: no LLM kinds.'
+  - id: tb-visit-brisbane
+    category: events
+    name: Visit Brisbane (Brisbane Economic Development Agency)
+    url: https://visit.brisbane.qld.au/sitemap.xml
+    method: sitemap
+    license: Copyright; no automated-access clause
+    cadence: daily
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Asia-Pacific): robots.txt: visitbrisbane.com.au and visit.brisbane.qld.au
+      robots 200; only /api/* disallowed; terms: https://visit.brisbane.qld.au/en/terms-and-conditions read: no robot/AI
+      clause (user content licensed CC BY 3.0 AU). No automated-access clause; facts only.'
+  - id: tb-visit-perth
+    category: events
+    name: Visit Perth (City of Perth)
+    url: https://www.visitperth.com/sitemap.xml
+    method: sitemap
+    license: Copyright; terms not found
+    cadence: daily
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Asia-Pacific): robots.txt: robots 200, path allowed (CMS paths disallowed);
+      terms: terms link points to perth.wa.gov.au, which answered 403: terms not readable (do not crawl perth.wa.gov.au).
+      Terms unconfirmed; owner accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: np-parks-tas
+    category: places
+    name: Parks and Wildlife Service Tasmania
+    url: https://parks.tas.gov.au/sitemap0.xml
+    method: sitemap
+    license: Copyright; terms not found
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Asia-Pacific): robots.txt: robots 200, path allowed (/*?* and SharePoint paths
+      disallowed); terms: terms not found. Terms unconfirmed; owner accepted for non-commercial use 2026-11-18. Facts
+      only.'
+  - id: np-parks-australia
+    category: places
+    name: Parks Australia
+    url: https://parksaustralia.gov.au/sitemap/sitemap-0.xml
+    method: sitemap
+    license: Copyright; terms not found
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Asia-Pacific): robots.txt: robots 200, path allowed; terms: terms not found
+      (Commonwealth sites are usually CC BY 4.0: confirm). Terms unconfirmed; owner accepted for non-commercial use
+      2026-11-18. Facts only.'
+  - id: tr-transport-nsw-info
+    category: getting_around
+    name: Transport for NSW (transportnsw.info)
+    url: https://transportnsw.info/sitemap.xml
+    method: sitemap
+    license: Copyright; terms not found
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Asia-Pacific): robots.txt: robots 200, path allowed (Drupal admin paths disallowed);
+      terms: terms not found (Opal terms of use only). Terms unconfirmed; owner accepted for non-commercial use 2026-11-18.
+      Facts only.'
+  - id: tr-journey-beyond
+    category: getting_around
+    name: Journey Beyond Rail (The Ghan, Indian Pacific)
+    url: https://www.journeybeyondrail.com.au/sitemap_index.xml
+    method: sitemap
+    license: Copyright; no automated-access clause
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Asia-Pacific): robots.txt: robots 200, path allowed; terms: https://www.journeybeyondrail.com.au/terms-conditions/
+      read: no robot/AI clause. No automated-access clause; facts only.'
+  - id: tr-spirit-of-tasmania
+    category: getting_around
+    name: Spirit of Tasmania (ferry)
+    url: https://www.spiritoftasmania.com.au/page-sitemap.xml
+    method: sitemap
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Asia-Pacific): robots.txt: robots 200, path allowed; terms: terms not found
+      (fare conditions page only). Terms unconfirmed; owner accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: ev-adelaide-festival
+    category: events
+    name: Adelaide Festival
+    url: https://www.adelaidefestival.com.au/sitemap.xml
+    method: sitemap
+    license: Copyright; no automated-access clause
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Asia-Pacific): robots.txt: robots 200, path allowed (CMS paths disallowed);
+      terms: https://www.adelaidefestival.com.au/terms-and-conditions read: no robot/AI clause. No automated-access
+      clause; facts only.'
+  - id: ev-sydney-festival
+    category: events
+    name: Sydney Festival
+    url: https://www.sydneyfestival.org.au/sitemap.xml
+    method: sitemap
+    license: Copyright; terms not found
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Asia-Pacific): robots.txt: robots 200, path allowed (/api/, /enta/, /wishlist
+      disallowed); terms: terms not found. Terms unconfirmed; owner accepted for non-commercial use 2026-11-18. Facts
+      only.'
+  - id: ev-concrete-playground
+    category: events
+    name: Concrete Playground
+    url: https://concreteplayground.com/sitemap.xml
+    method: sitemap
+    license: Copyright; terms not found
+    cadence: daily
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Asia-Pacific): robots.txt: robots 200, path allowed (competition, my-playground
+      disallowed); terms: terms not found. Terms unconfirmed; owner accepted for non-commercial use 2026-11-18. Facts
+      only.'
+  - id: tb-christchurch
+    category: places
+    name: ChristchurchNZ
+    url: https://www.christchurchnz.com/sitemap.xml
+    method: sitemap
+    license: Copyright; no automated-access clause
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Asia-Pacific): robots.txt: robots 200, path allowed; terms: https://www.christchurchnz.com/terms-of-use
+      read: copyright reservation only. No automated-access clause; facts only.'
+  - id: tb-wellington
+    category: events
+    name: WellingtonNZ
+    url: https://admin.wellingtonnz.com/sitemap.xml
+    method: sitemap
+    license: Copyright; no automated-access clause
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Asia-Pacific): robots.txt: robots 200, path allowed (empty Disallow); terms:
+      https://www.wellingtonnz.com/terms-of-use-and-copyright read: no robot/AI clause. No automated-access clause;
+      facts only. Onboarding 2026-11-18: robots.txt of admin.wellingtonnz.com (the sitemap host) read once first:
+      404, so allowed.'
+  - id: tb-queenstown
+    category: places
+    name: Destination Queenstown
+    url: https://www.queenstownnz.co.nz/sitemap.xml
+    method: sitemap
+    license: Copyright; terms not found
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Asia-Pacific): robots.txt: robots 200, path allowed; Crawl-delay 2; terms:
+      terms not found. Terms unconfirmed; owner accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: tb-northland
+    category: places
+    name: Northland NZ
+    url: https://northlandnz.com/sitemap.xml
+    method: sitemap
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Asia-Pacific): robots.txt: robots 200, path allowed; terms: terms not found.
+      Terms unconfirmed; owner accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: tr-great-journeys-nz
+    category: getting_around
+    name: Great Journeys NZ (KiwiRail)
+    url: https://greatjourneysnz.com/sitemap.xml
+    method: sitemap
+    license: Copyright; no automated-access clause
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Asia-Pacific): robots.txt: robots 200, path allowed; Crawl-delay 60 for *
+      (so ≤ 1 req/min); terms: https://www.greatjourneysnz.com/terms-and-conditions/ read: no robot/AI clause. No
+      automated-access clause; facts only.'
+  - id: tr-interislander
+    category: getting_around
+    name: Interislander ferry (KiwiRail)
+    url: https://www.interislander.co.nz/sitemap.xml
+    method: sitemap
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Asia-Pacific): robots.txt: robots 200, path allowed; terms: terms not found
+      (sailing conditions page only). Terms unconfirmed; owner accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: tb-vanuatu
+    category: places
+    name: Vanuatu Tourism Office
+    url: https://www.vanuatu.travel/sitemap.xml
+    method: sitemap
+    license: Copyright; no automated-access clause
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Asia-Pacific): robots.txt: robots 200, path allowed (Joomla system paths disallowed);
+      terms: https://www.vanuatu.travel/en/terms-of-use read: no robot/AI clause. No automated-access clause; facts
+      only.'
+  - id: tb-png
+    category: places
+    name: PNG Tourism Promotion Authority
+    url: https://papuanewguinea.travel/sitemap_index.xml
+    method: sitemap
+    license: Copyright; no automated-access clause
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Asia-Pacific): robots.txt: robots 200, path allowed; terms: https://papuanewguinea.travel/terms-privacy/
+      read: no robot/AI clause. No automated-access clause; facts only.'
+  - id: tb-tahiti
+    category: places
+    name: Tahiti Tourisme
+    url: https://tahititourisme.com/sitemap.xml
+    method: sitemap
+    license: Copyright; no automated-access clause
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Asia-Pacific): robots.txt: robots 200, path allowed; AI-bot block → title
+      + link only; terms: https://www.tahititourisme.com/legals/ read: no robot/AI clause. No automated-access clause;
+      facts only. robots.txt reserves AI use (AI crawlers blocked), so title and link only: no LLM kinds.'
+  - id: tb-solomons
+    category: places
+    name: Tourism Solomons
+    url: https://www.visitsolomons.com.sb/feed/
+    method: rss
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Asia-Pacific): robots.txt: robots 200, path allowed (empty Disallow); terms:
+      terms not found. Terms unconfirmed; owner accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: tb-new-caledonia
+    category: places
+    name: New Caledonia Tourism
+    url: https://www.newcaledonia.travel/sitemap.xml/
+    method: sitemap
+    license: Copyright; no automated-access clause
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Asia-Pacific): robots.txt: robots 200, path allowed (/wp/, /r/, *.php disallowed);
+      terms: https://www.newcaledonia.travel/terms-of-use/ read: photos reserved; no robot/AI clause. No automated-access
+      clause; facts only.'
+  - id: tb-guam
+    category: places
+    name: Guam Visitors Bureau
+    url: https://www.visitguam.com/sitemap.xml
+    method: sitemap
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Asia-Pacific): robots.txt: robots 200, path allowed; Crawl-delay 2; terms:
+      terms not found. Terms unconfirmed; owner accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: tb-spto
+    category: places
+    name: Pacific Tourism Organisation (South Pacific Islands)
+    url: https://southpacificislands.travel/feed/
+    method: rss
+    license: Copyright; terms not found
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Asia-Pacific): robots.txt: robots 200, path allowed (empty Disallow); terms:
+      terms not found (membership T&C only). Terms unconfirmed; owner accepted for non-commercial use 2026-11-18.
+      Facts only.'
+  - id: tb-niue
+    category: places
+    name: Niue Tourism
+    url: https://www.niueisland.com/sitemap.xml
+    method: sitemap
+    license: Copyright; no automated-access clause
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Asia-Pacific): robots.txt: robots 200, path allowed; terms: https://www.niueisland.com/terms-and-conditions
+      read: no robot/AI clause. No automated-access clause; facts only.'
+  - id: tb-palau
+    category: places
+    name: Palau Visitors Authority (Pristine Paradise Palau)
+    url: https://pristineparadisepalau.com/sitemap.xml
+    method: sitemap
+    license: Copyright; no automated-access clause
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Asia-Pacific): robots.txt: robots 200, path allowed; terms: https://pristineparadisepalau.com/website-terms-use/
+      read: copyright reservation only. No automated-access clause; facts only.'
+  - id: api-tdx-taiwan
+    category: getting_around
+    name: Taiwan Transport Data eXchange (TDX)
+    url: https://tdx.transportdata.tw/
+    method: api
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: true
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Asia-Pacific): robots.txt: see research (2026-11-18); terms: Copyright; terms
+      not found. Terms unconfirmed; owner accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: api-cwa-taiwan
+    category: weather
+    name: Taiwan CWA open weather data
+    url: https://opendata.cwa.gov.tw/
+    method: api
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: true
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Asia-Pacific): robots.txt: see research (2026-11-18); terms: Copyright; terms
+      not found. Terms unconfirmed; owner accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: api-metlink-nz
+    category: getting_around
+    name: Metlink Open Data (Wellington)
+    url: https://opendata.metlink.org.nz/
+    method: api
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: true
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Asia-Pacific): robots.txt: see research (2026-11-18); terms: Copyright; terms
+      not found. Terms unconfirmed; owner accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: od-data-gov-sg
+    category: places
+    name: data.gov.sg
+    url: https://data.gov.sg/
+    method: api
+    license: Singapore Open Data Licence 1.0
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Asia-Pacific): robots.txt: see research (2026-11-18); terms: Singapore Open
+      Data Licence 1.0.'
+  - id: od-data-qld
+    category: places
+    name: Queensland open data
+    url: https://www.data.qld.gov.au/
+    method: api
+    license: CC BY 4.0
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Asia-Pacific): robots.txt: see research (2026-11-18); terms: CC BY 4.0.'
+  - id: od-data-gov-mo
+    category: places
+    name: Macao open data portal
+    url: https://data.gov.mo/
+    method: api
+    license: Per-dataset licences (open-data portal)
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Asia-Pacific): robots.txt: see research (2026-11-18); terms: Per-dataset licences
+      (open-data portal).'
+  - id: wx-jma
+    category: weather
+    name: Japan Meteorological Agency forecasts
+    url: https://www.jma.go.jp/bosai/forecast/
+    method: html
+    license: PDL 1.0 (Japan)
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Asia-Pacific): robots.txt: see research (2026-11-18); terms: PDL 1.0 (Japan).'
+  - id: wx-metservice-nz
+    category: weather
+    name: MetService (New Zealand)
+    url: https://www.metservice.com/
+    method: html
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Asia-Pacific): robots.txt: see research (2026-11-18); terms: Copyright; terms
+      not found. Terms unconfirmed; owner accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: tb-mongolia-travel
+    category: places
+    name: Mongolia national tourism site
+    url: https://www.mongolia.travel/
+    method: html
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Asia-Pacific): robots.txt: see research (2026-11-18); terms: Copyright; terms
+      not found. Terms unconfirmed; owner accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: gov-mot-cambodia
+    category: places
+    name: Cambodia Ministry of Tourism
+    url: https://www.tourism.gov.kh/
+    method: html
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Asia-Pacific): robots.txt: see research (2026-11-18); terms: Copyright; terms
+      not found. Terms unconfirmed; owner accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: visa-evisa-uz
+    category: visa
+    name: Uzbekistan e-visa portal
+    url: https://e-visa.gov.uz/
+    method: html
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Asia-Pacific): robots.txt: see research (2026-11-18); terms: Copyright; terms
+      not found. Terms unconfirmed; owner accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: tr-delhi-metro
+    category: getting_around
+    name: Delhi Metro
+    url: https://www.delhimetrorail.com/
+    method: html
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Asia-Pacific): robots.txt: see research (2026-11-18); terms: Copyright; terms
+      not found. Terms unconfirmed; owner accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: tb-vnat
+    category: places
+    name: Vietnam National Authority of Tourism
+    url: https://vietnamtourism.gov.vn/en
+    method: html
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Asia-Pacific): robots.txt: see research (2026-11-18); terms: Copyright; terms
+      not found. Terms unconfirmed; owner accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: ref-japan-guide
+    category: places
+    name: japan-guide.com
+    url: https://www.japan-guide.com/
+    method: html
+    license: Copyright; personal/non-commercial terms (owner accepted)
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Asia-Pacific): robots.txt: allowed (only sumo pages disallowed); terms: ''Web
+      site users may download and copy the material for personal, non-commercial use, without the right to resell,
+      redistribute ... or create derivative works''. Terms restrict to personal/non-commercial use; owner accepted
+      for non-commercial use 2026-11-18 (''Web site users may download and copy the material for personal, non-commercial
+      use, without the right to resell, redistribute ... or create derivative works''). Facts only.'
+  - id: tb-macao-tourism
+    category: places
+    name: Macao Government Tourism Office
+    url: https://www.macaotourism.gov.mo/en/
+    method: html
+    license: Copyright; personal/non-commercial terms (owner accepted)
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Asia-Pacific): robots.txt: 404 (allowed); terms: ''provided for personal or
+      organizational, non-commercial use only''. Terms restrict to personal/non-commercial use; owner accepted for
+      non-commercial use 2026-11-18 (''provided for personal or organizational, non-commercial use only''). Facts
+      only.'
+  - id: tb-visitnsw
+    category: places
+    name: Visit NSW (Destination NSW)
+    url: https://www.visitnsw.com/articles.xml
+    method: rss
+    license: Copyright; personal/non-commercial terms (owner accepted)
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Asia-Pacific): robots.txt: allowed (research 2026-11-18); terms: ''The Content
+      may only be used or reproduced by you for non-commercial personal use''. Terms restrict to personal/non-commercial
+      use; owner accepted for non-commercial use 2026-11-18 (''The Content may only be used or reproduced by you for
+      non-commercial personal use''). Facts only.'
+  - id: ev-vivid-sydney
+    category: events
+    name: Vivid Sydney (Destination NSW)
+    url: https://www.vividsydney.com/
+    method: html
+    license: Copyright; personal/non-commercial terms (owner accepted)
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Asia-Pacific): robots.txt: allowed (research 2026-11-18); terms: ''The Content
+      may only be used or reproduced by you for non-commercial personal use''. Terms restrict to personal/non-commercial
+      use; owner accepted for non-commercial use 2026-11-18 (''The Content may only be used or reproduced by you for
+      non-commercial personal use''). Facts only.'
+  - id: tb-visitcanberra
+    category: places
+    name: Visit Canberra
+    url: https://visitcanberra.com.au/
+    method: html
+    license: Copyright; personal/non-commercial terms (owner accepted)
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Asia-Pacific): robots.txt: allowed (research 2026-11-18); terms: ''reproduce
+      ... in unaltered form only, for your personal use, educational use, or non-commercial use within your organisation''.
+      Terms restrict to personal/non-commercial use; owner accepted for non-commercial use 2026-11-18 (''reproduce
+      ... in unaltered form only, for your personal use, educational use, or non-commercial use within your organisation'').
+      Facts only.'
+  - id: np-wa-exploreparks
+    category: places
+    name: Explore Parks WA (DBCA)
+    url: https://exploreparks.dbca.wa.gov.au/
+    method: html
+    license: Copyright; personal/non-commercial terms (owner accepted)
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Asia-Pacific): robots.txt: allowed (research 2026-11-18); terms: ''The website
+      must only be used by members for personal and non-commercial purposes''. Terms restrict to personal/non-commercial
+      use; owner accepted for non-commercial use 2026-11-18 (''The website must only be used by members for personal
+      and non-commercial purposes''). Facts only.'
+  - id: tb-aucklandnz
+    category: places
+    name: Auckland (Tātaki Auckland Unlimited)
+    url: https://www.aucklandnz.com/
+    method: html
+    license: Copyright; personal/non-commercial terms (owner accepted)
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Asia-Pacific): robots.txt: allowed (research 2026-11-18); terms: ''access,
+      view, print, and copy the material ... for non-commercial personal or internal business purposes''. Terms restrict
+      to personal/non-commercial use; owner accepted for non-commercial use 2026-11-18 (''access, view, print, and
+      copy the material ... for non-commercial personal or internal business purposes''). Facts only.'
+  - id: tb-rotoruanz
+    category: places
+    name: Rotorua NZ
+    url: https://www.rotoruanz.com/
+    method: html
+    license: Copyright; personal/non-commercial terms (owner accepted)
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Asia-Pacific): robots.txt: allowed (research 2026-11-18); terms: ''The Website
+      is only for your legal personal use''. Terms restrict to personal/non-commercial use; owner accepted for non-commercial
+      use 2026-11-18 (''The Website is only for your legal personal use''). Facts only.'
+  - id: tb-nelsontasman
+    category: places
+    name: Nelson Tasman
+    url: https://www.nelsontasman.nz/
+    method: html
+    license: Copyright; personal/non-commercial terms (owner accepted)
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Asia-Pacific): robots.txt: allowed (research 2026-11-18); terms: ''access,
+      view, print, and where applicable, download the content on this Site for non-commercial purposes''. Terms restrict
+      to personal/non-commercial use; owner accepted for non-commercial use 2026-11-18 (''access, view, print, and
+      where applicable, download the content on this Site for non-commercial purposes''). Facts only.'
+  - id: ev-esplanade-sg
+    category: events
+    name: Esplanade (Singapore)
+    url: https://www.esplanade.com/whats-on
+    method: html
+    license: Copyright; personal/non-commercial terms (owner accepted)
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Asia-Pacific): robots.txt: allowed (research 2026-11-18); terms: ''download,
+      display and print the materials ... for your personal, non-commercial use only''. Terms restrict to personal/non-commercial
+      use; owner accepted for non-commercial use 2026-11-18 (''download, display and print the materials ... for your
+      personal, non-commercial use only''). Facts only.'
+  - id: tb-sltda
+    category: tips
+    name: Sri Lanka Tourism Development Authority
+    url: https://www.sltda.gov.lk/
+    method: html
+    license: Copyright; personal/non-commercial terms (owner accepted)
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Asia-Pacific): robots.txt: allowed (research 2026-11-18); terms: ''limited
+      permission to access and display the Web pages ... for your personal, non-commercial use''. Terms restrict to
+      personal/non-commercial use; owner accepted for non-commercial use 2026-11-18 (''limited permission to access
+      and display the Web pages ... for your personal, non-commercial use''). Facts only.'
+  - id: ev-broadsheet
+    category: events
+    name: Broadsheet (Australia)
+    url: https://www.broadsheet.com.au/
+    method: html
+    license: Copyright; personal/non-commercial terms (owner accepted)
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Asia-Pacific): robots.txt: allowed; GPTBot, ClaudeBot, anthropic-ai, PerplexityBot
+      and Google-Extended blocked; terms: ''The Platform is for your personal use unless otherwise approved by Broadsheet''.
+      Terms restrict to personal/non-commercial use; owner accepted for non-commercial use 2026-11-18 (''The Platform
+      is for your personal use unless otherwise approved by Broadsheet''). Facts only. robots.txt reserves AI use
+      (AI crawlers blocked), so title and link only: no LLM kinds.'
+  - id: tb-kyoto-travel
+    category: places
+    name: Kyoto City Tourism (en.kyoto.travel)
+    url: https://en.kyoto.travel/
+    method: html
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Asia-Pacific): robots.txt: no response from the research host (DNS); terms:
+      not checked. Terms unconfirmed; owner accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: np-knps-korea
+    category: places
+    name: Korea National Park Service
+    url: https://english.knps.or.kr/
+    method: html
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Asia-Pacific): robots.txt: no response from the research host (timeout); terms:
+      not checked. Terms unconfirmed; owner accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: tr-seoul-metro
+    category: getting_around
+    name: Seoul Metro
+    url: https://www.seoulmetro.co.kr/
+    method: html
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Asia-Pacific): robots.txt: no response from the research host (recv error);
+      terms: not checked. Terms unconfirmed; owner accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: gov-mct-china
+    category: tips
+    name: China Ministry of Culture and Tourism (English)
+    url: https://en.mct.gov.cn/
+    method: html
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Asia-Pacific): robots.txt: no response from the research host (DNS); terms:
+      not checked. Terms unconfirmed; owner accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: tb-hanoi-tourism
+    category: places
+    name: Hanoi Tourism
+    url: https://hanoitourism.vn/
+    method: html
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Asia-Pacific): robots.txt: no response from the research host (DNS); terms:
+      not checked. Terms unconfirmed; owner accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: tr-srt-thailand
+    category: getting_around
+    name: State Railway of Thailand
+    url: https://www.railway.co.th/
+    method: html
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Asia-Pacific): robots.txt: no response from the research host (timeout); terms:
+      not checked. Terms unconfirmed; owner accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: visa-evisa-kh
+    category: visa
+    name: Cambodia e-Visa
+    url: https://www.evisa.gov.kh/
+    method: html
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Asia-Pacific): robots.txt: no response from the research host (redirect loop);
+      terms: not checked. Terms unconfirmed; owner accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: visa-laoevisa
+    category: visa
+    name: Lao e-Visa
+    url: https://laoevisa.gov.la/
+    method: html
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Asia-Pacific): robots.txt: no response from the research host (robots ok (Crawl-delay
+      10), pages no response); terms: not checked. Terms unconfirmed; owner accepted for non-commercial use 2026-11-18.
+      Facts only.'
+  - id: gov-tourism-mm
+    category: places
+    name: Myanmar Ministry of Hotels and Tourism
+    url: https://tourism.gov.mm/
+    method: html
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Asia-Pacific): robots.txt: no response from the research host (refused); terms:
+      not checked. Terms unconfirmed; owner accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: tr-myrapid
+    category: getting_around
+    name: Rapid KL (myrapid)
+    url: https://myrapid.com.my/
+    method: html
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Asia-Pacific): robots.txt: no response from the research host (redirect loop);
+      terms: not checked. Terms unconfirmed; owner accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: tb-visitkl
+    category: places
+    name: Visit Kuala Lumpur
+    url: https://www.visitkl.gov.my/
+    method: html
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Asia-Pacific): robots.txt: no response from the research host (DNS); terms:
+      not checked. Terms unconfirmed; owner accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: gov-kemenparekraf
+    category: places
+    name: Indonesia Ministry of Tourism
+    url: https://kemenparekraf.go.id/
+    method: html
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Asia-Pacific): robots.txt: no response from the research host (DNS); terms:
+      not checked. Terms unconfirmed; owner accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: tr-krl-jakarta
+    category: getting_around
+    name: KRL Commuter Line (Jakarta)
+    url: https://www.krl.co.id/
+    method: html
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Asia-Pacific): robots.txt: no response from the research host (refused); terms:
+      not checked. Terms unconfirmed; owner accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: tb-visitjogja
+    category: places
+    name: Visit Jogja
+    url: https://visitjogja.jogjaprov.go.id/
+    method: html
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Asia-Pacific): robots.txt: no response from the research host (DNS); terms:
+      not checked. Terms unconfirmed; owner accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: visa-immigration-ph
+    category: visa
+    name: Philippine Bureau of Immigration
+    url: https://immigration.gov.ph/
+    method: html
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Asia-Pacific): robots.txt: no response from the research host (TLS); terms:
+      not checked. Terms unconfirmed; owner accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: tb-rajasthan
+    category: places
+    name: Rajasthan Tourism
+    url: https://tourism.rajasthan.gov.in/
+    method: html
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Asia-Pacific): robots.txt: no response from the research host (timeout); terms:
+      not checked. Terms unconfirmed; owner accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: tb-himachal
+    category: places
+    name: Himachal Tourism
+    url: https://himachaltourism.gov.in/
+    method: html
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Asia-Pacific): robots.txt: no response from the research host (DNS); terms:
+      not checked. Terms unconfirmed; owner accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: tb-tamilnadu
+    category: places
+    name: Tamil Nadu Tourism
+    url: https://www.tamilnadutourism.tn.gov.in/
+    method: html
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Asia-Pacific): robots.txt: no response from the research host (timeout); terms:
+      not checked. Terms unconfirmed; owner accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: tb-jktourism
+    category: places
+    name: Jammu and Kashmir Tourism
+    url: https://www.jktourism.jk.gov.in/
+    method: html
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Asia-Pacific): robots.txt: no response from the research host (DNS); terms:
+      not checked. Terms unconfirmed; owner accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: tb-wbtourism
+    category: places
+    name: West Bengal Tourism
+    url: https://www.wbtourism.gov.in/
+    method: html
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Asia-Pacific): robots.txt: no response from the research host (timeout); terms:
+      not checked. Terms unconfirmed; owner accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: tb-sikkim
+    category: places
+    name: Sikkim Tourism
+    url: https://www.sikkimtourism.gov.in/
+    method: html
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Asia-Pacific): robots.txt: no response from the research host (recv error);
+      terms: not checked. Terms unconfirmed; owner accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: tr-indianrailways
+    category: getting_around
+    name: Indian Railways
+    url: https://indianrailways.gov.in/
+    method: html
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Asia-Pacific): robots.txt: no response from the research host (timeout); terms:
+      not checked. Terms unconfirmed; owner accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: tb-puducherry
+    category: places
+    name: Puducherry Tourism
+    url: https://www.puducherrytourism.co.in/
+    method: html
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Asia-Pacific): robots.txt: no response from the research host (DNS); terms:
+      not checked. Terms unconfirmed; owner accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: tr-railway-lk
+    category: getting_around
+    name: Sri Lanka Railways
+    url: https://www.railway.gov.lk/
+    method: html
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Asia-Pacific): robots.txt: no response from the research host (timeout); terms:
+      not checked. Terms unconfirmed; owner accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: tb-punjab-pk
+    category: places
+    name: Tourism Punjab (Pakistan)
+    url: https://tourism.punjab.gov.pk/
+    method: html
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Asia-Pacific): robots.txt: no response from the research host (timeout); terms:
+      not checked. Terms unconfirmed; owner accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: tb-discoverkyrgyzstan
+    category: places
+    name: Discover Kyrgyzstan
+    url: https://www.discoverkyrgyzstan.org/
+    method: html
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Asia-Pacific): robots.txt: no response from the research host (DNS after redirect);
+      terms: not checked. Terms unconfirmed; owner accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: tr-td-hk
+    category: getting_around
+    name: Hong Kong Transport Department
+    url: https://www.td.gov.hk/
+    method: html
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Asia-Pacific): robots.txt: no response from the research host (timeout); terms:
+      not checked. Terms unconfirmed; owner accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: tr-transperth
+    category: getting_around
+    name: Transperth
+    url: https://www.transperth.wa.gov.au/
+    method: html
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Asia-Pacific): robots.txt: no response from the research host (timeout); terms:
+      not checked. Terms unconfirmed; owner accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: tb-tonga
+    category: places
+    name: Tonga Holiday (Tonga Tourism)
+    url: https://www.tongaholiday.com/
+    method: html
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus Asia-Pacific): robots.txt: no response from the research host (TLS); terms:
+      not checked. Terms unconfirmed; owner accepted for non-commercial use 2026-11-18. Facts only.'

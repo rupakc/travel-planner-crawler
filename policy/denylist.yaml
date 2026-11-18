@@ -729,3 +729,13 @@ entries:
   - host: visitethiopia.travel
     reason: Domain hijacked/redirects to unrelated site (a gambling-style domain), 2026-11-18
     source: research 2026-11-18 corpus Africa-ME SKIP
+  # --- corpus expansion: Asia-Pacific (research 2026-11-18): hijacked domains, terms ban ---
+  - host: visit-fsm.org
+    reason: Domain hijacked/redirects to unrelated site (a sports-streaming site), 2026-11-18
+    source: research 2026-11-18 corpus Asia-Pacific SKIP
+  - host: visitkiribati.travel
+    reason: Domain hijacked/redirects to unrelated site (popster.pe), 2026-11-18
+    source: research 2026-11-18 corpus Asia-Pacific SKIP
+  - host: saigoneer.com
+    reason: "Terms: users may not 'copy, scrape, reproduce, republish ... Website content', 2026-11-18"
+    source: research 2026-11-18 corpus Asia-Pacific SKIP

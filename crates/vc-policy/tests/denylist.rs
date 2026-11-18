@@ -373,6 +373,10 @@ fn batch2_entries_are_denied() {
         "https://www.geo.fr/",
         "https://www.routard.com/",
         "https://visitethiopia.travel/",
+        // Corpus expansion: Asia-Pacific (2026-11-18): terms bans
+        "https://www.visit-fsm.org/",
+        "https://www.visitkiribati.travel/",
+        "https://saigoneer.com/",
     ] {
         assert!(denied(u).is_some(), "{u} must be denied");
     }
@@ -478,6 +482,11 @@ fn approved_hosts_stay_allowed() {
         "https://www.oncf-voyages.ma/",
         "https://www.railway.ge/en/sitemap_index.xml",
         "https://capetown.gov.za/",
+        // Corpus expansion: Asia-Pacific (2026-11-18): sources next to new entries
+        "https://www.roots.gov.sg/sitemap-pages.xml",
+        "https://www.wellingtonnz.com/",
+        "https://admin.wellingtonnz.com/sitemap.xml",
+        "https://visithcmc.vn/feed/",
     ] {
         assert_eq!(denied(u), None, "{u} must stay allowed");
     }
