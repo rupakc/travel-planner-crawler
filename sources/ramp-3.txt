@@ -850,6 +850,9 @@ ev-esplanade-sg            # events: Esplanade (Singapore) (html, facts only, we
 tb-sltda                   # tips/hotels: Sri Lanka Tourism Development Authority (html, facts only, weekly, <= 100/day; terms owner-accepted)
 ev-broadsheet              # events/activities: Broadsheet (Australia) (html, facts only, weekly, <= 100/day; terms owner-accepted; robots reserves AI use: title and link only)
 
+# --- open data: html (2026-11-18) ---
+jma-climate-normals         # weather/packing: JMA monthly climate normals 1991-2020, 21 main-city stations (html seeds only, CC BY 4.0-compatible terms, yearly, <= 30/day)
+
 # --- ramp-3: open-data adapters (2026-11-18) ---
 openholidays               # events/tips: public + school holidays per country, this year and next (OpenHolidays API, ODbL share_alike, monthly, ~73 requests/month); openholidays adapter -> public_holiday
 nyc-parks-events           # events: NYC Parks events dated today or later (NYC Open Data Socrata, open, daily, <= 5 pages/run); json_events adapter -> event
@@ -882,3 +885,34 @@ od-nyc-public-restrooms       # tips/getting_around: NYC public restrooms with h
 od-fr-atout-france-classes    # hotels: every classified hotel/campsite/residence in France with stars (Licence Ouverte, weekly, dataset API + one 3.7 MB CSV in the dump window); udata_resource -> hotel
 od-wien-ogd                   # places/tips: Vienna sights, museums, public toilets, free Wi-Fi (CC BY 4.0, monthly, 4 WFS requests); wfs_geojson -> attraction, amenity
 od-zuerich-ogd                # tips: Züri WC public toilets (CC0, monthly, 2 WFS requests); wfs_geojson -> amenity
+# --- ramp-3: more GTFS feeds and Wikivoyage editions (2026-11-18) ---
+prague-pid-gtfs            # getting_around: Prague PID (CC BY 4.0, 46 MB, weekly, conditional GET); gtfs_static -> transit_item
+budapest-bkk-gtfs          # getting_around: Budapest BKK (facts only, 62 MB, weekly); gtfs_static -> transit_item
+mbta-gtfs                  # getting_around: Boston MBTA (MassDOT developer licence, 22 MB, weekly); gtfs_static -> transit_item
+cta-gtfs                   # getting_around: Chicago CTA (CTA developer licence, 51 MB, weekly); gtfs_static -> transit_item
+king-county-metro-gtfs     # getting_around: Seattle King County Metro + Link (King County terms, 11 MB, weekly); gtfs_static -> transit_item
+ireland-nta-gtfs           # getting_around: all Irish operators (NTA, CC BY 4.0, 182 MB, weekly); gtfs_static -> transit_item
+lithuania-gtfs             # getting_around: Lithuania national merged feed (facts only, 74 MB, weekly); gtfs_static -> transit_item
+luxembourg-gtfs            # getting_around: Luxembourg national feed via the udata index -> newest zip (CC BY 4.0, 16 MB, weekly); gtfs_static -> transit_item
+wikivoyage-dump-de         # places/hotels: de Wikivoyage dump (CC BY-SA share_alike, monthly, 1 streamed request in the dump window); wikivoyage_dump -> place, attraction, hotel
+wikivoyage-dump-fr         # places/hotels: fr Wikivoyage dump (CC BY-SA share_alike, monthly, 1 streamed request in the dump window); wikivoyage_dump -> place, attraction, hotel
+wikivoyage-dump-es         # places/hotels: es Wikivoyage dump (CC BY-SA share_alike, monthly, 1 streamed request in the dump window); wikivoyage_dump -> place, attraction, hotel
+wikivoyage-dump-it         # places/hotels: it Wikivoyage dump (CC BY-SA share_alike, monthly, 1 streamed request in the dump window); wikivoyage_dump -> place, attraction, hotel
+wikivoyage-dump-pt         # places/hotels: pt Wikivoyage dump (CC BY-SA share_alike, monthly, 1 streamed request in the dump window); wikivoyage_dump -> place, attraction, hotel
+wikivoyage-dump-nl         # places/hotels: nl Wikivoyage dump (CC BY-SA share_alike, monthly, 1 streamed request in the dump window); wikivoyage_dump -> place, attraction, hotel
+wikivoyage-dump-pl         # places/hotels: pl Wikivoyage dump (CC BY-SA share_alike, monthly, 1 streamed request in the dump window); wikivoyage_dump -> place, attraction, hotel
+wikivoyage-dump-ru         # places/hotels: ru Wikivoyage dump (CC BY-SA share_alike, monthly, 1 streamed request in the dump window); wikivoyage_dump -> place, attraction, hotel
+wikivoyage-dump-uk         # places/hotels: uk Wikivoyage dump (CC BY-SA share_alike, monthly, 1 streamed request in the dump window); wikivoyage_dump -> place, attraction, hotel
+wikivoyage-dump-zh         # places/hotels: zh Wikivoyage dump (CC BY-SA share_alike, monthly, 1 streamed request in the dump window); wikivoyage_dump -> place, attraction, hotel
+wikivoyage-dump-ja         # places/hotels: ja Wikivoyage dump (CC BY-SA share_alike, monthly, 1 streamed request in the dump window); wikivoyage_dump -> place, attraction, hotel
+wikivoyage-dump-sv         # places/hotels: sv Wikivoyage dump (CC BY-SA share_alike, monthly, 1 streamed request in the dump window); wikivoyage_dump -> place, attraction, hotel
+wikivoyage-dump-fi         # places/hotels: fi Wikivoyage dump (CC BY-SA share_alike, monthly, 1 streamed request in the dump window); wikivoyage_dump -> place, attraction, hotel
+wikivoyage-dump-he         # places/hotels: he Wikivoyage dump (CC BY-SA share_alike, monthly, 1 streamed request in the dump window); wikivoyage_dump -> place, attraction, hotel
+wikivoyage-dump-fa         # places/hotels: fa Wikivoyage dump (CC BY-SA share_alike, monthly, 1 streamed request in the dump window); wikivoyage_dump -> place, attraction, hotel
+wikivoyage-dump-vi         # places/hotels: vi Wikivoyage dump (CC BY-SA share_alike, monthly, 1 streamed request in the dump window); wikivoyage_dump -> place, attraction, hotel
+wikivoyage-dump-tr         # places/hotels: tr Wikivoyage dump (CC BY-SA share_alike, monthly, 1 streamed request in the dump window); wikivoyage_dump -> place, attraction, hotel
+wikivoyage-dump-el         # places/hotels: el Wikivoyage dump (CC BY-SA share_alike, monthly, 1 streamed request in the dump window); wikivoyage_dump -> place, attraction, hotel
+wikivoyage-dump-cs         # places/hotels: cs Wikivoyage dump (CC BY-SA share_alike, monthly, 1 streamed request in the dump window); wikivoyage_dump -> place, attraction, hotel
+wikivoyage-dump-id         # places/hotels: id Wikivoyage dump (CC BY-SA share_alike, monthly, 1 streamed request in the dump window); wikivoyage_dump -> place, attraction, hotel
+wikivoyage-dump-hi         # places/hotels: hi Wikivoyage dump (CC BY-SA share_alike, monthly, 1 streamed request in the dump window); wikivoyage_dump -> place, attraction, hotel
+wikivoyage-dump-bn         # places/hotels: bn Wikivoyage dump (CC BY-SA share_alike, monthly, 1 streamed request in the dump window); wikivoyage_dump -> place, attraction, hotel

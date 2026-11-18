@@ -442,8 +442,18 @@ fn gtfs_sources_are_wired_with_licence_and_politeness() {
         "translink-seq-gtfs",
         "entur-gtfs",
         "auckland-gtfs",
+        // 2026-11-18 open-data batch.
+        "prague-pid-gtfs",
+        "budapest-bkk-gtfs",
+        "mbta-gtfs",
+        "cta-gtfs",
+        "king-county-metro-gtfs",
+        "ireland-nta-gtfs",
+        "lithuania-gtfs",
+        "luxembourg-gtfs",
     ];
     let off = [
+        "stm-montreal-gtfs",
         "tfnsw-opendata",
         "sfbay-511",
         "trafiklab-gtfs-sverige",
@@ -501,4 +511,199 @@ fn gtfs_static_settings_follow_config() {
     assert_eq!(GtfsSettings::from_config(&c).max_bytes, 42);
     let a: &dyn SourceAdapter = vc_sources::adapters::get("gtfs_static").unwrap();
     assert_eq!(a.id(), "gtfs_static");
+}
+
+// ---------------------------------------------------------------------------------------
+// "Latest file" resolver: an index (udata/CKAN JSON, or an HTML page) names the current zip.
+
+fn udata_index(base: &str) -> String {
+    serde_json::json!({
+        "id": "5a2a58b9111e9b7f34fc6606",
+        "license": "cc-by",
+        "resources": [
+            {"id": "a", "title": "gtfs-20261104-20261212.zip", "type": "main", "format": "zip",
+             "url": format!("{base}/resources/lu/20261105-053451/gtfs-20261104-20261212.zip"),
+             "last_modified": "2026-11-05T05:34:55.712000+00:00"},
+            {"id": "b", "title": "gtfs-20261111-20261212.zip", "type": "main", "format": "zip",
+             "url": "/resources/lu/20261112-064412/gtfs-20261111-20261212.zip",
+             "last_modified": "2026-11-12T06:44:37.368000+00:00"},
+            {"id": "c", "title": "documentation.zip", "type": "documentation", "format": "zip",
+             "url": format!("{base}/resources/lu/doc.zip"),
+             "last_modified": "2026-11-17T00:00:00+00:00"},
+            {"id": "d", "title": "stops.csv", "type": "main", "format": "csv",
+             "url": format!("{base}/resources/lu/stops.csv"),
+             "last_modified": "2026-11-18T00:00:00+00:00"}
+        ]
+    })
+    .to_string()
+}
+
+#[test]
+fn resolve_latest_picks_the_newest_main_zip_of_a_udata_or_ckan_index() {
+    use vc_core::CanonicalUrl;
+    use vc_sources::adapters::gtfs_static::resolve_latest;
+    let idx = CanonicalUrl::parse("https://data.public.lu/api/1/datasets/x/").unwrap();
+    let got = resolve_latest(
+        &idx,
+        Some("application/json"),
+        udata_index("https://download.data.public.lu").as_bytes(),
+    )
+    .unwrap();
+    // The newest `main` zip (documentation and the CSV are ignored); relative URLs resolve
+    // against the index.
+    assert_eq!(
+        got.as_str(),
+        "https://data.public.lu/resources/lu/20261112-064412/gtfs-20261111-20261212.zip"
+    );
+    let ckan = serde_json::json!({"success": true, "result": {"resources": [
+        {"url": "https://ckan.test/d/old.zip", "format": "GTFS", "metadata_modified": "2026-10-01T00:00:00"},
+        {"url": "https://ckan.test/d/new.zip", "format": "ZIP", "metadata_modified": "2026-11-01T00:00:00"},
+        {"url": "https://ckan.test/d/readme.pdf", "format": "PDF", "metadata_modified": "2026-11-15T00:00:00"}
+    ]}});
+    let idx = CanonicalUrl::parse("https://ckan.test/api/3/action/package_show?id=d").unwrap();
+    assert_eq!(
+        resolve_latest(
+            &idx,
+            Some("application/json; charset=utf-8"),
+            ckan.to_string().as_bytes()
+        )
+        .unwrap()
+        .as_str(),
+        "https://ckan.test/d/new.zip"
+    );
+    // Nothing qualifies → None (the adapter stores nothing and fails).
+    let none = serde_json::json!({"resources": [{"url": "https://x.test/a.csv", "format": "csv"}]});
+    assert!(resolve_latest(&idx, Some("application/json"), none.to_string().as_bytes()).is_none());
+    assert!(resolve_latest(&idx, Some("application/json"), b"not json").is_none());
+    assert!(resolve_latest(&idx, Some("application/zip"), b"PK").is_none());
+}
+
+#[test]
+fn resolve_latest_reads_date_stamped_zip_links_of_an_html_index() {
+    use vc_core::CanonicalUrl;
+    use vc_sources::adapters::gtfs_static::resolve_latest;
+    let idx = CanonicalUrl::parse("https://feeds.test/gtfs/").unwrap();
+    let html = br#"<html><body><pre>
+        <a href="/gtfs/feed_20261111.zip">feed_20261111.zip</a>
+        <a href='feed_20261118.zip'>feed_20261118.zip</a>
+        <a href="/gtfs/feed_20261104.zip">feed_20261104.zip</a>
+        <a href="/gtfs/feed_20261118.zip-validation-report.html">report</a>
+        <a href="/gtfs/notes.txt">notes</a></pre></body></html>"#;
+    assert_eq!(
+        resolve_latest(&idx, Some("text/html; charset=UTF-8"), html)
+            .unwrap()
+            .as_str(),
+        "https://feeds.test/gtfs/feed_20261118.zip"
+    );
+    assert!(resolve_latest(&idx, Some("text/html"), b"<html>no feeds</html>").is_none());
+}
+
+#[tokio::test]
+async fn gtfs_static_resolves_an_index_then_downloads_the_current_zip() {
+    let s = MockServer::start().await;
+    Mock::given(method("GET"))
+        .and(path("/api/1/datasets/x/"))
+        .respond_with(
+            ResponseTemplate::new(200)
+                .insert_header("etag", "\"index-v7\"")
+                .set_body_raw(udata_index(&s.uri()), "application/json"),
+        )
+        .expect(1)
+        .mount(&s)
+        .await;
+    let raw = feed();
+    serve_zip(
+        &s,
+        "/resources/lu/20261112-064412/gtfs-20261111-20261212.zip",
+        raw.clone(),
+    )
+    .await;
+    let url = format!("{}/api/1/datasets/x/", s.uri());
+    let mut h = Harness::new(spec("auckland-gtfs"), "gtfs_static", &url, t0()).await;
+    let rep = h.run(&GtfsStatic::DEFAULT).await.unwrap();
+    assert!(rep.complete);
+    assert_eq!(rep.requests, 2, "the index, then the zip it names");
+    let got: Vec<String> = s
+        .received_requests()
+        .await
+        .unwrap()
+        .iter()
+        .map(|r| r.url.path().to_string())
+        .collect();
+    assert_eq!(
+        got,
+        [
+            "/api/1/datasets/x/",
+            "/resources/lu/20261112-064412/gtfs-20261111-20261212.zip"
+        ]
+    );
+    // Raw first: the index is spooled (manifest role, never mapped) before any item.
+    let first = &h.sink.records[0];
+    assert_eq!(first.meta.role, CaptureRole::Manifest);
+    assert!(matches!(first.payload, SpoolPayload::Response(_)));
+    assert_raw_first(&h.events.all());
+    assert_eq!(items(&h).iter().filter(|i| i["t"] == "operator").count(), 1);
+    let m = h
+        .manifests()
+        .into_iter()
+        .find(|m| m["type"] == "dump_manifest")
+        .unwrap();
+    assert_eq!(m["complete"], true);
+    assert_eq!(m["resolved_from_index"], true);
+    assert!(
+        m["resolved_url"]
+            .as_str()
+            .unwrap()
+            .ends_with("/gtfs-20261111-20261212.zip")
+    );
+    assert_eq!(
+        m["sha256"],
+        vc_sources::sha256::hex(&vc_sources::sha256::Sha256::digest(&raw))
+    );
+    // The leased row (the index) keeps the index's validators for the next conditional GET.
+    let last = h.sink.records.last().unwrap();
+    assert_eq!(
+        (last.meta.role, last.meta.status),
+        (CaptureRole::Primary, Some(200))
+    );
+    assert_eq!(last.meta.validators.etag.as_deref(), Some("\"index-v7\""));
+}
+
+#[tokio::test]
+async fn gtfs_static_never_follows_an_index_to_another_site() {
+    let s = MockServer::start().await;
+    let other = serde_json::json!({"resources": [
+        {"type": "main", "format": "zip", "url": "https://elsewhere.example/feed.zip",
+         "last_modified": "2026-11-12T00:00:00+00:00"}
+    ]});
+    Mock::given(path("/api/1/datasets/y/"))
+        .respond_with(
+            ResponseTemplate::new(200).set_body_raw(other.to_string(), "application/json"),
+        )
+        .mount(&s)
+        .await;
+    Mock::given(path("/empty/"))
+        .respond_with(
+            ResponseTemplate::new(200).set_body_raw("<html>nothing here</html>", "text/html"),
+        )
+        .mount(&s)
+        .await;
+    for p in ["/api/1/datasets/y/", "/empty/"] {
+        let url = format!("{}{p}", s.uri());
+        let mut h = Harness::new(spec("auckland-gtfs"), "gtfs_static", &url, t0()).await;
+        let err = h.run(&GtfsStatic::DEFAULT).await.unwrap_err();
+        assert!(matches!(err, Error::Invalid(_)), "{p}: {err:?}");
+        assert!(h.resources().is_empty(), "{p}");
+        let m = h
+            .manifests()
+            .into_iter()
+            .find(|m| m["type"] == "dump_manifest")
+            .unwrap();
+        assert_eq!(m["complete"], false, "{p}");
+    }
+    assert_eq!(
+        s.received_requests().await.unwrap().len(),
+        2,
+        "one index request each, nothing followed"
+    );
 }

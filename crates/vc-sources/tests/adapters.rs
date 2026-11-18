@@ -978,6 +978,103 @@ async fn wikivoyage_dump_parses_fixture() {
     );
 }
 
+/// The German edition (`wikivoyage-dump-de`): the edition comes from the dump URL, German
+/// `{{vCard}}` listings are kept as structured listings, and the records are German places,
+/// sights and places to stay.
+#[tokio::test]
+async fn wikivoyage_dump_reads_another_language_edition() {
+    let s = MockServer::start().await;
+    let p = "/dewikivoyage/latest/dewikivoyage-latest-pages-articles.xml.bz2";
+    serve(
+        &s,
+        p,
+        fixture("wikivoyage_de_pages_articles.xml.bz2"),
+        "application/octet-stream",
+    )
+    .await;
+    let mut h = Harness::new(
+        spec("wikivoyage-dump-de"),
+        "wikivoyage_dump",
+        &format!("{}{p}", s.uri()),
+        t0(),
+    )
+    .await;
+    h.client.chunk = 1000;
+    let rep = h
+        .run(&adapters::wikivoyage_dump::WikivoyageDump::DEFAULT)
+        .await
+        .unwrap();
+    assert!(rep.complete);
+    let res = h.resources();
+    let pages: Vec<serde_json::Value> = serde_json::from_slice(&res[0].1).unwrap();
+    let titles: Vec<&str> = pages.iter().map(|p| p["title"].as_str().unwrap()).collect();
+    assert_eq!(titles, ["Jotunheimen", "Liste der Sprachführer"]);
+    let j = &pages[0];
+    assert_eq!(j["lang"], "de");
+    assert_eq!(j["url"], "https://de.wikivoyage.org/wiki/Jotunheimen");
+    let ls = j["listings"].as_array().unwrap();
+    assert_eq!(ls.len(), 21, "every vCard");
+    let by_name = |n: &str| ls.iter().find(|l| l["name"] == n).unwrap();
+    assert_eq!(by_name("Lom Bygdamuseum")["type"], "see");
+    assert_eq!(by_name("Lom Bygdamuseum")["subtype"], "museum");
+    assert_eq!(by_name("Utladalen Naturhus")["type"], "eat");
+    assert_eq!(by_name("Klingenberg Hotel – Årdal")["type"], "sleep");
+    assert_eq!(by_name("Nordal Turistsenter")["type"], "sleep");
+    assert_eq!(by_name("Lom Helsesenter")["type"], "other");
+    assert_eq!(h.manifests()[0]["filter_version"], "wikivoyage-ns0-v2");
+
+    // Records: the article is a place; sights → attraction, places to stay → hotel.
+    let u = vc_core::CanonicalUrl::parse(&format!("{}{p}", s.uri())).unwrap();
+    let items = adapters::records::records("wikivoyage_dump", &u, &res[0].1)
+        .unwrap()
+        .unwrap();
+    let place = items.iter().find(|i| i.kind == "place").unwrap();
+    assert_eq!(place.id.as_deref(), Some("dewikivoyage:4127"));
+    assert_eq!(
+        (place.data["lat"].as_f64(), place.data["lng"].as_f64()),
+        (Some(61.63), Some(8.3))
+    );
+    let museum = items
+        .iter()
+        .find(|i| i.kind == "attraction" && i.data["name"] == "Lom Bygdamuseum")
+        .unwrap();
+    assert_eq!(museum.data["category"], "museum");
+    assert_eq!(museum.data["city"], "Jotunheimen");
+    assert!(museum.data["lat"].is_number());
+    assert!(
+        museum
+            .id
+            .as_deref()
+            .unwrap()
+            .starts_with("dewikivoyage:4127:")
+    );
+    let camp = items
+        .iter()
+        .find(|i| i.kind == "hotel" && i.data["name"] == "Nordal Turistsenter")
+        .unwrap();
+    assert_eq!(camp.data["property_type"], "campsite");
+    let kinds: std::collections::BTreeMap<&str, usize> =
+        items.iter().fold(Default::default(), |mut m, i| {
+            *m.entry(i.kind).or_default() += 1;
+            m
+        });
+    assert_eq!(kinds["place"], 1);
+    assert_eq!(kinds["attraction"], 3, "the three museums");
+    assert_eq!(kinds["hotel"], 15, "two campsites and thirteen hotels");
+    // Every item fits its kind's schema once the pipeline fills the country.
+    for i in &items {
+        let schema: serde_json::Value = serde_json::from_slice(
+            &std::fs::read(common::repo_root().join(format!("schemas/{}.v1.json", i.kind)))
+                .unwrap(),
+        )
+        .unwrap();
+        let v = jsonschema::validator_for(&schema).unwrap();
+        let mut d = i.data.clone();
+        d["country"] = "Norway".into();
+        assert!(v.is_valid(&d), "{}: {d}", i.kind);
+    }
+}
+
 #[tokio::test]
 async fn wikivoyage_dump_writes_raw_first() {
     let s = MockServer::start().await;

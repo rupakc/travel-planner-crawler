@@ -210,6 +210,20 @@ LICENCES: dict[str, tuple[str, str | None, str | None]] = {
     "Bahrain Government Open Data License": ("open", None, "https://www.data.gov.bh/"),
     "Open Government License (Oman)": ("open", None, "https://data.gov.om/"),
     # Asia-Pacific corpus (2026-11-18): no new licence strings.
+    # --- Open data: GTFS feeds, Wikivoyage editions, JMA (research 2026-11-18) -----------
+    "MassDOT Developers License Agreement": (
+        "api_terms", None,
+        "https://cdn.mbta.com/sites/default/files/2023-08/mbta-massdot-develop-license-agreement.pdf",
+    ),
+    "CTA Developer License Agreement": (
+        "api_terms", None, "https://www.transitchicago.com/developers/terms/",
+    ),
+    "King County transit data terms of use": (
+        "api_terms", None, "https://kingcounty.gov/en/dept/metro/rider-tools/mobile-and-web-apps",
+    ),
+    "JMA Terms of Use (compatible with CC BY 4.0)": (
+        "open", "CC-BY-4.0", "https://www.jma.go.jp/jma/en/copyright.html",
+    ),
 }
 
 # Attribution strings (sources.md §18). Default: "<name>".
@@ -6635,6 +6649,117 @@ _src(
     budget=100,
     include=['^https://www\\.ttc\\.ca/(?:riding-the-ttc|routes-and-schedules|Fares-and-passes|Explore-Toronto)(?:/|$)'],
 )
+# Open data at scale (research 2026-11-18): GTFS feeds on gtfs_static (Luxembourg through
+# its "latest file" resolver), Wikivoyage in 22 more languages on wikivoyage_dump (one
+# source per edition), JMA climate normals pages.
+# ---------------------------------------------------------------------------------------
+GTFS_OPEN_DATA = {
+    # id: (why, attribution, display requirement or None, off reason or None)
+    "prague-pid-gtfs": (
+        "Prague and Central Bohemia metro, tram, bus, rail and ferry lines and stations, for Local transportation.",
+        "Pražská integrovaná doprava (ROPID), CC BY 4.0", None, None,
+    ),
+    "budapest-bkk-gtfs": (
+        "Budapest metro, tram, bus, trolleybus and ferry lines and stations, for Local transportation.",
+        "BKK Centre for Budapest Transport", None, None,
+    ),
+    "mbta-gtfs": (
+        "Boston subway, commuter rail, bus and ferry lines and stations, for Local transportation.",
+        "Data provided by MassDOT (MBTA)",
+        "Acknowledge MassDOT as the provider of the data; never present Voyager as MassDOT or its "
+        "agent, and do not use MassDOT/MBTA logos (MassDOT Developers License Agreement 4.1).",
+        None,
+    ),
+    "cta-gtfs": (
+        "Chicago 'L' train and bus lines and stations, for Local transportation.",
+        "Data provided by Chicago Transit Authority",
+        "Use only to help transit riders; do not express or imply affiliation with or endorsement by "
+        "CTA (CTA Developer License I and III).",
+        None,
+    ),
+    "stm-montreal-gtfs": (
+        "Montréal metro and bus lines and stations, for Local transportation.",
+        "Société de transport de Montréal (STM)", None,
+        "robots.txt of www.stm.info disallows the download: the zip URL answers 302 to "
+        "/getcontentasset/…/gtfs_stm.zip and robots.txt has 'Disallow: /*getcontentasset' "
+        "(checked 2026-11-18); licence also unconfirmed",
+    ),
+    "king-county-metro-gtfs": (
+        "Seattle-area bus, Link light rail, streetcar and water taxi lines and stations, for Local transportation.",
+        "King County Metro Transit", None, None,
+    ),
+    "ireland-nta-gtfs": (
+        "Every Irish bus, rail, Luas and DART operator's lines and stations, for Local transportation.",
+        "National Transport Authority (Transport for Ireland), CC BY 4.0", None, None,
+    ),
+    "lithuania-gtfs": (
+        "City and regional bus and trolleybus lines in Vilnius, Kaunas, Klaipėda and every Lithuanian municipality, for Local transportation.",
+        "visimarsrutai.lt (Lithuanian Transport Competence Agency)", None, None,
+    ),
+    "luxembourg-gtfs": (
+        "Every Luxembourg bus, tram and rail line and stop (public transport is free there), for Local transportation.",
+        "Administration des transports publics, data.public.lu, CC BY 4.0", None, None,
+    ),
+}
+GTFS_FEEDS = GTFS_FEEDS + tuple(GTFS_OPEN_DATA)
+GTFS_ON = GTFS_ON | {sid for sid, row in GTFS_OPEN_DATA.items() if row[3] is None}
+for _sid, (_why, _attr, _display, _off) in GTFS_OPEN_DATA.items():
+    ADAPTERS[_sid] = "gtfs_static"
+    _src(_sid, ["getting_around"], _why, cls="official", kinds=["transit_item"], off=_off,
+         attribution=_attr, display=_display)
+
+# Wikivoyage language editions (all CC BY-SA 4.0, attribution per edition).
+WIKIVOYAGE_EDITIONS = {
+    "de": "German", "fr": "French", "es": "Spanish", "it": "Italian", "pt": "Portuguese",
+    "nl": "Dutch", "pl": "Polish", "ru": "Russian", "uk": "Ukrainian", "zh": "Chinese",
+    "ja": "Japanese", "sv": "Swedish", "fi": "Finnish", "he": "Hebrew", "fa": "Persian",
+    "vi": "Vietnamese", "tr": "Turkish", "el": "Greek", "cs": "Czech", "id": "Indonesian",
+    "hi": "Hindi", "bn": "Bengali",
+}
+for _code, _lang in WIKIVOYAGE_EDITIONS.items():
+    _sid = f"wikivoyage-dump-{_code}"
+    ADAPTERS[_sid] = "wikivoyage_dump"
+    # Structured records only (places from article coordinates, sights and places to stay
+    # from listings): no model reads these editions.
+    _src(_sid, ["places", "hotels"],
+         f"{_lang} Wikivoyage destination guides: destinations, sights and places to stay with "
+         f"coordinates, for Places to see and Hotels.",
+         cls="reference", kinds=["place", "attraction", "hotel"], budget=20,
+         attribution=f"Text from Wikivoyage contributors ({_lang} edition, {_code}.wikivoyage.org), "
+                     f"CC BY-SA 4.0")
+
+# JMA monthly normals (1991-2020) of 21 first-class stations in Japan's main destinations.
+_JMA_STATIONS = [
+    (14, 47412), (23, 47430), (34, 47590), (44, 47662), (46, 47670), (48, 47610), (54, 47604),
+    (56, 47605), (51, 47636), (61, 47759), (62, 47772), (63, 47770), (64, 47780), (67, 47765),
+    (72, 47891), (73, 47887), (82, 47807), (84, 47817), (88, 47827), (91, 47936), (91, 47918),
+]
+_src(
+    'jma-climate-normals',
+    ['weather', 'packing'],
+    "Official monthly climate normals (temperature, rain, sunshine, snow) for Japan's main cities, for Weather and the packing list.",
+    cls='official',
+    kinds=['weather_normal'],
+    llm=['weather_normal'],
+    depth=0,
+    budget=30,
+    seeds=[f"https://www.data.jma.go.jp/stats/etrn/view/nml_sfc_ym.php?prec_no={p}&block_no={b}"
+           f"&year=&month=&day=&view=" for p, b in _JMA_STATIONS],
+    attribution='Source: Japan Meteorological Agency (JMA), climate normals 1991-2020, CC BY 4.0',
+)
+_src(
+    'ea-bathing-water-profiles',
+    ['places', 'activities', 'tips'],
+    'Water quality classification of designated bathing beaches in England, for Places to see, Activities and Travel tips.',
+    cls='official',
+    kinds=['place', 'tip'],
+    off='robots.txt of environment.data.gov.uk disallows /doc/ and /data/, where the profiles get their data: '
+        '/bwq/profiles/ is a script-driven page (scripts/index.js reads /doc/bathing-water…), so its HTML '
+        'carries no sites, classifications or links (checked 2026-11-18); a rendered fetch would need the '
+        'disallowed API',
+    attribution='Contains public sector information licensed under the Open Government Licence v3.0 — Environment Agency',
+)
+
 
 # ---------------------------------------------------------------------------------------
 # Corpus expansion: thematic, worldwide (outdoors, culture, food and wine, traveller types,

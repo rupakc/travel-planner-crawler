@@ -29,7 +29,7 @@ use super::{
 };
 
 /// Bumped when a mapping changes (part of the extractor version string of adapter records).
-pub const MAPPING_VERSION: u32 = 1;
+pub const MAPPING_VERSION: u32 = 2;
 
 /// One record an adapter capture yields.
 #[derive(Debug, Clone, PartialEq)]
@@ -1528,13 +1528,9 @@ fn ourairports(body: &[u8]) -> Result<Vec<AdapterItem>> {
 }
 
 // ---------------------------------------------------------------------------------------------
-// Wikivoyage → place records
+// Wikivoyage → place, attraction and hotel records
 // ---------------------------------------------------------------------------------------------
 
-static GEO: LazyLock<Regex> = LazyLock::new(|| {
-    Regex::new(r"(?i)\{\{\s*geo\s*\|\s*(-?[0-9]+(?:\.[0-9]+)?)\s*\|\s*(-?[0-9]+(?:\.[0-9]+)?)")
-        .expect("regex")
-});
 static LINK: LazyLock<Regex> =
     LazyLock::new(|| Regex::new(r"\[\[(?:[^|\]]*\|)?([^\]]*)\]\]").expect("regex"));
 static TEMPLATE: LazyLock<Regex> = LazyLock::new(|| Regex::new(r"\{\{[^{}]*\}\}").expect("regex"));
@@ -1598,6 +1594,7 @@ fn place_type(text: &str) -> &'static str {
 }
 
 fn wikivoyage(body: &[u8]) -> Result<Vec<AdapterItem>> {
+    use super::wikivoyage_dump::{EDITIONS, article_coords, edition};
     let pages: Vec<Value> =
         serde_json::from_slice(body).map_err(|e| Error::Invalid(format!("wikivoyage: {e}")))?;
     let mut seen = HashSet::new();
@@ -1609,47 +1606,150 @@ fn wikivoyage(body: &[u8]) -> Result<Vec<AdapterItem>> {
         ) else {
             continue; // redirects and empty pages
         };
-        // Only geo-tagged articles: the coordinates place them (and give their country).
-        let Some(g) = GEO.captures(text) else {
-            continue;
-        };
-        let (Ok(lat), Ok(lng)) = (g[1].parse::<f64>(), g[2].parse::<f64>()) else {
-            continue;
-        };
-        if !((-90.0..=90.0).contains(&lat) && (-180.0..=180.0).contains(&lng)) {
-            continue;
-        }
+        // Pages written before filter v2 carry no `lang`: they are English.
+        let ed = p
+            .get("lang")
+            .and_then(Value::as_str)
+            .and_then(edition)
+            .unwrap_or(&EDITIONS[0]);
+        let prefix = ed.id_prefix();
+        let page_id = p.get("page_id").and_then(Value::as_u64);
+        let source_url = p.get("url").and_then(Value::as_str).and_then(s);
+        let as_of = p
+            .get("timestamp")
+            .and_then(Value::as_str)
+            .and_then(day)
+            .map(Value::String);
         if !seen.insert(title.to_string()) {
             continue;
         }
-        out.push(AdapterItem {
-            kind: "place",
-            id: p
-                .get("page_id")
-                .and_then(Value::as_u64)
-                .map(|id| format!("enwikivoyage:{id}")),
-            series_key: None,
-            data: obj(vec![
-                ("name", s(title)),
-                ("place_type", s(place_type(text))),
-                ("lat", Some(json!(lat))),
-                ("lng", Some(json!(lng))),
-                ("summary", lead(text).map(Value::String)),
-                (
-                    "source_url",
-                    p.get("url").and_then(Value::as_str).and_then(s),
-                ),
-                (
-                    "as_of",
-                    p.get("timestamp")
-                        .and_then(Value::as_str)
-                        .and_then(day)
-                        .map(Value::String),
-                ),
-            ]),
-        });
+        // Geo-tagged articles are places: the coordinates place them (and give their country).
+        if let Some((lat, lng)) = article_coords(ed, text) {
+            out.push(AdapterItem {
+                kind: "place",
+                id: page_id.map(|id| format!("{prefix}:{id}")),
+                series_key: None,
+                data: obj(vec![
+                    ("name", s(title)),
+                    ("place_type", s(place_type(text))),
+                    ("lat", Some(json!(lat))),
+                    ("lng", Some(json!(lng))),
+                    ("summary", lead(text).map(Value::String)),
+                    ("source_url", source_url.clone()),
+                    ("as_of", as_of.clone()),
+                ]),
+            });
+        }
+        // Listings: sights → attraction, places to stay → hotel, in the article's city (the
+        // article title without a district suffix, e.g. `Paris/Marais` → `Paris`).
+        let city = title.split('/').next().unwrap_or(title).trim();
+        let mut names = HashSet::new();
+        for l in p
+            .get("listings")
+            .and_then(Value::as_array)
+            .into_iter()
+            .flatten()
+        {
+            let (Some(ty), Some(name)) = (
+                l.get("type").and_then(Value::as_str),
+                l.get("name").and_then(Value::as_str),
+            ) else {
+                continue;
+            };
+            let kind = match ty {
+                "see" => "attraction",
+                "sleep" => "hotel",
+                _ => continue,
+            };
+            if !names.insert((kind, name.to_lowercase())) {
+                continue;
+            }
+            let field = |k: &str| l.get(k).and_then(Value::as_str).map(str::to_string);
+            let sub = field("subtype").unwrap_or_default().to_lowercase();
+            let phone = field("phone")
+                .filter(|v| WV_PHONE.is_match(v))
+                .map(|v| json!(v));
+            let url = field("url").map(|v| json!(v));
+            // A stable id across dumps: the listing's Wikidata item, else its name in the page.
+            let id = page_id.map(|pid| match field("wikidata") {
+                Some(q) => format!("{prefix}:{pid}:{q}"),
+                None => format!("{prefix}:{pid}:{}", name.to_lowercase()),
+            });
+            let mut fields = vec![
+                ("name", s(name)),
+                ("city", s(city)),
+                ("description", field("description").map(|v| json!(v))),
+                ("address", field("address").map(|v| json!(v))),
+                ("lat", l.get("lat").cloned()),
+                ("lng", l.get("lng").cloned()),
+                ("phone", phone),
+                ("source_url", source_url.clone()),
+                ("as_of", as_of.clone()),
+            ];
+            if kind == "attraction" {
+                fields.push(("category", s(attraction_category(&sub))));
+                fields.push(("info_url", url));
+                fields.push(("opening_hours", field("hours").map(|v| json!(v))));
+                fields.push((
+                    "admission",
+                    field("price")
+                        .filter(|v| v.chars().count() <= 80)
+                        .map(|v| json!({ "text": v })),
+                ));
+            } else {
+                fields.push(("property_type", hotel_type(&sub).map(|t| json!(t))));
+                fields.push(("website_url", url));
+            }
+            out.push(AdapterItem {
+                kind,
+                id,
+                series_key: None,
+                data: obj(fields),
+            });
+        }
     }
     Ok(out)
+}
+
+static WV_PHONE: LazyLock<Regex> =
+    LazyLock::new(|| Regex::new(r"^\+?[0-9][0-9 ().\-/]{1,30}$").expect("regex"));
+
+/// The attraction category of a fine-grained listing type (`{{vCard|type=museum}}`).
+fn attraction_category(sub: &str) -> &'static str {
+    match sub {
+        "museum" | "gallery" => "museum",
+        "church" | "cathedral" | "mosque" | "synagogue" | "temple" | "shrine" | "monastery"
+        | "chapel" => "religious_site",
+        "castle" | "palace" | "fort" | "castle ruin" => "palace_castle",
+        "viewpoint" => "viewpoint",
+        "park" | "garden" => "park_garden",
+        "market" => "market",
+        "national park" | "nature reserve" | "waterfall" | "cave" | "mountain" | "lake"
+        | "beach" | "landscape" => "natural_wonder",
+        "monument" | "memorial" => "monument",
+        "zoo" | "aquarium" => "zoo_aquarium",
+        "theme park" => "theme_park",
+        "archaeological site" | "ruins" | "ruin" | "landmark" | "tower" | "bridge" | "building" => {
+            "landmark"
+        }
+        _ => "other",
+    }
+}
+
+/// The hotel property type of a fine-grained listing type, if it names one.
+fn hotel_type(sub: &str) -> Option<&'static str> {
+    Some(match sub {
+        "hotel" | "motel" | "inn" => "hotel",
+        "hostel" => "hostel",
+        "guest house" | "guesthouse" | "pension" | "minshuku" => "guesthouse",
+        "ryokan" => "ryokan",
+        "bed and breakfast" => "bnb",
+        "apartment" | "holiday flat" => "apartment",
+        "resort" => "resort",
+        "campsite" | "camping" => "campsite",
+        "capsule hotel" => "capsule",
+        _ => return None,
+    })
 }
 
 // ---------------------------------------------------------------------------------------------

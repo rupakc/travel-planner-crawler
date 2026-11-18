@@ -7,7 +7,7 @@
 Every website and dataset the crawler knows, grouped by the part of the Voyager app it
 feeds. A source that serves several parts is listed under each of them.
 
-**1170 sources, 937 on, 233 off.**
+**1203 sources, 968 on, 235 off.**
 
 - **What we take**: the traveller-facing data the source gives (its `relevance.why`).
 - **Licence**: *open* (free reuse with credit), *share-alike* (kept apart from other
@@ -104,6 +104,7 @@ is added only with the owner's approval (see CONTRIBUTING.md).
 | Source | Website | What we take | Licence | On | Key |
 |---|---|---|---|---|---|
 | `ghcn` | `www.ncei.noaa.gov` | Long-term daily weather records and climate normals per station, for the Weather section's what-to-expect by month. | open | yes | no |
+| `jma-climate-normals` | `www.data.jma.go.jp` | Official monthly climate normals (temperature, rain, sunshine, snow) for Japan's main cities, for Weather and the packing list. | open | yes | no |
 | `met-norway` | `api.met.no` | Weather forecasts for any location worldwide, for the Weather section. | open | yes | no |
 | `nws` | `api.weather.gov` | US weather forecasts and alerts for the Weather section. | open | yes | no |
 | `official-tatnews` | `www.tatnews.org` | TAT Newsroom (Tourism Authority of Thailand): Official TAT news: festivals, events, entry-rule changes and travel advisories, for Events, Travel tips, Visa and Weather. | facts only | yes | no |
@@ -204,6 +205,28 @@ is added only with the owner's approval (see CONTRIBUTING.md).
 | `vakinn-is` | `www.vakinn.is` | Iceland's official list of quality and eco-certified stays and tour operators, for Hotels and Activities. | facts only | yes | no |
 | `viabono` | `www.viabono.de` | Viabono-certified eco hotels and holiday homes in Germany, for the Hotels section. | facts only | yes | no |
 | `wikivoyage-dump` | `dumps.wikimedia.org` | Wikivoyage destination guides (sights, things to do, where to stay, getting around, SIM and tips) for those app sections. | share-alike | yes | no |
+| `wikivoyage-dump-bn` | `dumps.wikimedia.org` | Bengali Wikivoyage destination guides: destinations, sights and places to stay with coordinates, for Places to see and Hotels. | share-alike | yes | no |
+| `wikivoyage-dump-cs` | `dumps.wikimedia.org` | Czech Wikivoyage destination guides: destinations, sights and places to stay with coordinates, for Places to see and Hotels. | share-alike | yes | no |
+| `wikivoyage-dump-de` | `dumps.wikimedia.org` | German Wikivoyage destination guides: destinations, sights and places to stay with coordinates, for Places to see and Hotels. | share-alike | yes | no |
+| `wikivoyage-dump-el` | `dumps.wikimedia.org` | Greek Wikivoyage destination guides: destinations, sights and places to stay with coordinates, for Places to see and Hotels. | share-alike | yes | no |
+| `wikivoyage-dump-es` | `dumps.wikimedia.org` | Spanish Wikivoyage destination guides: destinations, sights and places to stay with coordinates, for Places to see and Hotels. | share-alike | yes | no |
+| `wikivoyage-dump-fa` | `dumps.wikimedia.org` | Persian Wikivoyage destination guides: destinations, sights and places to stay with coordinates, for Places to see and Hotels. | share-alike | yes | no |
+| `wikivoyage-dump-fi` | `dumps.wikimedia.org` | Finnish Wikivoyage destination guides: destinations, sights and places to stay with coordinates, for Places to see and Hotels. | share-alike | yes | no |
+| `wikivoyage-dump-fr` | `dumps.wikimedia.org` | French Wikivoyage destination guides: destinations, sights and places to stay with coordinates, for Places to see and Hotels. | share-alike | yes | no |
+| `wikivoyage-dump-he` | `dumps.wikimedia.org` | Hebrew Wikivoyage destination guides: destinations, sights and places to stay with coordinates, for Places to see and Hotels. | share-alike | yes | no |
+| `wikivoyage-dump-hi` | `dumps.wikimedia.org` | Hindi Wikivoyage destination guides: destinations, sights and places to stay with coordinates, for Places to see and Hotels. | share-alike | yes | no |
+| `wikivoyage-dump-id` | `dumps.wikimedia.org` | Indonesian Wikivoyage destination guides: destinations, sights and places to stay with coordinates, for Places to see and Hotels. | share-alike | yes | no |
+| `wikivoyage-dump-it` | `dumps.wikimedia.org` | Italian Wikivoyage destination guides: destinations, sights and places to stay with coordinates, for Places to see and Hotels. | share-alike | yes | no |
+| `wikivoyage-dump-ja` | `dumps.wikimedia.org` | Japanese Wikivoyage destination guides: destinations, sights and places to stay with coordinates, for Places to see and Hotels. | share-alike | yes | no |
+| `wikivoyage-dump-nl` | `dumps.wikimedia.org` | Dutch Wikivoyage destination guides: destinations, sights and places to stay with coordinates, for Places to see and Hotels. | share-alike | yes | no |
+| `wikivoyage-dump-pl` | `dumps.wikimedia.org` | Polish Wikivoyage destination guides: destinations, sights and places to stay with coordinates, for Places to see and Hotels. | share-alike | yes | no |
+| `wikivoyage-dump-pt` | `dumps.wikimedia.org` | Portuguese Wikivoyage destination guides: destinations, sights and places to stay with coordinates, for Places to see and Hotels. | share-alike | yes | no |
+| `wikivoyage-dump-ru` | `dumps.wikimedia.org` | Russian Wikivoyage destination guides: destinations, sights and places to stay with coordinates, for Places to see and Hotels. | share-alike | yes | no |
+| `wikivoyage-dump-sv` | `dumps.wikimedia.org` | Swedish Wikivoyage destination guides: destinations, sights and places to stay with coordinates, for Places to see and Hotels. | share-alike | yes | no |
+| `wikivoyage-dump-tr` | `dumps.wikimedia.org` | Turkish Wikivoyage destination guides: destinations, sights and places to stay with coordinates, for Places to see and Hotels. | share-alike | yes | no |
+| `wikivoyage-dump-uk` | `dumps.wikimedia.org` | Ukrainian Wikivoyage destination guides: destinations, sights and places to stay with coordinates, for Places to see and Hotels. | share-alike | yes | no |
+| `wikivoyage-dump-vi` | `dumps.wikimedia.org` | Vietnamese Wikivoyage destination guides: destinations, sights and places to stay with coordinates, for Places to see and Hotels. | share-alike | yes | no |
+| `wikivoyage-dump-zh` | `dumps.wikimedia.org` | Chinese Wikivoyage destination guides: destinations, sights and places to stay with coordinates, for Places to see and Hotels. | share-alike | yes | no |
 | `atdw-atlas` | `developer.atdw.com.au` | Australian events, attractions, tours and accommodation listings, for Events, Activities and Hotels. | API terms | no | yes |
 | `booking-demand-api` | `developers.booking.com` | Hotel listings and prices for the Hotels section; needs a partner contract, so off. | API terms | no | yes |
 | `botswana-ecocert` | `www.botswanatourism.co.bw` | Botswana's official eco-certification (low-impact safari model) and certified lodges, for Hotels and Travel tips. | facts only | no | no |
@@ -626,6 +649,7 @@ is added only with the owner's approval (see CONTRIBUTING.md).
 | `culturetrip` | `theculturetrip.com` | Culture Trip destination guides (title and link only) for Places to see, Activities and Travel tips; every page times out for our bot, so off. | facts only | no | no |
 | `datatourisme-fr` | `diffuseur.datatourisme.fr` | Every French tourist office's events, restaurants, sights and walking or driving tours in one national feed, for Events, Activities, Places to see and the itinerary. | open | no | yes |
 | `doc-nz-api` | `api.doc.govt.nz` | New Zealand track, hut and campsite records with current alerts, for Places to see, Activities and Travel tips. | open | no | yes |
+| `ea-bathing-water-profiles` | `environment.data.gov.uk` | Water quality classification of designated bathing beaches in England, for Places to see, Activities and Travel tips. | open | no | no |
 | `failte-ireland-od` | `failteireland.developer.azure-api.net` | Every Fáilte Ireland-listed attraction and activity provider in Ireland, for Places to see and Activities. | open | no | yes |
 | `germany-kg` | `open-data-germany.org` | Events, sights and tours from German regional tourist boards, for Events, Places to see and Activities. | open | no | yes |
 | `gyg-partner` | `partner.getyourguide.com` | Bookable tours and activities with prices, for the Activities section; needs affiliate approval, so off. | API terms | no | yes |
@@ -1122,6 +1146,28 @@ is added only with the owner's approval (see CONTRIBUTING.md).
 | `wien-info` | `www.wien.info` | Vienna events, Heurigen wine taverns, coffee houses and suggested itineraries, for Events, Activities, the itinerary and Places to see. | facts only | yes | no |
 | `wikipedia-geosearch` | `en.wikipedia.org` | Wikipedia articles about sights near a destination (names, coordinates, summaries), for Places to see. | share-alike | yes | no |
 | `wikivoyage-dump` | `dumps.wikimedia.org` | Wikivoyage destination guides (sights, things to do, where to stay, getting around, SIM and tips) for those app sections. | share-alike | yes | no |
+| `wikivoyage-dump-bn` | `dumps.wikimedia.org` | Bengali Wikivoyage destination guides: destinations, sights and places to stay with coordinates, for Places to see and Hotels. | share-alike | yes | no |
+| `wikivoyage-dump-cs` | `dumps.wikimedia.org` | Czech Wikivoyage destination guides: destinations, sights and places to stay with coordinates, for Places to see and Hotels. | share-alike | yes | no |
+| `wikivoyage-dump-de` | `dumps.wikimedia.org` | German Wikivoyage destination guides: destinations, sights and places to stay with coordinates, for Places to see and Hotels. | share-alike | yes | no |
+| `wikivoyage-dump-el` | `dumps.wikimedia.org` | Greek Wikivoyage destination guides: destinations, sights and places to stay with coordinates, for Places to see and Hotels. | share-alike | yes | no |
+| `wikivoyage-dump-es` | `dumps.wikimedia.org` | Spanish Wikivoyage destination guides: destinations, sights and places to stay with coordinates, for Places to see and Hotels. | share-alike | yes | no |
+| `wikivoyage-dump-fa` | `dumps.wikimedia.org` | Persian Wikivoyage destination guides: destinations, sights and places to stay with coordinates, for Places to see and Hotels. | share-alike | yes | no |
+| `wikivoyage-dump-fi` | `dumps.wikimedia.org` | Finnish Wikivoyage destination guides: destinations, sights and places to stay with coordinates, for Places to see and Hotels. | share-alike | yes | no |
+| `wikivoyage-dump-fr` | `dumps.wikimedia.org` | French Wikivoyage destination guides: destinations, sights and places to stay with coordinates, for Places to see and Hotels. | share-alike | yes | no |
+| `wikivoyage-dump-he` | `dumps.wikimedia.org` | Hebrew Wikivoyage destination guides: destinations, sights and places to stay with coordinates, for Places to see and Hotels. | share-alike | yes | no |
+| `wikivoyage-dump-hi` | `dumps.wikimedia.org` | Hindi Wikivoyage destination guides: destinations, sights and places to stay with coordinates, for Places to see and Hotels. | share-alike | yes | no |
+| `wikivoyage-dump-id` | `dumps.wikimedia.org` | Indonesian Wikivoyage destination guides: destinations, sights and places to stay with coordinates, for Places to see and Hotels. | share-alike | yes | no |
+| `wikivoyage-dump-it` | `dumps.wikimedia.org` | Italian Wikivoyage destination guides: destinations, sights and places to stay with coordinates, for Places to see and Hotels. | share-alike | yes | no |
+| `wikivoyage-dump-ja` | `dumps.wikimedia.org` | Japanese Wikivoyage destination guides: destinations, sights and places to stay with coordinates, for Places to see and Hotels. | share-alike | yes | no |
+| `wikivoyage-dump-nl` | `dumps.wikimedia.org` | Dutch Wikivoyage destination guides: destinations, sights and places to stay with coordinates, for Places to see and Hotels. | share-alike | yes | no |
+| `wikivoyage-dump-pl` | `dumps.wikimedia.org` | Polish Wikivoyage destination guides: destinations, sights and places to stay with coordinates, for Places to see and Hotels. | share-alike | yes | no |
+| `wikivoyage-dump-pt` | `dumps.wikimedia.org` | Portuguese Wikivoyage destination guides: destinations, sights and places to stay with coordinates, for Places to see and Hotels. | share-alike | yes | no |
+| `wikivoyage-dump-ru` | `dumps.wikimedia.org` | Russian Wikivoyage destination guides: destinations, sights and places to stay with coordinates, for Places to see and Hotels. | share-alike | yes | no |
+| `wikivoyage-dump-sv` | `dumps.wikimedia.org` | Swedish Wikivoyage destination guides: destinations, sights and places to stay with coordinates, for Places to see and Hotels. | share-alike | yes | no |
+| `wikivoyage-dump-tr` | `dumps.wikimedia.org` | Turkish Wikivoyage destination guides: destinations, sights and places to stay with coordinates, for Places to see and Hotels. | share-alike | yes | no |
+| `wikivoyage-dump-uk` | `dumps.wikimedia.org` | Ukrainian Wikivoyage destination guides: destinations, sights and places to stay with coordinates, for Places to see and Hotels. | share-alike | yes | no |
+| `wikivoyage-dump-vi` | `dumps.wikimedia.org` | Vietnamese Wikivoyage destination guides: destinations, sights and places to stay with coordinates, for Places to see and Hotels. | share-alike | yes | no |
+| `wikivoyage-dump-zh` | `dumps.wikimedia.org` | Chinese Wikivoyage destination guides: destinations, sights and places to stay with coordinates, for Places to see and Hotels. | share-alike | yes | no |
 | `wine-portugal` | `www.winesofportugal.com` | Wines of Portugal (ViniPortugal): 14 wine regions, wine tourism, for Activities and Places to see. | facts only | yes | no |
 | `amusingplanet` | `feeds.feedburner.com` | Unusual places, natural wonders and hidden sights worldwide (headline, link and a short excerpt only), for Places to see. | facts only | no | no |
 | `api-europeana` | `api.europeana.eu` | Europeana Search and Record API: Museum and cultural-heritage records (50M items) with places and dates, for Places to see and Events. | open | no | yes |
@@ -1134,6 +1180,7 @@ is added only with the owner's approval (see CONTRIBUTING.md).
 | `datagovhk` | `data.gov.hk` | Official opening hours and admission of Hong Kong museums and attractions, plus cultural programmes and major events, for Places to see and Events. | open | no | no |
 | `datatourisme-fr` | `diffuseur.datatourisme.fr` | Every French tourist office's events, restaurants, sights and walking or driving tours in one national feed, for Events, Activities, Places to see and the itinerary. | open | no | yes |
 | `doc-nz-api` | `api.doc.govt.nz` | New Zealand track, hut and campsite records with current alerts, for Places to see, Activities and Travel tips. | open | no | yes |
+| `ea-bathing-water-profiles` | `environment.data.gov.uk` | Water quality classification of designated bathing beaches in England, for Places to see, Activities and Travel tips. | open | no | no |
 | `earthcheck` | `earthcheck.org` | EarthCheck-certified destinations and hotels, for Places to see and Hotels. | facts only | no | no |
 | `failte-ireland-od` | `failteireland.developer.azure-api.net` | Every Fáilte Ireland-listed attraction and activity provider in Ireland, for Places to see and Activities. | open | no | yes |
 | `germany-kg` | `open-data-germany.org` | Events, sights and tours from German regional tourist boards, for Events, Places to see and Activities. | open | no | yes |
@@ -2090,6 +2137,7 @@ is added only with the owner's approval (see CONTRIBUTING.md).
 | `culturetrip` | `theculturetrip.com` | Culture Trip destination guides (title and link only) for Places to see, Activities and Travel tips; every page times out for our bot, so off. | facts only | no | no |
 | `doc-nz-api` | `api.doc.govt.nz` | New Zealand track, hut and campsite records with current alerts, for Places to see, Activities and Travel tips. | open | no | yes |
 | `dubai-customs-passengers` | `www.dubaicustoms.gov.ae` | UAE duty-free allowances and banned items (medicines, e-cigarettes), for Travel tips and Packing. | facts only | no | no |
+| `ea-bathing-water-profiles` | `environment.data.gov.uk` | Water quality classification of designated bathing beaches in England, for Places to see, Activities and Travel tips. | open | no | no |
 | `eu-customs-travellers` | `taxation-customs.ec.europa.eu` | EU duty-free allowances for alcohol and tobacco, the 10,000 euro cash declaration and banned counterfeit goods, for Travel tips and Packing. | open | no | no |
 | `gov-agriculture-au-pets` | `www.agriculture.gov.au` | Australia DAFF: bringing cats and dogs: pet import and traveller biosecurity rules, for Travel tips and the Packing list. | facts only | no | no |
 | `gov-mct-china` | `en.mct.gov.cn` | China Ministry of Culture and Tourism (English): official visitor guide, for Travel tips and Places to see. | facts only | no | no |
@@ -2178,6 +2226,7 @@ is added only with the owner's approval (see CONTRIBUTING.md).
 | `blog-tokyocheapo` | `tokyocheapo.com` | Free and cheap Tokyo (events, transit passes, SIM cards) from Tokyo Cheapo, for Activities, Events, Local transportation, SIM cards and Travel tips (headline, link and a short excerpt only). | facts only | yes | no |
 | `blog-twoweekscr` | `www.twoweeksincostarica.com` | Two Weeks in Costa Rica: detailed independent Costa Rica guides, for Travel tips, Places to see and Local transportation. | facts only | yes | no |
 | `blog-vietnamcoracle` | `www.vietnamcoracle.com` | Independent budget guide to Vietnam (motorbike routes, guesthouses) from Vietnam Coracle, for Places to see, Hotels and Local transportation (headline, link and a short excerpt only). | facts only | yes | no |
+| `budapest-bkk-gtfs` | `go.bkk.hu` | Budapest metro, tram, bus, trolleybus and ferry lines and stations, for Local transportation. | facts only | yes | no |
 | `city-anchorage` | `www.anchorage.net` | Anchorage events, things to do and Alaska gateway transport advice, for Events, Activities and Local transportation. | facts only | yes | no |
 | `city-geneve` | `www.geneve.com` | Genève Tourisme: official visitor guide, for Activities, Events and Local transportation. | facts only | yes | no |
 | `city-hamburg` | `www.hamburg-travel.com` | Hamburg Tourismus: official visitor guide, for Activities, Events and Local transportation. | facts only | yes | no |
@@ -2185,13 +2234,19 @@ is added only with the owner's approval (see CONTRIBUTING.md).
 | `city-visitliverpool` | `www.visitliverpool.com` | Visit Liverpool: official visitor guide, for Activities, Events and Local transportation. | facts only | yes | no |
 | `city-yerevan` | `www.yerevan.am` | Yerevan Municipality: city notices (transport changes, events), for Events and Local transportation. | facts only | yes | no |
 | `city-zagreb` | `www.infozagreb.hr` | Zagreb Tourist Board: official visitor guide, for Activities, Events, Local transportation, Travel tips and the Emergency card. | facts only | yes | no |
+| `cta-gtfs` | `www.transitchicago.com` | Chicago 'L' train and bus lines and stations, for Local transportation. | API terms | yes | no |
 | `ed-inyourpocket` | `www.inyourpocket.com` | In Your Pocket city guides: travel articles and guides, for Places to see, Events, Local transportation and Travel tips. | facts only | yes | no |
 | `entur-gtfs` | `storage.googleapis.com` | All Norwegian public transport, including trains, ferries and Hurtigruten, for Local transportation. | open | yes | no |
 | `gbfs-systems` | `raw.githubusercontent.com` | The list of bike- and scooter-share systems by city, for the Local transportation section. | open | yes | no |
 | `gov-beijing-en` | `english.beijing.gov.cn` | Beijing Municipal Government (English): Visitor services, visa-free transit, payment and transport guides, for Travel tips, Visa, Local transportation and Events. | facts only | yes | no |
 | `gov-shanghai-en` | `english.shanghai.gov.cn` | Shanghai Municipal Government (English): Visa-free transit rules, payment and transport tips for visitors, for Visa, Local transportation and Travel tips. | facts only | yes | no |
 | `guide-caravanistan` | `caravanistan.com` | Caravanistan (Silk Road travel guide): Most-used independent guide for Central Asia visas, border crossings and transport, for Visa, Local transportation, Places to see and Travel tips. | share-alike | yes | no |
+| `ireland-nta-gtfs` | `www.transportforireland.ie` | Every Irish bus, rail, Luas and DART operator's lines and stations, for Local transportation. | open | yes | no |
+| `king-county-metro-gtfs` | `metro.kingcounty.gov` | Seattle-area bus, Link light rail, streetcar and water taxi lines and stations, for Local transportation. | API terms | yes | no |
+| `lithuania-gtfs` | `www.visimarsrutai.lt` | City and regional bus and trolleybus lines in Vilnius, Kaunas, Klaipėda and every Lithuanian municipality, for Local transportation. | facts only | yes | no |
+| `luxembourg-gtfs` | `data.public.lu` | Every Luxembourg bus, tram and rail line and stop (public transport is free there), for Local transportation. | open | yes | no |
 | `mag-hiddeneurope` | `www.hiddeneurope.eu` | hidden europe magazine: travel articles and guides, for Local transportation, Places to see and Travel tips. | facts only | yes | no |
+| `mbta-gtfs` | `cdn.mbta.com` | Boston subway, commuter rail, bus and ferry lines and stations, for Local transportation. | API terms | yes | no |
 | `od-nyc-public-restrooms` | `data.cityofnewyork.us` | Public restrooms across New York City with hours and wheelchair access, for Travel tips and getting around the city. | open | yes | no |
 | `official-berlin-welcomecard` | `www.berlin-welcomecard.de` | The official Berlin tourist pass (public transport plus discounts), for Activities and Local transportation. | facts only | yes | no |
 | `official-bvg` | `www.bvg.de` | Berlin public transport tickets, day and weekly passes and fares, for Local transportation. | facts only | yes | no |
@@ -2207,6 +2262,7 @@ is added only with the owner's approval (see CONTRIBUTING.md).
 | `osm-geofabrik` | `download.geofabrik.de` | OpenStreetMap hotels, sights and transit stops per region, for Hotels, Places to see and Local transportation. | share-alike | yes | no |
 | `ovapi-gtfs-nl` | `gtfs.ovapi.nl` | All Dutch train, bus, tram and metro timetables for Local transportation. | open | yes | no |
 | `pl-sentosa` | `www.sentosa.com.sg` | Sentosa Development Corporation: Sentosa island attractions, events and transport, for Activities, Events and Local transportation. | facts only | yes | no |
+| `prague-pid-gtfs` | `data.pid.cz` | Prague and Central Bohemia metro, tram, bus, rail and ferry lines and stations, for Local transportation. | open | yes | no |
 | `seat61` | `www.seat61.com` | How to travel by train and ferry between cities and countries, for Local transportation. | facts only | yes | no |
 | `tb-azores` | `www.visitazores.com` | Visit Azores: official visitor guide, for Activities, Places to see and Local transportation. | facts only | yes | no |
 | `tb-bahamas` | `www.bahamas.com` | The Islands of The Bahamas (Ministry of Tourism): official visitor guide, for Places to see, Events and Local transportation. | facts only | yes | no |
@@ -2365,6 +2421,7 @@ is added only with the owner's approval (see CONTRIBUTING.md).
 | `ontd-night-trains` | `back-on-track-eu.github.io` | All of about 205 regular European sleeper-train lines (operators, stops, days, classes), the flight-free option for an itinerary leg in Local transportation. | share-alike | no | no |
 | `sfbay-511` | `api.511.org` | One feed covering about 30 San Francisco Bay Area transit operators, for Local transportation. | API terms | no | yes |
 | `spain-nap` | `nap.transportes.gob.es` | Spain's official register of public-transport feeds (rail, bus, city transit) for Local transportation. | API terms | no | yes |
+| `stm-montreal-gtfs` | `www.stm.info` | Montréal metro and bus lines and stations, for Local transportation. | facts only | no | no |
 | `tfl-unified-api` | `api.tfl.gov.uk` | London lines, stations, fares, service status and step-free access for Local transportation. | open | no | yes |
 | `tfnsw-opendata` | `api.transport.nsw.gov.au` | Sydney and New South Wales timetables for trains, buses, ferries and light rail, for Local transportation. | open | no | yes |
 | `tr-bart-feeds` | `www.bart.gov` | San Francisco Bay Area BART service advisories and station information, for Local transportation. | facts only | no | no |
@@ -2445,6 +2502,7 @@ is added only with the owner's approval (see CONTRIBUTING.md).
 | `icp-uae-customs` | `icp.gov.ae` | UAE federal customs rules for travellers (allowances, cash declaration, banned and restricted items), for Travel tips and Packing. | facts only | yes | no |
 | `japan-customs-passengers` | `www.customs.go.jp` | Japan's duty-free allowances, prohibited items and the one-million-yen cash declaration, for Travel tips and Packing. | open | yes | no |
 | `japan-maff-aqs` | `www.maff.go.jp` | Rules and bans for bringing pets, meat and sausages into Japan, for Travel tips and Packing. | open | yes | no |
+| `jma-climate-normals` | `www.data.jma.go.jp` | Official monthly climate normals (temperature, rain, sunshine, snow) for Japan's main cities, for Weather and the packing list. | open | yes | no |
 | `korea-customs-travellers` | `www.customs.go.kr` | Korea's USD 800 duty-free allowance, alcohol and tobacco limits and prohibited items, for Travel tips and Packing. | facts only | yes | no |
 | `nz-customs-travellers` | `www.customs.govt.nz` | New Zealand's allowances, the NZD 10,000 cash rule and the biosecurity food declaration, for Travel tips and Packing. | facts only | yes | no |
 | `ref-paho` | `www.paho.org` | Pan American Health Organization: yellow fever, dengue and measles alerts for travellers, for Travel tips, the Packing list and Visa. | facts only | yes | no |
