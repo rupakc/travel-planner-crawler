@@ -157,7 +157,15 @@ def test_blogs_and_news_are_facts_only_editorial(generated):
         if sid.startswith(("blog-", "news-")):
             assert spec["licence"]["class"] == "facts_only", sid
             assert spec["source_class"] == "editorial", sid
-            assert spec["method"] == "rss" and spec["feeds"], sid
+            if sid in BLOGS_WITHOUT_A_FEED:
+                # The site has no working feed (2026-11-18): its post sitemap, posts only.
+                assert spec["method"] == "sitemap" and spec["sitemaps"] and spec["include"], sid
+                assert "sitemap is read" in " ".join(spec["notes"].split()), sid
+            else:
+                assert spec["method"] == "rss" and spec["feeds"], sid
+
+
+BLOGS_WITHOUT_A_FEED = {"blog-thriftynomads", "blog-expertvagabond", "blog-bootsnall"}
 
 
 def test_wikipedia_and_wikidata_are_reference_not_official(generated):
@@ -415,6 +423,28 @@ BATCH2_DENIED = [
     "https://www.us.emb-japan.go.jp/", "https://intramuros.gov.ph/",
     "https://www.agenziadoganemonopoli.gov.it/", "https://www.newzealand.com/",
     "https://www.douane.gouv.fr/", "https://www.mfa.gov.sg/",
+    # sustainable/eco travel research 2026-11-18: terms bans and bot walls
+    "https://whc.unesco.org/en/list/xml/", "https://www.unesco.org/en/terms-use",
+    "https://www.visitfinland.com/en/", "https://www.responsibletravel.com/", "https://www.greentraveller.co.uk/",
+    "https://www.kindtraveler.com/", "https://ecobnb.com/", "https://ecobnb.it/", "https://www.interrail.eu/",
+    "https://www.interrail.com/", "https://www.eurail.com/", "https://www.chronotrains.com/",
+    "https://www.greendestinations.org/", "https://www.visitportugal.com/", "https://www.nationaltrust.org.uk/",
+    "https://darksky.org/", "https://www.slovenia.info/", "https://www.thetravelfoundation.org.uk/",
+    "https://www.earth-changers.com/", "https://www.ademe.fr/", "https://sustainablehotelnews.com/",
+    "https://www.ecotourismkenya.org/", "https://lnt.org/why/7-principles/",
+    # budget travel research 2026-11-18: terms bans and bot walls
+    "https://thebrokebackpacker.com/", "https://wanderingearl.com/feed/", "https://secretflying.com/feed/",
+    "https://going.com/", "https://upgradedpoints.com/", "https://budgettravelbuff.com/",
+    "https://mochileandoporelmundo.com/", "https://www.getaway.co.za/", "https://12go.asia/",
+    "https://www.homeexchange.com/", "https://www.refill.org.uk/", "https://www.which.co.uk/",
+    "https://www.ryanair.com/", "https://www.flixbus.com/", "https://global.flixbus.com/",
+    "https://www.flixbus.de/", "https://gtfs.gis.flix.tech/gtfs_generic_eu.zip", "https://www.blablacar.com/",
+    "https://www.hostelz.com/", "https://www.yha.org.uk/", "https://madmonkeyhostels.com/feed/",
+    "https://www.tripzilla.com/feed/", "https://talesofabackpacker.com/", "https://nomadicbackpacker.com/",
+    "https://www.moneysavingexpert.com/", "https://moneysmart.gov.au/", "https://www.moneyhelper.org.uk/",
+    "https://www.expatistan.com/", "https://www.si.edu/", "https://www.parismuseumpass.fr/",
+    "https://www.ratp.fr/", "https://www.jreast.co.jp/", "https://www.nyc.gov/", "https://data.buenosaires.gob.ar/",
+    "https://www.routesonline.com/",
 ]
 
 # Hosts the crawler uses (or will use) that no denylist entry may catch.
@@ -451,7 +481,110 @@ APPROVED = [
     "https://www.capetown.gov.za/sitemap.xml", "https://cadataapi.state.gov/api/CountryTravelInformation",
     "https://api.ratings.food.gov.uk/Establishments", "https://data.cityofnewyork.us/resource/43nn-pn8j.json",
     "https://catalogue.data.govt.nz/", "https://www.customs.gov.sg/",
+    # neighbours of the sustainable/budget denylist entries (2026-11-18) that stay allowed
+    "https://datahub.visitfinland.com/", "https://transport.data.gouv.fr/resources/11681",
+    "https://transport-data-gouv-fr-resource-history-prod.cellar-c2.services.clever-cloud.com/11681/x.zip",
+    "https://www.nycgovparks.org/xml/events_300_rss.xml", "https://data.cityofnewyork.us/resource/fudw-fgrp.json",
+    "https://turismo.buenosaires.gob.ar/en", "https://www.smithsonianmag.com/travel/",
+    "https://feeds.feedburner.com/InstinctVoyageur", "https://www.korail.com/ebizbf/EbizBfKrPassAbout.do",
+    "https://www.green-tourism.com/our-members/", "https://youth.europa.eu/discovereu_en",
+    "https://www.doc.govt.nz/parks-and-recreation/places-to-go/", "https://www.nationalparks.nsw.gov.au/things-to-do",
+    "https://travelifestaybetter.com/", "https://www.greenglobe.com/sitemap.xml",
+    "https://www.parismusees.paris.fr/en/les-musees-de-la-ville-de-paris",
 ]
+
+
+# Sustainable/eco and budget travel (research 2026-11-18). Every row is a source; these are
+# off, each with its reason prefix. Every other row of the batch is enabled.
+SUSTAIN_BUDGET_OFF = {
+    "ontd-night-trains": "adapter pending", "eu-ecolabel-ecat": "adapter pending",
+    "data-gouv-ecolabel-fr": "adapter pending", "bigmac-index": "adapter pending",
+    "sg-hawker-centres": "adapter pending", "flixbus-gtfs": "adapter pending",
+    "doc-nz-api": "needs an API key", "greenseal-api": "needs an API key",
+    "icao-carbon": "needs an API key", "seoul-wifi": "needs an API key",
+    "adeac-bandera-azul": "owner decision: terms restrict reuse",
+    "blueflag-gr": "seed unresolved", "mavi-bayrak-tr": "seed unresolved",
+    "botswana-ecocert": "seed unresolved", "cst-costa-rica": "seed unresolved",
+    "nordic-swan-hotels": "seed unresolved", "umweltzeichen-tourism": "seed unresolved",
+    "tourcert": "seed unresolved", "travelife-hotels": "seed unresolved",
+    "earthcheck": "seed unresolved", "greenkey-global-ca": "seed unresolved",
+    "ecotourism-kenya-ecorated": "bot wall", "lnt-org": "bot wall",
+    "blog-thesmartlocal": "relevance",
+}
+# Crawl-delay from robots.txt (or the europa.eu default) -> min_delay_s.
+SUSTAIN_BUDGET_DELAYS = {
+    "gstc-certified-hotels": 600, "official-prague-eu": 600, "blog-eurocheapo": 30,
+    "ecotourism-au-greentravelguide": 10, "blog-vietnamcoracle": 10, "mag-mexicodesconocido": 10,
+    "blog-chicagoonthecheap": 10, "blog-bootsnall": 10, "official-turismo-ba": 10,
+    "official-discovereu": 10, "vakinn-is": 5,
+}
+# robots.txt blocks AI crawlers: title and link only, no LLM kinds.
+SUSTAIN_BUDGET_AI_RESERVED = {
+    "blog-indietraveller", "blog-gobackpacking", "blog-eurocheapo", "blog-tokyocheapo", "blog-japancheapo",
+    "blog-vietnamcoracle", "mag-mexicodesconocido", "blog-frequentmiler", "ref-priceoftravel",
+    "walking-freetoursbyfoot", "official-prague-eu", "official-parismusees",
+}
+
+
+def _sustain_budget_ids():
+    seeds = yaml.safe_load((ROOT / "docs" / "research" / "seeds.yaml").read_text())["seeds"]
+    i = next(n for n, s in enumerate(seeds) if s["id"] == "gstc-certified-hotels")
+    return [s["id"] for s in seeds[i:]]
+
+
+def test_sustainable_and_budget_sources_2026_11_18(generated):
+    ids = _sustain_budget_ids()
+    assert len(ids) == 116 and set(SUSTAIN_BUDGET_OFF) <= set(ids)
+    r2, r3 = set(_ramp("ramp-2.txt")), set(_ramp("ramp-3.txt"))
+    on = [sid for sid in ids if sid not in SUSTAIN_BUDGET_OFF]
+    assert len(on) == 92
+    for sid in on:
+        spec = generated[sid]
+        notes = " ".join(spec["notes"].split())
+        assert spec["enabled"] is True, sid
+        assert spec["method"] in ("html", "rss", "sitemap") and not spec["needs_key"], sid
+        assert sid in r2 and sid in r3, sid
+        assert spec["daily_budget"] <= 200 and spec["max_depth"] <= 2, sid
+        assert spec["min_delay_s"] >= SUSTAIN_BUDGET_DELAYS.get(sid, 5), sid
+        assert spec["cadence"] in ("h12", "daily", "weekly", "monthly", "quarterly"), sid
+        assert "2026-11-18" in notes, sid
+        # Terms not found -> facts only, by the owner's decision of 2026-11-18.
+        if spec["licence"]["class"] != "open":
+            assert spec["licence"]["class"] == "facts_only", sid
+            assert "owner accepted for non-commercial use 2026-11-18" in notes or \
+                "facts only" in notes or "reproduction" in notes, sid
+        if spec["category"] in ("blogs", "news"):
+            assert spec["method"] in ("rss", "sitemap") and spec["source_class"] == "editorial", sid
+        if sid in SUSTAIN_BUDGET_AI_RESERVED:
+            assert spec["llm_kinds"] == [], sid
+    for sid, why in SUSTAIN_BUDGET_OFF.items():
+        spec = generated[sid]
+        reason = " ".join(spec["notes"].split()).split("Disabled: ", 1)[1]
+        assert spec["enabled"] is False and reason.startswith(why), (sid, reason)
+        assert sid not in r2 and sid not in r3, sid
+        if spec["needs_key"]:
+            assert spec["key_secret"] == f"crawler-src-{sid}-key" and "https://" in reason, sid
+    # Bot walls met at onboarding are denylisted.
+    for sid, host in (("ecotourism-kenya-ecorated", "ecotourismkenya.org"), ("lnt-org", "lnt.org")):
+        assert any(e["host"] == host for e in DENYLIST), host
+        assert host in " ".join(generated[sid]["notes"].split()), sid
+    assert "personal" in generated["adeac-bandera-azul"]["notes"]
+    # The FlixBus GTFS stays on the gtfs_static adapter, off until its download avoids the
+    # denylisted origin.
+    fx = generated["flixbus-gtfs"]
+    assert fx["adapter"] == "gtfs_static" and fx["licence"]["spdx"] == "ODbL-1.0"
+    assert "gtfs.gis.flix.tech" in fx["notes"] and "flixbus-gtfs" not in s2s.GTFS_ON
+
+
+def test_unesco_whc_is_off_because_unesco_terms_ban_automated_access(generated):
+    spec = generated["unesco-whc"]
+    notes = " ".join(spec["notes"].split())
+    assert spec["enabled"] is False
+    assert "access, scrape, crawl, harvest or bulk-download Materials by any Automated System" in notes
+    for url in spec["seeds"]:
+        assert s2s.denied(url, DENYLIST) is not None, url
+    for ramp in ("ramp-1.txt", "ramp-2.txt", "ramp-3.txt"):
+        assert "unesco-whc" not in _ramp(ramp)
 
 
 @pytest.mark.parametrize("url", BATCH2_DENIED)
@@ -550,7 +683,7 @@ def test_terms_and_bot_wall_sources_are_off(generated):
 def test_batch2_off_sources_say_why(generated):
     prefixes = ("adapter pending", "needs an API key", "needs an account", "terms not yet confirmed",
                 "licence:", "robots.txt", "access route", "owner decision", "dataset retired",
-                "bot wall")
+                "bot wall", "seed unresolved", "relevance:")
     for sid in s2s.SOURCE_CLASS:
         spec = generated[sid]
         if spec["enabled"]:

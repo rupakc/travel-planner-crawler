@@ -181,6 +181,78 @@ fn news_and_blog_feeds_must_be_travel_focused() {
     assert!(errors(&s).is_empty());
 }
 
+/// Sustainable and budget travel publications (2026-11-18) pass the gate; FeedBurner is
+/// travel-focused only under Instinct Voyageur's feed path.
+#[test]
+fn sustainable_and_budget_travel_publications_pass_the_gate() {
+    let feed = |category: &str, url: &str| {
+        let mut s = base();
+        s.category = category.into();
+        s.feeds = vec![url.parse().unwrap()];
+        s
+    };
+    for (cat, url) in [
+        ("blogs", "https://ecophiles.com/feed/"),
+        ("news", "https://www.aeroroutes.com/eng?format=rss"),
+        ("blogs", "https://www.mexicodesconocido.com.mx/feed"),
+        ("blogs", "https://www.eurocheapo.com/blog/feed/"),
+        ("blogs", "https://tokyocheapo.com/feed/"),
+        ("blogs", "https://www.pointhacks.com.au/feed/"),
+        ("blogs", "https://coasttocoast.co.za/feed/"),
+        (
+            "blogs",
+            "https://www.melhoresdestinos.com.br/sitemap_index.xml",
+        ),
+        ("blogs", "https://feeds.feedburner.com/InstinctVoyageur"),
+    ] {
+        let e = errors(&feed(cat, url));
+        assert!(e.is_empty(), "{url}: {e:?}");
+    }
+    for url in [
+        "https://feeds.feedburner.com/SomeCookingBlog",
+        "https://thesmartlocal.com/feed/",
+    ] {
+        let e = errors(&feed("blogs", url));
+        assert!(
+            e.iter().any(|e| e.contains("not travel-focused")),
+            "{url}: {e:?}"
+        );
+    }
+}
+
+/// UNESCO's terms ban automated access (2026-11-18): every UNESCO host is denied, while
+/// hosts next to new denylist entries stay allowed.
+#[test]
+fn unesco_is_denied_and_neighbours_of_new_entries_are_not() {
+    let dl = vc_sources::load_denylist(&repo_root().join("policy/denylist.yaml")).unwrap();
+    let url = |u: &str| vc_core::CanonicalUrl::parse(u).unwrap();
+    for denied in [
+        "https://whc.unesco.org/en/list/xml/",
+        "https://www.unesco.org/en/terms-use",
+        "https://www.visitfinland.com/en/",
+        "https://gtfs.gis.flix.tech/gtfs_generic_eu.zip",
+        "https://www.flixbus.de/",
+        "https://www.nyc.gov/site/dcla/",
+        "https://data.buenosaires.gob.ar/",
+        "https://lnt.org/why/7-principles/",
+    ] {
+        assert!(
+            vc_sources::deny_match(&dl, &url(denied)).is_some(),
+            "{denied}"
+        );
+    }
+    for ok in [
+        "https://datahub.visitfinland.com/",
+        "https://transport.data.gouv.fr/resources/11681",
+        "https://www.nycgovparks.org/xml/events_300_rss.xml",
+        "https://turismo.buenosaires.gob.ar/en",
+        "https://www.smithsonianmag.com/travel/",
+        "https://www.green-tourism.com/our-members/",
+    ] {
+        assert!(vc_sources::deny_match(&dl, &url(ok)).is_none(), "{ok}");
+    }
+}
+
 #[test]
 fn travel_state_gov_is_denied_but_the_advisories_api_is_not() {
     let dl = vc_sources::load_denylist(&repo_root().join("policy/denylist.yaml")).unwrap();

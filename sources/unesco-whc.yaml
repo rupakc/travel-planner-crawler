@@ -32,9 +32,13 @@ needs_key: false
 key_secret: null
 max_retention_days: null
 display_requirements: null
-notes: 'Disabled: restricted licence (non-commercial or unknown), not ingested in v1 (spec §5.9).'
+notes: 'Disabled: restricted licence (non-commercial or unknown), not ingested in v1 (spec §5.9). | Also:
+  UNESCO''s Terms of Use (https://www.unesco.org/en/terms-use, read 2026-11-18) forbid users to ''access,
+  scrape, crawl, harvest or bulk-download Materials by any Automated System, except for ordinary indexing
+  by general-purpose search engines'', and cover ''any current or future website'' of UNESCO (whc.unesco.org
+  included); unesco.org is denylisted.'
 relevance:
   sections:
   - places
-  why: UNESCO World Heritage Sites with descriptions and locations for Places to see; licence unverified,
-    so off.
+  why: UNESCO World Heritage Sites with descriptions and locations for Places to see; UNESCO terms ban
+    automated access, so off.

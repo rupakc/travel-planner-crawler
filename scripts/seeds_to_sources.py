@@ -174,6 +174,8 @@ LICENCES: dict[str, tuple[str, str | None, str | None]] = {
     "Calendarific API ToS": ("api_terms", None, None),
     "Bandsintown API terms (written consent)": ("api_terms", None, None),
     "Auswärtiges Amt OpenData conditions": ("api_terms", None, None),
+    # --- Sustainable and budget travel (research 2026-11-18) -----------------------------
+    "KOGL Type 1 (attribution)": ("open", None, "https://www.kogl.or.kr/info/licenseType1.do"),
 }
 
 # Attribution strings (sources.md §18). Default: "<name>".
@@ -360,6 +362,7 @@ GTFS_FEEDS = (
     "mta-gtfs",
     "delfi-opendata-oepnv",
     "spain-nap",
+    "flixbus-gtfs",  # 2026-11-18: off until the download avoids gtfs.gis.flix.tech (403)
 )
 GTFS_ON = frozenset({
     "ovapi-gtfs-nl", "opentransportdata-swiss", "vic-gtfs", "translink-seq-gtfs", "entur-gtfs",
@@ -490,6 +493,12 @@ DISABLED = {
     ),
     # Bot wall: never retry with another identity (CLAUDE.md hard rule 2).
     "state-dept-advisories-rss": STATE_DEPT_403,
+    "unesco-whc": (
+        "UNESCO's Terms of Use (https://www.unesco.org/en/terms-use, read 2026-11-18) forbid users to "
+        "'access, scrape, crawl, harvest or bulk-download Materials by any Automated System, except for "
+        "ordinary indexing by general-purpose search engines', and cover 'any current or future website' "
+        "of UNESCO (whc.unesco.org included); unesco.org is denylisted."
+    ),
     "state-dept-country-pages": STATE_DEPT_403,
 }
 
@@ -551,7 +560,7 @@ RELEVANCE: dict[str, tuple[list[str], str]] = {
     "osm-geofabrik": (["hotels", "places", "getting_around"], "OpenStreetMap hotels, sights and transit stops per region, for Hotels, Places to see and Local transportation."),
     "overpass": (["hotels", "places"], "Targeted OpenStreetMap lookups of hotels and sights around a destination, for Hotels and Places to see."),
     "overture-places": (["hotels", "places"], "Open points of interest (hotels, sights) with names and coordinates, for Hotels and Places to see."),
-    "unesco-whc": (["places"], "UNESCO World Heritage Sites with descriptions and locations for Places to see; licence unverified, so off."),
+    "unesco-whc": (["places"], "UNESCO World Heritage Sites with descriptions and locations for Places to see; UNESCO terms ban automated access, so off."),
     "wikidata-dump": (["places"], "Facts about places and sights from Wikidata for Places to see; the full dump is too large, so off."),
     "wikipedia-geosearch": (["places"], "Wikipedia articles about sights near a destination (names, coordinates, summaries), for Places to see."),
     "wikivoyage-dump": (["places", "activities", "hotels", "tips", "getting_around", "sim", "packing", "walking_tours"], "Wikivoyage destination guides (sights, things to do, where to stay, getting around, SIM and tips) for those app sections."),
@@ -2483,6 +2492,1227 @@ _src(
     attribution=('Contains information licensed under the Open Government Licence – Toronto '
                  '(Toronto Public Health, DineSafe)'),
 )
+
+
+# ---------------------------------------------------------------------------------------
+# Sustainable/eco and budget travel (owner request 2026-11-18: "add all relevant sites on
+# sustainable/eco-friendly and budget travel"; research vetted 2026-11-18 with VoyagerBot's UA).
+# Owner policy for this batch: a site whose terms cannot be found is accepted for
+# non-commercial use (facts only, "owner accepted for non-commercial use 2026-11-18"); a site
+# whose terms exist and restrict reuse stays off ("owner decision: terms restrict reuse").
+# Rows whose seed or include could not be pinned with one onboarding request per host are
+# off with "seed unresolved"; api/dump rows wait for an adapter or an API key.
+# ---------------------------------------------------------------------------------------
+_src(
+    'gstc-certified-hotels',
+    ['hotels', 'tips'],
+    'The global list of hotels certified by GSTC-accredited bodies (certifier, status), to check eco-certification claims in Hotels and Travel tips.',
+    cls='reference',
+    kinds=['hotel', 'place'],
+    llm=['hotel'],
+    depth=1,
+    budget=20,
+    delay=600,
+    include=['^https://www\\.gstc\\.org/(?:certified-hotels-directory|certification)/'],
+)
+_src(
+    'green-tourism-members',
+    ['hotels', 'activities', 'places'],
+    'About 2,300 Gold, Silver and Bronze certified B&Bs, hotels, campsites and attractions with address and tier, for Hotels, Activities and Places to see.',
+    cls='reference',
+    kinds=['hotel', 'place', 'attraction'],
+    llm=['hotel', 'attraction'],
+    depth=2,
+    budget=100,
+    include=['^https://www\\.green-tourism\\.com/our-members/(?:page/\\d+/)?$'],
+)
+_src(
+    'ecotourism-au-greentravelguide',
+    ['activities', 'hotels', 'places'],
+    'Every ECO-certified operator, experience and destination in Australia (2,300+ operators), for Activities, Hotels and Places to see.',
+    cls='reference',
+    kinds=['activity', 'attraction', 'hotel'],
+    llm=['activity', 'attraction', 'hotel'],
+    depth=2,
+    budget=100,
+    delay=10,
+    seeds=['https://ecotourism.org.au/community-resources/hall-of-fame'],
+    include=['^https://greentravelguide\\.org/', '^https://ecotourism\\.org\\.au/(?:community-resources/hall-of-fame|sustainability/destinations)'],
+)
+_src(
+    'ontd-night-trains',
+    ['getting_around', 'itinerary'],
+    'All of about 205 regular European sleeper-train lines (operators, stops, days, classes), the flight-free option for an itinerary leg in Local transportation.',
+    cls='reference',
+    kinds=['transport_option'],
+    off='adapter pending: ONTD JSON reader (view_ontd_list/details/cities plus the GTFS-like routes, stops and trips JSON files) -> transport_option',
+    attribution='Back-on-Track Open Night Train Database, ODbL 1.0',
+)
+_src(
+    'doc-nz-parks',
+    ['places', 'activities', 'tips', 'itinerary'],
+    'Official New Zealand tracks, huts, campsites, Great Walks and the outdoor care code, for Places to see, Activities, Travel tips and the itinerary.',
+    cls='official',
+    kinds=['place', 'attraction', 'activity', 'tip'],
+    llm=['attraction', 'activity', 'tip'],
+    depth=2,
+    budget=200,
+    seeds=['https://www.doc.govt.nz/parks-and-recreation/things-to-do/walking-and-tramping/great-walks/', 'https://www.doc.govt.nz/parks-and-recreation/know-before-you-go/'],
+    include=['^https://www\\.doc\\.govt\\.nz/parks-and-recreation/(?:places-to-go|things-to-do|know-before-you-go|plan-and-prepare)/'],
+    attribution='Source: Department of Conservation (NZ), CC BY 4.0',
+)
+_src(
+    'nsw-national-parks',
+    ['places', 'activities', 'hotels'],
+    'Every New South Wales national park, walking track and campground or cabin, for Places to see, Activities and Hotels.',
+    cls='official',
+    kinds=['place', 'attraction', 'activity', 'hotel'],
+    llm=['attraction', 'activity'],
+    depth=2,
+    budget=200,
+    seeds=['https://www.nationalparks.nsw.gov.au/visit-a-park'],
+    include=['^https://www\\.nationalparks\\.nsw\\.gov\\.au/(?:things-to-do|visit-a-park|camping-and-accommodation)(?:/|$)'],
+    attribution='© State of New South Wales (NSW National Parks and Wildlife Service), CC BY 4.0',
+)
+_src(
+    'alpine-pearls',
+    ['places', 'getting_around', 'activities', 'hotels'],
+    'More than 20 Alpine villages in five countries reachable and explorable without a car (rail and bus access, car-free stays), for Places to see, Local transportation, Activities and Hotels.',
+    cls='reference',
+    kinds=['place', 'attraction', 'transport_option', 'hotel'],
+    llm=['attraction', 'transport_option'],
+    depth=1,
+    budget=100,
+    seeds=['https://www.alpine-pearls.com/en/the-pearls/alpine-pearls-map'],
+    include=['^https://www\\.alpine-pearls\\.com/en/'],
+    exclude=['^https://www\\.alpine-pearls\\.com/en/egtc/'],
+)
+_src(
+    'la-clef-verte',
+    ['hotels'],
+    'About 3,000 eco-labelled hotels, campsites, gîtes and hostels in France, for the Hotels section.',
+    cls='reference',
+    kinds=['hotel', 'place'],
+    llm=['hotel'],
+    depth=2,
+    budget=100,
+    include=['^https://www\\.laclefverte\\.org/etablissement'],
+    exclude=['^https://www\\.laclefverte\\.org/le-label/', '^https://www\\.laclefverte\\.org/rejoindre-le-label'],
+)
+_src(
+    'blueflag-global-news',
+    ['places', 'tips'],
+    'Yearly Blue Flag beach and marina counts per country and the award criteria, for Places to see and Travel tips.',
+    cls='reference',
+    kinds=['place', 'tip', 'article'],
+    llm=['tip'],
+    depth=1,
+    budget=50,
+    include=['^https://www\\.blueflag\\.global/(?:stories-news|news|criteria)'],
+)
+_src(
+    'pavillon-bleu-fr',
+    ['places', 'activities'],
+    'About 490 Blue Flag beaches and marinas in France, for Places to see and Activities.',
+    cls='reference',
+    kinds=['place', 'attraction'],
+    llm=['attraction'],
+    depth=1,
+    budget=100,
+)
+_src(
+    'beachawards-ie',
+    ['places', 'activities'],
+    'Irish Blue Flag and Green Coast beaches and marinas, for Places to see and Activities.',
+    cls='reference',
+    kinds=['place', 'attraction'],
+    llm=['attraction'],
+    depth=1,
+    budget=50,
+)
+_src(
+    'adeac-bandera-azul',
+    ['places'],
+    'About 800 Blue Flag beaches, ports and boats in Spain, for Places to see.',
+    cls='reference',
+    kinds=['place', 'attraction'],
+    llm=['attraction'],
+    off="owner decision: terms restrict reuse (the Aviso legal allows viewing and 'reproducciones privadas ... destinados únicamente al uso personal', i.e. personal use only); off unless ADEAC gives permission",
+    depth=2,
+    budget=100,
+)
+_src(
+    'blueflag-gr',
+    ['places'],
+    'About 620 Blue Flag beaches in Greece, for Places to see.',
+    cls='reference',
+    kinds=['place', 'attraction'],
+    llm=['attraction'],
+    off='seed unresolved: www.blueflag.gr redirects to /el (Greek) and the award-list path was not found with one request (onboarding check 2026-11-18, one request with the VoyagerBot UA)',
+    depth=2,
+    budget=100,
+)
+_src(
+    'bandeira-azul-pt',
+    ['places'],
+    'About 440 Blue Flag beaches and marinas in Portugal, for Places to see.',
+    cls='reference',
+    kinds=['place', 'attraction'],
+    llm=['attraction'],
+    depth=1,
+    budget=50,
+    include=['^https://bandeiraazul\\.abaae\\.pt/galardoados/'],
+)
+_src(
+    'mavi-bayrak-tr',
+    ['places'],
+    'About 580 Blue Flag beaches in Türkiye, for Places to see.',
+    cls='reference',
+    kinds=['place', 'attraction'],
+    llm=['attraction'],
+    off='seed unresolved: the home page redirects to /turkiye/anasayfa.aspx and the award-list path was not found with one request (onboarding check 2026-11-18, one request with the VoyagerBot UA)',
+    depth=2,
+    budget=100,
+)
+_src(
+    'vakinn-is',
+    ['hotels', 'activities'],
+    "Iceland's official list of quality and eco-certified stays and tour operators, for Hotels and Activities.",
+    cls='official',
+    kinds=['hotel', 'activity'],
+    llm=['hotel', 'activity'],
+    depth=2,
+    budget=100,
+    delay=5,
+    include=['^https://www\\.vakinn\\.is/en/'],
+)
+_src(
+    'botswana-ecocert',
+    ['hotels', 'tips'],
+    "Botswana's official eco-certification (low-impact safari model) and certified lodges, for Hotels and Travel tips.",
+    cls='official',
+    kinds=['hotel', 'tip'],
+    llm=['hotel', 'tip'],
+    off='seed unresolved: the certification page links only the application process and a feedback form, no list of certified lodges (onboarding check 2026-11-18, one request with the VoyagerBot UA)',
+    depth=2,
+    budget=50,
+)
+_src(
+    'cst-costa-rica',
+    ['hotels', 'activities'],
+    "Costa Rica's official sustainability certification for hotels and tour operators, for Hotels and Activities.",
+    cls='official',
+    kinds=['hotel', 'activity'],
+    llm=['hotel', 'activity'],
+    off='seed unresolved: www.turismo-sostenible.co.cr answers 301 to the apex with an empty body and the certified-company path is unknown (onboarding check 2026-11-18, one request with the VoyagerBot UA)',
+    depth=2,
+    budget=50,
+)
+_src(
+    'ecotourism-kenya-ecorated',
+    ['hotels'],
+    'Bronze, Silver and Gold eco-rated lodges and camps in Kenya, for the Hotels section.',
+    cls='reference',
+    kinds=['hotel'],
+    off='bot wall: https://www.ecotourismkenya.org/ answered 403 (WP Defender block page) to VoyagerBot on 2026-11-18 (onboarding check). Do not retry another way; ecotourismkenya.org is denylisted.',
+    depth=2,
+    budget=50,
+)
+_src(
+    'green-leaf-eco',
+    ['hotels'],
+    'Eco-certified lodges and camps across East and Southern Africa, for the Hotels section.',
+    cls='reference',
+    kinds=['hotel', 'place'],
+    llm=['hotel'],
+    depth=1,
+    budget=50,
+)
+_src(
+    'nordic-swan-hotels',
+    ['hotels'],
+    'Nordic Swan-labelled hotels and hostels across the Nordic countries, for the Hotels section.',
+    cls='reference',
+    kinds=['hotel'],
+    llm=['hotel'],
+    off='seed unresolved: the sitemap index lists only page, criteria and consultation sitemaps (mostly B2B product criteria), no list of labelled hotels (onboarding check 2026-11-18, one request with the VoyagerBot UA)',
+    depth=1,
+    budget=100,
+)
+_src(
+    'umweltzeichen-tourism',
+    ['hotels'],
+    'Austrian government-ecolabelled hotels, guesthouses and mountain huts, for the Hotels section.',
+    cls='official',
+    kinds=['hotel'],
+    llm=['hotel'],
+    off='seed unresolved: the sitemap answered 500 Internal Server Error (onboarding check 2026-11-18, one request with the VoyagerBot UA); re-check later',
+    depth=1,
+    budget=100,
+)
+_src(
+    'viabono',
+    ['hotels'],
+    'Viabono-certified eco hotels and holiday homes in Germany, for the Hotels section.',
+    cls='reference',
+    kinds=['hotel', 'place'],
+    llm=['hotel'],
+    depth=1,
+    budget=100,
+    include=['^https://www\\.viabono\\.de/details/'],
+)
+_src(
+    'legambiente-turismo',
+    ['hotels'],
+    'Legambiente-labelled eco hotels and agriturismi in Italy, for the Hotels section.',
+    cls='reference',
+    kinds=['hotel', 'place'],
+    llm=['hotel'],
+    depth=1,
+    budget=100,
+)
+_src(
+    'tourcert',
+    ['activities', 'hotels'],
+    'CSR-certified tour operators, hotels and destinations in Europe, for Activities and Hotels.',
+    cls='reference',
+    kinds=['activity', 'hotel'],
+    llm=['activity', 'hotel'],
+    off='seed unresolved: the sitemap index has post, page and project sitemaps but no certified-company list (onboarding check 2026-11-18, one request with the VoyagerBot UA)',
+    depth=1,
+    budget=100,
+)
+_src(
+    'travelife-hotels',
+    ['hotels'],
+    'GSTC-recognised Travelife-certified hotels worldwide, for the Hotels section.',
+    cls='reference',
+    kinds=['hotel'],
+    llm=['hotel'],
+    off='seed unresolved: the sitemap lists one page sitemap plus image and video sitemaps, no certified-hotel pages (onboarding check 2026-11-18, one request with the VoyagerBot UA)',
+    depth=1,
+    budget=100,
+)
+_src(
+    'biosphere-certified',
+    ['hotels', 'places'],
+    'Biosphere-certified hotels, companies and destinations (strong in Spain and Latin America), for Hotels and Places to see.',
+    cls='reference',
+    kinds=['hotel', 'place'],
+    llm=['hotel'],
+    depth=1,
+    budget=100,
+    include=['^https://www\\.biospheresustainable\\.com/en/(?:community|destination)/'],
+)
+_src(
+    'greenglobe-members',
+    ['hotels', 'activities'],
+    'Green Globe-certified hotels, resorts and attractions worldwide, for Hotels and Activities.',
+    cls='reference',
+    kinds=['hotel', 'attraction', 'article'],
+    llm=['hotel', 'attraction'],
+    depth=1,
+    budget=100,
+    include=['^https://www\\.greenglobe\\.com/(?:[a-z-]+-members$|news/)'],
+)
+_src(
+    'earthcheck',
+    ['places', 'hotels'],
+    'EarthCheck-certified destinations and hotels, for Places to see and Hotels.',
+    cls='reference',
+    kinds=['place', 'hotel'],
+    llm=['hotel'],
+    off='seed unresolved: the sitemap index has posts, pages and events only, no certified-client list (onboarding check 2026-11-18, one request with the VoyagerBot UA)',
+    depth=1,
+    budget=100,
+)
+_src(
+    'greenkey-global-ca',
+    ['hotels'],
+    'One-to-five key eco-ratings of North American hotels, for the Hotels section.',
+    cls='reference',
+    kinds=['hotel'],
+    llm=['hotel'],
+    off='seed unresolved: the sitemap index has news, resources and pages only, no rated-property pages (onboarding check 2026-11-18, one request with the VoyagerBot UA)',
+    depth=1,
+    budget=100,
+)
+_src(
+    'the-long-run',
+    ['hotels', 'activities'],
+    'GSTC-aligned nature lodges, reserves and travel businesses worldwide, for Hotels and Activities.',
+    cls='reference',
+    kinds=['hotel', 'activity'],
+    llm=['hotel', 'activity'],
+    depth=1,
+    budget=50,
+    include=['^https://www\\.thelongrun\\.org/(?:accommodation-site-members|travel-businesses|ger-members|group-members)(?:/|$)'],
+)
+_src(
+    'green-pearls',
+    ['hotels', 'places'],
+    'Curated sustainable hotels, restaurants and destinations, for Hotels and Places to see.',
+    cls='editorial',
+    kinds=['hotel', 'place', 'attraction'],
+    llm=['hotel', 'attraction'],
+    depth=1,
+    budget=100,
+    sitemaps=['https://www.greenpearls.com/restaurant-sitemap.xml', 'https://www.greenpearls.com/destination-sitemap.xml'],
+)
+_src(
+    'regenerative-travel',
+    ['hotels', 'tips'],
+    'Independent regenerative and eco hotels and impact stories, for Hotels and Travel tips.',
+    cls='editorial',
+    kinds=['hotel', 'place', 'article', 'tip'],
+    llm=['hotel', 'tip'],
+    depth=1,
+    budget=50,
+    include=['^https://regenerativetravel\\.com/(?:hotels|destinations|magazine)(?:/|$)'],
+)
+_src(
+    'goodtravel-guide',
+    ['tips', 'hotels', 'activities'],
+    'A directory and guides of sustainable travel businesses (headline, link and a short excerpt only), for Travel tips, Hotels and Activities.',
+    cls='editorial',
+    kinds=['article', 'tip', 'hotel', 'activity'],
+    llm=['tip'],
+    depth=1,
+    budget=50,
+)
+_src(
+    'ecophiles',
+    ['tips', 'places', 'activities'],
+    'Eco-travel destination guides from Ecophiles, for Travel tips, Places to see and Activities (headline, link and a short excerpt only).',
+    cls='editorial',
+    kinds=['article', 'tip'],
+    llm=['tip'],
+    depth=1,
+    budget=50,
+)
+_src(
+    'hanen-ecotourism-norway',
+    ['hotels', 'activities'],
+    "Norway's ecotourism-certified rural stays, farm stays and experiences, for Hotels and Activities.",
+    cls='reference',
+    kinds=['hotel', 'activity'],
+    llm=['hotel', 'activity'],
+    depth=1,
+    budget=100,
+    sitemaps=['https://www.hanen.no/hanen_member-sitemap2.xml', 'https://www.hanen.no/hanen_member-sitemap3.xml'],
+)
+_src(
+    'lnt-org',
+    ['tips', 'activities', 'packing'],
+    'The seven Leave No Trace principles and outdoor-ethics tips for hikes, camping and parks, for Travel tips, Activities and Packing.',
+    cls='reference',
+    kinds=['tip', 'packing_hint'],
+    llm=['tip', 'packing_hint'],
+    off="bot wall: https://lnt.org/why/7-principles/ served a Cloudflare challenge ('Attention Required!', 403) to VoyagerBot on 2026-11-18 (onboarding check). Do not retry another way; lnt.org is denylisted.",
+    depth=2,
+    budget=50,
+)
+_src(
+    'galapagos-park',
+    ['tips', 'places', 'activities'],
+    'Official Galápagos visitor rules, entry fee and visitor sites, for Travel tips, Places to see and Activities.',
+    cls='official',
+    kinds=['tip', 'attraction', 'place'],
+    llm=['tip', 'attraction'],
+    depth=1,
+    budget=50,
+)
+_src(
+    'doc-nz-api',
+    ['places', 'activities', 'tips'],
+    'New Zealand track, hut and campsite records with current alerts, for Places to see, Activities and Travel tips.',
+    cls='official',
+    kinds=['place', 'attraction', 'tip'],
+    off='needs an API key: owner must register a key at https://api.doc.govt.nz/ (free); adapter pending: DOC API reader',
+)
+_src(
+    'eu-ecolabel-ecat',
+    ['hotels'],
+    'About 820 EU Ecolabel hotels and campsites in the EU and EEA, for the Hotels section.',
+    cls='official',
+    kinds=['hotel'],
+    off='adapter pending: ECAT catalogue reader (find a documented export or API route first, robots-checked)',
+)
+_src(
+    'data-gouv-ecolabel-fr',
+    ['hotels'],
+    'EU Ecolabel tourist accommodation in France as an open file, for the Hotels section.',
+    cls='official',
+    kinds=['hotel'],
+    off='adapter pending: data.gouv.fr dataset reader (dataset JSON, then the resource CSV) -> hotel',
+)
+_src(
+    'greenseal-api',
+    ['hotels'],
+    'Green Seal-certified hotels and lodging in the United States, for the Hotels section.',
+    cls='reference',
+    kinds=['hotel'],
+    off="needs an API key: owner must request API access from Green Seal ('To gain access to the API, Users will need to fill' the request form at https://greenseal.org/); adapter pending",
+)
+_src(
+    'icao-carbon',
+    ['flights'],
+    'CO2 per passenger for each flight route, for a lower-emission choice in the Flights section.',
+    cls='official',
+    kinds=['route'],
+    off="needs an API key: owner must sign ICAO's Data Supply License Agreement (licensed, likely paid; https://www.icao.int/environmental-protection/CarbonOffset); adapter pending",
+)
+_src(
+    'blog-indietraveller',
+    ['tips', 'places', 'getting_around'],
+    'Independent budget-travel guides and daily cost advice from Indie Traveller, for Travel tips, Places to see and Local transportation (headline, link and a short excerpt only).',
+    cls='editorial',
+    kinds=['article', 'tip'],
+    depth=1,
+    budget=50,
+)
+_src(
+    'blog-bemusedbackpacker',
+    ['tips', 'places', 'packing'],
+    'Backpacking guides, budgets and gear advice from The Bemused Backpacker, for Travel tips, Places to see and Packing (headline, link and a short excerpt only).',
+    cls='editorial',
+    kinds=['article', 'tip'],
+    llm=['tip'],
+    depth=1,
+    budget=50,
+)
+_src(
+    'blog-backpackerbanter',
+    ['tips', 'places', 'hotels'],
+    'Shoestring backpacking routes and hostel advice from Backpacker Banter, for Travel tips, Places to see and Hotels (headline, link and a short excerpt only).',
+    cls='editorial',
+    kinds=['article', 'tip'],
+    llm=['tip'],
+    depth=1,
+    budget=50,
+)
+_src(
+    'blog-twomonkeys',
+    ['tips', 'places', 'itinerary'],
+    'Budget itineraries and destination cost guides from Two Monkeys Travel, for Travel tips, Places to see and the itinerary (headline, link and a short excerpt only).',
+    cls='editorial',
+    kinds=['article', 'tip'],
+    llm=['tip'],
+    depth=1,
+    budget=50,
+)
+_src(
+    'blog-travelfreak',
+    ['tips', 'places', 'flights'],
+    'Budget-travel tips and cheap-flight advice from TravelFreak, for Travel tips, Places to see and Flights (headline, link and a short excerpt only).',
+    cls='editorial',
+    kinds=['article', 'tip'],
+    llm=['tip'],
+    depth=1,
+    budget=50,
+)
+_src(
+    'blog-savvybackpacker',
+    ['tips', 'getting_around', 'hotels'],
+    'Europe-on-a-budget guides (rail, hostels, city costs) from The Savvy Backpacker, for Travel tips, Local transportation and Hotels (headline, link and a short excerpt only).',
+    cls='editorial',
+    kinds=['article', 'tip'],
+    llm=['tip'],
+    depth=1,
+    budget=50,
+)
+_src(
+    'blog-budgettraveller',
+    ['hotels', 'tips', 'places'],
+    'Budget-luxury stays and city guides from The Budget Traveller, for Hotels, Travel tips and Places to see (headline, link and a short excerpt only).',
+    cls='editorial',
+    kinds=['article', 'tip'],
+    llm=['tip'],
+    depth=1,
+    budget=50,
+)
+_src(
+    'blog-nomadicnotes',
+    ['tips', 'places', 'getting_around'],
+    'Long-running budget travel guides, strong on Asia, from Nomadic Notes, for Travel tips, Places to see and Local transportation (headline, link and a short excerpt only).',
+    cls='editorial',
+    kinds=['article', 'tip'],
+    llm=['tip'],
+    depth=1,
+    budget=50,
+)
+_src(
+    'blog-thriftynomads',
+    ['tips', 'flights', 'forex'],
+    'Travel-hacking and money-saving guides from Thrifty Nomads, for Travel tips, Flights and Forex (headline, link and a short excerpt only).',
+    cls='editorial',
+    kinds=['article', 'tip'],
+    llm=['tip'],
+    depth=1,
+    budget=50,
+    include=['^https://thriftynomads\\.com/[^/?#]+/$'],
+)
+_src(
+    'blog-expertvagabond',
+    ['tips', 'places', 'packing'],
+    'Adventure-on-a-budget guides and trip costs from Expert Vagabond, for Travel tips, Places to see and Packing (headline, link and a short excerpt only).',
+    cls='editorial',
+    kinds=['article', 'tip'],
+    llm=['tip'],
+    depth=1,
+    budget=50,
+    include=['^https://expertvagabond\\.com/[^/?#]+/$'],
+)
+_src(
+    'blog-backpackingislife',
+    ['itinerary', 'tips', 'places'],
+    'South-East Asia routes and cost breakdowns from Backpacking Is Life, for the itinerary, Travel tips and Places to see (headline, link and a short excerpt only).',
+    cls='editorial',
+    kinds=['article', 'tip'],
+    llm=['tip'],
+    depth=1,
+    budget=50,
+)
+_src(
+    'blog-hippieinheels',
+    ['tips', 'hotels', 'places'],
+    'India and Asia backpacking budgets and hostel picks from Hippie in Heels, for Travel tips, Hotels and Places to see (headline, link and a short excerpt only).',
+    cls='editorial',
+    kinds=['article', 'tip'],
+    llm=['tip'],
+    depth=1,
+    budget=50,
+)
+_src(
+    'blog-wheregoesrose',
+    ['tips', 'itinerary', 'places'],
+    'Country budget guides for India, Asia and Latin America from Where Goes Rose, for Travel tips, the itinerary and Places to see (headline, link and a short excerpt only).',
+    cls='editorial',
+    kinds=['article', 'tip'],
+    llm=['tip'],
+    depth=1,
+    budget=50,
+)
+_src(
+    'blog-gobackpacking',
+    ['tips', 'places'],
+    'Independent budget-travel advice from Go Backpacking, for Travel tips and Places to see (headline, link and a short excerpt only).',
+    cls='editorial',
+    kinds=['article', 'tip'],
+    depth=1,
+    budget=50,
+)
+_src(
+    'blog-neverendingvoyage',
+    ['tips', 'places', 'itinerary'],
+    'Slow and budget travel guides from Never Ending Voyage, for Travel tips, Places to see and the itinerary (headline, link and a short excerpt only).',
+    cls='editorial',
+    kinds=['article', 'tip'],
+    llm=['tip'],
+    depth=1,
+    budget=50,
+)
+_src(
+    'blog-seasia',
+    ['places', 'tips', 'events'],
+    'South-East Asia travel news and budget guides from SEAsia.co, for Places to see, Travel tips and Events (headline, link and a short excerpt only).',
+    cls='editorial',
+    kinds=['article', 'tip'],
+    llm=['tip'],
+    depth=1,
+    budget=50,
+)
+_src(
+    'blog-eurocheapo',
+    ['hotels', 'tips', 'getting_around'],
+    'Cheap hotels and city savings for Europe from EuroCheapo, for Hotels, Travel tips and Local transportation (headline, link and a short excerpt only).',
+    cls='editorial',
+    kinds=['article', 'tip'],
+    depth=1,
+    budget=50,
+    delay=30,
+    include=['^https://www\\.eurocheapo\\.com/blog/'],
+)
+_src(
+    'blog-tokyocheapo',
+    ['activities', 'events', 'getting_around', 'sim', 'tips'],
+    'Free and cheap Tokyo (events, transit passes, SIM cards) from Tokyo Cheapo, for Activities, Events, Local transportation, SIM cards and Travel tips (headline, link and a short excerpt only).',
+    cls='editorial',
+    kinds=['article', 'tip'],
+    depth=1,
+    budget=50,
+)
+_src(
+    'blog-japancheapo',
+    ['getting_around', 'hotels', 'tips'],
+    'Rail passes and budget travel across Japan from Japan Cheapo, for Local transportation, Hotels and Travel tips (headline, link and a short excerpt only).',
+    cls='editorial',
+    kinds=['article', 'tip'],
+    depth=1,
+    budget=50,
+)
+_src(
+    'blog-vietnamcoracle',
+    ['places', 'hotels', 'getting_around'],
+    'Independent budget guide to Vietnam (motorbike routes, guesthouses) from Vietnam Coracle, for Places to see, Hotels and Local transportation (headline, link and a short excerpt only).',
+    cls='editorial',
+    kinds=['article', 'tip'],
+    depth=1,
+    budget=50,
+    delay=10,
+)
+_src(
+    'blog-thesmartlocal',
+    ['activities', 'events', 'tips'],
+    'Free and cheap things to do in Singapore, Malaysia and Thailand from TheSmartLocal, for Activities, Events and Travel tips (headline, link and a short excerpt only).',
+    cls='editorial',
+    kinds=['article', 'tip'],
+    llm=['tip'],
+    off="relevance: TheSmartLocal is a general lifestyle publication (food, shopping, local news) for residents of Singapore and Malaysia, not a whole-travel one, so its feed fails the travel relevance gate; add only a travel-section feed after the owner's review",
+    depth=1,
+    budget=50,
+)
+_src(
+    'blog-viajenaviagem',
+    ['tips', 'places', 'flights'],
+    "Brazil's leading independent travel blog (Portuguese) with destination guides and fare tips, for Travel tips, Places to see and Flights (headline, link and a short excerpt only).",
+    cls='editorial',
+    kinds=['article', 'tip'],
+    llm=['tip'],
+    depth=1,
+    budget=50,
+)
+_src(
+    'deals-melhoresdestinos',
+    ['flights', 'hotels', 'tips'],
+    'Cheap-fare and budget-hotel deals from Brazil (Portuguese) from Melhores Destinos, for Flights, Hotels and Travel tips (headline, link and a short excerpt only).',
+    cls='editorial',
+    kinds=['article', 'tip'],
+    llm=['tip'],
+    depth=1,
+    budget=100,
+)
+_src(
+    'blog-360meridianos',
+    ['tips', 'itinerary'],
+    'South America backpacking cost guides (Portuguese) from 360meridianos, for Travel tips and the itinerary (headline, link and a short excerpt only).',
+    cls='editorial',
+    kinds=['article', 'tip'],
+    llm=['tip'],
+    depth=1,
+    budget=50,
+)
+_src(
+    'blog-elviajerofeliz',
+    ['tips', 'places', 'forex'],
+    'Spanish-language budget tips, money advice and destination guides from El Viajero Feliz, for Travel tips, Places to see and Forex (headline, link and a short excerpt only).',
+    cls='editorial',
+    kinds=['article', 'tip'],
+    llm=['tip'],
+    depth=1,
+    budget=50,
+)
+_src(
+    'mag-mexicodesconocido',
+    ['places', 'events', 'activities'],
+    'Mexican destinations, festivals and things to do (Spanish) from the travel magazine México Desconocido, for Places to see, Events and Activities (headline, link and a short excerpt only).',
+    cls='editorial',
+    kinds=['article', 'tip'],
+    depth=1,
+    budget=50,
+    delay=10,
+)
+_src(
+    'blog-southamericabackpacker',
+    ['tips', 'getting_around', 'places'],
+    'South America backpacking costs, buses and border crossings from South America Backpacker, for Travel tips, Local transportation and Places to see (headline, link and a short excerpt only).',
+    cls='editorial',
+    kinds=['article', 'tip'],
+    llm=['tip'],
+    depth=1,
+    budget=50,
+)
+_src(
+    'blog-generationvoyage',
+    ['tips', 'places'],
+    'French budget-travel guides from Generation Voyage, for Travel tips and Places to see (headline, link and a short excerpt only).',
+    cls='editorial',
+    kinds=['article', 'tip'],
+    llm=['tip'],
+    depth=1,
+    budget=50,
+)
+_src(
+    'blog-instinctvoyageur',
+    ['tips', 'forex', 'sim'],
+    'French tips on travel money, insurance, SIM cards and budget travel from Instinct Voyageur, for Travel tips, Forex and SIM cards (headline, link and a short excerpt only).',
+    cls='editorial',
+    kinds=['article', 'tip'],
+    llm=['tip'],
+    depth=1,
+    budget=50,
+)
+_src(
+    'blog-phototravellers',
+    ['tips', 'flights'],
+    'German money-saving travel tips and cheap destinations from Phototravellers, for Travel tips and Flights (headline, link and a short excerpt only).',
+    cls='editorial',
+    kinds=['article', 'tip'],
+    llm=['tip'],
+    depth=1,
+    budget=50,
+)
+_src(
+    'deals-urlaubstracker',
+    ['flights', 'hotels', 'tips'],
+    'German cheap-travel deals and guides from Urlaubstracker, for Flights, Hotels and Travel tips (headline, link and a short excerpt only).',
+    cls='editorial',
+    kinds=['article', 'tip'],
+    llm=['tip'],
+    depth=1,
+    budget=50,
+)
+_src(
+    'deals-travelpirates',
+    ['flights', 'hotels'],
+    'Error fares and budget package deals from TravelPirates, for Flights and Hotels (headline, link and a short excerpt only).',
+    cls='editorial',
+    kinds=['article', 'tip'],
+    llm=['tip'],
+    depth=1,
+    budget=50,
+)
+_src(
+    'deals-urlaubspiraten',
+    ['flights', 'hotels'],
+    'Error fares and budget package deals (German edition of TravelPirates) from Urlaubspiraten, for Flights and Hotels (headline, link and a short excerpt only).',
+    cls='editorial',
+    kinds=['article', 'tip'],
+    llm=['tip'],
+    depth=1,
+    budget=50,
+)
+_src(
+    'deals-viajerospiratas',
+    ['flights', 'hotels'],
+    'Error fares and budget package deals (Spanish edition of TravelPirates) from Viajeros Piratas, for Flights and Hotels (headline, link and a short excerpt only).',
+    cls='editorial',
+    kinds=['article', 'tip'],
+    llm=['tip'],
+    depth=1,
+    budget=50,
+)
+_src(
+    'deals-dollarflightclub',
+    ['flights', 'tips'],
+    'Cheap-fare tactics and deal round-ups from Dollar Flight Club, for Flights and Travel tips (headline, link and a short excerpt only).',
+    cls='editorial',
+    kinds=['article', 'tip'],
+    llm=['tip'],
+    depth=1,
+    budget=50,
+)
+_src(
+    'deals-thriftytraveler',
+    ['flights', 'tips'],
+    'Cheap flights and points advice (US) from Thrifty Traveler, for Flights and Travel tips (headline, link and a short excerpt only).',
+    cls='editorial',
+    kinds=['article', 'tip'],
+    llm=['tip'],
+    depth=1,
+    budget=50,
+)
+_src(
+    'deals-jacksflightclub',
+    ['flights', 'tips'],
+    "Cheap-flight guides (UK) from Jack's Flight Club, for Flights and Travel tips (headline, link and a short excerpt only).",
+    cls='editorial',
+    kinds=['article', 'tip'],
+    llm=['tip'],
+    depth=1,
+    budget=50,
+    include=['^https://jacksflightclub\\.com/blog/'],
+)
+_src(
+    'deals-fly4free',
+    ['flights', 'hotels'],
+    'Worldwide cheap fares and error fares from Fly4free, for Flights and Hotels (headline, link and a short excerpt only).',
+    cls='editorial',
+    kinds=['article', 'tip'],
+    llm=['tip'],
+    depth=1,
+    budget=50,
+)
+_src(
+    'deals-theflightdeal',
+    ['flights'],
+    'Cheap published fares from US cities from The Flight Deal, for the Flights section (headline, link and a short excerpt only).',
+    cls='editorial',
+    kinds=['article', 'tip'],
+    llm=['tip'],
+    depth=1,
+    budget=50,
+)
+_src(
+    'blog-frequentmiler',
+    ['flights', 'hotels', 'forex'],
+    'Points, miles and card-fee tactics from Frequent Miler, for Flights, Hotels and Forex (headline, link and a short excerpt only).',
+    cls='editorial',
+    kinds=['article', 'tip'],
+    depth=1,
+    budget=50,
+)
+_src(
+    'blog-pointhacks',
+    ['flights', 'hotels'],
+    'Points and cheap-travel news for Australia from Point Hacks, for Flights and Hotels (headline, link and a short excerpt only).',
+    cls='editorial',
+    kinds=['article', 'tip'],
+    llm=['tip'],
+    depth=1,
+    budget=50,
+)
+_src(
+    'blog-princeoftravel',
+    ['flights', 'hotels'],
+    'Points and cheap-travel news for Canada from Prince of Travel, for Flights and Hotels (headline, link and a short excerpt only).',
+    cls='editorial',
+    kinds=['article', 'tip'],
+    llm=['tip'],
+    depth=1,
+    budget=50,
+)
+_src(
+    'blog-chicagoonthecheap',
+    ['events', 'activities'],
+    'Free museum days and free or cheap events in Chicago from Chicago on the Cheap, for Events and Activities (headline, link and a short excerpt only).',
+    cls='editorial',
+    kinds=['article', 'tip'],
+    llm=['tip'],
+    depth=1,
+    budget=50,
+    delay=10,
+)
+_src(
+    'blog-bootsnall',
+    ['tips', 'itinerary'],
+    'Round-the-world budget planning articles (older archive) from BootsnAll, for Travel tips and the itinerary (headline, link and a short excerpt only).',
+    cls='editorial',
+    kinds=['article', 'tip'],
+    llm=['tip'],
+    depth=1,
+    budget=50,
+    delay=10,
+    include=['^https://www\\.bootsnall\\.com/articles/'],
+)
+_src(
+    'ref-priceoftravel',
+    ['tips', 'hotels', 'itinerary'],
+    'Per-city backpacker daily cost index (hostel, transit, meals) from Price of Travel, for Travel tips, Hotels and itinerary budgets (headline, link and a short excerpt only).',
+    cls='editorial',
+    kinds=['article', 'tip'],
+    depth=1,
+    budget=50,
+)
+_src(
+    'news-aeroroutes',
+    ['flights'],
+    'New routes and schedule changes, including low-cost carriers worldwide, from AeroRoutes, for the Flights section (headline, link and a short excerpt only).',
+    cls='editorial',
+    kinds=['article', 'tip'],
+    llm=['tip'],
+    depth=1,
+    budget=50,
+    include=['^https://www\\.aeroroutes\\.com/eng/'],
+)
+_src(
+    'bazbus',
+    ['getting_around', 'hotels', 'tips'],
+    'Hop-on hop-off backpacker bus routes, passes and hostel stops in South Africa, for Local transportation, Hotels and Travel tips.',
+    cls='editorial',
+    kinds=['transport_option', 'tip'],
+    llm=['transport_option', 'tip'],
+    depth=1,
+    budget=50,
+    include=['^https://bazbus\\.com/(?:blog|routes?|travel-info)/'],
+)
+_src(
+    'blog-coasttocoast',
+    ['hotels', 'getting_around', 'tips'],
+    'Southern and East Africa backpacker hostel and transport guide from Coast to Coast, for Hotels, Local transportation and Travel tips (headline, link and a short excerpt only).',
+    cls='editorial',
+    kinds=['article', 'tip'],
+    llm=['tip'],
+    depth=1,
+    budget=50,
+)
+_src(
+    'walking-freetoursbyfoot',
+    ['walking_tours', 'activities', 'tips'],
+    'Pay-what-you-wish walking tours in US and European cities plus free-things-to-do guides, for Free walking tours, Activities and Travel tips.',
+    cls='editorial',
+    kinds=['walking_tour', 'article'],
+    depth=1,
+    budget=100,
+)
+_src(
+    'walking-strawberrytours',
+    ['walking_tours'],
+    'Free tip-based walking tours in about 100 cities, for the Free walking tours section.',
+    cls='editorial',
+    kinds=['walking_tour'],
+    llm=['walking_tour'],
+    depth=1,
+    budget=100,
+    exclude=['/booking', '/checkout'],
+)
+_src(
+    'official-prague-eu',
+    ['activities', 'events', 'places', 'getting_around'],
+    'Official Prague visitor pass, free events and city information, for Activities, Events, Places to see and Local transportation.',
+    cls='official',
+    kinds=['place', 'attraction', 'event', 'article'],
+    depth=1,
+    budget=20,
+    delay=600,
+    sitemaps=['https://prague.eu/post-sitemap.xml'],
+    include=['^https://prague\\.eu/en/'],
+)
+_src(
+    'official-romapass',
+    ['activities', 'getting_around'],
+    'The official Rome city card (Roma Capitale) with free museum entries and public transport, for Activities and Local transportation.',
+    cls='official',
+    kinds=['activity', 'transport_option', 'tip'],
+    llm=['activity', 'transport_option', 'tip'],
+    depth=1,
+    budget=30,
+    include=['^https://www\\.romapass\\.it/en/'],
+)
+_src(
+    'official-berlin-welcomecard',
+    ['activities', 'getting_around'],
+    'The official Berlin tourist pass (public transport plus discounts), for Activities and Local transportation.',
+    cls='official',
+    kinds=['activity', 'transport_option', 'tip'],
+    llm=['activity', 'transport_option', 'tip'],
+    depth=1,
+    budget=30,
+    include=['^https://www\\.berlin-welcomecard\\.de/en'],
+)
+_src(
+    'official-parismusees',
+    ['places', 'activities'],
+    "The City of Paris's 14 museums, whose permanent collections are free, with exhibitions, for Places to see and Activities.",
+    cls='official',
+    kinds=['place', 'attraction', 'event'],
+    depth=1,
+    budget=30,
+    include=['^https://www\\.parismusees\\.paris\\.fr/en/(?:les-musees-de-la-ville-de-paris|news|expositions)'],
+)
+_src(
+    'official-inah',
+    ['places', 'tips'],
+    "Mexico's national museums and archaeological sites with prices and opening days, for Places to see and Travel tips.",
+    cls='official',
+    kinds=['place', 'attraction', 'tip'],
+    llm=['attraction', 'tip'],
+    depth=2,
+    budget=100,
+    include=['^https://www\\.inah\\.gob\\.mx/(?:museos|zonas|boletines)'],
+)
+_src(
+    'official-nycparks-events',
+    ['events', 'activities'],
+    'Free public events in New York City parks for the next two weeks, for Events and Activities.',
+    cls='official',
+    kinds=['event'],
+    llm=['event'],
+    depth=1,
+    budget=100,
+)
+_src(
+    'flixbus-gtfs',
+    ['getting_around', 'itinerary'],
+    'FlixBus and FlixTrain intercity coach and train stops and timetables across Europe, for Local transportation and the itinerary.',
+    cls='reference',
+    kinds=['transit_item'],
+    off="adapter pending: the resource's download goes to https://gtfs.gis.flix.tech/gtfs_generic_eu.zip, whose robots.txt answers 403 (denylisted); only the timestamped history copies on transport-data-gouv-fr-resource-history-prod.cellar-c2.services.clever-cloud.com avoid it, so gtfs_static needs a 'latest history copy' resolver (resource JSON of the transport.data.gouv.fr API) and a robots.txt check of that host (onboarding check 2026-11-18, one request with the VoyagerBot UA)",
+    attribution='FlixBus / FlixTrain via transport.data.gouv.fr, ODbL 1.0',
+)
+_src(
+    'official-japanrailpass',
+    ['getting_around', 'tips'],
+    'Official Japan Rail Pass prices, coverage and rules, for Local transportation and Travel tips.',
+    cls='editorial',
+    kinds=['transport_option', 'tip'],
+    llm=['transport_option', 'tip'],
+    depth=2,
+    budget=50,
+    include=['^https://japanrailpass\\.net/en/'],
+)
+_src(
+    'official-korail-pass',
+    ['getting_around'],
+    "Korea's rail pass for foreign visitors with prices and rules, for Local transportation.",
+    cls='official',
+    kinds=['transport_option', 'tip'],
+    llm=['transport_option', 'tip'],
+    depth=1,
+    budget=30,
+    include=['^https://www\\.korail\\.com/ebizbf/'],
+)
+_src(
+    'official-bvg',
+    ['getting_around'],
+    'Berlin public transport tickets, day and weekly passes and fares, for Local transportation.',
+    cls='official',
+    kinds=['transport_option'],
+    llm=['transport_option'],
+    depth=1,
+    budget=50,
+    sitemaps=['https://www.bvg.de/.rest/sitemap/pages/bvg-beta/en?templateType=bvg-core:pages/productOverview'],
+)
+_src(
+    'official-octopus',
+    ['getting_around', 'tips'],
+    'The tourist Octopus card and stored-value travel on Hong Kong transport, for Local transportation and Travel tips.',
+    cls='editorial',
+    kinds=['transport_option', 'tip'],
+    llm=['transport_option', 'tip'],
+    depth=2,
+    budget=50,
+    include=['^https://www\\.octopus\\.com\\.hk/en/consumer/'],
+)
+_src(
+    'official-myciti',
+    ['getting_around'],
+    'Cape Town bus rapid transit routes, fares and the myconnect card, for Local transportation.',
+    cls='official',
+    kinds=['transport_option'],
+    llm=['transport_option'],
+    depth=2,
+    budget=50,
+    include=['^https://www\\.myciti\\.org\\.za/en/'],
+)
+_src(
+    'official-turismo-ba',
+    ['walking_tours', 'events', 'activities'],
+    'City-run free guided walks and free events in Buenos Aires, for Free walking tours, Events and Activities.',
+    cls='official',
+    kinds=['walking_tour', 'event', 'activity'],
+    llm=['walking_tour', 'event', 'activity'],
+    depth=2,
+    budget=50,
+    delay=10,
+    seeds=['https://turismo.buenosaires.gob.ar/en'],
+    include=['^https://turismo\\.buenosaires\\.gob\\.ar/(?:en|es)/(?:article|agrupador-noticias/visitas-guiadas|recorrido|activity)'],
+)
+_src(
+    'official-isic',
+    ['tips', 'activities'],
+    'International Student Identity Card discounts and news, for Travel tips and Activities.',
+    cls='editorial',
+    kinds=['article', 'tip'],
+    llm=['tip'],
+    depth=1,
+    budget=30,
+)
+_src(
+    'official-eyca',
+    ['tips', 'activities', 'getting_around'],
+    'Youth (under 30) discounts on transport and attractions across Europe, for Travel tips, Activities and Local transportation.',
+    cls='reference',
+    kinds=['tip', 'activity'],
+    llm=['tip', 'activity'],
+    depth=1,
+    budget=50,
+    include=['^https://eyca\\.org/discounts'],
+)
+_src(
+    'official-discovereu',
+    ['getting_around', 'tips'],
+    'Free EU rail passes for 18-year-olds with application rounds and rules, for Local transportation and Travel tips.',
+    cls='official',
+    kinds=['transport_option', 'tip'],
+    llm=['transport_option', 'tip'],
+    depth=1,
+    budget=30,
+    delay=10,
+    include=['^https://youth\\.europa\\.eu/discovereu'],
+    attribution='© European Union, European Youth Portal, CC BY 4.0',
+)
+_src(
+    'official-hihostels',
+    ['hotels'],
+    'The non-profit Hostelling International hostel network with locations and facilities worldwide, for the Hotels section.',
+    cls='reference',
+    kinds=['hotel', 'place'],
+    llm=['hotel'],
+    depth=1,
+    budget=100,
+    include=['^https://www\\.hihostels\\.com/hostels/'],
+)
+_src(
+    'official-cfpb-money',
+    ['forex', 'tips'],
+    'Official US guidance on international money-transfer and exchange fees and card fees abroad, for Forex and Travel tips.',
+    cls='official',
+    kinds=['tip'],
+    llm=['tip'],
+    depth=1,
+    budget=30,
+    include=['^https://www\\.consumerfinance\\.gov/consumer-tools/money-transfers/', '^https://www\\.consumerfinance\\.gov/ask-cfpb/[^?#]*(?:foreign|international|exchange)'],
+)
+_src(
+    'official-vzbv-reise',
+    ['tips', 'forex', 'flights'],
+    'German consumer-centre advice on passenger rights, paying abroad and cheap-flight pitfalls, for Travel tips, Forex and Flights.',
+    cls='reference',
+    kinds=['tip'],
+    llm=['tip'],
+    depth=2,
+    budget=50,
+    include=['^https://www\\.verbraucherzentrale\\.de/wissen/reise-mobilitaet'],
+)
+_src(
+    'official-citizensadvice-holidays',
+    ['tips', 'flights'],
+    'UK consumer rights for cancelled or delayed flights and holidays, for Travel tips and Flights.',
+    cls='editorial',
+    kinds=['tip'],
+    llm=['tip'],
+    depth=1,
+    budget=30,
+    include=['^https://www\\.citizensadvice\\.org\\.uk/consumer/holiday-cancellations-and-compensation/'],
+)
+_src(
+    'bigmac-index',
+    ['forex', 'tips'],
+    'Price level and currency under- or over-valuation per country, a how-expensive-will-it-feel signal for Forex and Travel tips.',
+    cls='reference',
+    kinds=['price_level'],
+    off='adapter pending: Big Mac index CSV reader (one row per country and date) -> price_level observations',
+    attribution='The Economist Big Mac index, CC BY 4.0',
+)
+_src(
+    'sg-hawker-centres',
+    ['places', 'tips', 'itinerary'],
+    "Singapore's cheap-food hawker centres with locations and cleaning-closure dates, for Places to see, Travel tips and the itinerary.",
+    cls='official',
+    kinds=['place'],
+    off='adapter pending: data.gov.sg poll-download reader (GeoJSON of hawker centres plus the closure-dates dataset) -> place',
+    attribution='Contains information from data.gov.sg (NEA), made available under the Singapore Open Data Licence 1.0',
+)
+_src(
+    'seoul-wifi',
+    ['sim', 'tips'],
+    'Free public Wi-Fi locations across Seoul, for SIM cards and Travel tips.',
+    cls='official',
+    kinds=['place'],
+    off='needs an API key: owner must register a key at https://data.seoul.go.kr/ (free); adapter pending: Seoul OpenAPI reader on a port-443 route',
+)
+
 
 
 METHODS = {"html", "rss", "sitemap", "api", "dump"}

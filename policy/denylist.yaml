@@ -418,3 +418,170 @@ entries:
   - host: mfa.gov.sg
     reason: "Terms §6: 'caching and links to, and the framing of The Website or any of its contents are prohibited'; no commercial reproduction"
     source: research 2026-11-18 alternatives SKIP
+  # --- Sustainable/eco travel research 2026-11-18: terms bans and bot walls -----------
+  # unesco.org covers whc.unesco.org (the unesco-whc source is off).
+  - host: unesco.org
+    reason: "Terms of Use (www.unesco.org/en/terms-use, 2026-11-18) forbid users to 'access, scrape, crawl, harvest or bulk-download Materials by any Automated System, except for ordinary indexing by general-purpose search engines', for 'any current or future website' of UNESCO; AI-bot block"
+    source: research 2026-11-18 sustainable SKIP
+  # Exact host only: the Visit Finland DataHub API (datahub.visitfinland.com) is a separate source.
+  - host: www.visitfinland.com
+    reason: "Terms: 'systematically collect ... using any data spiders, robots ... mining or extraction methods' is prohibited"
+    source: research 2026-11-18 sustainable SKIP
+  - host: responsibletravel.com
+    reason: "Terms: 'You may not ... scrape, transfer or sell any information obtained from this website'"
+    source: research 2026-11-18 sustainable SKIP
+  - host: greentraveller.co.uk
+    reason: "Terms: 'the license does not permit the use of any scraping, data mining, intelligent robots'"
+    source: research 2026-11-18 sustainable SKIP
+  - host: kindtraveler.com
+    reason: "Terms: may not 'harvest, scrape, crawl, copy, or store content or data using automated means'"
+    source: research 2026-11-18 sustainable SKIP
+  - host: ecobnb.*
+    reason: "Terms (ecobnb.com, ecobnb.it): not permitted to 'monitor (for example by using spiders, scrapers or other automated tools)'"
+    source: research 2026-11-18 sustainable SKIP
+  - host: interrail.*
+    reason: "Eurail B.V. website terms (interrail.eu, interrail.com): may not 'use manual or automated software ... to crawl or spider any page'; 'harvest or scrape any Content'"
+    source: research 2026-11-18 sustainable + budget SKIP
+  - host: eurail.*
+    reason: "Eurail B.V. website terms (eurail.com): may not 'use manual or automated software ... to crawl or spider any page'; 'harvest or scrape any Content'"
+    source: research 2026-11-18 sustainable + budget SKIP
+  - host: chronotrains.com
+    reason: "About page: 'No redistribution or commercial use ... No scraping'; AI-bot block"
+    source: research 2026-11-18 sustainable SKIP
+  - host: greendestinations.org
+    reason: "T&C list 'data mining' among prohibited acts; ask Green Destinations for permission"
+    source: research 2026-11-18 sustainable SKIP
+  - host: visitportugal.com
+    reason: Bot challenge (Anubis proof-of-work page) on fetch, 2026-11-18
+    source: research 2026-11-18 sustainable SKIP
+  - host: nationaltrust.org.uk
+    reason: Bot challenge (Radware page) on fetch, 2026-11-18
+    source: research 2026-11-18 sustainable SKIP
+  - host: darksky.org
+    reason: 403 to VoyagerBot on the terms page, 2026-11-18; photo terms non-commercial
+    source: research 2026-11-18 sustainable SKIP
+  - host: slovenia.info
+    reason: robots.txt answers 403 to VoyagerBot, 2026-11-18
+    source: research 2026-11-18 sustainable SKIP
+  - host: thetravelfoundation.org.uk
+    reason: robots.txt answers 403 to VoyagerBot, 2026-11-18
+    source: research 2026-11-18 sustainable SKIP
+  - host: earth-changers.com
+    reason: robots.txt answers 403 to VoyagerBot, 2026-11-18
+    source: research 2026-11-18 sustainable SKIP
+  - host: ademe.fr
+    reason: robots.txt answers 403 to VoyagerBot, 2026-11-18
+    source: research 2026-11-18 sustainable SKIP
+  - host: sustainablehotelnews.com
+    reason: robots.txt answers 403 to VoyagerBot, 2026-11-18
+    source: research 2026-11-18 sustainable SKIP
+  - host: ecotourismkenya.org
+    reason: 403 (WP Defender block page) to VoyagerBot on the home page, onboarding check 2026-11-18
+    source: seed:ecotourism-kenya-ecorated
+  - host: lnt.org
+    reason: Cloudflare challenge ('Attention Required!', 403) to VoyagerBot, onboarding check 2026-11-18
+    source: seed:lnt-org
+  # --- Budget travel research 2026-11-18: terms bans and bot walls --------------------
+  - host: thebrokebackpacker.com
+    reason: robots.txt answers 403 to VoyagerBot, 2026-11-18
+    source: research 2026-11-18 budget SKIP
+  - host: wanderingearl.com
+    reason: /feed/ answers 403 to VoyagerBot, 2026-11-18
+    source: research 2026-11-18 budget SKIP
+  - host: secretflying.com
+    reason: /feed/ answers a Cloudflare challenge ('Just a moment...'), 2026-11-18
+    source: research 2026-11-18 budget SKIP
+  - host: going.com
+    reason: "Terms: may not 'Use any robot, spider or other automatic device, process or means to access the Going Platform for any purpose, including monitoring or copying'"
+    source: research 2026-11-18 budget SKIP
+  - host: upgradedpoints.com
+    reason: "Terms: 'You agree not to use any robot, spider, scraper ... to access, acquire, copy, or monitor the Services'"
+    source: research 2026-11-18 budget SKIP
+  - host: budgettravelbuff.com
+    reason: "Terms: 'No AI ... does not consent to the content ... being used ... for ... artificial intelligence'; AI bots blocked"
+    source: research 2026-11-18 budget SKIP
+  - host: mochileandoporelmundo.com
+    reason: "Aviso legal forbids 'Usar cualquier robot, araña u otro dispositivo, proceso o medio automático con cualquier finalidad'"
+    source: research 2026-11-18 budget SKIP
+  - host: getaway.co.za
+    reason: "Terms forbid 'any non-personal or commercial use of any robot, spider, other automatic device ... to monitor or copy'"
+    source: research 2026-11-18 budget SKIP
+  - host: 12go.asia
+    reason: "Terms: may not 'Use bots, scrapers, or similar automated tools to access, extract, or index any part of our Site'"
+    source: research 2026-11-18 budget SKIP
+  - host: homeexchange.com
+    reason: "Terms forbid to 'use indexing robots or other bots, or scrapers, to collect content from the Platform'"
+    source: research 2026-11-18 budget SKIP
+  - host: refill.org.uk
+    reason: "Terms: 'You shall not conduct, facilitate, authorise or permit any text or data mining or web scraping'"
+    source: research 2026-11-18 budget SKIP
+  - host: which.co.uk
+    reason: "Terms forbid the use 'where by automated means or otherwise, of any software ... (including ... robots, crawlers, spiders or scripts)'"
+    source: research 2026-11-18 budget SKIP
+  - host: ryanair.*
+    reason: "Terms: 'Use of any automated system or software ... to extract any data from this website for commercial purposes (screen scraping) is strictly prohibited'"
+    source: research 2026-11-18 budget SKIP
+  # The FlixBus GTFS on transport.data.gouv.fr (flixbus-gtfs) is not covered.
+  - host: flixbus.*
+    reason: "Terms: 'The use of automated systems to extract data from this website for commercial use (screen scraping) is prohibited'"
+    source: research 2026-11-18 budget SKIP
+  - host: gtfs.gis.flix.tech
+    reason: robots.txt answers 403 to VoyagerBot (Flix GTFS origin), 2026-11-18
+    source: research 2026-11-18 budget SKIP
+  - host: blablacar.*
+    reason: robots.txt answers 403 to VoyagerBot, 2026-11-18
+    source: research 2026-11-18 budget SKIP
+  - host: hostelz.com
+    reason: Terms page answers a Cloudflare challenge, 2026-11-18; AI bots blocked
+    source: research 2026-11-18 budget SKIP
+  - host: yha.org.uk
+    reason: Sitemap answers a Cloudflare challenge, 2026-11-18; ai-train=no
+    source: research 2026-11-18 budget SKIP
+  - host: madmonkeyhostels.com
+    reason: /feed/ answers 403 to VoyagerBot, 2026-11-18
+    source: research 2026-11-18 budget SKIP
+  - host: tripzilla.com
+    reason: /feed/ answers 403 to VoyagerBot, 2026-11-18
+    source: research 2026-11-18 budget SKIP
+  - host: talesofabackpacker.com
+    reason: robots.txt answers 403 to VoyagerBot, 2026-11-18
+    source: research 2026-11-18 budget SKIP
+  - host: nomadicbackpacker.com
+    reason: robots.txt answers 403 to VoyagerBot, 2026-11-18
+    source: research 2026-11-18 budget SKIP
+  - host: moneysavingexpert.com
+    reason: "News RSS answers 403 to VoyagerBot, 2026-11-18; terms: 'your own personal and non-commercial use only'"
+    source: research 2026-11-18 budget SKIP
+  - host: moneysmart.gov.au
+    reason: Travel-money page answers a Cloudflare challenge, 2026-11-18
+    source: research 2026-11-18 budget SKIP
+  - host: moneyhelper.org.uk
+    reason: robots.txt answers 403 to VoyagerBot, 2026-11-18
+    source: research 2026-11-18 budget SKIP
+  - host: expatistan.com
+    reason: robots.txt answers 403 to VoyagerBot, 2026-11-18
+    source: research 2026-11-18 budget SKIP
+  # si.edu only: Smithsonian magazine (smithsonianmag.com, news-smithsonian) is another host.
+  - host: si.edu
+    reason: Page answers a 'request verification' challenge, 2026-11-18
+    source: research 2026-11-18 budget SKIP
+  - host: parismuseumpass.fr
+    reason: Sitemap answers a Cloudflare challenge, 2026-11-18
+    source: research 2026-11-18 budget SKIP
+  - host: ratp.fr
+    reason: robots.txt answers 403 to VoyagerBot, 2026-11-18
+    source: research 2026-11-18 budget SKIP
+  - host: jreast.co.jp
+    reason: robots.txt answers 403 to VoyagerBot, 2026-11-18
+    source: research 2026-11-18 budget SKIP
+  # nyc.gov only: NYC Parks (nycgovparks.org) and NYC Open Data (data.cityofnewyork.us) are other hosts.
+  - host: nyc.gov
+    reason: robots.txt answers 403 to VoyagerBot, 2026-11-18
+    source: research 2026-11-18 budget SKIP
+  # Exact host only: turismo.buenosaires.gob.ar (official-turismo-ba) answers normally.
+  - host: data.buenosaires.gob.ar
+    reason: robots.txt answers a WAF 'Request Rejected' page (challenge), 2026-11-18
+    source: research 2026-11-18 budget SKIP
+  - host: routesonline.com
+    reason: News RSS answers 403 to VoyagerBot, 2026-11-18
+    source: research 2026-11-18 budget SKIP
