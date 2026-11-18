@@ -1,0 +1,20 @@
+{
+  "name": "1 Warwick",
+  "establishment_type": "restaurant",
+  "category_label": "Restaurant/Cafe/Canteen",
+  "address": "1 WARWICK STREET, LONDON, W1B 5LR",
+  "district": "Westminster",
+  "city": "London",
+  "country": "United Kingdom",
+  "country_code": "GB",
+  "lat": 51.5107175,
+  "lng": -0.1372907,
+  "hygiene": {
+    "scheme": "uk_fhrs",
+    "rating": "5",
+    "rating_value": 5,
+    "rating_date": "2025-04-29",
+    "authority": "Westminster"
+  },
+  "as_of": "2025-04-29"
+}

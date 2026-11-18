@@ -122,3 +122,9 @@ vic-gtfs                   # getting_around: Victoria train/tram/bus, zip of zip
 translink-seq-gtfs         # getting_around: South East Queensland (CC BY 4.0, weekly); gtfs_static -> transit_item
 entur-gtfs                 # getting_around: all of Norway (NLOD 2.0, weekly, ET-Client-Name sent); gtfs_static -> transit_item
 auckland-gtfs              # getting_around: Auckland bus/train/ferry (CC BY 4.0, weekly); gtfs_static -> transit_item
+
+# --- ramp-3: US country information and official food-hygiene registers (2026-11-18) ---
+state-dept-country-info    # visa/emergency_card/tips: State Dept country information, all countries in one conditional request (US public domain, daily, 1 request/day); state_dept_country_info -> visa_rule, embassy, tip
+fsa-food-hygiene           # activities: UK FSA hygiene ratings, 23 tourist-city authorities x restaurants/pubs/takeaways (OGL v3, weekly, ~100 requests/week, x-api-version 2); fsa_fhrs -> restaurant
+nyc-restaurant-inspections # activities: NYC DOHMH latest letter grade per restaurant, last 3 years (NYC Open Data, weekly, ~25 pages, 5/run, resumes); nyc_restaurant_inspections -> restaurant
+toronto-dinesafe           # activities: Toronto DineSafe latest inspection status per premises, via the CKAN datastore API (OGL-Toronto, weekly, ~45 pages, 5/run); toronto_dinesafe -> restaurant

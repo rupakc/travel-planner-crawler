@@ -499,9 +499,7 @@ def test_production_bot_walls_2026_11_18_are_off_and_out_of_every_ramp(generated
 ALTERNATIVES_ON = {"safetravel-nz", "eu-youreurope-travel", "revenue-ie-travellers"}
 ALTERNATIVES_OFF = {
     "dirco-sa": "owner decision",
-    "capetown-gov": "owner decision", "state-dept-country-info": "adapter pending",
-    "fsa-food-hygiene": "adapter pending", "nyc-restaurant-inspections": "adapter pending",
-    "toronto-dinesafe": "adapter pending",
+    "capetown-gov": "owner decision",
 }
 
 
@@ -570,6 +568,40 @@ ADAPTED_2026_11_18 = {
     "enwiki-visa-requirements": "enwiki_visa",
 }
 
+# US country information and the official food-hygiene registers: adapters shipped on
+# 2026-11-18, listed in ramp-3.
+COUNTRY_INFO_AND_FOOD = {
+    "state-dept-country-info": "state_dept_country_info",
+    "fsa-food-hygiene": "fsa_fhrs",
+    "nyc-restaurant-inspections": "nyc_restaurant_inspections",
+    "toronto-dinesafe": "toronto_dinesafe",
+}
+
+
+def test_country_info_and_food_registers_2026_11_18(generated):
+    for sid, adapter in COUNTRY_INFO_AND_FOOD.items():
+        spec = generated[sid]
+        assert spec["enabled"] is True and spec["adapter"] == adapter, sid
+        assert spec["source_class"] == "official" and spec["licence"]["class"] == "open", sid
+        assert spec["llm_kinds"] == [] and spec["daily_budget"] <= 300, sid
+        assert sid in _ramp("ramp-3.txt") and sid not in _ramp("ramp-2.txt"), sid
+    sd = generated["state-dept-country-info"]
+    assert sd["kinds"] == ["visa_rule", "embassy", "tip"] and sd["cadence"] == "daily"
+    assert sd["seeds"] == ["https://cadataapi.state.gov/api/CountryTravelInformation"]
+    for sid in ("fsa-food-hygiene", "nyc-restaurant-inspections", "toronto-dinesafe"):
+        spec = generated[sid]
+        assert spec["kinds"] == ["restaurant"] and spec["cadence"] == "weekly", sid
+    assert generated["nyc-restaurant-inspections"]["daily_budget"] <= 200
+    fsa = generated["fsa-food-hygiene"]["licence"]
+    assert fsa["spdx"] == "OGL-UK-3.0"
+    assert fsa["attribution"] == ("Contains public sector information licensed under the Open "
+                                  "Government Licence v3.0 — Food Standards Agency")
+    tor = generated["toronto-dinesafe"]["licence"]
+    assert "Open Government Licence – Toronto" in tor["attribution"]
+    assert tor["url"] == "https://open.toronto.ca/open-data-license/"
+    assert "NYC Open Data" in generated["nyc-restaurant-inspections"]["licence"]["attribution"]
+
+
 # Batch-2 api/dump sources that run on the open-data adapters (2026-11-18).
 OPEN_DATA_ADAPTERS = {
     "openholidays": "openholidays",
@@ -587,7 +619,8 @@ def test_batch2_api_and_dump_sources_run_only_on_an_adapter(generated):
         if sid in s2s.GTFS_FEEDS:
             continue
         if spec["method"] in ("api", "dump"):
-            want = OPEN_DATA_ADAPTERS.get(sid) or ADAPTED_2026_11_18.get(sid)
+            want = (OPEN_DATA_ADAPTERS.get(sid) or ADAPTED_2026_11_18.get(sid)
+                    or COUNTRY_INFO_AND_FOOD.get(sid))
             assert spec["adapter"] == want, sid
             assert spec["enabled"] is (want is not None), sid
         if spec["needs_key"]:
@@ -600,7 +633,7 @@ def test_batch2_enabled_sources_are_polite_and_scoped(generated):
         if not spec["enabled"] or sid in s2s.GTFS_FEEDS:
             continue
         assert spec["method"] in ("html", "rss", "sitemap") or sid in OPEN_DATA_ADAPTERS \
-            or sid in ADAPTED_2026_11_18, sid
+            or sid in ADAPTED_2026_11_18 or sid in COUNTRY_INFO_AND_FOOD, sid
         assert spec["daily_budget"] <= 500 and spec["max_depth"] <= 2 and spec["min_delay_s"] >= 5, sid
         assert spec["licence"]["class"] in ("open", "facts_only") or (
             sid in ("openholidays", "enwiki-visa-requirements")
@@ -656,7 +689,8 @@ def test_ramp_2_extends_ramp_1_with_enabled_runnable_sources():
         assert committed[sid]["method"] in ("html", "rss", "sitemap"), sid
     # Every html/rss/sitemap source this batch enables is in ramp-2 (the open-data adapter
     # sources come with ramp-3).
-    on = {sid for sid in s2s.SOURCE_CLASS if committed[sid]["enabled"]} - set(OPEN_DATA_ADAPTERS) - set(s2s.GTFS_FEEDS) - set(ADAPTED_2026_11_18)
+    on = ({sid for sid in s2s.SOURCE_CLASS if committed[sid]["enabled"]} - set(OPEN_DATA_ADAPTERS)
+          - set(s2s.GTFS_FEEDS) - set(ADAPTED_2026_11_18) - set(COUNTRY_INFO_AND_FOOD))
     assert on <= set(r2), sorted(on - set(r2))
 
 
@@ -680,7 +714,7 @@ def test_ramp_3_is_ramp_2_plus_the_open_data_sources():
     r2, r3 = _ramp("ramp-2.txt"), _ramp("ramp-3.txt")
     assert len(r3) == len(set(r3))
     assert r3[: len(r2)] == r2
-    assert set(r3[len(r2):]) == set(OPEN_DATA_ADAPTERS) | s2s.GTFS_ON
+    assert set(r3[len(r2):]) == set(OPEN_DATA_ADAPTERS) | s2s.GTFS_ON | set(COUNTRY_INFO_AND_FOOD)
     v = _validator()
     for sid in r3:
         spec = committed[sid]

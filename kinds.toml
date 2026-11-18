@@ -169,3 +169,12 @@ version = 1
 storage = "record"
 source_classes = ["reference"]
 verbatim = ["/max_stay_days", "/source_url", "/as_of", "/evidence/*"]
+
+# Added 2026-11-18 (official food-hygiene registers: UK FSA, NYC DOHMH, Toronto DineSafe).
+# Adapter-only: the source adapters map the registers; no source lists it as an llm_kind.
+
+[kinds.restaurant]
+version = 1
+storage = "record"
+source_classes = ["official"]
+verbatim = ["/hygiene/rating", "/hygiene/rating_date", "/phone", "/source_url", "/as_of", "/evidence/*"]

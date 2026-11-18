@@ -628,3 +628,116 @@ async fn official_embassy_and_medical_lists_reach_the_index() {
     assert_eq!(lists.len(), 1);
     assert_eq!(lists[0]["updated_date"], "2026-03-17");
 }
+
+/// US country information and the food-hygiene registers (2026-11-18): (source, adapter, URL,
+/// recorded fixture).
+const COUNTRY_INFO_AND_FOOD: &[(&str, &str, &str, &str)] = &[
+    (
+        "state-dept-country-info",
+        "state_dept_country_info",
+        "https://cadataapi.state.gov/api/CountryTravelInformation",
+        "state_dept_country_info.json",
+    ),
+    (
+        "fsa-food-hygiene",
+        "fsa_fhrs",
+        "https://api.ratings.food.gov.uk/Establishments?businessTypeId=1&localAuthorityId=120&pageNumber=1&pageSize=1000",
+        "fsa_establishments_p1.json",
+    ),
+    (
+        "nyc-restaurant-inspections",
+        "nyc_restaurant_inspections",
+        "https://data.cityofnewyork.us/resource/43nn-pn8j.json?%24limit=2000&%24offset=0",
+        "nyc_restaurant_inspections.json",
+    ),
+    (
+        "toronto-dinesafe",
+        "toronto_dinesafe",
+        "https://ckan0.cf.opendata.inter.prod-toronto.ca/api/3/action/datastore_search?limit=2000&offset=0&resource_id=75dbb3ff-8281-4f03-9de2-bd1214761302",
+        "toronto_dinesafe_page.json",
+    ),
+];
+
+#[test]
+fn country_info_and_restaurant_records_fit_their_schemas() {
+    let r = root();
+    let reg = vc_kinds::FileKindRegistry::load(&vc_config::KindsConfig {
+        kinds_toml: r.join("kinds.toml").display().to_string(),
+        schemas_dir: r.join("schemas").display().to_string(),
+        prompts_dir: r.join("prompts").display().to_string(),
+    })
+    .expect("kind registry");
+    for (_, adapter, url, file) in COUNTRY_INFO_AND_FOOD {
+        let u = vc_core::CanonicalUrl::parse(url).unwrap();
+        let items = vc_sources::adapters::records::records(adapter, &u, &recorded(file))
+            .expect("mapped")
+            .expect("fixture maps");
+        assert!(!items.is_empty(), "{file}: no records");
+        for it in items {
+            if let Err(e) = reg.validate(&vc_core::KindId::new(it.kind), &it.data) {
+                panic!("{file}: {} does not fit: {e:?}\n{:#}", it.kind, it.data);
+            }
+        }
+    }
+}
+
+async fn attributions(r: &Rig, kind: &str, source: &str) -> Vec<(String, String)> {
+    sqlx::query_as(
+        "SELECT DISTINCT v.licence_class, v.attribution FROM records r JOIN record_versions v
+           ON v.record_id = r.record_id AND v.version = r.current_version
+         WHERE r.kind = $1 AND r.source_id = $2",
+    )
+    .bind(kind)
+    .bind(source)
+    .fetch_all(&r.pool)
+    .await
+    .expect("attributions")
+}
+
+#[tokio::test]
+async fn country_info_and_food_registers_reach_the_index_with_their_licence() {
+    let r = rig_real(false).await;
+    let ids: Vec<&str> = COUNTRY_INFO_AND_FOOD.iter().map(|c| c.0).collect();
+    seed_real(&r.pool, &ids).await;
+    for (source, adapter, url, file) in COUNTRY_INFO_AND_FOOD {
+        let body = text(file);
+        let o = run(&r, api(url, source, adapter, MediaType::Json, &body)).await;
+        assert_processed(&o);
+    }
+    // Official US visa rules pass the high-stakes gate (official source only).
+    let visa = records_of(&r, "visa_rule", "state-dept-country-info").await;
+    assert_eq!(visa.len(), 4, "{visa:?}");
+    assert!(
+        visa.iter()
+            .any(|d| d["destination_country_code"] == "JP" && d["visa_type"] == "visa_free")
+    );
+    let emb = records_of(&r, "embassy", "state-dept-country-info").await;
+    assert_eq!(emb.len(), 4, "{emb:?}");
+    assert!(emb.iter().all(|d| d["of_country_code"] == "US"));
+    assert!(
+        !records_of(&r, "tip", "state-dept-country-info")
+            .await
+            .is_empty()
+    );
+    // Restaurants: every one carries its rating date and the source's licence attribution.
+    for (source, want) in [
+        ("fsa-food-hygiene", 3),
+        ("nyc-restaurant-inspections", 3),
+        ("toronto-dinesafe", 2),
+    ] {
+        let rs = records_of(&r, "restaurant", source).await;
+        assert_eq!(rs.len(), want, "{source}");
+        assert!(
+            rs.iter().all(|d| d["hygiene"]["rating_date"].is_string()),
+            "{source}"
+        );
+        let a = attributions(&r, "restaurant", source).await;
+        assert_eq!(a.len(), 1, "{source}");
+        assert_eq!(a[0].0, "open", "{source}");
+        assert!(!a[0].1.is_empty(), "{source}");
+    }
+    assert_eq!(
+        attributions(&r, "restaurant", "fsa-food-hygiene").await[0].1,
+        "Contains public sector information licensed under the Open Government Licence v3.0 — Food Standards Agency"
+    );
+}

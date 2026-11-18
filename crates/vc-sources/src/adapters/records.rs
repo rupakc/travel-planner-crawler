@@ -23,8 +23,9 @@ use vc_core::{CanonicalUrl, Error, Result};
 
 use super::{
     canada_advisories, canada_offices, countries, ecb_fx, enwiki_visa, eurostat_jsonstat,
-    fcdo_content_api, govuk_medical_lists, govuk_world_orgs, html_text, iso3, json_events,
-    openholidays, phone, state_dept_advisories, travelpayouts_fares,
+    fcdo_content_api, fsa_fhrs, govuk_medical_lists, govuk_world_orgs, html_text, iso3,
+    json_events, nyc_restaurant_inspections, openholidays, phone, state_dept_advisories,
+    state_dept_country_info, toronto_dinesafe, travelpayouts_fares,
 };
 
 /// Bumped when a mapping changes (part of the extractor version string of adapter records).
@@ -51,13 +52,17 @@ pub const MAPPED: &[&str] = &[
     "enwiki_visa",
     "eurostat_jsonstat",
     "fcdo_content_api",
+    "fsa_fhrs",
     "govuk_medical_lists",
     "govuk_world_orgs",
     "json_events",
+    "nyc_restaurant_inspections",
     "openholidays",
     "gtfs_static",
     "ourairports_csv",
     "state_dept_advisories",
+    "state_dept_country_info",
+    "toronto_dinesafe",
     "travelpayouts_fares",
     "wdi_csv",
     "wikivoyage_dump",
@@ -73,13 +78,17 @@ pub fn records(adapter: &str, url: &CanonicalUrl, body: &[u8]) -> Option<Result<
         "enwiki_visa" => enwiki_visa_records(url, body),
         "eurostat_jsonstat" => eurostat(body),
         "fcdo_content_api" => fcdo(url, body),
+        "fsa_fhrs" => restaurants(fsa_fhrs::items(url, body)),
         "govuk_medical_lists" => govuk_medical(url, body),
         "govuk_world_orgs" => govuk_orgs(url, body),
         "json_events" => json_event_items(url, body),
+        "nyc_restaurant_inspections" => restaurants(nyc_restaurant_inspections::items(url, body)),
         "openholidays" => holidays(url, body),
         "gtfs_static" => gtfs(body),
         "ourairports_csv" => ourairports(body),
         "state_dept_advisories" => state_dept(body),
+        "state_dept_country_info" => state_dept_info(body),
+        "toronto_dinesafe" => restaurants(toronto_dinesafe::items(url, body)),
         "travelpayouts_fares" => travelpayouts(url, body),
         "wdi_csv" => wdi(body),
         "wikivoyage_dump" => wikivoyage(body),
@@ -360,6 +369,147 @@ fn state_dept(body: &[u8]) -> Result<Vec<AdapterItem>> {
         }
     }
     Ok(out)
+}
+
+// ---------------------------------------------------------------------------------------------
+// US State Department country information → embassy, visa_rule, tip
+// ---------------------------------------------------------------------------------------------
+
+fn state_dept_info(body: &[u8]) -> Result<Vec<AdapterItem>> {
+    use state_dept_country_info as sd;
+    let mut out = Vec::new();
+    for c in sd::parse(body)? {
+        let code = c.country_code.map(|c| Value::String(c.to_string()));
+        let as_of = c.updated.clone().map(Value::String);
+        if let Some(b) = sd::embassy_block(&c.embassy)
+            && b.name.chars().count() <= 160
+            && let Some(mtype) = mission_type(&b.name)
+        {
+            let mut phones: Vec<Value> = Vec::new();
+            for (field, kind, label) in [
+                (&b.phone, "main", "Phone"),
+                (&b.emergency_phone, "emergency", "Emergency Phone"),
+                (&b.fax, "fax", "Fax"),
+            ] {
+                if let Some(f) = field {
+                    phones.extend(phone_items(f, kind, Some(label)));
+                }
+            }
+            phones.truncate(6);
+            let notes: Vec<Value> = b
+                .notes
+                .iter()
+                .filter(|n| n.chars().count() <= 400)
+                .take(4)
+                .map(|n| json!(n))
+                .collect();
+            out.push(AdapterItem {
+                kind: "embassy",
+                id: Some(format!("state-dept:embassy:{}", c.tag)),
+                series_key: None,
+                data: obj(vec![
+                    ("name", s(b.name.clone())),
+                    ("mission_type", s(mtype)),
+                    ("of_country", s("United States")),
+                    ("of_country_code", s("US")),
+                    ("country", s(c.country.clone())),
+                    ("country_code", code.clone()),
+                    ("address", short(b.address.clone(), 400)),
+                    (
+                        "phones",
+                        (!phones.is_empty()).then_some(Value::Array(phones)),
+                    ),
+                    (
+                        "emails",
+                        b.email.as_ref().and_then(|e| {
+                            emails(
+                                &e.split([',', ';', ' '])
+                                    .map(str::to_string)
+                                    .collect::<Vec<_>>(),
+                            )
+                        }),
+                    ),
+                    ("website_url", web_url(b.web.as_deref())),
+                    ("notes", (!notes.is_empty()).then_some(Value::Array(notes))),
+                    ("as_of", as_of.clone()),
+                ]),
+            });
+        }
+        if let Some(v) = sd::visa(&c.entry) {
+            out.push(AdapterItem {
+                kind: "visa_rule",
+                id: Some(format!("state-dept:visa:{}:US", c.tag)),
+                series_key: None,
+                data: obj(vec![
+                    ("destination_country", s(c.country.clone())),
+                    ("destination_country_code", code.clone()),
+                    ("nationality", s("United States")),
+                    ("nationality_code", s("US")),
+                    ("purpose", s(v.purpose)),
+                    ("visa_type", s(v.visa_type)),
+                    ("max_stay_days", v.max_stay_days.map(|d| json!(d))),
+                    (
+                        "passport_validity_months",
+                        v.passport_validity_months.map(|m| json!(m)),
+                    ),
+                    ("as_of", as_of.clone()),
+                    (
+                        "evidence",
+                        (!v.evidence.is_empty()).then(|| json!(v.evidence)),
+                    ),
+                ]),
+            });
+        }
+        let mut seen = HashSet::new();
+        for (section, html) in [
+            (sd::Section::Laws, &c.laws),
+            (sd::Section::Health, &c.health),
+            (sd::Section::Safety, &c.safety),
+        ] {
+            for t in sd::tips(section, html) {
+                let id = unique(
+                    &mut seen,
+                    format!(
+                        "state-dept:tip:{}:{:?}:{}",
+                        c.tag,
+                        section,
+                        t.title.to_lowercase()
+                    ),
+                );
+                out.push(AdapterItem {
+                    kind: "tip",
+                    id: Some(id),
+                    series_key: None,
+                    data: obj(vec![
+                        ("title", s(t.title)),
+                        ("body", s(t.body)),
+                        ("category", s(t.category)),
+                        ("severity", s(t.severity)),
+                        ("country", s(c.country.clone())),
+                        ("country_code", code.clone()),
+                        ("as_of", as_of.clone()),
+                    ]),
+                });
+            }
+        }
+    }
+    Ok(out)
+}
+
+// ---------------------------------------------------------------------------------------------
+// Food-hygiene registers (FSA FHRS, NYC DOHMH, Toronto DineSafe) → restaurant
+// ---------------------------------------------------------------------------------------------
+
+fn restaurants(items: Result<Vec<(String, Value)>>) -> Result<Vec<AdapterItem>> {
+    Ok(items?
+        .into_iter()
+        .map(|(id, data)| AdapterItem {
+            kind: "restaurant",
+            id: Some(id),
+            series_key: None,
+            data,
+        })
+        .collect())
 }
 
 /// FCDO `alert_status` values, most severe first, with GOV.UK's wording.

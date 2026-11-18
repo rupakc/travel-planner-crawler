@@ -1,0 +1,155 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/rupakc/travel-planner-crawler/schemas/restaurant.v1.json",
+  "title": "Restaurant (official food-hygiene listing)",
+  "description": "One record: one place that serves food (restaurant, cafe, takeaway, pub or bar) as an official food-safety authority lists it: name, address, coordinates and its latest published hygiene rating, grade or inspection result with that rating's date. Voyager use: activities (food), places to eat near the itinerary.",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "name": {
+      "type": "string",
+      "maxLength": 160,
+      "description": "Business name as the authority lists it."
+    },
+    "establishment_type": {
+      "type": "string",
+      "enum": [
+        "restaurant",
+        "cafe",
+        "takeaway",
+        "pub_bar",
+        "hotel",
+        "mobile",
+        "other"
+      ],
+      "description": "Kind of food business, from the authority's own category."
+    },
+    "category_label": {
+      "type": "string",
+      "maxLength": 120,
+      "description": "The authority's own category as written (e.g. \"Restaurant/Cafe/Canteen\")."
+    },
+    "cuisine": {
+      "type": "string",
+      "maxLength": 80,
+      "description": "Cuisine as the authority lists it (e.g. \"Italian\")."
+    },
+    "address": {
+      "type": "string",
+      "maxLength": 240,
+      "description": "Street address as written, including the postcode when given."
+    },
+    "district": {
+      "type": "string",
+      "maxLength": 120,
+      "description": "Borough, local authority or district (e.g. \"Westminster\", \"Brooklyn\")."
+    },
+    "city": {
+      "type": "string",
+      "maxLength": 120,
+      "description": "City in English. Always paired with `country`."
+    },
+    "country": {
+      "type": "string",
+      "maxLength": 80,
+      "description": "Country in English (e.g. \"United Kingdom\"). Required whenever `city` is set."
+    },
+    "country_code": {
+      "type": "string",
+      "maxLength": 2,
+      "description": "ISO 3166-1 alpha-2 country code of `country`.",
+      "pattern": "^[A-Z]{2}$"
+    },
+    "lat": {
+      "type": "number",
+      "minimum": -90,
+      "maximum": 90,
+      "description": "Latitude, only when the source states coordinates."
+    },
+    "lng": {
+      "type": "number",
+      "minimum": -180,
+      "maximum": 180,
+      "description": "Longitude, only when the source states coordinates."
+    },
+    "phone": {
+      "type": "string",
+      "maxLength": 32,
+      "description": "Phone number. As written by the source (digits, spaces, +, -, (, ), .).",
+      "pattern": "^\\+?[0-9][0-9 ().\\-/]{1,30}$"
+    },
+    "hygiene": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "The latest published food-hygiene rating, grade or inspection result.",
+      "properties": {
+        "scheme": {
+          "type": "string",
+          "enum": [
+            "uk_fhrs",
+            "uk_fhis",
+            "nyc_letter_grade",
+            "toronto_dinesafe",
+            "other"
+          ],
+          "description": "Rating scheme: UK Food Hygiene Rating Scheme (0-5), Scotland's Food Hygiene Information Scheme (Pass / Improvement Required), New York City letter grades (A-C), Toronto DineSafe (Pass / Conditional Pass / Closed)."
+        },
+        "rating": {
+          "type": "string",
+          "maxLength": 40,
+          "description": "The rating, grade or result exactly as published (e.g. \"5\", \"Pass\", \"A\", \"Conditional Pass\")."
+        },
+        "rating_value": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 5,
+          "description": "The numeric rating on a 0-5 scale, only for schemes that publish a number (UK FHRS)."
+        },
+        "rating_date": {
+          "type": "string",
+          "maxLength": 10,
+          "description": "Date of the inspection that produced the rating or grade (YYYY-MM-DD).",
+          "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$"
+        },
+        "authority": {
+          "type": "string",
+          "maxLength": 120,
+          "description": "The inspecting authority (e.g. \"Westminster\", \"NYC Department of Health and Mental Hygiene\")."
+        }
+      },
+      "required": [
+        "scheme",
+        "rating",
+        "rating_date"
+      ]
+    },
+    "source_url": {
+      "type": "string",
+      "maxLength": 2048,
+      "description": "The page's own link for this item (official site, booking or detail page), copied verbatim from the page.",
+      "pattern": "^https?://[^\\s]+$"
+    },
+    "as_of": {
+      "type": "string",
+      "maxLength": 10,
+      "description": "The \"last updated\", \"valid from\" or publication date the page itself states for this information (YYYY-MM-DD).",
+      "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$"
+    },
+    "evidence": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "maxLength": 300,
+        "description": "A verbatim quote from the page."
+      },
+      "maxItems": 3,
+      "description": "Up to 3 short verbatim quotes from the page that support the most important facts."
+    }
+  },
+  "required": [
+    "name",
+    "city",
+    "country",
+    "hygiene"
+  ]
+}

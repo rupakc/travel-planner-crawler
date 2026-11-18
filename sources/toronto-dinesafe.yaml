@@ -7,33 +7,35 @@ source_class: official
 licence:
   class: open
   spdx: null
-  attribution: City of Toronto DineSafe (restaurant inspections)
+  attribution: Contains information licensed under the Open Government Licence – Toronto (Toronto Public
+    Health, DineSafe)
   url: https://open.toronto.ca/open-data-license/
 method: api
 seeds:
 - https://ckan0.cf.opendata.inter.prod-toronto.ca/api/3/action/package_show?id=dinesafe
 sitemaps: []
 feeds: []
-adapter: null
+adapter: toronto_dinesafe
 include: []
 exclude: []
 max_depth: 0
 kinds:
-- place
+- restaurant
 llm_kinds: []
 render: never
 cadence: weekly
 min_delay_s: 5
 daily_budget: 300
 politeness_key: null
-enabled: false
+enabled: true
 needs_key: false
 key_secret: null
 max_retention_days: null
 display_requirements: null
 notes: 'Every Toronto food premises with address and inspection status. ckan0 robots.txt (2026-11-18):
-  200, "Allow: /api/". Open Government Licence – Toronto. | Disabled: adapter pending: CKAN package_show,
-  then the DineSafe datastore resource (JSON/CSV) reader'
+  200, "Allow: /api/" (re-checked 2026-11-18; /dataset/*/resource/*/download/* is disallowed, so the adapter
+  toronto_dinesafe reads the datastore through /api/3/action/datastore_search, 2000 distinct rows per
+  page, latest inspection per establishment). Open Government Licence – Toronto.'
 relevance:
   sections:
   - activities
