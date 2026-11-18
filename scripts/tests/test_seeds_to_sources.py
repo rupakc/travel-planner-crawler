@@ -167,7 +167,8 @@ def test_blogs_and_news_are_facts_only_editorial(generated):
 
 
 BLOGS_WITHOUT_A_FEED = {"blog-thriftynomads", "blog-expertvagabond", "blog-bootsnall", "blog-outsideonline",
-                        "blog-twoweekscr"}  # robots.txt disallows */feed/ (2026-11-18)
+                        "blog-twoweekscr",  # robots.txt disallows */feed/ (2026-11-18)
+                        "news-tourismupdate"}  # no feed; article sitemap (2026-11-18)
 
 
 def test_wikipedia_and_wikidata_are_reference_not_official(generated):
@@ -1212,7 +1213,7 @@ LATAM_PERSONAL_TERMS = {
 
 def test_corpus_latam_2026_11_18(generated):
     seeds = yaml.safe_load((ROOT / "docs" / "research" / "seeds.yaml").read_text())["seeds"]
-    ids = _batch_ids(seeds, "tb-caribe-mexicano", "CORPUS_AFTER_LATAM")
+    ids = _batch_ids(seeds, "tb-caribe-mexicano", "tb-visitghana")
     assert len(ids) == 108
     _corpus_batch_check(generated, ids, LATAM_OFF, LATAM_DELAYS, LATAM_AI_RESERVED, LATAM_PERSONAL_TERMS)
     assert len([s for s in ids if s not in LATAM_OFF]) == 85
@@ -1282,3 +1283,47 @@ def test_open_data_readers_2026_11_18(generated):
     # No ArcGIS feature-service host is ever a seed (services*.arcgis.com answer 403 on robots).
     for spec in generated.values():
         assert not any(".arcgis.com/" in u and "services" in u.split("/")[2] for u in spec["seeds"])
+
+
+# --- Corpus expansion: Africa and the Middle East (research vetted 2026-11-18) ------------
+AFRICA_OFF = {
+    **{sid: "adapter pending" for sid in (
+        "tr-digitalmatatus", "od-data-gov-qa", "od-data-gov-bh", "od-izmir-acikveri", "od-data-gov-ma",
+        "od-data-gov-tn", "od-data-gov-om", "od-data-abudhabi", "od-bayanat-ae")},
+    **{sid: "relevance" for sid in ("blog-yabangee", "news-whatson-ae", "lepetitjournal-news", "news-capetownetc")},
+    "tb-visitaqaba": "re-test from the crawler VM",
+}
+AFRICA_DELAYS = {"tb-discovertunisia": 10, "tr-rta-dubai": 10, "tr-bakubus": 60, "wx-meteo-sc": 10}
+AFRICA_AI_RESERVED = {"mag-theguideistanbul", "tb-fujairah", "tb-visitizmir", "tr-ttc-tbilisi"}
+AFRICA_PERSONAL_TERMS = {
+    "gov-westerncape", "visa-etakenya", "wx-met-oman", "tb-wesgro", "np-nwr-namibia", "tb-visitrasalkhaimah",
+    "tb-dct-abudhabi", "tr-admobility", "wx-ncm-sa", "ev-sharjahart", "customs-sars", "news-thenational-travel",
+    "mag-travelafrica", "blog-istanbulclues", "ref-zambiatourism",
+}
+
+
+def test_corpus_africa_me_2026_11_18(generated):
+    seeds = yaml.safe_load((ROOT / "docs" / "research" / "seeds.yaml").read_text())["seeds"]
+    ids = _batch_ids(seeds, "tb-visitghana", "CORPUS_AFTER_AFRICA")
+    assert len(ids) == 138
+    _corpus_batch_check(generated, ids, AFRICA_OFF, AFRICA_DELAYS, AFRICA_AI_RESERVED, AFRICA_PERSONAL_TERMS)
+    assert len([s for s in ids if s not in AFRICA_OFF]) == 124
+    # KwaZulu-Natal: the sitemap lives on visitkzn-sa.com, whose robots.txt was read first.
+    kzn = generated["tb-zulu-kzn"]
+    assert kzn["sitemaps"] == ["https://visitkzn-sa.com/sitemap.xml"]
+    assert "robots.txt of visitkzn-sa.com" in " ".join(kzn["notes"].split())
+    assert generated["ev-riyadhseason"]["render"] == "auto"
+    # MyCiTi is the existing official-myciti; Botswana Tourism's host already has a source.
+    assert "tb-botswanatourism" not in generated and generated["official-myciti"]["enabled"] is True
+    for url in AFRICA_DENIED:
+        assert s2s.denied(url, DENYLIST) is not None, url
+    for url in AFRICA_STAY_ALLOWED:
+        assert s2s.denied(url, DENYLIST) is None, url
+
+
+AFRICA_DENIED = ["https://georgia.travel/", "https://www.isimangaliso.com/", "https://www.thesouthafrican.com/",
+                 "https://www.casatramway.ma/", "https://mdlbeast.com/", "https://www.geo.fr/",
+                 "https://www.routard.com/", "https://visitethiopia.travel/"]
+AFRICA_STAY_ALLOWED = ["https://visitkzn-sa.com/sitemap.xml", "https://www.capetownmagazine.com/sitemap.xml",
+                       "https://www.oncf-voyages.ma/", "https://www.railway.ge/en/sitemap_index.xml"]
+

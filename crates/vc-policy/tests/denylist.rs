@@ -364,6 +364,15 @@ fn batch2_entries_are_denied() {
         "https://www.aruba.com/",
         "https://www.chilango.com/",
         "https://serviciomigraciones.cl/",
+        // Corpus expansion: Africa and the Middle East (2026-11-18): terms bans
+        "https://georgia.travel/",
+        "https://www.isimangaliso.com/",
+        "https://www.thesouthafrican.com/",
+        "https://www.casatramway.ma/",
+        "https://mdlbeast.com/",
+        "https://www.geo.fr/",
+        "https://www.routard.com/",
+        "https://visitethiopia.travel/",
     ] {
         assert!(denied(u).is_some(), "{u} must be denied");
     }
@@ -463,6 +472,12 @@ fn approved_hosts_stay_allowed() {
         "https://www.curacao.com/en/",
         "https://www.gob.mx/sectur",
         "https://www.conaf.cl/sitemap_index.xml",
+        // Corpus expansion: Africa and the Middle East (2026-11-18): sources next to new entries
+        "https://visitkzn-sa.com/sitemap.xml",
+        "https://www.capetownmagazine.com/sitemap.xml",
+        "https://www.oncf-voyages.ma/",
+        "https://www.railway.ge/en/sitemap_index.xml",
+        "https://capetown.gov.za/",
     ] {
         assert_eq!(denied(u), None, "{u} must stay allowed");
     }
