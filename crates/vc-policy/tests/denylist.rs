@@ -331,6 +331,25 @@ fn batch2_entries_are_denied() {
         "https://www.mvg.de/",
         "https://www.publictransport.com.mt/",
         "https://www.bolognawelcome.com/",
+        // North America research 2026-11-18: terms ban robots, scraping or AI use
+        "https://www.visitflorida.com/",
+        "https://www.enjoyillinois.com/",
+        "https://visitseattle.org/",
+        "https://www.denver.org/",
+        "https://www.visitdenver.com/",
+        "https://www.visitdallas.com/",
+        "https://baltimore.org/",
+        "https://www.visitnc.com/",
+        "https://www.visitorlando.com/",
+        "https://ottawatourism.ca/",
+        "https://www.gotobermuda.com/",
+        "https://www.soundtransit.org/",
+        "https://www.mbta.com/fares",
+        "https://www.parks.ca.gov/",
+        "https://data.calgary.ca/",
+        "https://www.calgary.ca/",
+        "https://roadtrippers.com/",
+        "https://www.eater.com/",
     ] {
         assert!(denied(u).is_some(), "{u} must be denied");
     }
@@ -407,6 +426,18 @@ fn approved_hosts_stay_allowed() {
         "https://www.museiitaliani.it/",
         "https://www.oebb.at/en/",
         "https://www.cairngorms.co.uk/",
+        // neighbours of the North America denylist entries (2026-11-18)
+        "https://cdn.mbta.com/MBTA_GTFS.zip",
+        "https://www.visitcalgary.com/events",
+        "https://www.denvergov.org/",
+        "https://parks.ny.gov/sitemap.xml",
+        "https://parks.canada.ca/pn-np",
+        "https://www.tourismwinnipeg.com/festivals-and-events",
+        "https://visitindiana.in.gov/sitemap.xml",
+        "https://admin.tourismvictoria.com/sitemap.xml",
+        "https://www.supernaturalbc.com/sitemap.xml",
+        "https://data.cityofchicago.org/resource/vsdy-d8k7.json",
+        "https://www.flysfo.com/sitemap.xml",
     ] {
         assert_eq!(denied(u), None, "{u} must stay allowed");
     }

@@ -166,7 +166,7 @@ def test_blogs_and_news_are_facts_only_editorial(generated):
                 assert spec["method"] == "rss" and spec["feeds"], sid
 
 
-BLOGS_WITHOUT_A_FEED = {"blog-thriftynomads", "blog-expertvagabond", "blog-bootsnall"}
+BLOGS_WITHOUT_A_FEED = {"blog-thriftynomads", "blog-expertvagabond", "blog-bootsnall", "blog-outsideonline"}
 
 
 def test_wikipedia_and_wikidata_are_reference_not_official(generated):
@@ -446,6 +446,14 @@ BATCH2_DENIED = [
     "https://www.expatistan.com/", "https://www.si.edu/", "https://www.parismuseumpass.fr/",
     "https://www.ratp.fr/", "https://www.jreast.co.jp/", "https://www.nyc.gov/", "https://data.buenosaires.gob.ar/",
     "https://www.routesonline.com/",
+    # North America research 2026-11-18: terms ban robots, scraping or AI use (bot walls seen
+    # from the research IP are not denylisted: they may be regional)
+    "https://www.visitflorida.com/", "https://www.enjoyillinois.com/", "https://visitseattle.org/",
+    "https://www.denver.org/", "https://www.visitdenver.com/", "https://www.visitdallas.com/",
+    "https://baltimore.org/", "https://www.visitnc.com/", "https://www.visitorlando.com/",
+    "https://ottawatourism.ca/", "https://www.gotobermuda.com/", "https://www.soundtransit.org/",
+    "https://www.mbta.com/fares", "https://www.parks.ca.gov/", "https://data.calgary.ca/",
+    "https://www.calgary.ca/", "https://roadtrippers.com/", "https://www.eater.com/",
 ]
 
 # Hosts the crawler uses (or will use) that no denylist entry may catch.
@@ -492,6 +500,11 @@ APPROVED = [
     "https://www.doc.govt.nz/parks-and-recreation/places-to-go/", "https://www.nationalparks.nsw.gov.au/things-to-do",
     "https://travelifestaybetter.com/", "https://www.greenglobe.com/sitemap.xml",
     "https://www.parismusees.paris.fr/en/les-musees-de-la-ville-de-paris",
+    # neighbours of the North America denylist entries (2026-11-18) that stay allowed
+    "https://cdn.mbta.com/MBTA_GTFS.zip", "https://www.visitcalgary.com/events", "https://www.denvergov.org/",
+    "https://parks.ny.gov/sitemap.xml", "https://parks.canada.ca/pn-np", "https://visitindiana.in.gov/sitemap.xml",
+    "https://admin.tourismvictoria.com/sitemap.xml", "https://www.supernaturalbc.com/sitemap.xml",
+    "https://data.cityofchicago.org/resource/vsdy-d8k7.json", "https://www.flysfo.com/sitemap.xml",
 ]
 
 
@@ -581,6 +594,95 @@ def test_sustainable_and_budget_sources_2026_11_18(generated):
     fx = generated["flixbus-gtfs"]
     assert fx["adapter"] == "gtfs_static" and fx["licence"]["spdx"] == "ODbL-1.0"
     assert "gtfs.gis.flix.tech" in fx["notes"] and "flixbus-gtfs" not in s2s.GTFS_ON
+
+
+# North America corpus (research vetted 2026-11-18): 98 rows, these are off with their reason.
+NA_OFF = {
+    "od-la-events": "dataset retired", "blog-narcity": "relevance:", "blog-outsideonline": "relevance:",
+    "tr-bart-feeds": "needs an API key", "od-msc-citypage": "adapter pending",
+    "od-canada-ckan": "adapter pending", "od-ottawa": "adapter pending",
+}
+# Personal/non-commercial-only terms: on by the owner's standing decision of 2026-11-18.
+NA_PERSONAL_USE = {"tb-alberta", "tb-novascotia", "city-montreal", "city-vancouver", "city-halifax",
+                   "city-las-vegas", "tr-wmata", "tr-cta", "tr-ttc"}
+NA_AI_RESERVED = {"city-charleston", "city-winnipeg", "park-ny-state", "blog-outsideonline"}
+NA_DELAYS = {"tb-quebec": 10, "city-halifax": 10, "od-canada-ckan": 20, "od-ottawa": 60}
+# Hosts whose terms ban robots/scraping/AI use (denylisted). Hosts that refused research
+# requests from an EU IP (403/challenge) are not added and not denylisted (may be regional).
+NA_TERMS_BANS = ["visitflorida.com", "enjoyillinois.com", "visitseattle.org", "denver.org", "visitdenver.com",
+                 "visitdallas.com", "baltimore.org", "visitnc.com", "visitorlando.com", "ottawatourism.ca",
+                 "gotobermuda.com", "soundtransit.org", "www.mbta.com", "parks.ca.gov", "calgary.ca",
+                 "roadtrippers.com", "eater.com"]
+NA_REGIONAL_REFUSALS = ["https://www.travelalaska.com/", "https://www.colorado.com/", "https://www.gohawaii.com/",
+                        "https://visitnj.org/", "https://www.amtrak.com/", "https://traveloregon.com/",
+                        "https://www.whistler.com/", "https://www.yvr.ca/"]
+
+
+def _na_ids():
+    seeds = yaml.safe_load((ROOT / "docs" / "research" / "seeds.yaml").read_text())["seeds"]
+    i = next(n for n, s in enumerate(seeds) if s["id"] == "tb-alabama")
+    ids = []
+    for s in seeds[i:]:
+        ids.append(s["id"])
+        if s["id"] == "tr-ttc":
+            break
+    return ids
+
+
+def test_north_america_sources_2026_11_18(generated):
+    ids = _na_ids()
+    assert len(ids) == 98 and set(NA_OFF) <= set(ids) and NA_PERSONAL_USE <= set(ids)
+    r2, r3 = set(_ramp("ramp-2.txt")), set(_ramp("ramp-3.txt"))
+    on = [sid for sid in ids if sid not in NA_OFF]
+    assert len(on) == 91
+    for sid in on:
+        spec = generated[sid]
+        notes = " ".join(spec["notes"].split())
+        assert spec["enabled"] is True and not spec["needs_key"], sid
+        assert spec["daily_budget"] <= 200 and spec["max_depth"] <= 2, sid
+        assert spec["min_delay_s"] >= NA_DELAYS.get(sid, 5), sid
+        assert spec["cadence"] in ("daily", "weekly", "monthly"), sid
+        assert "2026-11-18" in notes, sid
+        assert spec["licence"]["class"] in ("open", "facts_only"), sid
+        if "terms not found" in notes.lower():
+            assert "owner accepted for non-commercial use 2026-11-18" in notes, sid
+        if spec["method"] == "html":
+            assert spec["include"], f"{sid}: an html source pins its traveller sections"
+        if sid == "od-chicago-events":
+            assert spec["adapter"] == "json_events" and sid in r3 and sid not in r2
+            assert spec["seeds"] == ["https://data.cityofchicago.org/resource/vsdy-d8k7.json"]
+            assert spec["llm_kinds"] == [] and spec["kinds"] == ["event"]
+        else:
+            assert spec["method"] in ("html", "rss", "sitemap"), sid
+            assert sid in r2 and sid in r3, sid
+        if sid in NA_AI_RESERVED:
+            assert spec["llm_kinds"] == [], sid
+        # A source reads only its own hosts: every page include is pinned to a seed/sitemap/feed host.
+        hosts = {u.split("/")[2] for u in spec["seeds"] + spec["sitemaps"] + spec["feeds"]}
+        for r in spec["include"]:
+            assert any(r.startswith((f"^https://{h.replace('.', chr(92) + '.')}/",
+                                     f"^https?://{h.replace('.', chr(92) + '.')}/")) for h in hosts), (sid, r)
+    for sid in NA_PERSONAL_USE:
+        spec = generated[sid]
+        notes = " ".join(spec["notes"].split())
+        assert spec["enabled"] is True and spec["licence"]["class"] == "facts_only", sid
+        assert "terms restrict to personal/non-commercial use; owner accepted for non-commercial use 2026-11-18" in notes, sid
+    for sid, why in NA_OFF.items():
+        spec = generated[sid]
+        reason = " ".join(spec["notes"].split()).split("Disabled: ", 1)[1]
+        assert spec["enabled"] is False and reason.startswith(why), (sid, reason)
+        assert sid not in r2 and sid not in r3, sid
+    # Cross-host sitemaps were checked once with the VoyagerBot UA; the hosts that hold pages are listed.
+    assert generated["tb-indiana"]["sitemaps"] == ["https://visitindiana.in.gov/sitemap.xml"]
+    assert generated["tb-bc"]["sitemaps"] == ["https://www.supernaturalbc.com/sitemap.xml"]
+    vic = generated["city-victoria"]
+    assert vic["sitemaps"] == ["https://admin.tourismvictoria.com/sitemap.xml"]
+    assert vic["seeds"] == ["https://www.tourismvictoria.com/victoria-events"]
+    assert "travelnunavut.ca" in generated["tb-nunavut"]["sitemaps"][0]
+    for host in NA_TERMS_BANS:
+        assert any(e["host"] == host for e in DENYLIST), host
+    for url in NA_REGIONAL_REFUSALS:
+        assert s2s.denied(url, DENYLIST) is None, url
 
 
 def test_unesco_whc_is_off_because_unesco_terms_ban_automated_access(generated):
@@ -747,6 +849,7 @@ OPEN_DATA_ADAPTERS = {
     "stockholm-open-api": "json_events",
     "eurostat-prices": "eurostat_jsonstat",
     "worldbank-wdi-bulk": "wdi_csv",
+    "od-chicago-events": "json_events",  # North America, 2026-11-18
 }
 
 
@@ -995,7 +1098,7 @@ def _corpus_batch_check(generated, ids, off, delays, ai_reserved, personal):
 
 def test_corpus_europe_2026_11_18(generated):
     seeds = yaml.safe_load((ROOT / "docs" / "research" / "seeds.yaml").read_text())["seeds"]
-    ids = _batch_ids(seeds, "tb-visitcornwall", "CORPUS_AFTER_EUROPE")
+    ids = _batch_ids(seeds, "tb-visitcornwall", "tb-alabama")
     assert len(ids) == 151
     _corpus_batch_check(generated, ids, EUROPE_OFF, EUROPE_DELAYS, EUROPE_AI_RESERVED, EUROPE_PERSONAL_TERMS)
     assert len([s for s in ids if s not in EUROPE_OFF]) == 128

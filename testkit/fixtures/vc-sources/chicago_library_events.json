@@ -1,0 +1,5 @@
+[
+  {"title": "Holiday Craft Workshop", "description": "<p>Make paper ornaments with library staff.&nbsp;All materials provided.</p>", "event_types": "Arts and Crafts | Family", "event_page": {"url": "https://chipublib.bibliocommons.com/events/6900aa000000000000000001", "description": "Event Page: Holiday Craft Workshop"}, "location_name": "Harold Washington Library Center", "start": "2026-12-09T13:00:00.000", "end": "2026-12-09T14:30:00.000", "cancelled": false, "location_address": "400 S. State Street", "location_zip": "60605", "location": {"type": "Point", "coordinates": [-87.628222, 41.876246]}, "event_id": "6900aa000000000000000001"},
+  {"title": "Author Talk", "event_page": {"url": "https://chipublib.bibliocommons.com/events/6900aa000000000000000002"}, "location_name": "West Pullman", "start": "2026-12-10T18:00:00.000", "event_id": "6900aa000000000000000002"},
+  {"description": "A row without a title is skipped.", "start": "2026-12-11T10:00:00.000", "event_id": "6900aa000000000000000003"}
+]
