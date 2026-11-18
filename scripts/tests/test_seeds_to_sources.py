@@ -404,6 +404,9 @@ BATCH2_DENIED = [
     "https://www.worldpackers.com/articles/travel-scams", "https://www.moneycrashers.com/travel-scams/",
     "https://www.eurochange.co.uk/travel-money/guides", "https://travelersunited.org/",
     "https://consumer.ftc.gov/articles/travel-scams",
+    # bot walls met in production, 2026-11-17
+    "https://taxation-customs.ec.europa.eu/travelling_en", "https://www.mfat.govt.nz/en/embassies",
+    "https://mfat.govt.nz/", "https://secretldn.com/feed/", "https://www.secretldn.com/",
 ]
 
 # Hosts the crawler uses (or will use) that no denylist entry may catch.
@@ -412,9 +415,14 @@ APPROVED = [
     "https://cadataapi.state.gov/api/TravelAdvisories", "https://data.international.gc.ca/travel-voyage/x.json",
     "https://www.canada.ca/en/immigration-refugees-citizenship/", "https://www.cbsa-asfc.gc.ca/travel-voyage/",
     "https://inspection.canada.ca/en/", "https://www.cbp.gov/travel/", "https://www.aphis.usda.gov/pet-travel",
-    "https://home-affairs.ec.europa.eu/", "https://taxation-customs.ec.europa.eu/", "https://food.ec.europa.eu/",
+    "https://home-affairs.ec.europa.eu/", "https://food.ec.europa.eu/",
     "https://travel-europe.europa.eu/en/etias", "https://www.immigration.govt.nz/", "https://www.customs.govt.nz/",
-    "https://www.mfat.govt.nz/en/embassies", "https://www.customs.go.jp/english/", "https://www.maff.go.jp/aqs/english/",
+    "https://www.customs.go.jp/english/", "https://www.maff.go.jp/aqs/english/",
+    # europa.eu: only taxation-customs.ec.europa.eu is denied (2026-11-17)
+    "https://www.ecb.europa.eu/stats/eurofxref/eurofxref-daily.xml",
+    "https://home-affairs.ec.europa.eu/policies/schengen/visa-policy_en",
+    "https://food.ec.europa.eu/animals/movement-pets_en", "https://eur-lex.europa.eu/eli/reg/2018/1806",
+    "https://ec.europa.eu/eurostat/api/dissemination/statistics/1.0/data/prc_ppp_ind",
     "https://www.nps.gov/sitemap.xml", "https://www.visitscotland.com/", "https://www.discoverireland.ie/",
     "https://whatson.melbourne.vic.gov.au/", "https://www.sydney.com/", "https://www.gotokyo.org/",
     "https://www.gaultmillau.com/", "https://data.gov.hk/en-data/", "https://gtfs.de/", "https://smartraveller.gov.au/",
@@ -446,6 +454,18 @@ def test_every_enabled_source_is_allowed_by_the_denylist(generated):
                 assert s2s.denied(u, DENYLIST) is None, (sid, u)
 
 
+def test_production_bot_walls_2026_11_17_are_off_and_out_of_every_ramp(generated):
+    for sid, host in (("eu-customs-travellers", "taxation-customs.ec.europa.eu"),
+                      ("mfat-embassies", "mfat.govt.nz"), ("secretldn", "secretldn.com")):
+        spec = generated[sid]
+        notes = " ".join(spec["notes"].split())
+        assert spec["enabled"] is False, sid
+        assert "2026-11-17" in notes and "bot wall" in notes and host in notes, sid
+        for ramp in ("ramp-1.txt", "ramp-2.txt", "ramp-3.txt"):
+            assert sid not in _ramp(ramp), (sid, ramp)
+        assert any(e["host"] == host for e in DENYLIST), host
+
+
 def test_terms_and_bot_wall_sources_are_off(generated):
     for sid in ("timeout-blog-rss", "timeout-news-sitemap"):
         notes = " ".join(generated[sid]["notes"].split())
@@ -461,7 +481,8 @@ def test_terms_and_bot_wall_sources_are_off(generated):
 
 def test_batch2_off_sources_say_why(generated):
     prefixes = ("adapter pending", "needs an API key", "needs an account", "terms not yet confirmed",
-                "licence:", "robots.txt", "access route", "owner decision", "dataset retired")
+                "licence:", "robots.txt", "access route", "owner decision", "dataset retired",
+                "bot wall")
     for sid in s2s.SOURCE_CLASS:
         spec = generated[sid]
         if spec["enabled"]:
@@ -528,7 +549,9 @@ def test_owner_accepted_terms_2026_11_17(generated):
     assert len(accepted) >= 40
     for sid in accepted:
         spec = generated[sid]
-        assert spec["enabled"] is True, sid
+        # A bot wall met later (secretldn, 2026-11-17) turns an accepted source off.
+        bot_wall = "Disabled: bot wall" in " ".join(spec["notes"].split())
+        assert spec["enabled"] is (not bot_wall), sid
         assert spec["licence"]["class"] == "facts_only", sid
     sg = generated["sg-customs-travellers"]
     assert sg["enabled"] is True and "Owner decision 2026-11-17" in " ".join(sg["notes"].split())

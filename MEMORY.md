@@ -170,3 +170,13 @@ plan = `docs/superpowers/plans/2026-11-15-voyager-crawler.md`, r1–r5 = `docs/r
   bzip2 stream (about 200), never the 27 GB dump. Adapters can now send conditional GETs
   (`Fetch::conditional`: the leased row's validators; a 304 is spooled as a revisit).
   (crates/vc-sources/src/adapters/{govuk_world_orgs,canada_offices,govuk_medical_lists,enwiki_visa,phone,countries}.rs)
+- 2026-11-18: politeness-key splits. `policy/key_splits.yaml` (compiled into vc-core) lists
+  registrable domains whose hosts are keyed one by one; first entry `europa.eu` (EU bodies run
+  separate sites: a 403 from taxation-customs.ec.europa.eu on 2026-11-17 parked europa.eu and
+  stopped the ECB FX file). `PolitenessKey::for_host` applies it (frontier, fetcher, scope, the
+  oracle); `PolitenessKey::registrable` keeps "which organisation" (denylist brands,
+  publishers, grounding). Migration 1104 re-keys europa.eu rows per host, keeps the park on
+  taxation-customs only, disables the old `europa.eu` key. Off + denylisted after production
+  bot walls: eu-customs-travellers (403), mfat-embassies (challenge), secretldn (challenge).
+  Fetcher park/robots log lines carry origin + path. (crates/vc-core/src/ids.rs,
+  migrations/1104_key_split_europa_eu.sql)

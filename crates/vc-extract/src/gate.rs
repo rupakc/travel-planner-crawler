@@ -93,7 +93,7 @@ pub struct PeerRecord {
 /// The publisher of a URL host: its registrable domain (Public Suffix List), so
 /// `wiki-a.example.org` and `wiki-b.example.org` are one publisher.
 pub fn publisher_of(host: &str) -> String {
-    vc_core::PolitenessKey::for_host(host).0
+    vc_core::PolitenessKey::registrable(host)
 }
 
 /// Normalised value sets of a record's verbatim fields, per pointer.

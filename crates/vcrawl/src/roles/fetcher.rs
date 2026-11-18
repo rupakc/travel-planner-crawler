@@ -140,6 +140,13 @@ impl Recrawl for PgFrontier {
     }
 }
 
+/// Where a park or a robots block came from, for its log line: the URL's origin and its path,
+/// never the query string (it can carry tokens) and nothing from the page (hard rule 10). An
+/// operator can then see which site and page triggered a key park without digging in the DB.
+pub(crate) fn log_target(url: &CanonicalUrl) -> (String, String) {
+    (url.origin().0, url.as_url().path().to_string())
+}
+
 /// Tombstones what robots.txt newly disallows (Review Focus 1).
 #[derive(Clone)]
 pub struct RobotsTombstoner {
@@ -927,10 +934,10 @@ impl Fetcher {
         run.summaries.insert(origin.clone(), summary);
         if entry.status == RobotsStatus::Unauthorized {
             // Only this origin: its URLs come back `Disallowed` from the robots check.
-            tracing::info!(key = %p.key(), origin = %origin.0, "robots.txt refuses us (401/403): origin is do-not-crawl");
+            tracing::info!(key = %p.key(), origin = %origin.0, path = %url.as_url().path(), status = ?http_status, "robots.txt refuses us (401/403): origin is do-not-crawl");
         }
         if blocked {
-            tracing::info!(key = %p.key(), origin = %origin.0, "robots.txt blocks the key: parking");
+            tracing::info!(key = %p.key(), origin = %origin.0, path = %url.as_url().path(), status = ?http_status, "robots.txt blocks the key: parking");
             run.stop_with(KeySignal::Park(ParkReason::RobotsBlocked));
         } else if let Some(retry_after) = rate_limited {
             // robots.txt itself answered 429/503: the whole key backs off.
@@ -1288,7 +1295,15 @@ impl Fetcher {
             FetchError::Challenge { status } => {
                 // The permit client reports a detected challenge (whatever its status) and a
                 // bare 401/403 the same way; both park the key on the same ladder.
-                tracing::info!(key = %run.permit.key(), status, "challenge detected: parking the key");
+                let (origin, path) = log_target(&u.url);
+                tracing::info!(
+                    key = %run.permit.key(),
+                    status,
+                    origin = %origin,
+                    path = %path,
+                    source = u.source_id.as_ref().map(|s| s.0.as_str()).unwrap_or("-"),
+                    "challenge detected: parking the key"
+                );
                 run.stop_with(KeySignal::Park(ParkReason::Challenge));
             }
             FetchError::RateLimited { retry_after, .. } => {
@@ -1698,6 +1713,26 @@ impl CaptureSink for RecordingSink {
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    #[test]
+    fn log_target_names_origin_and_path_without_the_query() {
+        let u = CanonicalUrl::parse(
+            "https://Taxation-Customs.ec.europa.eu/travelling_en?token=s3cret&utm_source=x#top",
+        )
+        .unwrap();
+        let (origin, path) = log_target(&u);
+        assert_eq!(origin, "https://taxation-customs.ec.europa.eu");
+        assert_eq!(path, "/travelling_en");
+        assert!(!origin.contains("s3cret") && !path.contains("s3cret"));
+        let feed = CanonicalUrl::parse("http://secretldn.com:8080/feed/").unwrap();
+        assert_eq!(
+            log_target(&feed),
+            (
+                "http://secretldn.com:8080".to_string(),
+                "/feed/".to_string()
+            )
+        );
+    }
 
     #[test]
     fn adapter_floor_raises_recrawl_bounds() {
