@@ -1178,3 +1178,88 @@ async fn dump_stream_conditional_get_304() {
     let s = env.client.stream(&claim.permit, req).await.unwrap();
     assert_eq!(s.head.status, StatusCode::NOT_MODIFIED);
 }
+
+/// No response at all (owner decision 2026-11-18: robots.txt then counts as missing): a refused
+/// connection and one closed before a status line are `Connect`, a hang is `Timeout`; all three
+/// are `is_no_response()`. An HTTP answer (503) is an exchange, never a no-response error.
+#[tokio::test]
+async fn no_response_errors_are_classified() {
+    let env = Env::with(
+        Duration::from_secs(240),
+        Duration::ZERO,
+        FetchConfig {
+            request_timeout_s: 1,
+            ..FetchConfig::default()
+        },
+    )
+    .await;
+    let u = env.url("site.test", "/a");
+    env.frontier
+        .enqueue(&[NewUrl::new(u.clone())])
+        .await
+        .unwrap();
+    let claim = env.frontier.claim(&[0], 1).await.unwrap().unwrap();
+    let robots = |port: u16| {
+        FetchRequest::get(
+            CanonicalUrl::parse(&format!("http://site.test:{port}/robots.txt")).unwrap(),
+            RequestPurpose::Robots,
+        )
+    };
+
+    // Refused: nothing listens on the port any more.
+    let closed = std::net::TcpListener::bind("127.0.0.1:0").unwrap();
+    let refused_port = closed.local_addr().unwrap().port();
+    drop(closed);
+    let err = env
+        .client
+        .fetch(&claim.permit, robots(refused_port))
+        .await
+        .unwrap_err();
+    assert!(matches!(err, FetchError::Connect(_)), "{err:?}");
+    assert!(err.is_no_response());
+
+    // Accepted, then closed before any byte of a response.
+    let rude = tokio::net::TcpListener::bind("127.0.0.1:0").await.unwrap();
+    let rude_port = rude.local_addr().unwrap().port();
+    tokio::spawn(async move {
+        while let Ok((s, _)) = rude.accept().await {
+            drop(s);
+        }
+    });
+    let err = env
+        .client
+        .fetch(&claim.permit, robots(rude_port))
+        .await
+        .unwrap_err();
+    assert!(matches!(err, FetchError::Connect(_)), "{err:?}");
+    assert!(err.is_no_response());
+
+    // Accepted, never answered: a timeout.
+    let silent = tokio::net::TcpListener::bind("127.0.0.1:0").await.unwrap();
+    let silent_port = silent.local_addr().unwrap().port();
+    tokio::spawn(async move {
+        let mut held = Vec::new();
+        while let Ok((s, _)) = silent.accept().await {
+            held.push(s);
+        }
+    });
+    let err = env
+        .client
+        .fetch(&claim.permit, robots(silent_port))
+        .await
+        .unwrap_err();
+    assert!(matches!(err, FetchError::Timeout), "{err:?}");
+    assert!(err.is_no_response());
+
+    // A server error is an answer.
+    Mock::given(path("/robots.txt"))
+        .respond_with(ResponseTemplate::new(503))
+        .mount(&env.server)
+        .await;
+    let ex = env
+        .client
+        .fetch(&claim.permit, robots(env.server.address().port()))
+        .await
+        .expect("an HTTP answer is an exchange");
+    assert_eq!(ex.status, StatusCode::SERVICE_UNAVAILABLE);
+}

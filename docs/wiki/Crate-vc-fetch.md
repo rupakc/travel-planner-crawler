@@ -37,6 +37,10 @@ refused (`OutOfScope`), so tokens never travel in clear text.
 - 401, 403 and anything `Policy::is_challenge` flags: `FetchError::Challenge` (park; never
   retried).
 - Other error statuses are normal exchanges (the caller decides).
+- No response: a timeout is `Timeout`, a failed lookup `Dns`, and any other failure before a
+  status line (refused, reset or closed connection, TLS handshake, a reply that is not HTTP)
+  `Connect`. A failure after the response started (body cut, corrupt encoding) is
+  `Transport`.
 - `Retry-After` is parsed (seconds or HTTP date) by `retry_after`.
 - Bodies are decoded (gzip, deflate) under a decoded-byte cap (HTML 5 MB, other 10 MB);
   nested `.gz` payloads are probed up to `max_nested_gzip` layers under the same cap.

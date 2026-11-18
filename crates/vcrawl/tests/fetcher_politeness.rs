@@ -881,3 +881,207 @@ async fn third_party_borrow_hook_holds_and_releases_the_other_key() {
     let e = h.borrow(p, &cdn, deadline).await.err().expect("deadline");
     assert!(matches!(e, FetchError::DeadlineExceeded), "{e:?}");
 }
+
+/// A test configuration whose requests time out after 1 s.
+fn quick_timeout_cfg() -> vc_config::Config {
+    let mut c = cfg();
+    c.fetch.request_timeout_s = 1;
+    c
+}
+
+async fn robots_row(pool: &sqlx::PgPool, origin: &str) -> (String, f64) {
+    sqlx::query_as(
+        "SELECT robots_state,
+                extract(epoch FROM robots_expires_at - robots_fetched_at)::float8
+         FROM origins WHERE origin = $1",
+    )
+    .bind(origin)
+    .fetch_one(pool)
+    .await
+    .unwrap()
+}
+
+/// Owner decision 2026-11-18: robots.txt that never answers (the request times out) is treated
+/// as missing: the page is fetched in the same claim, the origin is stored as `no_response`
+/// with the short (6 h) TTL, and the politeness oracle agrees.
+#[tokio::test]
+async fn robots_no_response_is_treated_as_missing() {
+    let (web, _srv, port) = start(vec![
+        Site::new("dead", "dead.test")
+            .route("/robots.txt", Reply::no_response())
+            .route("/p", Reply::html("<p>p</p>")),
+    ])
+    .await;
+    let pool = testkit::pg().await;
+    let dir = tempfile::tempdir().unwrap();
+    let f = fetcher(
+        &quick_timeout_cfg(),
+        &pool,
+        &["dead.test"],
+        vec![],
+        dir.path(),
+        Arc::new(MemBlobStore::new()),
+    );
+    let p = url("dead.test", port, "/p");
+    f.parts()
+        .frontier
+        .enqueue(&[NewUrl::new(p.clone())])
+        .await
+        .unwrap();
+    let r = claimed(f.pass().await.unwrap());
+    assert_eq!(r.urls[0].result, UrlResult::Fetched, "{r:?}");
+    assert_eq!(r.signal, Some(KeySignal::Normal), "{r:?}");
+    for _ in 0..100 {
+        if web.log().entries().len() == 2 {
+            break;
+        }
+        tokio::time::sleep(Duration::from_millis(10)).await;
+    }
+    let mut got = paths(&web);
+    got.sort();
+    assert_eq!(got, ["dead.test/p", "dead.test/robots.txt"]);
+    let (state, ttl_s) = robots_row(&pool, &p.origin().0).await;
+    assert_eq!(state, "no_response");
+    assert!((ttl_s - 6.0 * 3600.0).abs() < 1.0, "ttl {ttl_s}");
+    let mut snap = web.policy_snapshot();
+    snap.default_min_delay_ms = 900;
+    testkit::assert_polite(&web.log(), &snap);
+}
+
+/// A refused connection on robots.txt is no response too: the page is attempted (and fails as a
+/// transient error), it is not held back by robots.
+#[tokio::test]
+async fn robots_connection_refused_is_treated_as_missing() {
+    let closed = std::net::TcpListener::bind("127.0.0.1:0").unwrap();
+    let port = closed.local_addr().unwrap().port();
+    drop(closed);
+    let pool = testkit::pg().await;
+    let dir = tempfile::tempdir().unwrap();
+    let f = fetcher(
+        &quick_timeout_cfg(),
+        &pool,
+        &["gone.test"],
+        vec![],
+        dir.path(),
+        Arc::new(MemBlobStore::new()),
+    );
+    let p = url("gone.test", port, "/p");
+    f.parts()
+        .frontier
+        .enqueue(&[NewUrl::new(p.clone())])
+        .await
+        .unwrap();
+    let r = claimed(f.pass().await.unwrap());
+    assert!(
+        matches!(
+            r.urls[0].result,
+            UrlResult::Failed {
+                class: vc_core::ErrorClass::Transient,
+                ..
+            }
+        ),
+        "{r:?}"
+    );
+    let (state, _) = robots_row(&pool, &p.origin().0).await;
+    assert_eq!(state, "no_response");
+}
+
+/// An HTTP answer keeps its meaning: robots.txt 503 still disallows everything (no page is
+/// asked) and is stored as `unavailable` with its 1 h TTL.
+#[tokio::test]
+async fn robots_503_still_disallows() {
+    let (web, _srv, port) = start(vec![
+        Site::new("busy", "busy.test")
+            .route("/robots.txt", Reply::status(503))
+            .route("/p", Reply::html("<p>p</p>")),
+    ])
+    .await;
+    let pool = testkit::pg().await;
+    let dir = tempfile::tempdir().unwrap();
+    let f = fetcher(
+        &quick_timeout_cfg(),
+        &pool,
+        &["busy.test"],
+        vec![],
+        dir.path(),
+        Arc::new(MemBlobStore::new()),
+    );
+    let p = url("busy.test", port, "/p");
+    f.parts()
+        .frontier
+        .enqueue(&[NewUrl::new(p.clone())])
+        .await
+        .unwrap();
+    let r = claimed(f.pass().await.unwrap());
+    assert_ne!(r.urls[0].result, UrlResult::Fetched, "{r:?}");
+    assert_eq!(paths(&web), ["busy.test/robots.txt"]);
+    let (state, ttl_s) = robots_row(&pool, &p.origin().0).await;
+    assert_eq!(state, "unavailable");
+    assert!((ttl_s - 3600.0).abs() < 1.0, "ttl {ttl_s}");
+}
+
+/// A robots.txt that got no response and later answers with rules: the rules apply at once and
+/// what they newly disallow is tombstoned.
+#[tokio::test]
+async fn robots_recovered_after_no_response_applies_and_tombstones() {
+    let (web, _srv, port) = start(vec![
+        Site::new("site", "site.test")
+            .route_cycles(
+                "/robots.txt",
+                vec![
+                    Some(Reply::no_response()),
+                    Some(Reply::text("User-agent: *\nDisallow: /private\n")),
+                ],
+            )
+            .route("/private/a", Reply::html("<p>a</p>"))
+            .route("/public/b", Reply::html("<p>b</p>")),
+    ])
+    .await;
+    let pool = testkit::pg().await;
+    let dir = tempfile::tempdir().unwrap();
+    let f = fetcher(
+        &quick_timeout_cfg(),
+        &pool,
+        &["site.test"],
+        vec![],
+        dir.path(),
+        Arc::new(MemBlobStore::new()),
+    );
+    let a = url("site.test", port, "/private/a");
+    let b = url("site.test", port, "/public/b");
+    f.parts()
+        .frontier
+        .enqueue(&[NewUrl::new(a.clone()), NewUrl::new(b.clone())])
+        .await
+        .unwrap();
+    let r = claimed(f.pass().await.unwrap());
+    assert!(
+        r.urls.iter().all(|u| u.result == UrlResult::Fetched),
+        "{r:?}"
+    );
+    f.flush().await.unwrap();
+    assert_eq!(robots_row(&pool, &a.origin().0).await.0, "no_response");
+
+    // The short TTL runs out; robots.txt answers again, disallowing /private.
+    sqlx::query("UPDATE origins SET robots_expires_at = now() - interval '1 second'")
+        .execute(&pool)
+        .await
+        .unwrap();
+    fast_forward(&pool).await;
+    web.set_cycle(1);
+    let before = web.log().entries().len();
+    let r = claimed(f.pass().await.unwrap());
+    assert!(r.tombstoned >= 1, "{r:?}");
+    let after: Vec<String> = paths(&web)[before..].to_vec();
+    assert_eq!(
+        after.first().map(String::as_str),
+        Some("site.test/robots.txt")
+    );
+    assert!(
+        !after.iter().any(|p| p.ends_with("/private/a")),
+        "{after:?}"
+    );
+    assert_eq!(robots_row(&pool, &a.origin().0).await.0, "ok");
+    let (state, ..) = url_state(&pool, &a).await;
+    assert!(state == "tombstoned" || state == "disabled", "{state}");
+}

@@ -959,6 +959,7 @@ async fn robots_roundtrip_is_lease_checked() {
         RobotsStatus::Unauthorized,
         RobotsStatus::Challenge,
         RobotsStatus::Unavailable,
+        RobotsStatus::NoResponse,
     ] {
         let e = RobotsEntry {
             status: st,

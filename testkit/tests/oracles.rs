@@ -243,6 +243,82 @@ fn robots_404_allows_all_and_5xx_disallows_all() {
     assert_eq!(kinds(&l, &s503), vec![ViolationKind::Disallowed]);
 }
 
+/// Owner decision 2026-11-18: a robots.txt that got no response at all counts as missing
+/// (allow all), while a 5xx answer still disallows everything.
+#[test]
+fn robots_no_response_allows_all() {
+    let s = PolicySnapshot::new().robots_no_response("http://blog.test", t(1_000));
+    let l = log(vec![
+        entry("http://blog.test/robots.txt", 0, 1_000, 0),
+        entry("http://blog.test/x", 6_000, 6_100, 200),
+        entry("http://blog.test/private/y", 11_200, 11_300, 200),
+    ]);
+    assert_eq!(check_polite(&l, &s), vec![]);
+    // Gaps still count from the end of the unanswered request.
+    let hasty = log(vec![
+        entry("http://blog.test/robots.txt", 0, 1_000, 0),
+        entry("http://blog.test/x", 2_000, 2_100, 200),
+    ]);
+    assert_eq!(kinds(&hasty, &s), vec![ViolationKind::ShortGap]);
+}
+
+/// Rules once served still govern when a later robots.txt request gets no response; when
+/// robots.txt answers with rules again, they apply.
+#[test]
+fn robots_no_response_keeps_earlier_rules_and_recovered_rules_apply() {
+    let s = PolicySnapshot::new()
+        .robots_served(
+            "http://blog.test",
+            t(100),
+            200,
+            "User-agent: *\nDisallow: /private\n",
+        )
+        .robots_no_response("http://blog.test", t(20_000))
+        .robots_served(
+            "http://blog.test",
+            t(40_100),
+            200,
+            "User-agent: *\nDisallow: /x\n",
+        );
+    let l = log(vec![
+        entry("http://blog.test/robots.txt", 0, 100, 200),
+        entry("http://blog.test/robots.txt", 19_000, 20_000, 0),
+        entry("http://blog.test/x", 25_000, 25_100, 200),
+        entry("http://blog.test/private/a", 30_200, 30_300, 200),
+        entry("http://blog.test/robots.txt", 40_000, 40_100, 200),
+        entry("http://blog.test/x", 45_200, 45_300, 200),
+    ]);
+    let v = check_polite(&l, &s);
+    let got: Vec<(&str, ViolationKind)> = v.iter().map(|v| (v.url.as_str(), v.kind)).collect();
+    assert_eq!(
+        got,
+        vec![
+            ("http://blog.test/private/a", ViolationKind::Disallowed),
+            ("http://blog.test/x", ViolationKind::Disallowed),
+        ]
+    );
+    // Without earlier rules, no response allows everything.
+    let s = PolicySnapshot::new().robots_no_response("http://blog.test", t(1_000));
+    let l = log(vec![
+        entry("http://blog.test/robots.txt", 0, 1_000, 0),
+        entry("http://blog.test/private/a", 6_000, 6_100, 200),
+    ]);
+    assert_eq!(check_polite(&l, &s), vec![]);
+}
+
+/// A snapshot with a no-response robots.txt survives the JSON round trip (E2E admin endpoint),
+/// and older snapshots without the field still parse.
+#[test]
+fn robots_no_response_round_trips() {
+    let s = PolicySnapshot::new().robots_no_response("http://blog.test", t(1_000));
+    let j = serde_json::to_string(&s).unwrap();
+    assert!(j.contains("\"no_response\":true"), "{j}");
+    assert_eq!(serde_json::from_str::<PolicySnapshot>(&j).unwrap(), s);
+    let old = PolicySnapshot::new().robots_served("http://blog.test", t(1), 404, "");
+    let j = serde_json::to_string(&old).unwrap();
+    assert!(!j.contains("no_response"), "{j}");
+}
+
 /// robots.txt 401/403 blocks its own origin for good (robots.txt included); another host of the
 /// key with its own robots.txt is still crawlable, and the refusal does not park the key.
 #[test]

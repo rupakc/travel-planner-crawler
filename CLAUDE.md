@@ -27,8 +27,11 @@ agent and the `check-politeness` skill review diffs against them.
    sitemaps, feeds, adapters, render sub-requests, admin validate and scout checks.
 4. **robots.txt per RFC 9309, stricter:** 401/403 on robots → that origin do-not-crawl
    (robots.txt speaks for its own origin; other hosts of the key keep their own robots.txt);
-   a challenge on robots → whole key do-not-crawl; 5xx → disallow; `VoyagerBot` group else `*`; AI-bot block → AI
-   reservation. Crawl-delay, X-Robots-Tag, meta robots, TDM, Content-Signal are honoured
+   a challenge on robots → whole key do-not-crawl; 5xx/429 → disallow + back-off; **no response
+   at all** (connect/read timeout, refused/reset/closed connection, TLS handshake, DNS) →
+   treated as missing (allow all, or the last good copy if one exists), re-read after 6 h —
+   owner decision 2026-11-18, deliberately laxer than RFC 9309 §2.3.1.4, revisit later;
+   `VoyagerBot` group else `*`; AI-bot block → AI reservation. Crawl-delay, X-Robots-Tag, meta robots, TDM, Content-Signal are honoured
    via the UsePolicy matrix (spec §5.2), which can only restrict (meet).
 5. **Delay per key** = max(Crawl-delay, `min_delay_s` ≥ 5 s, 10 × EWMA, penalty) ≤ 1 h;
    one request in flight per key; cross-key redirects are enqueued, never followed inline.

@@ -180,3 +180,14 @@ plan = `docs/superpowers/plans/2026-11-15-voyager-crawler.md`, r1–r5 = `docs/r
   bot walls: eu-customs-travellers (403), mfat-embassies (challenge), secretldn (challenge).
   Fetcher park/robots log lines carry origin + path. (crates/vc-core/src/ids.rs,
   migrations/1104_key_split_europa_eu.sql)
+- 2026-11-18: **robots.txt with no response = missing (owner decision, "revisit later").**
+  Connect/read timeout, connection refused/reset/closed before a status line, TLS handshake
+  failure, DNS failure → `RobotsStatus::NoResponse` (`origins.robots_state = 'no_response'`,
+  migration 1105): allow all, or the last good copy if one was ever read; TTL
+  `policy.robots_no_response_ttl_s` = 6 h; rules read later apply and tombstone. Deliberately
+  departs from RFC 9309 §2.3.1.4. Any HTTP answer keeps its meaning (5xx/429 disallow +
+  back-off, 401/403 origin do-not-crawl, challenge key park); a response that started but broke
+  (corrupt encoding, cut mid-body) stays `unavailable`. vc-fetch maps `send()` failures to the
+  new `FetchError::Connect` (TLS handshake failures included: no HTTP answer was received, and
+  pages over the same handshake fail and back off anyway). (crates/vc-policy/src/lib.rs,
+  crates/vcrawl/src/roles/fetcher.rs, BOT.md)

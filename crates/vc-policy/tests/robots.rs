@@ -171,6 +171,74 @@ fn robots_404_allows() {
     assert!(!s.key_blocked && !s.ai_reserved && s.sitemaps.is_empty());
 }
 
+/// Owner decision 2026-11-18 (departs from RFC 9309 §2.3.1.4): robots.txt that got no response
+/// at all (timeout, refused/reset connection, TLS handshake, DNS) is treated as missing: allow
+/// all, like 404. An HTTP answer (5xx/429) still disallows everything (`robots_5xx_disallows`).
+#[test]
+fn robots_no_response_allows_all() {
+    let p = policy();
+    let r = entry(RobotsStatus::NoResponse, None, None);
+    for path in ["/", "/page", "/private/x?q=1"] {
+        assert_eq!(
+            p.robots_verdict(&r, &url(&format!("https://example.com{path}"))),
+            RobotsVerdict::Allowed {
+                crawl_delay: None,
+                ai_reserved: false
+            },
+            "{path}"
+        );
+    }
+    assert_eq!(p.robots_summary(&r), RobotsSummary::default());
+    // It never speaks for another origin.
+    assert_eq!(
+        p.robots_verdict(&r, &url("https://other.example.com/page")),
+        RobotsVerdict::Disallowed
+    );
+}
+
+/// Rules we have read once are never dropped for a network failure: with a last good copy, a
+/// robots.txt that stops answering keeps that copy's rules (and Crawl-delay), at any age.
+#[test]
+fn robots_no_response_keeps_the_last_good_rules() {
+    let p = policy();
+    let mut r = entry(RobotsStatus::NoResponse, None, None);
+    r.last_good = Some((
+        Bytes::from_static(b"User-agent: *\nDisallow: /private\nCrawl-delay: 7\n"),
+        t0() - chrono::Duration::hours(1),
+    ));
+    assert_eq!(
+        p.robots_verdict(&r, &url("https://example.com/private/x")),
+        RobotsVerdict::Disallowed
+    );
+    assert_eq!(
+        p.robots_verdict(&r, &url("https://example.com/page")),
+        RobotsVerdict::Allowed {
+            crawl_delay: Some(Duration::from_secs(7)),
+            ai_reserved: false
+        }
+    );
+    assert_eq!(
+        p.robots_summary(&r).crawl_delay,
+        Some(Duration::from_secs(7))
+    );
+}
+
+/// A robots.txt that got no response and then answers with rules: what it newly disallows is
+/// tombstoned, as after a 404. A robots.txt that stops answering never tombstones anything.
+#[test]
+fn robots_no_response_then_rules_tombstones_newly_disallowed() {
+    let p = policy();
+    let urls = vec![
+        url("https://example.com/open"),
+        url("https://example.com/private/a"),
+    ];
+    let silent = entry(RobotsStatus::NoResponse, None, None);
+    let rules = ok("User-agent: *\nDisallow: /private\n");
+    let got = p.newly_disallowed(&silent, &rules, &urls);
+    assert_eq!(got, vec![url("https://example.com/private/a")]);
+    assert!(p.newly_disallowed(&rules, &silent, &urls).is_empty());
+}
+
 #[test]
 fn ai_bot_block_sets_ai_reservation() {
     let p = policy();

@@ -56,7 +56,7 @@ impl Policy for FakePolicy {
                     ai_reserved: false,
                 }
             }
-            RobotsStatus::NotFound => RobotsVerdict::Allowed {
+            RobotsStatus::NotFound | RobotsStatus::NoResponse => RobotsVerdict::Allowed {
                 crawl_delay: None,
                 ai_reserved: false,
             },

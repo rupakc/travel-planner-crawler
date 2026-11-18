@@ -34,6 +34,9 @@ catch planted violations).
 
 - The politeness oracle is deliberately strict and must never be loosened to make a test
   pass. It uses its own robots parser (`texting_robots`), independent of `vc-policy`.
+- `Reply::no_response()` makes a fake-web route hang without ever answering; the request is
+  logged (status 0) when the client gives up, and the oracle treats such a robots.txt as
+  missing (allow all, or the rules of the last 2xx robots.txt served before it).
 - Fixtures under `testkit/fixtures/<crate>/` belong to that crate's owner.
 
 ## Used by the E2E suite

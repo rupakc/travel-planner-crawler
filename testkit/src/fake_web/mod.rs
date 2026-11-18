@@ -49,6 +49,9 @@ pub struct Reply {
     pub challenge: bool,
     /// Added latency before the response is sent (on top of the site latency).
     pub latency: Duration,
+    /// Never answer: the request hangs until the client gives up (a timeout, as the crawler
+    /// sees it). Logged with status 0 when the client drops the connection.
+    pub no_response: bool,
 }
 
 impl Reply {
@@ -60,7 +63,15 @@ impl Reply {
             body: body.into(),
             challenge: false,
             latency: Duration::ZERO,
+            no_response: false,
         }
+    }
+
+    /// No response at all: the server holds the connection and never sends a status line.
+    pub fn no_response() -> Reply {
+        let mut r = Reply::status(0);
+        r.no_response = true;
+        r
     }
 
     /// `200 text/html`.
@@ -393,6 +404,7 @@ impl FakeWeb {
                 status: r.status,
                 body: String::from_utf8_lossy(&r.body).into_owned(),
                 challenge: r.challenge,
+                no_response: r.no_response,
             });
         }
         if r.challenge {
@@ -524,6 +536,18 @@ async fn handle(State(web): State<Arc<FakeWeb>>, req: Request) -> Response {
         }
     };
     let reply = reply.unwrap_or_else(|| Reply::status(404));
+    if reply.no_response {
+        // Recorded when the client gives up and the connection (and this future) is dropped.
+        let _guard = NoResponseGuard {
+            web: web.clone(),
+            key,
+            url,
+            started,
+            ua,
+            reply,
+        };
+        return std::future::pending::<Response>().await;
+    }
     let latency = site_latency + reply.latency;
     if !latency.is_zero() {
         tokio::time::sleep(latency).await;
@@ -554,6 +578,32 @@ async fn handle(State(web): State<Arc<FakeWeb>>, req: Request) -> Response {
         ua,
     });
     resp
+}
+
+/// Logs a request that was never answered once the client has dropped it.
+struct NoResponseGuard {
+    web: Arc<FakeWeb>,
+    key: String,
+    url: String,
+    started: chrono::DateTime<Utc>,
+    ua: String,
+    reply: Reply,
+}
+
+impl Drop for NoResponseGuard {
+    fn drop(&mut self) {
+        let ended = Utc::now();
+        self.web
+            .record_served(&self.key, &self.url, &self.reply, ended);
+        self.web.log.record(RequestLogEntry {
+            key: std::mem::take(&mut self.key),
+            url: std::mem::take(&mut self.url),
+            started_at: self.started,
+            ended_at: ended,
+            status: 0,
+            ua: std::mem::take(&mut self.ua),
+        });
+    }
 }
 
 fn json_response(status: StatusCode, v: serde_json::Value) -> Response {

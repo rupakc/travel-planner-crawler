@@ -249,7 +249,12 @@ pub enum FetchError {
     /// DNS resolution failed.
     #[error("dns: {0}")]
     Dns(String),
-    /// Connection / TLS / protocol failure.
+    /// No response was received: the connection was refused, reset or closed before a status
+    /// line arrived, the TLS handshake failed, or the reply was not HTTP at all.
+    #[error("connect: {0}")]
+    Connect(String),
+    /// Connection / TLS / protocol failure after the response started (body read, decoding), or
+    /// a client-side transport failure.
     #[error("transport: {0}")]
     Transport(String),
     /// The server answered 429 or 503 where the caller cannot hand back the exchange (an
@@ -271,6 +276,16 @@ pub enum FetchError {
 }
 
 impl FetchError {
+    /// Whether the server never answered: a timeout (connect, read or total), a DNS failure, or
+    /// a connection that failed before a status line ([`FetchError::Connect`]). On robots.txt
+    /// this means [`crate::policy::RobotsStatus::NoResponse`]; any HTTP answer does not.
+    pub fn is_no_response(&self) -> bool {
+        matches!(
+            self,
+            FetchError::Timeout | FetchError::Dns(_) | FetchError::Connect(_)
+        )
+    }
+
     /// The coarse class.
     pub fn class(&self) -> ErrorClass {
         match self {
@@ -287,6 +302,7 @@ impl FetchError {
             | FetchError::Challenge { .. } => ErrorClass::Policy,
             FetchError::Timeout
             | FetchError::Dns(_)
+            | FetchError::Connect(_)
             | FetchError::Transport(_)
             | FetchError::RateLimited { .. }
             | FetchError::ServerError { .. } => ErrorClass::Transient,

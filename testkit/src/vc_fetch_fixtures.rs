@@ -27,7 +27,8 @@ use vc_core::{CanonicalUrl, OriginKey};
 /// * Challenge: a `cf-mitigated: challenge` header or a body containing `cf-challenge`.
 /// * Robots: prefix match of `Disallow:` lines; `Unauthorized` → `Disallowed` (that origin
 ///   only); `Challenge` → `KeyBlocked`;
-///   `Unavailable` → `Unavailable`; `NotFound` → allowed.
+///   `Unavailable` → `Unavailable`; `NotFound` → allowed; `NoResponse` → the last good copy,
+///   else allowed.
 #[derive(Debug, Default)]
 pub struct StubPolicy {
     allowed_ips: Mutex<HashSet<IpAddr>>,
@@ -119,8 +120,16 @@ impl Policy for StubPolicy {
             RobotsStatus::Unauthorized => RobotsVerdict::Disallowed,
             RobotsStatus::Challenge => RobotsVerdict::KeyBlocked,
             RobotsStatus::Unavailable => RobotsVerdict::Unavailable,
-            RobotsStatus::Ok => {
-                let body = r.body.as_deref().unwrap_or_default();
+            RobotsStatus::Ok | RobotsStatus::NoResponse => {
+                // No response = no robots.txt, unless a last good copy was ever read.
+                let body = match r.status {
+                    RobotsStatus::Ok => r.body.as_deref().unwrap_or_default(),
+                    _ => r
+                        .last_good
+                        .as_ref()
+                        .map(|(b, _)| &b[..])
+                        .unwrap_or_default(),
+                };
                 let text = String::from_utf8_lossy(body);
                 let path = url.path_and_query();
                 let disallowed = text.lines().any(|l| {

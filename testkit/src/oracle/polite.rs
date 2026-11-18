@@ -11,8 +11,10 @@
 //!   the previous request of the key.
 //! * **NoRobots** — a request to an origin whose robots.txt had not been fetched yet.
 //! * **Disallowed** — a path disallowed by the robots.txt most recently served to the crawler
-//!   for that origin (`VoyagerBot` group, else `*`; 5xx/429 → everything disallowed). The
-//!   oracle uses its own robots parser (`texting_robots`), independent of `vc-policy`.
+//!   for that origin (`VoyagerBot` group, else `*`; 5xx/429 → everything disallowed; no
+//!   response at all → allow all, or the rules of the last 2xx robots.txt served before it —
+//!   owner decision 2026-11-18). The oracle uses its own robots parser (`texting_robots`),
+//!   independent of `vc-policy`.
 //! * **KeyBlocked** — any request to a key after a robots.txt of the key answered with a
 //!   challenge.
 //! * **OriginBlocked** — any request to an origin (its robots.txt included) after its robots.txt
@@ -63,6 +65,12 @@ pub struct RobotsServed {
     /// The response was a bot challenge (→ the whole key is do-not-crawl).
     #[serde(default)]
     pub challenge: bool,
+    /// No response at all (the crawler timed out or the connection was closed before a status
+    /// line; `status` is then 0). Owner decision 2026-11-18: treated as a missing robots.txt
+    /// (allow all), unless a 2xx robots.txt was served to that origin before: its rules then
+    /// still govern.
+    #[serde(default, skip_serializing_if = "std::ops::Not::not")]
+    pub no_response: bool,
 }
 
 /// A window in which a key must not be requested (park after a challenge, `Retry-After`).
@@ -182,6 +190,21 @@ impl PolicySnapshot {
             status,
             body: body.to_string(),
             challenge: false,
+            no_response: false,
+        });
+        self
+    }
+
+    /// Records a robots.txt request that got no response at all (`at` = when the crawler gave
+    /// up or the connection closed).
+    pub fn robots_no_response(mut self, origin: &str, at: DateTime<Utc>) -> Self {
+        self.robots.push(RobotsServed {
+            origin: origin_of(origin).unwrap_or_else(|| origin.to_string()),
+            at,
+            status: 0,
+            body: String::new(),
+            challenge: false,
+            no_response: true,
         });
         self
     }
@@ -194,6 +217,7 @@ impl PolicySnapshot {
             status: 200,
             body: String::new(),
             challenge: true,
+            no_response: false,
         });
         self
     }
@@ -318,6 +342,9 @@ enum RobotsState {
 }
 
 fn robots_state(r: &RobotsServed) -> RobotsState {
+    if r.no_response {
+        return RobotsState::AllowAll;
+    }
     if r.challenge {
         return RobotsState::KeyBlocked("challenge");
     }
@@ -344,6 +371,24 @@ pub fn check_polite(log: &RequestLog, snap: &PolicySnapshot) -> Vec<Violation> {
             .iter()
             .rev()
             .find(|r| r.origin == origin && r.at <= at)
+            .copied()
+    };
+    // The robots.txt that governs a request: the latest one served, except that one with no
+    // response at all defers to the last 2xx robots.txt served before it (if any).
+    let governing = |r: &'_ RobotsServed| -> Option<&RobotsServed> {
+        if !r.no_response {
+            return None;
+        }
+        robots
+            .iter()
+            .rev()
+            .find(|g| {
+                g.origin == r.origin
+                    && g.at <= r.at
+                    && !g.no_response
+                    && !g.challenge
+                    && (200..300).contains(&g.status)
+            })
             .copied()
     };
 
@@ -460,7 +505,7 @@ pub fn check_polite(log: &RequestLog, snap: &PolicySnapshot) -> Vec<Violation> {
                     format!("robots.txt answered {st} at {}", since.to_rfc3339()),
                 );
             }
-            let in_effect = robots_for(&origin, e.started_at);
+            let in_effect = robots_for(&origin, e.started_at).map(|r| governing(r).unwrap_or(r));
             let crawl_delay_ms = in_effect
                 .and_then(|r| match robots_state(r) {
                     RobotsState::Rules(robot) => robot.delay,
