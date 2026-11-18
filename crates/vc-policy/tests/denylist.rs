@@ -249,6 +249,10 @@ fn batch2_entries_are_denied() {
         // bot walls met in production, 2026-11-18
         "https://philippines.travel/sitemap.xml",
         "https://www.philippines.travel/",
+        // bot walls met in production at ramp end, 2026-11-18
+        "https://chicagoonthecheap.com/feed/",
+        "https://freetoursbyfoot.com/sitemaps.xml",
+        "https://www.nycgovparks.org/xml/events_300_rss.xml",
         "https://www.dubaicustoms.gov.ae/en/",
         "https://dubaicustoms.gov.ae/",
         // alternatives research 2026-11-18: refused, challenged or terms forbid copying
@@ -436,7 +440,6 @@ fn approved_hosts_stay_allowed() {
         // neighbours of the sustainable/budget denylist entries (2026-11-18)
         "https://datahub.visitfinland.com/",
         "https://transport.data.gouv.fr/resources/11681",
-        "https://www.nycgovparks.org/xml/events_300_rss.xml",
         "https://data.cityofnewyork.us/resource/fudw-fgrp.json",
         "https://turismo.buenosaires.gob.ar/en",
         "https://www.smithsonianmag.com/travel/",

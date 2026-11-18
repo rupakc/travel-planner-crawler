@@ -16,6 +16,9 @@
 #   FAKE_BEAT_RC           exit code of a heartbeat upsert (lib.sh host_beat); the call
 #                          is logged as "beat <instance> <json>"
 #   FAKE_DRILL_OUT/RC      output and exit code of the restore-drill container
+#   FAKE_IMAGES            lines "<id> <digest>" `docker images <repo>` lists
+#   FAKE_PS_IMAGES         images `docker ps -a --format {{.Image}}` lists
+#   FAKE_RMI_FAIL          an image ID `docker rmi` refuses (in use)
 # Per-service images are kept in $FAKE_STATE/<service>.
 set -uo pipefail
 st="${FAKE_STATE:?}"
@@ -108,6 +111,9 @@ case "${1:-} ${2:-}" in
     exit "${FAKE_DRILL_RC:-0}"
     ;;
   "rm "*) exit 0 ;;
+  "images "*) printf '%s' "${FAKE_IMAGES:-}" ;;
+  "ps -a") printf '%s' "${FAKE_PS_IMAGES:-}" ;;
+  "rmi "*) [[ "$2" == "${FAKE_RMI_FAIL:-none}" ]] && exit 1; exit 0 ;;
   "inspect "*)
     if [[ "$*" == *".Config.Image"* ]]; then
       echo "${FAKE_PG_IMAGE:-pgvector/pgvector:pg17@sha256:feed}"

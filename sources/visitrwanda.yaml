@@ -32,16 +32,16 @@ llm_kinds:
 - event
 render: never
 cadence: weekly
-min_delay_s: 5
+min_delay_s: 20
 daily_budget: 300
 politeness_key: null
-enabled: true
+enabled: false
 needs_key: false
 key_secret: null
 max_retention_days: null
 display_requirements: null
 notes: 'HOLD (research 2026-11-17): terms not found. Blocker was: terms not found. Terms unconfirmed;
-  owner accepted for non-commercial use 2026-11-17.'
+  owner accepted for non-commercial use 2026-11-17. | Disabled: 5xx at 5 s; re-enable after a slower re-test'
 relevance:
   sections:
   - itinerary

@@ -421,6 +421,8 @@ BATCH2_DENIED = [
     "https://mfat.govt.nz/", "https://secretldn.com/feed/", "https://www.secretldn.com/",
     # bot walls met in production, 2026-11-18
     "https://philippines.travel/sitemap.xml", "https://www.dubaicustoms.gov.ae/en/",
+    "https://chicagoonthecheap.com/feed/", "https://freetoursbyfoot.com/sitemaps.xml",
+    "https://www.nycgovparks.org/xml/events_300_rss.xml",
     # alternatives research 2026-11-18
     "https://www.visitoslo.com/", "https://dados.gov.br/", "https://www.sanparks.org/",
     "https://www.biosecurity.govt.nz/", "https://www.data.govt.nz/", "https://www.dubai.ae/",
@@ -496,7 +498,7 @@ APPROVED = [
     # neighbours of the sustainable/budget denylist entries (2026-11-18) that stay allowed
     "https://datahub.visitfinland.com/", "https://transport.data.gouv.fr/resources/11681",
     "https://transport-data-gouv-fr-resource-history-prod.cellar-c2.services.clever-cloud.com/11681/x.zip",
-    "https://www.nycgovparks.org/xml/events_300_rss.xml", "https://data.cityofnewyork.us/resource/fudw-fgrp.json",
+    "https://data.cityofnewyork.us/resource/fudw-fgrp.json",
     "https://turismo.buenosaires.gob.ar/en", "https://www.smithsonianmag.com/travel/",
     "https://feeds.feedburner.com/InstinctVoyageur", "https://www.korail.com/ebizbf/EbizBfKrPassAbout.do",
     "https://www.green-tourism.com/our-members/", "https://youth.europa.eu/discovereu_en",
@@ -526,6 +528,9 @@ SUSTAIN_BUDGET_OFF = {
     "earthcheck": "seed unresolved", "greenkey-global-ca": "seed unresolved",
     "ecotourism-kenya-ecorated": "bot wall", "lnt-org": "bot wall",
     "blog-thesmartlocal": "relevance",
+    # bot walls met in production at ramp end, 2026-11-18
+    "blog-chicagoonthecheap": "bot wall", "walking-freetoursbyfoot": "bot wall",
+    "official-nycparks-events": "bot wall",
 }
 # Crawl-delay from robots.txt (or the europa.eu default) -> min_delay_s.
 SUSTAIN_BUDGET_DELAYS = {
@@ -560,7 +565,9 @@ def test_sustainable_and_budget_sources_2026_11_18(generated):
     assert len(ids) == 116 and set(SUSTAIN_BUDGET_OFF) <= set(ids)
     r2, r3 = set(_ramp("ramp-2.txt")), set(_ramp("ramp-3.txt"))
     on = [sid for sid in ids if sid not in SUSTAIN_BUDGET_OFF]
-    assert len(on) == 93  # adeac-bandera-azul on since 2026-11-18 (personal-use terms, owner accepted)
+    # adeac-bandera-azul on since 2026-11-18 (personal-use terms, owner accepted); three bot
+    # walls off at ramp end 2026-11-18
+    assert len(on) == 90
     for sid in on:
         spec = generated[sid]
         notes = " ".join(spec["notes"].split())
@@ -740,6 +747,26 @@ def test_production_bot_walls_2026_11_18_are_off_and_out_of_every_ramp(generated
         assert any(e["host"] == host for e in DENYLIST), host
 
 
+def test_ramp_end_2026_11_18_refusals_are_off_and_out_of_every_ramp(generated):
+    for sid, host in (("blog-chicagoonthecheap", "chicagoonthecheap.com"),
+                      ("walking-freetoursbyfoot", "freetoursbyfoot.com"),
+                      ("official-nycparks-events", "www.nycgovparks.org")):
+        spec = generated[sid]
+        notes = " ".join(spec["notes"].split())
+        assert spec["enabled"] is False, sid
+        assert "2026-11-18" in notes and "bot wall" in notes and host in notes, sid
+        for ramp in ("ramp-1.txt", "ramp-2.txt", "ramp-3.txt"):
+            assert sid not in _ramp(ramp), (sid, ramp)
+        assert any(host == e["host"] or host.endswith("." + e["host"]) for e in DENYLIST), host
+    # too many 5xx at 5 s: off, slower, not denylisted
+    rw = generated["visitrwanda"]
+    assert rw["enabled"] is False and rw["min_delay_s"] == 20
+    assert "5xx at 5 s" in " ".join(rw["notes"].split())
+    assert not any(e["host"] == "visitrwanda.com" for e in DENYLIST)
+    for ramp in ("ramp-1.txt", "ramp-2.txt", "ramp-3.txt"):
+        assert "visitrwanda" not in _ramp(ramp), ramp
+
+
 # Alternatives to sites that refused or challenged VoyagerBot (vetted 2026-11-18).
 ALTERNATIVES_ON = {"safetravel-nz", "eu-youreurope-travel", "revenue-ie-travellers"}
 # Personal/non-commercial terms: on by the owner's standing rule of 2026-11-18 (facts only).
@@ -794,7 +821,8 @@ def test_batch2_off_sources_say_why(generated):
     prefixes = ("adapter pending", "needs an API key", "needs an account", "terms not yet confirmed",
                 "licence:", "robots.txt", "access route", "owner decision", "dataset retired",
                 "bot wall", "seed unresolved", "relevance:", "re-test from the crawler VM",
-                "terms forbid storage/redistribution", "meta robots", "terms forbid automated access")
+                "terms forbid storage/redistribution", "meta robots", "terms forbid automated access",
+                "5xx at")
     for sid in s2s.SOURCE_CLASS:
         spec = generated[sid]
         if spec["enabled"]:
@@ -901,7 +929,9 @@ def test_owner_accepted_terms_2026_11_17(generated):
     for sid in accepted:
         spec = generated[sid]
         # A bot wall met later (secretldn, 2026-11-17) turns an accepted source off.
-        bot_wall = "Disabled: bot wall" in " ".join(spec["notes"].split())
+        # (and too many 5xx, visitrwanda 2026-11-18) turn an accepted source off.
+        n = " ".join(spec["notes"].split())
+        bot_wall = "Disabled: bot wall" in n or "Disabled: 5xx at" in n
         assert spec["enabled"] is (not bot_wall), sid
         assert spec["licence"]["class"] == "facts_only", sid
     sg = generated["sg-customs-travellers"]

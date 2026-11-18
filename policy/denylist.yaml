@@ -377,6 +377,15 @@ entries:
   - host: philippines.travel
     reason: "/sitemap.xml served a challenge page to VoyagerBot in production, 2026-11-18: bot wall"
     source: seed:philippines-travel
+  - host: chicagoonthecheap.com
+    reason: "challenge/bot wall seen 2026-11-18 at ramp end"
+    source: seed:blog-chicagoonthecheap
+  - host: freetoursbyfoot.com
+    reason: "challenge/bot wall seen 2026-11-18 at ramp end"
+    source: seed:walking-freetoursbyfoot
+  - host: nycgovparks.org
+    reason: "challenge/bot wall seen 2026-11-18 at ramp end"
+    source: seed:official-nycparks-events
   - host: dubaicustoms.gov.ae
     reason: "/en/ served a challenge page to VoyagerBot in production, 2026-11-18: bot wall"
     source: seed:dubai-customs-passengers

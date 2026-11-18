@@ -7,7 +7,7 @@
 Every website and dataset the crawler knows, grouped by the part of the Voyager app it
 feeds. A source that serves several parts is listed under each of them.
 
-**1423 sources, 1162 on, 261 off.**
+**1423 sources, 1158 on, 265 off.**
 
 - **What we take**: the traveller-facing data the source gives (its `relevance.why`).
 - **Licence**: *open* (free reuse with credit), *share-alike* (kept apart from other
@@ -274,7 +274,6 @@ is added only with the owner's approval (see CONTRIBUTING.md).
 | `blog-amorgos` | `amorgos.gr` | Amorgos tourist guide (walking paths, beaches), for Places to see and Activities. | facts only | yes | no |
 | `blog-atlasandboots` | `www.atlasandboots.com` | Hiking and outdoor adventure guides from Atlas & Boots, for Activities, Places to see and Travel tips (headline, link and a short excerpt only). | facts only | yes | no |
 | `blog-bearfoottheory` | `bearfoottheory.com` | US national-park, hiking and van-life trip guides and packing lists, for Activities, Packing list and the itinerary. | facts only | yes | no |
-| `blog-chicagoonthecheap` | `chicagoonthecheap.com` | Free museum days and free or cheap events in Chicago from Chicago on the Cheap, for Events and Activities (headline, link and a short excerpt only). | facts only | yes | no |
 | `blog-ciaobambino` | `ciaobambino.com` | Ciao Bambino (family travel): family-friendly hotels and trip guides, for Hotels, Travel tips and Activities. | facts only | yes | no |
 | `blog-earthtrekkers` | `www.earthtrekkers.com` | Detailed trip itineraries and hikes from Earth Trekkers, for the itinerary, Activities and Places to see (headline, link and a short excerpt only). | facts only | yes | no |
 | `blog-familytravel-assoc` | `www.familytravel.org` | Family Travel Association: family-travel advice and destination ideas, for Travel tips and Activities. | facts only | yes | no |
@@ -445,7 +444,6 @@ is added only with the owner's approval (see CONTRIBUTING.md).
 | `official-berlin-welcomecard` | `www.berlin-welcomecard.de` | The official Berlin tourist pass (public transport plus discounts), for Activities and Local transportation. | facts only | yes | no |
 | `official-eyca` | `eyca.org` | Youth (under 30) discounts on transport and attractions across Europe, for Travel tips, Activities and Local transportation. | facts only | yes | no |
 | `official-isic` | `www.isic.org` | International Student Identity Card discounts and news, for Travel tips and Activities. | facts only | yes | no |
-| `official-nycparks-events` | `www.nycgovparks.org` | Free public events in New York City parks for the next two weeks, for Events and Activities. | facts only | yes | no |
 | `official-parismusees` | `www.parismusees.paris.fr` | The City of Paris's 14 museums, whose permanent collections are free, with exhibitions, for Places to see and Activities. | facts only | yes | no |
 | `official-prague-eu` | `prague.eu` | Official Prague visitor pass, free events and city information, for Activities, Events, Places to see and Local transportation. | facts only | yes | no |
 | `official-romapass` | `www.romapass.it` | The official Rome city card (Roma Capitale) with free museum entries and public transport, for Activities and Local transportation. | facts only | yes | no |
@@ -787,7 +785,6 @@ is added only with the owner's approval (see CONTRIBUTING.md).
 | `visitqatar` | `visitqatar.com` | Qatar's official events calendar, things to do and itineraries, for Events, Activities and the itinerary. | facts only | yes | no |
 | `visitscotland` | `www.visitscotland.com` | Official Scottish road trips, itineraries, events and food trails, for the itinerary, Activities, Events and Places to see. | facts only | yes | no |
 | `visitseoul` | `english.visitseoul.net` | Seoul restaurants, attractions and editors' picks, for Activities and Places to see. | facts only | yes | no |
-| `walking-freetoursbyfoot` | `freetoursbyfoot.com` | Pay-what-you-wish walking tours in US and European cities plus free-things-to-do guides, for Free walking tours, Activities and Travel tips. | facts only | yes | no |
 | `wien-info` | `www.wien.info` | Vienna events, Heurigen wine taverns, coffee houses and suggested itineraries, for Events, Activities, the itinerary and Places to see. | facts only | yes | no |
 | `wikivoyage-dump` | `dumps.wikimedia.org` | Wikivoyage destination guides (sights, things to do, where to stay, getting around, SIM and tips) for those app sections. | share-alike | yes | no |
 | `wine-alsace-civa` | `www.vinsalsace.com` | Vins d'Alsace (CIVA): Route des Vins: Alsace Wine Route villages, wine events, for Activities and Events. | facts only | yes | no |
@@ -799,6 +796,7 @@ is added only with the owner's approval (see CONTRIBUTING.md).
 | `worlds50best` | `www.the50.com` | The World's 50 Best restaurant and bar rankings (names and cities as facts), for Activities. | facts only | yes | no |
 | `api-usno-astro` | `aa.usno.navy.mil` | USNO Astronomical Applications API: Sunrise, sunset, twilight and moon phase for golden hour and stargazing nights, for Weather, the itinerary and Activities. | open | no | no |
 | `atdw-atlas` | `developer.atdw.com.au` | Australian events, attractions, tours and accommodation listings, for Events, Activities and Hotels. | API terms | no | yes |
+| `blog-chicagoonthecheap` | `chicagoonthecheap.com` | Free museum days and free or cheap events in Chicago from Chicago on the Cheap, for Events and Activities (headline, link and a short excerpt only). | facts only | no | no |
 | `blog-narcity` | `www.narcity.com` | Canadian city things-to-do news, for Events, Activities and Travel tips. | facts only | no | no |
 | `blog-outsideonline` | `www.outsideonline.com` | Adventure-travel and outdoor trip articles, for Activities, Packing list and Travel tips. | facts only | no | no |
 | `blog-thesmartlocal` | `thesmartlocal.com` | Free and cheap things to do in Singapore, Malaysia and Thailand from TheSmartLocal, for Activities, Events and Travel tips (headline, link and a short excerpt only). | facts only | no | no |
@@ -835,6 +833,7 @@ is added only with the owner's approval (see CONTRIBUTING.md).
 | `od-openskimap` | `tiles.openskimap.org` | OpenSkiMap: Ski resorts worldwide with run and lift counts, for Activities and Places to see. | share-alike | no | no |
 | `od-sf-restaurant-scores` | `data.sf.gov` | San Francisco restaurants with their health inspection scores, for food in Activities. | open | no | no |
 | `od-uk-bathing-water` | `environment.data.gov.uk` | Environment Agency Bathing Water Quality: Water quality and pollution-risk forecasts for 400+ England bathing waters, for Places to see, Activities and Weather. | open | no | no |
+| `official-nycparks-events` | `www.nycgovparks.org` | Free public events in New York City parks for the next two weeks, for Events and Activities. | facts only | no | no |
 | `parisjetaime` | `parisjetaime.com` | Paris events and things to do from the official tourist office, for Events and Activities. | facts only | no | no |
 | `park-gbrmpa` | `www.gbrmpa.gov.au` | Great Barrier Reef Marine Park Authority: reef visiting rules, zoning, for Places to see, Activities and Travel tips. | facts only | no | no |
 | `philippines-travel` | `philippines.travel` | Official Philippine destinations and activities, for Places to see and Activities. | facts only | no | no |
@@ -867,6 +866,7 @@ is added only with the owner's approval (see CONTRIBUTING.md).
 | `tourcert` | `tourcert.org` | CSR-certified tour operators, hotels and destinations in Europe, for Activities and Hotels. | facts only | no | no |
 | `viator-partner` | `docs.viator.com` | Bookable tours and activities with prices, for the Activities section; needs affiliate approval, so off. | API terms | no | yes |
 | `visit-finland-datahub` | `datahub.visitfinland.com` | Finnish tourism products, sights and opening hours, for Places to see, Activities and Events. | API terms | no | yes |
+| `walking-freetoursbyfoot` | `freetoursbyfoot.com` | Pay-what-you-wish walking tours in US and European cities plus free-things-to-do guides, for Free walking tours, Activities and Travel tips. | facts only | no | no |
 
 ## Places to see
 
@@ -1486,7 +1486,6 @@ is added only with the owner's approval (see CONTRIBUTING.md).
 | `visitjordan` | `visitjordan.com` | Official Jordanian sights and destinations, for Places to see. | facts only | yes | no |
 | `visitmaldives` | `visitmaldives.com` | Official Maldives islands, resorts areas and sights, for Places to see. | facts only | yes | no |
 | `visitnamibia` | `visitnamibia.com.na` | Official Namibian destinations and parks, for Places to see. | facts only | yes | no |
-| `visitrwanda` | `visitrwanda.com` | Official Rwandan itineraries, events and destinations, for the itinerary, Events and Places to see. | facts only | yes | no |
 | `visitsaudi` | `www.visitsaudi.com` | Official Saudi destinations, events and things to do, for Events and Places to see. | facts only | yes | no |
 | `visitscotland` | `www.visitscotland.com` | Official Scottish road trips, itineraries, events and food trails, for the itinerary, Activities, Events and Places to see. | facts only | yes | no |
 | `visitseoul` | `english.visitseoul.net` | Seoul restaurants, attractions and editors' picks, for Activities and Places to see. | facts only | yes | no |
@@ -1639,6 +1638,7 @@ is added only with the owner's approval (see CONTRIBUTING.md).
 | `tb-zanzibar` | `www.zanzibartourism.go.tz` | Official Zanzibar and Pemba sights and visitor rules, for Places to see and Activities. | facts only | no | no |
 | `unesco-whc` | `whc.unesco.org` | UNESCO World Heritage Sites with descriptions and locations for Places to see; UNESCO terms ban automated access, so off. | restricted | no | no |
 | `visit-finland-datahub` | `datahub.visitfinland.com` | Finnish tourism products, sights and opening hours, for Places to see, Activities and Events. | API terms | no | yes |
+| `visitrwanda` | `visitrwanda.com` | Official Rwandan itineraries, events and destinations, for the itinerary, Events and Places to see. | facts only | no | no |
 | `wikidata-dump` | `dumps.wikimedia.org` | Facts about places and sights from Wikidata for Places to see; the full dump is too large, so off. | open | no | no |
 
 ## Free walking tours
@@ -1678,17 +1678,16 @@ is added only with the owner's approval (see CONTRIBUTING.md).
 | `tb-schwarzwald` | `www.schwarzwald-tourismus.info` | Schwarzwald Tourismus: official visitor guide, for Activities, Free walking tours and Places to see. | facts only | yes | no |
 | `tb-tirol` | `www.tirol.at` | Tirol Werbung: official visitor guide, for Activities, Free walking tours, Events and Weather. | facts only | yes | no |
 | `tb-visittrentino` | `www.visittrentino.info` | Visit Trentino: official visitor guide, for Activities, Free walking tours and Places to see. | facts only | yes | no |
-| `walking-freetoursbyfoot` | `freetoursbyfoot.com` | Pay-what-you-wish walking tours in US and European cities plus free-things-to-do guides, for Free walking tours, Activities and Travel tips. | facts only | yes | no |
 | `walking-strawberrytours` | `strawberrytours.com` | Free tip-based walking tours in about 100 cities, for the Free walking tours section. | facts only | yes | no |
 | `wikivoyage-dump` | `dumps.wikimedia.org` | Wikivoyage destination guides (sights, things to do, where to stay, getting around, SIM and tips) for those app sections. | share-alike | yes | no |
 | `city-turismo-cdmx` | `turismo.cdmx.gob.mx` | Turismo CDMX (Secretaría de Turismo): official visitor guide, for Places to see, Activities and Free walking tours. | facts only | no | no |
+| `walking-freetoursbyfoot` | `freetoursbyfoot.com` | Pay-what-you-wish walking tours in US and European cities plus free-things-to-do guides, for Free walking tours, Activities and Travel tips. | facts only | no | no |
 
 ## Events
 
 | Source | Website | What we take | Licence | On | Key |
 |---|---|---|---|---|---|
 | `australia-com` | `www.australia.com` | Official Australian itineraries, places, food and wine and events, for the itinerary, Places to see, Activities and Events. | facts only | yes | no |
-| `blog-chicagoonthecheap` | `chicagoonthecheap.com` | Free museum days and free or cheap events in Chicago from Chicago on the Cheap, for Events and Activities (headline, link and a short excerpt only). | facts only | yes | no |
 | `blog-seasia` | `seasia.co` | South-East Asia travel news and budget guides from SEAsia.co, for Places to see, Travel tips and Events (headline, link and a short excerpt only). | facts only | yes | no |
 | `blog-tokyocheapo` | `tokyocheapo.com` | Free and cheap Tokyo (events, transit passes, SIM cards) from Tokyo Cheapo, for Activities, Events, Local transportation, SIM cards and Travel tips (headline, link and a short excerpt only). | facts only | yes | no |
 | `capetown-gov` | `www.capetown.gov.za` | Cape Town's official beaches, nature reserves, parks and city events, for Places to see, Activities and Events. | facts only | yes | no |
@@ -1825,7 +1824,6 @@ is added only with the owner's approval (see CONTRIBUTING.md).
 | `nyctourism` | `www.nyctourism.com` | Official NYC event listings, restaurant guides and itineraries, for Events, Activities, the itinerary and Places to see. | facts only | yes | no |
 | `od-chicago-events` | `data.cityofchicago.org` | Free Chicago Public Library events (talks, workshops, family events) at every branch, for Events and Activities. | open | yes | no |
 | `od-musei-italiani` | `www.museiitaliani.it` | Musei Italiani (MiC): state museums, hours, free Sundays, for Places to see and Events. | open | yes | no |
-| `official-nycparks-events` | `www.nycgovparks.org` | Free public events in New York City parks for the next two weeks, for Events and Activities. | facts only | yes | no |
 | `official-prague-eu` | `prague.eu` | Official Prague visitor pass, free events and city information, for Activities, Events, Places to see and Local transportation. | facts only | yes | no |
 | `official-sectur-mx` | `www.gob.mx` | SECTUR (Mexico Tourism Secretariat): official visitor guide, for Places to see, Events and Travel tips. | facts only | yes | no |
 | `official-tatnews` | `www.tatnews.org` | TAT Newsroom (Tourism Authority of Thailand): Official TAT news: festivals, events, entry-rule changes and travel advisories, for Events, Travel tips, Visa and Weather. | facts only | yes | no |
@@ -2107,7 +2105,6 @@ is added only with the owner's approval (see CONTRIBUTING.md).
 | `visitlisboa` | `www.visitlisboa.com` | Lisbon's official event agenda and itineraries, for Events, the itinerary and Activities. | facts only | yes | no |
 | `visitphilly` | `www.visitphilly.com` | Philadelphia events, itineraries and restaurant guides (title and link only), for Events, the itinerary and Activities. | facts only | yes | no |
 | `visitqatar` | `visitqatar.com` | Qatar's official events calendar, things to do and itineraries, for Events, Activities and the itinerary. | facts only | yes | no |
-| `visitrwanda` | `visitrwanda.com` | Official Rwandan itineraries, events and destinations, for the itinerary, Events and Places to see. | facts only | yes | no |
 | `visitsaudi` | `www.visitsaudi.com` | Official Saudi destinations, events and things to do, for Events and Places to see. | facts only | yes | no |
 | `visitscotland` | `www.visitscotland.com` | Official Scottish road trips, itineraries, events and food trails, for the itinerary, Activities, Events and Places to see. | facts only | yes | no |
 | `wien-info` | `www.wien.info` | Vienna events, Heurigen wine taverns, coffee houses and suggested itineraries, for Events, Activities, the itinerary and Places to see. | facts only | yes | no |
@@ -2121,6 +2118,7 @@ is added only with the owner's approval (see CONTRIBUTING.md).
 | `bcn-opendata-agenda` | `opendata-ajuntament.barcelona.cat` | Barcelona city council's cultural and leisure agenda, for the Events section. | open | no | no |
 | `blog-ba-herald` | `buenosairesherald.com` | Buenos Aires Herald: English-language Argentine news, for Travel tips and Events. | facts only | no | no |
 | `blog-bogotapost` | `thebogotapost.com` | The Bogotá Post: English-language Bogotá news and what's on, for Events and Travel tips. | facts only | no | no |
+| `blog-chicagoonthecheap` | `chicagoonthecheap.com` | Free museum days and free or cheap events in Chicago from Chicago on the Cheap, for Events and Activities (headline, link and a short excerpt only). | facts only | no | no |
 | `blog-narcity` | `www.narcity.com` | Canadian city things-to-do news, for Events, Activities and Travel tips. | facts only | no | no |
 | `blog-riotimes` | `www.riotimesonline.com` | The Rio Times: English-language Brazil/LatAm news, for Travel tips, Events and Forex. | facts only | no | no |
 | `blog-thesmartlocal` | `thesmartlocal.com` | Free and cheap things to do in Singapore, Malaysia and Thailand from TheSmartLocal, for Activities, Events and Travel tips (headline, link and a short excerpt only). | facts only | no | no |
@@ -2166,6 +2164,7 @@ is added only with the owner's approval (see CONTRIBUTING.md).
 | `od-la-events` | `data.lacity.org` | City of Los Angeles events and El Pueblo cultural events, for Events. | facts only | no | no |
 | `od-opendata-swiss` | `opendata.swiss` | opendata.swiss: government open-data datasets (tourism, events, transport), for Events, Places to see and Local transportation. | open | no | no |
 | `od-podatki-gov-si` | `podatki.gov.si` | OPSI (Slovenia open data): government open-data datasets (tourism, events, transport), for Events, Places to see and Local transportation. | open | no | no |
+| `official-nycparks-events` | `www.nycgovparks.org` | Free public events in New York City parks for the next two weeks, for Events and Activities. | facts only | no | no |
 | `openagenda-api` | `api.openagenda.com` | Event agendas from French, Belgian and Swiss cities and regions, for the Events section. | open | no | yes |
 | `parisjetaime` | `parisjetaime.com` | Paris events and things to do from the official tourist office, for Events and Activities. | facts only | no | no |
 | `predicthq` | `api.predicthq.com` | Events and public holidays worldwide for the Events section; paid only, so off. | API terms | no | yes |
@@ -2190,6 +2189,7 @@ is added only with the owner's approval (see CONTRIBUTING.md).
 | `timeout-news-sitemap` | `www.timeout.com` | Time Out city news pages (events, openings, things to do) for Events and Activities. | facts only | no | no |
 | `toronto-events` | `ckan0.cf.opendata.inter.prod-toronto.ca` | Festivals and events listed by the City of Toronto, for the Events section. | open | no | no |
 | `visit-finland-datahub` | `datahub.visitfinland.com` | Finnish tourism products, sights and opening hours, for Places to see, Activities and Events. | API terms | no | yes |
+| `visitrwanda` | `visitrwanda.com` | Official Rwandan itineraries, events and destinations, for the itinerary, Events and Places to see. | facts only | no | no |
 
 ## Visa and travel advice
 
@@ -2634,7 +2634,6 @@ is added only with the owner's approval (see CONTRIBUTING.md).
 | `visa-maldives-immigration` | `immigration.gov.mv` | Maldives Immigration: Free 30-day tourist visa, IMUGA traveller declaration, for Visa and Travel tips. | facts only | yes | no |
 | `visa-migracion-colombia` | `www.migracioncolombia.gov.co` | Migración Colombia: official entry, visa and immigration rules, for Visa and Travel tips. | facts only | yes | no |
 | `visa-nia-tw` | `www.immigration.gov.tw` | National Immigration Agency Taiwan (English): Entry rules, online arrival card, e-Gate for visitors, for Visa and Travel tips. | facts only | yes | no |
-| `walking-freetoursbyfoot` | `freetoursbyfoot.com` | Pay-what-you-wish walking tours in US and European cities plus free-things-to-do guides, for Free walking tours, Activities and Travel tips. | facts only | yes | no |
 | `wikivoyage-dump` | `dumps.wikimedia.org` | Wikivoyage destination guides (sights, things to do, where to stay, getting around, SIM and tips) for those app sections. | share-alike | yes | no |
 | `worldbank-wdi-bulk` | `databank.worldbank.org` | Price level ratio and purchasing-power parity for every country, for Travel tips cost guidance and itinerary budgets. | open | yes | no |
 | `wx-nea-sg` | `www.nea.gov.sg` | National Environment Agency Singapore: Weather, haze/dengue advisories and hawker centre info, for Weather and Travel tips. | facts only | yes | no |
@@ -2689,6 +2688,7 @@ is added only with the owner's approval (see CONTRIBUTING.md).
 | `tb-sikkim` | `www.sikkimtourism.gov.in` | Sikkim Tourism: official visitor guide, for Places to see and Travel tips. | facts only | no | no |
 | `tb-vnat` | `vietnamtourism.gov.vn` | Vietnam National Authority of Tourism: Official Vietnam tourism information, for Places to see and Travel tips. | facts only | no | no |
 | `thelocal-news` | `www.thelocal.com` | The Local (Europe): travel articles and guides, for Travel tips. | facts only | no | no |
+| `walking-freetoursbyfoot` | `freetoursbyfoot.com` | Pay-what-you-wish walking tours in US and European cities plus free-things-to-do guides, for Free walking tours, Activities and Travel tips. | facts only | no | no |
 | `who-ith` | `www.who.int` | WHO health advice for travellers (vaccines, health risks) for Travel tips and the Packing list; licence restricted, so off. | restricted | no | no |
 
 ## Emergency card
@@ -3150,7 +3150,6 @@ is added only with the owner's approval (see CONTRIBUTING.md).
 | `visitlisboa` | `www.visitlisboa.com` | Lisbon's official event agenda and itineraries, for Events, the itinerary and Activities. | facts only | yes | no |
 | `visitphilly` | `www.visitphilly.com` | Philadelphia events, itineraries and restaurant guides (title and link only), for Events, the itinerary and Activities. | facts only | yes | no |
 | `visitqatar` | `visitqatar.com` | Qatar's official events calendar, things to do and itineraries, for Events, Activities and the itinerary. | facts only | yes | no |
-| `visitrwanda` | `visitrwanda.com` | Official Rwandan itineraries, events and destinations, for the itinerary, Events and Places to see. | facts only | yes | no |
 | `visitscotland` | `www.visitscotland.com` | Official Scottish road trips, itineraries, events and food trails, for the itinerary, Activities, Events and Places to see. | facts only | yes | no |
 | `visitsweden` | `visitsweden.com` | Official Swedish destinations and trip ideas, for Places to see and the itinerary. | facts only | yes | no |
 | `wien-info` | `www.wien.info` | Vienna events, Heurigen wine taverns, coffee houses and suggested itineraries, for Events, Activities, the itinerary and Places to see. | facts only | yes | no |
@@ -3168,6 +3167,7 @@ is added only with the owner's approval (see CONTRIBUTING.md).
 | `od-iana-tzdb` | `data.iana.org` | IANA Time Zone Database: Local time and daylight-saving rules at the destination, for Flights, the itinerary and Travel tips. | open | no | no |
 | `ontd-night-trains` | `back-on-track-eu.github.io` | All of about 205 regular European sleeper-train lines (operators, stops, days, classes), the flight-free option for an itinerary leg in Local transportation. | share-alike | no | no |
 | `sg-hawker-centres` | `api-production.data.gov.sg` | Singapore's cheap-food hawker centres with locations and cleaning-closure dates, for Places to see, Travel tips and the itinerary. | open | no | no |
+| `visitrwanda` | `visitrwanda.com` | Official Rwandan itineraries, events and destinations, for the itinerary, Events and Places to see. | facts only | no | no |
 
 ## Needs a licence or API key
 

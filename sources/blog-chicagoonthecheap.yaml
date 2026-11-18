@@ -28,13 +28,15 @@ cadence: daily
 min_delay_s: 10
 daily_budget: 50
 politeness_key: null
-enabled: true
+enabled: false
 needs_key: false
 key_secret: null
 max_retention_days: null
 display_requirements: null
 notes: 'robots.txt (research 2026-11-18): allowed. Crawl-delay: 10. No terms page or no automated-access
-  clause found. Terms unconfirmed; owner accepted for non-commercial use 2026-11-18.'
+  clause found. Terms unconfirmed; owner accepted for non-commercial use 2026-11-18. | Disabled: bot wall:
+  chicagoonthecheap.com served a challenge page to VoyagerBot in production at ramp end on 2026-11-18.
+  Do not retry another way; chicagoonthecheap.com is denylisted.'
 relevance:
   sections:
   - events

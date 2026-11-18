@@ -27,14 +27,16 @@ cadence: daily
 min_delay_s: 5
 daily_budget: 100
 politeness_key: null
-enabled: true
+enabled: false
 needs_key: false
 key_secret: null
 max_retention_days: null
 display_requirements: null
 notes: 'robots.txt (research 2026-11-18): allowed. Plain RSS of free public events in NYC parks for the
   next 14 days; complements nyc-parks-events (NYC Open Data). NYC content terms not confirmed. Terms unconfirmed;
-  owner accepted for non-commercial use 2026-11-18.'
+  owner accepted for non-commercial use 2026-11-18. | Disabled: bot wall: robots.txt of www.nycgovparks.org
+  answered with a challenge (HTTP 405) to VoyagerBot in production on 2026-11-18. Do not retry another
+  way; nycgovparks.org is denylisted.'
 relevance:
   sections:
   - events
