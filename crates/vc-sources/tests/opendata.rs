@@ -319,6 +319,43 @@ fn nyc_parks_records_are_events() {
     assert_eq!(ev[2].data["price"], json!({"text": "$15 per class"}));
 }
 
+// Chicago Public Library events (Socrata, ISO date-times, GeoJSON point), 2026-11-18.
+#[test]
+fn chicago_library_records_are_events() {
+    let ev = items(
+        "json_events",
+        "https://data.cityofchicago.org/resource/vsdy-d8k7.json?$offset=0",
+        &fixture("chicago_library_events.json"),
+    );
+    assert_eq!(ev.len(), 2, "the untitled row is skipped");
+    assert_eq!(
+        ev[0].id.as_deref(),
+        Some("od-chicago-events:6900aa000000000000000001"),
+        "BiblioCommons gives each occurrence its own event id"
+    );
+    let d = &ev[0].data;
+    assert_eq!(d["name"], "Holiday Craft Workshop");
+    assert_eq!(d["start_date"], "2026-12-09");
+    assert_eq!(d["end_date"], "2026-12-09");
+    assert_eq!(d["start_time"], "13:00");
+    assert_eq!(d["venue"], "Harold Washington Library Center");
+    assert_eq!(d["address"], "400 S. State Street");
+    assert_eq!(d["city"], "Chicago");
+    assert_eq!(d["country_code"], "US");
+    assert_eq!(d["lat"], json!(41.876246));
+    assert_eq!(d["lng"], json!(-87.628222));
+    assert_eq!(
+        d["description"],
+        "Make paper ornaments with library staff. All materials provided."
+    );
+    assert_eq!(
+        d["source_url"],
+        "https://chipublib.bibliocommons.com/events/6900aa000000000000000001"
+    );
+    assert_eq!(ev[1].data["start_time"], "18:00");
+    assert!(ev[1].data.get("end_date").is_none());
+}
+
 // ---------------------------------------------------------------------------------------
 // json_events: Visit Stockholm (DRF page numbers)
 

@@ -108,6 +108,11 @@ pub const TRAVEL_PUBLICATIONS: &[(&str, &str)] = &[
     ("europeupclose.com", ""),
     ("hiddeneurope.eu", ""),
     ("europeanbestdestinations.com", ""),
+    // North America outdoor-travel blogs (research 2026-11-18). Hike Bike Travel has
+    // `travel` in its host; Narcity (city news) and Outside (fitness and gear too) are not
+    // whole-travel publications and stay off.
+    ("bearfoottheory.com", ""),
+    ("freshoffthegrid.com", ""),
 ];
 
 /// Whether `url` is travel-focused: `travel` in its host, path or query, or a

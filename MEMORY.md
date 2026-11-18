@@ -238,3 +238,10 @@ plan = `docs/superpowers/plans/2026-11-15-voyager-crawler.md`, r1–r5 = `docs/r
   tourism datasets + dataset reader; API keys; no-response hosts: re-test from the crawler VM;
   Eurostar: scraping clause, owner to confirm; The Local: relevance). Eight terms-ban hosts
   denylisted; 403/challenge hosts from the research laptop are not denylisted.
+- 2026-11-18: North America corpus (USA, Canada, Greenland): 98 rows, 91 on (90 html/rss/sitemap
+  in ramp-2 and ramp-3, the 9 personal-use-terms boards and transit sites included;
+  od-chicago-events on json_events in ramp-3, Chicago Public Library events only), 7 off (adapter
+  pending x3, BART needs an API key, LA events dataset retired, Narcity/Outside relevance). 17
+  terms-ban hosts denylisted (www.mbta.com exact, so the cdn.mbta.com GTFS stays allowed);
+  json_events reads ISO date-time start times. (scripts/seeds_to_sources.py,
+  policy/denylist.yaml, crates/vc-sources/src/adapters/json_events.rs)

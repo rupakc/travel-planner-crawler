@@ -220,6 +220,64 @@ fn sustainable_and_budget_travel_publications_pass_the_gate() {
     }
 }
 
+/// North America outdoor-travel blogs (2026-11-18) pass the gate; Narcity (city news) and
+/// Outside (fitness and gear too) are not whole-travel publications.
+#[test]
+fn north_america_travel_blogs_pass_the_gate() {
+    let feed = |category: &str, url: &str| {
+        let mut s = base();
+        s.category = category.into();
+        s.feeds = vec![url.parse().unwrap()];
+        s
+    };
+    for url in [
+        "https://bearfoottheory.com/feed/",
+        "https://www.freshoffthegrid.com/feed/",
+        "https://hikebiketravel.com/feed/",
+    ] {
+        let e = errors(&feed("blogs", url));
+        assert!(e.is_empty(), "{url}: {e:?}");
+    }
+    for (cat, url) in [
+        ("news", "https://www.narcity.com/feeds/feed.rss"),
+        ("blogs", "https://www.outsideonline.com/sitemap_index.xml"),
+    ] {
+        let e = errors(&feed(cat, url));
+        assert!(
+            e.iter().any(|e| e.contains("not travel-focused")),
+            "{url}: {e:?}"
+        );
+    }
+}
+
+/// Terms that ban robots, scraping or AI use put a host on the denylist (North America,
+/// 2026-11-18); the MBTA GTFS host and the new sources' hosts stay allowed.
+#[test]
+fn north_america_terms_bans_are_denied_and_sources_are_not() {
+    let dl = vc_sources::load_denylist(&repo_root().join("policy/denylist.yaml")).unwrap();
+    let url = |u: &str| vc_core::CanonicalUrl::parse(u).unwrap();
+    for denied in [
+        "https://www.visitflorida.com/",
+        "https://www.visitdenver.com/",
+        "https://www.mbta.com/fares",
+        "https://data.calgary.ca/",
+        "https://www.eater.com/",
+    ] {
+        assert!(
+            vc_sources::deny_match(&dl, &url(denied)).is_some(),
+            "{denied}"
+        );
+    }
+    for ok in [
+        "https://cdn.mbta.com/MBTA_GTFS.zip",
+        "https://www.visitcalgary.com/events",
+        "https://data.cityofchicago.org/resource/vsdy-d8k7.json",
+        "https://visitindiana.in.gov/sitemap.xml",
+    ] {
+        assert!(vc_sources::deny_match(&dl, &url(ok)).is_none(), "{ok}");
+    }
+}
+
 /// UNESCO's terms ban automated access (2026-11-18): every UNESCO host is denied, while
 /// hosts next to new denylist entries stay allowed.
 #[test]

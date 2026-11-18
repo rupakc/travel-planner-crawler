@@ -6324,3 +6324,1123 @@ seeds:
     needs_key: false
     allowed: true
     notes: 'Research 2026-11-18 (corpus Europe): robots.txt: timed out (no response); terms: unreadable.'
+  - id: tb-alabama
+    category: places
+    name: Alabama Tourism Department
+    url: https://alabama.travel/sitemap.xml
+    method: sitemap
+    license: Copyright; terms not found
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'robots.txt (research 2026-11-18): 200, no disallows. Terms not found (research 2026-11-18). Terms unconfirmed; owner
+      accepted for non-commercial use 2026-11-18.'
+  - id: tb-arkansas
+    category: places
+    name: Arkansas Tourism (Parks, Heritage & Tourism)
+    url: https://www.arkansas.com/
+    method: html
+    license: Copyright; terms not found
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'robots.txt (research 2026-11-18): 200, Drupal defaults only. Terms not found (research 2026-11-18). Terms unconfirmed;
+      owner accepted for non-commercial use 2026-11-18.'
+  - id: tb-connecticut
+    category: places
+    name: CTvisit (Connecticut Office of Tourism)
+    url: https://ctvisit.com/
+    method: html
+    license: Copyright; headline+link+excerpt only
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'robots.txt (research 2026-11-18): 200, Drupal defaults. Terms read (research 2026-11-18): /disclaimer: ''Reproduction
+      of this material ... without prior permission ... is strictly prohibited'' (copyright only); no automated-access clause,
+      so facts only (headline, link, short excerpt).'
+  - id: tb-delaware
+    category: places
+    name: Visit Delaware
+    url: https://www.visitdelaware.com/sitemap.xml
+    method: sitemap
+    license: Copyright; terms not found
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'robots.txt (research 2026-11-18): 200, Crawl-delay 2. Terms not found (research 2026-11-18). Terms unconfirmed;
+      owner accepted for non-commercial use 2026-11-18.'
+  - id: tb-indiana
+    category: places
+    name: Visit Indiana
+    url: https://visitindiana.in.gov/sitemap.xml
+    method: sitemap
+    license: Copyright; terms not found
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'robots.txt (research 2026-11-18): 200, Crawl-delay 2 on www.visitindiana.com, whose robots.txt names the sitemap
+      on visitindiana.in.gov. Onboarding check 2026-11-18 (one request each with the VoyagerBot UA): visitindiana.in.gov/robots.txt
+      200, ''Allow: /'', Crawl-delay 2; its sitemap lists pages on visitindiana.in.gov only, so that is the one host read (the
+      5,900 /listing/ pages are left out). Terms not found (research 2026-11-18). Terms unconfirmed; owner accepted for non-commercial
+      use 2026-11-18.'
+  - id: tb-iowa
+    category: places
+    name: Travel Iowa
+    url: https://www.traveliowa.com/sitemap.xml
+    method: sitemap
+    license: Copyright; headline+link+excerpt only
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'robots.txt (research 2026-11-18): 200, disallows /content /bundles /error. Terms read (research 2026-11-18): privacy/terms
+      page has no automation or personal-use clause; no automated-access clause, so facts only (headline, link, short excerpt).'
+  - id: tb-kansas
+    category: places
+    name: Travel Kansas
+    url: https://www.travelks.com/sitemap.xml
+    method: sitemap
+    license: Copyright; headline+link+excerpt only
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'robots.txt (research 2026-11-18): 200, Crawl-delay 2. Terms read (research 2026-11-18): the privacy-policy page
+      holds the terms; no automated-access clause, so facts only (headline, link, short excerpt).'
+  - id: tb-kentucky
+    category: places
+    name: Kentucky Tourism
+    url: https://www.kentuckytourism.com/sitemap/sitemap.gz
+    method: sitemap
+    license: Copyright; terms not found
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'robots.txt (research 2026-11-18): 200, disallows /sitefinity. The terms page is on kentucky.gov and answered 403,
+      so the terms are unreadable (treated as not found, research 2026-11-18). Terms unconfirmed; owner accepted for non-commercial
+      use 2026-11-18.'
+  - id: tb-mississippi
+    category: places
+    name: Visit Mississippi
+    url: https://visitmississippi.org/feed/
+    method: rss
+    license: Copyright; terms not found
+    cadence: daily
+    needs_key: false
+    allowed: true
+    notes: 'robots.txt (research 2026-11-18): 200, no disallows. Terms not found (research 2026-11-18). Terms unconfirmed; owner
+      accepted for non-commercial use 2026-11-18.'
+  - id: tb-missouri
+    category: places
+    name: Visit Missouri
+    url: https://www.visitmo.com/sitemap_index.xml
+    method: sitemap
+    license: Copyright; terms not found
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'robots.txt (research 2026-11-18): 200, no disallows. Terms not found (research 2026-11-18). Terms unconfirmed; owner
+      accepted for non-commercial use 2026-11-18.'
+  - id: tb-montana
+    category: places
+    name: Visit Montana
+    url: https://visitmt.com/sitemap.xml
+    method: sitemap
+    license: Copyright; terms not found
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'robots.txt (research 2026-11-18): 200, Laravel paths only. Terms not found (research 2026-11-18). Terms unconfirmed;
+      owner accepted for non-commercial use 2026-11-18.'
+  - id: tb-newmexico
+    category: places
+    name: New Mexico True
+    url: https://www.newmexico.org/sitemap.xml
+    method: sitemap
+    license: Copyright; terms not found
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'robots.txt (research 2026-11-18): 200, Crawl-delay 2. Terms not found (research 2026-11-18). Terms unconfirmed;
+      owner accepted for non-commercial use 2026-11-18.'
+  - id: tb-newyork
+    category: places
+    name: I LOVE NY (Empire State Development)
+    url: https://www.iloveny.com/sitemap.xml
+    method: sitemap
+    license: Copyright; headline+link+excerpt only
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'robots.txt (research 2026-11-18): 200, Crawl-delay 2. Terms read (research 2026-11-18): /terms-and-conditions/:
+      content ''proprietary and protected by copyright''; no automated-access clause, so facts only (headline, link, short excerpt).'
+  - id: tb-oklahoma
+    category: places
+    name: TravelOK
+    url: https://www.travelok.com/sitemap.xml.gz
+    method: sitemap
+    license: Copyright; headline+link+excerpt only
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'robots.txt (research 2026-11-18): 200, disallows /listings/search/ and /user-submission. Terms read (research 2026-11-18):
+      the personal-use licence covers brochures only: ''limited license to use our copyrighted brochures for your personal use
+      only''; no automated-access clause, so facts only (headline, link, short excerpt).'
+  - id: tb-pennsylvania
+    category: places
+    name: visitPA
+    url: https://www.visitpa.com/sitemap.xml
+    method: sitemap
+    license: Copyright; headline+link+excerpt only
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'robots.txt (research 2026-11-18): 200, Crawl-delay 2. Terms read (research 2026-11-18): privacy page with policies
+      covers the copyright of outside sites only; no automated-access clause, so facts only (headline, link, short excerpt).'
+  - id: tb-rhodeisland
+    category: places
+    name: Visit Rhode Island
+    url: https://www.visitrhodeisland.com/sitemap.xml
+    method: sitemap
+    license: Copyright; headline+link+excerpt only
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'robots.txt (research 2026-11-18): 200, Crawl-delay 2. Terms read (research 2026-11-18): /ugc-terms/ is a user-content
+      licence only; no automated-access clause, so facts only (headline, link, short excerpt).'
+  - id: tb-southcarolina
+    category: places
+    name: Discover South Carolina (SCPRT)
+    url: https://discoversouthcarolina.com/sitemap.txt
+    method: sitemap
+    license: Copyright; headline+link+excerpt only
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'robots.txt (research 2026-11-18): 200, disallows /search?*. Terms read (research 2026-11-18): scprt.com/legal holds
+      comment rules only; no automated-access clause, so facts only (headline, link, short excerpt).'
+  - id: tb-tennessee
+    category: places
+    name: Tennessee Vacation
+    url: https://www.tnvacation.com/events
+    method: html
+    license: Copyright; terms not found
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'robots.txt (research 2026-11-18): 200, disallows /simpleview-export/ and /authors/*. Terms not found (research 2026-11-18).
+      Terms unconfirmed; owner accepted for non-commercial use 2026-11-18.'
+  - id: tb-texas
+    category: places
+    name: Travel Texas
+    url: https://www.traveltexas.com/sitemap.xml
+    method: sitemap
+    license: Copyright; headline+link+excerpt only
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'robots.txt (research 2026-11-18): 200, Crawl-delay 2. Terms read (research 2026-11-18): /privacy-policy-terms-of-use/
+      has no automation or personal-use clause; no automated-access clause, so facts only (headline, link, short excerpt).'
+  - id: tb-utah
+    category: places
+    name: Visit Utah
+    url: https://www.visitutah.com/plan-your-trip
+    method: html
+    license: Copyright; terms not found
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'robots.txt (research 2026-11-18): 200, disallows /cmsctx/. Terms not found (research 2026-11-18). Terms unconfirmed;
+      owner accepted for non-commercial use 2026-11-18.'
+  - id: tb-vermont
+    category: places
+    name: Vermont Vacation
+    url: https://vermontvacation.com/sitemap_index.xml
+    method: sitemap
+    license: Copyright; headline+link+excerpt only
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'robots.txt (research 2026-11-18): 200, disallows /wp-admin/. Terms read (research 2026-11-18): /policies-and-terms-of-use/:
+      ''provided for informational purposes only''; no automated-access clause, so facts only (headline, link, short excerpt).'
+  - id: tb-virginia
+    category: places
+    name: Virginia Is For Lovers
+    url: https://www.virginia.org/sitemap.xml
+    method: sitemap
+    license: Copyright; terms not found
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'robots.txt (research 2026-11-18): 200, Crawl-delay 2. Terms not found (research 2026-11-18). Terms unconfirmed;
+      owner accepted for non-commercial use 2026-11-18.'
+  - id: tb-washington
+    category: places
+    name: State of Washington Tourism
+    url: https://stateofwatourism.com/sitemap_index.xml
+    method: sitemap
+    license: Copyright; terms not found
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'robots.txt (research 2026-11-18): 200; disallows /feed/* and /?s=* (so no RSS). Terms not found (research 2026-11-18).
+      Terms unconfirmed; owner accepted for non-commercial use 2026-11-18.'
+  - id: tb-westvirginia
+    category: places
+    name: WV Tourism
+    url: https://wvtourism.com/sitemap_index.xml
+    method: sitemap
+    license: Copyright; terms not found
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'robots.txt (research 2026-11-18): 200, no disallows. Terms not found (research 2026-11-18). Terms unconfirmed; owner
+      accepted for non-commercial use 2026-11-18.'
+  - id: tb-wisconsin
+    category: events
+    name: Travel Wisconsin
+    url: https://www.travelwisconsin.com/sitemap-event-1.xml
+    method: sitemap
+    license: Copyright; terms not found
+    cadence: daily
+    needs_key: false
+    allowed: true
+    notes: 'robots.txt (research 2026-11-18): 200, disallows /admin/ and /qa/. Terms not found (research 2026-11-18). Terms
+      unconfirmed; owner accepted for non-commercial use 2026-11-18.'
+  - id: tb-wyoming
+    category: places
+    name: Travel Wyoming
+    url: https://travelwyoming.com/sitemap.xml
+    method: sitemap
+    license: Copyright; headline+link+excerpt only
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'robots.txt (research 2026-11-18): 200, Crawl-delay 2. Terms read (research 2026-11-18): privacy/terms has an AI-tool
+      disclosure only; no automated-access clause, so facts only (headline, link, short excerpt).'
+  - id: city-boston
+    category: events
+    name: Meet Boston (Greater Boston CVB)
+    url: https://www.meetboston.com/sitemap.xml
+    method: sitemap
+    license: Copyright; headline+link+excerpt only
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'robots.txt (research 2026-11-18): 200, Crawl-delay 2. Terms read (research 2026-11-18): the privacy-policy page
+      holds the terms; no automated-access clause, so facts only (headline, link, short excerpt).'
+  - id: city-washington-dc
+    category: events
+    name: Destination DC
+    url: https://washington.org/sitemap.xml
+    method: sitemap
+    license: Copyright; headline+link+excerpt only
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'robots.txt (research 2026-11-18): 200, Drupal defaults. Terms read (research 2026-11-18): the privacy page has an
+      ''AI Usage Policy'' about their own chatbot; no scraping clause; no automated-access clause, so facts only (headline,
+      link, short excerpt).'
+  - id: city-new-orleans
+    category: events
+    name: New Orleans & Company
+    url: https://www.neworleans.com/sitemap.xml
+    method: sitemap
+    license: Copyright; terms not found
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'robots.txt (research 2026-11-18): 200, Crawl-delay 2. Terms not found (research 2026-11-18). Terms unconfirmed;
+      owner accepted for non-commercial use 2026-11-18.'
+  - id: city-austin
+    category: events
+    name: Visit Austin
+    url: https://www.austintexas.org/sitemap.xml
+    method: sitemap
+    license: Copyright; headline+link+excerpt only
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'robots.txt (research 2026-11-18): 200, Crawl-delay 2. Terms read (research 2026-11-18): /privacy-policy/ (with terms);
+      no automated-access clause, so facts only (headline, link, short excerpt).'
+  - id: city-miami
+    category: events
+    name: Greater Miami CVB
+    url: https://www.miamiandbeaches.com/sitemap.xml
+    method: sitemap
+    license: Copyright; headline+link+excerpt only
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'robots.txt (research 2026-11-18): 200, no disallows. Terms read (research 2026-11-18): combined privacy/cookies/terms
+      page; no automated-access clause, so facts only (headline, link, short excerpt).'
+  - id: city-houston
+    category: events
+    name: Visit Houston
+    url: https://www.visithoustontexas.com/sitemap.xml
+    method: sitemap
+    license: Copyright; headline+link+excerpt only
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'robots.txt (research 2026-11-18): 200, Crawl-delay 2. Terms read (research 2026-11-18): /contact/terms-of-use/ bans
+      harvesting personal data only; no automated-access clause, so facts only (headline, link, short excerpt).'
+  - id: city-phoenix
+    category: events
+    name: Visit Phoenix
+    url: https://www.visitphoenix.com/sitemap.xml
+    method: sitemap
+    license: Copyright; headline+link+excerpt only
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'robots.txt (research 2026-11-18): 200, Crawl-delay 2. Terms read (research 2026-11-18): privacy/terms page; no automated-access
+      clause, so facts only (headline, link, short excerpt).'
+  - id: city-salt-lake
+    category: events
+    name: Visit Salt Lake
+    url: https://www.visitsaltlake.com/sitemap.xml
+    method: sitemap
+    license: Copyright; terms not found
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'robots.txt (research 2026-11-18): 200, Crawl-delay 2. Terms not found (research 2026-11-18). Terms unconfirmed;
+      owner accepted for non-commercial use 2026-11-18.'
+  - id: city-san-antonio
+    category: events
+    name: Visit San Antonio
+    url: https://www.visitsanantonio.com/sitemap.xml
+    method: sitemap
+    license: Copyright; headline+link+excerpt only
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'robots.txt (research 2026-11-18): 200, Crawl-delay 2. Terms read (research 2026-11-18): /privacy-policy-and-terms/;
+      no automated-access clause, so facts only (headline, link, short excerpt).'
+  - id: city-st-louis
+    category: events
+    name: Explore St. Louis
+    url: https://explorestlouis.com/sitemap_index.xml
+    method: sitemap
+    license: Copyright; headline+link+excerpt only
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'robots.txt (research 2026-11-18): 200; disallows /events/community/, /*post_type=tribe* and /feed/*. Terms read
+      (research 2026-11-18): /terms-of-service/; no automated-access clause, so facts only (headline, link, short excerpt).'
+  - id: city-pittsburgh
+    category: events
+    name: Visit Pittsburgh
+    url: https://www.visitpittsburgh.com/sitemaps-1-sitemap.xml
+    method: sitemap
+    license: Copyright; terms not found
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'robots.txt (research 2026-11-18): 200, Craft defaults. Terms not found (research 2026-11-18). Terms unconfirmed;
+      owner accepted for non-commercial use 2026-11-18.'
+  - id: city-charleston
+    category: events
+    name: Explore Charleston
+    url: https://www.charlestoncvb.com/sitemap.xml
+    method: sitemap
+    license: Copyright; headline+link+excerpt only
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'robots.txt (research 2026-11-18): 200, Crawl-delay 3; AI reservation (anthropic-ai, CCBot and Bytespider blocked;
+      Content-Signal ai-train=no, use=reference). Terms read (research 2026-11-18): copyright.pdf; no automated-access clause,
+      so facts only (headline, link, short excerpt). robots.txt reserves AI use (AI crawlers blocked), so title and link only:
+      no LLM kinds.'
+  - id: city-minneapolis
+    category: events
+    name: Meet Minneapolis
+    url: https://www.minneapolis.org/sitemaps-1-sitemap.xml
+    method: sitemap
+    license: Copyright; headline+link+excerpt only
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'robots.txt (research 2026-11-18): 200, Craft defaults. Terms read (research 2026-11-18): privacy/terms page; no
+      automated-access clause, so facts only (headline, link, short excerpt).'
+  - id: city-detroit
+    category: events
+    name: Visit Detroit
+    url: https://visitdetroit.com/sitemaps-1-sitemap.xml
+    method: sitemap
+    license: Copyright; headline+link+excerpt only
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'robots.txt (research 2026-11-18): 200, disallows /directories/. Terms read (research 2026-11-18): /legal-privacy-policy/
+      is a copyright notice only; no automated-access clause, so facts only (headline, link, short excerpt).'
+  - id: city-anchorage
+    category: places
+    name: Visit Anchorage
+    url: https://www.anchorage.net/sitemap.xml
+    method: sitemap
+    license: Copyright; terms not found
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'robots.txt (research 2026-11-18): 200, Crawl-delay 2. Terms not found (research 2026-11-18). Terms unconfirmed;
+      owner accepted for non-commercial use 2026-11-18.'
+  - id: city-santa-fe
+    category: events
+    name: Tourism Santa Fe
+    url: https://www.santafe.org/sitemap.xml
+    method: sitemap
+    license: Copyright; terms not found
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'robots.txt (research 2026-11-18): 200, Crawl-delay 2. Terms not found (research 2026-11-18). Terms unconfirmed;
+      owner accepted for non-commercial use 2026-11-18.'
+  - id: tb-bc
+    category: places
+    name: Destination BC (SuperNatural BC)
+    url: https://www.supernaturalbc.com/sitemap.xml
+    method: sitemap
+    license: Copyright; headline+link+excerpt only
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'robots.txt (research 2026-11-18): www.hellobc.com robots.txt 200 (disallows /wp/wp-admin/) names its sitemap on
+      www.supernaturalbc.com. Onboarding check 2026-11-18 (one request each with the VoyagerBot UA): www.supernaturalbc.com/robots.txt
+      200, disallows /wp/wp-admin/ only; its sitemap lists pages on www.supernaturalbc.com only, so that is the one host read
+      (listing sitemaps left out). Terms read (research 2026-11-18): /legal-privacy-policy/; no automated-access clause, so
+      facts only (headline, link, short excerpt).'
+  - id: tb-ontario
+    category: places
+    name: Destination Ontario
+    url: https://www.destinationontario.com/sitemap.xml
+    method: sitemap
+    license: Copyright; headline+link+excerpt only
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'robots.txt (research 2026-11-18): 200, Drupal plus search/taxonomy disallows. Terms read (research 2026-11-18):
+      ontario.ca terms: King''s Printer copyright, ''follow the rules on our copyright information page''; no automated-access
+      clause, so facts only (headline, link, short excerpt).'
+  - id: tb-quebec
+    category: places
+    name: Bonjour Québec (Tourisme Québec)
+    url: https://www.bonjourquebec.com/sitemap.xml
+    method: sitemap
+    license: Copyright; terms not found
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'robots.txt (research 2026-11-18): 200, Crawl-delay 10; disallows trip-planner add paths. Terms not found (research
+      2026-11-18: the legal-notice link answers 404; the footer links Google''s terms). Terms unconfirmed; owner accepted for
+      non-commercial use 2026-11-18.'
+  - id: tb-pei
+    category: places
+    name: Tourism PEI
+    url: https://www.tourismpei.com/what-to-do/attractions-sightseeing
+    method: html
+    license: Copyright; headline+link+excerpt only
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'robots.txt (research 2026-11-18): 200, disallows /node/ and /taxonomy/. Terms read (research 2026-11-18): /copyright-privacy:
+      Province of PEI copyright notice only; no automated-access clause, so facts only (headline, link, short excerpt).'
+  - id: tb-newfoundland
+    category: places
+    name: Newfoundland & Labrador Tourism
+    url: https://www.newfoundlandlabrador.com/getting-here-and-around
+    method: html
+    license: Copyright; headline+link+excerpt only
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'robots.txt (research 2026-11-18): 200, disallows /api/ and /_next/. Terms read (research 2026-11-18): /legal: Crown
+      copyright notice; no automated-access clause, so facts only (headline, link, short excerpt).'
+  - id: tb-manitoba
+    category: places
+    name: Travel Manitoba
+    url: https://www.travelmanitoba.com/sitemaps-1-sitemap.xml
+    method: sitemap
+    license: Copyright; headline+link+excerpt only
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'robots.txt (research 2026-11-18): 200, Craft defaults plus /*.json$. Terms read (research 2026-11-18): privacy/terms
+      page; no automated-access clause, so facts only (headline, link, short excerpt).'
+  - id: tb-saskatchewan
+    category: places
+    name: Tourism Saskatchewan
+    url: https://www.tourismsaskatchewan.com/sitemap.xml
+    method: sitemap
+    license: Copyright; headline+link+excerpt only
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'robots.txt (research 2026-11-18): 200, no disallows. Terms read (research 2026-11-18): /terms-and-conditions: ownership
+      clause only; no automated-access clause, so facts only (headline, link, short excerpt).'
+  - id: tb-yukon
+    category: places
+    name: Travel Yukon
+    url: https://www.travelyukon.com/en/see-and-do/events
+    method: html
+    license: Copyright; headline+link+excerpt only
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'robots.txt (research 2026-11-18): 200, Drupal defaults. Terms read (research 2026-11-18): /en/terms-and-conditions:
+      listing rules only; no automated-access clause, so facts only (headline, link, short excerpt).'
+  - id: tb-nwt
+    category: places
+    name: Northwest Territories Tourism
+    url: https://spectacularnwt.com/sitemap_index.xml
+    method: sitemap
+    license: Copyright; headline+link+excerpt only
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'robots.txt (research 2026-11-18): 200, disallows /wp-admin/. Terms read (research 2026-11-18): /disclaimers/: copyright
+      only; no automated-access clause, so facts only (headline, link, short excerpt).'
+  - id: tb-nunavut
+    category: places
+    name: Travel Nunavut
+    url: https://www.travelnunavut.ca/sitemap.xml
+    method: sitemap
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'robots.txt (research 2026-11-18): 200, ''Allow: /''. Terms not found (research 2026-11-18; nunavuttourism.com does
+      not resolve, the tourism board is travelnunavut.ca). Terms unconfirmed; owner accepted for non-commercial use 2026-11-18.'
+  - id: city-toronto
+    category: events
+    name: Destination Toronto
+    url: https://www.destinationtoronto.com/sitemap.xml
+    method: sitemap
+    license: Copyright; terms not found
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'robots.txt (research 2026-11-18): 200, Crawl-delay 2. Terms not found (research 2026-11-18). Terms unconfirmed;
+      owner accepted for non-commercial use 2026-11-18.'
+  - id: city-quebec
+    category: events
+    name: Québec Cité (Destination Québec cité)
+    url: https://www.quebec-cite.com/sitemap.xml
+    method: sitemap
+    license: Copyright; headline+link+excerpt only
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'robots.txt (research 2026-11-18): 200, Drupal defaults. Terms read (research 2026-11-18): a copyright anchor on
+      the homepage only; no reuse clause; no automated-access clause, so facts only (headline, link, short excerpt).'
+  - id: city-calgary
+    category: events
+    name: Tourism Calgary
+    url: https://www.visitcalgary.com/events
+    method: html
+    license: Copyright; headline+link+excerpt only
+    cadence: daily
+    needs_key: false
+    allowed: true
+    notes: 'robots.txt (research 2026-11-18): 200, disallows /cp. Terms read (research 2026-11-18): /terms-and-conditions: ''may
+      download information for their own reference ... no part ... for any commercial purpose without consent'' (non-commercial
+      use is fine); no automated-access clause, so facts only (headline, link, short excerpt).'
+  - id: city-winnipeg
+    category: events
+    name: Tourism Winnipeg
+    url: https://www.tourismwinnipeg.com/festivals-and-events
+    method: html
+    license: Copyright; headline+link+excerpt only
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'robots.txt (research 2026-11-18): 200, no disallows; AI reservation (Content-Signal ai-train=no; AI bots blocked).
+      Terms read (research 2026-11-18): privacy page: the personal-use limit applies only to newsletter articles; no automated-access
+      clause, so facts only (headline, link, short excerpt). robots.txt reserves AI use (AI crawlers blocked), so title and
+      link only: no LLM kinds.'
+  - id: city-victoria
+    category: events
+    name: Destination Greater Victoria
+    url: https://admin.tourismvictoria.com/sitemap.xml
+    method: sitemap
+    license: Copyright; terms not found
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'robots.txt (research 2026-11-18): www.tourismvictoria.com robots.txt 200 (disallows /wp/wp-admin/) names its sitemap
+      on admin.tourismvictoria.com. Onboarding check 2026-11-18 (one request each with the VoyagerBot UA): admin.tourismvictoria.com/robots.txt
+      200, disallows /wp/wp-admin/ only; its sitemaps list pages on www.tourismvictoria.com, which is a seed host of this source.
+      Terms not found (research 2026-11-18). Terms unconfirmed; owner accepted for non-commercial use 2026-11-18.'
+  - id: tb-greenland
+    category: places
+    name: Visit Greenland
+    url: https://visitgreenland.com/sitemap_index.xml
+    method: sitemap
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'robots.txt (research 2026-11-18): 200; disallows /feed/, */feed/ (no RSS) and /?s. Terms not found (research 2026-11-18).
+      Terms unconfirmed; owner accepted for non-commercial use 2026-11-18.'
+  - id: tr-viarail
+    category: getting_around
+    name: VIA Rail Canada (traveller pages)
+    url: https://www.viarail.ca/sitemap.xml
+    method: sitemap
+    license: Copyright; headline+link+excerpt only
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'robots.txt (research 2026-11-18): 200, Drupal plus offers disallows. Terms read (research 2026-11-18): /en/terms-and-conditions;
+      no automated-access clause, so facts only (headline, link, short excerpt).'
+  - id: tr-la-metro
+    category: getting_around
+    name: LA Metro (riding pages)
+    url: https://www.metro.net/sitemap_index.xml
+    method: sitemap
+    license: Copyright; headline+link+excerpt only
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'robots.txt (research 2026-11-18): 200, WordPress defaults. Terms read (research 2026-11-18): /about/copyright/:
+      ''Any other use, including reproduction ... is strictly prohibited'' (a copyright notice); no automated-access clause,
+      so facts only (headline, link, short excerpt).'
+  - id: tr-stm
+    category: getting_around
+    name: STM Montréal (visitor pages)
+    url: https://www.stm.info/sitemap.xml
+    method: sitemap
+    license: Copyright; headline+link+excerpt only
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'robots.txt (research 2026-11-18): 200; disallows PDFs, assets and *search. Terms read (research 2026-11-18): conditions-et-confidentialite:
+      may not be reproduced ''sauf pour usage personnel'' (a reproduction clause); no automated-access clause, so facts only
+      (headline, link, short excerpt).'
+  - id: tr-translink
+    category: getting_around
+    name: TransLink Vancouver (rider guide)
+    url: https://www.translink.ca/sitemap.xml
+    method: sitemap
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'robots.txt (research 2026-11-18): 200, disallows /temp/, /upload/ and /-/media/Documents/. Terms not found (research
+      2026-11-18: /terms-of-use answers 404; the footer links Google''s terms). Terms unconfirmed; owner accepted for non-commercial
+      use 2026-11-18.'
+  - id: tr-septa
+    category: getting_around
+    name: SEPTA (visitor info)
+    url: https://www.septa.org/
+    method: html
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'robots.txt (research 2026-11-18): 200; disallows *.html, *.htm, *.php and file types, so only extensionless paths
+      are read. Terms not found (research 2026-11-18). Terms unconfirmed; owner accepted for non-commercial use 2026-11-18.'
+  - id: tr-panynj
+    category: getting_around
+    name: Port Authority of NY & NJ (airport ground transport, PATH)
+    url: https://www.panynj.gov/sitemap.xml
+    method: sitemap
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'robots.txt (research 2026-11-18): 200, staging disallows only. Terms not found (research 2026-11-18). Terms unconfirmed;
+      owner accepted for non-commercial use 2026-11-18.'
+  - id: tr-toronto-pearson
+    category: getting_around
+    name: Toronto Pearson Airport
+    url: https://www.torontopearson.com/sitemap_yyz_en.xml
+    method: sitemap
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'robots.txt (research 2026-11-18): 200, disallows App_* and payments. Terms not found (research 2026-11-18). Terms
+      unconfirmed; owner accepted for non-commercial use 2026-11-18.'
+  - id: tr-mwaa
+    category: getting_around
+    name: Reagan National / Dulles (MWAA)
+    url: https://www.flyreagan.com/sitemap.xml
+    method: sitemap
+    license: Copyright; headline+link+excerpt only
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'robots.txt (research 2026-11-18): 200, Drupal defaults. Terms read (research 2026-11-18): mwaa.com privacy statement
+      and website policy; no automated-access clause, so facts only (headline, link, short excerpt).'
+  - id: tr-massport
+    category: getting_around
+    name: Massport (Boston Logan)
+    url: https://www.massport.com/sitemap.xml
+    method: sitemap
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'robots.txt (research 2026-11-18): 200, Drupal defaults. Terms not found (research 2026-11-18). Terms unconfirmed;
+      owner accepted for non-commercial use 2026-11-18.'
+  - id: tr-sfo
+    category: getting_around
+    name: San Francisco International Airport
+    url: https://www.flysfo.com/sitemap.xml
+    method: sitemap
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'robots.txt (research 2026-11-18): 200, Drupal defaults. Terms not found (research 2026-11-18: privacy-cookie page
+      only; flysfo.com is not covered by the sftravel.com denial). Terms unconfirmed; owner accepted for non-commercial use
+      2026-11-18.'
+  - id: park-parks-canada
+    category: places
+    name: Parks Canada
+    url: https://parks.canada.ca/pn-np
+    method: html
+    license: Canada.ca terms (facts only; commercial redistribution needs permission)
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'robots.txt (research 2026-11-18): 404 (no robots.txt, so allowed). Terms read (research 2026-11-18): canada.ca terms,
+      ''you may reproduce the materials ... for non-commercial purposes ... without charge or further permission''; facts only
+      (Crown copyright).'
+  - id: park-usfs
+    category: places
+    name: USDA Forest Service
+    url: https://www.fs.usda.gov/sitemap.xml
+    method: sitemap
+    license: US public domain
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'robots.txt (research 2026-11-18): 200, Drupal defaults. US federal work, public domain; the regulations-policies
+      page has no automated-access clause (research 2026-11-18).'
+  - id: park-blm
+    category: places
+    name: Bureau of Land Management
+    url: https://www.blm.gov/sitemap.xml
+    method: sitemap
+    license: US public domain
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'robots.txt (research 2026-11-18): 200, Drupal defaults. US federal work, public domain; /info/notices has no automated-access
+      clause (research 2026-11-18).'
+  - id: park-usfws
+    category: places
+    name: US Fish & Wildlife Service (refuges)
+    url: https://www.fws.gov/sitemap.xml
+    method: sitemap
+    license: US public domain
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'robots.txt (research 2026-11-18): 200, Drupal defaults. US federal work, public domain; /policies has no automated-access
+      clause (research 2026-11-18).'
+  - id: park-ny-state
+    category: places
+    name: NY State Parks
+    url: https://parks.ny.gov/sitemap.xml
+    method: sitemap
+    license: Copyright; headline+link+excerpt only
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'robots.txt (research 2026-11-18): 200, Drupal; AI reservation (anthropic-ai, CCBot, ChatGPT-User and Bytespider
+      blocked). Terms read (research 2026-11-18): privacy page; no automated-access clause, so facts only (headline, link, short
+      excerpt). robots.txt reserves AI use (AI crawlers blocked), so title and link only: no LLM kinds.'
+  - id: park-texas
+    category: places
+    name: Texas Parks & Wildlife (state parks)
+    url: https://tpwd.texas.gov/sitemap.xml
+    method: sitemap
+    license: Copyright; headline+link+excerpt only
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'robots.txt (research 2026-11-18): 200; disallows /tours/, /files/ and /API/. Terms read (research 2026-11-18): /site/policies/;
+      no automated-access clause, so facts only (headline, link, short excerpt).'
+  - id: park-oregon
+    category: places
+    name: Oregon State Parks
+    url: https://stateparks.oregon.gov/
+    method: html
+    license: Copyright; terms not found
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'robots.txt (research 2026-11-18): 200; disallows /data/, /files/ and /images/. Terms not found (research 2026-11-18).
+      Terms unconfirmed; owner accepted for non-commercial use 2026-11-18.'
+  - id: park-ontario
+    category: places
+    name: Ontario Parks
+    url: https://www.ontarioparks.ca/
+    method: html
+    license: Copyright; terms not found
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'robots.txt (research 2026-11-18): 200, Crawl-delay 1, disallows /admin. Terms not found (research 2026-11-18). Terms
+      unconfirmed; owner accepted for non-commercial use 2026-11-18.'
+  - id: park-bc
+    category: places
+    name: BC Parks
+    url: https://bcparks.ca/sitemap-index.xml
+    method: sitemap
+    license: Copyright; headline+link+excerpt only
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'robots.txt (research 2026-11-18): 200, no disallows. Terms read (research 2026-11-18): the www2.gov.bc.ca disclaimer;
+      no automated-access clause, so facts only (headline, link, short excerpt).'
+  - id: park-alberta
+    category: places
+    name: Alberta Parks
+    url: https://www.albertaparks.ca/
+    method: html
+    license: Alberta.ca terms (copying permitted without charge; facts only)
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'robots.txt (research 2026-11-18): robots.txt returns a sitemap XML url list instead of rules, which parses as no
+      rules (allowed). Onboarding check 2026-11-18 (one request with the VoyagerBot UA): /sitemap.xml answers 301 to the home
+      page, so the home page is the seed. Terms read (research 2026-11-18): alberta.ca, ''may be copied and distributed for
+      non-commercial use without charge or further permission''; facts only.'
+  - id: od-chicago-events
+    category: events
+    name: 'City of Chicago open data: Chicago Public Library events'
+    url: https://data.cityofchicago.org/resource/vsdy-d8k7.json
+    method: api
+    license: City of Chicago data terms
+    cadence: daily
+    needs_key: false
+    allowed: true
+    notes: 'robots.txt (research 2026-11-18): 200, Crawl-delay 1; Socrata /browse disallows only, /resource allowed. City of
+      Chicago data disclaimer: free use, no automated-access clause (research 2026-11-18). Onboarding check 2026-11-18 (one
+      request per dataset with the VoyagerBot UA): Chicago Public Library Events (vsdy-d8k7) has 2,935 rows dated today or later;
+      Special Events (xgse-8eg7) has none and the Park District permits (pk66-w54g) end in past years and name private requestors,
+      so only vsdy-d8k7 is read'
+  - id: od-la-events
+    category: events
+    name: 'City of LA open data: events'
+    url: https://data.lacity.org/resource/9aw9-mn4p.json
+    method: api
+    license: Copyright; terms not found
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'robots.txt (research 2026-11-18): 200, Crawl-delay 1, /resource allowed. Terms not found (research 2026-11-18).
+      Terms unconfirmed; owner accepted for non-commercial use 2026-11-18.'
+  - id: blog-bearfoottheory
+    category: blogs
+    name: Bearfoot Theory
+    url: https://bearfoottheory.com/feed/
+    method: rss
+    license: Copyright; terms not found
+    cadence: daily
+    needs_key: false
+    allowed: true
+    notes: 'robots.txt (research 2026-11-18): 200, WordPress defaults. Terms not found (research 2026-11-18). Terms unconfirmed;
+      owner accepted for non-commercial use 2026-11-18.'
+  - id: blog-freshoffthegrid
+    category: blogs
+    name: Fresh Off The Grid
+    url: https://www.freshoffthegrid.com/feed/
+    method: rss
+    license: Copyright; headline+link+excerpt only
+    cadence: daily
+    needs_key: false
+    allowed: true
+    notes: 'robots.txt (research 2026-11-18): 200, no disallows. Terms read (research 2026-11-18): /terms: copyright and trademark
+      only; no automated-access clause, so facts only (headline, link, short excerpt).'
+  - id: blog-hikebiketravel
+    category: blogs
+    name: Hike Bike Travel
+    url: https://hikebiketravel.com/feed/
+    method: rss
+    license: Copyright; terms not found
+    cadence: daily
+    needs_key: false
+    allowed: true
+    notes: 'robots.txt (research 2026-11-18): 200, WordPress defaults. Terms not found (research 2026-11-18). Terms unconfirmed;
+      owner accepted for non-commercial use 2026-11-18.'
+  - id: blog-narcity
+    category: news
+    name: Narcity (Canada/US)
+    url: https://www.narcity.com/feeds/feed.rss
+    method: rss
+    license: Copyright; headline+link+excerpt only
+    cadence: daily
+    needs_key: false
+    allowed: true
+    notes: 'robots.txt (research 2026-11-18): 200; disallows */tag/*. Terms read (research 2026-11-18): /terms-conditions: UGC
+      licence; no automated-access clause, so facts only (headline, link, short excerpt).'
+  - id: blog-outsideonline
+    category: blogs
+    name: Outside Online
+    url: https://www.outsideonline.com/sitemap_index.xml
+    method: sitemap
+    license: Copyright; terms not found
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'robots.txt (research 2026-11-18): 200; AI reservation (anthropic-ai, CCBot, Bytespider and Applebot-Extended blocked).
+      Terms not found on the homepage (research 2026-11-18). Terms unconfirmed; owner accepted for non-commercial use 2026-11-18.
+      The site has no travel-only feed, so the sitemap is read. robots.txt reserves AI use (AI crawlers blocked), so title and
+      link only: no LLM kinds.'
+  - id: tr-bart-feeds
+    category: getting_around
+    name: BART (feeds and API)
+    url: https://www.bart.gov/
+    method: api
+    license: Copyright; terms not found
+    cadence: daily
+    needs_key: false
+    allowed: true
+    notes: 'robots.txt (research 2026-11-18): 200, Drupal defaults. Terms read (research 2026-11-18): see the reason below.'
+  - id: od-msc-citypage
+    category: weather
+    name: 'MSC Datamart: Canadian city weather (citypage_weather)'
+    url: https://dd.weather.gc.ca/citypage_weather/
+    method: api
+    license: ECCC Data Servers End-use Licence
+    cadence: daily
+    needs_key: false
+    allowed: true
+    notes: 'robots.txt (research 2026-11-18): 404 (allowed). ECCC Data Servers End-use Licence v2.1.1: ''royalty-free, perpetual
+      ... including for commercial purposes'', with attribution (research 2026-11-18).'
+  - id: od-canada-ckan
+    category: places
+    name: Open Government Portal (Canada) CKAN
+    url: https://open.canada.ca/data/api/3/action/package_search
+    method: api
+    license: Open Government Licence - Canada
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'robots.txt (research 2026-11-18): 200, Crawl-delay 20. Open Government Licence – Canada (research 2026-11-18).'
+  - id: od-ottawa
+    category: places
+    name: City of Ottawa open data (ArcGIS Hub)
+    url: https://open.ottawa.ca/
+    method: api
+    license: Open Government Licence - City of Ottawa
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'robots.txt (research 2026-11-18): 200, Crawl-delay 60. Open Government Licence – City of Ottawa (research 2026-11-18).'
+  - id: tb-alberta
+    category: places
+    name: Travel Alberta
+    url: https://www.travelalberta.com/
+    method: html
+    license: Copyright; terms not found
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'robots.txt (research 2026-11-18): 200, no * group and no AI-bot block (onboarding re-read 2026-11-18). terms restrict
+      to personal/non-commercial use; owner accepted for non-commercial use 2026-11-18 (''licence to access, view, download,
+      store, and print ... provided that: your use of such Material is for educational or personal, non-commercial purposes
+      only''). Facts only (headline, link, short excerpt).'
+  - id: tb-novascotia
+    category: places
+    name: Tourism Nova Scotia
+    url: https://novascotia.com/feed/
+    method: rss
+    license: Copyright; terms not found
+    cadence: daily
+    needs_key: false
+    allowed: true
+    notes: 'robots.txt (research 2026-11-18): 200, WordPress and event-filter disallows; GPTBot/ClaudeBot group disallows /wp-admin/
+      only (no AI reservation); Crawl-delay only for bingbot/Yeti (onboarding re-read 2026-11-18). terms restrict to personal/non-commercial
+      use; owner accepted for non-commercial use 2026-11-18 (''This Site is strictly for personal and non-commercial use.'').
+      Facts only (headline, link, short excerpt).'
+  - id: city-montreal
+    category: events
+    name: Tourisme Montréal
+    url: https://www.mtl.org/sitemap.xml
+    method: sitemap
+    license: Copyright; terms not found
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'robots.txt (research 2026-11-18): 200, no AI-bot block (onboarding re-read 2026-11-18); the sitemap is one flat
+      urlset. terms restrict to personal/non-commercial use; owner accepted for non-commercial use 2026-11-18 (''pour votre
+      usage et information à des fins personnelles et non commerciales''). Facts only (headline, link, short excerpt).'
+  - id: city-vancouver
+    category: events
+    name: Destination Vancouver
+    url: https://www.destinationvancouver.com/
+    method: html
+    license: Copyright; terms not found
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'robots.txt (research 2026-11-18): 200, disallows /plugins/, /svtest/, /studio/ and /api/ (onboarding re-read 2026-11-18).
+      terms restrict to personal/non-commercial use; owner accepted for non-commercial use 2026-11-18 (''made available to you
+      for your lawful, personal, and non-commercial use only''). Facts only (headline, link, short excerpt).'
+  - id: city-halifax
+    category: events
+    name: Discover Halifax
+    url: https://discoverhalifaxns.com/feed/
+    method: rss
+    license: Copyright; terms not found
+    cadence: daily
+    needs_key: false
+    allowed: true
+    notes: 'robots.txt (research 2026-11-18): 200, Crawl-delay 10, no AI-bot block (onboarding re-read 2026-11-18). terms restrict
+      to personal/non-commercial use; owner accepted for non-commercial use 2026-11-18 (''download and copy the content ...
+      for private personal use only. Other uses are restricted.''). Facts only (headline, link, short excerpt).'
+  - id: city-las-vegas
+    category: events
+    name: Visit Las Vegas (LVCVA)
+    url: https://www.visitlasvegas.com/
+    method: html
+    license: Copyright; terms not found
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'robots.txt (research 2026-11-18): 200, Crawl-delay 2, disallows /plugins/crm/count/ (onboarding re-read 2026-11-18).
+      terms restrict to personal/non-commercial use; owner accepted for non-commercial use 2026-11-18 (''Copying or storing
+      of any content for other than personal, noncommercial use is expressly prohibited''). Facts only (headline, link, short
+      excerpt).'
+  - id: tr-wmata
+    category: getting_around
+    name: WMATA (Washington Metro visitor pages)
+    url: https://www.wmata.com/
+    method: html
+    license: Copyright; terms not found
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'robots.txt (research 2026-11-18): 200, disallows /private/ (onboarding re-read 2026-11-18). terms restrict to personal/non-commercial
+      use; owner accepted for non-commercial use 2026-11-18 (''You may: (1) print copies ... for your own personal use ... Commercial
+      use ... prohibited'' and ''may not ... modify or re-use the text''). Facts only (headline, link, short excerpt).'
+  - id: tr-cta
+    category: getting_around
+    name: CTA (Chicago Transit Authority visitor pages)
+    url: https://www.transitchicago.com/
+    method: html
+    license: Copyright; terms not found
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'robots.txt (research 2026-11-18): 200, disallows /search/, /news/ and query-string paths (onboarding re-read 2026-11-18).
+      terms restrict to personal/non-commercial use; owner accepted for non-commercial use 2026-11-18 (''print copies ... for
+      your own personal use ... Commercial use ... prohibited'' (the same clause as WMATA)). Facts only (headline, link, short
+      excerpt).'
+  - id: tr-ttc
+    category: getting_around
+    name: TTC (Toronto Transit Commission visitor pages)
+    url: https://www.ttc.ca/
+    method: html
+    license: Copyright; terms not found
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'robots.txt (research 2026-11-18): 200, empty * group (onboarding re-read 2026-11-18). terms restrict to personal/non-commercial
+      use; owner accepted for non-commercial use 2026-11-18 (''entitled to view and make a copy of the Works for your own personal
+      and non-commercial use''). Facts only (headline, link, short excerpt).'

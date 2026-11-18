@@ -611,3 +611,57 @@ entries:
   - host: bolognawelcome.com
     reason: Explicit TDM reservation (art. 70-quater L.633/1941, Dir. 2019/790 art. 4) and a ban on automated scraping, 2026-11-18
     source: research 2026-11-18 corpus Europe SKIP
+  # --- North America research 2026-11-18: terms ban robots, scraping or AI use ---------
+  - host: visitflorida.com
+    reason: 'Terms: ''may not ... scrape or aggregate Content from the Site''; personal, non-commercial use only'
+    source: research 2026-11-18 north-america SKIP
+  - host: enjoyillinois.com
+    reason: 'Terms: ''agree not to access ... the website through any automated means (including ... web crawlers or screen scrapers)'''
+    source: research 2026-11-18 north-america SKIP
+  - host: visitseattle.org
+    reason: 'Terms: ''not use the Site ... including ... using bots or spiders to scrape any content'''
+    source: research 2026-11-18 north-america SKIP
+  - host: denver.org
+    reason: 'Visit Denver terms: ''Use any robot, spider, scraper, or other automated or manual means to access the System'' is prohibited'
+    source: research 2026-11-18 north-america SKIP
+  # Visit Denver uses both denver.org and visitdenver.com.
+  - host: visitdenver.com
+    reason: 'Visit Denver (sibling domain of denver.org): the same terms ban robots, spiders and scrapers'
+    source: research 2026-11-18 north-america SKIP
+  - host: visitdallas.com
+    reason: 'Terms: ''Use any robot, spider, or other automatic device, process, or means to access the Website for any purpose'' is prohibited'
+    source: research 2026-11-18 north-america SKIP
+  - host: baltimore.org
+    reason: 'Terms: ''use any robot, spider or other automatic device, process or means to access the Website for any purpose'' is prohibited'
+    source: research 2026-11-18 north-america SKIP
+  - host: visitnc.com
+    reason: 'Terms: ''will not use any robot, spider, other automated device, or manual process to monitor or copy any content'''
+    source: research 2026-11-18 north-america SKIP
+  - host: visitorlando.com
+    reason: 'Terms: ''General AI Use Prohibition'' (no input of content into any AI system or LLM; bans use of AI training models)'
+    source: research 2026-11-18 north-america SKIP
+  - host: ottawatourism.ca
+    reason: 'Terms: ''(f) using any robot, spider, or other automatic device, process, or means to access the Site'' is prohibited'
+    source: research 2026-11-18 north-america SKIP
+  - host: gotobermuda.com
+    reason: 'Bermuda Tourism Authority terms: ''You may not use spiders, robots, data mining techniques or other automated devices'''
+    source: research 2026-11-18 north-america SKIP
+  - host: soundtransit.org
+    reason: 'Terms: ''Use any robot, spider or other automatic device, process or means to access the Website'' is prohibited'
+    source: research 2026-11-18 north-america SKIP
+  # www.mbta.com only: the MBTA GTFS download (cdn.mbta.com) is published for reuse.
+  - host: www.mbta.com
+    reason: Terms ban 'data harvesting, data mining, or ... other means we have not intentionally made available'; personal non-commercial use only; AI bots blocked
+    source: research 2026-11-18 north-america SKIP
+  - host: parks.ca.gov
+    reason: 'California State Parks terms: ''may not use any "deep-link", "spider" or other automatic device, or process, to access ... content'''
+    source: research 2026-11-18 north-america SKIP
+  - host: calgary.ca
+    reason: 'calgary.ca terms: ''No ... use of data mining, robots, or similar data-gathering and extraction tools is permitted''; personal non-commercial use (covers data.calgary.ca)'
+    source: research 2026-11-18 north-america SKIP
+  - host: roadtrippers.com
+    reason: 'Roadpass terms: ''(g) use any automated system, including ... "robots," "spiders" ... to access the Services'' is prohibited'
+    source: research 2026-11-18 north-america SKIP
+  - host: eater.com
+    reason: Vox Media/PMC terms ban spidering and scraping and use in 'any artificial intelligence systems, machine learning models'; AI bots blocked
+    source: research 2026-11-18 north-america SKIP

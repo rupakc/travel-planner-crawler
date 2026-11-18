@@ -165,6 +165,38 @@ pub const MAPPINGS: &[EventMapping] = &[
         country_code: "US",
         default_category: "other",
     },
+    // Chicago Public Library Events (City of Chicago open data `vsdy-d8k7`, checked
+    // 2026-11-18): `start`/`end` are ISO date-times, `location` is a GeoJSON point
+    // (`[lng, lat]`), `event_page.url` links the library's event page.
+    EventMapping {
+        source: "od-chicago-events",
+        path: "/resource/vsdy-d8k7.json",
+        items: "",
+        pager: Pager::SocrataOffset {
+            limit: 1000,
+            order: "start,event_id",
+            upcoming_field: Some("start"),
+        },
+        fields: Fields {
+            id: "/event_id",
+            name: "/title",
+            description: "/description",
+            start_date: "/start",
+            end_date: "/end",
+            start_time: "/start",
+            venue: "/location_name",
+            address: "/location_address",
+            lat: "/location/coordinates/1",
+            lng: "/location/coordinates/0",
+            url: "/event_page/url",
+            category: "/event_types",
+            ..Fields::NONE
+        },
+        city: "Chicago",
+        country: "United States",
+        country_code: "US",
+        default_category: "other",
+    },
     // Visit Stockholm public events list (DRF, `?format=json`): `title`/`description` are
     // `{en, sv}` objects; the item's `city` is the district or municipality.
     EventMapping {
@@ -369,9 +401,16 @@ fn cut(s: &str, max: usize) -> String {
     t
 }
 
-/// `HH:MM` from `HH:MM`, `HH:MM:SS` or `h:mm am/pm` (`None` otherwise).
+/// `HH:MM` from `HH:MM`, `HH:MM:SS`, `h:mm am/pm` or an ISO date-time
+/// (`YYYY-MM-DDTHH:MM…`; `None` otherwise).
 pub fn hhmm(t: &str) -> Option<String> {
     let t = t.trim().to_ascii_lowercase();
+    let b = t.as_bytes();
+    let t = if b.len() > 11 && b[4] == b'-' && b[7] == b'-' && b[10] == b't' {
+        t[11..].to_string()
+    } else {
+        t
+    };
     let (clock, pm) = if let Some(x) = t.strip_suffix("pm").or_else(|| t.strip_suffix("p.m.")) {
         (x.trim().to_string(), Some(true))
     } else if let Some(x) = t.strip_suffix("am").or_else(|| t.strip_suffix("a.m.")) {
@@ -630,6 +669,8 @@ mod tests {
         assert_eq!(hhmm("12:00 am").as_deref(), Some("00:00"));
         assert_eq!(hhmm("12:15 p.m.").as_deref(), Some("12:15"));
         assert_eq!(hhmm("09:05:00").as_deref(), Some("09:05"));
+        assert_eq!(hhmm("2026-12-09T13:00:00.000").as_deref(), Some("13:00"));
+        assert_eq!(hhmm("2026-12-09"), None);
         assert_eq!(hhmm("25:00"), None);
         assert_eq!(hhmm("noon"), None);
     }
