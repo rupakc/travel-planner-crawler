@@ -7,7 +7,7 @@
 Every website and dataset the crawler knows, grouped by the part of the Voyager app it
 feeds. A source that serves several parts is listed under each of them.
 
-**838 sources, 665 on, 173 off.**
+**849 sources, 672 on, 177 off.**
 
 - **What we take**: the traveller-facing data the source gives (its `relevance.why`).
 - **Licence**: *open* (free reuse with credit), *share-alike* (kept apart from other
@@ -150,6 +150,8 @@ is added only with the owner's approval (see CONTRIBUTING.md).
 | `la-clef-verte` | `www.laclefverte.org` | About 3,000 eco-labelled hotels, campsites, gîtes and hostels in France, for the Hotels section. | facts only | yes | no |
 | `legambiente-turismo` | `www.legambienteturismo.it` | Legambiente-labelled eco hotels and agriturismi in Italy, for the Hotels section. | facts only | yes | no |
 | `nsw-national-parks` | `www.nationalparks.nsw.gov.au` | Every New South Wales national park, walking track and campground or cabin, for Places to see, Activities and Hotels. | open | yes | no |
+| `od-catalonia-tourism-register` | `analisi.transparenciacatalunya.cat` | Every registered hotel, hostal, rural house, apartment block and campsite in Catalonia with its official category, for Hotels. | facts only | yes | no |
+| `od-fr-atout-france-classes` | `www.data.gouv.fr`, `data.classement.atout-france.fr` | Every officially classified hotel, campsite, tourist residence and holiday village in France with its star rating and website, for Hotels. | open | yes | no |
 | `official-hihostels` | `www.hihostels.com` | The non-profit Hostelling International hostel network with locations and facilities worldwide, for the Hotels section. | facts only | yes | no |
 | `osm-geofabrik` | `download.geofabrik.de` | OpenStreetMap hotels, sights and transit stops per region, for Hotels, Places to see and Local transportation. | share-alike | yes | no |
 | `overpass` | `overpass-api.de` | Targeted OpenStreetMap lookups of hotels and sights around a destination, for Hotels and Places to see. | share-alike | yes | no |
@@ -313,7 +315,9 @@ is added only with the owner's approval (see CONTRIBUTING.md).
 | `nyc-restaurant-inspections` | `data.cityofnewyork.us` | Every New York City restaurant with cuisine, address and inspection grade, for food in Activities. | open | yes | no |
 | `nyctourism` | `www.nyctourism.com` | Official NYC event listings, restaurant guides and itineraries, for Events, Activities, the itinerary and Places to see. | facts only | yes | no |
 | `oad-guides` | `www.oadguides.com` | Opinionated About Dining restaurant rankings (names and cities as facts), for Activities. | facts only | yes | no |
+| `od-austin-food-inspections` | `data.austintexas.gov` | Austin food establishments with address and latest official inspection score, for food in Activities. | open | yes | no |
 | `od-chicago-events` | `data.cityofchicago.org` | Free Chicago Public Library events (talks, workshops, family events) at every branch, for Events and Activities. | open | yes | no |
+| `od-chicago-food-inspections` | `data.cityofchicago.org` | Chicago restaurants, bakeries and taverns with address and latest official inspection result, for food in Activities. | open | yes | no |
 | `official-berlin-welcomecard` | `www.berlin-welcomecard.de` | The official Berlin tourist pass (public transport plus discounts), for Activities and Local transportation. | facts only | yes | no |
 | `official-eyca` | `eyca.org` | Youth (under 30) discounts on transport and attractions across Europe, for Travel tips, Activities and Local transportation. | facts only | yes | no |
 | `official-isic` | `www.isic.org` | International Student Identity Card discounts and news, for Travel tips and Activities. | facts only | yes | no |
@@ -511,9 +515,13 @@ is added only with the owner's approval (see CONTRIBUTING.md).
 | `od-eea-bathing-water` | `www.eea.europa.eu` | EEA bathing water quality: Annual water-quality class of about 22,000 EU beaches and lakes, for Places to see and Activities. | open | no | no |
 | `od-epa-beacon` | `www.epa.gov` | US EPA BEACON beach advisories: US beach advisories and closures, for Places to see, Activities and Travel tips. | open | no | no |
 | `od-gb-toiletmap` | `www.toiletmap.org.uk` | Great British Public Toilet Map: About 14,000 UK public toilets with opening hours and accessibility, for Travel tips and Activities. | facts only | no | no |
+| `od-hk-fehd-licensed-restaurants` | `www.fehd.gov.hk` | Every licensed restaurant in Hong Kong with district and address, for food in Activities. | open | no | no |
+| `od-lacounty-restaurant-inspections` | `data.lacounty.gov` | Los Angeles County restaurant and market inspection results, for food in Activities. | facts only | no | no |
 | `od-nasa-black-marble` | `ladsweb.modaps.eosdis.nasa.gov` | NASA VIIRS Black Marble: Night-sky brightness for stargazing, for Activities. | open | no | no |
+| `od-nz-doc` | `doc-deptconservation.opendata.arcgis.com` | New Zealand's backcountry huts, tracks and campsites from the Department of Conservation, for Places to see and Activities. | open | no | no |
 | `od-openbeta` | `api.openbeta.io` | OpenBeta: Climbing crags and routes worldwide, for Activities. | open | no | no |
 | `od-openskimap` | `tiles.openskimap.org` | OpenSkiMap: Ski resorts worldwide with run and lift counts, for Activities and Places to see. | share-alike | no | no |
+| `od-sf-restaurant-scores` | `data.sf.gov` | San Francisco restaurants with their health inspection scores, for food in Activities. | open | no | no |
 | `od-uk-bathing-water` | `environment.data.gov.uk` | Environment Agency Bathing Water Quality: Water quality and pollution-risk forecasts for 400+ England bathing waters, for Places to see, Activities and Weather. | open | no | no |
 | `parisjetaime` | `parisjetaime.com` | Paris events and things to do from the official tourist office, for Events and Activities. | facts only | no | no |
 | `park-gbrmpa` | `www.gbrmpa.gov.au` | Great Barrier Reef Marine Park Authority: reef visiting rules, zoning, for Places to see, Activities and Travel tips. | facts only | no | no |
@@ -685,6 +693,7 @@ is added only with the owner's approval (see CONTRIBUTING.md).
 | `nsw-national-parks` | `www.nationalparks.nsw.gov.au` | Every New South Wales national park, walking track and campground or cabin, for Places to see, Activities and Hotels. | open | yes | no |
 | `nyctourism` | `www.nyctourism.com` | Official NYC event listings, restaurant guides and itineraries, for Events, Activities, the itinerary and Places to see. | facts only | yes | no |
 | `od-musei-italiani` | `www.museiitaliani.it` | Musei Italiani (MiC): state museums, hours, free Sundays, for Places to see and Events. | open | yes | no |
+| `od-wien-ogd` | `data.wien.gv.at` | Vienna's sights and museums plus its public toilets and free Wi-Fi spots, for Places to see and Travel tips. | open | yes | no |
 | `official-inah` | `www.inah.gob.mx` | Mexico's national museums and archaeological sites with prices and opening days, for Places to see and Travel tips. | facts only | yes | no |
 | `official-parismusees` | `www.parismusees.paris.fr` | The City of Paris's 14 museums, whose permanent collections are free, with exhibitions, for Places to see and Activities. | facts only | yes | no |
 | `official-prague-eu` | `prague.eu` | Official Prague visitor pass, free events and city information, for Activities, Events, Places to see and Local transportation. | facts only | yes | no |
@@ -898,6 +907,7 @@ is added only with the owner's approval (see CONTRIBUTING.md).
 | `od-imls-museums` | `www.imls.gov` | IMLS Museum Data Files: About 30,000 US museums with address and type (last release 2018), for Places to see. | open | no | no |
 | `od-mapping-museums-uk` | `museums.bbk.ac.uk` | Mapping Museums (Birkbeck): About 4,000 UK museums, open and closed, for Places to see. | open | no | no |
 | `od-nl-rijksmonumenten` | `linkeddata.cultureelerfgoed.nl` | Rijksmonumentenregister (RCE): About 63,000 Dutch national monuments with locations, for Places to see. | open | no | no |
+| `od-nz-doc` | `doc-deptconservation.opendata.arcgis.com` | New Zealand's backcountry huts, tracks and campsites from the Department of Conservation, for Places to see and Activities. | open | no | no |
 | `od-opendata-swiss` | `opendata.swiss` | opendata.swiss: government open-data datasets (tourism, events, transport), for Events, Places to see and Local transportation. | open | no | no |
 | `od-openskimap` | `tiles.openskimap.org` | OpenSkiMap: Ski resorts worldwide with run and lift counts, for Activities and Places to see. | share-alike | no | no |
 | `od-ottawa` | `open.ottawa.ca` | City of Ottawa points of interest from its open-data hub, for Places to see. | open | no | no |
@@ -1468,6 +1478,9 @@ is added only with the owner's approval (see CONTRIBUTING.md).
 | `news-wanderlust` | `www.wanderlust.co.uk` | Wanderlust (UK) travel-section articles (destination features, openings, travel disruptions) for Travel tips and Places to see (headline, link and a short excerpt only). | facts only | yes | no |
 | `np-cairngorms` | `cairngorms.co.uk` | Cairngorms National Park: official visitor guide, for Activities, Free walking tours and Travel tips. | facts only | yes | no |
 | `nz-customs-travellers` | `www.customs.govt.nz` | New Zealand's allowances, the NZD 10,000 cash rule and the biosecurity food declaration, for Travel tips and Packing. | facts only | yes | no |
+| `od-nyc-public-restrooms` | `data.cityofnewyork.us` | Public restrooms across New York City with hours and wheelchair access, for Travel tips and getting around the city. | open | yes | no |
+| `od-wien-ogd` | `data.wien.gv.at` | Vienna's sights and museums plus its public toilets and free Wi-Fi spots, for Places to see and Travel tips. | open | yes | no |
+| `od-zuerich-ogd` | `www.ogd.stadt-zuerich.ch` | Zürich's public toilets (Züri WC) with hours, remarks and wheelchair access, for Travel tips. | open | yes | no |
 | `official-cfpb-money` | `www.consumerfinance.gov` | Official US guidance on international money-transfer and exchange fees and card fees abroad, for Forex and Travel tips. | open | yes | no |
 | `official-citizensadvice-holidays` | `www.citizensadvice.org.uk` | UK consumer rights for cancelled or delayed flights and holidays, for Travel tips and Flights. | facts only | yes | no |
 | `official-discovereu` | `youth.europa.eu` | Free EU rail passes for 18-year-olds with application rounds and rules, for Local transportation and Travel tips. | open | yes | no |
@@ -1620,6 +1633,7 @@ is added only with the owner's approval (see CONTRIBUTING.md).
 | `entur-gtfs` | `storage.googleapis.com` | All Norwegian public transport, including trains, ferries and Hurtigruten, for Local transportation. | open | yes | no |
 | `gbfs-systems` | `raw.githubusercontent.com` | The list of bike- and scooter-share systems by city, for the Local transportation section. | open | yes | no |
 | `mag-hiddeneurope` | `www.hiddeneurope.eu` | hidden europe magazine: travel articles and guides, for Local transportation, Places to see and Travel tips. | facts only | yes | no |
+| `od-nyc-public-restrooms` | `data.cityofnewyork.us` | Public restrooms across New York City with hours and wheelchair access, for Travel tips and getting around the city. | open | yes | no |
 | `official-berlin-welcomecard` | `www.berlin-welcomecard.de` | The official Berlin tourist pass (public transport plus discounts), for Activities and Local transportation. | facts only | yes | no |
 | `official-bvg` | `www.bvg.de` | Berlin public transport tickets, day and weekly passes and fares, for Local transportation. | facts only | yes | no |
 | `official-discovereu` | `youth.europa.eu` | Free EU rail passes for 18-year-olds with application rounds and rules, for Local transportation and Travel tips. | open | yes | no |

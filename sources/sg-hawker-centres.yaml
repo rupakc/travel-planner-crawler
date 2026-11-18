@@ -33,9 +33,10 @@ key_secret: null
 max_retention_days: null
 display_requirements: null
 notes: 'Datasets d_4a086da0a5553be1d89383cd90d07ecd (GeoJSON) and d_bda4baa634dd1cc7a6c7cad5f19e2d68 (closures).
-  robots.txt allows all; the API host''s robots.txt is 404 (research 2026-11-18). | Disabled: adapter
-  pending: data.gov.sg poll-download reader (GeoJSON of hawker centres plus the closure-dates dataset)
-  -> place'
+  robots.txt allows all; the API host''s robots.txt is 404 (research 2026-11-18). | Disabled: access route:
+  the poll-download answer (api-open.data.gov.sg/v1, checked 2026-11-18; the v2 seed path answers 404)
+  is a one-hour pre-signed URL on s3.ap-southeast-1.amazonaws.com, another site, carrying temporary AWS
+  credentials in its query; no direct GeoJSON route'
 relevance:
   sections:
   - places

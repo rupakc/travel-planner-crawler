@@ -514,7 +514,7 @@ APPROVED = [
 SUSTAIN_BUDGET_OFF = {
     "ontd-night-trains": "adapter pending", "eu-ecolabel-ecat": "adapter pending",
     "data-gouv-ecolabel-fr": "adapter pending", "bigmac-index": "adapter pending",
-    "sg-hawker-centres": "adapter pending", "flixbus-gtfs": "adapter pending",
+    "sg-hawker-centres": "access route", "flixbus-gtfs": "adapter pending",
     "doc-nz-api": "needs an API key", "greenseal-api": "needs an API key",
     "icao-carbon": "needs an API key", "seoul-wifi": "needs an API key",
     "blueflag-gr": "seed unresolved", "mavi-bayrak-tr": "seed unresolved",
@@ -862,7 +862,8 @@ def test_batch2_api_and_dump_sources_run_only_on_an_adapter(generated):
             continue
         if spec["method"] in ("api", "dump"):
             want = (OPEN_DATA_ADAPTERS.get(sid) or ADAPTED_2026_11_18.get(sid)
-                    or COUNTRY_INFO_AND_FOOD.get(sid))
+                    or COUNTRY_INFO_AND_FOOD.get(sid)
+                    or OPEN_DATA_READERS.get(sid, (None,))[0])
             assert spec["adapter"] == want, sid
             assert spec["enabled"] is (want is not None), sid
         if spec["needs_key"]:
@@ -875,7 +876,7 @@ def test_batch2_enabled_sources_are_polite_and_scoped(generated):
         if not spec["enabled"] or sid in s2s.GTFS_FEEDS:
             continue
         assert spec["method"] in ("html", "rss", "sitemap") or sid in OPEN_DATA_ADAPTERS \
-            or sid in ADAPTED_2026_11_18 or sid in COUNTRY_INFO_AND_FOOD, sid
+            or sid in ADAPTED_2026_11_18 or sid in COUNTRY_INFO_AND_FOOD or sid in OPEN_DATA_READERS, sid
         assert spec["daily_budget"] <= 500 and spec["max_depth"] <= 2 and spec["min_delay_s"] >= 5, sid
         assert spec["licence"]["class"] in ("open", "facts_only") or (
             sid in ("openholidays", "enwiki-visa-requirements") + tuple(CORPUS_SHARE_ALIKE)
@@ -932,7 +933,8 @@ def test_ramp_2_extends_ramp_1_with_enabled_runnable_sources():
     # Every html/rss/sitemap source this batch enables is in ramp-2 (the open-data adapter
     # sources come with ramp-3).
     on = ({sid for sid in s2s.SOURCE_CLASS if committed[sid]["enabled"]} - set(OPEN_DATA_ADAPTERS)
-          - set(s2s.GTFS_FEEDS) - set(ADAPTED_2026_11_18) - set(COUNTRY_INFO_AND_FOOD))
+          - set(s2s.GTFS_FEEDS) - set(ADAPTED_2026_11_18) - set(COUNTRY_INFO_AND_FOOD)
+          - set(OPEN_DATA_READERS))
     assert on <= set(r2), sorted(on - set(r2))
 
 
@@ -956,7 +958,8 @@ def test_ramp_3_is_ramp_2_plus_the_open_data_sources():
     r2, r3 = _ramp("ramp-2.txt"), _ramp("ramp-3.txt")
     assert len(r3) == len(set(r3))
     assert r3[: len(r2)] == r2
-    assert set(r3[len(r2):]) == set(OPEN_DATA_ADAPTERS) | s2s.GTFS_ON | set(COUNTRY_INFO_AND_FOOD)
+    assert set(r3[len(r2):]) == (set(OPEN_DATA_ADAPTERS) | s2s.GTFS_ON | set(COUNTRY_INFO_AND_FOOD)
+                                 | set(OPEN_DATA_READERS))
     v = _validator()
     for sid in r3:
         spec = committed[sid]
@@ -1233,3 +1236,49 @@ LATAM_DENIED = ["https://www.aruba.com/", "https://www.chilango.com/", "https://
 LATAM_STAY_ALLOWED = ["https://www.metro.cl/sitemap.xml", "https://www.curacao.com/en/", "https://www.gob.mx/sectur",
                       "https://www.conaf.cl/sitemap_index.xml"]
 
+# Generic, mapping-driven open-data readers (2026-11-18): on, official, adapter-only kinds,
+# listed in ramp-3.
+OPEN_DATA_READERS = {
+    "od-chicago-food-inspections": ("socrata", ["restaurant"], "open"),
+    "od-austin-food-inspections": ("socrata", ["restaurant"], "open"),
+    "od-catalonia-tourism-register": ("socrata", ["hotel"], "facts_only"),
+    "od-nyc-public-restrooms": ("socrata", ["amenity"], "open"),
+    "od-fr-atout-france-classes": ("udata_resource", ["hotel"], "open"),
+    "od-wien-ogd": ("wfs_geojson", ["attraction", "amenity"], "open"),
+    "od-zuerich-ogd": ("wfs_geojson", ["amenity"], "open"),
+}
+OPEN_DATA_READERS_OFF = {
+    "od-sf-restaurant-scores": "dataset retired",
+    "od-lacounty-restaurant-inspections": "access route",
+    "od-nz-doc": "access route",
+    "od-hk-fehd-licensed-restaurants": "adapter pending",
+    "sg-hawker-centres": "access route",
+}
+
+
+def test_open_data_readers_2026_11_18(generated):
+    for sid, (adapter, kinds, licence) in OPEN_DATA_READERS.items():
+        spec = generated[sid]
+        assert spec["enabled"] is True and spec["adapter"] == adapter, sid
+        assert spec["kinds"] == kinds and spec["llm_kinds"] == [], sid
+        assert spec["source_class"] == "official", sid
+        assert spec["licence"]["class"] == licence and spec["licence"]["attribution"], sid
+        assert spec["daily_budget"] <= 200 and spec["min_delay_s"] >= 5, sid
+        assert sid in _ramp("ramp-3.txt") and sid not in _ramp("ramp-2.txt"), sid
+    # Atout France: the dataset API names the file; the file's host is a seed so the source
+    # owns it. Never a /datasets/r/ redirect or a static.data.gouv.fr/resources file.
+    atout = generated["od-fr-atout-france-classes"]["seeds"]
+    assert atout[0] == "https://www.data.gouv.fr/api/1/datasets/hebergements-touristiques-classes-en-france/"
+    assert atout[1].startswith("https://data.classement.atout-france.fr/static/exportHebergementsClasses/")
+    assert not any("/datasets/r/" in u or "static.data.gouv.fr" in u for u in atout)
+    assert len(generated["od-wien-ogd"]["seeds"]) == 4
+    assert len(generated["od-zuerich-ogd"]["seeds"]) == 2
+    for sid, why in OPEN_DATA_READERS_OFF.items():
+        spec = generated[sid]
+        reason = " ".join(spec["notes"].split()).split("Disabled: ", 1)[1]
+        assert spec["enabled"] is False and reason.startswith(why), (sid, reason)
+        for ramp in ("ramp-1.txt", "ramp-2.txt", "ramp-3.txt"):
+            assert sid not in _ramp(ramp), (sid, ramp)
+    # No ArcGIS feature-service host is ever a seed (services*.arcgis.com answer 403 on robots).
+    for spec in generated.values():
+        assert not any(".arcgis.com/" in u and "services" in u.split("/")[2] for u in spec["seeds"])

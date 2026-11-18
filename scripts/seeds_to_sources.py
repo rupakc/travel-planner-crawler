@@ -44,6 +44,8 @@ KINDS = {
     "embassy", "medical_facility", "visa_reference",
     # 2026-11-18: official food-hygiene registers (adapter-only).
     "restaurant",
+    # 2026-11-18: public toilets, drinking water, free Wi-Fi from city registers (adapter-only).
+    "amenity",
 }
 
 
@@ -155,6 +157,8 @@ LICENCES: dict[str, tuple[str, str | None, str | None]] = {
     "Madrid open data (attribution)": ("open", None, None),
     "OGL-Toronto": ("open", None, "https://open.toronto.ca/open-data-license/"),
     "NYC Open Data terms": ("open", None, None),
+    "Catalonia open data terms (unconfirmed)": COPYRIGHT,
+    "LA County terms (custom)": COPYRIGHT,
     "OGDL-Taiwan 1.0": ("open", None, "https://data.gov.tw/license"),
     "Open per item (CC0/CC BY; CC BY-SA kept apart)": ("open", None, None),
     "Canada.ca terms (facts only; commercial redistribution needs permission)": (
@@ -427,6 +431,14 @@ ADAPTERS = {
     "fsa-food-hygiene": "fsa_fhrs",
     "nyc-restaurant-inspections": "nyc_restaurant_inspections",
     "toronto-dinesafe": "toronto_dinesafe",
+    # 2026-11-18: generic, mapping-driven open-data readers.
+    "od-chicago-food-inspections": "socrata",
+    "od-austin-food-inspections": "socrata",
+    "od-catalonia-tourism-register": "socrata",
+    "od-nyc-public-restrooms": "socrata",
+    "od-fr-atout-france-classes": "udata_resource",
+    "od-wien-ogd": "wfs_geojson",
+    "od-zuerich-ogd": "wfs_geojson",
 }
 
 # Template URLs in seeds.yaml -> a concrete, fetchable entry URL (template kept in notes).
@@ -2517,6 +2529,136 @@ _src(
 
 
 # ---------------------------------------------------------------------------------------
+# Generic, mapping-driven open-data readers (2026-11-18): `socrata` (Socrata SODA datasets),
+# `udata_resource` (data.gouv.fr / data.public.lu files), `wfs_geojson` (city WFS point
+# layers). What differs per dataset is a mapping table in the reader; every row is vetted
+# (robots.txt read first with VoyagerBot's UA, one metadata/sample request per host).
+# ---------------------------------------------------------------------------------------
+_src(
+    'od-chicago-food-inspections',
+    ['activities'],
+    'Chicago restaurants, bakeries and taverns with address and latest official inspection result, '
+    'for food in Activities.',
+    cls='official',
+    kinds=['restaurant'],
+    budget=200,
+    attribution='City of Chicago, Department of Public Health (Chicago Data Portal)',
+)
+_src(
+    'od-austin-food-inspections',
+    ['activities'],
+    'Austin food establishments with address and latest official inspection score, for food in '
+    'Activities.',
+    cls='official',
+    kinds=['restaurant'],
+    budget=100,
+    attribution='City of Austin, Austin Public Health (data.austintexas.gov)',
+)
+_src(
+    'od-sf-restaurant-scores',
+    ['activities'],
+    'San Francisco restaurants with their health inspection scores, for food in Activities.',
+    cls='official',
+    kinds=['restaurant'],
+    off=('dataset retired: "Health Inspection Scores (2016-2019)" has not been updated since '
+         '2021-09-24 (checked 2026-11-18); a frozen snapshot is not a current register'),
+    attribution='San Francisco Department of Public Health (DataSF), ODC-PDDL',
+)
+_src(
+    'od-catalonia-tourism-register',
+    ['hotels'],
+    'Every registered hotel, hostal, rural house, apartment block and campsite in Catalonia with '
+    'its official category, for Hotels.',
+    cls='official',
+    kinds=['hotel'],
+    budget=50,
+    attribution="Generalitat de Catalunya, Registre de Turisme de Catalunya (Departament d'Empresa i Treball)",
+)
+_src(
+    'od-nyc-public-restrooms',
+    ['tips', 'getting_around'],
+    'Public restrooms across New York City with hours and wheelchair access, for Travel tips and '
+    'getting around the city.',
+    cls='official',
+    kinds=['amenity'],
+    budget=20,
+    attribution='NYC Parks, DOT, DCP, DCAS, Mayor\'s Office of Operations, NYPL, BPL, QPL and MTA, via NYC Open Data',
+)
+_src(
+    'od-fr-atout-france-classes',
+    ['hotels'],
+    'Every officially classified hotel, campsite, tourist residence and holiday village in France '
+    'with its star rating and website, for Hotels.',
+    cls='official',
+    kinds=['hotel'],
+    budget=20,
+    seeds=['https://data.classement.atout-france.fr/static/exportHebergementsClasses/hebergements_classes.csv'],
+    attribution='Atout France, Hébergements touristiques classés en France, Licence Ouverte 2.0',
+)
+_src(
+    'od-wien-ogd',
+    ['places', 'tips'],
+    "Vienna's sights and museums plus its public toilets and free Wi-Fi spots, for Places to see "
+    'and Travel tips.',
+    cls='official',
+    kinds=['attraction', 'amenity'],
+    budget=20,
+    seeds=[
+        'https://data.wien.gv.at/daten/geo?service=WFS&request=GetFeature&version=1.1.0&typeName=ogdwien:MUSEUMOGD&srsName=EPSG:4326&outputFormat=json',
+        'https://data.wien.gv.at/daten/geo?service=WFS&request=GetFeature&version=1.1.0&typeName=ogdwien:WCANLAGEOGD&srsName=EPSG:4326&outputFormat=json',
+        'https://data.wien.gv.at/daten/geo?service=WFS&request=GetFeature&version=1.1.0&typeName=ogdwien:WLANWIENATOGD&srsName=EPSG:4326&outputFormat=json',
+    ],
+    attribution='Datenquelle: Stadt Wien – data.wien.gv.at, CC BY 4.0',
+)
+_src(
+    'od-zuerich-ogd',
+    ['tips'],
+    "Zürich's public toilets (Züri WC) with hours, remarks and wheelchair access, for Travel tips.",
+    cls='official',
+    kinds=['amenity'],
+    budget=10,
+    seeds=[
+        'https://www.ogd.stadt-zuerich.ch/wfs/geoportal/Zueri_WC?service=WFS&version=1.1.0&request=GetFeature&typename=poi_zueriwc_rs_view&outputFormat=GeoJSON&srsName=EPSG:4326',
+    ],
+    attribution='Stadt Zürich Open Government Data (Züri WC), CC0',
+)
+_src(
+    'od-lacounty-restaurant-inspections',
+    ['activities'],
+    'Los Angeles County restaurant and market inspection results, for food in Activities.',
+    cls='official',
+    kinds=['restaurant'],
+    off=('access route: the ArcGIS Hub download of the inspections CSV item answered 500 '
+         '(2026-11-18) and the file itself is only on www.arcgis.com, another site; the arcgis_hub '
+         'reader was not built'),
+    delay=60,
+    attribution='County of Los Angeles, Department of Public Health, Environmental Health',
+)
+_src(
+    'od-nz-doc',
+    ['places', 'activities'],
+    "New Zealand's backcountry huts, tracks and campsites from the Department of Conservation, for "
+    'Places to see and Activities.',
+    cls='official',
+    kinds=['place', 'attraction'],
+    off=('access route: the ArcGIS Hub download answers 302 to services1.arcgis.com, whose '
+         'robots.txt answers 403 (checked 2026-11-18); never fetched'),
+    delay=60,
+    attribution='Department of Conservation (NZ), CC BY 4.0',
+)
+_src(
+    'od-hk-fehd-licensed-restaurants',
+    ['activities'],
+    'Every licensed restaurant in Hong Kong with district and address, for food in Activities.',
+    cls='official',
+    kinds=['restaurant'],
+    off=('adapter pending: a licence register without any hygiene result, and the restaurant kind '
+         'requires one (hygiene.rating and its date); needs a licensed-premises mapping'),
+    attribution='Food and Environmental Hygiene Department, via DATA.GOV.HK',
+)
+
+
+# ---------------------------------------------------------------------------------------
 # Sustainable/eco and budget travel (owner request 2026-11-18: "add all relevant sites on
 # sustainable/eco-friendly and budget travel"; research vetted 2026-11-18 with VoyagerBot's UA).
 # Owner policy for this batch: a site whose terms cannot be found is accepted for
@@ -3722,7 +3864,9 @@ _src(
     "Singapore's cheap-food hawker centres with locations and cleaning-closure dates, for Places to see, Travel tips and the itinerary.",
     cls='official',
     kinds=['place'],
-    off='adapter pending: data.gov.sg poll-download reader (GeoJSON of hawker centres plus the closure-dates dataset) -> place',
+    off=('access route: the poll-download answer (api-open.data.gov.sg/v1, checked 2026-11-18; the '
+         'v2 seed path answers 404) is a one-hour pre-signed URL on s3.ap-southeast-1.amazonaws.com, '
+         'another site, carrying temporary AWS credentials in its query; no direct GeoJSON route'),
     attribution='Contains information from data.gov.sg (NEA), made available under the Singapore Open Data Licence 1.0',
 )
 _src(

@@ -3320,6 +3320,150 @@ seeds:
       200, "Allow: /api/" (re-checked 2026-11-18; /dataset/*/resource/*/download/* is disallowed, so the
       adapter toronto_dinesafe reads the datastore through /api/3/action/datastore_search, 2000 distinct
       rows per page, latest inspection per establishment). Open Government Licence – Toronto.'
+  # --- Generic open-data readers: socrata, udata_resource, wfs_geojson (2026-11-18) ---
+  - id: od-chicago-food-inspections
+    category: activities
+    name: City of Chicago food inspections (Chicago Data Portal)
+    url: https://data.cityofchicago.org/resource/4ijn-s7e5.json
+    method: api
+    license: City of Chicago data terms
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'Chicago Department of Public Health inspections, one row per inspection, updated daily
+      (rowsUpdatedAt 2026-11-18). robots.txt (2026-11-18): Crawl-delay 1, /resource/ not disallowed. Data
+      Terms of Use: the City "voluntarily provides the data ... as is" (no use restriction). Adapter socrata:
+      restaurants, bakeries, taverns and Golden Diners with a Pass / Pass w/ Conditions / Fail result in
+      the last three years, latest result per licence, 2000 rows per page, group-aligned.'
+  - id: od-austin-food-inspections
+    category: activities
+    name: Austin Public Health food establishment inspection scores (City of Austin open data)
+    url: https://data.austintexas.gov/resource/ecmv-9xxi.json
+    method: api
+    license: Public domain
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'One row per inspection with a 0-100 score, three-year window, updated 2026-11-15. Dataset licence
+      "Public Domain" (metadata). robots.txt (2026-11-18): Crawl-delay 1, /resource/ allowed. Adapter
+      socrata: latest score per facility; city is Austin (the register also covers Travis County towns,
+      which the address names).'
+  - id: od-sf-restaurant-scores
+    category: activities
+    name: San Francisco restaurant health inspection scores (DataSF)
+    url: https://data.sf.gov/resource/pyih-qa8i.json
+    method: api
+    license: Public domain
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Dataset "Health Inspection Scores (2016-2019)", ODC-PDDL; rows last updated 2021-09-24 (metadata
+      checked 2026-11-18): a frozen snapshot, not a current register.'
+  - id: od-catalonia-tourism-register
+    category: hotels
+    name: Registre de Turisme de Catalunya (tourist accommodation register)
+    url: https://analisi.transparenciacatalunya.cat/resource/t2h3-cgys.json
+    method: api
+    license: Catalonia open data terms (unconfirmed)
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Generalitat de Catalunya (Departament d''Empresa i Treball), updated monthly (2026-10-05).
+      robots.txt (2026-11-18): Crawl-delay 1, /resource/ allowed. Dataset licence "See Terms of Use"; the
+      gencat licence page answered 404 and governobert.gencat.cat robots.txt redirects, so the terms were
+      not read: facts only. Adapter socrata: hotels and hostals, rural houses, tourist apartment blocks and
+      campsites (about 6,500); holiday flats (HUT, about 105k, many run by private individuals) and shared
+      homes are left out, and the owner columns (names, tax ids) are never requested.'
+  - id: od-nyc-public-restrooms
+    category: tips
+    name: NYC Public Restrooms (NYC Open Data)
+    url: https://data.cityofnewyork.us/resource/i7jb-7jku.json
+    method: api
+    license: NYC Open Data terms
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'About 1,100 public restrooms in parks, libraries, transit and plazas with hours and accessibility,
+      updated 2026-11-04. Same host and robots.txt as the other NYC Open Data sources (Crawl-delay 1).
+      Adapter socrata: operational restrooms -> amenity.'
+  - id: od-fr-atout-france-classes
+    category: hotels
+    name: 'Atout France: classified tourist accommodation (hotels, campsites, residences)'
+    url: https://www.data.gouv.fr/api/1/datasets/hebergements-touristiques-classes-en-france/
+    method: dump
+    license: Licence Ouverte 2.0
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'About 21,000 classified hotels, campsites, tourist residences, holiday villages, leisure parks and
+      hostels with their official star rating, regenerated daily (CSV, 3.7 MB, semicolon-separated).
+      www.data.gouv.fr robots.txt (2026-11-18) allows /api/1/datasets/ (it disallows /datasets/r/ and, on
+      static.data.gouv.fr, /resources); its GPTBot/ChatGPT-User group only blocks catalogue CSV exports.
+      The file is on data.classement.atout-france.fr, whose robots.txt redirects to a login page (no
+      rules: treated as missing). Adapter udata_resource: the dataset API names the current file, which is
+      streamed in the dump window and mapped to hotel.'
+  - id: od-wien-ogd
+    category: places
+    name: 'Stadt Wien open data: sights, museums, public toilets, free Wi-Fi (WFS)'
+    url: https://data.wien.gv.at/daten/geo?service=WFS&request=GetFeature&version=1.1.0&typeName=ogdwien:SEHENSWUERDIGOGD&srsName=EPSG:4326&outputFormat=json
+    method: api
+    license: CC BY 4.0
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Four small GeoJSON layers (63 sights, 138 museums, 191 public toilets, 233 free Wi-Fi spots;
+      2026-11-18). robots.txt answers 404 (allowed). data.gv.at datasets are CC BY 4.0 (the terms page is
+      an SPA). Adapter wfs_geojson: one request per layer a month.'
+  - id: od-zuerich-ogd
+    category: tips
+    name: 'Stadt Zürich open data: Züri WC public toilets (WFS)'
+    url: https://www.ogd.stadt-zuerich.ch/wfs/geoportal/Zueri_WC?service=WFS&version=1.1.0&request=GetFeature&typename=poi_zueriwc_view&outputFormat=GeoJSON&srsName=EPSG:4326
+    method: api
+    license: CC0
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'About 115 public toilets (25 without and 91 with wheelchair access, 2026-11-18) with hours and
+      remarks. CKAN package geo_zueri_wc on data.stadt-zuerich.ch, licence cc-zero; its CSV resource on
+      www.stadt-zuerich.ch is an HTML app, so the WFS is read. robots.txt of www.ogd.stadt-zuerich.ch
+      answers 404 (allowed). Adapter wfs_geojson: two layers, one request each a month.'
+  - id: od-lacounty-restaurant-inspections
+    category: activities
+    name: LA County Environmental Health restaurant and market inspections (ArcGIS Hub)
+    url: https://data.lacounty.gov/api/search/v1/collections/dataset/items?q=restaurant%20inspection
+    method: api
+    license: LA County terms (custom)
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Hub items 19b6607ac82c4512b10811870975dbdc (inspections) and 5eaea9f89b7549ee841da7617d3a9cba
+      (violations) are uploaded CSV files. robots.txt (2026-11-18): Crawl-delay 60. The hub download
+      /api/download/v1/items/<id>/csv answered 500 "Cannot fetch content entity" (2026-11-18); the file
+      itself is only on www.arcgis.com.'
+  - id: od-nz-doc
+    category: places
+    name: NZ Department of Conservation huts, tracks and campsites (ArcGIS Hub)
+    url: https://doc-deptconservation.opendata.arcgis.com/api/search/v1/collections/dataset/items?q=huts
+    method: api
+    license: CC BY 4.0
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'DOC Huts (item 9a10bbf719b34e08989962db3c130cb4) is a feature service. robots.txt (2026-11-18):
+      Crawl-delay 60. The hub download /api/download/v1/items/<id>/csv?layers=0 answers 302 to
+      services1.arcgis.com, whose robots.txt answers 403.'
+  - id: od-hk-fehd-licensed-restaurants
+    category: activities
+    name: Hong Kong FEHD licensed restaurants (XML)
+    url: https://www.fehd.gov.hk/english/licensing/license/text/LP_Restaurants_EN.XML
+    method: dump
+    license: DATA.GOV.HK terms (attribution)
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'Every licensed restaurant (type, district, licence number, name, address, licence expiry), XML 4.9
+      MB, regenerated daily (2026-11-17). robots.txt answers 404 (allowed). DATA.GOV.HK terms allow
+      commercial reuse with attribution.'
   # --- Sustainable/eco and budget travel (research 2026-11-18, owner request "add all relevant sites") ---
   - id: gstc-certified-hotels
     category: hotels
