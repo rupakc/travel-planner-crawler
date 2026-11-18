@@ -665,3 +665,32 @@ entries:
   - host: eater.com
     reason: Vox Media/PMC terms ban spidering and scraping and use in 'any artificial intelligence systems, machine learning models'; AI bots blocked
     source: research 2026-11-18 north-america SKIP
+  # --- corpus expansion: thematic (research 2026-11-18): terms ban robots/scraping/TDM ---
+  - host: nationaltrail.co.uk
+    reason: "Terms: 'No text or data mining, or web scraping ... Any robot, bot, spider, scraper', 2026-11-18"
+    source: research 2026-11-18 corpus thematic SKIP
+  - host: appalachiantrail.org
+    reason: Terms ban 'any systematic or automated data collection activities', 2026-11-18
+    source: research 2026-11-18 corpus thematic SKIP
+  - host: euansguide.com
+    reason: Terms ban text or data mining and web scraping, including for AI, 2026-11-18
+    source: research 2026-11-18 corpus thematic SKIP
+  - host: pikeplacemarket.org
+    reason: Terms ban 'using bots or spiders to scrape any content', 2026-11-18
+    source: research 2026-11-18 corpus thematic SKIP
+  # nparks.gov.sg only: other Singapore government hosts (roots.gov.sg, nhb.gov.sg, nea.gov.sg) are separate.
+  - host: nparks.gov.sg
+    reason: Terms ban 'robots, spiders, other automatic devices to navigate, search, monitor or copy', 2026-11-18
+    source: research 2026-11-18 corpus thematic SKIP
+  - host: sunrise-sunset.org
+    reason: Terms ban automated scripts or programs to extract data (personal use only), 2026-11-18
+    source: research 2026-11-18 corpus thematic SKIP
+  - host: sydneyairport.com.au
+    reason: Terms ban content that 'retrieves, scrapes, or indexes ... using an automated device', 2026-11-18
+    source: research 2026-11-18 corpus thematic SKIP
+  - host: viennaairport.com
+    reason: "Terms: 'Jeder automatisierte Zugriff auf die Website' is not allowed, 2026-11-18"
+    source: research 2026-11-18 corpus thematic SKIP
+  - host: southwest.com
+    reason: Terms ban 'deep-link, page-scrape, robot, crawl, index, spider', 2026-11-18
+    source: research 2026-11-18 corpus thematic SKIP

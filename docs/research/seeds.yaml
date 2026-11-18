@@ -7444,3 +7444,956 @@ seeds:
     notes: 'robots.txt (research 2026-11-18): 200, empty * group (onboarding re-read 2026-11-18). terms restrict to personal/non-commercial
       use; owner accepted for non-commercial use 2026-11-18 (''entitled to view and make a copy of the Works for your own personal
       and non-commercial use''). Facts only (headline, link, short excerpt).'
+  # --- Corpus expansion: thematic, worldwide (research 2026-11-18, corpus_thematic.md) ---
+  - id: trail-camino-santiago-gal
+    category: activities
+    name: Camino de Santiago (Xunta de Galicia official)
+    url: https://www.caminodesantiago.gal/sitemap.xml
+    method: sitemap
+    license: Reuse with attribution (Xunta de Galicia legal notice)
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus thematic): robots.txt: 200; allow; only Bytespider blocked; no Crawl-delay;
+      terms: Aviso legal: "permite su reproducción total o parcial, modificación, distribución … para usos comerciales
+      y no comerciales" with source citation. robots.txt reserves AI use (AI crawlers blocked), so title and link
+      only: no LLM kinds.'
+  - id: trail-eurovelo
+    category: activities
+    name: EuroVelo (European Cyclists' Federation)
+    url: https://en.eurovelo.com/
+    method: html
+    license: Text reuse with acknowledgement (ECF)
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus thematic): robots.txt: 200; allow all; no Crawl-delay; terms: "Reproduction
+      of the text is generally authorized, provided the source is acknowledged".'
+  - id: trail-ffrandonnee
+    category: activities
+    name: FFRandonnée (French Hiking Federation)
+    url: https://www.ffrandonnee.fr/sitemap.xml
+    method: sitemap
+    license: Copyright; no automated-access clause
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus thematic): robots.txt: 200; allow; terms: Mentions légales: reproduction reserved
+      (copyright only); no bot or TDM clause. No automated-access clause; facts only.'
+  - id: trail-mongr
+    category: activities
+    name: MonGR (official GR route pages, FFRandonnée)
+    url: https://www.mongr.fr/sitemap.xml
+    method: sitemap
+    license: Copyright; no automated-access clause
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus thematic): robots.txt: 200; allow; terms: CGU: editorial content and GPX are
+      FFRandonnée works, "reproduction … interdite" (copyright); no anti-bot clause. No automated-access clause; facts
+      only.'
+  - id: park-parks-victoria
+    category: places
+    name: Parks Victoria
+    url: https://www.parks.vic.gov.au/sitemap.xml
+    method: sitemap
+    license: CC BY 4.0
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus thematic): robots.txt: 200; allow; terms: "All material … under a Creative
+      Commons Attribution 4.0 International licence" (logos and images excluded).'
+  - id: park-noaa-sanctuaries
+    category: places
+    name: NOAA National Marine Sanctuaries
+    url: https://sanctuaries.noaa.gov/visit/
+    method: html
+    license: US public domain
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus thematic): robots.txt: 200; allow; terms: Disclaimer: no restrictions.'
+  - id: park-env-japan
+    category: places
+    name: 'Japan Ministry of the Environment: National Parks'
+    url: https://www.env.go.jp/en/nature/nps/park/index.html
+    method: html
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus thematic): robots.txt: 200; allow; terms: terms not found (guessed URL 404).
+      Terms unconfirmed; owner accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: park-gbrmpa
+    category: places
+    name: Great Barrier Reef Marine Park Authority
+    url: https://www.gbrmpa.gov.au/
+    method: html
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus thematic): robots.txt: robots: no response (redirect to `:443` then timeout)
+      → allowed by owner rule; host did not answer during vetting; terms: terms not found (unreachable). Terms unconfirmed;
+      owner accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: ref-darkskydiscovery-uk
+    category: places
+    name: Dark Sky Discovery (UK)
+    url: https://www.darkskydiscovery.org.uk/
+    method: html
+    license: Copyright; terms not found
+    cadence: quarterly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus thematic): robots.txt: robots 404 → allowed; terms: terms not found. Site
+      looks rarely updated (legacy Google Analytics). Low priority. Terms unconfirmed; owner accepted for non-commercial
+      use 2026-11-18. Facts only.'
+  - id: food-tucson-gastronomy
+    category: activities
+    name: Tucson City of Gastronomy (UNESCO Creative City official site)
+    url: https://tucson.cityofgastronomy.org/sitemap.xml
+    method: sitemap
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus thematic): robots.txt: 200; allow; **AI-bot block (GPTBot, ClaudeBot, CCBot,
+      Google-Extended …) → AI reservation: title and link only**; terms: terms not found. Terms unconfirmed; owner
+      accepted for non-commercial use 2026-11-18. Facts only. robots.txt reserves AI use (AI crawlers blocked), so
+      title and link only: no LLM kinds.'
+  - id: food-parma-gastronomy
+    category: activities
+    name: Parma City of Gastronomy (Parma Welcome, comune)
+    url: https://parmawelcome.it/parma-city-of-gastronomy/
+    method: html
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus thematic): robots.txt: robots: HTML 404 → allowed; terms: terms not found
+      (`/note-legali/` 404). Terms unconfirmed; owner accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: food-european-region-gastronomy
+    category: events
+    name: European Region of Gastronomy (IGCAT)
+    url: https://www.europeanregionofgastronomy.org/feed/
+    method: rss
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus thematic): robots.txt: 200; allow; terms: terms not found. Terms unconfirmed;
+      owner accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: food-slowfood-foundation
+    category: activities
+    name: Slow Food Foundation for Biodiversity (Presidia, Ark of Taste)
+    url: https://www.fondazioneslowfood.com/it/feed/
+    method: rss
+    license: Copyright; terms not found
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus thematic): robots.txt: 200; allow; terms: terms not found. Terms unconfirmed;
+      owner accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: wine-routes-spain
+    category: activities
+    name: Rutas del Vino de España (ACEVIN official)
+    url: https://wineroutesofspain.com/feed/
+    method: rss
+    license: Copyright; no automated-access clause
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus thematic): robots.txt: 200; allow; terms: Aviso legal: "Quedan expresamente
+      prohibidas la reproducción, copia, distribución" (copyright only); no bot clause. No automated-access clause;
+      facts only.'
+  - id: wine-alsace-civa
+    category: activities
+    name: 'Vins d''Alsace (CIVA): Route des Vins'
+    url: https://www.vinsalsace.com/fr/
+    method: html
+    license: Copyright; no automated-access clause
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus thematic): robots.txt: 200; allow (homepage redirect looped once); terms:
+      Mentions légales: no bot or TDM clause. No automated-access clause; facts only.'
+  - id: wine-great-wine-capitals
+    category: activities
+    name: Great Wine Capitals Global Network
+    url: https://www.greatwinecapitals.com/feed/
+    method: rss
+    license: Copyright; terms not found
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus thematic): robots.txt: 200; allow; terms: terms not found. Terms unconfirmed;
+      owner accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: wine-wosa
+    category: activities
+    name: Wines of South Africa (WOSA)
+    url: https://www.wosa.co.za/
+    method: html
+    license: Copyright; no automated-access clause
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus thematic): robots.txt: 200; allow; terms: T&C: "Reproduction is prohibited
+      other than in accordance with the copyright notice" (copyright only). No automated-access clause; facts only.'
+  - id: tb-visitnapavalley
+    category: activities
+    name: Visit Napa Valley (official DMO)
+    url: https://www.visitnapavalley.com/sitemap.xml
+    method: sitemap
+    license: Copyright; terms not found
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus thematic): robots.txt: 200; allow; **Crawl-delay 2**; terms: terms not found
+      (`/terms-of-use/` 404). Terms unconfirmed; owner accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: wine-deutsche-weinstrasse
+    category: events
+    name: Deutsche Weinstraße (Pfalz tourism)
+    url: https://www.deutsche-weinstrasse.de/
+    method: html
+    license: Copyright; no automated-access clause
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus thematic): robots.txt: robots answers 200 HTML (no rules) → allowed; terms:
+      Impressum (pfalz.de): copyright only. No automated-access clause; facts only.'
+  - id: wine-portugal
+    category: activities
+    name: Wines of Portugal (ViniPortugal)
+    url: https://www.winesofportugal.com/sitemap.xml
+    method: sitemap
+    license: Copyright; personal/non-commercial terms (owner accepted)
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus thematic): robots.txt: 200; allow; terms: "may be downloaded … reproduced
+      for personal, non-commercial use or in non-profit projects", with source. Fits Voyager; owner may confirm. Terms
+      restrict to personal/non-commercial use; owner accepted for non-commercial use 2026-11-18 (''reproduced for
+      personal, non-commercial use or in non-profit projects'', with source). Facts only.'
+  - id: mkt-tsukiji-outer
+    category: places
+    name: Tsukiji Outer Market (official)
+    url: https://www.tsukiji.or.jp/english/
+    method: html
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus thematic): robots.txt: 200; allow; terms: terms not found (copyright line
+      only). Terms unconfirmed; owner accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: ev-christkindlesmarkt
+    category: events
+    name: Nürnberger Christkindlesmarkt (city official)
+    url: https://www.christkindlesmarkt.de/
+    method: html
+    license: Copyright; no automated-access clause
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus thematic): robots.txt: 200; allow; terms: Impressum: no bot clause. No automated-access
+      clause; facts only.'
+  - id: ev-noel-strasbourg
+    category: events
+    name: Strasbourg Capitale de Noël (city official)
+    url: https://noel.strasbourg.eu/
+    method: html
+    license: Copyright; no automated-access clause
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus thematic): robots.txt: 200; allow; terms: "Aucune reproduction … ne peut être
+      faite sans autorisation" (copyright only). No automated-access clause; facts only.'
+  - id: her-cadw
+    category: places
+    name: Cadw (Welsh Government historic environment)
+    url: https://cadw.gov.wales/sitemap.xml
+    method: sitemap
+    license: Copyright; no automated-access clause
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus thematic): robots.txt: 200; allow; terms: T&C: no re-sale or reproduction
+      in contravention (copyright); no bot clause. No automated-access clause; facts only.'
+  - id: blog-wheelchairtravel
+    category: blogs
+    name: Wheelchair Travel (John Morris)
+    url: https://wheelchairtravel.org/rss/
+    method: rss
+    license: Copyright; no automated-access clause
+    cadence: daily
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus thematic): robots.txt: 200; allow; terms: T&C: no anti-bot or TDM clause.
+      No automated-access clause; facts only.'
+  - id: gov-tsa
+    category: packing
+    name: 'US TSA: What Can I Bring, TSA Cares'
+    url: https://www.tsa.gov/sitemap.xml
+    method: sitemap
+    license: US public domain
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus thematic): robots.txt: 200; allow; terms: terms not found (guessed URL 404);
+      US federal work.'
+  - id: gov-catsa
+    category: packing
+    name: 'CATSA: What can I bring (Canada)'
+    url: https://www.catsa-acsta.gc.ca/en/what-can-bring
+    method: html
+    license: Copyright; personal/non-commercial terms (owner accepted)
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus thematic): robots.txt: 200; allow; terms: canada.ca: non-commercial reproduction
+      permitted with attribution. Terms restrict to personal/non-commercial use; owner accepted for non-commercial
+      use 2026-11-18 (canada.ca: non-commercial reproduction permitted with attribution). Facts only.'
+  - id: blog-familytravel-assoc
+    category: blogs
+    name: Family Travel Association
+    url: https://www.familytravel.org/feed/
+    method: rss
+    license: Copyright; terms not found
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus thematic): robots.txt: 200; allow; terms: terms not found. Terms unconfirmed;
+      owner accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: blog-ciaobambino
+    category: blogs
+    name: Ciao Bambino (family travel)
+    url: https://ciaobambino.com/feed
+    method: rss
+    license: Copyright; terms not found
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus thematic): robots.txt: 200; allow; Google-Extended blocked only; terms: terms
+      not found. Terms unconfirmed; owner accepted for non-commercial use 2026-11-18. Facts only. robots.txt reserves
+      AI use (AI crawlers blocked), so title and link only: no LLM kinds.'
+  - id: blog-solotravelerworld
+    category: blogs
+    name: Solo Traveler World
+    url: https://solotravelerworld.com/feed/
+    method: rss
+    license: Copyright; terms not found
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus thematic): robots.txt: 200; allow; terms: terms not found. Terms unconfirmed;
+      owner accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: ref-ilga-world
+    category: tips
+    name: ILGA World
+    url: https://ilga.org/feed/
+    method: rss
+    license: Copyright; terms not found
+    cadence: quarterly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus thematic): robots.txt: 200; allow; **Crawl-delay 10**; terms: terms page answered
+      429 → terms not found. Report licence unknown. Low priority. Terms unconfirmed; owner accepted for non-commercial
+      use 2026-11-18. Facts only. Feed last built 2024-03 (stale); low priority.'
+  - id: ref-rainbowmap-ilga-europe
+    category: tips
+    name: Rainbow Map (ILGA-Europe)
+    url: https://rainbowmap.ilga-europe.org/
+    method: html
+    license: Copyright; terms not found
+    cadence: yearly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus thematic): robots.txt: 200; allow; terms: terms not found. Terms unconfirmed;
+      owner accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: ref-iglta
+    category: tips
+    name: IGLTA (International LGBTQ+ Travel Association)
+    url: https://www.iglta.org/sitemap.xml
+    method: sitemap
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus thematic): robots.txt: 200; allow; **Crawl-delay 2**; terms: terms not found.
+      Terms unconfirmed; owner accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: ref-humandignitytrust
+    category: tips
+    name: 'Human Dignity Trust: map of criminalisation'
+    url: https://www.humandignitytrust.org/sitemap.xml
+    method: sitemap
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus thematic): robots.txt: 200; allow; terms: terms not found. Terms unconfirmed;
+      owner accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: gov-afcd-hk-pets
+    category: tips
+    name: 'Hong Kong AFCD: bringing pets in'
+    url: https://www.afcd.gov.hk/english/quarantine/qua_ie/qua_ie_ipe/qua_ie_ipe_ipdc/qua_ie_ipe_ipdc.html
+    method: html
+    license: Copyright; personal/non-commercial terms (owner accepted)
+    cadence: quarterly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus thematic): robots.txt: robots answers a soft-404 HTML → allowed; terms: "may
+      be re-disseminated or reproduced, provided that AFCD … is acknowledged and … for non-commercial use" (Voyager
+      is non-commercial). Terms restrict to personal/non-commercial use; owner accepted for non-commercial use 2026-11-18
+      (''may be re-disseminated or reproduced, provided that AFCD ... is acknowledged and ... for non-commercial use'').
+      Facts only.'
+  - id: gov-agriculture-au-pets
+    category: tips
+    name: 'Australia DAFF: bringing cats and dogs'
+    url: https://www.agriculture.gov.au/biosecurity-trade/cats-dogs
+    method: html
+    license: Copyright; terms not found
+    cadence: quarterly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus thematic): robots.txt: **no response** (robots, home, terms) → allowed by
+      owner rule; terms: terms not found (unreachable; Australian government sites are usually CC BY 4.0, unverified).
+      Terms unconfirmed; owner accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: gov-senasica-mx-pets
+    category: tips
+    name: 'SENASICA Mexico: travelling with pets'
+    url: https://www.gob.mx/senasica/acciones-y-programas/importacion-de-mascotas-perros-y-gatos
+    method: html
+    license: Copyright; no automated-access clause
+    cadence: quarterly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus thematic): robots.txt: 200; allow; terms: gob.mx terms: "La información del
+      portal gob.mx es pública a menos que se indique lo contrario". No automated-access clause; facts only.'
+  - id: gov-ee-police-dnv
+    category: visa
+    name: 'Estonian Police and Border Guard: digital nomad visa'
+    url: https://www.politsei.ee/sitemap.xml
+    method: sitemap
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus thematic): robots.txt: 200; allow; **Crawl-delay 10**; terms: terms not found.
+      Terms unconfirmed; owner accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: gov-pt-vistos
+    category: visa
+    name: Portugal MNE Vistos (D8 digital nomad and others)
+    url: https://vistos.mne.gov.pt/sitemap.xml
+    method: sitemap
+    license: Copyright; no automated-access clause
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus thematic): robots.txt: 200; allow; terms: Avisos legais: no bot clause. No
+      automated-access clause; facts only.'
+  - id: gov-hr-mup-nomads
+    category: visa
+    name: 'Croatia MUP: temporary stay of digital nomads'
+    url: https://mup.gov.hr/aliens-281621/stay-and-work/temporary-stay-of-digital-nomads/286833
+    method: html
+    license: Copyright; terms not found
+    cadence: quarterly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus thematic): robots.txt: robots 404 → allowed; terms: terms not found. Terms
+      unconfirmed; owner accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: gov-gr-migration
+    category: visa
+    name: Greece Ministry of Migration
+    url: https://migration.gov.gr/feed/
+    method: rss
+    license: Copyright; terms not found
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus thematic): robots.txt: 200; allow; terms: terms not found. Terms unconfirmed;
+      owner accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: gov-mt-nomad
+    category: visa
+    name: 'Residency Malta: Nomad Residence Permit'
+    url: https://nomad.residencymalta.gov.mt/wp-sitemap.xml
+    method: sitemap
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus thematic): robots.txt: 200; allow; terms: terms not found. Terms unconfirmed;
+      owner accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: gov-is-remote-work
+    category: visa
+    name: 'Ísland.is: long-term visa for remote workers'
+    url: https://island.is/en/long-term-visa-for-remote-workers
+    method: html
+    license: Copyright; terms not found
+    cadence: quarterly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus thematic): robots.txt: robots 404 → allowed; terms: terms not found. Terms
+      unconfirmed; owner accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: eco-wwoof
+    category: activities
+    name: WWOOF (Federation of WWOOF Organisations)
+    url: https://wwoof.net/feed/
+    method: rss
+    license: Copyright; no automated-access clause
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus thematic): robots.txt: 200; allow; terms: Legal notices: no bot clause. No
+      automated-access clause; facts only.'
+  - id: health-travelhealthpro
+    category: tips
+    name: TravelHealthPro (NaTHNaC, UKHSA)
+    url: https://travelhealthpro.org.uk/sitemap.xml
+    method: sitemap
+    license: Copyright; no automated-access clause
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus thematic): robots.txt: 200; allow; terms: Disclaimer: no reuse restriction
+      beyond Crown copyright. No automated-access clause; facts only.'
+  - id: health-fitfortravel
+    category: tips
+    name: fitfortravel (NHS Scotland)
+    url: https://www.fitfortravel.nhs.uk/destinations
+    method: html
+    license: Copyright; terms not found
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus thematic): robots.txt: **no response** (robots, home, terms) → allowed by
+      owner rule; terms: terms not found (unreachable). Terms unconfirmed; owner accepted for non-commercial use 2026-11-18.
+      Facts only.'
+  - id: health-ecdc
+    category: tips
+    name: 'ECDC: communicable disease threats'
+    url: https://www.ecdc.europa.eu/en/threats-and-outbreaks/reports-and-data/weekly-threats
+    method: html
+    license: Copyright; terms not found
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus thematic): robots.txt: 200; allow; terms: terms page answered **429** → terms
+      not read; treat as terms not found and pace gently. Terms unconfirmed; owner accepted for non-commercial use
+      2026-11-18. Facts only. europa.eu: paced at 10 s like the other europa.eu sources; terms page answered 429 (not
+      read).'
+  - id: health-iamat
+    category: tips
+    name: IAMAT (now fsimt.foundation)
+    url: https://fsimt.foundation/sitemap_index.xml
+    method: sitemap
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus thematic): robots.txt: 200; allow; terms: terms not found. Rebrand in progress;
+      low priority. Terms unconfirmed; owner accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: air-dubai
+    category: flights
+    name: Dubai Airports (DXB)
+    url: https://www.dubaiairports.ae/sitemap/sitemap-index.xml
+    method: sitemap
+    license: Copyright; no automated-access clause
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus thematic): robots.txt: 200; allow; terms: Terms of use: informational purpose;
+      no bot clause. No automated-access clause; facts only.'
+  - id: air-frankfurt
+    category: flights
+    name: Frankfurt Airport (FRA)
+    url: https://www.frankfurt-airport.com/en.sitemap.xml
+    method: sitemap
+    license: Copyright; terms not found
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus thematic): robots.txt: 200; allow; terms: Nutzungsbedingungen: bans only "Automatische
+      Funktionen … zum Erwerb von Produkten" (automated purchasing), not reading. Terms unconfirmed; owner accepted
+      for non-commercial use 2026-11-18. Facts only.'
+  - id: air-narita
+    category: flights
+    name: Narita Airport (NRT)
+    url: https://www.narita-airport.jp/sitemap/www.narita-airport.jp/sitemap_en_0.xml
+    method: sitemap
+    license: Copyright; personal/non-commercial terms (owner accepted)
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus thematic): robots.txt: 200; allow; terms: Site policy: reproduction only for
+      "personal use" or "quotation" (copyright; quotation fits facts_only). Terms restrict to personal/non-commercial
+      use; owner accepted for non-commercial use 2026-11-18 (reproduction only for ''personal use'' or ''quotation'').
+      Facts only.'
+  - id: air-jfk
+    category: flights
+    name: JFK Airport (Port Authority NY/NJ)
+    url: https://www.jfkairport.com/sitemap.xml
+    method: sitemap
+    license: Copyright; no automated-access clause
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus thematic): robots.txt: 200; allow; terms: Website disclaimer: no bot clause.
+      No automated-access clause; facts only.'
+  - id: air-istanbul
+    category: flights
+    name: Istanbul Airport (IST)
+    url: https://www.istairport.com/en/sitemap.xml
+    method: sitemap
+    license: Copyright; terms not found
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus thematic): robots.txt: 200; **GPTBot and ClaudeBot blocked → AI reservation
+      (title and link only)**; terms: home and terms: no response → terms not found. Terms unconfirmed; owner accepted
+      for non-commercial use 2026-11-18. Facts only. robots.txt reserves AI use (AI crawlers blocked), so title and
+      link only: no LLM kinds.'
+  - id: air-doha
+    category: flights
+    name: Hamad International (DOH)
+    url: https://dohahamadairport.com/
+    method: html
+    license: Copyright; terms not found
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus thematic): robots.txt: 200; allow; terms: terms not found (guessed URL 404).
+      Terms unconfirmed; owner accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: air-aena
+    category: flights
+    name: Aena (all 46 Spanish airports)
+    url: https://www.aena.es/sites/sitemaps/en_GB.xml
+    method: sitemap
+    license: Copyright; no automated-access clause
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus thematic): robots.txt: 200; allow; terms: Aviso legal: reproduction requires
+      permission (copyright only); no bot clause. No automated-access clause; facts only.'
+  - id: air-dfw
+    category: flights
+    name: Dallas/Fort Worth (DFW)
+    url: https://www.dfwairport.com/sitemap.xml
+    method: sitemap
+    license: Copyright; no automated-access clause
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus thematic): robots.txt: 200; allow; terms: Legal (privacy and T&C): no scraping
+      clause found. No automated-access clause; facts only.'
+  - id: air-zurich
+    category: flights
+    name: Zurich Airport (ZRH)
+    url: https://www.flughafen-zuerich.ch/en/passengers
+    method: html
+    license: Copyright; no automated-access clause
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus thematic): robots.txt: 200; allow; terms: Legal notice: no bot clause. No
+      automated-access clause; facts only.'
+  - id: air-dublin
+    category: flights
+    name: Dublin Airport (DUB, daa)
+    url: https://www.dublinairport.com/sitemap.xml
+    method: sitemap
+    license: Copyright; no automated-access clause
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus thematic): robots.txt: 200; allow; terms: Terms of use: no bot or TDM clause
+      found. No automated-access clause; facts only.'
+  - id: od-openskimap
+    category: activities
+    name: OpenSkiMap
+    url: https://tiles.openskimap.org/geojson/ski_areas.geojson
+    method: api
+    license: ODbL
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus thematic): robots.txt: allowed (research 2026-11-18); terms: ODbL.'
+  - id: od-openbeta
+    category: activities
+    name: OpenBeta
+    url: https://api.openbeta.io/
+    method: api
+    license: CC0
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus thematic): robots.txt: allowed (research 2026-11-18); terms: CC0.'
+  - id: od-uk-bathing-water
+    category: places
+    name: Environment Agency Bathing Water Quality
+    url: https://environment.data.gov.uk/doc/bathing-water.json
+    method: api
+    license: OGL v3.0
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus thematic): robots.txt: allowed (research 2026-11-18); terms: OGL v3.0.'
+  - id: od-eea-bathing-water
+    category: places
+    name: EEA bathing water quality
+    url: https://www.eea.europa.eu/en/datahub
+    method: api
+    license: EEA reuse with acknowledgement
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus thematic): robots.txt: allowed (research 2026-11-18); terms: EEA reuse with
+      acknowledgement.'
+  - id: od-epa-beacon
+    category: places
+    name: US EPA BEACON beach advisories
+    url: https://www.epa.gov/waterdata/beacon-20-beach-advisory-and-closing-online-notification
+    method: api
+    license: US public domain
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus thematic): robots.txt: allowed (research 2026-11-18); terms: US public domain.'
+  - id: od-fr-merimee
+    category: places
+    name: Mérimée (French protected monuments)
+    url: https://data.culture.gouv.fr/explore/dataset/liste-des-immeubles-proteges-au-titre-des-monuments-historiques/
+    method: api
+    license: Licence Ouverte 2.0
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus thematic): robots.txt: allowed (research 2026-11-18); terms: Licence Ouverte
+      2.0.'
+  - id: od-nl-rijksmonumenten
+    category: places
+    name: Rijksmonumentenregister (RCE)
+    url: https://linkeddata.cultureelerfgoed.nl/
+    method: api
+    license: CC0
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus thematic): robots.txt: allowed (research 2026-11-18); terms: CC0.'
+  - id: od-imls-museums
+    category: places
+    name: IMLS Museum Data Files
+    url: https://www.imls.gov/research-evaluation/data-collection/museum-data-files
+    method: api
+    license: US public domain
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus thematic): robots.txt: allowed (research 2026-11-18); terms: US public domain.'
+  - id: od-mapping-museums-uk
+    category: places
+    name: Mapping Museums (Birkbeck)
+    url: https://museums.bbk.ac.uk/
+    method: api
+    license: CC BY 4.0
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus thematic): robots.txt: allowed (research 2026-11-18); terms: CC BY 4.0.'
+  - id: od-iana-tzdb
+    category: flights
+    name: IANA Time Zone Database
+    url: https://data.iana.org/time-zones/tzdata-latest.tar.gz
+    method: dump
+    license: Public domain
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus thematic): robots.txt: allowed (research 2026-11-18); terms: Public domain.'
+  - id: api-usno-astro
+    category: weather
+    name: USNO Astronomical Applications API
+    url: https://aa.usno.navy.mil/api/rstt/oneday
+    method: api
+    license: US public domain
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus thematic): robots.txt: allowed (research 2026-11-18); terms: US public domain.'
+  - id: api-equaldex
+    category: tips
+    name: Equaldex Equality Index API
+    url: https://www.equaldex.com/api/equality-index
+    method: api
+    license: Equaldex API terms (credit and link)
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus thematic): robots.txt: allowed (research 2026-11-18); terms: Equaldex API
+      terms (credit and link).'
+  - id: od-gb-toiletmap
+    category: tips
+    name: Great British Public Toilet Map
+    url: https://www.toiletmap.org.uk/
+    method: api
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus thematic): robots.txt: allowed (research 2026-11-18); terms: Copyright; terms
+      not found. Terms unconfirmed; owner accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: od-nasa-black-marble
+    category: activities
+    name: NASA VIIRS Black Marble
+    url: https://ladsweb.modaps.eosdis.nasa.gov/
+    method: api
+    license: CC0
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus thematic): robots.txt: allowed (research 2026-11-18); terms: CC0.'
+  - id: ref-mountainproject
+    category: activities
+    name: Mountain Project (onX)
+    url: https://www.mountainproject.com/route-guide
+    method: html
+    license: Copyright; personal/non-commercial terms (owner accepted)
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus thematic): robots.txt: allowed, Crawl-delay 60; terms: ''personal, non-commercial
+      use only''. Terms restrict to personal/non-commercial use; owner accepted for non-commercial use 2026-11-18
+      (''personal, non-commercial use only''). Facts only.'
+  - id: park-wa-dbca
+    category: places
+    name: Parks and Wildlife Service WA (DBCA)
+    url: https://www.parksandwildlife.wa.gov.au/
+    method: html
+    license: Copyright; personal/non-commercial terms (owner accepted)
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus thematic): robots.txt: no response (allowed by the owner rule); terms: ''your
+      own personal use, for non-commercial educational purposes or for non-commercial use within your organisation''.
+      Terms restrict to personal/non-commercial use; owner accepted for non-commercial use 2026-11-18 (''your own
+      personal use, for non-commercial educational purposes or for non-commercial use within your organisation'').
+      Facts only.'
+  - id: food-macao-gastronomy
+    category: activities
+    name: Macao Creative City of Gastronomy (MGTO)
+    url: https://www.gastronomy.gov.mo/
+    method: html
+    license: Copyright; personal/non-commercial terms (owner accepted)
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus thematic): robots.txt: allowed (research 2026-11-18); terms: ''for personal
+      or organizational, non-commercial use only''. Terms restrict to personal/non-commercial use; owner accepted
+      for non-commercial use 2026-11-18 (''for personal or organizational, non-commercial use only''). Facts only.'
+  - id: mkt-borough-market
+    category: places
+    name: Borough Market
+    url: https://boroughmarket.org.uk/
+    method: html
+    license: Copyright; personal/non-commercial terms (owner accepted)
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus thematic): robots.txt: 404 (allowed); terms: ''print one copy ... for your
+      own personal, non-commercial use''. Terms restrict to personal/non-commercial use; owner accepted for non-commercial
+      use 2026-11-18 (''print one copy ... for your own personal, non-commercial use''). Facts only.'
+  - id: blog-journeywoman
+    category: blogs
+    name: JourneyWoman
+    url: https://journeywoman.com/feed/
+    method: rss
+    license: Copyright; personal/non-commercial terms (owner accepted)
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus thematic): robots.txt: allowed; AI bots blocked (Content-Signal); terms: ''strictly
+      for personal and non-commercial use''. Terms restrict to personal/non-commercial use; owner accepted for non-commercial
+      use 2026-11-18 (''strictly for personal and non-commercial use''). Facts only. robots.txt reserves AI use (AI
+      crawlers blocked), so title and link only: no LLM kinds.'
+  - id: ref-aarp-travel
+    category: tips
+    name: AARP Travel
+    url: https://www.aarp.org/travel/
+    method: html
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus thematic): robots.txt: allowed; CCBot blocked; terms: terms page renders only
+      with JavaScript (not read). Terms unconfirmed; owner accepted for non-commercial use 2026-11-18. Facts only.
+      robots.txt reserves AI use (AI crawlers blocked), so title and link only: no LLM kinds.'
+  - id: air-changi
+    category: flights
+    name: Singapore Changi Airport
+    url: https://www.changiairport.com/en.html
+    method: html
+    license: Copyright; personal/non-commercial terms (owner accepted)
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus thematic): robots.txt: allowed (research 2026-11-18); terms: ''only for your
+      own personal and non-commercial use''. Terms restrict to personal/non-commercial use; owner accepted for non-commercial
+      use 2026-11-18 (''only for your own personal and non-commercial use''). Facts only.'
+  - id: air-delhi
+    category: flights
+    name: Delhi Indira Gandhi International Airport
+    url: https://www.newdelhiairport.in/
+    method: html
+    license: Copyright; personal/non-commercial terms (owner accepted)
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus thematic): robots.txt: allowed (research 2026-11-18); terms: ''private and
+      personal non-commercial use''. Terms restrict to personal/non-commercial use; owner accepted for non-commercial
+      use 2026-11-18 (''private and personal non-commercial use''). Facts only.'
+  - id: air-qantas-travel-info
+    category: flights
+    name: 'Qantas: travel information'
+    url: https://www.qantas.com/au/en/travel-info.html
+    method: html
+    license: Copyright; personal/non-commercial terms (owner accepted)
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus thematic): robots.txt: allowed (research 2026-11-18); terms: ''You may use
+      our websites only for your personal and non-commercial purposes''. Terms restrict to personal/non-commercial
+      use; owner accepted for non-commercial use 2026-11-18 (''You may use our websites only for your personal and
+      non-commercial purposes''). Facts only.'
+  - id: ref-museumsassociation
+    category: places
+    name: Museums Association
+    url: https://www.museumsassociation.org/
+    method: html
+    license: Copyright; personal/non-commercial terms (owner accepted)
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus thematic): robots.txt: n/a; terms: ''personal and non-commercial use only''.
+      No automated-access clause; facts only.'
+  - id: air-united
+    category: flights
+    name: United Airlines
+    url: https://www.united.com/
+    method: html
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus thematic): robots.txt: no response; terms: not read (believed to ban automated
+      access). Terms unconfirmed; owner accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: air-klm
+    category: flights
+    name: KLM
+    url: https://www.klm.com/
+    method: html
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (corpus thematic): robots.txt: 200, allows; terms: not read (home and terms gave no
+      response; Air France-KLM terms believed to ban scraping). Terms unconfirmed; owner accepted for non-commercial
+      use 2026-11-18. Facts only.'

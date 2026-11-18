@@ -350,6 +350,16 @@ fn batch2_entries_are_denied() {
         "https://www.calgary.ca/",
         "https://roadtrippers.com/",
         "https://www.eater.com/",
+        // Corpus expansion: thematic (2026-11-18): terms bans
+        "https://www.nationaltrail.co.uk/",
+        "https://appalachiantrail.org/",
+        "https://www.euansguide.com/",
+        "https://www.pikeplacemarket.org/",
+        "https://www.nparks.gov.sg/",
+        "https://sunrise-sunset.org/api",
+        "https://www.sydneyairport.com.au/",
+        "https://www.viennaairport.com/",
+        "https://www.southwest.com/",
     ] {
         assert!(denied(u).is_some(), "{u} must be denied");
     }
@@ -438,6 +448,12 @@ fn approved_hosts_stay_allowed() {
         "https://www.supernaturalbc.com/sitemap.xml",
         "https://data.cityofchicago.org/resource/vsdy-d8k7.json",
         "https://www.flysfo.com/sitemap.xml",
+        // Corpus expansion: thematic (2026-11-18): sources next to new entries
+        "https://www.roots.gov.sg/sitemap-pages.xml",
+        "https://www.nea.gov.sg/sitemap.xml",
+        "https://aa.usno.navy.mil/api/rstt/oneday",
+        "https://www.flughafen-zuerich.ch/en/passengers",
+        "https://cadw.gov.wales/sitemap.xml",
     ] {
         assert_eq!(denied(u), None, "{u} must stay allowed");
     }

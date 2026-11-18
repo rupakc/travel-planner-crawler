@@ -1081,10 +1081,10 @@ def _corpus_batch_check(generated, ids, off, delays, ai_reserved, personal):
         assert sid in r2 and sid in r3, sid
         assert spec["daily_budget"] <= 200 and spec["max_depth"] <= 2, sid
         assert spec["min_delay_s"] >= delays.get(sid, 5), sid
-        assert spec["cadence"] in ("daily", "weekly", "monthly", "quarterly"), sid
+        assert spec["cadence"] in ("daily", "weekly", "monthly", "quarterly", "yearly"), sid
         if spec["licence"]["class"] != "open":
             assert spec["licence"]["class"] == "facts_only", sid
-        if "terms not found" in notes or "Terms unconfirmed" in notes:
+        if spec["licence"]["class"] == "facts_only" and ("terms not found" in notes or "Terms unconfirmed" in notes):
             assert "owner accepted for non-commercial use 2026-11-18" in notes, sid
         if sid in personal:
             assert spec["licence"]["class"] == "facts_only", sid
@@ -1124,5 +1124,56 @@ EUROPE_STAY_ALLOWED = [
     "https://visittallinn.ee/sitemap.xml", "https://www.tirol.at/sitemap.xml", "https://www.visitmalta.com/en/",
     "https://www.translink.co.uk/sitemap.xml", "https://www.museiitaliani.it/", "https://www.oebb.at/en/",
     "https://www.cairngorms.co.uk/",
+]
+
+
+# --- Corpus expansion: thematic, worldwide (research vetted 2026-11-18, corpus_thematic.md) ---
+THEMATIC_OFF = {
+    **{sid: "adapter pending" for sid in (
+        "od-openskimap", "od-openbeta", "od-uk-bathing-water", "od-eea-bathing-water", "od-epa-beacon",
+        "od-fr-merimee", "od-nl-rijksmonumenten", "od-imls-museums", "od-mapping-museums-uk", "od-iana-tzdb",
+        "api-usno-astro", "api-equaldex", "od-gb-toiletmap")},
+    "od-nasa-black-marble": "needs an account",
+    "ref-museumsassociation": "relevance",
+    **{sid: "re-test from the crawler VM" for sid in (
+        "park-gbrmpa", "gov-agriculture-au-pets", "health-fitfortravel", "air-united", "air-klm")},
+}
+THEMATIC_DELAYS = {"ref-ilga-world": 10, "gov-ee-police-dnv": 10, "health-ecdc": 10, "ref-mountainproject": 60}
+THEMATIC_AI_RESERVED = {"air-istanbul", "blog-ciaobambino", "blog-journeywoman", "food-tucson-gastronomy",
+                        "ref-aarp-travel", "trail-camino-santiago-gal"}
+THEMATIC_PERSONAL_TERMS = {
+    "wine-portugal", "gov-catsa", "gov-afcd-hk-pets", "air-narita", "ref-mountainproject",
+    "park-wa-dbca", "food-macao-gastronomy", "mkt-borough-market", "blog-journeywoman", "air-changi", "air-delhi",
+    "air-qantas-travel-info",
+}
+
+
+def test_corpus_thematic_2026_11_18(generated):
+    seeds = yaml.safe_load((ROOT / "docs" / "research" / "seeds.yaml").read_text())["seeds"]
+    ids = _batch_ids(seeds, "trail-camino-santiago-gal", "CORPUS_AFTER_THEMATIC")
+    assert len(ids) == 84
+    _corpus_batch_check(generated, ids, THEMATIC_OFF, THEMATIC_DELAYS, THEMATIC_AI_RESERVED, THEMATIC_PERSONAL_TERMS)
+    assert len([s for s in ids if s not in THEMATIC_OFF]) == 64
+    # Duplicates of existing sources, the denylisted Smithsonian API and Incheon (robots Disallow: /) are not added.
+    for sid in ("park-doc-nz", "park-nsw-npws", "ev-festivalfinder-eu", "air-incheon", "air-munich",
+                "api-smithsonian-oa", "air-sfo"):
+        assert sid not in generated, sid
+    assert generated["air-frankfurt"]["exclude"] and "(?!" not in "".join(generated["air-frankfurt"]["include"])
+    for url in THEMATIC_DENIED:
+        assert s2s.denied(url, DENYLIST) is not None, url
+    for url in THEMATIC_STAY_ALLOWED:
+        assert s2s.denied(url, DENYLIST) is None, url
+
+
+# Terms ban robots, scraping, automated access or TDM (corpus thematic 2026-11-18).
+THEMATIC_DENIED = [
+    "https://www.nationaltrail.co.uk/", "https://appalachiantrail.org/", "https://www.euansguide.com/",
+    "https://www.pikeplacemarket.org/", "https://www.nparks.gov.sg/", "https://sunrise-sunset.org/api",
+    "https://www.sydneyairport.com.au/", "https://www.viennaairport.com/", "https://www.southwest.com/",
+]
+THEMATIC_STAY_ALLOWED = [
+    "https://www.roots.gov.sg/sitemap-pages.xml", "https://www.nea.gov.sg/sitemap.xml",
+    "https://www.nationalparks.nsw.gov.au/things-to-do", "https://aa.usno.navy.mil/api/rstt/oneday",
+    "https://www.flughafen-zuerich.ch/en/passengers", "https://cadw.gov.wales/sitemap.xml",
 ]
 

@@ -113,6 +113,9 @@ pub const TRAVEL_PUBLICATIONS: &[(&str, &str)] = &[
     // whole-travel publications and stay off.
     ("bearfoottheory.com", ""),
     ("freshoffthegrid.com", ""),
+    // Corpus expansion: thematic (2026-11-18): travel magazines and blogs whose URLs lack "travel".
+    ("ciaobambino.com", ""),
+    ("journeywoman.com", ""),
 ];
 
 /// Whether `url` is travel-focused: `travel` in its host, path or query, or a

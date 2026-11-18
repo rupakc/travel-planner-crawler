@@ -245,3 +245,9 @@ plan = `docs/superpowers/plans/2026-11-15-voyager-crawler.md`, r1–r5 = `docs/r
   terms-ban hosts denylisted (www.mbta.com exact, so the cdn.mbta.com GTFS stays allowed);
   json_events reads ISO date-time start times. (scripts/seeds_to_sources.py,
   policy/denylist.yaml, crates/vc-sources/src/adapters/json_events.rs)
+- 2026-11-18 Corpus expansion, thematic (outdoors, food/wine, traveller types, health, airports,
+  digital-nomad visas): 84 rows, 64 on (12 under the personal/non-commercial owner rule), 20 off
+  (13 dataset/API adapters pending, NASA Earthdata account, Museums Association relevance, five
+  no-response hosts to re-test from the crawler VM, United and KLM included). Nine terms-ban hosts
+  denylisted (nparks.gov.sg among them). Incheon (robots Disallow: / except /ap_en/) not added;
+  Parks Canada, USFS, BLM and SFO already came with the North America batch.
