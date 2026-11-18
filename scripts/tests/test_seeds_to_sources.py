@@ -1054,7 +1054,7 @@ EUROPE_OFF = {
         "od-andmed-eesti", "od-data-europa", "od-data-gov-cz", "od-dane-gov-pl", "tr-irail", "tr-entur",
         "tb-puglia")},
     "api-europeana": "needs an API key", "od-data-gov-gr": "needs an API key",
-    "tr-eurostar": "owner decision", "thelocal-news": "relevance",
+    "thelocal-news": "relevance",
     "ref-odysseus-culture-gr": "re-test from the crawler VM", "tr-intercity-pl": "re-test from the crawler VM",
 }
 EUROPE_DELAYS = {"city-toulouse": 20, "city-geneve": 10, "tb-gibraltar": 10, "blog-europeupclose": 30,
@@ -1066,6 +1066,7 @@ EUROPE_AI_RESERVED = {
 }
 # Personal/non-commercial terms, on by the owner's standing rule of 2026-11-18.
 EUROPE_PERSONAL_TERMS = {
+    "tr-eurostar",  # enabled 2026-11-18, owner rule
     "city-visitbath", "city-visitbelfast", "city-visitmanchester", "city-visitcambridge", "tb-visitisleofman",
     "tb-historicenvironment-scot", "tb-discovernorthernireland", "tb-bayern", "tr-cfr-calatori", "city-esmadrid",
     "city-visitvalencia", "tb-sardegna", "tb-visittrentino", "city-visitbruges", "city-visitbergen",
@@ -1113,7 +1114,7 @@ def test_corpus_europe_2026_11_18(generated):
     ids = _batch_ids(seeds, "tb-visitcornwall", "tb-alabama")
     assert len(ids) == 151
     _corpus_batch_check(generated, ids, EUROPE_OFF, EUROPE_DELAYS, EUROPE_AI_RESERVED, EUROPE_PERSONAL_TERMS)
-    assert len([s for s in ids if s not in EUROPE_OFF]) == 128
+    assert len([s for s in ids if s not in EUROPE_OFF]) == 129
     # National open-data portals wait for a dataset reader, not an HTML crawl.
     for sid in ids:
         if sid.startswith("od-") and sid not in ("od-musei-italiani", "od-data-gov-gr", "od-data-gov-cz"):
@@ -1466,7 +1467,7 @@ def test_jma_normals_and_bathing_water_2026_11_18(generated):
 # rules of 2026-11-18). Every row of the batch has notes starting "Research 2026-11-18 (hidden
 # gems". Off rows carry one of these reason prefixes; everything else is on, in ramp-2 and
 # ramp-3, facts only unless an open licence was quoted.
-HIDDEN_GEMS_COUNTS = {'total': 90, 'on': 77, 'off': 13}
+HIDDEN_GEMS_COUNTS = {'total': 220, 'on': 194, 'off': 26}
 HIDDEN_GEMS_OFF_PREFIXES = ("re-test from the crawler VM", "terms forbid storage/redistribution",
                             "meta robots", "seed unresolved", "adapter pending")
 # Parked or hijacked official domains: denylisted, never a source.
@@ -1570,3 +1571,32 @@ def test_hidden_gems_part_1_asia_pacific_africa(generated):
     # Advisory-risk destinations are added normally and flagged.
     for sid in ("tb-pakistan", "gov-gilgit-baltistan", "tb-kamchatka"):
         assert generated[sid]["enabled"] and "Advisory-risk destination" in notes(sid), sid
+
+
+def test_hidden_gems_part_2_europe_atlantic_americas(generated):
+    def notes(sid):
+        return " ".join(generated[sid]["notes"].split())
+
+    tr = generated["gov-tristan"]
+    assert not tr["enabled"] and "Disabled: seed unresolved" in notes("gov-tristan")
+    for sid, clause in (("mag-polarjournal", "in databases"), ("od-wdpa", "redistribute"),
+                        ("guide-visitikaria", "storage")):
+        assert not generated[sid]["enabled"] and clause in notes(sid), sid
+        assert "terms forbid storage/redistribution" in notes(sid), sid
+    # Terms limited to personal/non-commercial use: on, facts only (owner rule 2026-11-18).
+    for sid in ("tb-shetland", "tb-orkney", "tb-jersey", "tb-borkum", "tb-statia", "tb-ouessant"):
+        spec = generated[sid]
+        assert spec["enabled"] and spec["licence"]["class"] == "facts_only", sid
+        assert "personal/non-commercial use; owner accepted for non-commercial use 2026-11-18" in notes(sid), sid
+    for sid in ("tb-ouessant", "tb-shetland", "tr-orkney-ferries"):
+        assert generated[sid]["llm_kinds"] == [], sid
+    assert generated["tb-shetland"]["min_delay_s"] >= 5 and generated["tb-french-guiana"]["min_delay_s"] >= 20
+    vh = generated["gov-usgs-volcanoes"]
+    assert vh["seeds"] == ["https://www.usgs.gov/programs/VHP"] and vh["licence"]["class"] == "open"
+    assert vh["sitemaps"] == [] and vh["include"]
+    for sid in ("od-natural-earth", "od-ramsar-rsis"):
+        assert "Disabled: adapter pending" in notes(sid), sid
+    # Seeds on redirect hosts use the final host.
+    assert generated["tb-lofoten"]["sitemaps"] == ["https://visitlofoten.com/en/sitemap_index.xml"]
+    assert generated["tb-bornholm"]["sitemaps"] == ["https://www.bornholminfo.dk/sitemap.xml"]
+    assert generated["tb-american-samoa"]["seeds"] == ["https://www.visitamericansamoa.org/"]

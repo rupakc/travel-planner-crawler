@@ -27,15 +27,17 @@ cadence: monthly
 min_delay_s: 5
 daily_budget: 50
 politeness_key: null
-enabled: false
+enabled: true
 needs_key: false
 key_secret: null
 max_retention_days: null
 display_requirements: null
 notes: 'Research 2026-11-18 (corpus Europe): robots.txt: n/a; terms: ''solely for your own personal and
   non-commercial use''; scraping banned for commercial purposes. No automated-access clause; facts only.
-  | Disabled: owner decision: terms restrict reuse and ban scraping for commercial purposes (''solely
-  for your own personal and non-commercial use''); kept off as a scraping clause, owner to confirm'
+  Enabled 2026-11-18 under the owner''s standing rule: Terms restrict to personal/non-commercial use;
+  owner accepted for non-commercial use 2026-11-18 (''solely for your own personal and non-commercial
+  use''; the scraping ban applies only ''for commercial purposes'', and Voyager is non-commercial). Facts
+  only.'
 relevance:
   sections:
   - getting_around
