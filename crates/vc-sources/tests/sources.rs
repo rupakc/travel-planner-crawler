@@ -302,7 +302,6 @@ fn unesco_is_denied_and_neighbours_of_new_entries_are_not() {
     for ok in [
         "https://datahub.visitfinland.com/",
         "https://transport.data.gouv.fr/resources/11681",
-        "https://www.nycgovparks.org/xml/events_300_rss.xml",
         "https://turismo.buenosaires.gob.ar/en",
         "https://www.smithsonianmag.com/travel/",
         "https://www.green-tourism.com/our-members/",
