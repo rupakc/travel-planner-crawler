@@ -280,3 +280,10 @@ plan = `docs/superpowers/plans/2026-11-15-voyager-crawler.md`, r1–r5 = `docs/r
   official-myciti; visitkzn-sa.com robots.txt read once before using its sitemap for KZN;
   visitaqaba.com timed out (re-test); Riyadh Season enabled with render auto (JS app, no terms).
   Seven terms-ban hosts and the hijacked visitethiopia.travel denylisted.
+- 2026-11-18 Corpus expansion, Asia-Pacific: 183 rows, 141 on (15 under the personal/non-commercial
+  owner rule, japan-guide included: its terms restrict use but do not ban robots); 42 off (29
+  no-response hosts to re-test from the crawler VM, SPAs and portals waiting for render or an
+  adapter, three API keys). admin.wellingtonnz.com robots.txt read once before using its sitemap.
+  visit-fsm.org and visitkiribati.travel denylisted as hijacked domains; saigoneer.com for a
+  scraping ban. Not added: english.visitbeijing.com.cn, www.airport.kr, www.tourismlaos.org,
+  data.gov.au (robots.txt Disallow: /); nparks.gov.sg is denylisted (thematic batch).
