@@ -7,7 +7,7 @@
 Every website and dataset the crawler knows, grouped by the part of the Voyager app it
 feeds. A source that serves several parts is listed under each of them.
 
-**730 sources, 580 on, 150 off.**
+**838 sources, 665 on, 173 off.**
 
 - **What we take**: the traveller-facing data the source gives (its `relevance.why`).
 - **Licence**: *open* (free reuse with credit), *share-alike* (kept apart from other
@@ -35,6 +35,7 @@ is added only with the owner's approval (see CONTRIBUTING.md).
 | `air-narita` | `www.narita-airport.jp` | Narita Airport (NRT): airport transfers, terminals and travel information, for Flights, Local transportation and the Packing list. | facts only | yes | no |
 | `air-qantas-travel-info` | `www.qantas.com` | Qantas: travel information: Baggage, check-in and travel rules, for Flights and the Packing list. | facts only | yes | no |
 | `air-zurich` | `www.flughafen-zuerich.ch` | Zurich Airport (ZRH): airport transfers, terminals and travel information, for Flights, Local transportation and the Packing list. | facts only | yes | no |
+| `blog-caribjournal` | `www.caribjournal.com` | Caribbean Journal: airport transfers, terminals and travel information, for Places to see, Hotels, Flights and Travel tips. | facts only | yes | no |
 | `blog-frequentmiler` | `frequentmiler.com` | Points, miles and card-fee tactics from Frequent Miler, for Flights, Hotels and Forex (headline, link and a short excerpt only). | facts only | yes | no |
 | `blog-headforpoints` | `www.headforpoints.com` | Airline, airport-lounge and hotel reviews and booking tips from Head for Points, for Flights, Hotels and Travel tips (headline, link and a short excerpt only). | facts only | yes | no |
 | `blog-onemileatatime` | `onemileatatime.com` | Airline, airport and hotel reviews and booking tips from One Mile at a Time, for Flights, Hotels and Travel tips (headline, link and a short excerpt only). | facts only | yes | no |
@@ -95,12 +96,15 @@ is added only with the owner's approval (see CONTRIBUTING.md).
 | `tb-canary` | `www.hellocanaryislands.com` | Hello Canary Islands: official visitor guide, for Activities, Places to see, Weather and Travel tips. | facts only | yes | no |
 | `tb-lapland` | `lapland.fi` | Visit Lapland (House of Lapland): official visitor guide, for Activities, Weather and the Packing list. | facts only | yes | no |
 | `tb-tirol` | `www.tirol.at` | Tirol Werbung: official visitor guide, for Activities, Free walking tours, Events and Weather. | facts only | yes | no |
+| `wx-meteochile` | `climatologia.meteochile.gob.cl` | Dirección Meteorológica de Chile (climatology): official station climatology for Chile, for Weather. | facts only | yes | no |
+| `wx-nhc` | `www.nhc.noaa.gov` | NOAA National Hurricane Center: tropical-cyclone advisories for the Caribbean and Mexico, for Weather, Travel tips and the Emergency card. | open | yes | no |
 | `api-usno-astro` | `aa.usno.navy.mil` | USNO Astronomical Applications API: Sunrise, sunset, twilight and moon phase for golden hour and stargazing nights, for Weather, the itinerary and Activities. | open | no | no |
 | `ecmwf-open` | `data.ecmwf.int` | Global weather forecasts (GRIB2 files) for the Weather section; needs a self-hosted forecast model, so off. | open | no | no |
 | `meteostat` | `bulk.meteostat.net` | Historical weather and climate data per station for the Weather section; non-commercial licence, so off. | restricted | no | no |
 | `od-msc-citypage` | `dd.weather.gc.ca` | Current conditions and forecasts for Canadian cities from Environment Canada, for Weather. | open | no | no |
 | `od-uk-bathing-water` | `environment.data.gov.uk` | Environment Agency Bathing Water Quality: Water quality and pollution-risk forecasts for 400+ England bathing waters, for Places to see, Activities and Weather. | open | no | no |
 | `open-meteo` | `api.open-meteo.com` | Weather forecasts and climate data for the Weather section; non-commercial free API, so off. | restricted | no | no |
+| `wx-inmet` | `portal.inmet.gov.br` | INMET Brazil (portal; API apitempo.inmet.gov.br): official visitor guide, for Weather. | facts only | no | no |
 
 ## Hotels
 
@@ -111,6 +115,7 @@ is added only with the owner's approval (see CONTRIBUTING.md).
 | `biosphere-certified` | `www.biospheresustainable.com` | Biosphere-certified hotels, companies and destinations (strong in Spain and Latin America), for Hotels and Places to see. | facts only | yes | no |
 | `blog-backpackerbanter` | `www.backpackerbanter.com` | Shoestring backpacking routes and hostel advice from Backpacker Banter, for Travel tips, Places to see and Hotels (headline, link and a short excerpt only). | facts only | yes | no |
 | `blog-budgettraveller` | `budgettraveller.org` | Budget-luxury stays and city guides from The Budget Traveller, for Hotels, Travel tips and Places to see (headline, link and a short excerpt only). | facts only | yes | no |
+| `blog-caribjournal` | `www.caribjournal.com` | Caribbean Journal: airport transfers, terminals and travel information, for Places to see, Hotels, Flights and Travel tips. | facts only | yes | no |
 | `blog-ciaobambino` | `ciaobambino.com` | Ciao Bambino (family travel): family-friendly hotels and trip guides, for Hotels, Travel tips and Activities. | facts only | yes | no |
 | `blog-coasttocoast` | `coasttocoast.co.za` | Southern and East Africa backpacker hostel and transport guide from Coast to Coast, for Hotels, Local transportation and Travel tips (headline, link and a short excerpt only). | facts only | yes | no |
 | `blog-eurocheapo` | `www.eurocheapo.com` | Cheap hotels and city savings for Europe from EuroCheapo, for Hotels, Travel tips and Local transportation (headline, link and a short excerpt only). | facts only | yes | no |
@@ -152,6 +157,7 @@ is added only with the owner's approval (see CONTRIBUTING.md).
 | `ref-iglta` | `www.iglta.org` | IGLTA (International LGBTQ+ Travel Association): LGBTQ-welcoming destinations, Pride events, for Travel tips, Events and Hotels. | facts only | yes | no |
 | `ref-priceoftravel` | `www.priceoftravel.com` | Per-city backpacker daily cost index (hostel, transit, meals) from Price of Travel, for Travel tips, Hotels and itinerary budgets (headline, link and a short excerpt only). | facts only | yes | no |
 | `regenerative-travel` | `regenerativetravel.com` | Independent regenerative and eco hotels and impact stories, for Hotels and Travel tips. | facts only | yes | no |
+| `tb-cordoba-ar` | `cordobaturismo.gov.ar` | Córdoba Turismo (Agencia Córdoba Turismo): accessible lodging lists, tourist routes, for Places to see, Events and Hotels. | facts only | yes | no |
 | `tb-visitnapavalley` | `www.visitnapavalley.com` | Visit Napa Valley (official DMO): wineries, events, itineraries, for Activities, Events and Hotels. | facts only | yes | no |
 | `the-long-run` | `www.thelongrun.org` | GSTC-aligned nature lodges, reserves and travel businesses worldwide, for Hotels and Activities. | facts only | yes | no |
 | `vakinn-is` | `www.vakinn.is` | Iceland's official list of quality and eco-certified stays and tour operators, for Hotels and Activities. | facts only | yes | no |
@@ -168,6 +174,8 @@ is added only with the owner's approval (see CONTRIBUTING.md).
 | `greenkey-global-ca` | `greenkeyglobal.com` | One-to-five key eco-ratings of North American hotels, for the Hotels section. | facts only | no | no |
 | `greenseal-api` | `greenseal.org` | Green Seal-certified hotels and lodging in the United States, for the Hotels section. | API terms | no | yes |
 | `nordic-swan-hotels` | `www.nordic-swan-ecolabel.org` | Nordic Swan-labelled hotels and hostels across the Nordic countries, for the Hotels section. | facts only | no | no |
+| `od-datatur-mx` | `www.datatur.sectur.gob.mx` | DataTur (SECTUR tourism statistics): government open-data datasets (tourism, events, transport), for Hotels and Travel tips. | open | no | no |
+| `od-datos-gov-co` | `www.datos.gov.co` | Portal de Datos Abiertos de Colombia (MinTIC, Socrata): registered tourism providers (RNT), attractions, events datasets, for Places to see, Events and Hotels. | open | no | no |
 | `tourcert` | `tourcert.org` | CSR-certified tour operators, hotels and destinations in Europe, for Activities and Hotels. | facts only | no | no |
 | `travelife-hotels` | `travelifestaybetter.com` | GSTC-recognised Travelife-certified hotels worldwide, for the Hotels section. | facts only | no | no |
 | `umweltzeichen-tourism` | `www.umweltzeichen.at` | Austrian government-ecolabelled hotels, guesthouses and mountain huts, for the Hotels section. | facts only | no | no |
@@ -222,6 +230,7 @@ is added only with the owner's approval (see CONTRIBUTING.md).
 | `city-luzern` | `www.luzern.com` | Luzern Tourismus: official visitor guide, for Activities, Places to see and Events. | facts only | yes | no |
 | `city-lyon` | `en.visiterlyon.com` | ONLYLYON Tourisme: official visitor guide, for Activities, Events and Local transportation. | facts only | yes | no |
 | `city-marseille` | `www.marseille-tourisme.com` | Marseille Tourisme: official visitor guide, for Activities, Places to see and Events. | facts only | yes | no |
+| `city-medellin-travel` | `www.medellin.travel` | Medellín Travel (Bureau Medellín): official visitor guide, for Places to see, Activities and Events. | facts only | yes | no |
 | `city-miami` | `www.miamiandbeaches.com` | Miami and Miami Beach events, things to do and neighbourhoods, for Events, Activities and Places to see. | facts only | yes | no |
 | `city-minneapolis` | `www.minneapolis.org` | Minneapolis events calendar and things to do, for Events and Activities. | facts only | yes | no |
 | `city-montreal` | `www.mtl.org` | Montréal events and things to do from the city's tourism bureau, for Events and Activities. | facts only | yes | no |
@@ -318,6 +327,7 @@ is added only with the owner's approval (see CONTRIBUTING.md).
 | `park-alberta` | `www.albertaparks.ca` | Alberta provincial parks (Kananaskis and others) with visitor information, for Places to see and Activities. | facts only | yes | no |
 | `park-bc` | `bcparks.ca` | British Columbia provincial parks, trip planning and wildlife-safety and closure notes, for Places to see, Activities and Travel tips. | facts only | yes | no |
 | `park-blm` | `www.blm.gov` | Public-land recreation sites, activities and events, for Activities, Places to see and Events. | open | yes | no |
+| `park-conanp-mx` | `www.gob.mx` | CONANP (Mexico protected areas): official visitor guide, for Places to see, Activities and Travel tips. | facts only | yes | no |
 | `park-env-japan` | `www.env.go.jp` | Japan Ministry of the Environment: National Parks: Japan's 35 national parks, official English pages, for Places to see and Activities. | facts only | yes | no |
 | `park-noaa-sanctuaries` | `sanctuaries.noaa.gov` | NOAA National Marine Sanctuaries: diving, snorkelling and whale-watching sanctuaries, for Places to see and Activities. | open | yes | no |
 | `park-ny-state` | `parks.ny.gov` | New York State parks and historic sites with visitor information and events, for Places to see, Activities and Events. | facts only | yes | no |
@@ -345,18 +355,24 @@ is added only with the owner's approval (see CONTRIBUTING.md).
 | `tb-andalucia` | `www.andalucia.org` | Andalucía Tourism: official visitor guide, for Activities, Places to see, Events and Travel tips. | facts only | yes | no |
 | `tb-arkansas` | `www.arkansas.com` | Official Arkansas attractions, events and its 52 state parks, for Events, Activities and Places to see. | facts only | yes | no |
 | `tb-azores` | `www.visitazores.com` | Visit Azores: official visitor guide, for Activities, Places to see and Local transportation. | facts only | yes | no |
+| `tb-bariloche` | `barilocheturismo.gob.ar` | Bariloche Turismo (EMPROTUR): official visitor guide, for Places to see, Activities and Events. | facts only | yes | no |
 | `tb-bayern` | `erlebe.bayern` | Bayern Tourismus (erlebe.bayern): official visitor guide, for Activities, Places to see and Events. | facts only | yes | no |
 | `tb-bc` | `www.supernaturalbc.com` | Official British Columbia regions, experiences, road trips and practical tips, for Activities, Places to see and the itinerary. | facts only | yes | no |
+| `tb-bonaire` | `bonaireisland.com` | Tourism Corporation Bonaire: official visitor guide, for Places to see, Activities and Events. | facts only | yes | no |
 | `tb-brittany` | `www.brittanytourism.com` | Brittany Tourism: official visitor guide, for Activities, Places to see and Local transportation. | facts only | yes | no |
 | `tb-bulgaria` | `visitbulgaria.com` | Visit Bulgaria (Ministry of Tourism): official visitor guide, for Places to see and Activities. | facts only | yes | no |
 | `tb-canary` | `www.hellocanaryislands.com` | Hello Canary Islands: official visitor guide, for Activities, Places to see, Weather and Travel tips. | facts only | yes | no |
+| `tb-caribe-mexicano` | `caribemexicano.travel` | Caribe Mexicano (Quintana Roo tourism board): official Cancún/Riviera Maya/Tulum/Cozumel destinations and experiences, for Places to see, Activities and the itinerary. | facts only | yes | no |
 | `tb-catalunya` | `www.catalunya.com` | Catalunya Turisme: official visitor guide, for Activities, Places to see and Events. | facts only | yes | no |
 | `tb-connecticut` | `ctvisit.com` | Official Connecticut events, things to do and getting-around advice, for Events, Activities and Local transportation. | facts only | yes | no |
 | `tb-crete` | `www.incrediblecrete.gr` | Incredible Crete (Region of Crete): official visitor guide, for Places to see, Activities and Free walking tours. | facts only | yes | no |
 | `tb-croatia` | `croatia.hr` | Croatia.hr (HTZ): official visitor guide, for Places to see, Activities and Events. | facts only | yes | no |
+| `tb-curacao` | `sitemap.curacao.com` | Curaçao Tourist Board: ED card and entry, for Events, Activities and Visa. | facts only | yes | no |
 | `tb-czechia` | `www.visitczechia.com` | Visit Czechia (CzechTourism): official visitor guide, for Places to see, Activities and Events. | facts only | yes | no |
 | `tb-delaware` | `www.visitdelaware.com` | Official Delaware events, attractions and beaches, for Events, Activities and Places to see. | facts only | yes | no |
 | `tb-discovernorthernireland` | `discovernorthernireland.com` | Discover Northern Ireland: official visitor guide, for Activities, Places to see and Events. | facts only | yes | no |
+| `tb-dominica` | `discoverdominica.com` | Discover Dominica Authority: official visitor guide, for Places to see, Activities and Events. | facts only | yes | no |
+| `tb-ecuador` | `ecuador.travel` | Ecuador Travel (MINTUR): official visitor guide, for Places to see, Visa and Activities. | facts only | yes | no |
 | `tb-emilia-romagna` | `emiliaromagnaturismo.it` | Emilia-Romagna Turismo: official visitor guide, for Activities, Places to see and Events. | open | yes | no |
 | `tb-english-heritage` | `www.english-heritage.org.uk` | English Heritage: 400+ sites, opening times, events, for Places to see, Events and Activities. | facts only | yes | no |
 | `tb-euskadi` | `tourism.euskadi.eus` | Euskadi Tourism: official visitor guide, for Activities, Places to see and Events. | facts only | yes | no |
@@ -365,8 +381,10 @@ is added only with the owner's approval (see CONTRIBUTING.md).
 | `tb-galicia` | `www.turismo.gal` | Turismo de Galicia: official visitor guide, for Activities, Places to see, Events and Free walking tours. | open | yes | no |
 | `tb-germany-travel` | `www.germany.travel` | Germany Travel (GNTB): official visitor guide, for Places to see, Activities, Travel tips and Events. | facts only | yes | no |
 | `tb-gibraltar` | `www.visitgibraltar.gi` | Visit Gibraltar: official visitor guide, for Places to see, Activities and Travel tips. | facts only | yes | no |
+| `tb-godr` | `www.godominicanrepublic.com` | Go Dominican Republic (MITUR): official visitor guide, for Places to see, Activities and Events. | facts only | yes | no |
 | `tb-graubuenden` | `www.graubuenden.ch` | Graubünden Ferien: official visitor guide, for Activities, Free walking tours and Places to see. | facts only | yes | no |
 | `tb-greenland` | `visitgreenland.com` | Official Greenland destinations, things to do, how to get around and practical facts, for Activities, Places to see, Local transportation and Travel tips. | facts only | yes | no |
+| `tb-guadeloupe` | `www.lesilesdeguadeloupe.com` | Îles de Guadeloupe (CTIG): official visitor guide, for Places to see, Activities and Events. | facts only | yes | no |
 | `tb-illesbalears` | `www.illesbalears.travel` | Illes Balears Tourism: official visitor guide, for Activities, Places to see and Events. | facts only | yes | no |
 | `tb-indiana` | `visitindiana.in.gov` | Official Indiana events, road trips and things to do, for Events, Activities and Places to see. | facts only | yes | no |
 | `tb-iowa` | `www.traveliowa.com` | Official Iowa events, trip ideas and things to do, for Events and Activities. | facts only | yes | no |
@@ -380,6 +398,8 @@ is added only with the owner's approval (see CONTRIBUTING.md).
 | `tb-madeira` | `visitmadeira.com` | Visit Madeira: official visitor guide, for Activities, Free walking tours, Places to see and Events. | facts only | yes | no |
 | `tb-malta` | `www.visitmalta.com` | Visit Malta: official visitor guide, for Activities, Events, Places to see and Local transportation. | facts only | yes | no |
 | `tb-manitoba` | `www.travelmanitoba.com` | Official Manitoba events and things to do (Churchill polar bears), for Events and Activities. | facts only | yes | no |
+| `tb-martinique` | `www.martinique.org` | Martinique (Comité Martiniquais du Tourisme): official visitor guide, for Places to see, Events and Activities. | facts only | yes | no |
+| `tb-mendoza` | `mendoza.tur.ar` | Mendoza Turismo (EMETUR): wine routes, Aconcagua, for Places to see, Events and Activities. | facts only | yes | no |
 | `tb-mississippi` | `visitmississippi.org` | Official Mississippi event and trip-idea posts, for Events and Activities. | facts only | yes | no |
 | `tb-missouri` | `www.visitmo.com` | Official Missouri events, trip ideas and things to do, for Events and Activities. | facts only | yes | no |
 | `tb-moldova` | `moldova.travel` | Moldova Travel: Official Moldova destinations and things to do (FCDO and the US advise against travel to Transnistria only), for Places to see and Activities. | facts only | yes | no |
@@ -400,6 +420,7 @@ is added only with the owner's approval (see CONTRIBUTING.md).
 | `tb-pennsylvania` | `www.visitpa.com` | Official Pennsylvania events (America250 in 2026), trips and regions, for Events, Activities and Places to see. | facts only | yes | no |
 | `tb-poland` | `www.poland.travel` | Poland Travel (POT): official visitor guide, for Places to see, Activities and Travel tips. | facts only | yes | no |
 | `tb-provence` | `provence-alpes-cotedazur.com` | Provence-Alpes-Côte d'Azur Tourisme: official visitor guide, for Activities, Places to see and Events. | facts only | yes | no |
+| `tb-puertovallarta` | `visitpuertovallarta.com` | Visit Puerto Vallarta (tourism board): city event calendar and guides, for Events and Activities. | facts only | yes | no |
 | `tb-quebec` | `www.bonjourquebec.com` | Official Québec regions, things to do and events, for Events, Activities and Places to see. | facts only | yes | no |
 | `tb-rhodeisland` | `www.visitrhodeisland.com` | Official Rhode Island events and things to do, for Events and Activities. | facts only | yes | no |
 | `tb-sachsen` | `www.sachsen-tourismus.de` | Sachsen Tourismus: official visitor guide, for Activities, Places to see and Events. | facts only | yes | no |
@@ -413,6 +434,8 @@ is added only with the owner's approval (see CONTRIBUTING.md).
 | `tb-texas` | `www.traveltexas.com` | Official Texas events, things to do and published itineraries, for Events, Activities and the itinerary. | facts only | yes | no |
 | `tb-ticino` | `www.ticino.ch` | Ticino Turismo: official visitor guide, for Activities, Places to see and Events. | facts only | yes | no |
 | `tb-tirol` | `www.tirol.at` | Tirol Werbung: official visitor guide, for Activities, Free walking tours, Events and Weather. | facts only | yes | no |
+| `tb-tourismpanama` | `www.tourismpanama.com` | Visit Panamá (PROMTUR): official visitor guide, for Places to see, Visa and Activities. | facts only | yes | no |
+| `tb-ushuaia` | `turismoushuaia.com` | Turismo Ushuaia (InFueTur): End-of-the-world excursions, for Places to see, Activities and Local transportation. | facts only | yes | no |
 | `tb-utah` | `www.visitutah.com` | Official Utah trip planning, the Mighty 5 national parks and recommended itineraries, for Activities, Places to see and the itinerary. | facts only | yes | no |
 | `tb-valais` | `www.valais.ch` | Valais/Wallis Promotion: official visitor guide, for Activities, Places to see and Events. | facts only | yes | no |
 | `tb-valdeloire` | `www.valdeloire-france.com` | Val de Loire (Centre-VdL Tourisme): official visitor guide, for Places to see and Activities. | facts only | yes | no |
@@ -422,15 +445,20 @@ is added only with the owner's approval (see CONTRIBUTING.md).
 | `tb-visitcornwall` | `www.visitcornwall.com` | Visit Cornwall: official Cornwall attractions, beaches, events, for Activities, Places to see, Events and Local transportation. | facts only | yes | no |
 | `tb-visitguernsey` | `www.visitguernsey.com` | Visit Guernsey: official visitor guide, for Activities, Events and Local transportation. | facts only | yes | no |
 | `tb-visitisleofman` | `www.visitisleofman.com` | Visit Isle of Man: official visitor guide, for Activities, Places to see and Events. | facts only | yes | no |
+| `tb-visitjamaica` | `www.visitjamaica.com` | Visit Jamaica (JTB): official visitor guide, for Places to see, Activities and Events. | facts only | yes | no |
+| `tb-visitloscabos` | `www.visitloscabos.travel` | Visit Los Cabos (FITURCA): official visitor guide, for Places to see, Activities and Events. | facts only | yes | no |
 | `tb-visitluxembourg` | `www.visitluxembourg.com` | Visit Luxembourg: official visitor guide, for Activities, Places to see and Local transportation. | facts only | yes | no |
 | `tb-visitnapavalley` | `www.visitnapavalley.com` | Visit Napa Valley (official DMO): wineries, events, itineraries, for Activities, Events and Hotels. | facts only | yes | no |
 | `tb-visitsicily` | `www.visitsicily.info` | Visit Sicily: official visitor guide, for Places to see, Activities and Events. | facts only | yes | no |
+| `tb-visittci` | `www.visittci.com` | Visit Turks and Caicos Islands: traveller information, for Places to see and Activities. | facts only | yes | no |
 | `tb-visittrentino` | `www.visittrentino.info` | Visit Trentino: official visitor guide, for Activities, Free walking tours and Places to see. | facts only | yes | no |
 | `tb-visittuscany` | `www.visittuscany.com` | Visit Tuscany: official visitor guide, for Activities, Places to see, Events and the itinerary. | facts only | yes | no |
 | `tb-washington` | `stateofwatourism.com` | Official Washington State experiences, regions and road trips, for Activities, Places to see and the itinerary. | facts only | yes | no |
 | `tb-westvirginia` | `wvtourism.com` | Official West Virginia events and things to do (New River Gorge), for Events and Activities. | facts only | yes | no |
 | `tb-wisconsin` | `www.travelwisconsin.com` | Official Wisconsin event listings (a dedicated event sitemap) and things to do, for Events and Activities. | facts only | yes | no |
 | `tb-wyoming` | `travelwyoming.com` | Official Wyoming things to do and Yellowstone/Grand Teton gateway towns, for Activities and Places to see. | facts only | yes | no |
+| `tb-ytuqueplanes` | `www.ytuqueplanes.com` | ¿Y tú qué planes? (PromPerú domestic tourism): regional routes across all of Peru, for Places to see, Activities and the itinerary. | facts only | yes | no |
+| `tb-yucatan` | `yucatan.travel` | Yucatán Travel (state tourism): Mérida, the cenotes and the Mayan sites, for Places to see, Activities and Events. | facts only | yes | no |
 | `tb-yukon` | `www.travelyukon.com` | Official Yukon events, things to do and getting around, for Events, Activities and Local transportation. | facts only | yes | no |
 | `the-long-run` | `www.thelongrun.org` | GSTC-aligned nature lodges, reserves and travel businesses worldwide, for Hotels and Activities. | facts only | yes | no |
 | `toronto-dinesafe` | `ckan0.cf.opendata.inter.prod-toronto.ca` | Every Toronto food premises with address and inspection status, for food in Activities. | open | yes | no |
@@ -466,6 +494,7 @@ is added only with the owner's approval (see CONTRIBUTING.md).
 | `blog-outsideonline` | `www.outsideonline.com` | Adventure-travel and outdoor trip articles, for Activities, Packing list and Travel tips. | facts only | no | no |
 | `blog-thesmartlocal` | `thesmartlocal.com` | Free and cheap things to do in Singapore, Malaysia and Thailand from TheSmartLocal, for Activities, Events and Travel tips (headline, link and a short excerpt only). | facts only | no | no |
 | `choosechicago` | `www.choosechicago.com` | Chicago events and things to do from the official tourism board, for Events and Activities. | facts only | no | no |
+| `city-turismo-cdmx` | `turismo.cdmx.gob.mx` | Turismo CDMX (Secretaría de Turismo): official visitor guide, for Places to see, Activities and Free walking tours. | facts only | no | no |
 | `cst-costa-rica` | `turismo-sostenible.co.cr` | Costa Rica's official sustainability certification for hotels and tour operators, for Hotels and Activities. | facts only | no | no |
 | `culturetrip` | `theculturetrip.com` | Culture Trip destination guides (title and link only) for Places to see, Activities and Travel tips; every page times out for our bot, so off. | facts only | no | no |
 | `datatourisme-fr` | `diffuseur.datatourisme.fr` | Every French tourist office's events, restaurants, sights and walking or driving tours in one national feed, for Events, Activities, Places to see and the itinerary. | open | no | yes |
@@ -520,6 +549,7 @@ is added only with the owner's approval (see CONTRIBUTING.md).
 | `blog-bemusedbackpacker` | `bemusedbackpacker.com` | Backpacking guides, budgets and gear advice from The Bemused Backpacker, for Travel tips, Places to see and Packing (headline, link and a short excerpt only). | facts only | yes | no |
 | `blog-bemytravelmuse` | `www.bemytravelmuse.com` | Solo travel guides and itineraries from Be My Travel Muse, for Travel tips and Places to see (headline, link and a short excerpt only). | facts only | yes | no |
 | `blog-budgettraveller` | `budgettraveller.org` | Budget-luxury stays and city guides from The Budget Traveller, for Hotels, Travel tips and Places to see (headline, link and a short excerpt only). | facts only | yes | no |
+| `blog-caribjournal` | `www.caribjournal.com` | Caribbean Journal: airport transfers, terminals and travel information, for Places to see, Hotels, Flights and Travel tips. | facts only | yes | no |
 | `blog-dangerousbusiness` | `www.dangerous-business.com` | Travel blog posts with destination guides and practical trip advice, for Travel tips and Places to see (headline, link and a short excerpt only). | facts only | yes | no |
 | `blog-earthtrekkers` | `www.earthtrekkers.com` | Detailed trip itineraries and hikes from Earth Trekkers, for the itinerary, Activities and Places to see (headline, link and a short excerpt only). | facts only | yes | no |
 | `blog-elviajerofeliz` | `elviajerofeliz.com` | Spanish-language budget tips, money advice and destination guides from El Viajero Feliz, for Travel tips, Places to see and Forex (headline, link and a short excerpt only). | facts only | yes | no |
@@ -551,9 +581,11 @@ is added only with the owner's approval (see CONTRIBUTING.md).
 | `blog-travelsofadam` | `www.travelsofadam.com` | City guides (including LGBTQ travel) from Travels of Adam, for Travel tips and Places to see (headline, link and a short excerpt only). | facts only | yes | no |
 | `blog-twomonkeys` | `twomonkeystravelgroup.com` | Budget itineraries and destination cost guides from Two Monkeys Travel, for Travel tips, Places to see and the itinerary (headline, link and a short excerpt only). | facts only | yes | no |
 | `blog-twowanderingsoles` | `www.twowanderingsoles.com` | Travel blog posts with destination guides and practical trip advice, for Travel tips and Places to see (headline, link and a short excerpt only). | facts only | yes | no |
+| `blog-twoweekscr` | `www.twoweeksincostarica.com` | Two Weeks in Costa Rica: detailed independent Costa Rica guides, for Travel tips, Places to see and Local transportation. | facts only | yes | no |
 | `blog-uncorneredmarket` | `www.uncorneredmarket.com` | Travel blog posts with destination guides and practical trip advice, for Travel tips and Places to see (headline, link and a short excerpt only). | facts only | yes | no |
 | `blog-viajenaviagem` | `www.viajenaviagem.com` | Brazil's leading independent travel blog (Portuguese) with destination guides and fare tips, for Travel tips, Places to see and Flights (headline, link and a short excerpt only). | facts only | yes | no |
 | `blog-vietnamcoracle` | `www.vietnamcoracle.com` | Independent budget guide to Vietnam (motorbike routes, guesthouses) from Vietnam Coracle, for Places to see, Hotels and Local transportation (headline, link and a short excerpt only). | facts only | yes | no |
+| `blog-wander-argentina` | `wander-argentina.org` | Wander Argentina: travel articles and guides, for Travel tips, Places to see and Forex. | facts only | yes | no |
 | `blog-wanderlustcrew` | `www.wanderlustcrew.com` | Travel blog posts with destination guides and practical trip advice, for Travel tips and Places to see (headline, link and a short excerpt only). | facts only | yes | no |
 | `blog-wheelchairtravel` | `wheelchairtravel.org` | Wheelchair Travel (John Morris): wheelchair-accessible city guides, airline policies, for Travel tips, Flights, Hotels and Places to see. | facts only | yes | no |
 | `blog-wheregoesrose` | `www.wheregoesrose.com` | Country budget guides for India, Asia and Latin America from Where Goes Rose, for Travel tips, the itinerary and Places to see (headline, link and a short excerpt only). | facts only | yes | no |
@@ -564,6 +596,7 @@ is added only with the owner's approval (see CONTRIBUTING.md).
 | `brokenships` | `brokenships.com` | Opening hours, tickets and visitor information for the Museum of Broken Relationships in Zagreb, for Places to see. | facts only | yes | no |
 | `budapestinfo` | `www.budapestinfo.hu` | Budapest's official sights and visitor information, for Places to see. | facts only | yes | no |
 | `capetown-gov` | `www.capetown.gov.za` | Cape Town's official beaches, nature reserves, parks and city events, for Places to see, Activities and Events. | facts only | yes | no |
+| `city-ba-ciudad` | `buenosaires.gob.ar` | Buenos Aires Ciudad (agenda, culture): city agenda and cultural programme, for Events and Places to see. | facts only | yes | no |
 | `city-belgrade` | `www.tob.rs` | Tourist Organisation of Belgrade: official visitor guide, for Activities, Events and Places to see. | facts only | yes | no |
 | `city-bordeaux` | `www.bordeaux-tourisme.com` | Bordeaux Tourisme: official visitor guide, for Activities, Places to see, Events and Free walking tours. | facts only | yes | no |
 | `city-boston` | `www.meetboston.com` | Boston events, things to do and neighbourhoods from the city's visitor bureau, for Events, Activities and Places to see. | facts only | yes | no |
@@ -578,6 +611,7 @@ is added only with the owner's approval (see CONTRIBUTING.md).
 | `city-ljubljana` | `www.visitljubljana.com` | Visit Ljubljana: official visitor guide, for Activities, Events and Places to see. | facts only | yes | no |
 | `city-luzern` | `www.luzern.com` | Luzern Tourismus: official visitor guide, for Activities, Places to see and Events. | facts only | yes | no |
 | `city-marseille` | `www.marseille-tourisme.com` | Marseille Tourisme: official visitor guide, for Activities, Places to see and Events. | facts only | yes | no |
+| `city-medellin-travel` | `www.medellin.travel` | Medellín Travel (Bureau Medellín): official visitor guide, for Places to see, Activities and Events. | facts only | yes | no |
 | `city-miami` | `www.miamiandbeaches.com` | Miami and Miami Beach events, things to do and neighbourhoods, for Events, Activities and Places to see. | facts only | yes | no |
 | `city-myhelsinki` | `www.myhelsinki.fi` | MyHelsinki: official visitor guide, for Activities, Places to see and Events. | facts only | yes | no |
 | `city-porto` | `www.visitporto.travel` | Visit Porto: official visitor guide, for Activities, Places to see and Events. | facts only | yes | no |
@@ -626,6 +660,7 @@ is added only with the owner's approval (see CONTRIBUTING.md).
 | `mag-europeanbestdestinations` | `www.europeanbestdestinations.com` | European Best Destinations: travel articles and guides, for Places to see, Events and the itinerary. | facts only | yes | no |
 | `mag-hiddeneurope` | `www.hiddeneurope.eu` | hidden europe magazine: travel articles and guides, for Local transportation, Places to see and Travel tips. | facts only | yes | no |
 | `mag-mexicodesconocido` | `www.mexicodesconocido.com.mx` | Mexican destinations, festivals and things to do (Spanish) from the travel magazine México Desconocido, for Places to see, Events and Activities (headline, link and a short excerpt only). | facts only | yes | no |
+| `mag-viagemeturismo` | `viagemeturismo.abril.com.br` | Viagem e Turismo (Abril): Brazil's main travel magazine (pt). The /ultimas-noticias/rss link on the home page answered 404, for Places to see, Travel tips and Events. | facts only | yes | no |
 | `mathallen-oslo` | `mathallenoslo.no` | Vendors, opening hours and visitor information for the Mathallen food hall in Oslo, for Places to see and Activities. | facts only | yes | no |
 | `mkt-borough-market` | `boroughmarket.org.uk` | Borough Market: traveller information, for Places to see, Activities and Events. | facts only | yes | no |
 | `mkt-tsukiji-outer` | `www.tsukiji.or.jp` | Tsukiji Outer Market (official): shops, hours, closed-day calendar, etiquette, for Places to see, Activities and Travel tips. | facts only | yes | no |
@@ -653,6 +688,7 @@ is added only with the owner's approval (see CONTRIBUTING.md).
 | `official-inah` | `www.inah.gob.mx` | Mexico's national museums and archaeological sites with prices and opening days, for Places to see and Travel tips. | facts only | yes | no |
 | `official-parismusees` | `www.parismusees.paris.fr` | The City of Paris's 14 museums, whose permanent collections are free, with exhibitions, for Places to see and Activities. | facts only | yes | no |
 | `official-prague-eu` | `prague.eu` | Official Prague visitor pass, free events and city information, for Activities, Events, Places to see and Local transportation. | facts only | yes | no |
+| `official-sectur-mx` | `www.gob.mx` | SECTUR (Mexico Tourism Secretariat): official visitor guide, for Places to see, Events and Travel tips. | facts only | yes | no |
 | `opentripmap` | `api.opentripmap.com` | Tourist attractions with names, categories and coordinates, for Places to see and Activities. | share-alike | yes | yes |
 | `osm-geofabrik` | `download.geofabrik.de` | OpenStreetMap hotels, sights and transit stops per region, for Hotels, Places to see and Local transportation. | share-alike | yes | no |
 | `overpass` | `overpass-api.de` | Targeted OpenStreetMap lookups of hotels and sights around a destination, for Hotels and Places to see. | share-alike | yes | no |
@@ -660,13 +696,18 @@ is added only with the owner's approval (see CONTRIBUTING.md).
 | `park-alberta` | `www.albertaparks.ca` | Alberta provincial parks (Kananaskis and others) with visitor information, for Places to see and Activities. | facts only | yes | no |
 | `park-bc` | `bcparks.ca` | British Columbia provincial parks, trip planning and wildlife-safety and closure notes, for Places to see, Activities and Travel tips. | facts only | yes | no |
 | `park-blm` | `www.blm.gov` | Public-land recreation sites, activities and events, for Activities, Places to see and Events. | open | yes | no |
+| `park-conaf` | `www.conaf.cl` | CONAF (Chile national parks): Torres del Paine and other park rules, fees, closures, fire alerts, for Places to see and Travel tips. | facts only | yes | no |
+| `park-conanp-mx` | `www.gob.mx` | CONANP (Mexico protected areas): official visitor guide, for Places to see, Activities and Travel tips. | facts only | yes | no |
 | `park-env-japan` | `www.env.go.jp` | Japan Ministry of the Environment: National Parks: Japan's 35 national parks, official English pages, for Places to see and Activities. | facts only | yes | no |
+| `park-iguacu` | `cataratasdoiguacu.com.br` | Cataratas do Iguaçu (Brazil-side park concession): tickets, hours, rules for Iguaçu Falls, for Places to see and Travel tips. | facts only | yes | no |
 | `park-noaa-sanctuaries` | `sanctuaries.noaa.gov` | NOAA National Marine Sanctuaries: diving, snorkelling and whale-watching sanctuaries, for Places to see and Activities. | open | yes | no |
 | `park-ny-state` | `parks.ny.gov` | New York State parks and historic sites with visitor information and events, for Places to see, Activities and Events. | facts only | yes | no |
 | `park-ontario` | `www.ontarioparks.ca` | Ontario provincial parks (Algonquin and others) and trip planning, for Places to see and Activities. | facts only | yes | no |
 | `park-oregon` | `stateparks.oregon.gov` | Oregon state parks (coast parks) with visitor information, for Places to see and Activities. | facts only | yes | no |
 | `park-parks-canada` | `parks.canada.ca` | Canada's national parks and historic sites (conditions, fees, closures), for Places to see, Activities and Travel tips. | facts only | yes | no |
 | `park-parks-victoria` | `www.parks.vic.gov.au` | Parks Victoria: parks, walks, camping, closures, for Places to see and Activities. | open | yes | no |
+| `park-pn-ar` | `www.argentina.gob.ar` | Parques Nacionales Argentina (argentina.gob.ar): Iguazú, Los Glaciares, Nahuel Huapi: fees, rules, closures, for Places to see and Travel tips. | open | yes | no |
+| `park-sernanp` | `www.gob.pe` | SERNANP (Peru protected areas), gob.pe: national parks, fees, closures, for Places to see and Travel tips. | facts only | yes | no |
 | `park-texas` | `tpwd.texas.gov` | Texas state parks and state-park events, for Places to see, Events and Activities. | facts only | yes | no |
 | `park-usfs` | `www.fs.usda.gov` | National forest recreation, passes and know-before-you-go advice, for Activities, Places to see and Travel tips. | open | yes | no |
 | `park-usfws` | `www.fws.gov` | National wildlife refuges and birding sites with visitor information, for Activities and Places to see. | open | yes | no |
@@ -674,6 +715,9 @@ is added only with the owner's approval (see CONTRIBUTING.md).
 | `pavillon-bleu-fr` | `pavillonbleu.org` | About 490 Blue Flag beaches and marinas in France, for Places to see and Activities. | facts only | yes | no |
 | `peru-travel` | `www.peru.travel` | Official Peruvian destinations and itineraries, for Places to see and the itinerary. | facts only | yes | no |
 | `ref-darkskydiscovery-uk` | `www.darkskydiscovery.org.uk` | Dark Sky Discovery (UK): about 150 designated UK stargazing sites (alternative to the denied darksky.org), for Places to see and Activities. | facts only | yes | no |
+| `ref-machupicchu` | `www.machupicchu.gob.pe` | Machu Picchu official (Ministerio de Cultura, Cusco): circuits, rules, capacity, for Places to see, Travel tips and the itinerary. | facts only | yes | no |
+| `ref-pancanal` | `pancanal.com` | Panama Canal Authority (ACP): canal news and visitor-centre information, for Places to see and Travel tips. | facts only | yes | no |
+| `ref-sic-cultura-mx` | `sic.cultura.gob.mx` | Sistema de Información Cultural (Secretaría de Cultura): national directory of museums, archaeological zones, theatres and festivals, for Places to see and Events. | facts only | yes | no |
 | `rub-og-stub` | `www.spisrubogstub.dk` | Opening hours, menus and booking information for Rub & Stub, a social restaurant in Copenhagen, for Activities and Places to see. | facts only | yes | no |
 | `srilanka-travel` | `www.srilanka.travel` | Official Sri Lankan attractions and destinations, for Places to see. | facts only | yes | no |
 | `sydney-com` | `www.sydney.com` | Sydney food and drink, things to do and events, for Activities, Events and Places to see. | facts only | yes | no |
@@ -684,20 +728,33 @@ is added only with the owner's approval (see CONTRIBUTING.md).
 | `tb-algarve` | `www.visitalgarve.pt` | Visit Algarve: official visitor guide, for Activities, Places to see and Events. | facts only | yes | no |
 | `tb-alsace` | `www.visit.alsace` | Visit Alsace: official visitor guide, for Activities, Events and Places to see. | facts only | yes | no |
 | `tb-andalucia` | `www.andalucia.org` | Andalucía Tourism: official visitor guide, for Activities, Places to see, Events and Travel tips. | facts only | yes | no |
+| `tb-anguilla` | `ivisitanguilla.com` | Anguilla Tourist Board: official visitor guide, for Places to see, Events and Visa. | facts only | yes | no |
+| `tb-antigua` | `www.visitantiguabarbuda.com` | Visit Antigua & Barbuda (ABTA): official visitor guide, for Places to see and Events. | facts only | yes | no |
 | `tb-arkansas` | `www.arkansas.com` | Official Arkansas attractions, events and its 52 state parks, for Events, Activities and Places to see. | facts only | yes | no |
 | `tb-azores` | `www.visitazores.com` | Visit Azores: official visitor guide, for Activities, Places to see and Local transportation. | facts only | yes | no |
+| `tb-bahamas` | `www.bahamas.com` | The Islands of The Bahamas (Ministry of Tourism): official visitor guide, for Places to see, Events and Local transportation. | facts only | yes | no |
+| `tb-bahia` | `bahia.com.br` | Bahia Turismo (state): official visitor guide, for Places to see, the itinerary and Events. | facts only | yes | no |
+| `tb-barbados` | `www.visitbarbados.org` | Visit Barbados (BTMI): official visitor guide, for Places to see, Events and Visa. | facts only | yes | no |
+| `tb-bariloche` | `barilocheturismo.gob.ar` | Bariloche Turismo (EMPROTUR): official visitor guide, for Places to see, Activities and Events. | facts only | yes | no |
 | `tb-bayern` | `erlebe.bayern` | Bayern Tourismus (erlebe.bayern): official visitor guide, for Activities, Places to see and Events. | facts only | yes | no |
 | `tb-bc` | `www.supernaturalbc.com` | Official British Columbia regions, experiences, road trips and practical tips, for Activities, Places to see and the itinerary. | facts only | yes | no |
+| `tb-bonaire` | `bonaireisland.com` | Tourism Corporation Bonaire: official visitor guide, for Places to see, Activities and Events. | facts only | yes | no |
 | `tb-brittany` | `www.brittanytourism.com` | Brittany Tourism: official visitor guide, for Activities, Places to see and Local transportation. | facts only | yes | no |
 | `tb-bulgaria` | `visitbulgaria.com` | Visit Bulgaria (Ministry of Tourism): official visitor guide, for Places to see and Activities. | facts only | yes | no |
 | `tb-canary` | `www.hellocanaryislands.com` | Hello Canary Islands: official visitor guide, for Activities, Places to see, Weather and Travel tips. | facts only | yes | no |
+| `tb-caribe-mexicano` | `caribemexicano.travel` | Caribe Mexicano (Quintana Roo tourism board): official Cancún/Riviera Maya/Tulum/Cozumel destinations and experiences, for Places to see, Activities and the itinerary. | facts only | yes | no |
 | `tb-catalunya` | `www.catalunya.com` | Catalunya Turisme: official visitor guide, for Activities, Places to see and Events. | facts only | yes | no |
+| `tb-cordoba-ar` | `cordobaturismo.gov.ar` | Córdoba Turismo (Agencia Córdoba Turismo): accessible lodging lists, tourist routes, for Places to see, Events and Hotels. | facts only | yes | no |
 | `tb-crete` | `www.incrediblecrete.gr` | Incredible Crete (Region of Crete): official visitor guide, for Places to see, Activities and Free walking tours. | facts only | yes | no |
 | `tb-croatia` | `croatia.hr` | Croatia.hr (HTZ): official visitor guide, for Places to see, Activities and Events. | facts only | yes | no |
+| `tb-cuba` | `www.cuba.travel` | Cuba Travel (MINTUR): official visitor guide, for Places to see and Travel tips. | facts only | yes | no |
 | `tb-cyprus` | `www.visitcyprus.com` | Visit Cyprus (Deputy Ministry of Tourism): official visitor guide, for Places to see, Events and Travel tips. | facts only | yes | no |
 | `tb-czechia` | `www.visitczechia.com` | Visit Czechia (CzechTourism): official visitor guide, for Places to see, Activities and Events. | facts only | yes | no |
 | `tb-delaware` | `www.visitdelaware.com` | Official Delaware events, attractions and beaches, for Events, Activities and Places to see. | facts only | yes | no |
 | `tb-discovernorthernireland` | `discovernorthernireland.com` | Discover Northern Ireland: official visitor guide, for Activities, Places to see and Events. | facts only | yes | no |
+| `tb-dominica` | `discoverdominica.com` | Discover Dominica Authority: official visitor guide, for Places to see, Activities and Events. | facts only | yes | no |
+| `tb-ecuador` | `ecuador.travel` | Ecuador Travel (MINTUR): official visitor guide, for Places to see, Visa and Activities. | facts only | yes | no |
+| `tb-elsalvador` | `elsalvador.travel` | El Salvador Travel (MITUR/CORSATUR): official news and destinations (last item 2026-10-14), for Places to see and Events. | facts only | yes | no |
 | `tb-emilia-romagna` | `emiliaromagnaturismo.it` | Emilia-Romagna Turismo: official visitor guide, for Activities, Places to see and Events. | open | yes | no |
 | `tb-english-heritage` | `www.english-heritage.org.uk` | English Heritage: 400+ sites, opening times, events, for Places to see, Events and Activities. | facts only | yes | no |
 | `tb-euskadi` | `tourism.euskadi.eus` | Euskadi Tourism: official visitor guide, for Activities, Places to see and Events. | facts only | yes | no |
@@ -705,10 +762,14 @@ is added only with the owner's approval (see CONTRIBUTING.md).
 | `tb-galicia` | `www.turismo.gal` | Turismo de Galicia: official visitor guide, for Activities, Places to see, Events and Free walking tours. | open | yes | no |
 | `tb-germany-travel` | `www.germany.travel` | Germany Travel (GNTB): official visitor guide, for Places to see, Activities, Travel tips and Events. | facts only | yes | no |
 | `tb-gibraltar` | `www.visitgibraltar.gi` | Visit Gibraltar: official visitor guide, for Places to see, Activities and Travel tips. | facts only | yes | no |
+| `tb-godr` | `www.godominicanrepublic.com` | Go Dominican Republic (MITUR): official visitor guide, for Places to see, Activities and Events. | facts only | yes | no |
 | `tb-graubuenden` | `www.graubuenden.ch` | Graubünden Ferien: official visitor guide, for Activities, Free walking tours and Places to see. | facts only | yes | no |
 | `tb-greenland` | `visitgreenland.com` | Official Greenland destinations, things to do, how to get around and practical facts, for Activities, Places to see, Local transportation and Travel tips. | facts only | yes | no |
+| `tb-guadeloupe` | `www.lesilesdeguadeloupe.com` | Îles de Guadeloupe (CTIG): official visitor guide, for Places to see, Activities and Events. | facts only | yes | no |
+| `tb-guatemala` | `visitguatemala.com` | Visit Guatemala (INGUAT): Antigua, Tikal, Atitlán, for Places to see and the itinerary. | facts only | yes | no |
 | `tb-heritageireland` | `heritageireland.ie` | Heritage Ireland (OPW): OPW state heritage sites, opening times, free days, for Places to see and Travel tips. | facts only | yes | no |
 | `tb-historicenvironment-scot` | `www.historicenvironment.scot` | Historic Environment Scotland: places to visit: official visitor guide, for Places to see and Events. | facts only | yes | no |
+| `tb-honduras` | `honduras.travel` | Honduras Travel (IHT): Roatán, Copán, for Places to see. | facts only | yes | no |
 | `tb-illesbalears` | `www.illesbalears.travel` | Illes Balears Tourism: official visitor guide, for Activities, Places to see and Events. | facts only | yes | no |
 | `tb-indiana` | `visitindiana.in.gov` | Official Indiana events, road trips and things to do, for Events, Activities and Places to see. | facts only | yes | no |
 | `tb-istria` | `www.istra.hr` | Istria Tourist Board: official visitor guide, for Activities, Events and Places to see. | facts only | yes | no |
@@ -718,6 +779,9 @@ is added only with the owner's approval (see CONTRIBUTING.md).
 | `tb-lithuania` | `lithuania.travel` | Lithuania Travel: official visitor guide, for Places to see, Activities and Events. | facts only | yes | no |
 | `tb-madeira` | `visitmadeira.com` | Visit Madeira: official visitor guide, for Activities, Free walking tours, Places to see and Events. | facts only | yes | no |
 | `tb-malta` | `www.visitmalta.com` | Visit Malta: official visitor guide, for Activities, Events, Places to see and Local transportation. | facts only | yes | no |
+| `tb-martinique` | `www.martinique.org` | Martinique (Comité Martiniquais du Tourisme): official visitor guide, for Places to see, Events and Activities. | facts only | yes | no |
+| `tb-mendoza` | `mendoza.tur.ar` | Mendoza Turismo (EMETUR): wine routes, Aconcagua, for Places to see, Events and Activities. | facts only | yes | no |
+| `tb-minas` | `www.minasgerais.com.br` | Minas Gerais turismo (state): Ouro Preto, Inhotim, for Places to see and Events. | facts only | yes | no |
 | `tb-moldova` | `moldova.travel` | Moldova Travel: Official Moldova destinations and things to do (FCDO and the US advise against travel to Transnistria only), for Places to see and Activities. | facts only | yes | no |
 | `tb-monaco` | `www.visitmonaco.com` | Visit Monaco: official visitor guide, for Activities, Events and Places to see. | facts only | yes | no |
 | `tb-montana` | `visitmt.com` | Official Montana events, things to do and Glacier/Yellowstone gateway towns, for Events, Activities and Places to see. | facts only | yes | no |
@@ -734,6 +798,7 @@ is added only with the owner's approval (see CONTRIBUTING.md).
 | `tb-provence` | `provence-alpes-cotedazur.com` | Provence-Alpes-Côte d'Azur Tourisme: official visitor guide, for Activities, Places to see and Events. | facts only | yes | no |
 | `tb-quebec` | `www.bonjourquebec.com` | Official Québec regions, things to do and events, for Events, Activities and Places to see. | facts only | yes | no |
 | `tb-sachsen` | `www.sachsen-tourismus.de` | Sachsen Tourismus: official visitor guide, for Activities, Places to see and Events. | facts only | yes | no |
+| `tb-salta` | `visitsalta.ar` | Visit Salta (Ministerio de Turismo de Salta): official visitor guide, for Places to see and Events. | facts only | yes | no |
 | `tb-salzburgerland` | `www.salzburgerland.com` | SalzburgerLand Tourismus: official visitor guide, for Activities, Events and Places to see. | facts only | yes | no |
 | `tb-sanmarino` | `www.visitsanmarino.com` | Visit San Marino: official visitor guide, for Places to see and Events. | facts only | yes | no |
 | `tb-sardegna` | `www.sardegnaturismo.it` | Sardegna Turismo: official visitor guide, for Places to see, Activities and Events. | facts only | yes | no |
@@ -741,7 +806,15 @@ is added only with the owner's approval (see CONTRIBUTING.md).
 | `tb-serbia` | `www.serbia.travel` | Serbia Travel (NTOS): official visitor guide, for Places to see and Events. | facts only | yes | no |
 | `tb-slovakia` | `slovakia.travel` | Slovakia Travel: official visitor guide, for Places to see, Activities and Events. | facts only | yes | no |
 | `tb-southcarolina` | `discoversouthcarolina.com` | Official South Carolina events, attractions and state parks, for Events, Activities and Places to see. | facts only | yes | no |
+| `tb-stbarth` | `www.saintbarth-tourisme.com` | Saint-Barth tourisme (CTTSB): official visitor guide, for Places to see and Events. | facts only | yes | no |
+| `tb-stlucia` | `stlucia.org` | Saint Lucia Tourism Authority: official visitor guide, for Places to see and Events. | facts only | yes | no |
+| `tb-stmaarten` | `www.vacationstmaarten.com` | St. Maarten Tourism Bureau: official visitor guide, for Places to see and Events. | facts only | yes | no |
 | `tb-ticino` | `www.ticino.ch` | Ticino Turismo: official visitor guide, for Activities, Places to see and Events. | facts only | yes | no |
+| `tb-tobago` | `visittobago.gov.tt` | Visit Tobago (Tobago Tourism Agency): official visitor guide, for Places to see and Events. | facts only | yes | no |
+| `tb-tourismpanama` | `www.tourismpanama.com` | Visit Panamá (PROMTUR): official visitor guide, for Places to see, Visa and Activities. | facts only | yes | no |
+| `tb-trinbago` | `visittrinbago.tt` | Visit Trinidad & Tobago (Tourism Trinidad): official visitor guide, for Places to see and Events. | facts only | yes | no |
+| `tb-uruguaynatural` | `uruguaynatural.com` | Uruguay Natural (Ministerio de Turismo): official destinations, for Places to see and Events. | facts only | yes | no |
+| `tb-ushuaia` | `turismoushuaia.com` | Turismo Ushuaia (InFueTur): End-of-the-world excursions, for Places to see, Activities and Local transportation. | facts only | yes | no |
 | `tb-utah` | `www.visitutah.com` | Official Utah trip planning, the Mighty 5 national parks and recommended itineraries, for Activities, Places to see and the itinerary. | facts only | yes | no |
 | `tb-valais` | `www.valais.ch` | Valais/Wallis Promotion: official visitor guide, for Activities, Places to see and Events. | facts only | yes | no |
 | `tb-valdeloire` | `www.valdeloire-france.com` | Val de Loire (Centre-VdL Tourisme): official visitor guide, for Places to see and Activities. | facts only | yes | no |
@@ -749,12 +822,17 @@ is added only with the owner's approval (see CONTRIBUTING.md).
 | `tb-visitcornwall` | `www.visitcornwall.com` | Visit Cornwall: official Cornwall attractions, beaches, events, for Activities, Places to see, Events and Local transportation. | facts only | yes | no |
 | `tb-visithungary` | `visithungary.com` | Visit Hungary: official visitor guide, for Places to see and Events. | facts only | yes | no |
 | `tb-visitisleofman` | `www.visitisleofman.com` | Visit Isle of Man: official visitor guide, for Activities, Places to see and Events. | facts only | yes | no |
+| `tb-visitjamaica` | `www.visitjamaica.com` | Visit Jamaica (JTB): official visitor guide, for Places to see, Activities and Events. | facts only | yes | no |
+| `tb-visitloscabos` | `www.visitloscabos.travel` | Visit Los Cabos (FITURCA): official visitor guide, for Places to see, Activities and Events. | facts only | yes | no |
 | `tb-visitluxembourg` | `www.visitluxembourg.com` | Visit Luxembourg: official visitor guide, for Activities, Places to see and Local transportation. | facts only | yes | no |
 | `tb-visitsicily` | `www.visitsicily.info` | Visit Sicily: official visitor guide, for Places to see, Activities and Events. | facts only | yes | no |
+| `tb-visittci` | `www.visittci.com` | Visit Turks and Caicos Islands: traveller information, for Places to see and Activities. | facts only | yes | no |
 | `tb-visittrentino` | `www.visittrentino.info` | Visit Trentino: official visitor guide, for Activities, Free walking tours and Places to see. | facts only | yes | no |
 | `tb-visittuscany` | `www.visittuscany.com` | Visit Tuscany: official visitor guide, for Activities, Places to see, Events and the itinerary. | facts only | yes | no |
 | `tb-washington` | `stateofwatourism.com` | Official Washington State experiences, regions and road trips, for Activities, Places to see and the itinerary. | facts only | yes | no |
 | `tb-wyoming` | `travelwyoming.com` | Official Wyoming things to do and Yellowstone/Grand Teton gateway towns, for Activities and Places to see. | facts only | yes | no |
+| `tb-ytuqueplanes` | `www.ytuqueplanes.com` | ¿Y tú qué planes? (PromPerú domestic tourism): regional routes across all of Peru, for Places to see, Activities and the itinerary. | facts only | yes | no |
+| `tb-yucatan` | `yucatan.travel` | Yucatán Travel (state tourism): Mérida, the cenotes and the Mayan sites, for Places to see, Activities and Events. | facts only | yes | no |
 | `torvehallerne` | `torvehallernekbh.dk` | Stalls, opening hours and visitor information for the Torvehallerne food market in Copenhagen, for Places to see and Activities. | facts only | yes | no |
 | `trail-camino-santiago-gal` | `www.caminodesantiago.gal` | Camino de Santiago (Xunta de Galicia official): official Camino routes, stages, pilgrim credential and hostel rules, for Activities, the itinerary, Travel tips and Places to see. | open | yes | no |
 | `visitabudhabi` | `visitabudhabi.ae` | Abu Dhabi events and sights, for Events and Places to see. | facts only | yes | no |
@@ -780,6 +858,8 @@ is added only with the owner's approval (see CONTRIBUTING.md).
 | `amusingplanet` | `feeds.feedburner.com` | Unusual places, natural wonders and hidden sights worldwide (headline, link and a short excerpt only), for Places to see. | facts only | no | no |
 | `api-europeana` | `api.europeana.eu` | Europeana Search and Record API: Museum and cultural-heritage records (50M items) with places and dates, for Places to see and Events. | open | no | yes |
 | `blueflag-gr` | `www.blueflag.gr` | About 620 Blue Flag beaches in Greece, for Places to see. | facts only | no | no |
+| `city-turismo-cdmx` | `turismo.cdmx.gob.mx` | Turismo CDMX (Secretaría de Turismo): official visitor guide, for Places to see, Activities and Free walking tours. | facts only | no | no |
+| `city-visit-rio` | `visit.rio` | Visit Rio (Rio CVB): traveller information, for Places to see and Events. | facts only | no | no |
 | `colombia-travel` | `colombia.travel` | Official Colombian destinations and itineraries, for Places to see and the itinerary. | facts only | no | no |
 | `culturetrip` | `theculturetrip.com` | Culture Trip destination guides (title and link only) for Places to see, Activities and Travel tips; every page times out for our bot, so off. | facts only | no | no |
 | `datagovhk` | `data.gov.hk` | Official opening hours and admission of Hong Kong museums and attractions, plus cultural programmes and major events, for Places to see and Events. | open | no | no |
@@ -795,6 +875,7 @@ is added only with the owner's approval (see CONTRIBUTING.md).
 | `od-andmed-eesti` | `andmed.eesti.ee` | Estonian open data portal: government open-data datasets (tourism, events, transport), for Events, Places to see and Local transportation. | open | no | no |
 | `od-avoindata-fi` | `www.avoindata.fi` | avoindata.fi: government open-data datasets (tourism, events, transport), for Events, Places to see and Local transportation. | open | no | no |
 | `od-canada-ckan` | `open.canada.ca` | Federal datasets of Parks Canada places and attractions, for Places to see and Activities. | open | no | no |
+| `od-catalogo-uy` | `catalogodatos.gub.uy` | Catálogo Nacional de Datos Abiertos (AGESIC, CKAN): tourism datasets, for Places to see and Events. | open | no | no |
 | `od-culture-data-gouv` | `culture.data.gouv.fr` | Ministère de la Culture open data: Musées de France, Monuments historiques, festivals datasets, for Places to see and Events. | open | no | no |
 | `od-dane-gov-pl` | `dane.gov.pl` | dane.gov.pl (Polish open data): government open-data datasets (tourism, events, transport), for Places to see and Events. | open | no | no |
 | `od-data-europa` | `data.europa.eu` | data.europa.eu: pan-EU harvest of national portals, for Events, Places to see and Local transportation. | open | no | no |
@@ -804,8 +885,13 @@ is added only with the owner's approval (see CONTRIBUTING.md).
 | `od-data-gv-at` | `www.data.gv.at` | data.gv.at: government open-data datasets (tourism, events, transport), for Events, Places to see and Local transportation. | open | no | no |
 | `od-data-overheid-nl` | `data.overheid.nl` | data.overheid.nl: government open-data datasets (tourism, events, transport), for Events, Local transportation and Places to see. | open | no | no |
 | `od-data-public-lu` | `data.public.lu` | data.public.lu: government open-data datasets (tourism, events, transport), for Events, Places to see and Local transportation. | open | no | no |
+| `od-data-rio` | `www.data.rio` | Data.Rio (Rio city open data, ArcGIS Hub): city POI/tourism/transport layers, for Places to see, Events and Local transportation. | open | no | no |
 | `od-dataportal-se` | `www.dataportal.se` | Sveriges dataportal: government open-data datasets (tourism, events, transport), for Events, Places to see and Local transportation. | open | no | no |
+| `od-datos-bogota` | `datosabiertos.bogota.gov.co` | Datos Abiertos Bogotá: government open-data datasets (tourism, events, transport), for Local transportation and Places to see. | open | no | no |
+| `od-datos-cdmx` | `datos.cdmx.gob.mx` | Datos Abiertos CDMX (CKAN; GTFS, Ecobici, POIs): government open-data datasets (tourism, events, transport), for Local transportation and Places to see. | open | no | no |
+| `od-datos-gob-cl` | `datos.gob.cl` | datos.gob.cl (CKAN): tourism datasets (138 match "turismo"), for Places to see and Events. | open | no | no |
 | `od-datos-gob-es` | `datos.gob.es` | datos.gob.es: government open-data datasets (tourism, events, transport), for Events, Places to see and Local transportation. | open | no | no |
+| `od-datos-gov-co` | `www.datos.gov.co` | Portal de Datos Abiertos de Colombia (MinTIC, Socrata): registered tourism providers (RNT), attractions, events datasets, for Places to see, Events and Hotels. | open | no | no |
 | `od-eea-bathing-water` | `www.eea.europa.eu` | EEA bathing water quality: Annual water-quality class of about 22,000 EU beaches and lakes, for Places to see and Activities. | open | no | no |
 | `od-epa-beacon` | `www.epa.gov` | US EPA BEACON beach advisories: US beach advisories and closures, for Places to see, Activities and Travel tips. | open | no | no |
 | `od-fr-merimee` | `data.culture.gouv.fr` | Mérimée (French protected monuments): About 45,000 protected historic monuments in France with locations, for Places to see. | open | no | no |
@@ -818,6 +904,7 @@ is added only with the owner's approval (see CONTRIBUTING.md).
 | `od-podatki-gov-si` | `podatki.gov.si` | OPSI (Slovenia open data): government open-data datasets (tourism, events, transport), for Events, Places to see and Local transportation. | open | no | no |
 | `od-uk-bathing-water` | `environment.data.gov.uk` | Environment Agency Bathing Water Quality: Water quality and pollution-risk forecasts for 400+ England bathing waters, for Places to see, Activities and Weather. | open | no | no |
 | `park-gbrmpa` | `www.gbrmpa.gov.au` | Great Barrier Reef Marine Park Authority: reef visiting rules, zoning, for Places to see, Activities and Travel tips. | facts only | no | no |
+| `park-sinac-cr` | `www.sinac.go.cr` | SINAC Costa Rica (protected areas): official visitor guide, for Places to see and Travel tips. | facts only | no | no |
 | `philippines-travel` | `philippines.travel` | Official Philippine destinations and activities, for Places to see and Activities. | facts only | no | no |
 | `ref-museumsassociation` | `www.museumsassociation.org` | Museums Association: traveller information, for Places to see. | facts only | no | no |
 | `ref-odysseus-culture-gr` | `odysseus.culture.gr` | Odysseus (Greek Ministry of Culture monuments and museums): official visitor guide, for Places to see. | facts only | no | no |
@@ -826,7 +913,11 @@ is added only with the owner's approval (see CONTRIBUTING.md).
 | `sg-hawker-centres` | `api-production.data.gov.sg` | Singapore's cheap-food hawker centres with locations and cleaning-closure dates, for Places to see, Travel tips and the itinerary. | open | no | no |
 | `taiwan-tourism-od` | `media.taiwan.net.tw` | Every Taiwanese tourism event, listed restaurant and scenic spot, for Events, Activities and Places to see. | open | no | no |
 | `tat-data-api` | `tatdataapi.io` | Thai events, attractions and activities as structured data, for Events, Places to see and Activities. | facts only | no | yes |
+| `tb-parana` | `www.viajeparana.com` | Viaje Paraná: official visitor guide, for Places to see and Events. | facts only | no | no |
 | `tb-puglia` | `www.viaggiareinpuglia.it` | Viaggiare in Puglia: official visitor guide, for Places to see, Activities and Events. | facts only | no | no |
+| `tb-saintmartin` | `www.iledesaintmartin.org` | Office de Tourisme de Saint-Martin: official visitor guide, for Places to see and Events. | facts only | no | no |
+| `tb-santacatarina` | `turismo.sc.gov.br` | Turismo Santa Catarina: official visitor guide, for Places to see. | facts only | no | no |
+| `tb-stkitts` | `www.stkittstourism.kn` | St. Kitts Tourism Authority: official visitor guide, for Places to see and Events. | facts only | no | no |
 | `unesco-whc` | `whc.unesco.org` | UNESCO World Heritage Sites with descriptions and locations for Places to see; UNESCO terms ban automated access, so off. | restricted | no | no |
 | `visit-finland-datahub` | `datahub.visitfinland.com` | Finnish tourism products, sights and opening hours, for Places to see, Activities and Events. | API terms | no | yes |
 | `wikidata-dump` | `dumps.wikimedia.org` | Facts about places and sights from Wikidata for Places to see; the full dump is too large, so off. | open | no | no |
@@ -857,6 +948,7 @@ is added only with the owner's approval (see CONTRIBUTING.md).
 | `walking-freetoursbyfoot` | `freetoursbyfoot.com` | Pay-what-you-wish walking tours in US and European cities plus free-things-to-do guides, for Free walking tours, Activities and Travel tips. | facts only | yes | no |
 | `walking-strawberrytours` | `strawberrytours.com` | Free tip-based walking tours in about 100 cities, for the Free walking tours section. | facts only | yes | no |
 | `wikivoyage-dump` | `dumps.wikimedia.org` | Wikivoyage destination guides (sights, things to do, where to stay, getting around, SIM and tips) for those app sections. | share-alike | yes | no |
+| `city-turismo-cdmx` | `turismo.cdmx.gob.mx` | Turismo CDMX (Secretaría de Turismo): official visitor guide, for Places to see, Activities and Free walking tours. | facts only | no | no |
 
 ## Events
 
@@ -871,6 +963,7 @@ is added only with the owner's approval (see CONTRIBUTING.md).
 | `city-aarhus` | `www.visitaarhus.com` | VisitAarhus: official visitor guide, for Activities and Events. | facts only | yes | no |
 | `city-anchorage` | `www.anchorage.net` | Anchorage events, things to do and Alaska gateway transport advice, for Events, Activities and Local transportation. | facts only | yes | no |
 | `city-austin` | `www.austintexas.org` | Austin live music, SXSW and other events and things to do, for Events and Activities. | facts only | yes | no |
+| `city-ba-ciudad` | `buenosaires.gob.ar` | Buenos Aires Ciudad (agenda, culture): city agenda and cultural programme, for Events and Places to see. | facts only | yes | no |
 | `city-belgrade` | `www.tob.rs` | Tourist Organisation of Belgrade: official visitor guide, for Activities, Events and Places to see. | facts only | yes | no |
 | `city-bordeaux` | `www.bordeaux-tourisme.com` | Bordeaux Tourisme: official visitor guide, for Activities, Places to see, Events and Free walking tours. | facts only | yes | no |
 | `city-boston` | `www.meetboston.com` | Boston events, things to do and neighbourhoods from the city's visitor bureau, for Events, Activities and Places to see. | facts only | yes | no |
@@ -896,6 +989,7 @@ is added only with the owner's approval (see CONTRIBUTING.md).
 | `city-luzern` | `www.luzern.com` | Luzern Tourismus: official visitor guide, for Activities, Places to see and Events. | facts only | yes | no |
 | `city-lyon` | `en.visiterlyon.com` | ONLYLYON Tourisme: official visitor guide, for Activities, Events and Local transportation. | facts only | yes | no |
 | `city-marseille` | `www.marseille-tourisme.com` | Marseille Tourisme: official visitor guide, for Activities, Places to see and Events. | facts only | yes | no |
+| `city-medellin-travel` | `www.medellin.travel` | Medellín Travel (Bureau Medellín): official visitor guide, for Places to see, Activities and Events. | facts only | yes | no |
 | `city-miami` | `www.miamiandbeaches.com` | Miami and Miami Beach events, things to do and neighbourhoods, for Events, Activities and Places to see. | facts only | yes | no |
 | `city-minneapolis` | `www.minneapolis.org` | Minneapolis events calendar and things to do, for Events and Activities. | facts only | yes | no |
 | `city-montreal` | `www.mtl.org` | Montréal events and things to do from the city's tourism bureau, for Events and Activities. | facts only | yes | no |
@@ -939,8 +1033,15 @@ is added only with the owner's approval (see CONTRIBUTING.md).
 | `discoverireland` | `www.discoverireland.ie` | Irish events, things to do, food experiences and road trips, for Events, Activities, the itinerary and Places to see. | facts only | yes | no |
 | `discoverlosangeles` | `www.discoverlosangeles.com` | Los Angeles eat and drink, things to do and events, for Activities and Events. | facts only | yes | no |
 | `ed-inyourpocket` | `www.inyourpocket.com` | In Your Pocket city guides: travel articles and guides, for Places to see, Events, Local transportation and Travel tips. | facts only | yes | no |
+| `ev-carnaval-barranquilla` | `carnavaldebarranquilla.org` | Carnaval de Barranquilla S.A.S. BIC: official Carnival programme (UNESCO heritage), for Events. | facts only | yes | no |
+| `ev-carnaval-salvador` | `carnaval.salvador.ba.gov.br` | Carnaval de Salvador (Prefeitura): official circuits, schedules, blocos, for Events. | facts only | yes | no |
+| `ev-cervantino` | `festivalcervantino.gob.mx` | Festival Internacional Cervantino: official visitor guide, for Events. | facts only | yes | no |
 | `ev-christkindlesmarkt` | `www.christkindlesmarkt.de` | Nürnberger Christkindlesmarkt (city official): Christmas-market dates, hours, programme, for Events and Activities. | facts only | yes | no |
 | `ev-festivalfinder` | `www.festivalfinder.eu` | Festival Finder (EFA / EFFE): 1,700+ labelled European arts festivals with dates, for Events. | facts only | yes | no |
+| `ev-idartes` | `www.idartes.gov.co` | Idartes (Bogotá arts institute): Bogotá's official free-events agenda (Rock al Parque and others), for Events. | facts only | yes | no |
+| `ev-liesa` | `liesa.org.br` | LIESA (Rio Samba-school league): Rio Carnival Sambódromo parade order and dates, for Events. | facts only | yes | no |
+| `ev-ncc-tt` | `ncctt.org` | National Carnival Commission of Trinidad and Tobago: official Carnival calendar, for Events. | facts only | yes | no |
+| `ev-ncf-barbados` | `ncf.bb` | National Cultural Foundation (Crop Over): Crop Over and national festivals, for Events. | facts only | yes | no |
 | `ev-noel-strasbourg` | `noel.strasbourg.eu` | Strasbourg Capitale de Noël (city official): Christmas-market locations, dates, programme, for Events. | facts only | yes | no |
 | `eventbrite-api` | `www.eventbriteapi.com` | Public events by organiser and venue (dates, venues, links), for the Events section. | API terms | yes | yes |
 | `food-european-region-gastronomy` | `www.europeanregionofgastronomy.org` | European Region of Gastronomy (IGCAT): awarded gastronomy regions and their programmes, for Events and Activities. | facts only | yes | no |
@@ -954,6 +1055,7 @@ is added only with the owner's approval (see CONTRIBUTING.md).
 | `liveriga` | `www.liveriga.com` | Riga's official tourism portal: sights, things to do, events and visitor advice, for Places to see, Activities, Events and Travel tips. | facts only | yes | no |
 | `mag-europeanbestdestinations` | `www.europeanbestdestinations.com` | European Best Destinations: travel articles and guides, for Places to see, Events and the itinerary. | facts only | yes | no |
 | `mag-mexicodesconocido` | `www.mexicodesconocido.com.mx` | Mexican destinations, festivals and things to do (Spanish) from the travel magazine México Desconocido, for Places to see, Events and Activities (headline, link and a short excerpt only). | facts only | yes | no |
+| `mag-viagemeturismo` | `viagemeturismo.abril.com.br` | Viagem e Turismo (Abril): Brazil's main travel magazine (pt). The /ultimas-noticias/rss link on the home page answered 404, for Places to see, Travel tips and Events. | facts only | yes | no |
 | `melbourne-whatson` | `whatson.melbourne.vic.gov.au` | Melbourne events plus the city's restaurant and bar listings, for Events and Activities. | facts only | yes | no |
 | `mkt-borough-market` | `boroughmarket.org.uk` | Borough Market: traveller information, for Places to see, Activities and Events. | facts only | yes | no |
 | `nps-site` | `www.nps.gov` | Official things to do, tours, trails and ranger events for more than 400 US national parks, for Places to see, Activities, the itinerary and Events. | open | yes | no |
@@ -963,6 +1065,7 @@ is added only with the owner's approval (see CONTRIBUTING.md).
 | `od-musei-italiani` | `www.museiitaliani.it` | Musei Italiani (MiC): state museums, hours, free Sundays, for Places to see and Events. | open | yes | no |
 | `official-nycparks-events` | `www.nycgovparks.org` | Free public events in New York City parks for the next two weeks, for Events and Activities. | facts only | yes | no |
 | `official-prague-eu` | `prague.eu` | Official Prague visitor pass, free events and city information, for Activities, Events, Places to see and Local transportation. | facts only | yes | no |
+| `official-sectur-mx` | `www.gob.mx` | SECTUR (Mexico Tourism Secretariat): official visitor guide, for Places to see, Events and Travel tips. | facts only | yes | no |
 | `official-turismo-ba` | `turismo.buenosaires.gob.ar` | City-run free guided walks and free events in Buenos Aires, for Free walking tours, Events and Activities. | facts only | yes | no |
 | `openholidays` | `openholidaysapi.org` | Public and school holidays by region for about 36 countries (crowds and closures), for Events and Travel tips. | share-alike | yes | no |
 | `paris-quefaire` | `opendata.paris.fr` | Official Paris city events and things to do with dates and venues, for Events and Activities. | share-alike | yes | no |
@@ -970,6 +1073,7 @@ is added only with the owner's approval (see CONTRIBUTING.md).
 | `park-ny-state` | `parks.ny.gov` | New York State parks and historic sites with visitor information and events, for Places to see, Activities and Events. | facts only | yes | no |
 | `park-texas` | `tpwd.texas.gov` | Texas state parks and state-park events, for Places to see, Events and Activities. | facts only | yes | no |
 | `ref-iglta` | `www.iglta.org` | IGLTA (International LGBTQ+ Travel Association): LGBTQ-welcoming destinations, Pride events, for Travel tips, Events and Hotels. | facts only | yes | no |
+| `ref-sic-cultura-mx` | `sic.cultura.gob.mx` | Sistema de Información Cultural (Secretaría de Cultura): national directory of museums, archaeological zones, theatres and festivals, for Places to see and Events. | facts only | yes | no |
 | `seatgeek` | `api.seatgeek.com` | Concerts, sports and theatre events with dates and venues, for the Events section. | API terms | yes | yes |
 | `spain-info` | `www.spain.info` | Spain's official routes, gastronomy and event calendar, for the itinerary, Events and Activities. | facts only | yes | no |
 | `stockholm-open-api` | `www.visitstockholm.com` | Official Stockholm events, curated guides and activities for Events, Activities and the itinerary. | open | yes | no |
@@ -978,20 +1082,33 @@ is added only with the owner's approval (see CONTRIBUTING.md).
 | `tb-algarve` | `www.visitalgarve.pt` | Visit Algarve: official visitor guide, for Activities, Places to see and Events. | facts only | yes | no |
 | `tb-alsace` | `www.visit.alsace` | Visit Alsace: official visitor guide, for Activities, Events and Places to see. | facts only | yes | no |
 | `tb-andalucia` | `www.andalucia.org` | Andalucía Tourism: official visitor guide, for Activities, Places to see, Events and Travel tips. | facts only | yes | no |
+| `tb-anguilla` | `ivisitanguilla.com` | Anguilla Tourist Board: official visitor guide, for Places to see, Events and Visa. | facts only | yes | no |
+| `tb-antigua` | `www.visitantiguabarbuda.com` | Visit Antigua & Barbuda (ABTA): official visitor guide, for Places to see and Events. | facts only | yes | no |
 | `tb-arkansas` | `www.arkansas.com` | Official Arkansas attractions, events and its 52 state parks, for Events, Activities and Places to see. | facts only | yes | no |
+| `tb-bahamas` | `www.bahamas.com` | The Islands of The Bahamas (Ministry of Tourism): official visitor guide, for Places to see, Events and Local transportation. | facts only | yes | no |
+| `tb-bahia` | `bahia.com.br` | Bahia Turismo (state): official visitor guide, for Places to see, the itinerary and Events. | facts only | yes | no |
+| `tb-barbados` | `www.visitbarbados.org` | Visit Barbados (BTMI): official visitor guide, for Places to see, Events and Visa. | facts only | yes | no |
+| `tb-bariloche` | `barilocheturismo.gob.ar` | Bariloche Turismo (EMPROTUR): official visitor guide, for Places to see, Activities and Events. | facts only | yes | no |
 | `tb-bayern` | `erlebe.bayern` | Bayern Tourismus (erlebe.bayern): official visitor guide, for Activities, Places to see and Events. | facts only | yes | no |
+| `tb-bonaire` | `bonaireisland.com` | Tourism Corporation Bonaire: official visitor guide, for Places to see, Activities and Events. | facts only | yes | no |
 | `tb-catalunya` | `www.catalunya.com` | Catalunya Turisme: official visitor guide, for Activities, Places to see and Events. | facts only | yes | no |
 | `tb-connecticut` | `ctvisit.com` | Official Connecticut events, things to do and getting-around advice, for Events, Activities and Local transportation. | facts only | yes | no |
+| `tb-cordoba-ar` | `cordobaturismo.gov.ar` | Córdoba Turismo (Agencia Córdoba Turismo): accessible lodging lists, tourist routes, for Places to see, Events and Hotels. | facts only | yes | no |
 | `tb-croatia` | `croatia.hr` | Croatia.hr (HTZ): official visitor guide, for Places to see, Activities and Events. | facts only | yes | no |
+| `tb-curacao` | `sitemap.curacao.com` | Curaçao Tourist Board: ED card and entry, for Events, Activities and Visa. | facts only | yes | no |
 | `tb-cyprus` | `www.visitcyprus.com` | Visit Cyprus (Deputy Ministry of Tourism): official visitor guide, for Places to see, Events and Travel tips. | facts only | yes | no |
 | `tb-czechia` | `www.visitczechia.com` | Visit Czechia (CzechTourism): official visitor guide, for Places to see, Activities and Events. | facts only | yes | no |
 | `tb-delaware` | `www.visitdelaware.com` | Official Delaware events, attractions and beaches, for Events, Activities and Places to see. | facts only | yes | no |
 | `tb-discovernorthernireland` | `discovernorthernireland.com` | Discover Northern Ireland: official visitor guide, for Activities, Places to see and Events. | facts only | yes | no |
+| `tb-dominica` | `discoverdominica.com` | Discover Dominica Authority: official visitor guide, for Places to see, Activities and Events. | facts only | yes | no |
+| `tb-elsalvador` | `elsalvador.travel` | El Salvador Travel (MITUR/CORSATUR): official news and destinations (last item 2026-10-14), for Places to see and Events. | facts only | yes | no |
 | `tb-emilia-romagna` | `emiliaromagnaturismo.it` | Emilia-Romagna Turismo: official visitor guide, for Activities, Places to see and Events. | open | yes | no |
 | `tb-english-heritage` | `www.english-heritage.org.uk` | English Heritage: 400+ sites, opening times, events, for Places to see, Events and Activities. | facts only | yes | no |
 | `tb-euskadi` | `tourism.euskadi.eus` | Euskadi Tourism: official visitor guide, for Activities, Places to see and Events. | facts only | yes | no |
 | `tb-galicia` | `www.turismo.gal` | Turismo de Galicia: official visitor guide, for Activities, Places to see, Events and Free walking tours. | open | yes | no |
 | `tb-germany-travel` | `www.germany.travel` | Germany Travel (GNTB): official visitor guide, for Places to see, Activities, Travel tips and Events. | facts only | yes | no |
+| `tb-godr` | `www.godominicanrepublic.com` | Go Dominican Republic (MITUR): official visitor guide, for Places to see, Activities and Events. | facts only | yes | no |
+| `tb-guadeloupe` | `www.lesilesdeguadeloupe.com` | Îles de Guadeloupe (CTIG): official visitor guide, for Places to see, Activities and Events. | facts only | yes | no |
 | `tb-historicenvironment-scot` | `www.historicenvironment.scot` | Historic Environment Scotland: places to visit: official visitor guide, for Places to see and Events. | facts only | yes | no |
 | `tb-illesbalears` | `www.illesbalears.travel` | Illes Balears Tourism: official visitor guide, for Activities, Places to see and Events. | facts only | yes | no |
 | `tb-indiana` | `visitindiana.in.gov` | Official Indiana events, road trips and things to do, for Events, Activities and Places to see. | facts only | yes | no |
@@ -1004,6 +1121,9 @@ is added only with the owner's approval (see CONTRIBUTING.md).
 | `tb-madeira` | `visitmadeira.com` | Visit Madeira: official visitor guide, for Activities, Free walking tours, Places to see and Events. | facts only | yes | no |
 | `tb-malta` | `www.visitmalta.com` | Visit Malta: official visitor guide, for Activities, Events, Places to see and Local transportation. | facts only | yes | no |
 | `tb-manitoba` | `www.travelmanitoba.com` | Official Manitoba events and things to do (Churchill polar bears), for Events and Activities. | facts only | yes | no |
+| `tb-martinique` | `www.martinique.org` | Martinique (Comité Martiniquais du Tourisme): official visitor guide, for Places to see, Events and Activities. | facts only | yes | no |
+| `tb-mendoza` | `mendoza.tur.ar` | Mendoza Turismo (EMETUR): wine routes, Aconcagua, for Places to see, Events and Activities. | facts only | yes | no |
+| `tb-minas` | `www.minasgerais.com.br` | Minas Gerais turismo (state): Ouro Preto, Inhotim, for Places to see and Events. | facts only | yes | no |
 | `tb-mississippi` | `visitmississippi.org` | Official Mississippi event and trip-idea posts, for Events and Activities. | facts only | yes | no |
 | `tb-missouri` | `www.visitmo.com` | Official Missouri events, trip ideas and things to do, for Events and Activities. | facts only | yes | no |
 | `tb-monaco` | `www.visitmonaco.com` | Visit Monaco: official visitor guide, for Activities, Events and Places to see. | facts only | yes | no |
@@ -1015,13 +1135,16 @@ is added only with the owner's approval (see CONTRIBUTING.md).
 | `tb-nwt` | `spectacularnwt.com` | Official Northwest Territories aurora viewing, destinations and events, for Activities and Events. | facts only | yes | no |
 | `tb-occitanie` | `www.tourisme-occitanie.com` | Tourisme Occitanie: official visitor guide, for Activities, Places to see and Events. | facts only | yes | no |
 | `tb-oklahoma` | `www.travelok.com` | Official Oklahoma festivals, attractions and state parks, for Events, Activities and Places to see. | facts only | yes | no |
+| `tb-onecaribbean` | `www.onecaribbean.org` | Caribbean Tourism Organization: regional tourism news and member-country pages. The /feed/ link answered HTML, for Travel tips and Events. | facts only | yes | no |
 | `tb-ontario` | `www.destinationontario.com` | Official Ontario destinations, articles and events, for Events, Activities and Places to see. | facts only | yes | no |
 | `tb-pei` | `www.tourismpei.com` | Official Prince Edward Island attractions, events and how to get there, for Activities, Events and Local transportation. | facts only | yes | no |
 | `tb-pennsylvania` | `www.visitpa.com` | Official Pennsylvania events (America250 in 2026), trips and regions, for Events, Activities and Places to see. | facts only | yes | no |
 | `tb-provence` | `provence-alpes-cotedazur.com` | Provence-Alpes-Côte d'Azur Tourisme: official visitor guide, for Activities, Places to see and Events. | facts only | yes | no |
+| `tb-puertovallarta` | `visitpuertovallarta.com` | Visit Puerto Vallarta (tourism board): city event calendar and guides, for Events and Activities. | facts only | yes | no |
 | `tb-quebec` | `www.bonjourquebec.com` | Official Québec regions, things to do and events, for Events, Activities and Places to see. | facts only | yes | no |
 | `tb-rhodeisland` | `www.visitrhodeisland.com` | Official Rhode Island events and things to do, for Events and Activities. | facts only | yes | no |
 | `tb-sachsen` | `www.sachsen-tourismus.de` | Sachsen Tourismus: official visitor guide, for Activities, Places to see and Events. | facts only | yes | no |
+| `tb-salta` | `visitsalta.ar` | Visit Salta (Ministerio de Turismo de Salta): official visitor guide, for Places to see and Events. | facts only | yes | no |
 | `tb-salzburgerland` | `www.salzburgerland.com` | SalzburgerLand Tourismus: official visitor guide, for Activities, Events and Places to see. | facts only | yes | no |
 | `tb-sanmarino` | `www.visitsanmarino.com` | Visit San Marino: official visitor guide, for Places to see and Events. | facts only | yes | no |
 | `tb-sardegna` | `www.sardegnaturismo.it` | Sardegna Turismo: official visitor guide, for Places to see, Activities and Events. | facts only | yes | no |
@@ -1029,10 +1152,17 @@ is added only with the owner's approval (see CONTRIBUTING.md).
 | `tb-serbia` | `www.serbia.travel` | Serbia Travel (NTOS): official visitor guide, for Places to see and Events. | facts only | yes | no |
 | `tb-slovakia` | `slovakia.travel` | Slovakia Travel: official visitor guide, for Places to see, Activities and Events. | facts only | yes | no |
 | `tb-southcarolina` | `discoversouthcarolina.com` | Official South Carolina events, attractions and state parks, for Events, Activities and Places to see. | facts only | yes | no |
+| `tb-stbarth` | `www.saintbarth-tourisme.com` | Saint-Barth tourisme (CTTSB): official visitor guide, for Places to see and Events. | facts only | yes | no |
+| `tb-stlucia` | `stlucia.org` | Saint Lucia Tourism Authority: official visitor guide, for Places to see and Events. | facts only | yes | no |
+| `tb-stmaarten` | `www.vacationstmaarten.com` | St. Maarten Tourism Bureau: official visitor guide, for Places to see and Events. | facts only | yes | no |
 | `tb-tennessee` | `www.tnvacation.com` | Official Tennessee events, things to do and transportation advice, for Events, Activities and Local transportation. | facts only | yes | no |
 | `tb-texas` | `www.traveltexas.com` | Official Texas events, things to do and published itineraries, for Events, Activities and the itinerary. | facts only | yes | no |
 | `tb-ticino` | `www.ticino.ch` | Ticino Turismo: official visitor guide, for Activities, Places to see and Events. | facts only | yes | no |
 | `tb-tirol` | `www.tirol.at` | Tirol Werbung: official visitor guide, for Activities, Free walking tours, Events and Weather. | facts only | yes | no |
+| `tb-tobago` | `visittobago.gov.tt` | Visit Tobago (Tobago Tourism Agency): official visitor guide, for Places to see and Events. | facts only | yes | no |
+| `tb-trinbago` | `visittrinbago.tt` | Visit Trinidad & Tobago (Tourism Trinidad): official visitor guide, for Places to see and Events. | facts only | yes | no |
+| `tb-turismo-uy` | `www.gub.uy` | Ministerio de Turismo (gub.uy): notices, season info, statistics, for Events and Travel tips. | facts only | yes | no |
+| `tb-uruguaynatural` | `uruguaynatural.com` | Uruguay Natural (Ministerio de Turismo): official destinations, for Places to see and Events. | facts only | yes | no |
 | `tb-valais` | `www.valais.ch` | Valais/Wallis Promotion: official visitor guide, for Activities, Places to see and Events. | facts only | yes | no |
 | `tb-veneto` | `www.veneto.eu` | Veneto Tourism: official visitor guide, for Activities, Places to see and Events. | facts only | yes | no |
 | `tb-vermont` | `vermontvacation.com` | Official Vermont events, foliage and ski trips, for Events and Activities. | facts only | yes | no |
@@ -1041,11 +1171,14 @@ is added only with the owner's approval (see CONTRIBUTING.md).
 | `tb-visitguernsey` | `www.visitguernsey.com` | Visit Guernsey: official visitor guide, for Activities, Events and Local transportation. | facts only | yes | no |
 | `tb-visithungary` | `visithungary.com` | Visit Hungary: official visitor guide, for Places to see and Events. | facts only | yes | no |
 | `tb-visitisleofman` | `www.visitisleofman.com` | Visit Isle of Man: official visitor guide, for Activities, Places to see and Events. | facts only | yes | no |
+| `tb-visitjamaica` | `www.visitjamaica.com` | Visit Jamaica (JTB): official visitor guide, for Places to see, Activities and Events. | facts only | yes | no |
+| `tb-visitloscabos` | `www.visitloscabos.travel` | Visit Los Cabos (FITURCA): official visitor guide, for Places to see, Activities and Events. | facts only | yes | no |
 | `tb-visitnapavalley` | `www.visitnapavalley.com` | Visit Napa Valley (official DMO): wineries, events, itineraries, for Activities, Events and Hotels. | facts only | yes | no |
 | `tb-visitsicily` | `www.visitsicily.info` | Visit Sicily: official visitor guide, for Places to see, Activities and Events. | facts only | yes | no |
 | `tb-visittuscany` | `www.visittuscany.com` | Visit Tuscany: official visitor guide, for Activities, Places to see, Events and the itinerary. | facts only | yes | no |
 | `tb-westvirginia` | `wvtourism.com` | Official West Virginia events and things to do (New River Gorge), for Events and Activities. | facts only | yes | no |
 | `tb-wisconsin` | `www.travelwisconsin.com` | Official Wisconsin event listings (a dedicated event sitemap) and things to do, for Events and Activities. | facts only | yes | no |
+| `tb-yucatan` | `yucatan.travel` | Yucatán Travel (state tourism): Mérida, the cenotes and the Mayan sites, for Places to see, Activities and Events. | facts only | yes | no |
 | `tb-yukon` | `www.travelyukon.com` | Official Yukon events, things to do and getting around, for Events, Activities and Local transportation. | facts only | yes | no |
 | `ticketmaster` | `app.ticketmaster.com` | Concerts, sports and theatre events with dates, venues and ticket links, for the Events section. | API terms | yes | yes |
 | `visitabudhabi` | `visitabudhabi.ae` | Abu Dhabi events and sights, for Events and Places to see. | facts only | yes | no |
@@ -1067,13 +1200,18 @@ is added only with the owner's approval (see CONTRIBUTING.md).
 | `atdw-atlas` | `developer.atdw.com.au` | Australian events, attractions, tours and accommodation listings, for Events, Activities and Hotels. | API terms | no | yes |
 | `bandsintown` | `rest.bandsintown.com` | Concerts by artist and venue with dates and ticket links, for the Events section. | API terms | no | yes |
 | `bcn-opendata-agenda` | `opendata-ajuntament.barcelona.cat` | Barcelona city council's cultural and leisure agenda, for the Events section. | open | no | no |
+| `blog-ba-herald` | `buenosairesherald.com` | Buenos Aires Herald: English-language Argentine news, for Travel tips and Events. | facts only | no | no |
+| `blog-bogotapost` | `thebogotapost.com` | The Bogotá Post: English-language Bogotá news and what's on, for Events and Travel tips. | facts only | no | no |
 | `blog-narcity` | `www.narcity.com` | Canadian city things-to-do news, for Events, Activities and Travel tips. | facts only | no | no |
+| `blog-riotimes` | `www.riotimesonline.com` | The Rio Times: English-language Brazil/LatAm news, for Travel tips, Events and Forex. | facts only | no | no |
 | `blog-thesmartlocal` | `thesmartlocal.com` | Free and cheap things to do in Singapore, Malaysia and Thailand from TheSmartLocal, for Activities, Events and Travel tips (headline, link and a short excerpt only). | facts only | no | no |
 | `calendarific` | `calendarific.com` | Public holidays in about 230 countries (closures and crowds), for Events and Travel tips. | API terms | no | yes |
 | `choosechicago` | `www.choosechicago.com` | Chicago events and things to do from the official tourism board, for Events and Activities. | facts only | no | no |
+| `city-visit-rio` | `visit.rio` | Visit Rio (Rio CVB): traveller information, for Places to see and Events. | facts only | no | no |
 | `datagovhk` | `data.gov.hk` | Official opening hours and admission of Hong Kong museums and attractions, plus cultural programmes and major events, for Places to see and Events. | open | no | no |
 | `datatourisme-fr` | `diffuseur.datatourisme.fr` | Every French tourist office's events, restaurants, sights and walking or driving tours in one national feed, for Events, Activities, Places to see and the itinerary. | open | no | yes |
 | `edinburgh-festivals-api` | `api.edinburghfestivalcity.com` | Listings for the Edinburgh festivals (dates, venues, tickets), for the Events section. | API terms | no | yes |
+| `ev-cartelera-cdmx` | `cartelera.cdmx.gob.mx` | Cartelera CDMX (city culture listings): official visitor guide, for Events. | facts only | no | no |
 | `germany-kg` | `open-data-germany.org` | Events, sights and tours from German regional tourist boards, for Events, Places to see and Activities. | open | no | yes |
 | `hel-linkedevents` | `api.hel.fi` | Every public event in Helsinki, Espoo and Vantaa with venue, time and price, for Events and Activities. | open | no | no |
 | `korea-tourapi` | `apis.data.go.kr` | National Korean festivals, restaurants, sights and official travel courses, for Events, Activities, Places to see and the itinerary. | facts only | no | yes |
@@ -1082,6 +1220,7 @@ is added only with the owner's approval (see CONTRIBUTING.md).
 | `nps-data-api` | `developer.nps.gov` | US national park things to do, events and tours as structured data, for Activities, Events and the itinerary. | facts only | no | yes |
 | `od-andmed-eesti` | `andmed.eesti.ee` | Estonian open data portal: government open-data datasets (tourism, events, transport), for Events, Places to see and Local transportation. | open | no | no |
 | `od-avoindata-fi` | `www.avoindata.fi` | avoindata.fi: government open-data datasets (tourism, events, transport), for Events, Places to see and Local transportation. | open | no | no |
+| `od-catalogo-uy` | `catalogodatos.gub.uy` | Catálogo Nacional de Datos Abiertos (AGESIC, CKAN): tourism datasets, for Places to see and Events. | open | no | no |
 | `od-culture-data-gouv` | `culture.data.gouv.fr` | Ministère de la Culture open data: Musées de France, Monuments historiques, festivals datasets, for Places to see and Events. | open | no | no |
 | `od-dane-gov-pl` | `dane.gov.pl` | dane.gov.pl (Polish open data): government open-data datasets (tourism, events, transport), for Places to see and Events. | open | no | no |
 | `od-data-europa` | `data.europa.eu` | data.europa.eu: pan-EU harvest of national portals, for Events, Places to see and Local transportation. | open | no | no |
@@ -1090,8 +1229,11 @@ is added only with the owner's approval (see CONTRIBUTING.md).
 | `od-data-gv-at` | `www.data.gv.at` | data.gv.at: government open-data datasets (tourism, events, transport), for Events, Places to see and Local transportation. | open | no | no |
 | `od-data-overheid-nl` | `data.overheid.nl` | data.overheid.nl: government open-data datasets (tourism, events, transport), for Events, Local transportation and Places to see. | open | no | no |
 | `od-data-public-lu` | `data.public.lu` | data.public.lu: government open-data datasets (tourism, events, transport), for Events, Places to see and Local transportation. | open | no | no |
+| `od-data-rio` | `www.data.rio` | Data.Rio (Rio city open data, ArcGIS Hub): city POI/tourism/transport layers, for Places to see, Events and Local transportation. | open | no | no |
 | `od-dataportal-se` | `www.dataportal.se` | Sveriges dataportal: government open-data datasets (tourism, events, transport), for Events, Places to see and Local transportation. | open | no | no |
+| `od-datos-gob-cl` | `datos.gob.cl` | datos.gob.cl (CKAN): tourism datasets (138 match "turismo"), for Places to see and Events. | open | no | no |
 | `od-datos-gob-es` | `datos.gob.es` | datos.gob.es: government open-data datasets (tourism, events, transport), for Events, Places to see and Local transportation. | open | no | no |
+| `od-datos-gov-co` | `www.datos.gov.co` | Portal de Datos Abiertos de Colombia (MinTIC, Socrata): registered tourism providers (RNT), attractions, events datasets, for Places to see, Events and Hotels. | open | no | no |
 | `od-la-events` | `data.lacity.org` | City of Los Angeles events and El Pueblo cultural events, for Events. | facts only | no | no |
 | `od-opendata-swiss` | `opendata.swiss` | opendata.swiss: government open-data datasets (tourism, events, transport), for Events, Places to see and Local transportation. | open | no | no |
 | `od-podatki-gov-si` | `podatki.gov.si` | OPSI (Slovenia open data): government open-data datasets (tourism, events, transport), for Events, Places to see and Local transportation. | open | no | no |
@@ -1101,7 +1243,10 @@ is added only with the owner's approval (see CONTRIBUTING.md).
 | `secretldn` | `secretldn.com` | London what's-on and hidden gems (headline, link and a short excerpt only), for Events and Places to see. | facts only | no | no |
 | `taiwan-tourism-od` | `media.taiwan.net.tw` | Every Taiwanese tourism event, listed restaurant and scenic spot, for Events, Activities and Places to see. | open | no | no |
 | `tat-data-api` | `tatdataapi.io` | Thai events, attractions and activities as structured data, for Events, Places to see and Activities. | facts only | no | yes |
+| `tb-parana` | `www.viajeparana.com` | Viaje Paraná: official visitor guide, for Places to see and Events. | facts only | no | no |
 | `tb-puglia` | `www.viaggiareinpuglia.it` | Viaggiare in Puglia: official visitor guide, for Places to see, Activities and Events. | facts only | no | no |
+| `tb-saintmartin` | `www.iledesaintmartin.org` | Office de Tourisme de Saint-Martin: official visitor guide, for Places to see and Events. | facts only | no | no |
+| `tb-stkitts` | `www.stkittstourism.kn` | St. Kitts Tourism Authority: official visitor guide, for Places to see and Events. | facts only | no | no |
 | `timeout-blog-rss` | `www.timeout.com` | Time Out city articles (what's on, things to do, new openings) for Events and Activities. | facts only | no | no |
 | `timeout-news-sitemap` | `www.timeout.com` | Time Out city news pages (events, openings, things to do) for Events and Activities. | facts only | no | no |
 | `toronto-events` | `ckan0.cf.opendata.inter.prod-toronto.ca` | Festivals and events listed by the City of Toronto, for the Events section. | open | no | no |
@@ -1116,6 +1261,7 @@ is added only with the owner's approval (see CONTRIBUTING.md).
 | `brazil-mre-visas` | `www.gov.br` | Brazil's visa requirement table by nationality, for the Visa section. | facts only | yes | no |
 | `canada-travel-json` | `data.international.gc.ca` | Official Canadian travel advice per country (entry rules, safety level, emergency contacts) for Visa and the Emergency card. | open | yes | no |
 | `cbp-travel` | `www.cbp.gov` | Visa Waiver Program countries and ESTA rules for Visa, plus US duty-free limits, prohibited and agricultural items and the $10,000 cash declaration for Travel tips and Packing. | open | yes | no |
+| `customs-sag-cl` | `www.sag.gob.cl` | SAG Chile (agricultural/livestock service: traveller declaration): Chile's strict food, plant and animal import rules for travellers (SAG declaration), for Travel tips, the Packing list and Visa. | share-alike | yes | no |
 | `dirco-sa` | `dirco.gov.za` | Official contacts of South African missions abroad and foreign missions in South Africa, plus consular advice, for the Emergency card and Visa. | facts only | yes | no |
 | `enwiki-visa-requirements` | `dumps.wikimedia.org` | About 199 passport-by-destination tables (visa-free, eVisa, visa on arrival, days) used only to cross-check official visa rules in the Visa section. | share-alike | yes | no |
 | `eu-etias-ees` | `travel-europe.europa.eu` | Who needs ETIAS, its fee, validity and start date, and EES biometric registration at Schengen borders, for the Visa section. | open | yes | no |
@@ -1138,17 +1284,31 @@ is added only with the owner's approval (see CONTRIBUTING.md).
 | `malaysia-imi-visa` | `www.imi.gov.my` | Malaysia's visa-required and visa-free nationalities and lengths of stay, for the Visa section. | facts only | yes | no |
 | `nia-china-visa-free` | `en.nia.gov.cn` | China's 240-hour visa-free transit and unilateral visa-free nationality lists, for the Visa section. | facts only | yes | no |
 | `nz-immigration` | `www.immigration.govt.nz` | New Zealand's visa-waiver countries, NZeTA, visitor levy and transit rules, for the Visa section. | open | yes | no |
+| `ref-paho` | `www.paho.org` | Pan American Health Organization: yellow fever, dengue and measles alerts for travellers, for Travel tips, the Packing list and Visa. | facts only | yes | no |
 | `smartraveller` | `www.smartraveller.gov.au` | Official Australian travel advice per country (entry rules, safety, local laws) for Visa and Travel tips. | open | yes | no |
 | `state-dept-advisories-api` | `cadataapi.state.gov` | Official US travel advisory level and summary per country, for the Visa section's safety advice. | open | yes | no |
 | `state-dept-country-info` | `cadataapi.state.gov` | Official US country information (entry, exit and visa requirements, embassy and consulate contacts, health, local laws), for Visa, the Emergency card and Travel tips. | open | yes | no |
+| `tb-anguilla` | `ivisitanguilla.com` | Anguilla Tourist Board: official visitor guide, for Places to see, Events and Visa. | facts only | yes | no |
+| `tb-barbados` | `www.visitbarbados.org` | Visit Barbados (BTMI): official visitor guide, for Places to see, Events and Visa. | facts only | yes | no |
+| `tb-curacao` | `sitemap.curacao.com` | Curaçao Tourist Board: ED card and entry, for Events, Activities and Visa. | facts only | yes | no |
+| `tb-ecuador` | `ecuador.travel` | Ecuador Travel (MINTUR): official visitor guide, for Places to see, Visa and Activities. | facts only | yes | no |
+| `tb-tourismpanama` | `www.tourismpanama.com` | Visit Panamá (PROMTUR): official visitor guide, for Places to see, Visa and Activities. | facts only | yes | no |
 | `thai-evisa` | `www.thaievisa.go.th` | Thailand's visa-exemption list and e-Visa categories, for the Visa section. | facts only | yes | no |
 | `uae-visa-uae` | `u.ae` | UAE visa-on-arrival nationalities and tourist visa types, for the Visa section. | facts only | yes | no |
 | `vietnam-evisa` | `evisa.gov.vn` | Vietnam's e-Visa rules and ports of entry, for the Visa section. | facts only | yes | no |
+| `visa-cancilleria-ec` | `www.cancilleria.gob.ec` | Cancillería del Ecuador: Ecuador visa rules and consular notices, for Visa. | facts only | yes | no |
+| `visa-immigration-bz` | `immigration.gov.bz` | Belize Immigration and Nationality Department: Belize entry and visa notices (last item 2026-10-27), for Visa. | facts only | yes | no |
+| `visa-inm-mx` | `www.gob.mx` | INM Mexico (National Migration Institute): official entry, visa and immigration rules, for Visa and Travel tips. | facts only | yes | no |
+| `visa-migracion-colombia` | `www.migracioncolombia.gov.co` | Migración Colombia: official entry, visa and immigration rules, for Visa and Travel tips. | facts only | yes | no |
+| `visa-migraciones-ar` | `www.argentina.gob.ar` | Dirección Nacional de Migraciones (argentina.gob.ar): Argentina entry requirements and visas by nationality, for Visa. | open | yes | no |
+| `visa-migraciones-pe` | `www.gob.pe` | Superintendencia Nacional de Migraciones (gob.pe): Peru entry rules, stay extensions, notices, for Visa. | facts only | yes | no |
+| `visa-pica-jm` | `www.pica.gov.jm` | PICA Jamaica (passport, immigration, citizenship): Jamaica entry and visa rules, for Visa. | facts only | yes | no |
 | `au-homeaffairs-visas` | `immi.homeaffairs.gov.au` | Which passports qualify for Australia's ETA or eVisitor and the visitor visa rules, for the Visa section. | open | no | no |
 | `auswaertiges-amt-opendata` | `www.auswaertiges-amt.de` | German embassy and consulate contacts, health leaflets and travel warnings per country, for the Emergency card, Visa and Travel tips. | API terms | no | no |
 | `passport-index-dataset` | `github.com` | Visa requirements by passport, only as a cross-check for the Visa section; provenance unclear, so off. | restricted | no | no |
 | `state-dept-advisories-rss` | `travel.state.gov` | US travel advisory changes per country for the Visa section; travel.state.gov blocks our bot, so off. | open | no | no |
 | `state-dept-country-pages` | `travel.state.gov` | US entry rules and embassy contacts per country for Visa and the Emergency card; travel.state.gov blocks our bot, so off. | open | no | no |
+| `visa-migracion-pa` | `www.migracion.gob.pa` | Servicio Nacional de Migración Panamá: official entry, visa and immigration rules, for Visa. | facts only | no | no |
 
 ## SIM cards
 
@@ -1180,6 +1340,7 @@ is added only with the owner's approval (see CONTRIBUTING.md).
 | `blog-bemytravelmuse` | `www.bemytravelmuse.com` | Solo travel guides and itineraries from Be My Travel Muse, for Travel tips and Places to see (headline, link and a short excerpt only). | facts only | yes | no |
 | `blog-bootsnall` | `www.bootsnall.com` | Round-the-world budget planning articles (older archive) from BootsnAll, for Travel tips and the itinerary (headline, link and a short excerpt only). | facts only | yes | no |
 | `blog-budgettraveller` | `budgettraveller.org` | Budget-luxury stays and city guides from The Budget Traveller, for Hotels, Travel tips and Places to see (headline, link and a short excerpt only). | facts only | yes | no |
+| `blog-caribjournal` | `www.caribjournal.com` | Caribbean Journal: airport transfers, terminals and travel information, for Places to see, Hotels, Flights and Travel tips. | facts only | yes | no |
 | `blog-ciaobambino` | `ciaobambino.com` | Ciao Bambino (family travel): family-friendly hotels and trip guides, for Hotels, Travel tips and Activities. | facts only | yes | no |
 | `blog-coasttocoast` | `coasttocoast.co.za` | Southern and East Africa backpacker hostel and transport guide from Coast to Coast, for Hotels, Local transportation and Travel tips (headline, link and a short excerpt only). | facts only | yes | no |
 | `blog-dangerousbusiness` | `www.dangerous-business.com` | Travel blog posts with destination guides and practical trip advice, for Travel tips and Places to see (headline, link and a short excerpt only). | facts only | yes | no |
@@ -1226,9 +1387,11 @@ is added only with the owner's approval (see CONTRIBUTING.md).
 | `blog-travelsofadam` | `www.travelsofadam.com` | City guides (including LGBTQ travel) from Travels of Adam, for Travel tips and Places to see (headline, link and a short excerpt only). | facts only | yes | no |
 | `blog-twomonkeys` | `twomonkeystravelgroup.com` | Budget itineraries and destination cost guides from Two Monkeys Travel, for Travel tips, Places to see and the itinerary (headline, link and a short excerpt only). | facts only | yes | no |
 | `blog-twowanderingsoles` | `www.twowanderingsoles.com` | Travel blog posts with destination guides and practical trip advice, for Travel tips and Places to see (headline, link and a short excerpt only). | facts only | yes | no |
+| `blog-twoweekscr` | `www.twoweeksincostarica.com` | Two Weeks in Costa Rica: detailed independent Costa Rica guides, for Travel tips, Places to see and Local transportation. | facts only | yes | no |
 | `blog-uncorneredmarket` | `www.uncorneredmarket.com` | Travel blog posts with destination guides and practical trip advice, for Travel tips and Places to see (headline, link and a short excerpt only). | facts only | yes | no |
 | `blog-viajenaviagem` | `www.viajenaviagem.com` | Brazil's leading independent travel blog (Portuguese) with destination guides and fare tips, for Travel tips, Places to see and Flights (headline, link and a short excerpt only). | facts only | yes | no |
 | `blog-viewfromthewing` | `viewfromthewing.com` | Airline and hotel news and booking tips from View from the Wing, for Flights, Hotels and Travel tips (headline, link and a short excerpt only). | facts only | yes | no |
+| `blog-wander-argentina` | `wander-argentina.org` | Wander Argentina: travel articles and guides, for Travel tips, Places to see and Forex. | facts only | yes | no |
 | `blog-wanderlustcrew` | `www.wanderlustcrew.com` | Travel blog posts with destination guides and practical trip advice, for Travel tips and Places to see (headline, link and a short excerpt only). | facts only | yes | no |
 | `blog-wheelchairtravel` | `wheelchairtravel.org` | Wheelchair Travel (John Morris): wheelchair-accessible city guides, airline policies, for Travel tips, Flights, Hotels and Places to see. | facts only | yes | no |
 | `blog-wheregoesrose` | `www.wheregoesrose.com` | Country budget guides for India, Asia and Latin America from Where Goes Rose, for Travel tips, the itinerary and Places to see (headline, link and a short excerpt only). | facts only | yes | no |
@@ -1250,6 +1413,7 @@ is added only with the owner's approval (see CONTRIBUTING.md).
 | `city-visitdublin` | `www.visitdublin.com` | Visit Dublin: official visitor guide, for Activities, Events and Travel tips. | facts only | yes | no |
 | `city-zagreb` | `www.infozagreb.hr` | Zagreb Tourist Board: official visitor guide, for Activities, Events, Local transportation, Travel tips and the Emergency card. | facts only | yes | no |
 | `common-crawl` | `index.commoncrawl.org` | Index of a public web crawl, used only to discover travel pages (sights, things to do, advice) for Places to see, Activities and Travel tips. | facts only | yes | no |
+| `customs-sag-cl` | `www.sag.gob.cl` | SAG Chile (agricultural/livestock service: traveller declaration): Chile's strict food, plant and animal import rules for travellers (SAG declaration), for Travel tips, the Packing list and Visa. | share-alike | yes | no |
 | `deals-dollarflightclub` | `dollarflightclub.com` | Cheap-fare tactics and deal round-ups from Dollar Flight Club, for Flights and Travel tips (headline, link and a short excerpt only). | facts only | yes | no |
 | `deals-jacksflightclub` | `jacksflightclub.com` | Cheap-flight guides (UK) from Jack's Flight Club, for Flights and Travel tips (headline, link and a short excerpt only). | facts only | yes | no |
 | `deals-melhoresdestinos` | `www.melhoresdestinos.com.br` | Cheap-fare and budget-hotel deals from Brazil (Portuguese) from Melhores Destinos, for Flights, Hotels and Travel tips (headline, link and a short excerpt only). | facts only | yes | no |
@@ -1282,6 +1446,7 @@ is added only with the owner's approval (see CONTRIBUTING.md).
 | `liveriga` | `www.liveriga.com` | Riga's official tourism portal: sights, things to do, events and visitor advice, for Places to see, Activities, Events and Travel tips. | facts only | yes | no |
 | `lonelyplanet-sitemaps` | `www.lonelyplanet.com` | Lonely Planet destination articles for Places to see and Travel tips (headline, link and a short excerpt only). | facts only | yes | no |
 | `mag-hiddeneurope` | `www.hiddeneurope.eu` | hidden europe magazine: travel articles and guides, for Local transportation, Places to see and Travel tips. | facts only | yes | no |
+| `mag-viagemeturismo` | `viagemeturismo.abril.com.br` | Viagem e Turismo (Abril): Brazil's main travel magazine (pt). The /ultimas-noticias/rss link on the home page answered 404, for Places to see, Travel tips and Events. | facts only | yes | no |
 | `mkt-tsukiji-outer` | `www.tsukiji.or.jp` | Tsukiji Outer Market (official): shops, hours, closed-day calendar, etiquette, for Places to see, Activities and Travel tips. | facts only | yes | no |
 | `mus-vatican` | `www.museivaticani.va` | Musei Vaticani: hours, closures, last-Sunday free entry, for Places to see and Travel tips. | facts only | yes | no |
 | `news-bbc` | `www.bbc.com` | BBC Travel travel-section articles (destination features, openings, travel disruptions) for Travel tips and Places to see (headline, link and a short excerpt only). | facts only | yes | no |
@@ -1311,16 +1476,25 @@ is added only with the owner's approval (see CONTRIBUTING.md).
 | `official-isic` | `www.isic.org` | International Student Identity Card discounts and news, for Travel tips and Activities. | facts only | yes | no |
 | `official-japanrailpass` | `japanrailpass.net` | Official Japan Rail Pass prices, coverage and rules, for Local transportation and Travel tips. | facts only | yes | no |
 | `official-octopus` | `www.octopus.com.hk` | The tourist Octopus card and stored-value travel on Hong Kong transport, for Local transportation and Travel tips. | facts only | yes | no |
+| `official-sectur-mx` | `www.gob.mx` | SECTUR (Mexico Tourism Secretariat): official visitor guide, for Places to see, Events and Travel tips. | facts only | yes | no |
 | `official-vzbv-reise` | `www.verbraucherzentrale.de` | German consumer-centre advice on passenger rights, paying abroad and cheap-flight pitfalls, for Travel tips, Forex and Flights. | facts only | yes | no |
 | `openholidays` | `openholidaysapi.org` | Public and school holidays by region for about 36 countries (crowds and closures), for Events and Travel tips. | share-alike | yes | no |
 | `park-bc` | `bcparks.ca` | British Columbia provincial parks, trip planning and wildlife-safety and closure notes, for Places to see, Activities and Travel tips. | facts only | yes | no |
+| `park-conaf` | `www.conaf.cl` | CONAF (Chile national parks): Torres del Paine and other park rules, fees, closures, fire alerts, for Places to see and Travel tips. | facts only | yes | no |
+| `park-conanp-mx` | `www.gob.mx` | CONANP (Mexico protected areas): official visitor guide, for Places to see, Activities and Travel tips. | facts only | yes | no |
+| `park-iguacu` | `cataratasdoiguacu.com.br` | Cataratas do Iguaçu (Brazil-side park concession): tickets, hours, rules for Iguaçu Falls, for Places to see and Travel tips. | facts only | yes | no |
 | `park-parks-canada` | `parks.canada.ca` | Canada's national parks and historic sites (conditions, fees, closures), for Places to see, Activities and Travel tips. | facts only | yes | no |
+| `park-pn-ar` | `www.argentina.gob.ar` | Parques Nacionales Argentina (argentina.gob.ar): Iguazú, Los Glaciares, Nahuel Huapi: fees, rules, closures, for Places to see and Travel tips. | open | yes | no |
+| `park-sernanp` | `www.gob.pe` | SERNANP (Peru protected areas), gob.pe: national parks, fees, closures, for Places to see and Travel tips. | facts only | yes | no |
 | `park-usfs` | `www.fs.usda.gov` | National forest recreation, passes and know-before-you-go advice, for Activities, Places to see and Travel tips. | open | yes | no |
 | `park-wa-dbca` | `www.parksandwildlife.wa.gov.au` | Parks and Wildlife Service WA (DBCA): official visitor guide, for Places to see, Activities and Travel tips. | facts only | yes | no |
 | `ref-aarp-travel` | `www.aarp.org` | AARP Travel: Senior travel advice and discounts, for Travel tips and Activities. | facts only | yes | no |
 | `ref-humandignitytrust` | `www.humandignitytrust.org` | Human Dignity Trust: map of criminalisation: countries that criminalise LGBT people, with law and penalty (safety-critical for travellers), for Travel tips. | facts only | yes | no |
 | `ref-iglta` | `www.iglta.org` | IGLTA (International LGBTQ+ Travel Association): LGBTQ-welcoming destinations, Pride events, for Travel tips, Events and Hotels. | facts only | yes | no |
 | `ref-ilga-world` | `ilga.org` | ILGA World: country legal situation for LGBTI travellers (State-Sponsored Homophobia reports), for Travel tips. | facts only | yes | no |
+| `ref-machupicchu` | `www.machupicchu.gob.pe` | Machu Picchu official (Ministerio de Cultura, Cusco): circuits, rules, capacity, for Places to see, Travel tips and the itinerary. | facts only | yes | no |
+| `ref-paho` | `www.paho.org` | Pan American Health Organization: yellow fever, dengue and measles alerts for travellers, for Travel tips, the Packing list and Visa. | facts only | yes | no |
+| `ref-pancanal` | `pancanal.com` | Panama Canal Authority (ACP): canal news and visitor-centre information, for Places to see and Travel tips. | facts only | yes | no |
 | `ref-priceoftravel` | `www.priceoftravel.com` | Per-city backpacker daily cost index (hostel, transit, meals) from Price of Travel, for Travel tips, Hotels and itinerary budgets (headline, link and a short excerpt only). | facts only | yes | no |
 | `ref-rainbowmap-ilga-europe` | `rainbowmap.ilga-europe.org` | Rainbow Map (ILGA-Europe): per-country LGBTI rights score across 49 European countries, for Travel tips. | facts only | yes | no |
 | `regenerative-travel` | `regenerativetravel.com` | Independent regenerative and eco hotels and impact stories, for Hotels and Travel tips. | facts only | yes | no |
@@ -1332,25 +1506,34 @@ is added only with the owner's approval (see CONTRIBUTING.md).
 | `state-dept-country-info` | `cadataapi.state.gov` | Official US country information (entry, exit and visa requirements, embassy and consulate contacts, health, local laws), for Visa, the Emergency card and Travel tips. | open | yes | no |
 | `tb-andalucia` | `www.andalucia.org` | Andalucía Tourism: official visitor guide, for Activities, Places to see, Events and Travel tips. | facts only | yes | no |
 | `tb-canary` | `www.hellocanaryislands.com` | Hello Canary Islands: official visitor guide, for Activities, Places to see, Weather and Travel tips. | facts only | yes | no |
+| `tb-cuba` | `www.cuba.travel` | Cuba Travel (MINTUR): official visitor guide, for Places to see and Travel tips. | facts only | yes | no |
 | `tb-cyprus` | `www.visitcyprus.com` | Visit Cyprus (Deputy Ministry of Tourism): official visitor guide, for Places to see, Events and Travel tips. | facts only | yes | no |
 | `tb-faroe` | `visitfaroeislands.com` | Visit Faroe Islands: official visitor guide, for Activities, Local transportation and Travel tips. | facts only | yes | no |
 | `tb-germany-travel` | `www.germany.travel` | Germany Travel (GNTB): official visitor guide, for Places to see, Activities, Travel tips and Events. | facts only | yes | no |
 | `tb-gibraltar` | `www.visitgibraltar.gi` | Visit Gibraltar: official visitor guide, for Places to see, Activities and Travel tips. | facts only | yes | no |
 | `tb-greenland` | `visitgreenland.com` | Official Greenland destinations, things to do, how to get around and practical facts, for Activities, Places to see, Local transportation and Travel tips. | facts only | yes | no |
 | `tb-heritageireland` | `heritageireland.ie` | Heritage Ireland (OPW): OPW state heritage sites, opening times, free days, for Places to see and Travel tips. | facts only | yes | no |
+| `tb-onecaribbean` | `www.onecaribbean.org` | Caribbean Tourism Organization: regional tourism news and member-country pages. The /feed/ link answered HTML, for Travel tips and Events. | facts only | yes | no |
 | `tb-poland` | `www.poland.travel` | Poland Travel (POT): official visitor guide, for Places to see, Activities and Travel tips. | facts only | yes | no |
+| `tb-turismo-uy` | `www.gub.uy` | Ministerio de Turismo (gub.uy): notices, season info, statistics, for Events and Travel tips. | facts only | yes | no |
 | `trail-camino-santiago-gal` | `www.caminodesantiago.gal` | Camino de Santiago (Xunta de Galicia official): official Camino routes, stages, pilgrim credential and hostel rules, for Activities, the itinerary, Travel tips and Places to see. | open | yes | no |
 | `trail-ffrandonnee` | `www.ffrandonnee.fr` | FFRandonnée (French Hiking Federation): GR/GRP trail news, closures, hiking-season advice in France, for Activities and Travel tips. | facts only | yes | no |
 | `travelerset-scams` | `travelerset.com` | Common travel scams and safety advice for the Travel tips section. | facts only | yes | no |
 | `twopassportspacked-scams` | `twopassportspacked.com` | Common travel scams and safety advice for the Travel tips section. | facts only | yes | no |
+| `visa-inm-mx` | `www.gob.mx` | INM Mexico (National Migration Institute): official entry, visa and immigration rules, for Visa and Travel tips. | facts only | yes | no |
+| `visa-migracion-colombia` | `www.migracioncolombia.gov.co` | Migración Colombia: official entry, visa and immigration rules, for Visa and Travel tips. | facts only | yes | no |
 | `walking-freetoursbyfoot` | `freetoursbyfoot.com` | Pay-what-you-wish walking tours in US and European cities plus free-things-to-do guides, for Free walking tours, Activities and Travel tips. | facts only | yes | no |
 | `wikivoyage-dump` | `dumps.wikimedia.org` | Wikivoyage destination guides (sights, things to do, where to stay, getting around, SIM and tips) for those app sections. | share-alike | yes | no |
 | `worldbank-wdi-bulk` | `databank.worldbank.org` | Price level ratio and purchasing-power parity for every country, for Travel tips cost guidance and itinerary budgets. | open | yes | no |
+| `wx-nhc` | `www.nhc.noaa.gov` | NOAA National Hurricane Center: tropical-cyclone advisories for the Caribbean and Mexico, for Weather, Travel tips and the Emergency card. | open | yes | no |
 | `api-equaldex` | `www.equaldex.com` | Equaldex Equality Index API: LGBTQ+ rights and the Equality Index per country, for traveller safety, for Travel tips. | API terms | no | no |
 | `auswaertiges-amt-opendata` | `www.auswaertiges-amt.de` | German embassy and consulate contacts, health leaflets and travel warnings per country, for the Emergency card, Visa and Travel tips. | API terms | no | no |
 | `bigmac-index` | `raw.githubusercontent.com` | Price level and currency under- or over-valuation per country, a how-expensive-will-it-feel signal for Forex and Travel tips. | open | no | no |
+| `blog-ba-herald` | `buenosairesherald.com` | Buenos Aires Herald: English-language Argentine news, for Travel tips and Events. | facts only | no | no |
+| `blog-bogotapost` | `thebogotapost.com` | The Bogotá Post: English-language Bogotá news and what's on, for Events and Travel tips. | facts only | no | no |
 | `blog-narcity` | `www.narcity.com` | Canadian city things-to-do news, for Events, Activities and Travel tips. | facts only | no | no |
 | `blog-outsideonline` | `www.outsideonline.com` | Adventure-travel and outdoor trip articles, for Activities, Packing list and Travel tips. | facts only | no | no |
+| `blog-riotimes` | `www.riotimesonline.com` | The Rio Times: English-language Brazil/LatAm news, for Travel tips, Events and Forex. | facts only | no | no |
 | `blog-thesmartlocal` | `thesmartlocal.com` | Free and cheap things to do in Singapore, Malaysia and Thailand from TheSmartLocal, for Activities, Events and Travel tips (headline, link and a short excerpt only). | facts only | no | no |
 | `botswana-ecocert` | `www.botswanatourism.co.bw` | Botswana's official eco-certification (low-impact safari model) and certified lodges, for Hotels and Travel tips. | facts only | no | no |
 | `calendarific` | `calendarific.com` | Public holidays in about 230 countries (closures and crowds), for Events and Travel tips. | API terms | no | yes |
@@ -1361,10 +1544,12 @@ is added only with the owner's approval (see CONTRIBUTING.md).
 | `gov-agriculture-au-pets` | `www.agriculture.gov.au` | Australia DAFF: bringing cats and dogs: pet import and traveller biosecurity rules, for Travel tips and the Packing list. | facts only | no | no |
 | `health-fitfortravel` | `www.fitfortravel.nhs.uk` | fitfortravel (NHS Scotland): per-country health advice and malaria maps, for Travel tips and the Packing list. | facts only | no | no |
 | `lnt-org` | `lnt.org` | The seven Leave No Trace principles and outdoor-ethics tips for hikes, camping and parks, for Travel tips, Activities and Packing. | facts only | no | no |
+| `od-datatur-mx` | `www.datatur.sectur.gob.mx` | DataTur (SECTUR tourism statistics): government open-data datasets (tourism, events, transport), for Hotels and Travel tips. | open | no | no |
 | `od-epa-beacon` | `www.epa.gov` | US EPA BEACON beach advisories: US beach advisories and closures, for Places to see, Activities and Travel tips. | open | no | no |
 | `od-gb-toiletmap` | `www.toiletmap.org.uk` | Great British Public Toilet Map: About 14,000 UK public toilets with opening hours and accessibility, for Travel tips and Activities. | facts only | no | no |
 | `od-iana-tzdb` | `data.iana.org` | IANA Time Zone Database: Local time and daylight-saving rules at the destination, for Flights, the itinerary and Travel tips. | open | no | no |
 | `park-gbrmpa` | `www.gbrmpa.gov.au` | Great Barrier Reef Marine Park Authority: reef visiting rules, zoning, for Places to see, Activities and Travel tips. | facts only | no | no |
+| `park-sinac-cr` | `www.sinac.go.cr` | SINAC Costa Rica (protected areas): official visitor guide, for Places to see and Travel tips. | facts only | no | no |
 | `ricksteves-forum` | `community.ricksteves.com` | Traveller questions and answers about trips in Europe, for Travel tips; v1 uses only the Stack Exchange dump, so off. | facts only | no | no |
 | `se-api` | `api.stackexchange.com` | Travel Stack Exchange questions and answers for Travel tips; v1 uses the data dump instead, so off. | share-alike | no | no |
 | `seoul-wifi` | `data.seoul.go.kr` | Free public Wi-Fi locations across Seoul, for SIM cards and Travel tips. | open | no | yes |
@@ -1387,6 +1572,7 @@ is added only with the owner's approval (see CONTRIBUTING.md).
 | `govuk-world-orgs` | `www.gov.uk` | Official British embassy, high-commission and consulate addresses, phones and hours in every country, for the Emergency card. | open | yes | no |
 | `safetravel-nz` | `www.safetravel.govt.nz` | Official New Zealand travel advice per country (safety level, local laws, health) and the responsible New Zealand embassy, for Travel tips and the Emergency card. | open | yes | no |
 | `state-dept-country-info` | `cadataapi.state.gov` | Official US country information (entry, exit and visa requirements, embassy and consulate contacts, health, local laws), for Visa, the Emergency card and Travel tips. | open | yes | no |
+| `wx-nhc` | `www.nhc.noaa.gov` | NOAA National Hurricane Center: tropical-cyclone advisories for the Caribbean and Mexico, for Weather, Travel tips and the Emergency card. | open | yes | no |
 | `auswaertiges-amt-opendata` | `www.auswaertiges-amt.de` | German embassy and consulate contacts, health leaflets and travel warnings per country, for the Emergency card, Visa and Travel tips. | API terms | no | no |
 | `healthsites-io` | `healthsites.io` | Hospitals and clinics worldwide with names, addresses and phones, for the Emergency card's hospitals. | share-alike | no | yes |
 | `mfat-embassies` | `www.mfat.govt.nz` | Official New Zealand embassy and consulate contacts per country, for the Emergency card. | open | no | no |
@@ -1422,6 +1608,7 @@ is added only with the owner's approval (see CONTRIBUTING.md).
 | `blog-savvybackpacker` | `thesavvybackpacker.com` | Europe-on-a-budget guides (rail, hostels, city costs) from The Savvy Backpacker, for Travel tips, Local transportation and Hotels (headline, link and a short excerpt only). | facts only | yes | no |
 | `blog-southamericabackpacker` | `southamericabackpacker.com` | South America backpacking costs, buses and border crossings from South America Backpacker, for Travel tips, Local transportation and Places to see (headline, link and a short excerpt only). | facts only | yes | no |
 | `blog-tokyocheapo` | `tokyocheapo.com` | Free and cheap Tokyo (events, transit passes, SIM cards) from Tokyo Cheapo, for Activities, Events, Local transportation, SIM cards and Travel tips (headline, link and a short excerpt only). | facts only | yes | no |
+| `blog-twoweekscr` | `www.twoweeksincostarica.com` | Two Weeks in Costa Rica: detailed independent Costa Rica guides, for Travel tips, Places to see and Local transportation. | facts only | yes | no |
 | `blog-vietnamcoracle` | `www.vietnamcoracle.com` | Independent budget guide to Vietnam (motorbike routes, guesthouses) from Vietnam Coracle, for Places to see, Hotels and Local transportation (headline, link and a short excerpt only). | facts only | yes | no |
 | `city-anchorage` | `www.anchorage.net` | Anchorage events, things to do and Alaska gateway transport advice, for Events, Activities and Local transportation. | facts only | yes | no |
 | `city-geneve` | `www.geneve.com` | Genève Tourisme: official visitor guide, for Activities, Events and Local transportation. | facts only | yes | no |
@@ -1448,6 +1635,7 @@ is added only with the owner's approval (see CONTRIBUTING.md).
 | `ovapi-gtfs-nl` | `gtfs.ovapi.nl` | All Dutch train, bus, tram and metro timetables for Local transportation. | open | yes | no |
 | `seat61` | `www.seat61.com` | How to travel by train and ferry between cities and countries, for Local transportation. | facts only | yes | no |
 | `tb-azores` | `www.visitazores.com` | Visit Azores: official visitor guide, for Activities, Places to see and Local transportation. | facts only | yes | no |
+| `tb-bahamas` | `www.bahamas.com` | The Islands of The Bahamas (Ministry of Tourism): official visitor guide, for Places to see, Events and Local transportation. | facts only | yes | no |
 | `tb-brittany` | `www.brittanytourism.com` | Brittany Tourism: official visitor guide, for Activities, Places to see and Local transportation. | facts only | yes | no |
 | `tb-connecticut` | `ctvisit.com` | Official Connecticut events, things to do and getting-around advice, for Events, Activities and Local transportation. | facts only | yes | no |
 | `tb-faroe` | `visitfaroeislands.com` | Visit Faroe Islands: official visitor guide, for Activities, Local transportation and Travel tips. | facts only | yes | no |
@@ -1459,26 +1647,37 @@ is added only with the owner's approval (see CONTRIBUTING.md).
 | `tb-nunavut` | `www.travelnunavut.ca` | Official Nunavut things to do, regions and fly-in travel advice, for Activities, Places to see and Local transportation. | facts only | yes | no |
 | `tb-pei` | `www.tourismpei.com` | Official Prince Edward Island attractions, events and how to get there, for Activities, Events and Local transportation. | facts only | yes | no |
 | `tb-tennessee` | `www.tnvacation.com` | Official Tennessee events, things to do and transportation advice, for Events, Activities and Local transportation. | facts only | yes | no |
+| `tb-ushuaia` | `turismoushuaia.com` | Turismo Ushuaia (InFueTur): End-of-the-world excursions, for Places to see, Activities and Local transportation. | facts only | yes | no |
 | `tb-visitcornwall` | `www.visitcornwall.com` | Visit Cornwall: official Cornwall attractions, beaches, events, for Activities, Places to see, Events and Local transportation. | facts only | yes | no |
 | `tb-visitguernsey` | `www.visitguernsey.com` | Visit Guernsey: official visitor guide, for Activities, Events and Local transportation. | facts only | yes | no |
 | `tb-visitluxembourg` | `www.visitluxembourg.com` | Visit Luxembourg: official visitor guide, for Activities, Places to see and Local transportation. | facts only | yes | no |
 | `tb-yukon` | `www.travelyukon.com` | Official Yukon events, things to do and getting around, for Events, Activities and Local transportation. | facts only | yes | no |
+| `tr-ado` | `www.ado.com.mx` | ADO / Mobility ADO (intercity buses): Mexico's main bus terminals and routes, for Local transportation. | facts only | yes | no |
 | `tr-bkk` | `bkk.hu` | BKK Budapest transport: tickets, airport bus 100E (GTFS needs key), for Local transportation. | facts only | yes | no |
+| `tr-buquebus` | `www.buquebus.com` | Buquebus (Buenos Aires–Colonia/Montevideo ferries): River Plate ferries, for Local transportation. | facts only | yes | no |
 | `tr-calmac` | `www.calmac.co.uk` | CalMac Ferries: Scottish islands ferries, timetables, disruption, for Local transportation. | facts only | yes | no |
 | `tr-cd-cz` | `www.cd.cz` | České dráhy: fares, routes, stations and travel information, for Local transportation. | facts only | yes | no |
 | `tr-cfr-calatori` | `www.cfrcalatori.ro` | CFR Călători (Romanian rail): fares, routes, stations and travel information, for Local transportation. | facts only | yes | no |
 | `tr-cp` | `www.cp.pt` | CP – Comboios de Portugal: fares, routes, stations and travel information, for Local transportation. | facts only | yes | no |
 | `tr-cta` | `www.transitchicago.com` | Chicago 'L' and bus fares and how to ride, for Local transportation (timetables come from GTFS). | facts only | yes | no |
+| `tr-efe` | `www.efe.cl` | EFE Trenes de Chile: Santiago–Chillán, Biotren and other passenger services, for Local transportation. | facts only | yes | no |
 | `tr-elron` | `elron.ee` | Elron (Estonian rail): fares, routes, stations and travel information, for Local transportation. | facts only | yes | no |
+| `tr-emova` | `emova.com.ar` | Emova (Buenos Aires Subte operator): subway service news and closures, for Local transportation. | facts only | yes | no |
 | `tr-heathrow` | `www.heathrow.com` | Heathrow Airport: travel information: airport transfers, terminals and travel information, for Flights and Local transportation. | facts only | yes | no |
 | `tr-irishrail` | `www.irishrail.ie` | Iarnród Éireann: rail fares, stations, accessibility, for Local transportation. | facts only | yes | no |
 | `tr-jadrolinija` | `www.jadrolinija.hr` | Jadrolinija ferries: Croatian island ferries, timetables, for Local transportation. | facts only | yes | no |
 | `tr-la-metro` | `www.metro.net` | Los Angeles Metro fares, TAP cards and airport (LAX) connections, for Local transportation. | facts only | yes | no |
 | `tr-massport` | `www.massport.com` | Getting to and from Boston Logan (Silver Line, water taxi), for Local transportation and Flights. | facts only | yes | no |
+| `tr-metro-cl` | `www.metro.cl` | Metro de Santiago: network, fares, hours, for Local transportation. | facts only | yes | no |
+| `tr-metro-medellin` | `www.metrodemedellin.gov.co` | Metro de Medellín: lines, fares, hours, Cívica card, for Local transportation. | facts only | yes | no |
+| `tr-metro-sp` | `www.metro.sp.gov.br` | Metrô de São Paulo: service news, closures, for Local transportation. | facts only | yes | no |
+| `tr-metrorio` | `www.metrorio.com.br` | MetrôRio: Rio metro lines, fares, hours, for Local transportation. | facts only | yes | no |
 | `tr-munich-airport` | `www.munich-airport.com` | Munich Airport: travel information: airport transfers, terminals and travel information, for Flights and Local transportation. | facts only | yes | no |
 | `tr-mwaa` | `www.flyreagan.com` | Washington, DC airport transfers, parking and transport at Reagan National, for Local transportation and Flights. | facts only | yes | no |
+| `tr-navimag` | `www.navimag.com` | Navimag Ferries: Patagonian ferry routes (Puerto Montt–Natales), for Local transportation. | facts only | yes | no |
 | `tr-oebb` | `www.oebb.at` | ÖBB: tickets, Nightjet, luggage, for Local transportation. | facts only | yes | no |
 | `tr-panynj` | `www.panynj.gov` | Getting to and from JFK, Newark and LaGuardia (AirTrain, buses, taxis) and the PATH train, for Local transportation and Flights. | facts only | yes | no |
+| `tr-perurail` | `www.perurail.com` | PeruRail: fares, routes, stations and travel information, for Local transportation. | facts only | yes | no |
 | `tr-renfe` | `www.renfe.com` | Renfe: fares, passes, stations, for Local transportation. | facts only | yes | no |
 | `tr-septa` | `www.septa.org` | Philadelphia transit fares, the airport line and visitor information, for Local transportation. | facts only | yes | no |
 | `tr-sfo` | `www.flysfo.com` | SFO ground transportation (BART, shuttles, taxis), for Local transportation and Flights. | facts only | yes | no |
@@ -1487,8 +1686,12 @@ is added only with the owner's approval (see CONTRIBUTING.md).
 | `tr-toronto-pearson` | `www.torontopearson.com` | Getting to and from Toronto Pearson (UP Express, taxis) and terminal information, for Local transportation and Flights. | facts only | yes | no |
 | `tr-translink` | `www.translink.ca` | Vancouver transit fares, the rider guide and the Canada Line to YVR, for Local transportation. | facts only | yes | no |
 | `tr-translink-ni` | `www.translink.co.uk` | Translink (Northern Ireland): NI rail/bus fares, routes, airport links, for Local transportation. | facts only | yes | no |
+| `tr-transmilenio` | `www.transmilenio.gov.co` | TransMilenio (Bogotá BRT): fares, routes, stations and travel information, for Local transportation. | facts only | yes | no |
 | `tr-transportforireland` | `www.transportforireland.ie` | Transport for Ireland (NTA): Leap card, fares, national GTFS page, for Local transportation. | facts only | yes | no |
+| `tr-tren-maya` | `www.trenmaya.gob.mx` | Tren Maya: Yucatán peninsula rail stations, routes and rules, for Local transportation. | facts only | yes | no |
+| `tr-trenes-ar` | `www.argentina.gob.ar` | Trenes Argentinos (argentina.gob.ar): long-distance and suburban rail, timetables, for Local transportation. | open | yes | no |
 | `tr-ttc` | `www.ttc.ca` | Toronto subway, streetcar and bus fares and how to ride, for Local transportation (timetables come from GTFS). | facts only | yes | no |
+| `tr-ultramar` | `www.ultramarferry.com` | Ultramar ferries (Cancún–Isla Mujeres–Cozumel): island ferry routes and schedules, for Local transportation. | facts only | yes | no |
 | `tr-viarail` | `www.viarail.ca` | VIA Rail routes, stations, baggage and on-board information, for Local transportation (timetables come from GTFS). | facts only | yes | no |
 | `tr-vy` | `www.vy.no` | Vy (Norwegian rail): fares, routes, stations and travel information, for Local transportation. | facts only | yes | no |
 | `tr-wmata` | `www.wmata.com` | Washington, DC Metro fares and how to ride, for Local transportation (timetables come from GTFS). | facts only | yes | no |
@@ -1516,7 +1719,10 @@ is added only with the owner's approval (see CONTRIBUTING.md).
 | `od-data-gv-at` | `www.data.gv.at` | data.gv.at: government open-data datasets (tourism, events, transport), for Events, Places to see and Local transportation. | open | no | no |
 | `od-data-overheid-nl` | `data.overheid.nl` | data.overheid.nl: government open-data datasets (tourism, events, transport), for Events, Local transportation and Places to see. | open | no | no |
 | `od-data-public-lu` | `data.public.lu` | data.public.lu: government open-data datasets (tourism, events, transport), for Events, Places to see and Local transportation. | open | no | no |
+| `od-data-rio` | `www.data.rio` | Data.Rio (Rio city open data, ArcGIS Hub): city POI/tourism/transport layers, for Places to see, Events and Local transportation. | open | no | no |
 | `od-dataportal-se` | `www.dataportal.se` | Sveriges dataportal: government open-data datasets (tourism, events, transport), for Events, Places to see and Local transportation. | open | no | no |
+| `od-datos-bogota` | `datosabiertos.bogota.gov.co` | Datos Abiertos Bogotá: government open-data datasets (tourism, events, transport), for Local transportation and Places to see. | open | no | no |
+| `od-datos-cdmx` | `datos.cdmx.gob.mx` | Datos Abiertos CDMX (CKAN; GTFS, Ecobici, POIs): government open-data datasets (tourism, events, transport), for Local transportation and Places to see. | open | no | no |
 | `od-datos-gob-es` | `datos.gob.es` | datos.gob.es: government open-data datasets (tourism, events, transport), for Events, Places to see and Local transportation. | open | no | no |
 | `od-opendata-swiss` | `opendata.swiss` | opendata.swiss: government open-data datasets (tourism, events, transport), for Events, Places to see and Local transportation. | open | no | no |
 | `od-podatki-gov-si` | `podatki.gov.si` | OPSI (Slovenia open data): government open-data datasets (tourism, events, transport), for Events, Places to see and Local transportation. | open | no | no |
@@ -1531,6 +1737,7 @@ is added only with the owner's approval (see CONTRIBUTING.md).
 | `tr-eurostar` | `www.eurostar.com` | Eurostar: fares, routes, stations and travel information, for Local transportation. | facts only | no | no |
 | `tr-intercity-pl` | `www.intercity.pl` | PKP Intercity: fares, routes, stations and travel information, for Local transportation. | facts only | no | no |
 | `tr-irail` | `api.irail.be` | iRail API (Belgian rail): SNCB/NMBS stations, departures, for Local transportation. | facts only | no | no |
+| `tr-metro-cdmx` | `metro.cdmx.gob.mx` | Metro CDMX (STC): fares, routes, stations and travel information, for Local transportation. | facts only | no | no |
 | `trafiklab-gtfs-sverige` | `opendata.samtrafiken.se` | All Swedish public transport timetables for Local transportation. | open | no | yes |
 | `transport-data-gouv` | `transport.data.gouv.fr` | France's national register of every GTFS and NeTEx feed with links, licences and coverage, for city transport and rail in Local transportation. | open | no | no |
 
@@ -1542,6 +1749,7 @@ is added only with the owner's approval (see CONTRIBUTING.md).
 | `blog-frequentmiler` | `frequentmiler.com` | Points, miles and card-fee tactics from Frequent Miler, for Flights, Hotels and Forex (headline, link and a short excerpt only). | facts only | yes | no |
 | `blog-instinctvoyageur` | `feeds.feedburner.com` | French tips on travel money, insurance, SIM cards and budget travel from Instinct Voyageur, for Travel tips, Forex and SIM cards (headline, link and a short excerpt only). | facts only | yes | no |
 | `blog-thriftynomads` | `thriftynomads.com` | Travel-hacking and money-saving guides from Thrifty Nomads, for Travel tips, Flights and Forex (headline, link and a short excerpt only). | facts only | yes | no |
+| `blog-wander-argentina` | `wander-argentina.org` | Wander Argentina: travel articles and guides, for Travel tips, Places to see and Forex. | facts only | yes | no |
 | `boc-valet` | `www.bankofcanada.ca` | Daily Bank of Canada exchange rates for the Forex section. | open | yes | no |
 | `ecb-eurofxref` | `www.ecb.europa.eu` | Daily European Central Bank euro exchange rates for the Forex section. | open | yes | no |
 | `er-api-open` | `open.er-api.com` | Daily exchange rates for about 160 currencies for the Forex section. | API terms | yes | no |
@@ -1550,6 +1758,9 @@ is added only with the owner's approval (see CONTRIBUTING.md).
 | `official-cfpb-money` | `www.consumerfinance.gov` | Official US guidance on international money-transfer and exchange fees and card fees abroad, for Forex and Travel tips. | open | yes | no |
 | `official-vzbv-reise` | `www.verbraucherzentrale.de` | German consumer-centre advice on passenger rights, paying abroad and cheap-flight pitfalls, for Travel tips, Forex and Flights. | facts only | yes | no |
 | `bigmac-index` | `raw.githubusercontent.com` | Price level and currency under- or over-valuation per country, a how-expensive-will-it-feel signal for Forex and Travel tips. | open | no | no |
+| `blog-riotimes` | `www.riotimesonline.com` | The Rio Times: English-language Brazil/LatAm news, for Travel tips, Events and Forex. | facts only | no | no |
+| `fx-banxico` | `www.banxico.org.mx` | Banco de México SIE API (FIX MXN/USD): Official Mexican peso FIX exchange rate, for Forex. | API terms | no | yes |
+| `fx-bcra` | `api.bcra.gob.ar` | BCRA Estadísticas Cambiarias API: Official Argentine peso exchange rates, for Forex. | open | no | no |
 | `imf-fx` | `www.imf.org` | IMF monthly representative exchange rates for the Forex section; terms restricted, so off. | restricted | no | no |
 
 ## Packing list
@@ -1574,6 +1785,7 @@ is added only with the owner's approval (see CONTRIBUTING.md).
 | `cbsa-travellers` | `www.cbsa-asfc.gc.ca` | Canada's personal exemptions, restricted goods and the CAD 10,000 cash reporting rule, for Travel tips and Packing. | facts only | yes | no |
 | `cdc-travel` | `wwwnc.cdc.gov` | Official health advice per destination (vaccines, medicines, health risks) for Travel tips and the Packing list. | open | yes | no |
 | `cfia-travellers` | `inspection.canada.ca` | Which food, plants and animals travellers may bring into Canada, for Travel tips and Packing. | facts only | yes | no |
+| `customs-sag-cl` | `www.sag.gob.cl` | SAG Chile (agricultural/livestock service: traveller declaration): Chile's strict food, plant and animal import rules for travellers (SAG declaration), for Travel tips, the Packing list and Visa. | share-alike | yes | no |
 | `enwiki-dump` | `dumps.wikimedia.org` | Facts from English Wikipedia: places, airport destination tables, emergency numbers and plug and voltage types, for Places to see, Flights, the Emergency card and the Packing list. | share-alike | yes | no |
 | `eu-food-pets-travel` | `food.ec.europa.eu` | The EU pet passport, rabies and microchip rules and the ban on meat and dairy in luggage from outside the EU, for Travel tips and Packing. | open | yes | no |
 | `eu-youreurope-travel` | `europa.eu` | EU duty-free allowances for alcohol, tobacco and cash, and the rules for food, pets and luggage when entering the EU, for Travel tips and Packing. | open | yes | no |
@@ -1589,6 +1801,7 @@ is added only with the owner's approval (see CONTRIBUTING.md).
 | `japan-maff-aqs` | `www.maff.go.jp` | Rules and bans for bringing pets, meat and sausages into Japan, for Travel tips and Packing. | open | yes | no |
 | `korea-customs-travellers` | `www.customs.go.kr` | Korea's USD 800 duty-free allowance, alcohol and tobacco limits and prohibited items, for Travel tips and Packing. | facts only | yes | no |
 | `nz-customs-travellers` | `www.customs.govt.nz` | New Zealand's allowances, the NZD 10,000 cash rule and the biosecurity food declaration, for Travel tips and Packing. | facts only | yes | no |
+| `ref-paho` | `www.paho.org` | Pan American Health Organization: yellow fever, dengue and measles alerts for travellers, for Travel tips, the Packing list and Visa. | facts only | yes | no |
 | `revenue-ie-travellers` | `www.revenue.ie` | Ireland's duty-free allowances and customs rules for travellers arriving from outside and within the EU, for Travel tips and Packing. | open | yes | no |
 | `sg-customs-travellers` | `www.customs.gov.sg` | Singapore's GST relief, duty-free concession, no duty-free cigarettes and prohibited goods (chewing gum, e-cigarettes), for Travel tips and Packing. | facts only | yes | no |
 | `tb-lapland` | `lapland.fi` | Visit Lapland (House of Lapland): official visitor guide, for Activities, Weather and the Packing list. | facts only | yes | no |
@@ -1631,15 +1844,20 @@ is added only with the owner's approval (see CONTRIBUTING.md).
 | `nps-site` | `www.nps.gov` | Official things to do, tours, trails and ranger events for more than 400 US national parks, for Places to see, Activities, the itinerary and Events. | open | yes | no |
 | `nyctourism` | `www.nyctourism.com` | Official NYC event listings, restaurant guides and itineraries, for Events, Activities, the itinerary and Places to see. | facts only | yes | no |
 | `peru-travel` | `www.peru.travel` | Official Peruvian destinations and itineraries, for Places to see and the itinerary. | facts only | yes | no |
+| `ref-machupicchu` | `www.machupicchu.gob.pe` | Machu Picchu official (Ministerio de Cultura, Cusco): circuits, rules, capacity, for Places to see, Travel tips and the itinerary. | facts only | yes | no |
 | `ref-priceoftravel` | `www.priceoftravel.com` | Per-city backpacker daily cost index (hostel, transit, meals) from Price of Travel, for Travel tips, Hotels and itinerary budgets (headline, link and a short excerpt only). | facts only | yes | no |
 | `spain-info` | `www.spain.info` | Spain's official routes, gastronomy and event calendar, for the itinerary, Events and Activities. | facts only | yes | no |
 | `stockholm-open-api` | `www.visitstockholm.com` | Official Stockholm events, curated guides and activities for Events, Activities and the itinerary. | open | yes | no |
+| `tb-bahia` | `bahia.com.br` | Bahia Turismo (state): official visitor guide, for Places to see, the itinerary and Events. | facts only | yes | no |
 | `tb-bc` | `www.supernaturalbc.com` | Official British Columbia regions, experiences, road trips and practical tips, for Activities, Places to see and the itinerary. | facts only | yes | no |
+| `tb-caribe-mexicano` | `caribemexicano.travel` | Caribe Mexicano (Quintana Roo tourism board): official Cancún/Riviera Maya/Tulum/Cozumel destinations and experiences, for Places to see, Activities and the itinerary. | facts only | yes | no |
+| `tb-guatemala` | `visitguatemala.com` | Visit Guatemala (INGUAT): Antigua, Tikal, Atitlán, for Places to see and the itinerary. | facts only | yes | no |
 | `tb-texas` | `www.traveltexas.com` | Official Texas events, things to do and published itineraries, for Events, Activities and the itinerary. | facts only | yes | no |
 | `tb-utah` | `www.visitutah.com` | Official Utah trip planning, the Mighty 5 national parks and recommended itineraries, for Activities, Places to see and the itinerary. | facts only | yes | no |
 | `tb-virginia` | `www.virginia.org` | Official Virginia events, things to do and itineraries, for Events, Activities and the itinerary. | facts only | yes | no |
 | `tb-visittuscany` | `www.visittuscany.com` | Visit Tuscany: official visitor guide, for Activities, Places to see, Events and the itinerary. | facts only | yes | no |
 | `tb-washington` | `stateofwatourism.com` | Official Washington State experiences, regions and road trips, for Activities, Places to see and the itinerary. | facts only | yes | no |
+| `tb-ytuqueplanes` | `www.ytuqueplanes.com` | ¿Y tú qué planes? (PromPerú domestic tourism): regional routes across all of Peru, for Places to see, Activities and the itinerary. | facts only | yes | no |
 | `trail-camino-santiago-gal` | `www.caminodesantiago.gal` | Camino de Santiago (Xunta de Galicia official): official Camino routes, stages, pilgrim credential and hostel rules, for Activities, the itinerary, Travel tips and Places to see. | open | yes | no |
 | `trail-eurovelo` | `en.eurovelo.com` | EuroVelo (European Cyclists' Federation): 17 long-distance cycle routes, stages and country sections, for Activities, the itinerary and Local transportation. | open | yes | no |
 | `trail-mongr` | `www.mongr.fr` | MonGR (official GR route pages, FFRandonnée): GR route facts (length, stages, start and finish towns). Facts only, never GPX or topo text, for Activities and the itinerary. | facts only | yes | no |
@@ -1691,6 +1909,7 @@ source's notes say where to sign up and what it costs.
 | `duffel` | `api.duffel.com` | flights | Live fares are a non-goal; they stay on SerpAPI in the app (spec §2). |
 | `edinburgh-festivals-api` | `api.edinburghfestivalcity.com` | events | needs an API key: owner must register a key at https://api.edinburghfestivalcity.com/ (free); adapter pending: listings API reader |
 | `failte-ireland-od` | `failteireland.developer.azure-api.net` | places, activities | needs an API key: owner must register a key at https://failteireland.developer.azure-api.net/ (free tier, rate-limited; Open Data Plus subscription key); robots.txt of data.failteireland.ie timed out: re-check; adapter pending |
+| `fx-banxico` | `www.banxico.org.mx` | forex | needs an API key: owner must request a free token at https://www.banxico.org.mx/SieAPIRest/service/v1/token; adapter pending: SIE JSON series reader -> fx_rate |
 | `germany-kg` | `open-data-germany.org` | events, places, activities | needs an API key: owner must register a key at https://open-data-germany.org/ (free key from GNTB); adapter pending: KG reader with a per-item licence filter |
 | `greenseal-api` | `greenseal.org` | hotels | needs an API key: owner must request API access from Green Seal ('To gain access to the API, Users will need to fill' the request form at https://greenseal.org/); adapter pending |
 | `gyg-partner` | `partner.getyourguide.com` | activities | Needs affiliate approval (not granted). |

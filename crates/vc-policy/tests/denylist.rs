@@ -360,6 +360,10 @@ fn batch2_entries_are_denied() {
         "https://www.sydneyairport.com.au/",
         "https://www.viennaairport.com/",
         "https://www.southwest.com/",
+        // Corpus expansion: Latin America (2026-11-18): terms bans
+        "https://www.aruba.com/",
+        "https://www.chilango.com/",
+        "https://serviciomigraciones.cl/",
     ] {
         assert!(denied(u).is_some(), "{u} must be denied");
     }
@@ -454,6 +458,11 @@ fn approved_hosts_stay_allowed() {
         "https://aa.usno.navy.mil/api/rstt/oneday",
         "https://www.flughafen-zuerich.ch/en/passengers",
         "https://cadw.gov.wales/sitemap.xml",
+        // Corpus expansion: Latin America (2026-11-18): sources next to new entries
+        "https://www.metro.cl/sitemap.xml",
+        "https://www.curacao.com/en/",
+        "https://www.gob.mx/sectur",
+        "https://www.conaf.cl/sitemap_index.xml",
     ] {
         assert_eq!(denied(u), None, "{u} must stay allowed");
     }

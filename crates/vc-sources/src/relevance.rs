@@ -116,6 +116,10 @@ pub const TRAVEL_PUBLICATIONS: &[(&str, &str)] = &[
     // Corpus expansion: thematic (2026-11-18): travel magazines and blogs whose URLs lack "travel".
     ("ciaobambino.com", ""),
     ("journeywoman.com", ""),
+    // Corpus expansion: Latin America (2026-11-18): travel magazines and blogs whose URLs lack "travel".
+    ("twoweeksincostarica.com", ""),
+    ("wander-argentina.org", ""),
+    ("caribjournal.com", ""),
 ];
 
 /// Whether `url` is travel-focused: `travel` in its host, path or query, or a

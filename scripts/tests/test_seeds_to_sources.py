@@ -166,7 +166,8 @@ def test_blogs_and_news_are_facts_only_editorial(generated):
                 assert spec["method"] == "rss" and spec["feeds"], sid
 
 
-BLOGS_WITHOUT_A_FEED = {"blog-thriftynomads", "blog-expertvagabond", "blog-bootsnall", "blog-outsideonline"}
+BLOGS_WITHOUT_A_FEED = {"blog-thriftynomads", "blog-expertvagabond", "blog-bootsnall", "blog-outsideonline",
+                        "blog-twoweekscr"}  # robots.txt disallows */feed/ (2026-11-18)
 
 
 def test_wikipedia_and_wikidata_are_reference_not_official(generated):
@@ -877,7 +878,7 @@ def test_batch2_enabled_sources_are_polite_and_scoped(generated):
             or sid in ADAPTED_2026_11_18 or sid in COUNTRY_INFO_AND_FOOD, sid
         assert spec["daily_budget"] <= 500 and spec["max_depth"] <= 2 and spec["min_delay_s"] >= 5, sid
         assert spec["licence"]["class"] in ("open", "facts_only") or (
-            sid in ("openholidays", "enwiki-visa-requirements")
+            sid in ("openholidays", "enwiki-visa-requirements") + tuple(CORPUS_SHARE_ALIKE)
             and spec["licence"]["class"] == "share_alike"), sid
         assert spec["cadence"] in ("daily", "h12", "weekly", "monthly", "quarterly", "yearly"), sid
         # Every include regex is pinned to the source's own host.
@@ -1083,7 +1084,7 @@ def _corpus_batch_check(generated, ids, off, delays, ai_reserved, personal):
         assert spec["min_delay_s"] >= delays.get(sid, 5), sid
         assert spec["cadence"] in ("daily", "weekly", "monthly", "quarterly", "yearly"), sid
         if spec["licence"]["class"] != "open":
-            assert spec["licence"]["class"] == "facts_only", sid
+            assert spec["licence"]["class"] == "facts_only" or sid in CORPUS_SHARE_ALIKE, sid
         if spec["licence"]["class"] == "facts_only" and ("terms not found" in notes or "Terms unconfirmed" in notes):
             assert "owner accepted for non-commercial use 2026-11-18" in notes, sid
         if sid in personal:
@@ -1150,7 +1151,7 @@ THEMATIC_PERSONAL_TERMS = {
 
 def test_corpus_thematic_2026_11_18(generated):
     seeds = yaml.safe_load((ROOT / "docs" / "research" / "seeds.yaml").read_text())["seeds"]
-    ids = _batch_ids(seeds, "trail-camino-santiago-gal", "CORPUS_AFTER_THEMATIC")
+    ids = _batch_ids(seeds, "trail-camino-santiago-gal", "tb-caribe-mexicano")
     assert len(ids) == 84
     _corpus_batch_check(generated, ids, THEMATIC_OFF, THEMATIC_DELAYS, THEMATIC_AI_RESERVED, THEMATIC_PERSONAL_TERMS)
     assert len([s for s in ids if s not in THEMATIC_OFF]) == 64
@@ -1176,4 +1177,59 @@ THEMATIC_STAY_ALLOWED = [
     "https://www.nationalparks.nsw.gov.au/things-to-do", "https://aa.usno.navy.mil/api/rstt/oneday",
     "https://www.flughafen-zuerich.ch/en/passengers", "https://cadw.gov.wales/sitemap.xml",
 ]
+
+
+# Corpus sources whose licence is share_alike (never merged with other licences).
+CORPUS_SHARE_ALIKE = {"customs-sag-cl", "blog-caravanistan"}
+
+
+# --- Corpus expansion: Latin America and the Caribbean (research vetted 2026-11-18) -------
+LATAM_OFF = {
+    **{sid: "adapter pending" for sid in (
+        "od-datos-gov-co", "od-datos-gob-cl", "od-catalogo-uy", "od-data-rio", "fx-bcra")},
+    "fx-banxico": "needs an API key",
+    **{sid: "relevance" for sid in ("blog-bogotapost", "blog-ba-herald", "blog-riotimes")},
+    # robots.txt gave no response from the research workstation; terms unchecked.
+    **{sid: "re-test from the crawler VM" for sid in (
+        "city-turismo-cdmx", "ev-cartelera-cdmx", "tr-metro-cdmx", "od-datos-cdmx", "od-datatur-mx",
+        "od-datos-bogota", "park-sinac-cr", "visa-migracion-pa", "city-visit-rio", "tb-santacatarina",
+        "tb-parana", "wx-inmet", "tb-saintmartin", "tb-stkitts")},
+}
+LATAM_DELAYS = {"park-pn-ar": 10, "visa-migraciones-ar": 10, "tr-trenes-ar": 10, "tb-anguilla": 10,
+                "visa-pica-jm": 10, "tb-bonaire": 10}
+LATAM_AI_RESERVED = {"blog-wander-argentina", "tb-guadeloupe", "tb-mendoza", "tb-yucatan", "tr-metro-cl",
+                     "tr-navimag", "tr-transmilenio"}
+# OWNER-DECISION rows of the LatAm research, on by the owner's decision of 2026-11-18.
+LATAM_PERSONAL_TERMS = {
+    "official-sectur-mx", "visa-inm-mx", "park-conanp-mx", "ev-cervantino", "city-medellin-travel",
+    "visa-migracion-colombia", "tr-transmilenio", "tr-perurail", "tb-visitjamaica", "tb-bonaire", "tb-visittci",
+    "tb-visitloscabos",
+}
+
+
+def test_corpus_latam_2026_11_18(generated):
+    seeds = yaml.safe_load((ROOT / "docs" / "research" / "seeds.yaml").read_text())["seeds"]
+    ids = _batch_ids(seeds, "tb-caribe-mexicano", "CORPUS_AFTER_LATAM")
+    assert len(ids) == 108
+    _corpus_batch_check(generated, ids, LATAM_OFF, LATAM_DELAYS, LATAM_AI_RESERVED, LATAM_PERSONAL_TERMS)
+    assert len([s for s in ids if s not in LATAM_OFF]) == 85
+    # PeruRail's robots.txt disallows /feed/: HTML pages only.
+    pr = generated["tr-perurail"]
+    assert pr["method"] == "html" and not pr["feeds"]
+    # INAH stays on under the same rule (gob.mx personal-use terms).
+    inah = generated["official-inah"]
+    assert inah["enabled"] is True and "solamente para su uso personal" in " ".join(inah["notes"].split())
+    sag = generated["customs-sag-cl"]
+    assert sag["licence"]["class"] == "share_alike" and sag["enabled"] is True
+    for sid in ("park-galapagos", "city-turismo-ba", "tb-turismo-br"):
+        assert sid not in generated, sid
+    for url in LATAM_DENIED:
+        assert s2s.denied(url, DENYLIST) is not None, url
+    for url in LATAM_STAY_ALLOWED:
+        assert s2s.denied(url, DENYLIST) is None, url
+
+
+LATAM_DENIED = ["https://www.aruba.com/", "https://www.chilango.com/", "https://serviciomigraciones.cl/"]
+LATAM_STAY_ALLOWED = ["https://www.metro.cl/sitemap.xml", "https://www.curacao.com/en/", "https://www.gob.mx/sectur",
+                      "https://www.conaf.cl/sitemap_index.xml"]
 

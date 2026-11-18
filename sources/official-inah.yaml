@@ -37,7 +37,10 @@ key_secret: null
 max_retention_days: null
 display_requirements: null
 notes: 'robots.txt (research 2026-11-18): allowed. No terms page found. Terms unconfirmed; owner accepted
-  for non-commercial use 2026-11-18.'
+  for non-commercial use 2026-11-18. LatAm re-vet 2026-11-18: inah.gob.mx links the gob.mx terms, which
+  allow the materials ''solamente para su uso personal y no para un uso comercial''. Terms restrict to
+  personal/non-commercial use; owner accepted for non-commercial use 2026-11-18 (gob.mx personal-use clause);
+  stays on, facts only.'
 relevance:
   sections:
   - places
