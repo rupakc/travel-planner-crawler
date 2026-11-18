@@ -30,7 +30,7 @@ cadence: weekly
 min_delay_s: 5
 daily_budget: 100
 politeness_key: null
-enabled: true
+enabled: false
 needs_key: false
 key_secret: null
 max_retention_days: null
@@ -38,7 +38,9 @@ display_requirements: null
 notes: 'Research 2026-11-18 (corpus LatAm): robots.txt: 200; terms: personal, non-commercial use; copying
   and redistribution restricted (terms found via search). Terms restrict to personal/non-commercial use;
   owner accepted for non-commercial use 2026-11-18 (personal, non-commercial use; copying and redistribution
-  restricted (terms found via search)). Facts only.'
+  restricted (terms found via search)). Facts only. | Disabled: terms forbid automated access: visittci.com
+  terms say no ''robot, spider, or other automatic device ... to access the Website'' (hidden gems research
+  2026-11-18); denylisted'
 relevance:
   sections:
   - places

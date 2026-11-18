@@ -13883,3 +13883,1060 @@ seeds:
     allowed: true
     notes: environment.data.gov.uk/robots.txt (checked 2026-11-18) disallows /doc/, /data/, /water-quality; /bwq/profiles/
       is allowed. Content OGL v3.0.
+  # --- Hidden gems, small islands and remote places (research 2026-11-18), part 1 ---
+  - id: tb-kiribati
+    category: places
+    name: Kiribati National Tourism Office
+    url: https://kiribatitourism.gov.ki/sitemap.xml
+    method: sitemap
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (hidden gems, small islands and remote places; Pacific/Kiribati): robots 200 (* group, 8
+      disallows, / allowed). Terms: terms not found. Terms unconfirmed; owner accepted for non-commercial use 2026-11-18;
+      facts only.'
+  - id: tb-fsm
+    category: places
+    name: FSM Visitors Board
+    url: https://visit-micronesia.fm/feed/
+    method: rss
+    license: Tourism board copyright; facts only
+    cadence: daily
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (hidden gems, small islands and remote places; Pacific/FSM): robots 200 (* group, 1 disallows,
+      / allowed); http only. Terms: "you will not reproduce or redistribute the [name]''s intellectual property" (copyright
+      only). Terms hold no bot, AI or personal-use clause (copyright only): facts only.'
+  - id: tb-yap
+    category: places
+    name: Yap Visitors Bureau
+    url: https://visityap.com/sitemap.xml
+    method: sitemap
+    license: Copyright; terms not found
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (hidden gems, small islands and remote places; Pacific/FSM-Yap): robots 200 (* group, 0
+      disallows, / allowed). Terms: terms not found. Terms unconfirmed; owner accepted for non-commercial use 2026-11-18;
+      facts only.'
+  - id: tb-pohnpei
+    category: places
+    name: Pohnpei Visitors Bureau
+    url: http://www.visit-pohnpei.fm/
+    method: html
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (hidden gems, small islands and remote places; Pacific/FSM-Pohnpei): robots 404 (allowed);
+      http only. Terms: terms not found; robots.txt 404 (allowed); no sitemap. Terms unconfirmed; owner accepted for non-commercial
+      use 2026-11-18; facts only.'
+  - id: tb-cook-islands
+    category: places
+    name: Cook Islands Tourism
+    url: https://cookislands.travel/sitemap.xml
+    method: sitemap
+    license: Copyright; terms not found
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (hidden gems, small islands and remote places; Pacific/Cook Is): robots 200 (* group, 35
+      disallows, / allowed). Terms: terms not found. Terms unconfirmed; owner accepted for non-commercial use 2026-11-18;
+      facts only.'
+  - id: gov-tokelau
+    category: tips
+    name: Government of Tokelau
+    url: http://www.tokelau.org.nz/sitemap.xml
+    method: sitemap
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (hidden gems, small islands and remote places; Pacific/Tokelau): robots 200 (* group, 4
+      disallows, / allowed). Terms: terms not found. Terms unconfirmed; owner accepted for non-commercial use 2026-11-18;
+      facts only.'
+  - id: tb-american-samoa
+    category: places
+    name: American Samoa Visitors Bureau
+    url: https://www.visitamericansamoa.org/sitemap.xml
+    method: sitemap
+    license: Copyright; terms not found
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (hidden gems, small islands and remote places; Pacific/American Samoa): robots 200 (* group,
+      27 disallows, / allowed). Terms: terms not found; seed host is www.visitamericansamoa.org. Terms unconfirmed; owner
+      accepted for non-commercial use 2026-11-18; facts only. Onboarding: americansamoa.travel redirects to www.visitamericansamoa.org;
+      its robots.txt read 2026-11-18 (200, AI crawlers grouped with * and not blocked).'
+  - id: tb-norfolk-island
+    category: places
+    name: Norfolk Island Tourism
+    url: https://www.norfolkisland.com.au/feed/
+    method: rss
+    license: Copyright; terms not found
+    cadence: daily
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (hidden gems, small islands and remote places; Pacific/Norfolk Is): robots 200 (* group,
+      1 disallows, / allowed). Terms: terms not found. Terms unconfirmed; owner accepted for non-commercial use 2026-11-18;
+      facts only.'
+  - id: tb-lord-howe
+    category: places
+    name: Lord Howe Island Tourism Association
+    url: https://lordhoweisland.info/
+    method: html
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (hidden gems, small islands and remote places; Pacific/Lord Howe): robots 404 (allowed).
+      Terms: terms not found; robots.txt 404 (allowed). Terms unconfirmed; owner accepted for non-commercial use 2026-11-18;
+      facts only.'
+  - id: tb-christmas-island
+    category: places
+    name: Christmas Island Tourism Association
+    url: https://www.christmas.net.au/sitemap.xml
+    method: sitemap
+    license: Copyright; terms not found
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (hidden gems, small islands and remote places; Indian Ocean/Christmas Is): robots 200 (*
+      group, 27 disallows, / allowed). Terms: terms not found. Terms unconfirmed; owner accepted for non-commercial use
+      2026-11-18; facts only.'
+  - id: tb-cocos-keeling
+    category: places
+    name: Cocos Keeling Islands Tourism
+    url: https://cocoskeelingislands.com.au/sitemap_index.xml
+    method: sitemap
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (hidden gems, small islands and remote places; Indian Ocean/Cocos): robots 200 (* group,
+      1 disallows, / allowed). Terms: terms not found. Terms unconfirmed; owner accepted for non-commercial use 2026-11-18;
+      facts only.'
+  - id: tb-pitcairn
+    category: tips
+    name: Pitcairn Islands Tourism
+    url: https://www.visitpitcairn.pn/sitemap.xml
+    method: sitemap
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (hidden gems, small islands and remote places; Pacific/Pitcairn): robots 200 (* group, 27
+      disallows, / allowed). Terms: page "visa-legal" holds entry rules, no site terms found. Terms unconfirmed; owner accepted
+      for non-commercial use 2026-11-18; facts only.'
+  - id: tb-mayotte
+    category: places
+    name: Mayotte Tourisme
+    url: https://www.mayotte-tourisme.com/sitemap.xml/
+    method: sitemap
+    license: Tourism board copyright; facts only
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (hidden gems, small islands and remote places; Indian Ocean/Mayotte): robots 200 (* group,
+      23 disallows, / allowed). Terms: "Tout usage public ou commercial d''une reproduction ... strictement interdit" (reproduction
+      only; we store facts+link). Terms hold no bot, AI or personal-use clause (copyright only): facts only.'
+  - id: tb-lakshadweep
+    category: places
+    name: SPORTS Lakshadweep Tourism
+    url: https://www.lakshadweeptourism.com/
+    method: html
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (hidden gems, small islands and remote places; Indian Ocean/India): robots 404 (allowed).
+      Terms: terms not found; robots 404. Terms unconfirmed; owner accepted for non-commercial use 2026-11-18; facts only.'
+  - id: tb-ogasawara
+    category: places
+    name: Ogasawara Village Tourism
+    url: https://www.ogasawaramura.com/sitemap_index.xml
+    method: sitemap
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (hidden gems, small islands and remote places; Asia/Japan-Ogasawara): robots 200 (* group,
+      1 disallows, / allowed). Terms: terms not found. Terms unconfirmed; owner accepted for non-commercial use 2026-11-18;
+      facts only.'
+  - id: tb-tokyo-islands
+    category: places
+    name: Tokyo Islands (Izu & Ogasawara)
+    url: https://www.tokyo-islands.com/wp-sitemap.xml
+    method: sitemap
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (hidden gems, small islands and remote places; Asia/Japan-Izu): robots 200 (* group, 1 disallows,
+      / allowed). Terms: terms not found. Terms unconfirmed; owner accepted for non-commercial use 2026-11-18; facts only.'
+  - id: tb-sado
+    category: places
+    name: Sado Tourism Association
+    url: https://www.visitsado.com/sitemap.xml
+    method: sitemap
+    license: Tourism board copyright; facts only
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (hidden gems, small islands and remote places; Asia/Japan-Sado): robots 404 (allowed). Terms:
+      "私的利用のための複製や引用など著作権法上認められた場合を除き無断で転用・引用することはできません" (copyright). Terms hold no bot, AI or personal-use clause (copyright
+      only): facts only.'
+  - id: tb-oki
+    category: places
+    name: Oki Islands Geopark
+    url: https://www.oki-geopark.jp/wp-sitemap.xml
+    method: sitemap
+    license: Tourism board copyright; facts only
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (hidden gems, small islands and remote places; Asia/Japan-Oki): robots 200 (* group, 1 disallows,
+      / allowed). Terms: copyright reservation only. Terms hold no bot, AI or personal-use clause (copyright only): facts
+      only.'
+  - id: tb-japan-beautiful-villages
+    category: places
+    name: Most Beautiful Villages in Japan
+    url: https://japan-utsukushii-mura.com/feed/
+    method: rss
+    license: Tourism board copyright; facts only
+    cadence: daily
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (hidden gems, small islands and remote places; Asia/Japan): robots 200 (* group, 1 disallows,
+      / allowed). Terms: site-policy: no bot/AI clause. Terms hold no bot, AI or personal-use clause (copyright only): facts
+      only. Onboarding: www.utsukushii-mura.jp redirects to japan-utsukushii-mura.com; its robots.txt read 2026-11-18 (200,
+      disallows /wp-admin/ only).'
+  - id: tb-tohoku
+    category: places
+    name: Tohoku Tourism Promotion
+    url: https://www.tohokukanko.jp/sitemap.xml
+    method: sitemap
+    license: Copyright; terms not found
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (hidden gems, small islands and remote places; Asia/Japan): robots 404 (allowed). Terms:
+      terms not found. Terms unconfirmed; owner accepted for non-commercial use 2026-11-18; facts only.'
+  - id: tb-kumano
+    category: walking_tours
+    name: Tanabe City Kumano Tourism Bureau
+    url: https://www.tb-kumano.jp/wp-sitemap.xml
+    method: sitemap
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (hidden gems, small islands and remote places; Asia/Japan): robots 200 (* group, 1 disallows,
+      / allowed). Terms: terms not found. Terms unconfirmed; owner accepted for non-commercial use 2026-11-18; facts only.'
+  - id: tb-shikoku
+    category: places
+    name: Shikoku Tourism (Shikoku 88)
+    url: https://shikoku-tourism.com/
+    method: html
+    license: Tourism board copyright; facts only
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (hidden gems, small islands and remote places; Asia/Japan): robots 404 (allowed). Terms:
+      site page: no bot/AI clause. Terms hold no bot, AI or personal-use clause (copyright only): facts only.'
+  - id: ev-setouchi-triennale
+    category: events
+    name: Setouchi Triennale
+    url: https://setouchi-artfest.jp/sitemap.xml
+    method: sitemap
+    license: Tourism board copyright; facts only
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (hidden gems, small islands and remote places; Asia/Japan): robots 200 (* group, 7 disallows,
+      / allowed). Terms: sitepolicy: no bot/AI clause. Terms hold no bot, AI or personal-use clause (copyright only): facts
+      only.'
+  - id: tb-jeju
+    category: places
+    name: Visit Jeju
+    url: https://www.visitjeju.net/
+    method: html
+    license: Copyright; terms not found
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (hidden gems, small islands and remote places; Asia/Korea): robots 200 (* group, 0 disallows,
+      / allowed). Terms: terms not found; empty title = JS app → render: auto. Terms unconfirmed; owner accepted for non-commercial
+      use 2026-11-18; facts only.'
+  - id: tb-penghu
+    category: places
+    name: Penghu National Scenic Area
+    url: https://www.penghu-nsa.gov.tw/sitemap.xml
+    method: sitemap
+    license: Copyright; terms not found
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (hidden gems, small islands and remote places; Asia/Taiwan): robots 200 (* group, 0 disallows,
+      / allowed). Terms: terms not found. Terms unconfirmed; owner accepted for non-commercial use 2026-11-18; facts only.'
+  - id: tb-matsu
+    category: places
+    name: Matsu National Scenic Area
+    url: https://www.matsu-nsa.gov.tw/sitemap.xml
+    method: sitemap
+    license: Copyright; terms not found
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (hidden gems, small islands and remote places; Asia/Taiwan): robots.txt serves HTML (treated
+      as missing). Terms: terms not found; robots.txt returns HTML. Terms unconfirmed; owner accepted for non-commercial
+      use 2026-11-18; facts only.'
+  - id: tb-taiwan-east-coast
+    category: places
+    name: East Coast NSA (Green Is, Orchid Is)
+    url: https://www.eastcoast-nsa.gov.tw/sitemap.xml
+    method: sitemap
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (hidden gems, small islands and remote places; Asia/Taiwan): robots 404 (allowed). Terms:
+      terms not found; robots 404. Terms unconfirmed; owner accepted for non-commercial use 2026-11-18; facts only.'
+  - id: tb-langkawi
+    category: places
+    name: Langkawi Development Authority Tourism
+    url: https://naturallylangkawi.my/feed/
+    method: rss
+    license: Copyright; terms not found
+    cadence: daily
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (hidden gems, small islands and remote places; Asia/Malaysia): robots 200 (* group, 1 disallows,
+      / allowed). Terms: terms not found. Terms unconfirmed; owner accepted for non-commercial use 2026-11-18; facts only.'
+  - id: cbt-kyrgyzstan
+    category: activities
+    name: CBT Kyrgyzstan
+    url: https://cbtkyrgyzstan.kg/wp-sitemap.xml
+    method: sitemap
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (hidden gems, small islands and remote places; Asia/Kyrgyzstan): robots 200 (* group, 1
+      disallows, / allowed). Terms: terms not found. Terms unconfirmed; owner accepted for non-commercial use 2026-11-18;
+      facts only.'
+  - id: ref-pamirs
+    category: places
+    name: Pamirs.org (META Pamirs guide)
+    url: https://pamirs.org/feed/
+    method: rss
+    license: Copyright; terms not found
+    cadence: daily
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (hidden gems, small islands and remote places; Asia/Tajikistan): robots 200 (* group, 1
+      disallows, / allowed). Terms: terms not found. Terms unconfirmed; owner accepted for non-commercial use 2026-11-18;
+      facts only. Advisory-risk destination (government travel advisories apply: Tajik-Afghan border (GBAO)): added normally,
+      flagged here.'
+  - id: tb-kamchatka
+    category: places
+    name: Visit Kamchatka
+    url: https://visitkamchatka.ru/sitemap.xml
+    method: sitemap
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (hidden gems, small islands and remote places; Russia/Far East): robots 200 (* group, 9
+      disallows, / allowed). Terms: terms not found. Terms unconfirmed; owner accepted for non-commercial use 2026-11-18;
+      facts only. Advisory-risk destination (government travel advisories apply: Russia — most governments advise against
+      all travel): added normally, flagged here.'
+  - id: ref-iaato
+    category: tips
+    name: IAATO
+    url: https://iaato.org/
+    method: html
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (hidden gems, small islands and remote places; Antarctica): robots 200 (* group, 33 disallows,
+      / allowed). Terms: terms not found. Terms unconfirmed; owner accepted for non-commercial use 2026-11-18; facts only.'
+  - id: gov-south-georgia
+    category: tips
+    name: South Georgia & South Sandwich Is Government
+    url: https://gov.gs/feed/
+    method: rss
+    license: Tourism board copyright; facts only
+    cadence: daily
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (hidden gems, small islands and remote places; Antarctica/SGSSI): robots 200 (* group, 1
+      disallows, / allowed). Terms: disclaimer: no bot/AI clause. Terms hold no bot, AI or personal-use clause (copyright
+      only): facts only.'
+  - id: tb-stewart-island
+    category: places
+    name: Stewart Island Promotion
+    url: https://www.stewartisland.co.nz/sitemap.xml
+    method: sitemap
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (hidden gems, small islands and remote places; NZ): robots 200 (* group, 6 disallows, /
+      allowed). Terms: terms not found. Terms unconfirmed; owner accepted for non-commercial use 2026-11-18; facts only.'
+  - id: tb-chatham-islands
+    category: places
+    name: Chatham Islands Tourism
+    url: https://visitchathamislands.com/feed/
+    method: rss
+    license: Copyright; terms not found
+    cadence: daily
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (hidden gems, small islands and remote places; NZ): robots.txt serves HTML (treated as missing).
+      Terms: terms not found; robots.txt returns HTML. Terms unconfirmed; owner accepted for non-commercial use 2026-11-18;
+      facts only.'
+  - id: tb-eswatini
+    category: places
+    name: Eswatini Tourism Authority
+    url: https://www.thekingdomofeswatini.com/sitemap.xml
+    method: sitemap
+    license: Personal-use-only terms; facts only (owner accepted)
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (hidden gems, small islands and remote places; Africa/Eswatini): robots 200 (* group, 1
+      disallows, / allowed). Terms: "may be reproduced free of charge ... for non-commercial, informational purposes". Terms
+      restrict to personal/non-commercial use; owner accepted for non-commercial use 2026-11-18; facts only.'
+  - id: ref-japan-onsen-assoc
+    category: places
+    name: Japan Spa (Onsen) Association
+    url: https://www.spa.or.jp/feed/
+    method: rss
+    license: Copyright; terms not found
+    cadence: daily
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (hidden gems, small islands and remote places; Asia/Japan): robots 200 (* group, 1 disallows,
+      / allowed). Terms: terms not found. Terms unconfirmed; owner accepted for non-commercial use 2026-11-18; facts only.'
+  - id: tr-tokai-kisen
+    category: getting_around
+    name: Tokai Kisen (Izu Islands ferries)
+    url: https://www.tokaikisen.co.jp/wp-sitemap.xml
+    method: sitemap
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (hidden gems, small islands and remote places; Asia/Japan): robots 200 (* group, 1 disallows,
+      / allowed). Terms: terms not found. Terms unconfirmed; owner accepted for non-commercial use 2026-11-18; facts only.'
+  - id: tr-ogasawara-kaiun
+    category: getting_around
+    name: Ogasawara Kaiun (Ogasawara Maru)
+    url: https://www.ogasawarakaiun.co.jp/
+    method: html
+    license: Tourism board copyright; facts only
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (hidden gems, small islands and remote places; Asia/Japan): robots 404 (allowed). Terms:
+      terms page: no bot/AI clause. Terms hold no bot, AI or personal-use clause (copyright only): facts only.'
+  - id: guide-wanderlush
+    category: places
+    name: Wander-Lush
+    url: https://wander-lush.org/sitemaps.xml
+    method: sitemap
+    license: Tourism board copyright; facts only
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (hidden gems, small islands and remote places; Caucasus/Balkans/Asia): robots 200 (* group,
+      1 disallows, / allowed). Terms: disclaimer: no bot/AI clause. Terms hold no bot, AI or personal-use clause (copyright
+      only): facts only.'
+  - id: tb-ishigaki
+    category: places
+    name: Yaeyama Islands (Ishigaki) tourism
+    url: https://yaeyama.or.jp/feed/
+    method: rss
+    license: Tourism board copyright; facts only
+    cadence: daily
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (hidden gems, small islands and remote places; Asia/Japan-Okinawa): robots 200 (* group,
+      1 disallows, / allowed). Terms: siteuse: no bot/AI clause. Terms hold no bot, AI or personal-use clause (copyright
+      only): facts only.'
+  - id: tb-goto
+    category: places
+    name: Goto Islands
+    url: https://goto.nagasaki-tabinet.com/storage/system/sitemap.xml
+    method: sitemap
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (hidden gems, small islands and remote places; Asia/Japan-Goto): robots 200 (* group, 34
+      disallows, / allowed). Terms: terms not found. Terms unconfirmed; owner accepted for non-commercial use 2026-11-18;
+      facts only.'
+  - id: gov-kinmen
+    category: places
+    name: Kinmen County
+    url: https://www.kinmen.gov.tw/sitemap.xml
+    method: sitemap
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (hidden gems, small islands and remote places; Asia/Taiwan): robots 404 (allowed). Terms:
+      terms not found. Terms unconfirmed; owner accepted for non-commercial use 2026-11-18; facts only.'
+  - id: tb-labuan-bajo
+    category: places
+    name: BPOLBF (Labuan Bajo / Flores)
+    url: https://bpolbf.kemenpar.go.id/
+    method: html
+    license: Copyright; terms not found
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (hidden gems, small islands and remote places; Asia/Indonesia): robots 200 (* group, 0 disallows,
+      / allowed). Terms: terms not found. Terms unconfirmed; owner accepted for non-commercial use 2026-11-18; facts only.'
+  - id: np-komodo
+    category: tips
+    name: Komodo National Park
+    url: https://www.komodonationalpark.org/
+    method: html
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (hidden gems, small islands and remote places; Asia/Indonesia): robots 404 (allowed). Terms:
+      terms not found; robots 404. Terms unconfirmed; owner accepted for non-commercial use 2026-11-18; facts only.'
+  - id: gov-leh-permit
+    category: visa
+    name: Leh Ladakh Protected Area Permit
+    url: https://www.lahdclehpermit.in/sitemap.xml
+    method: sitemap
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (hidden gems, small islands and remote places; Asia/India): robots 200 (* group, 0 disallows,
+      / allowed). Terms: terms not found. Terms unconfirmed; owner accepted for non-commercial use 2026-11-18; facts only.
+      Advisory-risk destination (government travel advisories apply: Ladakh border areas): added normally, flagged here.'
+  - id: gov-leh
+    category: places
+    name: Leh District (Ladakh)
+    url: https://leh.nic.in/
+    method: html
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (hidden gems, small islands and remote places; Asia/India): robots 204. Terms: terms not
+      found; robots.txt 204 (empty). Terms unconfirmed; owner accepted for non-commercial use 2026-11-18; facts only. Advisory-risk
+      destination (government travel advisories apply: Ladakh border areas): added normally, flagged here.'
+  - id: tb-pakistan
+    category: places
+    name: Pakistan Tourism
+    url: https://tourism.gov.pk/
+    method: html
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (hidden gems, small islands and remote places; Asia/Pakistan): robots 404 (allowed). Terms:
+      terms not found; robots 404. Terms unconfirmed; owner accepted for non-commercial use 2026-11-18; facts only. Advisory-risk
+      destination (government travel advisories apply: parts of Pakistan): added normally, flagged here.'
+  - id: gov-gilgit-baltistan
+    category: tips
+    name: Gilgit-Baltistan Government
+    url: https://www.gilgitbaltistan.gov.pk/
+    method: html
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (hidden gems, small islands and remote places; Asia/Pakistan): robots 404 (allowed). Terms:
+      terms not found; robots 404. Terms unconfirmed; owner accepted for non-commercial use 2026-11-18; facts only. Advisory-risk
+      destination (government travel advisories apply: ADVISORY: Pakistan (GB/LoC areas)): added normally, flagged here.'
+  - id: tb-cape-verde
+    category: places
+    name: Turismo Cabo Verde
+    url: https://www.turismo.cv/sitemap.xml
+    method: sitemap
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (hidden gems, small islands and remote places; Africa/Cape Verde): robots 200 (* group,
+      0 disallows, / allowed). Terms: terms not found. Terms unconfirmed; owner accepted for non-commercial use 2026-11-18;
+      facts only.'
+  - id: tb-tuvalu
+    category: places
+    name: Tuvalu Tourism
+    url: https://www.timelesstuvalu.com/feed/
+    method: rss
+    license: Tourism board copyright; facts only
+    cadence: daily
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (hidden gems, small islands and remote places; Pacific/Tuvalu): robots 200 (* group, 1 disallows,
+      / allowed). Terms: T&C: no bot/AI clause. Terms hold no bot, AI or personal-use clause (copyright only): facts only.'
+  - id: gov-torres-strait
+    category: tips
+    name: Torres Strait Regional Authority
+    url: https://www.tsra.gov.au/sitemap_index.xml
+    method: sitemap
+    license: CC BY 4.0
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (hidden gems, small islands and remote places; Australia): robots 200 (* group, 2 disallows,
+      / allowed). Terms: "All material ... under a Creative Commons Attribution 4.0 International licence". Open licence:
+      CC BY 4.0.'
+  - id: blog-kimberley
+    category: places
+    name: Australia's North West (Kimberley)
+    url: https://www.kimberleyaustralia.com/kimberley-australia.xml
+    method: rss
+    license: Copyright; terms not found
+    cadence: daily
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (hidden gems, small islands and remote places; Australia/WA): robots 200 (* group, 4 disallows,
+      / allowed). Terms: terms not found. Terms unconfirmed; owner accepted for non-commercial use 2026-11-18; facts only.'
+  - id: tb-flinders-island
+    category: places
+    name: Flinders Island tourism
+    url: https://www.flindersisland.com.au/
+    method: html
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (hidden gems, small islands and remote places; Australia/Tasmania): robots 404 (allowed).
+      Terms: terms not found; robots 404. Terms unconfirmed; owner accepted for non-commercial use 2026-11-18; facts only.'
+  - id: tb-great-barrier
+    category: places
+    name: Great Barrier Island Tourism
+    url: https://www.greatbarrierisland.nz/feed/
+    method: rss
+    license: Copyright; terms not found
+    cadence: daily
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (hidden gems, small islands and remote places; NZ): robots 200 (* group, 4 disallows, /
+      allowed). Terms: terms not found. Terms unconfirmed; owner accepted for non-commercial use 2026-11-18; facts only.'
+  - id: gov-dasta
+    category: places
+    name: DASTA (Designated Areas for Sustainable Tourism)
+    url: https://www.dasta.or.th/th/
+    method: html
+    license: Copyright; terms not found
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (hidden gems, small islands and remote places; Asia/Thailand): robots 404 (allowed). Terms:
+      terms not found; robots 404. Terms unconfirmed; owner accepted for non-commercial use 2026-11-18; facts only.'
+  - id: np-con-dao
+    category: places
+    name: Con Dao National Park
+    url: https://www.condaopark.com.vn/sitemap.xml
+    method: sitemap
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (hidden gems, small islands and remote places; Asia/Vietnam): robots 200 (* group, 10 disallows,
+      / allowed); AI-bot block (gptbot,claudebot,ccbot,google-extended…) → title+link only; Content-Signal: search=yes,ai-train=no,use=reference.
+      Terms: terms not found; AI-bot block + ai-train=no → title+link. Terms unconfirmed; owner accepted for non-commercial
+      use 2026-11-18; facts only. robots.txt reserves content from AI crawlers: title and link only, no LLM kinds.'
+  - id: museum-solovki
+    category: places
+    name: Solovetsky Museum-Reserve
+    url: https://www.solovky.ru/sitemap.xml
+    method: sitemap
+    license: Copyright; terms not found
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (hidden gems, small islands and remote places; Russia/White Sea): robots 200 (* group, 36
+      disallows, / allowed). Terms: terms not found. Terms unconfirmed; owner accepted for non-commercial use 2026-11-18;
+      facts only. Advisory-risk destination (government travel advisories apply: Russia): added normally, flagged here.'
+  - id: gov-taaf
+    category: tips
+    name: TAAF (French Southern & Antarctic Lands)
+    url: https://taaf.fr/sitemap_index.xml
+    method: sitemap
+    license: Tourism board copyright; facts only
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (hidden gems, small islands and remote places; Antarctica/Indian Ocean): robots 200 (* group,
+      1 disallows, / allowed). Terms: mentions légales: copyright reservation only. Terms hold no bot, AI or personal-use
+      clause (copyright only): facts only.'
+  - id: gov-bat
+    category: tips
+    name: British Antarctic Territory Government
+    url: https://www.britishantarcticterritory.org.uk/feed/
+    method: rss
+    license: Tourism board copyright; facts only
+    cadence: daily
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (hidden gems, small islands and remote places; Antarctica): robots 200 (* group, 0 disallows,
+      / allowed). Terms: "No part of the publication may be reproduced ... without the written permission" (copyright).
+      Terms hold no bot, AI or personal-use clause (copyright only): facts only.'
+  - id: ref-ntnc
+    category: activities
+    name: NTNC (Annapurna Conservation Area)
+    url: https://www.ntnc.org.np/
+    method: html
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (hidden gems, small islands and remote places; Asia/Nepal): robots 200 (* group, 22 disallows,
+      / allowed). Terms: terms not found. Terms unconfirmed; owner accepted for non-commercial use 2026-11-18; facts only.'
+  - id: np-rapa-nui
+    category: places
+    name: Ma'u Henua (Rapa Nui National Park)
+    url: https://www.rapanuinationalpark.com/sitemap.xml
+    method: sitemap
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (hidden gems, small islands and remote places; Pacific/Rapa Nui): robots 200 (* group, 0
+      disallows, / allowed); http only. Terms: terms not found; seed host www.rapanuinationalpark.com. Terms unconfirmed;
+      owner accepted for non-commercial use 2026-11-18; facts only. Onboarding: www.mauhenua.cl redirects to www.rapanuinationalpark.com;
+      its robots.txt read 2026-11-18 (200, * Allow /, sitemap listed).'
+  - id: ref-shikoku-henro
+    category: walking_tours
+    name: Shikoku 88 Temple Pilgrimage Association
+    url: https://88shikokuhenro.jp/feed/
+    method: rss
+    license: Tourism board copyright; facts only
+    cadence: daily
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (hidden gems, small islands and remote places; Asia/Japan): robots 200 (* group, 1 disallows,
+      / allowed). Terms: site-use: no bot/AI clause. Terms hold no bot, AI or personal-use clause (copyright only): facts
+      only.'
+  - id: blog-hikinginjapan
+    category: activities
+    name: Hiking in Japan
+    url: https://hikinginjapan.com/feed/
+    method: rss
+    license: Copyright; terms not found
+    cadence: daily
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (hidden gems, small islands and remote places; Asia/Japan): robots 200 (* group, 10 disallows,
+      / allowed). Terms: terms not found. Terms unconfirmed; owner accepted for non-commercial use 2026-11-18; facts only.'
+  - id: tb-miyakojima
+    category: places
+    name: Miyakojima Tourism Association
+    url: https://miyako-guide.net/wp-sitemap.xml
+    method: sitemap
+    license: Copyright; terms not found
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (hidden gems, small islands and remote places; Asia/Japan-Okinawa): robots 200 (* group,
+      1 disallows, / allowed). Terms: terms not found. Terms unconfirmed; owner accepted for non-commercial use 2026-11-18;
+      facts only.'
+  - id: tb-naoshima
+    category: places
+    name: Naoshima Tourism Association
+    url: https://naoshima.net/wp-sitemap.xml
+    method: sitemap
+    license: Tourism board copyright; facts only
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (hidden gems, small islands and remote places; Asia/Japan-Setouchi): robots 200 (* group,
+      1 disallows, / allowed). Terms: terms of use: no bot/AI clause. Terms hold no bot, AI or personal-use clause (copyright
+      only): facts only.'
+  - id: tb-iki
+    category: places
+    name: Iki Island tourism
+    url: https://www.ikikankou.com/storage/system/sitemap.xml
+    method: sitemap
+    license: Tourism board copyright; facts only
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (hidden gems, small islands and remote places; Asia/Japan-Iki): robots 200 (* group, 34
+      disallows, / allowed). Terms: site page: no bot/AI clause. Terms hold no bot, AI or personal-use clause (copyright
+      only): facts only.'
+  - id: tb-tsushima
+    category: places
+    name: Tsushima tourism
+    url: https://www.tsushima-net.org/sitemap.xml
+    method: sitemap
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (hidden gems, small islands and remote places; Asia/Japan-Tsushima): robots 200 (* group,
+      0 disallows, / allowed). Terms: terms not found. Terms unconfirmed; owner accepted for non-commercial use 2026-11-18;
+      facts only.'
+  - id: tb-rishiri
+    category: places
+    name: Rishiri tourism
+    url: https://www.rishiri-plus.jp/sitemap.xml
+    method: sitemap
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (hidden gems, small islands and remote places; Asia/Japan-Rishiri): robots 200 (* group,
+      1 disallows, / allowed). Terms: terms not found. Terms unconfirmed; owner accepted for non-commercial use 2026-11-18;
+      facts only.'
+  - id: ref-shiretoko
+    category: tips
+    name: Shiretoko Nature Foundation
+    url: https://www.shiretoko.or.jp/wp-sitemap.xml
+    method: sitemap
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (hidden gems, small islands and remote places; Asia/Japan-Hokkaido): robots 200 (* group,
+      1 disallows, / allowed). Terms: terms not found. Terms unconfirmed; owner accepted for non-commercial use 2026-11-18;
+      facts only.'
+  - id: gov-ulleung
+    category: places
+    name: Ulleung County
+    url: https://www.ulleung.go.kr/
+    method: html
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (hidden gems, small islands and remote places; Asia/Korea): robots 200 (* group, 0 disallows,
+      / allowed). Terms: terms not found; empty title (JS). Terms unconfirmed; owner accepted for non-commercial use 2026-11-18;
+      facts only.'
+  - id: guide-tioman
+    category: places
+    name: Tioman Island
+    url: https://www.tioman.org/
+    method: html
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (hidden gems, small islands and remote places; Asia/Malaysia): robots 404 (allowed). Terms:
+      terms not found; robots 404. Terms unconfirmed; owner accepted for non-commercial use 2026-11-18; facts only.'
+  - id: gov-lord-howe-board
+    category: tips
+    name: Lord Howe Island Board
+    url: https://www.lhib.nsw.gov.au/sitemap.xml
+    method: sitemap
+    license: Tourism board copyright; facts only
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (hidden gems, small islands and remote places; Pacific/Lord Howe): robots 200 (* group,
+      33 disallows, / allowed). Terms: "no part ... may be reproduced ... for any commercial purposes". Terms hold no bot,
+      AI or personal-use clause (copyright only): facts only.'
+  - id: ref-nma
+    category: activities
+    name: Nepal Mountaineering Association
+    url: https://www.nepalmountaineering.org/
+    method: html
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (hidden gems, small islands and remote places; Asia/Nepal): robots 200 (* group, 0 disallows,
+      / allowed). Terms: terms not found. Terms unconfirmed; owner accepted for non-commercial use 2026-11-18; facts only.'
+  - id: tb-andaman-nicobar
+    category: places
+    name: Andaman & Nicobar Directorate of Tourism
+    url: https://tourism.andamannicobar.gov.in/sitemap.xml
+    method: sitemap
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (hidden gems, small islands and remote places; Indian Ocean/India): robots 200 (* group,
+      0 disallows, / allowed). Terms: terms not found. Terms unconfirmed; owner accepted for non-commercial use 2026-11-18;
+      facts only. Advisory-risk destination (government travel advisories apply: North Sentinel (prohibited), RAP): added
+      normally, flagged here.'
+  - id: tb-arunachal
+    category: places
+    name: Arunachal Pradesh Tourism
+    url: https://www.arunachaltourism.com/
+    method: html
+    license: Personal-use-only terms; facts only (owner accepted)
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (hidden gems, small islands and remote places; Asia/India; owner-decision row): robots 200
+      (* group, 1 disallows, / allowed). Terms: "for informational and non-commercial or personal use only". Terms restrict
+      to personal/non-commercial use; owner accepted for non-commercial use 2026-11-18 ("for informational and non-commercial
+      or personal use only"); facts only.'
+  - id: tb-amami
+    category: places
+    name: Amami Tourism
+    url: https://www.amami-tourism.org/
+    method: html
+    license: Personal-use-only terms; facts only (owner accepted)
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (hidden gems, small islands and remote places; Asia/Japan-Amami; owner-decision row): robots
+      200 (* group, 1 disallows, / allowed). Terms: "本サイトの利用により入手した、いかなる情報も私的利用の範囲を超えて使用をすることができない" (private use only).
+      Terms restrict to personal/non-commercial use; owner accepted for non-commercial use 2026-11-18 ("本サイトの利用により入手した、いかなる情報も私的利用の範囲を超えて使用をすることができない"
+      (private use only)); facts only.'
+  - id: guide-capeverdeislands
+    category: places
+    name: Cape Verde Islands tourism
+    url: https://www.capeverdeislands.org/
+    method: html
+    license: Personal-use-only terms; facts only (owner accepted)
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (hidden gems, small islands and remote places; Africa/Cape Verde; owner-decision row): robots
+      200 (* group, 0 disallows, / allowed); Content-Signal: search=yes, ai-input=yes, ai-train=yes. Terms: "Apart from
+      personal, not commercial, use it is not allowed to copy". Terms restrict to personal/non-commercial use; owner accepted
+      for non-commercial use 2026-11-18 ("Apart from personal, not commercial, use it is not allowed to copy"); facts only.'
+  - id: tb-king-island
+    category: places
+    name: King Island tourism
+    url: https://www.kingisland.org.au/
+    method: html
+    license: Terms forbid storage/redistribution
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (hidden gems, small islands and remote places; Australia/Tasmania; owner-decision row):
+      robots 200 (* group, 0 disallows, / allowed). Terms: "You must not: copy or use, in whole or in part, any Content". '
+  - id: gov-aad
+    category: tips
+    name: Australian Antarctic Division
+    url: https://www.antarctica.gov.au/
+    method: html
+    license: Personal-use-only terms; facts only (owner accepted)
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (hidden gems, small islands and remote places; Antarctica; owner-decision row): robots 200
+      (* group, 2 disallows, / allowed). Terms: "reproduce ... for your personal, non-commercial use or use within your
+      organisation". Terms restrict to personal/non-commercial use; owner accepted for non-commercial use 2026-11-18 ("reproduce
+      ... for your personal, non-commercial use or use within your organisation"); facts only.'
+  - id: tb-setouchi
+    category: places
+    name: Setouchi Tourism Authority
+    url: https://www.setouchitourism.or.jp/
+    method: html
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (hidden gems, small islands and remote places; Asia/Japan; re-vet row): TLS error at research
+      from a laptop IP; robots.txt and terms not read yet.'
+  - id: tb-zanzibar
+    category: places
+    name: Zanzibar Commission for Tourism
+    url: https://www.zanzibartourism.go.tz/
+    method: html
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (hidden gems, small islands and remote places; Africa/Zanzibar; re-vet row): unreachable
+      at research from a laptop IP; robots.txt and terms not read yet.'
+  - id: tb-rebun
+    category: places
+    name: Rebun tourism
+    url: https://www.rebun-island.jp/
+    method: html
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (hidden gems, small islands and remote places; Asia/Japan-Rebun; re-vet row): unreachable
+      at research from a laptop IP; robots.txt and terms not read yet.'
+  - id: gov-wakatobi
+    category: places
+    name: Wakatobi Regency
+    url: https://www.wakatobikab.go.id/
+    method: html
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (hidden gems, small islands and remote places; Asia/Indonesia; re-vet row): unreachable
+      at research from a laptop IP; robots.txt and terms not read yet.'
+  - id: museum-kizhi
+    category: places
+    name: Kizhi Museum-Reserve
+    url: https://www.kizhi.karelia.ru/
+    method: html
+    license: Copyright; terms not found
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (hidden gems, small islands and remote places; Russia/Karelia; re-vet row): unreachable
+      at research from a laptop IP; robots.txt and terms not read yet. Advisory-risk destination (Russia): added normally,
+      flagged here.'
+  - id: tb-chuuk
+    category: places
+    name: Chuuk Visitors Bureau
+    url: https://www.visit-chuuk.com/
+    method: html
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (hidden gems, small islands and remote places; Pacific/FSM-Chuuk; re-vet row): connection
+      closed without a response at research from a laptop IP; robots.txt and terms not read yet.'
+  - id: tb-himachal-hptdc
+    category: hotels
+    name: Himachal Pradesh Tourism Development Corp
+    url: https://hptdc.hp.gov.in/
+    method: html
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (hidden gems, small islands and remote places; Asia/India; re-vet row): DNS failure at research
+      from a laptop IP; robots.txt and terms not read yet.'
+  - id: tb-seychelles
+    category: places
+    name: Tourism Seychelles
+    url: https://www.seychelles.travel/
+    method: html
+    license: Copyright; terms not found
+    cadence: weekly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (hidden gems, small islands and remote places; Indian Ocean/Seychelles; re-vet row): robots.txt
+      522 at research from a laptop IP; robots.txt and terms not read yet.'
+  - id: tb-yakushima
+    category: places
+    name: Yakushima Tourism
+    url: https://www.yakushima-info.com/
+    method: html
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (hidden gems, small islands and remote places; Asia/Japan-Yakushima; re-vet row): home page
+      520 at research from a laptop IP; robots.txt and terms not read yet.'
+  - id: tb-kangaroo-island
+    category: places
+    name: Kangaroo Island Tourism
+    url: https://www.kangarooisland.com.au/
+    method: html
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-18 (hidden gems, small islands and remote places; Australia/SA; re-vet row): home page 404
+      at research from a laptop IP; robots.txt and terms not read yet.'

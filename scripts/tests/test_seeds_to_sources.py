@@ -793,7 +793,8 @@ def test_terms_and_bot_wall_sources_are_off(generated):
 def test_batch2_off_sources_say_why(generated):
     prefixes = ("adapter pending", "needs an API key", "needs an account", "terms not yet confirmed",
                 "licence:", "robots.txt", "access route", "owner decision", "dataset retired",
-                "bot wall", "seed unresolved", "relevance:", "re-test from the crawler VM")
+                "bot wall", "seed unresolved", "relevance:", "re-test from the crawler VM",
+                "terms forbid storage/redistribution", "meta robots", "terms forbid automated access")
     for sid in s2s.SOURCE_CLASS:
         spec = generated[sid]
         if spec["enabled"]:
@@ -1195,6 +1196,8 @@ CORPUS_SHARE_ALIKE = {"customs-sag-cl", "guide-caravanistan"}  # caravanistan: C
 
 # --- Corpus expansion: Latin America and the Caribbean (research vetted 2026-11-18) -------
 LATAM_OFF = {
+    # Its terms ban robots and spiders (hidden gems research 2026-11-18): off, denylisted.
+    "tb-visittci": "terms forbid automated access",
     **{sid: "adapter pending" for sid in (
         "od-datos-gov-co", "od-datos-gob-cl", "od-catalogo-uy", "od-data-rio", "fx-bcra")},
     "fx-banxico": "needs an API key",
@@ -1222,7 +1225,7 @@ def test_corpus_latam_2026_11_18(generated):
     ids = _batch_ids(seeds, "tb-caribe-mexicano", "tb-visitghana")
     assert len(ids) == 108
     _corpus_batch_check(generated, ids, LATAM_OFF, LATAM_DELAYS, LATAM_AI_RESERVED, LATAM_PERSONAL_TERMS)
-    assert len([s for s in ids if s not in LATAM_OFF]) == 85
+    assert len([s for s in ids if s not in LATAM_OFF]) == 84
     # PeruRail's robots.txt disallows /feed/: HTML pages only.
     pr = generated["tr-perurail"]
     assert pr["method"] == "html" and not pr["feeds"]
@@ -1457,3 +1460,113 @@ def test_jma_normals_and_bathing_water_2026_11_18(generated):
     assert bw["enabled"] is False and reason.startswith("robots.txt") and "/doc/" in reason
     for ramp in ("ramp-1.txt", "ramp-2.txt", "ramp-3.txt"):
         assert "ea-bathing-water-profiles" not in _ramp(ramp)
+
+
+# Hidden gems, small islands and remote places (research 2026-11-18, vetted rows, owner
+# rules of 2026-11-18). Every row of the batch has notes starting "Research 2026-11-18 (hidden
+# gems". Off rows carry one of these reason prefixes; everything else is on, in ramp-2 and
+# ramp-3, facts only unless an open licence was quoted.
+HIDDEN_GEMS_COUNTS = {'total': 90, 'on': 77, 'off': 13}
+HIDDEN_GEMS_OFF_PREFIXES = ("re-test from the crawler VM", "terms forbid storage/redistribution",
+                            "meta robots", "seed unresolved", "adapter pending")
+# Parked or hijacked official domains: denylisted, never a source.
+HIDDEN_GEMS_DENIED = [
+    "https://www.gotobermuda.com/", "https://www.visitgozo.com/", "https://www.iledere.com/",
+    "https://www.visittci.com/", "https://www.les-plus-beaux-villages-de-france.org/",
+    "https://www.bradtguides.com/", "https://www.parconazionalepantelleria.it/", "https://www.menorca.es/",
+    "https://www.iatlanticas.es/", "https://www.ats.aq/", "https://www.visituganda.com/",
+    "https://www.tz-vis.hr/", "https://www.lastovo-tz.net/", "https://www.socotraisland.org/",
+    "https://www.visitamazonas.com.br/", "https://www.timsnepal.com/", "https://www.visitrajaampat.com/",
+    "https://www.ethiopia.travel/", "https://www.visitnaxos.gr/", "https://visitfolegandros.gr/",
+    "https://www.tongaholiday.com/", "https://www.visitmarshallislands.com/lander",
+    "https://www.discovernauru.com/", "https://www.visitcuracao.com/", "https://www.kosrae.com/",
+]
+# Hosts next to the new entries that stay allowed.
+HIDDEN_GEMS_ALLOWED = [
+    "https://visithvar.hr/", "https://visitkorcula.eu/", "https://www.visitmadeira.com/en",
+    "https://www.experiencealula.com/", "https://www.myoutislands.com/", "https://www.visit-micronesia.fm/",
+    "https://www.visitsolomons.com.sb/", "https://www.uzbekistan.travel/", "https://www.visitsaaremaa.ee/",
+]
+
+
+def _hidden_gems_ids():
+    return [s["id"] for s in SEEDS
+            if (s.get("notes") or "").startswith("Research 2026-11-18 (hidden gems")]
+
+
+@pytest.mark.parametrize("url", HIDDEN_GEMS_DENIED)
+def test_hidden_gems_denylist_entries(url):
+    assert s2s.denied(url, DENYLIST) is not None, url
+
+
+@pytest.mark.parametrize("url", HIDDEN_GEMS_ALLOWED)
+def test_hidden_gems_neighbours_stay_allowed(url):
+    assert s2s.denied(url, DENYLIST) is None, url
+
+
+def test_hidden_gems_sources_2026_11_18(generated):
+    import re
+
+    ids = _hidden_gems_ids()
+    assert len(ids) == len(set(ids)) == HIDDEN_GEMS_COUNTS["total"]
+    r2, r3 = _ramp("ramp-2.txt"), _ramp("ramp-3.txt")
+    on, off = [], []
+    for sid in ids:
+        spec = generated[sid]
+        notes = " ".join(spec["notes"].split())
+        (on if spec["enabled"] else off).append(sid)
+        assert spec["max_depth"] <= 2 and spec["daily_budget"] <= 100, sid
+        for m in re.finditer(r"Crawl-delay (\d+)", notes):
+            assert spec["min_delay_s"] >= int(m.group(1)), sid
+        if "reserves content from AI crawlers" in notes:
+            assert spec["llm_kinds"] == [], sid
+        if not spec["enabled"]:
+            reason = notes.split("Disabled: ", 1)[1]
+            assert reason.startswith(HIDDEN_GEMS_OFF_PREFIXES), (sid, reason)
+            assert sid not in r2 and sid not in r3, sid
+            continue
+        assert spec["method"] in ("html", "rss", "sitemap") and not spec["needs_key"], sid
+        assert sid in r2 and sid in r3, sid
+        assert spec["cadence"] in ("daily", "weekly", "monthly"), sid
+        if spec["method"] == "rss":
+            assert spec["cadence"] == "daily" and spec["daily_budget"] <= 50, sid
+        if spec["licence"]["class"] not in ("open", "share_alike"):
+            assert spec["licence"]["class"] == "facts_only" and "facts only" in notes, sid
+        if "Terms unconfirmed" in notes:
+            assert "owner accepted for non-commercial use 2026-11-18" in notes, sid
+        if "Terms restrict to personal/non-commercial use" in notes:
+            assert "owner accepted for non-commercial use 2026-11-18" in notes, sid
+        if spec["category"] in ("blogs", "news"):
+            assert spec["source_class"] == "editorial", sid
+        for u in spec["seeds"] + spec["sitemaps"] + spec["feeds"]:
+            assert s2s.denied(u, DENYLIST) is None, (sid, u)
+    assert len(on) == HIDDEN_GEMS_COUNTS["on"] and len(off) == HIDDEN_GEMS_COUNTS["off"], (len(on), len(off))
+    # Parked domains found at onboarding are denylisted and no source reads them.
+    parked = ("visitmarshallislands.com", "discovernauru.com", "visitcuracao.com", "kosrae.com")
+    for sid, spec in generated.items():
+        for u in spec["seeds"] + spec["sitemaps"] + spec["feeds"]:
+            assert not any(h in u for h in parked), (sid, u)
+
+
+def test_hidden_gems_part_1_asia_pacific_africa(generated):
+    def notes(sid):
+        return " ".join(generated[sid]["notes"].split())
+
+    # A web-firewall page on robots.txt at onboarding: off, re-tested from the VM, not denylisted.
+    for sid, host in (("tb-jeju", "www.visitjeju.net"), ("gov-ulleung", "www.ulleung.go.kr")):
+        assert not generated[sid]["enabled"] and "Disabled: re-test from the crawler VM" in notes(sid), sid
+        assert s2s.denied(f"https://{host}/", DENYLIST) is None, host
+    ki = generated["tb-king-island"]
+    assert not ki["enabled"] and "terms forbid storage/redistribution" in notes("tb-king-island")
+    # Terms limited to personal/non-commercial use: on, facts only (owner rule 2026-11-18).
+    for sid in ("tb-arunachal", "tb-amami", "gov-aad", "tb-eswatini"):
+        spec = generated[sid]
+        assert spec["enabled"] and spec["licence"]["class"] == "facts_only", sid
+        assert "personal/non-commercial use; owner accepted for non-commercial use 2026-11-18" in notes(sid), sid
+    assert generated["gov-torres-strait"]["licence"]["spdx"] == "CC-BY-4.0"
+    # Seeds on redirect hosts use the final host.
+    assert generated["np-rapa-nui"]["sitemaps"] == ["https://www.rapanuinationalpark.com/sitemap.xml"]
+    assert generated["tb-japan-beautiful-villages"]["feeds"] == ["https://japan-utsukushii-mura.com/feed/"]
+    # Advisory-risk destinations are added normally and flagged.
+    for sid in ("tb-pakistan", "gov-gilgit-baltistan", "tb-kamchatka"):
+        assert generated[sid]["enabled"] and "Advisory-risk destination" in notes(sid), sid
