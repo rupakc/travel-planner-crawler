@@ -898,7 +898,7 @@ fn mobitool_rows_are_life_cycle_pkm_factors_with_merged_powertrains() {
     );
     // ... but a blank cell outside a merged region stays blank (a bicycle has no powertrain).
     by_id(&it, "mobitool:2025:bicycle_conventional_urban");
-    // Trains abroad are stored under their country; everything else is Swiss.
+    // Trains abroad are stored under their country, flights carry none, the rest is Swiss.
     let tgv = by_id_of(
         &it,
         "mobitool:2025:high_speed_train_fr_electricity_mix_fr_and_diesel_high_speed_train_tgv",
@@ -916,11 +916,57 @@ fn mobitool_rows_are_life_cycle_pkm_factors_with_merged_powertrains() {
         "mobitool:2025:airplane_kerosene_intercontinental_economy",
     );
     assert_eq!(fly["category"], "flights");
+    assert_eq!(fly["geography"], "Intercontinental");
+    assert!(fly.get("country_code").is_none(), "{fly}");
+    let eu = by_id_of(
+        &it,
+        "mobitool:2025:airplane_kerosene_within_europe_business",
+    );
+    assert_eq!(eu["geography"], "Europe");
+    assert!(eu.get("country_code").is_none());
+    let avg = by_id_of(&it, "mobitool:2025:airplane_kerosene_average");
+    assert_eq!(avg["geography"], "International");
+    assert!(
+        !it.iter()
+            .any(|i| i.data["category"] == "flights" && i.data["country_code"] == "CH")
+    );
+    assert!(
+        it.iter()
+            .all(|i| i.data["dataset"].as_str().unwrap().contains("v3.1"))
+    );
     let ship = by_id_of(&it, "mobitool:2025:passenger_ship_diesel");
     assert_eq!(ship["category"], "ferry");
     for c in ["DE", "IT", "AT"] {
         assert!(it.iter().any(|i| i.data["country_code"] == c), "{c}");
     }
+}
+
+#[test]
+fn mobitool_is_refused_unless_saved_with_gwp100a_per_pkm() {
+    let url = CanonicalUrl::parse(MOBITOOL).unwrap();
+    let m = mapping_for(&url).unwrap();
+    let body = fixture("factor_mobitool_v3_1.xlsx");
+    assert!(!factor_table::items_with(m, &url, &body).unwrap().is_empty());
+    // The fixture's dropdowns say GWP100a and pkm; a mapping that wants another indicator or
+    // functional unit (what a file saved with other choices looks like) refuses the file.
+    for want in [
+        &[("Select an indicator", "ReCiPe 2016")][..],
+        &[("Functional unit for passenger transport", "vkm")][..],
+        &[("No such label", "GWP100a")][..],
+    ] {
+        let mut other = *m;
+        other.preamble_require = want;
+        let e = factor_table::items_with(&other, &url, &body).unwrap_err();
+        assert!(e.to_string().contains("above the header"), "{e}");
+    }
+    // Every row filtered out (as when the sheet is saved per vkm) refuses the file too.
+    let mut vkm = *m;
+    vkm.keep = &[factor_table::Keep {
+        column: "Functional unit",
+        values: &["vkm"],
+    }];
+    let e = factor_table::items_with(&vkm, &url, &body).unwrap_err();
+    assert!(e.to_string().contains("none mapped"), "{e}");
 }
 
 #[test]
@@ -1001,18 +1047,31 @@ fn epa_supply_chain_keeps_travel_industries_only() {
     let cats = |id: &str| by_id_of(&it, &format!("epa-supply-chain:2022:{id}"))["category"].clone();
     assert_eq!(cats("481111"), "flights");
     assert_eq!(cats("482111"), "rail");
-    assert_eq!(cats("483112"), "ferry");
+    // 483112 is cruise lines ("Deep Sea Passenger Transportation"), not a ferry.
+    assert_eq!(cats("483112"), "other");
+    assert!(hotel["dataset"].as_str().unwrap().contains("v1.3"));
     assert_eq!(cats("485310"), "taxi");
     assert_eq!(cats("485510"), "coach");
     assert_eq!(cats("487110"), "activity");
     assert_eq!(cats("532111"), "car");
     assert_eq!(cats("722511"), "food");
     assert_eq!(cats("712110"), "activity");
-    // Another dollar year changes the unit text: nothing is mapped until the mapping is updated.
+    // Another dollar year changes the unit text: the file is refused (an error, never an empty
+    // success) until the mapping is updated.
     let other = String::from_utf8(fixture("factor_epa_supply_chain_v1_3.csv"))
         .unwrap()
         .replace("2022 USD", "2023 USD");
-    assert!(items(EPA_SC, other.as_bytes()).is_empty());
+    let e = records(
+        "factor_table",
+        &CanonicalUrl::parse(EPA_SC).unwrap(),
+        other.as_bytes(),
+    )
+    .unwrap()
+    .unwrap_err();
+    assert!(e.to_string().contains("none mapped"), "{e}");
+    // A later edition has no mapping (its label would name the wrong edition).
+    let v14 = EPA_SC.replace("v1.3.0", "v1.4.0");
+    assert!(factor_table::mappings_for(&CanonicalUrl::parse(&v14).unwrap()).is_empty());
 }
 
 #[test]

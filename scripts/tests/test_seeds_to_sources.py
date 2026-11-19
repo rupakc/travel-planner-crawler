@@ -892,7 +892,7 @@ def test_batch2_off_sources_say_why(generated):
                 "licence:", "robots.txt", "access route", "owner decision", "dataset retired",
                 "bot wall", "seed unresolved", "relevance:", "re-test from the crawler VM",
                 "terms forbid storage/redistribution", "meta robots", "terms forbid automated access",
-                "5xx at", "duplicate:", "gone:") + FULL_CRAWL_REFUSED_PREFIXES
+                "5xx at", "duplicate:", "gone:", "restricted licence") + FULL_CRAWL_REFUSED_PREFIXES
     for sid in s2s.SOURCE_CLASS:
         spec = generated[sid]
         if spec["enabled"]:
@@ -1765,7 +1765,6 @@ FACTOR_TABLE_SOURCES = {
     "od-mobitool-ch": "emission_factor",
     "carbon-aib-residual-mix": "emission_factor",
     "od-epa-supply-chain-ghg": "emission_factor",
-    "od-owid-tourism-aviation": "emission_factor",
 }
 # Third batch (2026-11-19): looked at (robots.txt first, one sample) and left off, with why.
 CARBON_TABLES_3_OFF = {
@@ -1797,7 +1796,7 @@ CARBON_TABLES_2_OFF = {
 CARBON_KEYED = {"carbon-ember-api": ("ember_api", "crawler-src-ember-key")}
 # Owner decisions of 2026-11-19 turned on (html, facts only).
 CARBON_OWNER_ON = ("tr-flix-methodology", "carbon-breeam-projects", "carbon-greenbooklive")
-CARBON_COUNTS = {"total": 310, "on": 164, "adapter pending": 108, "needs an API key": 25, "robots.txt": 5,
+CARBON_COUNTS = {"total": 310, "on": 163, "restricted licence": 1, "adapter pending": 108, "needs an API key": 25, "robots.txt": 5,
                  "duplicate": 3, "gone": 1, "re-test from the crawler VM": 3, "5xx at": 1}
 CARBON_DENIED = ["https://www.climatiq.io/terms", "https://www.goldstandard.org/", "https://registry.verra.org/",
                  "https://media.amtrak.com/terms-of-use/", "https://ghgprotocol.org/terms-use",
@@ -1829,7 +1828,8 @@ def test_carbon_corpus_2026_11_19(generated):
         if not spec["enabled"]:
             reason = notes.split("Disabled: ", 1)[1]
             prefix = next(p for p in ("adapter pending", "needs an API key", "owner decision", "robots.txt",
-                                      "duplicate", "gone", "re-test from the crawler VM", "5xx at")
+                                      "duplicate", "gone", "re-test from the crawler VM", "5xx at",
+                                      "restricted licence")
                           if reason.startswith(p))
             reasons[prefix] = reasons.get(prefix, 0) + 1
             assert sid not in r2 and sid not in r3, sid

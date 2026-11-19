@@ -19963,7 +19963,7 @@ seeds:
     name: 'Our World in Data: per-capita CO2 from international flights, tourism-adjusted'
     url: https://ourworldindata.org/grapher/per-capita-co-emissions-from-international-flights-tourism-adjusted.csv
     method: api
-    license: CC BY 4.0
+    license: OWID CC BY 4.0; UN Tourism input personal/non-commercial terms
     cadence: yearly
     needs_key: false
     allowed: true

@@ -292,6 +292,11 @@ pub struct FactorMapping {
     pub min_year: i64,
     /// A published 0 means "no figure" in this dataset (skipped, never stored as 0).
     pub skip_zero: bool,
+    /// `(label, value)` pairs the cells above the header must hold: a cell equal to `label`
+    /// whose next non-empty cell equals `value` (mobitool's "Select an indicator" /
+    /// "GWP100a"). The workbook's cached results follow its dropdowns, so a file saved with
+    /// another choice is refused rather than mapped under the wrong scope.
+    pub preamble_require: &'static [(&'static str, &'static str)],
     /// Body cap in bytes.
     pub max_bytes: u64,
     /// Row → record.
@@ -384,13 +389,18 @@ const MOBITOOL_CATEGORIES: &[(&str, &str)] = &[
 ];
 
 /// mobitool rows of trains abroad name the country's electricity mix (`"Electricity mix DE &
-/// Diesel"`); every other row is a Swiss figure.
+/// Diesel"`); airplane rows are international; every other row is a Swiss figure.
 const MOBITOOL_COUNTRIES: &[(&str, &str, &str)] = &[
     ("mix DE", "Germany", "DE"),
     ("mix FR", "France", "FR"),
     ("mix IT", "Italy", "IT"),
     ("mix AT", "Austria", "AT"),
-    ("ENTSO-E", "Europe", ""),
+    // Flights are not Swiss factors: the within-Europe and intercontinental rows, and the
+    // average over both, carry no country code. (v3.1's "Train Europe / ENTSO-E" rows are
+    // goods transport, tkm, so never mapped.)
+    ("within Europe", "Europe", ""),
+    ("ntercontinental", "Intercontinental", ""),
+    ("Airplane", "International", ""),
 ];
 
 const AIB_PATH: &[&str] = &[
@@ -422,6 +432,7 @@ const fn aib(dataset: &'static str, column: &'static str, prefix: &'static str) 
         year: Year::FileNameLeading,
         min_year: 0,
         skip_zero: false,
+        preamble_require: &[],
         max_bytes: 2 * 1024 * 1024,
         output: Output::Factor {
             activity_prefix: prefix,
@@ -444,7 +455,8 @@ const fn aib(dataset: &'static str, column: &'static str, prefix: &'static str) 
 
 /// US EPA supply-chain factors: the travel and leisure industries a trip spends money in
 /// (passenger transport, car rental, travel agencies and tours, attractions, lodging, food
-/// service). Freight, casinos, schools and the rest of the economy are not stored.
+/// service). Freight, stand-alone casinos (713210), schools and the rest of the economy are
+/// not stored; casino hotels (721120) are lodging and are kept.
 const EPA_SC_TRAVEL_NAICS: &[&str] = &[
     "481111", "481211", "482111", "483112", "483114", "483212", "485111", "485112", "485113",
     "485210", "485310", "485320", "485510", "487110", "487210", "487990", "532111", "561510",
@@ -458,6 +470,8 @@ const EPA_SC_CATEGORIES: &[(&str, &str)] = &[
     ("Air Transportation", "flights"),
     ("Railroads", "rail"),
     ("Commuter Rail", "rail"),
+    // Before "Passenger Transportation": 483112 is cruise lines, not a ferry.
+    ("Deep Sea Passenger", "other"),
     ("Passenger Transportation", "ferry"),
     ("Taxi", "taxi"),
     ("Limousine", "taxi"),
@@ -502,6 +516,7 @@ const fn concito(
         year: Year::FileName,
         min_year: 0,
         skip_zero: true,
+        preamble_require: &[],
         max_bytes: 4 * 1024 * 1024,
         output: Output::Factor {
             activity_prefix: "",
@@ -541,6 +556,7 @@ const fn rivm(
         year: Year::FileName,
         min_year: 0,
         skip_zero: false,
+        preamble_require: &[],
         max_bytes: 4 * 1024 * 1024,
         output: Output::Factor {
             activity_prefix: "",
@@ -583,6 +599,7 @@ const fn owid_co2(
         year: Year::Column("year"),
         min_year: OWID_CO2_FROM,
         skip_zero: false,
+        preamble_require: &[],
         max_bytes: OWID_CO2_MAX,
         output: Output::Factor {
             activity_prefix: prefix,
@@ -651,6 +668,7 @@ pub const MAPPINGS: &[FactorMapping] = &[
         year: Year::ValueHeaderSuffix,
         min_year: 0,
         skip_zero: false,
+        preamble_require: &[],
         max_bytes: 8 * 1024 * 1024,
         output: Output::Factor {
             activity_prefix: "",
@@ -695,6 +713,7 @@ pub const MAPPINGS: &[FactorMapping] = &[
         year: Year::Column("year"),
         min_year: 0,
         skip_zero: false,
+        preamble_require: &[],
         max_bytes: 1024 * 1024,
         output: Output::Factor {
             activity_prefix: "",
@@ -728,6 +747,7 @@ pub const MAPPINGS: &[FactorMapping] = &[
         year: Year::Column("year"),
         min_year: 0,
         skip_zero: false,
+        preamble_require: &[],
         max_bytes: 4 * 1024 * 1024,
         output: Output::GridIntensity {
             geo: Geo::Iso3 {
@@ -755,6 +775,7 @@ pub const MAPPINGS: &[FactorMapping] = &[
         year: Year::Column("year"),
         min_year: 0,
         skip_zero: false,
+        preamble_require: &[],
         max_bytes: 1024 * 1024,
         output: Output::Factor {
             activity_prefix: "",
@@ -825,6 +846,7 @@ pub const MAPPINGS: &[FactorMapping] = &[
         year: Year::Preamble("eGRID"),
         min_year: 0,
         skip_zero: false,
+        preamble_require: &[],
         max_bytes: 4 * 1024 * 1024,
         output: Output::Factor {
             activity_prefix: EGRID_PREFIX,
@@ -865,6 +887,7 @@ pub const MAPPINGS: &[FactorMapping] = &[
         year: Year::Preamble("eGRID"),
         min_year: 0,
         skip_zero: false,
+        preamble_require: &[],
         max_bytes: 4 * 1024 * 1024,
         output: Output::Factor {
             activity_prefix: EGRID_PREFIX,
@@ -908,6 +931,7 @@ pub const MAPPINGS: &[FactorMapping] = &[
         year: Year::FileName,
         min_year: 0,
         skip_zero: false,
+        preamble_require: &[],
         max_bytes: 4 * 1024 * 1024,
         output: Output::Factor {
             activity_prefix: "",
@@ -939,6 +963,7 @@ pub const MAPPINGS: &[FactorMapping] = &[
         year: Year::FileName,
         min_year: 0,
         skip_zero: false,
+        preamble_require: &[],
         max_bytes: 4 * 1024 * 1024,
         output: Output::Factor {
             activity_prefix: "Mobile combustion",
@@ -974,6 +999,7 @@ pub const MAPPINGS: &[FactorMapping] = &[
         year: Year::FirstYearIn("Time period"),
         min_year: 0,
         skip_zero: false,
+        preamble_require: &[],
         max_bytes: 1024 * 1024,
         output: Output::Factor {
             activity_prefix: "Passenger rail, traction energy",
@@ -1009,6 +1035,7 @@ pub const MAPPINGS: &[FactorMapping] = &[
         year: Year::Column("year"),
         min_year: 2022,
         skip_zero: false,
+        preamble_require: &[],
         max_bytes: 8 * 1024 * 1024,
         output: Output::Factor {
             activity_prefix: "",
@@ -1079,9 +1106,9 @@ pub const MAPPINGS: &[FactorMapping] = &[
     // hours or days); merged "Powertrain" cells label every row they cover.
     FactorMapping {
         dataset: "mobitool",
-        dataset_label: "mobitool factors (Swiss FOEN / PSI), life-cycle passenger transport",
+        dataset_label: "mobitool factors v3.1 (Swiss FOEN / PSI), life-cycle passenger transport",
         publisher: "mobitool (Swiss Federal Office for the Environment, PSI)",
-        path_contains: &["mobitool-Faktoren-", ".xlsx"],
+        path_contains: &["mobitool-Faktoren-v3.1-", ".xlsx"],
         format: Format::XlsxMerged {
             sheet: "mobitool-Faktoren-",
         },
@@ -1104,6 +1131,10 @@ pub const MAPPINGS: &[FactorMapping] = &[
         year: Year::FileNameLeading,
         min_year: 0,
         skip_zero: true,
+        preamble_require: &[
+            ("Select an indicator", "GWP100a"),
+            ("Functional unit for passenger transport", "pkm"),
+        ],
         max_bytes: 12 * 1024 * 1024,
         output: Output::Factor {
             activity_prefix: "",
@@ -1152,9 +1183,13 @@ pub const MAPPINGS: &[FactorMapping] = &[
     // mapped until the unit below is updated.
     FactorMapping {
         dataset: "epa-supply-chain",
-        dataset_label: "US EPA Supply Chain GHG Emission Factors (NAICS, with margins)",
+        dataset_label: "US EPA Supply Chain GHG Emission Factors v1.3 (NAICS, with margins)",
         publisher: EPA,
-        path_contains: &["SupplyChainGHGEmissionFactors_", "_NAICS_CO2e_USD", ".csv"],
+        path_contains: &[
+            "SupplyChainGHGEmissionFactors_v1.3",
+            "_NAICS_CO2e_USD",
+            ".csv",
+        ],
         format: Format::Csv,
         anchor: "",
         header_rows: 1,
@@ -1184,6 +1219,7 @@ pub const MAPPINGS: &[FactorMapping] = &[
         year: Year::FileName,
         min_year: 0,
         skip_zero: false,
+        preamble_require: &[],
         max_bytes: 2 * 1024 * 1024,
         output: Output::Factor {
             activity_prefix: "",
@@ -1200,9 +1236,9 @@ pub const MAPPINGS: &[FactorMapping] = &[
             geo: US,
         },
     },
-    // Our World in Data grapher (CC BY 4.0, from OECD and UN Tourism): per-capita CO2 of
-    // international flights, allocated to the country of departure and then adjusted for
-    // tourism (kg per person per year).
+    // Our World in Data grapher (OECD and UN Tourism inputs; facts only, see the source
+    // notes): per-capita CO2 of international flights, allocated to the country of departure
+    // and then adjusted for tourism (kg per person per year).
     FactorMapping {
         dataset: "owid-tourism-aviation",
         dataset_label: "Our World in Data: per capita CO2 from international flights, tourism-adjusted",
@@ -1220,6 +1256,7 @@ pub const MAPPINGS: &[FactorMapping] = &[
         year: Year::Column("Year"),
         min_year: 0,
         skip_zero: false,
+        preamble_require: &[],
         max_bytes: 1024 * 1024,
         output: Output::Factor {
             activity_prefix: "International flights, tourism-adjusted CO2 per capita",
@@ -1264,6 +1301,7 @@ pub const MAPPINGS: &[FactorMapping] = &[
         year: Year::Preamble("Vehicle occupancies ("),
         min_year: 0,
         skip_zero: true,
+        preamble_require: &[],
         max_bytes: 12 * 1024 * 1024,
         output: Output::Occupancy {
             label: &["Vehicle Type", "Journey Purpose"],
@@ -1814,15 +1852,57 @@ pub fn items(url: &CanonicalUrl, body: &[u8]) -> Result<Vec<FactorItem>> {
     if ms.is_empty() {
         return Err(Error::Invalid(format!("{ID}: no mapping for this file")));
     }
+    file_items(&ms, url, body)
+}
+
+/// The records one mapping gives a file, with the same checks as [`items`] (tests try a
+/// mapping with one field changed).
+pub fn items_with(m: &FactorMapping, url: &CanonicalUrl, body: &[u8]) -> Result<Vec<FactorItem>> {
+    file_items(&[m], url, body)
+}
+
+/// Every mapping of a file. One mapping may legitimately map nothing (a column left blank in
+/// this file), but when rows were read and no mapping kept any of them the format has drifted
+/// (a new dollar year in a unit text, a dropdown saved with another functional unit), so the
+/// file is refused rather than stored as an empty success.
+fn file_items(ms: &[&FactorMapping], url: &CanonicalUrl, body: &[u8]) -> Result<Vec<FactorItem>> {
     let mut out = Vec::new();
+    let mut rows = 0;
     for m in ms {
-        out.extend(mapping_items(m, url, body)?);
+        let (items, n) = mapping_items(m, url, body)?;
+        out.extend(items);
+        rows += n;
+    }
+    if out.is_empty() && rows > 0 {
+        let names: Vec<&str> = ms.iter().map(|m| m.dataset).collect();
+        return Err(Error::Invalid(format!(
+            "{ID}: {}: {rows} rows read but none mapped (unit, filter or layout changed?)",
+            names.join(", ")
+        )));
     }
     Ok(out)
 }
 
-fn mapping_items(m: &FactorMapping, url: &CanonicalUrl, body: &[u8]) -> Result<Vec<FactorItem>> {
+/// The records of one mapping, with the number of table rows read.
+fn mapping_items(
+    m: &FactorMapping,
+    url: &CanonicalUrl,
+    body: &[u8],
+) -> Result<(Vec<FactorItem>, usize)> {
     let t = read_table(m, body)?;
+    for (label, want) in m.preamble_require {
+        let got = t
+            .preamble
+            .iter()
+            .position(|c| c == label)
+            .and_then(|i| t.preamble.get(i + 1));
+        if got.map(String::as_str) != Some(*want) {
+            return Err(Error::Invalid(format!(
+                "{ID}: {}: {label:?} is {got:?} above the header, not {want:?}",
+                m.dataset
+            )));
+        }
+    }
     let cols: HashMap<&str, usize> = t
         .header
         .iter()
@@ -2166,7 +2246,7 @@ fn mapping_items(m: &FactorMapping, url: &CanonicalUrl, body: &[u8]) -> Result<V
             }
         }
     }
-    Ok(out)
+    Ok((out, t.rows.len()))
 }
 
 /// The adapter.
@@ -2199,18 +2279,11 @@ impl SourceAdapter for FactorTable {
                 .unwrap_or(first.max_bytes),
             ..Fetch::default()
         };
-        let ex = fetch_raw(ctx, url, &opts, &mut rep).await?;
+        let ex = fetch_raw(ctx, url.clone(), &opts, &mut rep).await?;
         if !not_modified(&ex) {
             check_status(&ex)?;
-            for m in &ms {
-                let t = read_table(m, &ex.body)?;
-                tracing::info!(
-                    adapter = ID,
-                    dataset = m.dataset,
-                    rows = t.rows.len(),
-                    "parsed"
-                );
-            }
+            let records = file_items(&ms, &url, &ex.body)?.len();
+            tracing::info!(adapter = ID, dataset = first.dataset, records, "parsed");
         }
         rep.complete = true;
         Ok(rep)

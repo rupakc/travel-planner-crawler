@@ -126,6 +126,12 @@ LICENCES: dict[str, tuple[str, str | None, str | None]] = {
     "copyright; robots allows": COPYRIGHT,
     "Personal copyright; link/reference only": COPYRIGHT,
     "robots Allow /; ToS not verified": COPYRIGHT,
+    # OWID publishes under CC BY 4.0 but third-party inputs keep their own terms; UN Tourism's
+    # (www.untourism.int/copyright, 2026-11-19) are personal, non-commercial, no derivatives:
+    # restricted until the owner accepts them (as for the 2026-11-18/19 owner-accepted sources).
+    "OWID CC BY 4.0; UN Tourism input personal/non-commercial terms": (
+        "restricted", None, "https://www.untourism.int/copyright",
+    ),
     "robots allows tour pages; ToS not verified": COPYRIGHT,
     "robots disallows only /users/; ToS not verified; user copyright": COPYRIGHT,
     "Common Crawl ToU; page copyright remains": COPYRIGHT,
@@ -18684,12 +18690,6 @@ CARBON_TABLES_3 = {
         'campgrounds, restaurants and bars) -> emission_factor records (US, spend-based). Rows whose '
         'unit is not "kg CO2e/2022 USD, purchaser price" are not mapped. pasteur.epa.gov robots.txt: '
         '404 (allowed), 2026-11-19. Next version: replace the seed and the dollar year in the mapping.'),
-    'od-owid-tourism-aviation': (
-        'Adapter factor_table (2026-11-19): grapher CSV per-capita-co-emissions-from-international-'
-        'flights-tourism-adjusted (32 KB; OECD and UN Tourism, kg CO2 per person per year, 2013-2024, '
-        'unit from the chart\'s metadata.json) -> emission_factor records per country (category flights; '
-        'OWID aggregates skipped). ourworldindata.org robots.txt: Sitemap line only (allowed), re-checked '
-        '2026-11-19.'),
 }
 for _sid, _note in CARBON_TABLES_3.items():
     ADAPTERS[_sid] = 'factor_table'
@@ -18703,7 +18703,24 @@ for _sid, _note in CARBON_TABLES_3.items():
 ATTRIBUTION['od-mobitool-ch'] = 'mobitool factors v3.1 (Swiss Federal Office for the Environment FOEN, PSI)'
 ATTRIBUTION['carbon-aib-residual-mix'] = 'Association of Issuing Bodies (AIB), European Residual Mixes 2025'
 ATTRIBUTION['od-epa-supply-chain-ghg'] = 'US EPA, Supply Chain GHG Emission Factors for US Commodities and Industries v1.3'
-ATTRIBUTION['od-owid-tourism-aviation'] = 'Our World in Data (ourworldindata.org), based on OECD and UN Tourism; CC BY 4.0'
+# Restricted (UN Tourism input terms), so no adapter is attached and it is not in a ramp file;
+# the factor_table mapping is ready for when the owner accepts the terms.
+NOTES_APPEND['od-owid-tourism-aviation'] = (
+        'Adapter factor_table ready, not attached (2026-11-19): grapher CSV per-capita-co-emissions-from-international-'
+        'flights-tourism-adjusted (32 KB; OECD and UN Tourism, kg CO2 per person per year, 2013-2024, '
+        'unit from the chart\'s metadata.json) -> emission_factor records per country (category flights; '
+        'OWID aggregates skipped). ourworldindata.org robots.txt: Sitemap line only (allowed), re-checked '
+        '2026-11-19. Licence: OWID says third-party data keeps its original licence; the inputs are OECD '
+        '"Air transport CO2 emissions (experimental)" (CC BY 4.0) and the "UN Tourism Statistics Database", '
+        'whose site terms (www.untourism.int/copyright, read 2026-11-19; robots.txt allows it) grant only '
+        'personal, non-commercial use without derivatives. So restricted and off until the owner accepts '
+        'those terms (as for the non-commercial-terms sources accepted 2026-11-19; then facts only). The '
+        'factor_table mapping and its test stay ready; attribution = OWID\'s citationShort verbatim.')
+DISABLED.pop('od-owid-tourism-aviation', None)  # the licence is the reason now
+# OWID's citationShort, verbatim (chart metadata.json, 2026-11-19).
+ATTRIBUTION['od-owid-tourism-aviation'] = (
+    'OECD (2025); UN Tourism (2025); Population based on various sources (2024) \u2013 with minor processing by '
+    'Our World in Data')
 
 # Third batch, left off (2026-11-19), each after its host's robots.txt.
 CARBON_TABLES_3_OFF = {

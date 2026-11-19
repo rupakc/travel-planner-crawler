@@ -1233,4 +1233,3 @@ od-dft-tag-databook                # carbon/getting_around: DfT TAG data book A1
 od-mobitool-ch                     # carbon/getting_around: mobitool v3.1 life-cycle g CO2e per pkm, CH plus trains in DE FR IT AT (api, facts_only, yearly, <= 10/day); factor_table
 carbon-aib-residual-mix            # carbon/hotels: AIB 2025 production, residual and supplier mix g CO2/kWh for 34 European countries (api, facts_only, yearly, <= 10/day); factor_table
 od-epa-supply-chain-ghg            # carbon/activities: US EPA supply-chain kg CO2e per 2022 USD for 41 travel industries (api, open, yearly, <= 10/day); factor_table
-od-owid-tourism-aviation           # carbon/flights: OWID tourism-adjusted international aviation kg CO2 per capita (api, open, yearly, <= 10/day); factor_table

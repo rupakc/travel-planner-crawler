@@ -7,7 +7,7 @@
 Every website and dataset the crawler knows, grouped by the part of the Voyager app it
 feeds. A source that serves several parts is listed under each of them.
 
-**1733 sources, 1270 on, 463 off.**
+**1733 sources, 1269 on, 464 off.**
 
 - **What we take**: the traveller-facing data the source gives (its `relevance.why`).
 - **Licence**: *open* (free reuse with credit), *share-alike* (kept apart from other
@@ -90,7 +90,6 @@ a reader or a key exists.
 | `od-ispra-tourism` | `indicatoriambientali.isprambiente.it` | ISPRA environmental indicators: tourism GHG intensity, air travel emission intensity: Italian official indicator sheets on tourism GHG per MEUR and air-travel emission intensity, for the trip Carbon footprint and Flights. | facts only | yes | no |
 | `od-mobitool-ch` | `assets.ctfassets.net` | mobitool factors v3 (FOEN/SFOE Switzerland): Swiss LCA factors per pkm/vkm for cars, rail, bus, tram, flights, ships incl. vehicle and infrastructure, for the trip Carbon footprint, Local transportation and Flights. | facts only | yes | no |
 | `od-naturvardsverket-resor` | `www.naturvardsverket.se` | Naturvardsverket travel climate calculation tool (SMED): Swedish official travel factors and method (flights incl. high-altitude effect, rail, bus, car, hotel), for the trip Carbon footprint, Flights, Local transportation and Hotels. | facts only | yes | no |
-| `od-owid-tourism-aviation` | `ourworldindata.org` | Our World in Data: per-capita CO2 from international flights, tourism-adjusted: Country aviation CO2 allocated by tourism flows (ICCT basis), CSV per grapher, for the trip Carbon footprint and Flights. | open | yes | no |
 | `od-owid-travel-mode` | `ourworldindata.org` | Our World in Data: carbon footprint of travel per km by mode: g CO2e/pkm for flights, rail, bus, ferry and car (CSV confirmed), for the trip Carbon footprint, Flights and Local transportation. | open | yes | no |
 | `official-citizensadvice-holidays` | `www.citizensadvice.org.uk` | UK consumer rights for cancelled or delayed flights and holidays, for Travel tips and Flights. | facts only | yes | no |
 | `official-vzbv-reise` | `www.verbraucherzentrale.de` | German consumer-centre advice on passenger rights, paying abroad and cheap-flight pitfalls, for Travel tips, Forex and Flights. | facts only | yes | no |
@@ -165,6 +164,7 @@ a reader or a key exists.
 | `od-jp-env-emission-units` | `www.env.go.jp` | Japan MoE emission unit database: Japanese official factors incl. air passenger-km and hotel stays, for the trip Carbon footprint, Flights and Hotels. | facts only | no | no |
 | `od-moe-jp-gvc-db` | `www.env.go.jp` | Japan MOE emission unit database (Green Value Chain Platform): Japanese factors per JPY/pkm for business travel, accommodation per night, food, for the trip Carbon footprint, Flights, Local transportation and Hotels. | open | no | no |
 | `od-openap` | `openap.dev`, `github.com` | OpenAP aircraft performance model: Open fuel-flow and emission model per aircraft type, for the trip Carbon footprint and Flights. | open | no | no |
+| `od-owid-tourism-aviation` | `ourworldindata.org` | Our World in Data: per-capita CO2 from international flights, tourism-adjusted: Country aviation CO2 allocated by tourism flows (ICCT basis), CSV per grapher, for the trip Carbon footprint and Flights. | restricted | no | no |
 | `od-statcan-tourism-ghg` | `www150.statcan.gc.ca` | Statistics Canada table 38-10-0141-01: energy use and GHG emissions associated with tourism, by product: Official kt CO2e and TJ per tourism product (air, accommodation, food, vehicle fuel...): factor source per tourism product, for the trip Carbon footprint, Flights, Hotels and Local transportation. | open | no | no |
 | `od-uba-at-ekz` | `www.umweltbundesamt.at` | Umweltbundesamt Austria emission factors per transport mode: Austrian g CO2e per pkm (direct + upstream) for flights, car, rail, bus, tram, 2024 data, for the trip Carbon footprint, Local transportation and Flights. | facts only | no | no |
 | `od-uk-caa-airline-data` | `www.caa.co.uk` | UK CAA airline data (seat-km available and used): Real load factors per UK airline, for the trip Carbon footprint and Flights. | facts only | no | no |
@@ -3612,7 +3612,6 @@ a reader or a key exists.
 | `od-orr-rail-environment` | `dataportal.orr.gov.uk` | ORR Rail environment statistics (Table 6100 g CO2e/pkm, GB): Official GB passenger-rail g CO2e per pkm (31 g, 2024-25), yearly in November. Tables are ODS, so an ODS reader is needed (the release page fits html), for the trip Carbon footprint and Local transportation. | open | yes | no |
 | `od-owid-co2-data` | `raw.githubusercontent.com` | OWID CO2 and greenhouse gas emissions dataset: Per-country CO2/GHG per capita and consumption-based emissions for every country. Destination context and a fallback for Africa and the Gulf. Yearly, for the trip Carbon footprint and Travel tips. | open | yes | no |
 | `od-owid-food-ghg` | `ourworldindata.org` | Our World in Data: environmental impacts of food (Poore & Nemecek 2018): kg CO2e per kg / per 1000 kcal for ~40 food products and the supply-chain split (farm, land use, transport, retail): the core per-meal factor table, for the trip Carbon footprint, Travel tips and the Itinerary. | open | yes | no |
-| `od-owid-tourism-aviation` | `ourworldindata.org` | Our World in Data: per-capita CO2 from international flights, tourism-adjusted: Country aviation CO2 allocated by tourism flows (ICCT basis), CSV per grapher, for the trip Carbon footprint and Flights. | open | yes | no |
 | `od-owid-travel-mode` | `ourworldindata.org` | Our World in Data: carbon footprint of travel per km by mode: g CO2e/pkm for flights, rail, bus, ferry and car (CSV confirmed), for the trip Carbon footprint, Flights and Local transportation. | open | yes | no |
 | `od-rivm-food-lca` | `www.rivm.nl` | RIVM Database milieubelasting voedingsmiddelen (Dutch food LCA database): Official Dutch government LCA of ~250 foods as eaten (kg CO2e per kg, plus land/water), consumer-side incl. cooking: a second national food factor set, for the trip Carbon footprint and Travel tips. | open | yes | no |
 | `od-scb-tsa-env` | `www.scb.se` | SCB Sweden: tourism satellite account and the environment (method development): Method to attribute GHG to tourism from Swedish environmental accounts; TSA updated yearly, for the trip Carbon footprint. | open | yes | no |
@@ -3821,6 +3820,7 @@ a reader or a key exists.
 | `od-openap` | `openap.dev`, `github.com` | OpenAP aircraft performance model: Open fuel-flow and emission model per aircraft type, for the trip Carbon footprint and Flights. | open | no | no |
 | `od-openev-data` | `open-ev-data.github.io`, `github.com` | OpenEV Data dataset: Versioned EV spec dataset (consumption, battery), for the trip Carbon footprint and Local transportation. | open | no | no |
 | `od-ornl-tedb` | `tedb.ornl.gov` | ORNL Transportation Energy Data Book: Btu/CO2 per passenger-mile by US mode, load factors, for the trip Carbon footprint and Local transportation. | open | no | no |
+| `od-owid-tourism-aviation` | `ourworldindata.org` | Our World in Data: per-capita CO2 from international flights, tourism-adjusted: Country aviation CO2 allocated by tourism flows (ICCT basis), CSV per grapher, for the trip Carbon footprint and Flights. | restricted | no | no |
 | `od-primap-hist` | `zenodo.org` | PRIMAP-hist national historical emissions v2.7 (Zenodo): Consistent country x sector GHG 1750-2024 for every country, for the trip Carbon footprint and Travel tips. | share-alike | no | no |
 | `od-seattle-energy-benchmarking` | `cos-data.seattle.gov`, `data.seattle.gov` | Seattle Building Energy Benchmarking 2015-present: Per-building hotel EUI/GHG and ranges by building type, for the trip Carbon footprint and Hotels. | open | no | no |
 | `od-sf-ecbepo` | `data.sfgov.org` | San Francisco Existing Commercial Buildings Energy Performance: Benchmark EUI/GHG incl. hotels, for the trip Carbon footprint and Hotels. | open | no | no |

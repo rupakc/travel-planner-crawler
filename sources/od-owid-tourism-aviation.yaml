@@ -5,39 +5,48 @@ name: 'Our World in Data: per-capita CO2 from international flights, tourism-adj
 category: carbon
 source_class: reference
 licence:
-  class: open
-  spdx: CC-BY-4.0
-  attribution: Our World in Data (ourworldindata.org), based on OECD and UN Tourism; CC BY 4.0
-  url: https://creativecommons.org/licenses/by/4.0/
+  class: restricted
+  spdx: null
+  attribution: OECD (2025); UN Tourism (2025); Population based on various sources (2024) – with minor
+    processing by Our World in Data
+  url: https://www.untourism.int/copyright
 method: api
 seeds:
 - https://ourworldindata.org/grapher/per-capita-co-emissions-from-international-flights-tourism-adjusted.csv
 sitemaps: []
 feeds: []
-adapter: factor_table
+adapter: null
 include: []
 exclude: []
 max_depth: 0
 kinds:
-- emission_factor
-llm_kinds: []
+- article
+- tip
+llm_kinds:
+- tip
 render: never
 cadence: yearly
 min_delay_s: 5
-daily_budget: 10
+daily_budget: 20
 politeness_key: null
-enabled: true
+enabled: false
 needs_key: false
 key_secret: null
 max_retention_days: null
 display_requirements: null
 notes: 'Research 2026-11-19 (carbon footprint corpus; tourism research; verdict ADD): Country aviation
   CO2 allocated by tourism flows (ICCT basis), CSV per grapher. Format: CSV. Licence (research): open
-  (CC BY 4.0). robots allowed; homepage states CC BY. Yearly. | Adapter factor_table (2026-11-19): grapher
-  CSV per-capita-co-emissions-from-international-flights-tourism-adjusted (32 KB; OECD and UN Tourism,
-  kg CO2 per person per year, 2013-2024, unit from the chart''s metadata.json) -> emission_factor records
-  per country (category flights; OWID aggregates skipped). ourworldindata.org robots.txt: Sitemap line
-  only (allowed), re-checked 2026-11-19.'
+  (CC BY 4.0). robots allowed; homepage states CC BY. Yearly. | Disabled: restricted licence (non-commercial
+  or unknown), not ingested in v1 (spec §5.9). | Adapter factor_table ready, not attached (2026-11-19):
+  grapher CSV per-capita-co-emissions-from-international-flights-tourism-adjusted (32 KB; OECD and UN
+  Tourism, kg CO2 per person per year, 2013-2024, unit from the chart''s metadata.json) -> emission_factor
+  records per country (category flights; OWID aggregates skipped). ourworldindata.org robots.txt: Sitemap
+  line only (allowed), re-checked 2026-11-19. Licence: OWID says third-party data keeps its original licence;
+  the inputs are OECD "Air transport CO2 emissions (experimental)" (CC BY 4.0) and the "UN Tourism Statistics
+  Database", whose site terms (www.untourism.int/copyright, read 2026-11-19; robots.txt allows it) grant
+  only personal, non-commercial use without derivatives. So restricted and off until the owner accepts
+  those terms (as for the non-commercial-terms sources accepted 2026-11-19; then facts only). The factor_table
+  mapping and its test stay ready; attribution = OWID''s citationShort verbatim.'
 relevance:
   sections:
   - carbon

@@ -363,3 +363,11 @@ plan = `docs/superpowers/plans/2026-11-15-voyager-crawler.md`, r1–r5 = `docs/r
   On (ramp-3): od-mobitool-ch, carbon-aib-residual-mix, od-epa-supply-chain-ghg (41 travel NAICS,
   spend-based), od-owid-tourism-aviation. 16 more left off with precise reasons (Cornell CHSB: CDN
   robots 403; impactco2: no units/years in the CSV; PDFs; wide/block layouts; signed redirects; DNS).
+  Review fixes: a file whose rows were read but none mapped is an error (format drift), mobitool
+  is refused unless its dropdowns say GWP100a / pkm (`preamble_require`), mobitool and EPA mappings
+  match only their edition (v3.1, v1.3, named in the dataset label), mobitool flights carry no
+  country code, EPA cruise lines are `other`; od-owid-tourism-aviation is now restricted and off (UN
+  Tourism input terms are personal/non-commercial; mapping kept; on again if the owner accepts). Process lesson: a single 1 KB range GET
+  reached the Cornell CDN (cf003.cdn.4science.cloud) before its robots.txt was read, because the
+  download redirected there. Resolve redirect targets (HEAD or no-follow) and read each new
+  host's robots.txt before any GET to it.
