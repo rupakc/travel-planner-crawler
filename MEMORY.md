@@ -339,3 +339,8 @@ plan = `docs/superpowers/plans/2026-11-15-voyager-crawler.md`, r1–r5 = `docs/r
   carbon-greenbooklive. Off with reasons: Ember (CSV host robots Disallow: /), SNCF (/api/
   disallowed), Base Carbone (static.data.gouv.fr disallowed), Climatiq OEFDB (repo gone),
   Electricity Maps (needs key), EPA eGRID/EF Hub, AU NGA, AGRIBALYSE (adapter pending).
+- 2026-11-19: adapter `ember_api` -> `grid_carbon_intensity` (annual + monthly, life-cycle, series
+  `grid_ci:<ISO2>:<period>:lifecycle`). Source carbon-ember-api on (ramp-3), two rows (yearly from
+  2000, monthly from 2019-01, no entity_code = every country), weekly, daily_budget 10. Owner key in
+  Secret Manager `crawler-src-ember-key` (new KEY_SECRET override in seeds_to_sources.py); sent as the
+  `api_key` query parameter, redacted from stored URLs/redirects/errors; a row carrying it is refused.

@@ -31,6 +31,7 @@ pub mod canada_advisories;
 pub mod canada_offices;
 pub mod countries;
 pub mod ecb_fx;
+pub mod ember_api;
 pub mod enwiki_visa;
 pub mod eurostat_jsonstat;
 pub mod factor_table;
@@ -70,6 +71,7 @@ pub static REGISTRY: &[&dyn SourceAdapter] = &[
     &canada_advisories::CanadaAdvisories,
     &canada_offices::CanadaOfficesAdapter,
     &ecb_fx::EcbFx,
+    &ember_api::EmberApi,
     &enwiki_visa::EnwikiVisa::DEFAULT,
     &eurostat_jsonstat::EurostatJsonStat,
     &factor_table::FactorTable,
@@ -161,6 +163,7 @@ pub fn registry_with(cfg: &vc_config::SourcesConfig) -> Vec<Box<dyn SourceAdapte
         Box::new(canada_advisories::CanadaAdvisories),
         Box::new(canada_offices::CanadaOfficesAdapter),
         Box::new(ecb_fx::EcbFx),
+        Box::new(ember_api::EmberApi),
         Box::new(enwiki_visa::EnwikiVisa::new(d.clone())),
         Box::new(eurostat_jsonstat::EurostatJsonStat),
         Box::new(factor_table::FactorTable),

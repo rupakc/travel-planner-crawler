@@ -7,7 +7,7 @@
 Every website and dataset the crawler knows, grouped by the part of the Voyager app it
 feeds. A source that serves several parts is listed under each of them.
 
-**1733 sources, 1255 on, 478 off.**
+**1733 sources, 1256 on, 477 off.**
 
 - **What we take**: the traveller-facing data the source gives (its `relevance.why`).
 - **Licence**: *open* (free reuse with credit), *share-alike* (kept apart from other
@@ -252,6 +252,7 @@ a reader or a key exists.
 | `carbon-dgnb-projects` | `www.dgnb.de` | DGNB certified projects: Certified buildings incl. hotels, for the trip Carbon footprint and Hotels. | facts only | yes | no |
 | `carbon-ecomark-jp` | `www.ecomark.jp` | Japan Eco Mark Office: eco-label certified products and criteria: Japan's official eco-label. robots.txt redirects to the homepage (no file, allowed). Terms are a copyright reservation only, for the trip Carbon footprint, Hotels and Travel tips. | facts only | yes | no |
 | `carbon-eea-grid-intensity` | `www.eea.europa.eu` | EEA GHG emission intensity of electricity generation: Official EU country grid intensity, for the trip Carbon footprint and Hotels. | open | yes | no |
+| `carbon-ember-api` | `api.ember-energy.org` | Ember API: Monthly and yearly carbon intensity per country and region, machine-readable, for the trip Carbon footprint, Hotels and Local transportation. | open | yes | yes |
 | `carbon-energiaabierta-cl` | `energiaabierta.cl` | Energía Abierta (CNE Chile): emission factor: Official Chilean SEN emission factor, with a feed, for the trip Carbon footprint and Hotels. | facts only | yes | no |
 | `carbon-energystar-eui` | `www.energystar.gov`, `portfoliomanager.energystar.gov` | ENERGY STAR technical reference: US median EUI by property type: National median hotel EUI as a fallback hotel-night estimate, for the trip Carbon footprint and Hotels. | facts only | yes | no |
 | `carbon-gbca-greenstar` | `new.gbca.org.au` | GBCA Green Star project directory: Green Star-rated Australian hotels, for the trip Carbon footprint and Hotels. | facts only | yes | no |
@@ -378,7 +379,6 @@ a reader or a key exists.
 | `carbon-eirgrid-sgd` | `www.smartgriddashboard.com` | EirGrid Smart Grid Dashboard: Irish 15-minute intensity, for the trip Carbon footprint and Hotels. | open | no | no |
 | `carbon-electricitymaps-api` | `api.electricitymap.org`, `api.electricitymaps.com`, `app.electricitymaps.com` | Electricity Maps API (free tier): Widest live zone coverage, for the trip Carbon footprint, Hotels and Local transportation. | API terms | no | yes |
 | `carbon-emas-register` | `green-business.ec.europa.eu` | EU EMAS register (accommodation): EMAS hotels publish verified per-night energy/CO2, for the trip Carbon footprint and Hotels. | open | no | no |
-| `carbon-ember-api` | `api.ember-energy.org`, `ember-energy.org` | Ember API: Monthly and yearly carbon intensity per country and region, machine-readable, for the trip Carbon footprint, Hotels and Local transportation. | open | no | yes |
 | `carbon-ember-grid` | `ember-energy.org` | Ember yearly electricity data (grid intensity): gCO2/kWh per country to turn hotel kWh into CO2, for the trip Carbon footprint and Hotels. | open | no | no |
 | `carbon-energinet-eds` | `api.energidataservice.dk`, `www.energidataservice.dk` | Energinet Energi Data Service (CO2Emis, CO2EmisProg): 5-minute Danish grid intensity, for the trip Carbon footprint, Hotels and Local transportation. | open | no | no |
 | `carbon-energy-charts` | `api.energy-charts.info`, `www.energy-charts.info` | Energy-Charts API (Fraunhofer ISE): No-key European mix and green-power signal, for the trip Carbon footprint, Hotels and Travel tips. | facts only | no | no |
@@ -3015,6 +3015,7 @@ a reader or a key exists.
 | `blog-twoweekscr` | `www.twoweeksincostarica.com` | Two Weeks in Costa Rica: detailed independent Costa Rica guides, for Travel tips, Places to see and Local transportation. | facts only | yes | no |
 | `blog-vietnamcoracle` | `www.vietnamcoracle.com` | Independent budget guide to Vietnam (motorbike routes, guesthouses) from Vietnam Coracle, for Places to see, Hotels and Local transportation (headline, link and a short excerpt only). | facts only | yes | no |
 | `budapest-bkk-gtfs` | `go.bkk.hu` | Budapest metro, tram, bus, trolleybus and ferry lines and stations, for Local transportation. | facts only | yes | no |
+| `carbon-ember-api` | `api.ember-energy.org` | Ember API: Monthly and yearly carbon intensity per country and region, machine-readable, for the trip Carbon footprint, Hotels and Local transportation. | open | yes | yes |
 | `carbon-ifeu-motorhome-study` | `www.civd.de` | ifeu/CIVD: climate balance of motorhome trips vs hotel nights (2020): Per-night CO2e for hotel vs camper/campsite stays, for the trip Carbon footprint, Hotels and Local transportation. | facts only | yes | no |
 | `carbon-nl-klimaatwijsopreis` | `www.klimaatwijsopreis.nl` | Klimaatwijs op reis (Milieu Centraal / BUas holiday footprint calculator): Dutch holiday calculator with accommodation, activity and vessel factors, for the trip Carbon footprint, Hotels, Activities and Local transportation. | facts only | yes | no |
 | `carbon-owid-grapher-ci` | `ourworldindata.org` | OWID grapher: lifecycle carbon intensity of electricity: Single-indicator CSV with citation metadata (Ember 2026), for the trip Carbon footprint, Hotels and Local transportation. | open | yes | no |
@@ -3257,7 +3258,6 @@ a reader or a key exists.
 | `carbon-ar-snigei-factors` | `inventariogei.ambiente.gob.ar` | Argentina SNIGEI-AR: emission factors for carbon footprints, 2025: Argentina's official footprint factor set, yearly. robots.txt is 404 (allowed), for the trip Carbon footprint, Hotels and Local transportation. | facts only | no | no |
 | `carbon-eia-eba-bulk` | `www.eia.gov` | US EIA Hourly Electric Grid Monitor bulk (EBA.zip): US hourly regional intensity for stays and EV or rail legs, for the trip Carbon footprint, Hotels and Local transportation. | open | no | no |
 | `carbon-electricitymaps-api` | `api.electricitymap.org`, `api.electricitymaps.com`, `app.electricitymaps.com` | Electricity Maps API (free tier): Widest live zone coverage, for the trip Carbon footprint, Hotels and Local transportation. | API terms | no | yes |
-| `carbon-ember-api` | `api.ember-energy.org`, `ember-energy.org` | Ember API: Monthly and yearly carbon intensity per country and region, machine-readable, for the trip Carbon footprint, Hotels and Local transportation. | open | no | yes |
 | `carbon-energinet-eds` | `api.energidataservice.dk`, `www.energidataservice.dk` | Energinet Energi Data Service (CO2Emis, CO2EmisProg): 5-minute Danish grid intensity, for the trip Carbon footprint, Hotels and Local transportation. | open | no | no |
 | `carbon-entsoe` | `web-api.tp.entsoe.eu`, `transparency.entsoe.eu` | ENTSO-E Transparency REST API: Hourly European mix to combine with lifecycle factors, for the trip Carbon footprint, Hotels and Local transportation. | API terms | no | yes |
 | `carbon-fingrid` | `data.fingrid.fi`, `www.fingrid.fi`, `developer-data.fingrid.fi` | Fingrid Open Data CO2 factors: Real-time Finnish intensity, for the trip Carbon footprint, Hotels and Local transportation. | open | no | yes |
@@ -3538,6 +3538,7 @@ a reader or a key exists.
 | `carbon-dgnb-projects` | `www.dgnb.de` | DGNB certified projects: Certified buildings incl. hotels, for the trip Carbon footprint and Hotels. | facts only | yes | no |
 | `carbon-ecomark-jp` | `www.ecomark.jp` | Japan Eco Mark Office: eco-label certified products and criteria: Japan's official eco-label. robots.txt redirects to the homepage (no file, allowed). Terms are a copyright reservation only, for the trip Carbon footprint, Hotels and Travel tips. | facts only | yes | no |
 | `carbon-eea-grid-intensity` | `www.eea.europa.eu` | EEA GHG emission intensity of electricity generation: Official EU country grid intensity, for the trip Carbon footprint and Hotels. | open | yes | no |
+| `carbon-ember-api` | `api.ember-energy.org` | Ember API: Monthly and yearly carbon intensity per country and region, machine-readable, for the trip Carbon footprint, Hotels and Local transportation. | open | yes | yes |
 | `carbon-energiaabierta-cl` | `energiaabierta.cl` | Energía Abierta (CNE Chile): emission factor: Official Chilean SEN emission factor, with a feed, for the trip Carbon footprint and Hotels. | facts only | yes | no |
 | `carbon-energystar-eui` | `www.energystar.gov`, `portfoliomanager.energystar.gov` | ENERGY STAR technical reference: US median EUI by property type: National median hotel EUI as a fallback hotel-night estimate, for the trip Carbon footprint and Hotels. | facts only | yes | no |
 | `carbon-gbca-greenstar` | `new.gbca.org.au` | GBCA Green Star project directory: Green Star-rated Australian hotels, for the trip Carbon footprint and Hotels. | facts only | yes | no |
@@ -3708,7 +3709,6 @@ a reader or a key exists.
 | `carbon-electricitymaps-contrib` | `raw.githubusercontent.com`, `github.com` | electricitymaps-contrib emission-factor config: Sourced per-fuel factors to convert generation mixes, for the trip Carbon footprint. | facts only | no | no |
 | `carbon-elexon-bmrs` | `data.elexon.co.uk` | Elexon BMRS Insights API: Backup GB mix, for the trip Carbon footprint. | API terms | no | no |
 | `carbon-emas-register` | `green-business.ec.europa.eu` | EU EMAS register (accommodation): EMAS hotels publish verified per-night energy/CO2, for the trip Carbon footprint and Hotels. | open | no | no |
-| `carbon-ember-api` | `api.ember-energy.org`, `ember-energy.org` | Ember API: Monthly and yearly carbon intensity per country and region, machine-readable, for the trip Carbon footprint, Hotels and Local transportation. | open | no | yes |
 | `carbon-ember-grid` | `ember-energy.org` | Ember yearly electricity data (grid intensity): gCO2/kWh per country to turn hotel kWh into CO2, for the trip Carbon footprint and Hotels. | open | no | no |
 | `carbon-emi-nz` | `www.emi.ea.govt.nz` | Electricity Authority EMI generation datasets: NZ generation by fuel, for the trip Carbon footprint. | open | no | no |
 | `carbon-energinet-eds` | `api.energidataservice.dk`, `www.energidataservice.dk` | Energinet Energi Data Service (CO2Emis, CO2EmisProg): 5-minute Danish grid intensity, for the trip Carbon footprint, Hotels and Local transportation. | open | no | no |
@@ -3868,7 +3868,6 @@ source's notes say where to sign up and what it costs.
 | `carbon-crrem` | `www.crrem.eu` | carbon, hotels | needs an API key: https://www.crrem.eu/ (free: free registration believed required (unverified)) |
 | `carbon-csiro-nem-realtime` | `agdatashop.csiro.au` | carbon, hotels | needs an API key: https://agdatashop.csiro.au/real-time-carbon-emissions-intensity-of-the-national-electricity-market (free: account and a $0.00 checkout) |
 | `carbon-electricitymaps-api` | `api.electricitymap.org`, `api.electricitymaps.com`, `app.electricitymaps.com` | carbon, hotels, getting_around | needs an API key: https://app.electricitymaps.com/ (free API key from the owner) |
-| `carbon-ember-api` | `api.ember-energy.org`, `ember-energy.org` | carbon, hotels, getting_around | needs an API key: https://ember-energy.org/data/api (free: free key) |
 | `carbon-entsoe` | `web-api.tp.entsoe.eu`, `transparency.entsoe.eu` | carbon, hotels, getting_around | needs an API key: https://transparency.entsoe.eu/ (free: free token: register, then email transparency@entsoe.eu) |
 | `carbon-epa-campd` | `api.epa.gov`, `api.data.gov` | carbon | needs an API key: https://api.data.gov/signup/ (free: free api.data.gov key) |
 | `carbon-fingrid` | `data.fingrid.fi`, `www.fingrid.fi`, `developer-data.fingrid.fi` | carbon, hotels, getting_around | needs an API key: https://developer-data.fingrid.fi/ (free: free key) |

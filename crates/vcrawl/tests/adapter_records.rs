@@ -913,3 +913,41 @@ fn factor_table_records_fit_the_kind_registry() {
         }
     }
 }
+
+#[test]
+fn ember_api_records_fit_the_kind_registry() {
+    let r = root();
+    let reg = vc_kinds::FileKindRegistry::load(&vc_config::KindsConfig {
+        kinds_toml: r.join("kinds.toml").display().to_string(),
+        schemas_dir: r.join("schemas").display().to_string(),
+        prompts_dir: r.join("prompts").display().to_string(),
+    })
+    .expect("kind registry");
+    for (url, file) in [
+        (
+            "https://api.ember-energy.org/v1/carbon-intensity/yearly?is_aggregate_entity=false&start_date=2000",
+            "ember_ci_yearly.json",
+        ),
+        (
+            "https://api.ember-energy.org/v1/carbon-intensity/monthly?is_aggregate_entity=false&start_date=2019-01",
+            "ember_ci_monthly.json",
+        ),
+    ] {
+        let u = vc_core::CanonicalUrl::parse(url).unwrap();
+        let items = vc_sources::adapters::records::records("ember_api", &u, &recorded(file))
+            .expect("mapped")
+            .expect("fixture maps");
+        assert!(!items.is_empty(), "{file}");
+        for it in items {
+            assert_eq!(it.kind, "grid_carbon_intensity", "{file}");
+            if let Err(e) = reg.validate(&vc_core::KindId::new(it.kind), &it.data) {
+                panic!("{file}: does not fit: {e:?}\n{:#}", it.data);
+            }
+            assert_eq!(
+                reg.series_key(&vc_core::KindId::new(it.kind), &it.data, None),
+                it.series_key,
+                "{file}: the adapter's series key is the registry's"
+            );
+        }
+    }
+}
