@@ -31,14 +31,14 @@ min_delay_s: 5
 daily_budget: 20
 politeness_key: null
 enabled: false
-needs_key: false
-key_secret: null
+needs_key: true
+key_secret: crawler-src-carbon-electricitymaps-api-key
 max_retention_days: null
 display_requirements: null
 notes: 'Research 2026-11-19 (carbon footprint corpus; electricity grid; verdict OWNER-DECISION): Widest
   live zone coverage. Format: json (live and 24 h zone intensity). Licence (research): api_terms (unread).
   API robots 404, but the terms page and portal answered 403, so the terms are unread. Free personal token.
-  | Disabled: owner decision: Widest live zone coverage.'
+  | Disabled: needs an API key: https://app.electricitymaps.com/ (free API key from the owner)'
 relevance:
   sections:
   - carbon

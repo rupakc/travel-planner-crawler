@@ -33,6 +33,7 @@ pub mod countries;
 pub mod ecb_fx;
 pub mod enwiki_visa;
 pub mod eurostat_jsonstat;
+pub mod factor_table;
 pub mod fcdo_content_api;
 pub mod fsa_fhrs;
 pub mod govuk_medical_lists;
@@ -71,6 +72,7 @@ pub static REGISTRY: &[&dyn SourceAdapter] = &[
     &ecb_fx::EcbFx,
     &enwiki_visa::EnwikiVisa::DEFAULT,
     &eurostat_jsonstat::EurostatJsonStat,
+    &factor_table::FactorTable,
     &fcdo_content_api::FcdoContentApi,
     &fsa_fhrs::FsaFhrs::DEFAULT,
     &govuk_medical_lists::GovukMedicalLists,
@@ -161,6 +163,7 @@ pub fn registry_with(cfg: &vc_config::SourcesConfig) -> Vec<Box<dyn SourceAdapte
         Box::new(ecb_fx::EcbFx),
         Box::new(enwiki_visa::EnwikiVisa::new(d.clone())),
         Box::new(eurostat_jsonstat::EurostatJsonStat),
+        Box::new(factor_table::FactorTable),
         Box::new(fcdo_content_api::FcdoContentApi),
         Box::new(fsa_fhrs::FsaFhrs::DEFAULT),
         Box::new(govuk_medical_lists::GovukMedicalLists),

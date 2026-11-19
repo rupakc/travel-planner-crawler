@@ -1,0 +1,94 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/rupakc/travel-planner-crawler/schemas/grid_carbon_intensity.v1.json",
+  "title": "Grid carbon intensity",
+  "description": "One observation: the carbon intensity of one country's electricity for one period (gCO2e per kWh generated), as a reference dataset publishes it. Voyager use: turning a stay's or an electric vehicle's kWh into CO2e for the trip carbon footprint.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "country_code",
+    "period",
+    "date",
+    "intensity_g_per_kwh",
+    "basis",
+    "publisher"
+  ],
+  "properties": {
+    "country": {
+      "type": "string",
+      "maxLength": 80,
+      "description": "Country in English."
+    },
+    "country_code": {
+      "type": "string",
+      "maxLength": 2,
+      "pattern": "^[A-Z]{2}$",
+      "description": "ISO 3166-1 alpha-2 code of `country`."
+    },
+    "period": {
+      "type": "string",
+      "enum": [
+        "annual",
+        "monthly"
+      ],
+      "description": "Length of the period the figure covers."
+    },
+    "year": {
+      "type": "integer",
+      "minimum": 1950,
+      "maximum": 2100,
+      "description": "Year of the period."
+    },
+    "date": {
+      "type": "string",
+      "maxLength": 10,
+      "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$",
+      "description": "First day of the period (YYYY-01-01 for annual figures): the observation time of the series."
+    },
+    "intensity_g_per_kwh": {
+      "type": "number",
+      "minimum": 0,
+      "description": "Grams of CO2e per kWh of electricity generated, exactly as published."
+    },
+    "basis": {
+      "type": "string",
+      "enum": [
+        "lifecycle",
+        "direct"
+      ],
+      "description": "`lifecycle` = life-cycle emissions of generation (OWID/Ember); `direct` = combustion only."
+    },
+    "publisher": {
+      "type": "string",
+      "maxLength": 160,
+      "description": "Who publishes the figure, and its upstream source (e.g. \"Our World in Data, based on Ember and Energy Institute\")."
+    },
+    "dataset": {
+      "type": "string",
+      "maxLength": 160,
+      "description": "The dataset or chart the figure comes from."
+    },
+    "source_url": {
+      "type": "string",
+      "maxLength": 2048,
+      "description": "The page's own link for this item (official site or detail page), copied verbatim from the page.",
+      "pattern": "^https?://[^\\s]+$"
+    },
+    "as_of": {
+      "type": "string",
+      "maxLength": 10,
+      "description": "The \"last updated\", \"valid from\" or publication date the page itself states for this information (YYYY-MM-DD).",
+      "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$"
+    },
+    "evidence": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "maxLength": 300,
+        "description": "A verbatim quote from the page."
+      },
+      "maxItems": 3,
+      "description": "Up to 3 short verbatim quotes from the page that support the most important facts."
+    }
+  }
+}

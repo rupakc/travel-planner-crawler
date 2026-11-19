@@ -1142,3 +1142,7 @@ ref-seea-tourism                   # carbon: UN SEEA: tourism environmental acco
 ref-stay-grounded-calculators      # carbon/flights: Stay Grounded: comparison of carbon calculators (annex) (html, facts only, monthly, <= 50/day)
 ref-ferdamalastofa                 # carbon/tips: Ferdamalastofa (Icelandic Tourist Board) (html, facts only, monthly, <= 50/day)
 carbon-ecomark-jp                  # carbon/hotels/tips: Japan Eco Mark Office: eco-label certified products and crit (html, facts only, monthly, <= 50/day)
+# --- carbon footprint corpus, owner decisions turned on (2026-11-19) ---
+tr-flix-methodology                # carbon/getting_around: Flix sustainability and ESG pages (html, facts only, yearly, <= 100/day)
+carbon-breeam-projects             # carbon/hotels: BREEAM certified projects (html, facts only, Crawl-delay 10, <= 50/day)
+carbon-greenbooklive               # carbon/hotels: GreenBookLive certification register (html, facts only, <= 50/day)

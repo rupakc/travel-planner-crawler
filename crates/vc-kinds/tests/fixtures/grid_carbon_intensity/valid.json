@@ -1,0 +1,10 @@
+{
+  "country": "France",
+  "country_code": "FR",
+  "period": "annual",
+  "year": 2024,
+  "date": "2024-01-01",
+  "intensity_g_per_kwh": 44.68,
+  "basis": "lifecycle",
+  "publisher": "Our World in Data, based on Ember and Energy Institute"
+}

@@ -37,7 +37,9 @@ max_retention_days: null
 display_requirements: null
 notes: 'Research 2026-11-19 (carbon footprint corpus; official factor sets; verdict NEEDS-ADAPTER): US
   CO2e per MWh by subregion/state for hotel and EV-charging electricity. Format: xlsx + txt. Licence (research):
-  US public domain. summary tables xlsx ~1 MB. | Disabled: adapter pending: xlsx + txt'
+  US public domain. summary tables xlsx ~1 MB. | Disabled: adapter pending: eGRID summary workbook is
+  presentation tables (merged multi-row headers, one sheet per table); needs a per-table factor_table
+  mapping'
 relevance:
   sections:
   - carbon

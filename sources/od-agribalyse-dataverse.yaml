@@ -39,7 +39,8 @@ notes: 'Research 2026-11-19 (carbon footprint corpus; food and activities; verdi
   open food factor set; this copy is not on the denied ademe.fr host. Format: Dataverse API (JSON) + CSV/XLSX
   files. Licence (research): open (Etalab Licence Ouverte 2.0). reader: none (Dataverse API then CSV/XLSX);
   cadence: biennial; robots: no response (allowed under the owner rule); terms: Etalab Open License (doc.agribalyse.fr).
-  | Disabled: adapter pending: Dataverse API (JSON) + CSV/XLSX files'
+  | Disabled: adapter pending: files are reached through the Dataverse API (dataset JSON, then file ids);
+  entrepot.recherche.data.gouv.fr robots.txt did not answer at research'
 relevance:
   sections:
   - carbon

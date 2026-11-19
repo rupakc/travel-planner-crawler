@@ -36,8 +36,8 @@ display_requirements: null
 notes: 'Research 2026-11-19 (carbon footprint corpus; ground transport; verdict ADD): Official gCO2e/pkm
   by SNCF service (TGV INOUI, OUIGO, Intercites, TER). Format: CSV. Licence (research): share_alike (SNCF
   open data, ODbL - confirm on dataset page). yearly; data.gouv.fr already used in repo; direct SNCF portal
-  disallows /api/. | Disabled: adapter pending: udata_resource mapping for this dataset (CSV); the generic
-  reader exists but has no mapping for it yet'
+  disallows /api/. | Disabled: robots.txt: the dataset''s only files are on ressources.data.sncf.com/api/,
+  which that host disallows (checked 2026-11-19)'
 relevance:
   sections:
   - carbon

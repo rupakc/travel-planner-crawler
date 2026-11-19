@@ -9,36 +9,34 @@ licence:
   spdx: CC-BY-4.0
   attribution: 'OWID grapher: lifecycle carbon intensity of electricity'
   url: https://creativecommons.org/licenses/by/4.0/
-method: dump
+method: api
 seeds:
-- https://ourworldindata.org/grapher/carbon-intensity-electricity.csv
-- https://ourworldindata.org/grapher/carbon-intensity-electricity.metadata.json
+- https://ourworldindata.org/grapher/electricity-mix.csv?frequency=annual&metric=carbon_intensity&source=total&v=1&csvType=full&useColumnShortNames=true
 sitemaps: []
 feeds: []
-adapter: null
+adapter: factor_table
 include: []
 exclude: []
 max_depth: 0
 kinds:
-- article
-- tip
-llm_kinds:
-- tip
+- grid_carbon_intensity
+llm_kinds: []
 render: never
 cadence: yearly
 min_delay_s: 5
-daily_budget: 20
+daily_budget: 10
 politeness_key: null
-enabled: false
+enabled: true
 needs_key: false
 key_secret: null
 max_retention_days: null
 display_requirements: null
 notes: 'Research 2026-11-19 (carbon footprint corpus; electricity grid; verdict ADD): Single-indicator
   CSV with citation metadata (Ember 2026). Format: csv + json metadata. Licence (research): open (CC BY
-  4.0). robots: only a Sitemap line; metadata fetched 200; csv_filter fits. | Disabled: adapter pending:
-  csv_filter mapping for this dataset (csv + json metadata); the generic reader exists but has no mapping
-  for it yet'
+  4.0). robots: only a Sitemap line; metadata fetched 200; csv_filter fits. | Adapter factor_table (2026-11-19):
+  grapher CSV electricity-mix (metric carbon_intensity, annual; carbon-intensity-electricity.csv redirects
+  here) -> grid_carbon_intensity observations per country (aggregates skipped). robots.txt: Sitemap line
+  only (allowed), re-checked 2026-11-19.'
 relevance:
   sections:
   - carbon

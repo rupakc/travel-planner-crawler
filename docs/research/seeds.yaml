@@ -16558,8 +16558,8 @@ seeds:
   - id: od-desnz-ghg-factors
     category: carbon
     name: UK DESNZ GHG conversion factors 2026 (flat file)
-    url: https://www.gov.uk/government/publications/greenhouse-gas-reporting-conversion-factors-2026
-    method: dump
+    url: https://assets.publishing.service.gov.uk/media/6a6c9748862aaf18d9c62ac9/ghg-conversion-factors-2026-flat-format-revised.xlsx
+    method: api
     license: OGL v3.0
     cadence: yearly
     needs_key: false
@@ -17659,7 +17659,7 @@ seeds:
   - id: tr-flix-methodology
     category: carbon
     name: Flix emissions methodology
-    url: https://corporate.flix.com/
+    url: https://corporate.flix.com/flix-sustainability/
     method: html
     license: copyright
     cadence: yearly
@@ -18270,7 +18270,7 @@ seeds:
     category: carbon
     name: 'Our World in Data: environmental impacts of food (Poore & Nemecek 2018)'
     url: https://ourworldindata.org/grapher/ghg-per-kg-poore.csv?v=1&csvType=full&useColumnShortNames=true
-    method: dump
+    method: api
     license: CC BY 4.0
     cadence: yearly
     needs_key: false
@@ -19114,8 +19114,8 @@ seeds:
   - id: carbon-owid-grapher-ci
     category: carbon
     name: 'OWID grapher: lifecycle carbon intensity of electricity'
-    url: https://ourworldindata.org/grapher/carbon-intensity-electricity.csv
-    method: dump
+    url: https://ourworldindata.org/grapher/electricity-mix.csv?frequency=annual&metric=carbon_intensity&source=total&v=1&csvType=full&useColumnShortNames=true
+    method: api
     license: CC BY 4.0
     cadence: yearly
     needs_key: false
@@ -19254,7 +19254,7 @@ seeds:
     method: api
     license: Partner ToS
     cadence: yearly
-    needs_key: false
+    needs_key: true
     allowed: true
     notes: 'Research 2026-11-19 (carbon footprint corpus; electricity grid; verdict OWNER-DECISION): Widest live zone coverage.
       Format: json (live and 24 h zone intensity). Licence (research): api_terms (unread). API robots 404, but the terms page

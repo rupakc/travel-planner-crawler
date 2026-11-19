@@ -155,10 +155,17 @@ fn high_stakes_kinds_official_only() {
 // --- further tests ---
 
 #[test]
-fn fx_rate_weather_normal_cheapest_fare_and_price_level_are_observations() {
+fn fx_rate_weather_normal_cheapest_fare_price_level_and_grid_ci_are_observations() {
     let reg = registry();
     for k in reg.all() {
-        let obs = ["cheapest_fare", "fx_rate", "price_level", "weather_normal"].contains(&&*k.id.0);
+        let obs = [
+            "cheapest_fare",
+            "fx_rate",
+            "grid_carbon_intensity",
+            "price_level",
+            "weather_normal",
+        ]
+        .contains(&&*k.id.0);
         let want = if obs {
             KindStorage::Observation
         } else {
@@ -209,6 +216,18 @@ fn series_keys_render_from_fixtures() {
         reg.series_key(&KindId::new("price_level"), &pl, None)
             .as_deref(),
         Some("price_level:PT:restaurants_hotels:eu27_2020_100")
+    );
+    // Grid carbon intensity: one series per country, period length and basis.
+    let gi = json!({"country_code": "FR", "period": "annual", "date": "2024-01-01",
+        "intensity_g_per_kwh": 44.68, "basis": "lifecycle", "publisher": "OWID"});
+    assert_eq!(
+        reg.series_key(&KindId::new("grid_carbon_intensity"), &gi, None)
+            .as_deref(),
+        Some("grid_ci:FR:annual:lifecycle")
+    );
+    assert_eq!(
+        reg.series_key(&KindId::new("emission_factor"), &gi, None),
+        None
     );
 }
 

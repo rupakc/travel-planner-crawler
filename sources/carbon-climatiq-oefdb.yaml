@@ -35,7 +35,9 @@ max_retention_days: null
 display_requirements: null
 notes: 'Research 2026-11-19 (carbon footprint corpus; stays; verdict OWNER-DECISION): Community factor
   DB. Format: csv in repo. Licence (research): unknown. LICENSE on main 404; Open Net Zero lists the licence
-  as unknown; probably stale. | Disabled: owner decision: Community factor DB'
+  as unknown; probably stale. | Disabled: gone: owner approved 2026-11-19, but github.com/climatiq/Open-Emission-Factors-DB
+  no longer exists (GitHub API 404, 2026-11-19); only a stale 2021 third-party fork remains, so nothing
+  to read'
 relevance:
   sections:
   - carbon

@@ -148,6 +148,8 @@ A **kind** is a type of record. Each kind is defined by data, not code (see
 | `airport`, `route` | record | |
 | `public_holiday` | record | public, bank and school holidays per country/subdivision (added 2026-11-18) |
 | `amenity` | record | public toilets, drinking fountains, free Wi-Fi spots from city registers; official only (added 2026-11-18) |
+| `emission_factor` | record | one published GHG emission factor (kg CO2e per passenger-km, per room-night, per kg of food) as an official/reference table states it; adapter `factor_table`, official/reference only (added 2026-11-19) |
+| `grid_carbon_intensity` | observation | gCO2e per kWh of one country's electricity per year, series `grid_ci:<ISO2>:<period>:<basis>`; adapter `factor_table` (added 2026-11-19) |
 | `fx_rate`, `weather_normal` | observation | time series |
 | `price_level` | observation | country price level per year and category, series `price_level:<ISO2>:<category>:<basis>` (`eu27_2020_100` Eurostat, `us_1` World Bank; added 2026-11-18) |
 

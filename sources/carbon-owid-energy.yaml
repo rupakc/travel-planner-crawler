@@ -38,9 +38,9 @@ display_requirements: null
 notes: 'Research 2026-11-19 (carbon footprint corpus; electricity grid; verdict ADD): Yearly lifecycle
   grid intensity for ~200 countries in one CSV; global fallback. Format: csv (country x year, carbon_intensity_elec
   gCO2e/kWh). Licence (research): open (CC BY 4.0). robots 404 on raw and DO Spaces (allowed); HEAD 200
-  on both; csv_filter fits; refreshed after each Ember/EI release. | Disabled: adapter pending: csv_filter
-  mapping for this dataset (csv (country x year, carbon_intensity_elec gCO2e/kWh)); the generic reader
-  exists but has no mapping for it yet'
+  on both; csv_filter fits; refreshed after each Ember/EI release. | Disabled: duplicate: covered by carbon-owid-grapher-ci
+  (the same Ember/Energy Institute carbon-intensity series, one small CSV instead of the ~10 MB energy
+  dataset)'
 relevance:
   sections:
   - carbon

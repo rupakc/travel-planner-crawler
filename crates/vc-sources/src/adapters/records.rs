@@ -23,9 +23,10 @@ use vc_core::{CanonicalUrl, Error, Result};
 
 use super::{
     canada_advisories, canada_offices, countries, ecb_fx, enwiki_visa, eurostat_jsonstat,
-    fcdo_content_api, fsa_fhrs, govuk_medical_lists, govuk_world_orgs, html_text, iso3,
-    json_events, nyc_restaurant_inspections, openholidays, phone, socrata, state_dept_advisories,
-    state_dept_country_info, toronto_dinesafe, travelpayouts_fares, udata_resource, wfs_geojson,
+    factor_table, fcdo_content_api, fsa_fhrs, govuk_medical_lists, govuk_world_orgs, html_text,
+    iso3, json_events, nyc_restaurant_inspections, openholidays, phone, socrata,
+    state_dept_advisories, state_dept_country_info, toronto_dinesafe, travelpayouts_fares,
+    udata_resource, wfs_geojson,
 };
 
 /// Bumped when a mapping changes (part of the extractor version string of adapter records).
@@ -51,6 +52,7 @@ pub const MAPPED: &[&str] = &[
     "ecb_fx",
     "enwiki_visa",
     "eurostat_jsonstat",
+    "factor_table",
     "fcdo_content_api",
     "fsa_fhrs",
     "govuk_medical_lists",
@@ -80,6 +82,7 @@ pub fn records(adapter: &str, url: &CanonicalUrl, body: &[u8]) -> Option<Result<
         "ecb_fx" => ecb(body),
         "enwiki_visa" => enwiki_visa_records(url, body),
         "eurostat_jsonstat" => eurostat(body),
+        "factor_table" => factors(factor_table::items(url, body)),
         "fcdo_content_api" => fcdo(url, body),
         "fsa_fhrs" => restaurants(fsa_fhrs::items(url, body)),
         "govuk_medical_lists" => govuk_medical(url, body),
@@ -528,6 +531,36 @@ fn rows(items: Result<Vec<(Option<String>, &'static str, Value)>>) -> Result<Vec
             id,
             series_key: None,
             data,
+        })
+        .collect())
+}
+
+/// Records of `factor_table`: `emission_factor` records and `grid_carbon_intensity`
+/// observations (series `grid_ci:<ISO2>:<period>:<basis>`, the date is the time axis).
+fn factors(items: Result<Vec<(Option<String>, &'static str, Value)>>) -> Result<Vec<AdapterItem>> {
+    Ok(items?
+        .into_iter()
+        .map(|(id, kind, data)| {
+            let series_key = (kind == "grid_carbon_intensity").then(|| {
+                let f = |k: &str| {
+                    data.get(k)
+                        .and_then(Value::as_str)
+                        .unwrap_or_default()
+                        .to_string()
+                };
+                format!(
+                    "grid_ci:{}:{}:{}",
+                    f("country_code"),
+                    f("period"),
+                    f("basis")
+                )
+            });
+            AdapterItem {
+                kind,
+                id,
+                series_key,
+                data,
+            }
         })
         .collect())
 }
