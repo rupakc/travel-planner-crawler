@@ -36,9 +36,9 @@ display_requirements: null
 notes: 'Research 2026-11-19 (carbon footprint corpus; gaps; verdict OWNER-DECISION): Conflicts with od-data-gouv-base-carbone
   (all resources point to denied data.ademe.fr). Add only if the file is served from static.data.gouv.fr.
   Format: csv + xlsx. Licence (research): open (Licence Ouverte v2). robots 200 (dataset pages allowed);
-  ''sous Licence Ouverte''. Old v17: use only as a fallback. | Disabled: owner decision: Conflicts with
-  od-data-gouv-base-carbone (all resources point to denied data.ademe.fr). Add only if the file is served
-  from static.data.gouv.fr.'
+  ''sous Licence Ouverte''. Old v17: use only as a fallback. | Disabled: robots.txt: the Base Carbone
+  files are on static.data.gouv.fr, which that host disallows (owner approved the source 2026-11-19; robots
+  wins)'
 relevance:
   sections:
   - carbon

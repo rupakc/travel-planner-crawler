@@ -1,0 +1,15 @@
+{
+  "activity": "flights_long_haul_to_from_uk_economy_class_with_rf",
+  "activity_label": "Flights / Long-haul, to/from UK / Economy class / With RF",
+  "category": "flights",
+  "geography": "United Kingdom",
+  "country_code": "GB",
+  "unit": "kg CO2e per passenger.km",
+  "value": 0.11704,
+  "gas_basis": "co2e_with_rf",
+  "scope": "Scope 3",
+  "year": 2026,
+  "publisher": "UK Department for Energy Security and Net Zero",
+  "dataset": "UK GHG conversion factors 2026, flat file",
+  "factor_id": "21_316_3170_11_1"
+}

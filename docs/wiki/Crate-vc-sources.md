@@ -48,6 +48,8 @@ fetcher runs adapters.
 `mobility_database_catalog`, `nager_holidays`, `ourairports_csv`, `se_travel_dump`,
 `state_dept_advisories`, `ticketmaster_discovery`, `wikidata_sparql`, `wikivoyage_dump`.
 What each one reads: [Sources and Licences](Sources-and-Licences#built-in-adapters-apis-and-dumps).
+Later additions include the open-data readers (2026-11-18) and `factor_table` (2026-11-19,
+CSV/XLSX emission-factor and grid-intensity tables; see [Carbon Footprint Data](Carbon-Footprint-Data)).
 Some adapters belong to sources that are disabled in `sources/*.yaml` (for example
 `nager_holidays` and `mobility_database_catalog`, whose robots.txt disallows us or redirects
 to a login page); a disabled source is never seeded. The list and reasons are on

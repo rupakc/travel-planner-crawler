@@ -1138,6 +1138,10 @@ ref-seea-tourism                   # carbon: UN SEEA: tourism environmental acco
 ref-stay-grounded-calculators      # carbon/flights: Stay Grounded: comparison of carbon calculators (annex) (html, facts only, monthly, <= 50/day)
 ref-ferdamalastofa                 # carbon/tips: Ferdamalastofa (Icelandic Tourist Board) (html, facts only, monthly, <= 50/day)
 carbon-ecomark-jp                  # carbon/hotels/tips: Japan Eco Mark Office: eco-label certified products and crit (html, facts only, monthly, <= 50/day)
+# --- carbon footprint corpus, owner decisions turned on (2026-11-19) ---
+tr-flix-methodology                # carbon/getting_around: Flix sustainability and ESG pages (html, facts only, yearly, <= 100/day)
+carbon-breeam-projects             # carbon/hotels: BREEAM certified projects (html, facts only, Crawl-delay 10, <= 50/day)
+carbon-greenbooklive               # carbon/hotels: GreenBookLive certification register (html, facts only, <= 50/day)
 
 # --- ramp-3: open-data adapters (2026-11-18) ---
 openholidays               # events/tips: public + school holidays per country, this year and next (OpenHolidays API, ODbL share_alike, monthly, ~73 requests/month); openholidays adapter -> public_holiday
@@ -1207,3 +1211,7 @@ wikivoyage-dump-bn         # places/hotels: bn Wikivoyage dump (CC BY-SA share_a
 od-eurostat-avia-paoc              # carbon/flights: Eurostat avia_paoc passengers and seats by country (api, open, yearly, <= 20/day); eurostat_jsonstat
 od-eurostat-avia-par               # carbon/flights: Eurostat avia_par_<cc> route passengers and seats (api, open, yearly, <= 20/day); eurostat_jsonstat
 od-eurostat-air-emissions          # carbon: Eurostat env_ac_ainah_r2 air emissions accounts (H51 air tra (api, open, yearly, <= 20/day); eurostat_jsonstat
+# --- carbon footprint factor tables, factor_table (2026-11-19) ---
+od-desnz-ghg-factors               # carbon/flights/hotels: UK DESNZ GHG conversion factors flat file (api, open, yearly, <= 10/day); factor_table
+od-owid-food-ghg                   # carbon/tips: OWID food GHG per kg, Poore & Nemecek (api, open, yearly, <= 10/day); factor_table
+carbon-owid-grapher-ci             # carbon/hotels: OWID grid carbon intensity per country (api, open, yearly, <= 10/day); factor_table

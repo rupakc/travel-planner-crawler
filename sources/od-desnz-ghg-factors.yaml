@@ -9,29 +9,24 @@ licence:
   spdx: OGL-UK-3.0
   attribution: Contains public sector information licensed under the Open Government Licence v3.0
   url: https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/
-method: dump
+method: api
 seeds:
-- https://www.gov.uk/government/publications/greenhouse-gas-reporting-conversion-factors-2026
 - https://assets.publishing.service.gov.uk/media/6a6c9748862aaf18d9c62ac9/ghg-conversion-factors-2026-flat-format-revised.xlsx
-- https://assets.publishing.service.gov.uk/media/6a29392bade52dc0882218a8/ghg-conversion-factors-2026-full-set.xlsx
-- https://assets.publishing.service.gov.uk/media/6a2940543b15d05a7ce3202e/2026-GHG-conversion-factors-methodology-report.pdf
 sitemaps: []
 feeds: []
-adapter: null
+adapter: factor_table
 include: []
 exclude: []
 max_depth: 0
 kinds:
-- article
-- tip
-llm_kinds:
-- tip
+- emission_factor
+llm_kinds: []
 render: never
 cadence: yearly
 min_delay_s: 5
-daily_budget: 20
+daily_budget: 10
 politeness_key: null
-enabled: false
+enabled: true
 needs_key: false
 key_secret: null
 max_retention_days: null
@@ -40,8 +35,11 @@ notes: 'Research 2026-11-19 (carbon footprint corpus; aviation; verdict NEEDS-AD
   CO2e per passenger-km for flights by haul and cabin class (with/without RF), plus rail, bus, ferry,
   car, taxi and hotel-night factors. Format: xlsx flat factor table. Licence (research): open (OGL v3).
   Published yearly in June (2026 set on 2026-06-11, flat file revised July). Find each year''s files through
-  the gov.uk content API. csv_filter does not read xlsx. | Disabled: adapter pending: xlsx flat factor
-  table'
+  the gov.uk content API. csv_filter does not read xlsx. | Adapter factor_table (2026-11-19): the flat
+  file only (sheet "Factors by Category"), kg CO2e rows of Business travel air/sea/land, Hotel stay and
+  UK electricity -> emission_factor records. robots.txt of assets.publishing.service.gov.uk: 404 (allowed),
+  re-checked 2026-11-19. The full-set workbook and methodology PDF are not fetched. Next year: replace
+  the seed with the new flat file (June).'
 relevance:
   sections:
   - carbon

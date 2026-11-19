@@ -863,3 +863,53 @@ async fn open_data_readers_reach_the_index_with_their_licence() {
         "Datenquelle: Stadt Wien – data.wien.gv.at, CC BY 4.0"
     );
 }
+
+#[test]
+fn factor_table_records_fit_the_kind_registry() {
+    let r = root();
+    let reg = vc_kinds::FileKindRegistry::load(&vc_config::KindsConfig {
+        kinds_toml: r.join("kinds.toml").display().to_string(),
+        schemas_dir: r.join("schemas").display().to_string(),
+        prompts_dir: r.join("prompts").display().to_string(),
+    })
+    .expect("kind registry");
+    for (url, file, kind) in [
+        (
+            "https://assets.publishing.service.gov.uk/media/x/ghg-conversion-factors-2026-flat-format-revised.xlsx",
+            "factor_desnz_flat_2026.xlsx",
+            "emission_factor",
+        ),
+        (
+            "https://ourworldindata.org/grapher/ghg-per-kg-poore.csv",
+            "factor_owid_food_poore.csv",
+            "emission_factor",
+        ),
+        (
+            "https://ourworldindata.org/grapher/electricity-mix.csv",
+            "factor_owid_grid_ci.csv",
+            "grid_carbon_intensity",
+        ),
+    ] {
+        let u = vc_core::CanonicalUrl::parse(url).unwrap();
+        let items = vc_sources::adapters::records::records("factor_table", &u, &recorded(file))
+            .expect("mapped")
+            .expect("fixture maps");
+        assert!(!items.is_empty(), "{file}");
+        for it in items {
+            assert_eq!(it.kind, kind, "{file}");
+            if let Err(e) = reg.validate(&vc_core::KindId::new(it.kind), &it.data) {
+                panic!("{file}: {} does not fit: {e:?}\n{:#}", it.kind, it.data);
+            }
+            let tmpl = reg.series_key_template(&vc_core::KindId::new(it.kind));
+            assert_eq!(tmpl.is_some(), it.series_key.is_some(), "{file}");
+            if let Some(k) = &it.series_key {
+                assert_eq!(
+                    reg.series_key(&vc_core::KindId::new(it.kind), &it.data, None)
+                        .as_ref(),
+                    Some(k),
+                    "{file}: the adapter's series key is the registry's"
+                );
+            }
+        }
+    }
+}

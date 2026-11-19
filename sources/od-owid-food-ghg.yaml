@@ -9,29 +9,24 @@ licence:
   spdx: CC-BY-4.0
   attribution: 'Our World in Data: environmental impacts of food (Poore & Nemecek 2018)'
   url: https://creativecommons.org/licenses/by/4.0/
-method: dump
+method: api
 seeds:
 - https://ourworldindata.org/grapher/ghg-per-kg-poore.csv?v=1&csvType=full&useColumnShortNames=true
-- https://ourworldindata.org/grapher/ghg-kcal-poore.csv?v=1&csvType=full&useColumnShortNames=true
-- https://ourworldindata.org/grapher/food-emissions-supply-chain.csv?v=1&csvType=full&useColumnShortNames=true
-- https://ourworldindata.org/environmental-impacts-of-food
-- https://ourworldindata.org/sitemap.xml
 sitemaps: []
 feeds: []
-adapter: null
+adapter: factor_table
 include: []
 exclude: []
 max_depth: 0
 kinds:
-- article
-- tip
+- emission_factor
 llm_kinds: []
 render: never
 cadence: yearly
 min_delay_s: 5
-daily_budget: 20
+daily_budget: 10
 politeness_key: null
-enabled: false
+enabled: true
 needs_key: false
 key_secret: null
 max_retention_days: null
@@ -41,9 +36,10 @@ notes: 'Research 2026-11-19 (carbon footprint corpus; food and activities; verdi
   the core per-meal factor table. Format: CSV (grapher download) + JSON metadata. Licence (research):
   open (CC BY 4.0). reader: csv_filter; cadence: yearly; robots 200: Sitemap only, no rules, no AI-bot
   block; terms: ''Data produced by us falls under our permissive CC BY license''. AI-reserved robots (AI
-  crawlers named): no LLM kinds, title, link and short excerpt only. | Disabled: adapter pending: csv_filter
-  mapping for this dataset (CSV (grapher download) + JSON metadata); the generic reader exists but has
-  no mapping for it yet'
+  crawlers named): no LLM kinds, title, link and short excerpt only. | Adapter factor_table (2026-11-19):
+  grapher CSV ghg-per-kg-poore (kg CO2e per kg, global means) -> emission_factor records. ourworldindata.org
+  robots.txt: Sitemap line only (allowed), re-checked 2026-11-19. The per-kcal and supply-chain CSVs are
+  not mapped yet.'
 relevance:
   sections:
   - carbon

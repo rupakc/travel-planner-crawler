@@ -11,13 +11,17 @@ licence:
   url: null
 method: html
 seeds:
-- https://corporate.flix.com/
+- https://corporate.flix.com/flix-sustainability/
+- https://corporate.flix.com/flix-sustainable-travel/
+- https://corporate.flix.com/esg-strategy-commitments/
+- https://corporate.flix.com/governance-esg-data-policies/
 sitemaps: []
 feeds: []
 adapter: null
-include: []
+include:
+- ^https?://corporate\.flix\.com/(flix-sustainab|esg-|governance-esg)
 exclude: []
-max_depth: 0
+max_depth: 1
 kinds:
 - article
 - tip
@@ -26,9 +30,9 @@ llm_kinds:
 render: never
 cadence: yearly
 min_delay_s: 5
-daily_budget: 20
+daily_budget: 100
 politeness_key: null
-enabled: false
+enabled: true
 needs_key: false
 key_secret: null
 max_retention_days: null
@@ -36,8 +40,10 @@ display_requirements: null
 notes: 'Research 2026-11-19 (carbon footprint corpus; gaps; verdict OWNER-DECISION): Same organisation
   as denylisted flixbus.*, whose terms ban scraping for commercial use. Owner to decide whether the corporate
   site differs. Format: html + PDF. Licence (research): facts_only. yearly; robots disallows /wp-json/
-  only; terms not found. | Disabled: owner decision: Same organisation as denylisted flixbus.*, whose
-  terms ban scraping for commercial use. Owner to decide whether the corporate site differs.'
+  only; terms not found. | FlixBus terms ban scraping only for commercial use; owner accepted 2026-11-19
+  (Voyager is non-commercial). corporate.flix.com robots.txt (2026-11-19) disallows only /wp-json/ and
+  ?rest_route=; flix.com is not covered by the flixbus.* denylist entry. Sustainability and ESG paths
+  only.'
 relevance:
   sections:
   - carbon

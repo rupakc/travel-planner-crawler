@@ -84,3 +84,12 @@ never requested.
 | `udata_atout_france_classes.csv` | Atout France `hebergements_classes.csv` (`udata_resource`) | one download (3.7 MB, 21,362 rows); header plus the first 3 rows and the first campsite, tourist residence, holiday village and collective hostel | Licence Ouverte 2.0 |
 | `wfs_wien_sights.json`, `wfs_wien_museums.json`, `wfs_wien_toilets.json`, `wfs_wien_wifi.json` | data.wien.gv.at WFS `GetFeature` for `ogdwien:SEHENSWUERDIGOGD`, `MUSEUMOGD`, `WCANLAGEOGD`, `WLANWIENATOGD` (`wfs_geojson`) | fetched; first 3 / 2 / (first, first with an accessible cabin) / 2 features kept | CC BY 4.0, Stadt Wien – data.wien.gv.at |
 | `wfs_zuerich_wc.json`, `wfs_zuerich_wc_rs.json` | www.ogd.stadt-zuerich.ch WFS `GetFeature` for `poi_zueriwc_view` and `poi_zueriwc_rs_view` (`wfs_geojson`) | fetched; first feature kept, staff/e-mail/fax properties removed | CC0, Stadt Zürich |
+
+### factor_table: carbon factor tables (2026-11-19)
+
+| File | Source | How it was cut | Licence |
+|---|---|---|---|
+| `factor_desnz_flat_2026.xlsx` | UK DESNZ "ghg-conversion-factors-2026-flat-format-revised.xlsx", sheet "Factors by Category" | the sheet's 6 title/header rows plus 34 real rows copied unchanged with openpyxl (Butane fuel rows, UK electricity, flights, ferry, taxi, bus, rail, and the hotel stays for UK, UK (London), Argentina (blank), France, Hong Kong and Korea) into a new workbook with the same sheet name | OGL v3 |
+| `factor_owid_food_poore.csv` | OWID grapher `ghg-per-kg-poore.csv?v=1&csvType=full&useColumnShortNames=true` | header plus the first 7 rows | CC BY 4.0 |
+| `factor_owid_grid_ci.csv` | OWID grapher `electricity-mix.csv?frequency=annual&metric=carbon_intensity&source=total&...` | header plus 6 rows (ASEAN and World aggregates, France 2023 and 2024, Germany, India) | CC BY 4.0 |
+

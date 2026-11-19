@@ -331,3 +331,11 @@ plan = `docs/superpowers/plans/2026-11-15-voyager-crawler.md`, r1–r5 = `docs/r
   terms bans: climatiq.io, goldstandard.org, verra.org, media.amtrak.com, ghgprotocol.org,
   hestia.earth (except api.hestia.earth). (scripts/seeds_to_sources.py, docs/research/seeds.yaml,
   policy/denylist.yaml)
+- 2026-11-19: **Carbon kinds + `factor_table` adapter.** New kinds `emission_factor` (record) and
+  `grid_carbon_intensity` (observation, series `grid_ci:<ISO2>:<period>:<basis>`); adapter
+  `factor_table` (CSV, XLSX via calamine; one conditional request per file, raw first, mapping
+  per dataset in code). On: od-desnz-ghg-factors, od-owid-food-ghg, carbon-owid-grapher-ci (ramp-3).
+  Owner decisions on: tr-flix-methodology, carbon-breeam-projects (Crawl-delay 10),
+  carbon-greenbooklive. Off with reasons: Ember (CSV host robots Disallow: /), SNCF (/api/
+  disallowed), Base Carbone (static.data.gouv.fr disallowed), Climatiq OEFDB (repo gone),
+  Electricity Maps (needs key), EPA eGRID/EF Hub, AU NGA, AGRIBALYSE (adapter pending).

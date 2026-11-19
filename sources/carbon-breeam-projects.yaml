@@ -12,13 +12,13 @@ licence:
 method: html
 seeds:
 - https://tools.breeam.com/projects/explore/index.jsp
-- https://tools.breeam.com/projects/explore/buildingdetails.jsp
 sitemaps: []
 feeds: []
 adapter: null
-include: []
+include:
+- ^https?://tools\.breeam\.com/projects/explore/
 exclude: []
-max_depth: 0
+max_depth: 1
 kinds:
 - article
 - tip
@@ -27,9 +27,9 @@ llm_kinds:
 render: never
 cadence: yearly
 min_delay_s: 10
-daily_budget: 20
+daily_budget: 50
 politeness_key: null
-enabled: false
+enabled: true
 needs_key: false
 key_secret: null
 max_retention_days: null
@@ -37,7 +37,8 @@ display_requirements: null
 notes: 'Research 2026-11-19 (carbon footprint corpus; stays; verdict OWNER-DECISION): ~52k certified buildings
   incl. hotels. Format: html. Licence (research): facts_only. robots 200, Crawl-delay 10; terms: personal
   use only, no commercial use, and no links ''to any part of the Site other than the home page''. Crawl-delay
-  10 s honoured as min_delay_s. | Disabled: owner decision: ~52k certified buildings incl. hotels'
+  10 s honoured as min_delay_s. | Terms personal/non-commercial use; owner accepted 2026-11-19 (facts_only).
+  robots.txt Crawl-delay 10 (2026-11-19), so min_delay_s 10.'
 relevance:
   sections:
   - carbon

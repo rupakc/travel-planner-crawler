@@ -188,3 +188,18 @@ version = 1
 storage = "record"
 source_classes = ["official"]
 verbatim = ["/phone", "/info_url", "/source_url", "/as_of", "/evidence/*"]
+
+# 2026-11-19: carbon footprint (adapter `factor_table`, official/reference factor tables only).
+
+[kinds.emission_factor]
+version = 1
+storage = "record"
+source_classes = ["official", "reference"]
+verbatim = ["/value", "/source_url", "/as_of", "/evidence/*"]
+
+[kinds.grid_carbon_intensity]
+version = 1
+storage = "observation"
+source_classes = ["official", "reference"]
+verbatim = ["/intensity_g_per_kwh", "/source_url", "/as_of", "/evidence/*"]
+series_key = "grid_ci:{country_code}:{period}:{basis}"

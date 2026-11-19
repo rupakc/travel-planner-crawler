@@ -46,6 +46,8 @@ KINDS = {
     "restaurant",
     # 2026-11-18: public toilets, drinking water, free Wi-Fi from city registers (adapter-only).
     "amenity",
+    # 2026-11-19: carbon footprint factor tables (adapter factor_table).
+    "emission_factor", "grid_carbon_intensity",
 }
 
 
@@ -18386,6 +18388,102 @@ _src(
 )
 
 
+# ---------------------------------------------------------------------------------------
+# Carbon factor tables on the `factor_table` adapter (2026-11-19) and the owner decisions on
+# the PR #141 owner-decision rows (2026-11-19: approved wherever robots.txt allows, Voyager
+# being non-commercial). Each mapped file is the source's only seed (one adapter row per file).
+# ---------------------------------------------------------------------------------------
+NOTES_APPEND: dict[str, str] = {}
+
+for _sid, _kind, _note in (
+    ('od-desnz-ghg-factors', 'emission_factor',
+     'Adapter factor_table (2026-11-19): the flat file only (sheet "Factors by Category"), kg CO2e rows of '
+     'Business travel air/sea/land, Hotel stay and UK electricity -> emission_factor records. robots.txt of '
+     'assets.publishing.service.gov.uk: 404 (allowed), re-checked 2026-11-19. The full-set workbook and '
+     'methodology PDF are not fetched. Next year: replace the seed with the new flat file (June).'),
+    ('od-owid-food-ghg', 'emission_factor',
+     'Adapter factor_table (2026-11-19): grapher CSV ghg-per-kg-poore (kg CO2e per kg, global means) -> '
+     'emission_factor records. ourworldindata.org robots.txt: Sitemap line only (allowed), re-checked '
+     '2026-11-19. The per-kcal and supply-chain CSVs are not mapped yet.'),
+    ('carbon-owid-grapher-ci', 'grid_carbon_intensity',
+     'Adapter factor_table (2026-11-19): grapher CSV electricity-mix (metric carbon_intensity, annual; '
+     'carbon-intensity-electricity.csv redirects here) -> grid_carbon_intensity observations per country '
+     '(aggregates skipped). robots.txt: Sitemap line only (allowed), re-checked 2026-11-19.'),
+):
+    ADAPTERS[_sid] = 'factor_table'
+    KINDS_OVERRIDE[_sid] = [_kind]
+    LLM_KINDS_OVERRIDE[_sid] = []
+    EXTRA_SEEDS[_sid] = []
+    MAX_DEPTH[_sid] = 0
+    DAILY_BUDGET[_sid] = 10
+    DISABLED.pop(_sid, None)
+    NOTES_APPEND[_sid] = _note
+
+DISABLED['carbon-ember-grid'] = (
+    'robots.txt: files.ember-energy.org (the CSV host) answers "Disallow: /" except PDFs (checked 2026-11-19); '
+    'grid intensity comes from carbon-owid-grapher-ci (Ember-based) instead')
+DISABLED['carbon-owid-energy'] = (
+    'duplicate: covered by carbon-owid-grapher-ci (the same Ember/Energy Institute carbon-intensity series, one small CSV '
+    'instead of the ~10 MB energy dataset)')
+DISABLED['od-sncf-info-ges'] = (
+    'robots.txt: the dataset\'s only files are on ressources.data.sncf.com/api/, which that host disallows '
+    '(checked 2026-11-19)')
+DISABLED['od-epa-egrid'] = (
+    'adapter pending: eGRID summary workbook is presentation tables (merged multi-row headers, one sheet per '
+    'table); needs a per-table factor_table mapping')
+DISABLED['od-epa-ef-hub'] = (
+    'adapter pending: EF Hub workbook is a stack of presentation tables on one sheet (one header per table); '
+    'needs a per-table factor_table mapping')
+DISABLED['od-au-nga-factors'] = (
+    'adapter pending: NGA factors workbook is presentation tables; dcceew.gov.au robots.txt did not answer '
+    '(2026-11-19) and the file URL is not yet confirmed')
+DISABLED['od-agribalyse-dataverse'] = (
+    'adapter pending: files are reached through the Dataverse API (dataset JSON, then file ids); '
+    'entrepot.recherche.data.gouv.fr robots.txt did not answer at research')
+
+# Owner decisions (2026-11-19).
+DISABLED.pop('tr-flix-methodology', None)
+EXTRA_SEEDS['tr-flix-methodology'] = [
+    'https://corporate.flix.com/flix-sustainable-travel/',
+    'https://corporate.flix.com/esg-strategy-commitments/',
+    'https://corporate.flix.com/governance-esg-data-policies/',
+]
+INCLUDE['tr-flix-methodology'] = ['^https?://corporate\\.flix\\.com/(flix-sustainab|esg-|governance-esg)']
+MAX_DEPTH['tr-flix-methodology'] = 1
+DAILY_BUDGET['tr-flix-methodology'] = 100
+NOTES_APPEND['tr-flix-methodology'] = (
+    'FlixBus terms ban scraping only for commercial use; owner accepted 2026-11-19 (Voyager is non-commercial). '
+    'corporate.flix.com robots.txt (2026-11-19) disallows only /wp-json/ and ?rest_route=; flix.com is not '
+    'covered by the flixbus.* denylist entry. Sustainability and ESG paths only.')
+
+DISABLED.pop('carbon-breeam-projects', None)
+EXTRA_SEEDS['carbon-breeam-projects'] = []
+INCLUDE['carbon-breeam-projects'] = ['^https?://tools\\.breeam\\.com/projects/explore/']
+MAX_DEPTH['carbon-breeam-projects'] = 1
+MIN_DELAY['carbon-breeam-projects'] = 10
+DAILY_BUDGET['carbon-breeam-projects'] = 50
+NOTES_APPEND['carbon-breeam-projects'] = (
+    'Terms personal/non-commercial use; owner accepted 2026-11-19 (facts_only). robots.txt Crawl-delay 10 '
+    '(2026-11-19), so min_delay_s 10.')
+
+DISABLED.pop('carbon-greenbooklive', None)
+INCLUDE['carbon-greenbooklive'] = ['^https?://www\\.greenbooklive\\.com/search/']
+MAX_DEPTH['carbon-greenbooklive'] = 1
+MIN_DELAY['carbon-greenbooklive'] = 10
+DAILY_BUDGET['carbon-greenbooklive'] = 50
+NOTES_APPEND['carbon-greenbooklive'] = (
+    'Terms not found; owner accepted 2026-11-19 (facts_only). robots.txt (2026-11-19) disallows /cms/ only.')
+
+DISABLED['carbon-climatiq-oefdb'] = (
+    'gone: owner approved 2026-11-19, but github.com/climatiq/Open-Emission-Factors-DB no longer exists (GitHub API '
+    '404, 2026-11-19); only a stale 2021 third-party fork remains, so nothing to read')
+DISABLED['od-fr-base-carbone-v17'] = (
+    'robots.txt: the Base Carbone files are on static.data.gouv.fr, which that host disallows (owner '
+    'approved the source 2026-11-19; robots wins)')
+DISABLED['carbon-electricitymaps-api'] = (
+    'needs an API key: https://app.electricitymaps.com/ (free API key from the owner)')
+
+
 METHODS = {"html", "rss", "sitemap", "api", "dump"}
 
 
@@ -18473,6 +18571,8 @@ def build_spec(seed: dict) -> dict:
     elif sid in DISABLED:
         enabled = False
         notes.append(f"Disabled: {DISABLED[sid]}")
+    if sid in NOTES_APPEND:
+        notes.append(NOTES_APPEND[sid])
     if seed["cadence"] in {"never", "semiannual", "on_change", "4x_daily", "hourly_cache"}:
         notes.append(f"Research cadence: {seed['cadence']}.")
 

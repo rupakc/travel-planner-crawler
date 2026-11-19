@@ -36,9 +36,9 @@ max_retention_days: null
 display_requirements: null
 notes: 'Research 2026-11-19 (carbon footprint corpus; stays; verdict ADD): gCO2/kWh per country to turn
   hotel kWh into CO2. Format: csv. Licence (research): open (CC BY 4.0). robots 200; CC BY 4.0. The CSV
-  sits on a storage host, so read that host''s robots first; may overlap a grid brief. | Disabled: adapter
-  pending: csv_filter mapping for this dataset (csv); the generic reader exists but has no mapping for
-  it yet'
+  sits on a storage host, so read that host''s robots first; may overlap a grid brief. | Disabled: robots.txt:
+  files.ember-energy.org (the CSV host) answers "Disallow: /" except PDFs (checked 2026-11-19); grid intensity
+  comes from carbon-owid-grapher-ci (Ember-based) instead'
 relevance:
   sections:
   - carbon
