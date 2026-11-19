@@ -1229,3 +1229,8 @@ od-concito-big-climate-db          # carbon/tips: The Big Climate Database v1.2,
 od-rivm-food-lca                   # carbon/tips: RIVM Dutch food LCA 2024, to retail and to consumption (api, open, yearly, <= 10/day); factor_table
 # --- vehicle occupancy (2026-11-19): factor_table, kind occupancy ---
 od-dft-tag-databook                # carbon/getting_around: DfT TAG data book A1.3.3.2 car and PSV persons per vehicle (api, open, yearly, <= 10/day); factor_table
+# --- carbon factor tables, third batch (2026-11-19): factor_table ---
+od-mobitool-ch                     # carbon/getting_around: mobitool v3.1 life-cycle g CO2e per pkm, CH plus trains in DE FR IT AT (api, facts_only, yearly, <= 10/day); factor_table
+carbon-aib-residual-mix            # carbon/hotels: AIB 2025 production, residual and supplier mix g CO2/kWh for 34 European countries (api, facts_only, yearly, <= 10/day); factor_table
+od-epa-supply-chain-ghg            # carbon/activities: US EPA supply-chain kg CO2e per 2022 USD for 41 travel industries (api, open, yearly, <= 10/day); factor_table
+od-owid-tourism-aviation           # carbon/flights: OWID tourism-adjusted international aviation kg CO2 per capita (api, open, yearly, <= 10/day); factor_table

@@ -18649,6 +18649,127 @@ DISABLED['od-nhts-occupancy'] = (
     'robots.txt answers the SPA index page, so no rules)')
 
 
+# ---------------------------------------------------------------------------------------
+# Carbon factor tables, third batch (2026-11-19): factor_table now reads merged cells
+# (XlsxMerged), headers split over up to four rows, ISO alpha-2 and label-derived countries,
+# and the leading year of a file name. robots.txt was read before any other request to each
+# host (2026-11-19); each file was fetched once to inspect it and cut the fixture.
+# ---------------------------------------------------------------------------------------
+CARBON_TABLES_3 = {
+    'od-mobitool-ch': (
+        'Adapter factor_table (2026-11-19): mobitool-Faktoren-v3.1-20250408.xlsx (6 MB, sheet '
+        '"mobitool-Faktoren-v3.1", PSI for the Swiss FOEN): the "sum" column, life-cycle g CO2e per '
+        'passenger-km (GWP100a), for every pkm row (about 115: soft mobility, scooters and motorbikes, '
+        'cars, city buses, coaches, tram, Swiss trains, trains and high-speed trains in DE, FR, IT, AT, '
+        'passenger ship, cable car, airplane by haul and cabin) -> emission_factor records (CH, or the '
+        'train\'s country from its electricity mix). Freight (tkm), hours and days rows are not stored. '
+        'The workbook link is on www.energieschweiz.ch/umweltrechner-verkehr/ (www.mobitool.ch '
+        'redirects there); robots.txt (2026-11-19): www.energieschweiz.ch disallows only /search, '
+        'assets.ctfassets.net answers 404 (allowed). Licence: all rights reserved, facts only. Next '
+        'edition: replace the seed with the new workbook URL from that page.'),
+    'carbon-aib-residual-mix': (
+        'Adapter factor_table (2026-11-19): 2025_Final _Residual mix calculation results_25052026.xlsx '
+        '(80 KB), sheet "CO2": direct g CO2 per kWh of the production mix, the residual mix and the total '
+        'supplier mix for 34 European countries (ISO alpha-2 codes; "NA" cells give no record) -> '
+        'emission_factor records (category electricity; not grid_carbon_intensity, whose life-cycle '
+        'series per country come from Ember/OWID). The year is the one that leads the file name (2025), '
+        'not the publication stamp. www.aib-net.org robots.txt (2026-11-19): /sites/default/files/ '
+        'allowed. Next year (late May): replace the seed with the new results file from '
+        'www.aib-net.org/facts/european-residual-mix.'),
+    'od-epa-supply-chain-ghg': (
+        'Adapter factor_table (2026-11-19): the v1.3 NAICS CSV (120 KB): kg CO2e per 2022 US dollar '
+        '(purchaser price, with margins) for 41 travel industries only (passenger air, rail, water, '
+        'transit, taxi, coach, sightseeing, car rental, travel agencies and tours, performing arts, '
+        'spectator sports, museums and parks, amusement, golf, skiing, marinas, hotels, B&Bs, '
+        'campgrounds, restaurants and bars) -> emission_factor records (US, spend-based). Rows whose '
+        'unit is not "kg CO2e/2022 USD, purchaser price" are not mapped. pasteur.epa.gov robots.txt: '
+        '404 (allowed), 2026-11-19. Next version: replace the seed and the dollar year in the mapping.'),
+    'od-owid-tourism-aviation': (
+        'Adapter factor_table (2026-11-19): grapher CSV per-capita-co-emissions-from-international-'
+        'flights-tourism-adjusted (32 KB; OECD and UN Tourism, kg CO2 per person per year, 2013-2024, '
+        'unit from the chart\'s metadata.json) -> emission_factor records per country (category flights; '
+        'OWID aggregates skipped). ourworldindata.org robots.txt: Sitemap line only (allowed), re-checked '
+        '2026-11-19.'),
+}
+for _sid, _note in CARBON_TABLES_3.items():
+    ADAPTERS[_sid] = 'factor_table'
+    KINDS_OVERRIDE[_sid] = ['emission_factor']
+    LLM_KINDS_OVERRIDE[_sid] = []
+    EXTRA_SEEDS[_sid] = []
+    MAX_DEPTH[_sid] = 0
+    DAILY_BUDGET[_sid] = 10
+    DISABLED.pop(_sid, None)
+    NOTES_APPEND[_sid] = _note
+ATTRIBUTION['od-mobitool-ch'] = 'mobitool factors v3.1 (Swiss Federal Office for the Environment FOEN, PSI)'
+ATTRIBUTION['carbon-aib-residual-mix'] = 'Association of Issuing Bodies (AIB), European Residual Mixes 2025'
+ATTRIBUTION['od-epa-supply-chain-ghg'] = 'US EPA, Supply Chain GHG Emission Factors for US Commodities and Industries v1.3'
+ATTRIBUTION['od-owid-tourism-aviation'] = 'Our World in Data (ourworldindata.org), based on OECD and UN Tourism; CC BY 4.0'
+
+# Third batch, left off (2026-11-19), each after its host's robots.txt.
+CARBON_TABLES_3_OFF = {
+    'carbon-cornell-chsb-index': (
+        'robots.txt: the eCommons bitstream downloads redirect to cf003.cdn.4science.cloud, whose '
+        'robots.txt answers 403 (checked 2026-11-19), so that origin is do-not-crawl; the item page '
+        'serves the 2025 index as a PDF there too'),
+    'impactco2': (
+        'adapter pending: equivalents.csv (robots Allow /, fetched once 2026-11-19) has only "kg CO2e" '
+        'per row, with no unit denominator (per km and person, per kg, per night, per year) and no '
+        'reference year; those live in the site\'s JavaScript category data, and factor_table copies '
+        'published units and years only'),
+    'od-jrc-com-ef': (
+        'adapter pending: the jeodpp FTP (robots.txt 404, listed 2026-11-19) holds only three 2017 PDFs '
+        '(dataset/come, coms, comw) and the CC BY 4.0 notice: no xlsx or csv to map'),
+    'carbon-jrc-com-factors': (
+        'duplicate: the JRC Covenant of Mayors factors are od-jrc-com-ef (PDF-only on the jeodpp FTP, '
+        'checked 2026-11-19)'),
+    'od-miteco-calculadoras': (
+        'adapter pending: the calculator workbook (calculadora_hc_tcm30-485617.xlsx, robots Crawl-delay 10, '
+        'fetched once 2026-11-19) lays its factors out one column per year (2007 onwards) under '
+        'per-section titles, mostly fuels per litre; factor_table reads one value column per table '
+        '(needs a year-columns-to-rows option)'),
+    'carbon-mcti-brazil': (
+        'adapter pending: the average grid factor (Inventario_2026_janout.xlsx on www.gov.br, robots '
+        'allowed, fetched once 2026-11-19) is one block per year (title, year, month header, monthly '
+        'row, the annual figure beside the header), not a table; the old antigo.mctic.gov.br files stop '
+        'in 2021'),
+    'od-ens-dk-standardfaktorer': (
+        'adapter pending: both seeds are PDFs (Energistyrelsens standardfaktorer for 2024; '
+        'el-emissionsfaktorer 2024-2035), checked 2026-11-19 after robots.txt; no PDF table reader'),
+    'od-ornl-tedb': (
+        'adapter pending: nothing to map as emission factors: TEDB tables 2.13-2.16 give energy intensities (Btu per passenger-mile) and the '
+        'chapter 11 CO2 tables are national totals (checked 2026-11-19, robots allows /data/); the '
+        'crawler never converts energy into emissions'),
+    'od-cea-co2-baseline': (
+        'adapter pending: only the user-guide PDFs are reachable; the CO2 baseline database page answers '
+        '404 and no xlsx link was found (cea.nic.in robots Allow /, checked 2026-11-19)'),
+    'carbon-eccc-nir': (
+        'adapter pending: EN_Annex7_Electricity_Intensity.xlsx was found through the catalogue\'s '
+        'path_contents API (robots Allow /, 2026-11-19), but /api/file answers a 302 to a short-lived '
+        'Azure SAS-signed URL; needs redirect handling that never stores the signature'),
+    'od-moe-jp-gvc-db': (
+        'adapter pending: DB_V3-6.xlsx (6 MB, www.env.go.jp robots disallows /cgi-bin/ only, fetched '
+        'once 2026-11-19): the per-pkm sheet names IDEA product codes without values, the per-yen and '
+        'per-night sheets are presentation tables with unnamed label columns, and the world grid sheet '
+        'copies IGES/IEA figures under Japanese country names'),
+    'od-jp-env-emission-units': (
+        'duplicate: the MOE emission-unit database is od-moe-jp-gvc-db (this seed page, '
+        'estimate_tool.html, answers 404, 2026-11-19)'),
+    'carbon-jp-moe-factors': (
+        're-test from the crawler VM: ghg-santeikohyo.env.go.jp did not resolve (DNS) on 2026-11-19'),
+    'od-greenferries': (
+        're-test from the crawler VM: data.greenferries.org did not resolve (DNS) on 2026-11-19; if it is '
+        'back, its Datasette tables export CSV for factor_table'),
+    'od-emsa-thetis-mrv': (
+        'adapter pending: the public emission reports are exported by the JavaScript app only '
+        '(mrv.emsa.europa.eu robots.txt 404; the binary report path answers 404 without the app\'s '
+        'parameters, 2026-11-19)'),
+    'od-br-ghg-protocol-tool': (
+        'adapter pending: the programme page (robots allowed, 2026-11-19) links no workbook; the tool '
+        'is distributed on request'),
+}
+DISABLED.update(CARBON_TABLES_3_OFF)
+
+
 METHODS = {"html", "rss", "sitemap", "api", "dump"}
 
 

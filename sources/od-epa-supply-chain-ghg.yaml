@@ -7,28 +7,26 @@ source_class: official
 licence:
   class: open
   spdx: null
-  attribution: US EPA Supply Chain GHG Emission Factors v1.3 (USEEIO, by NAICS-6)
+  attribution: US EPA, Supply Chain GHG Emission Factors for US Commodities and Industries v1.3
   url: null
-method: dump
+method: api
 seeds:
 - https://pasteur.epa.gov/uploads/10.23719/1531143/SupplyChainGHGEmissionFactors_v1.3.0_NAICS_CO2e_USD2022.csv
 sitemaps: []
 feeds: []
-adapter: null
+adapter: factor_table
 include: []
 exclude: []
 max_depth: 0
 kinds:
-- article
-- tip
-llm_kinds:
-- tip
+- emission_factor
+llm_kinds: []
 render: never
 cadence: yearly
 min_delay_s: 5
-daily_budget: 20
+daily_budget: 10
 politeness_key: null
-enabled: false
+enabled: true
 needs_key: false
 key_secret: null
 max_retention_days: null
@@ -37,8 +35,13 @@ notes: 'Research 2026-11-19 (carbon footprint corpus; food and activities; verdi
   for every industry: restaurants (722), amusement/theme parks (713110), golf (713910), skiing (713920),
   museums (712), performing arts and sports events (711): spend-based activity factors. Format: CSV. Licence
   (research): open (US Government work, public domain). reader: csv_filter; cadence ~yearly; robots 404
-  (allowed); HEAD of the CSV returned 200 on 2026-11-19. | Disabled: adapter pending: csv_filter mapping
-  for this dataset (CSV); the generic reader exists but has no mapping for it yet'
+  (allowed); HEAD of the CSV returned 200 on 2026-11-19. | Adapter factor_table (2026-11-19): the v1.3
+  NAICS CSV (120 KB): kg CO2e per 2022 US dollar (purchaser price, with margins) for 41 travel industries
+  only (passenger air, rail, water, transit, taxi, coach, sightseeing, car rental, travel agencies and
+  tours, performing arts, spectator sports, museums and parks, amusement, golf, skiing, marinas, hotels,
+  B&Bs, campgrounds, restaurants and bars) -> emission_factor records (US, spend-based). Rows whose unit
+  is not "kg CO2e/2022 USD, purchaser price" are not mapped. pasteur.epa.gov robots.txt: 404 (allowed),
+  2026-11-19. Next version: replace the seed and the dollar year in the mapping.'
 relevance:
   sections:
   - carbon

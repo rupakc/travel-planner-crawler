@@ -40,8 +40,10 @@ notes: 'Research 2026-11-19 (carbon footprint corpus; food and activities; verdi
   an API: a ready source for meal and shopping footprints. Format: CSV (equivalents.csv) + JSON API. Licence
   (research): facts_only (ADEME allows non-commercial, educational reuse). reader: csv_filter for the
   CSV (API needs an adapter; may need a free key, unverified); robots 200 Allow /; terms restrict to non-commercial
-  use, owner accepted. | Disabled: adapter pending: csv_filter mapping for this dataset (CSV (equivalents.csv)
-  + JSON API); the generic reader exists but has no mapping for it yet'
+  use, owner accepted. | Disabled: adapter pending: equivalents.csv (robots Allow /, fetched once 2026-11-19)
+  has only "kg CO2e" per row, with no unit denominator (per km and person, per kg, per night, per year)
+  and no reference year; those live in the site''s JavaScript category data, and factor_table copies published
+  units and years only'
 relevance:
   sections:
   - carbon

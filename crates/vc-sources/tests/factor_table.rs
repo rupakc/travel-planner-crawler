@@ -833,3 +833,231 @@ async fn the_tag_data_book_is_one_request_spooled_raw() {
     assert_eq!(h.responses().len(), 1);
     assert_raw_first(&h.events.all());
 }
+
+// ---------------------------------------------------------------------------------------
+// Third batch (2026-11-19): mobitool (CH, merged cells, four header rows), AIB residual mixes
+// (ISO alpha-2 codes), US EPA supply-chain factors (travel industries), OWID tourism-adjusted
+// aviation per capita.
+// ---------------------------------------------------------------------------------------
+
+const MOBITOOL: &str = "https://assets.ctfassets.net/4y40wxcxzkmz/oVkB45ifGfz5X44f5Omb1/9d3ef33605fb6154d61d7630536c3a92/mobitool-Faktoren-v3.1-20250408.xlsx";
+const AIB: &str = "https://www.aib-net.org/sites/default/files/assets/eecs/Residual%20Mix/2025_Final%20_Residual%20mix%20calculation%20results_25052026.xlsx";
+const EPA_SC: &str = "https://pasteur.epa.gov/uploads/10.23719/1531143/SupplyChainGHGEmissionFactors_v1.3.0_NAICS_CO2e_USD2022.csv";
+const OWID_TA: &str = "https://ourworldindata.org/grapher/per-capita-co-emissions-from-international-flights-tourism-adjusted.csv";
+
+fn by_id_of<'a>(it: &'a [AdapterItem], id: &str) -> &'a Value {
+    &by_id(it, id).data
+}
+
+#[test]
+fn batch_three_urls_have_their_mappings_and_leading_years() {
+    let n = |u: &str| factor_table::mappings_for(&CanonicalUrl::parse(u).unwrap()).len();
+    assert_eq!(n(MOBITOOL), 1);
+    assert_eq!(n(AIB), 3, "production, residual and supplier mix");
+    assert_eq!(n(EPA_SC), 1);
+    assert_eq!(n(OWID_TA), 1);
+    let lead = |u: &str| factor_table::file_name_leading_year(&CanonicalUrl::parse(u).unwrap());
+    // The data year leads the file name; a later date stamp must not win.
+    assert_eq!(lead(AIB), Some(2025));
+    assert_eq!(lead(MOBITOOL), Some(2025));
+    assert_eq!(
+        factor_table::file_name_year(&CanonicalUrl::parse(AIB).unwrap()),
+        Some(2026),
+        "the last year would be the publication stamp"
+    );
+    // Percent escapes ("%20") are not digits.
+    assert_eq!(lead("https://x.example/a%2019/b%20mix.xlsx"), None);
+    assert_eq!(lead("https://x.example/v3.1-19991231.csv"), Some(1999));
+}
+
+#[test]
+fn mobitool_rows_are_life_cycle_pkm_factors_with_merged_powertrains() {
+    let it = items(MOBITOOL, &fixture("factor_mobitool_v3_1.xlsx"));
+    fit(&it);
+    // pkm rows only: the freight-rail tkm rows give nothing, nor does "On foot" (0).
+    assert!(
+        it.iter()
+            .all(|i| i.data["unit"] == "g CO2e per passenger.km")
+    );
+    assert!(
+        it.iter()
+            .all(|i| i.data["year"] == 2025 && i.data["gas_basis"] == "co2e")
+    );
+    assert!(!it.iter().any(|i| i.data["activity"] == "on_foot"));
+    // A merged "Powertrain" cell labels every row it covers ...
+    let hybrid = by_id_of(
+        &it,
+        "mobitool:2025:city_bus_13m_hybrid_diesel_single_deck_euro_6",
+    );
+    assert_eq!(hybrid["category"], "bus");
+    assert_eq!(hybrid["value"], 124.72684487088364);
+    let ebike = by_id_of(&it, "mobitool:2025:e_bike_battery_electric_45_km_h");
+    assert_eq!(
+        ebike["activity_label"],
+        "E-Bike / Battery electric / <45 km/h"
+    );
+    // ... but a blank cell outside a merged region stays blank (a bicycle has no powertrain).
+    by_id(&it, "mobitool:2025:bicycle_conventional_urban");
+    // Trains abroad are stored under their country; everything else is Swiss.
+    let tgv = by_id_of(
+        &it,
+        "mobitool:2025:high_speed_train_fr_electricity_mix_fr_and_diesel_high_speed_train_tgv",
+    );
+    assert_eq!(tgv["country_code"], "FR");
+    assert_eq!(tgv["geography"], "France");
+    assert_eq!(tgv["category"], "rail");
+    let sbb = by_id_of(&it, "mobitool:2025:train_switzerland_long_distance_traffic");
+    assert_eq!(sbb["country_code"], "CH");
+    assert_eq!(sbb["value"], 6.8154116452453986);
+    let coach = by_id_of(&it, "mobitool:2025:coach_bus_diesel_single_deck_euro_6");
+    assert_eq!(coach["category"], "coach");
+    let fly = by_id_of(
+        &it,
+        "mobitool:2025:airplane_kerosene_intercontinental_economy",
+    );
+    assert_eq!(fly["category"], "flights");
+    let ship = by_id_of(&it, "mobitool:2025:passenger_ship_diesel");
+    assert_eq!(ship["category"], "ferry");
+    for c in ["DE", "IT", "AT"] {
+        assert!(it.iter().any(|i| i.data["country_code"] == c), "{c}");
+    }
+}
+
+#[test]
+fn a_header_split_over_four_rows_is_joined_and_merges_fill_data_rows_only() {
+    let m = mapping_for(&CanonicalUrl::parse(MOBITOOL).unwrap()).unwrap();
+    let t = factor_table::read_table(m, &fixture("factor_mobitool_v3_1.xlsx")).unwrap();
+    // "sum" sits three rows above its "[g CO2-eq.]" unit row.
+    assert!(
+        t.header.iter().any(|h| h == "sum [g CO2-eq.]"),
+        "{:?}",
+        t.header
+    );
+    assert!(t.header.iter().any(|h| h == "Functional unit"));
+    // With fewer header rows the sheet is refused.
+    let mut two = *m;
+    two.header_rows = 2;
+    assert!(factor_table::read_table(&two, &fixture("factor_mobitool_v3_1.xlsx")).is_err());
+    // Without the merged-cell fill the hybrid bus rows lose their powertrain.
+    let mut plain = *m;
+    plain.format = factor_table::Format::Xlsx {
+        sheet: "mobitool-Faktoren-v3.1",
+    };
+    let pt = factor_table::read_table(&plain, &fixture("factor_mobitool_v3_1.xlsx")).unwrap();
+    let ix = pt.header.iter().position(|h| h == "Powertrain").unwrap();
+    assert!(
+        pt.rows.iter().filter(|r| r[ix].is_empty()).count()
+            > t.rows.iter().filter(|r| r[ix].is_empty()).count()
+    );
+}
+
+#[test]
+fn aib_co2_sheet_is_three_mixes_per_country_without_na_cells() {
+    let it = items(AIB, &fixture("factor_aib_residual_mix_2025.xlsx"));
+    fit(&it);
+    // 34 countries x 3 mixes, minus the residual mix of AT, CH and NL ("NA").
+    assert_eq!(it.len(), 99);
+    assert!(it.iter().all(|i| i.data["category"] == "electricity"
+        && i.data["unit"] == "g CO2 per kWh"
+        && i.data["gas_basis"] == "co2"
+        && i.data["year"] == 2025));
+    let de = by_id_of(&it, "aib-residual-mix:2025:DE:electricity_residual_mix");
+    assert_eq!(de["value"], 701.47);
+    assert_eq!(de["geography"], "Germany");
+    assert_eq!(
+        by_id_of(
+            &it,
+            "aib-supplier-mix:2025:DE:electricity_total_supplier_mix"
+        )["value"],
+        21.03
+    );
+    assert_eq!(
+        by_id_of(&it, "aib-production-mix:2025:FR:electricity_production_mix")["value"],
+        13.7
+    );
+    assert!(
+        !it.iter()
+            .any(|i| i.id.as_deref() == Some("aib-residual-mix:2025:AT:electricity_residual_mix"))
+    );
+}
+
+#[test]
+fn epa_supply_chain_keeps_travel_industries_only() {
+    let it = items(EPA_SC, &fixture("factor_epa_supply_chain_v1_3.csv"));
+    fit(&it);
+    // Farming, freight air and casinos are in the fixture and are not stored.
+    assert_eq!(it.len(), 14, "{it:#?}");
+    for id in ["111110", "481112", "713210"] {
+        assert!(!it.iter().any(|i| i.data["factor_id"] == id), "{id}");
+    }
+    let hotel = by_id_of(&it, "epa-supply-chain:2022:721110");
+    assert_eq!(hotel["category"], "accommodation");
+    assert_eq!(hotel["value"], 0.145);
+    assert_eq!(
+        hotel["unit"],
+        "kg CO2e per 2022 USD spent (purchaser price)"
+    );
+    assert_eq!(hotel["country_code"], "US");
+    let cats = |id: &str| by_id_of(&it, &format!("epa-supply-chain:2022:{id}"))["category"].clone();
+    assert_eq!(cats("481111"), "flights");
+    assert_eq!(cats("482111"), "rail");
+    assert_eq!(cats("483112"), "ferry");
+    assert_eq!(cats("485310"), "taxi");
+    assert_eq!(cats("485510"), "coach");
+    assert_eq!(cats("487110"), "activity");
+    assert_eq!(cats("532111"), "car");
+    assert_eq!(cats("722511"), "food");
+    assert_eq!(cats("712110"), "activity");
+    // Another dollar year changes the unit text: nothing is mapped until the mapping is updated.
+    let other = String::from_utf8(fixture("factor_epa_supply_chain_v1_3.csv"))
+        .unwrap()
+        .replace("2022 USD", "2023 USD");
+    assert!(items(EPA_SC, other.as_bytes()).is_empty());
+}
+
+#[test]
+fn owid_tourism_aviation_is_kg_co2_per_capita_without_aggregates() {
+    let it = items(OWID_TA, &fixture("factor_owid_tourism_aviation.csv"));
+    fit(&it);
+    // France 2013-2021 and the United States 2013-2020; Africa (OWID_AFR) is skipped.
+    assert_eq!(it.len(), 17);
+    let fr = by_id_of(
+        &it,
+        "owid-tourism-aviation:2019:FR:international_flights_tourism_adjusted_co2_per_capita",
+    );
+    assert_eq!(fr["value"], 91.32692);
+    assert_eq!(fr["unit"], "kg CO2 per person per year");
+    assert_eq!(fr["category"], "flights");
+    assert_eq!(fr["gas_basis"], "co2");
+}
+
+#[tokio::test]
+async fn the_mobitool_workbook_is_one_request_spooled_raw() {
+    let p = "/4y40wxcxzkmz/oVkB45ifGfz5X44f5Omb1/9d3ef33605fb6154d61d7630536c3a92/mobitool-Faktoren-v3.1-20250408.xlsx";
+    let s = MockServer::start().await;
+    Mock::given(method("GET"))
+        .and(path(p))
+        .respond_with(
+            ResponseTemplate::new(200)
+                .insert_header(
+                    "content-type",
+                    "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+                )
+                .set_body_bytes(fixture("factor_mobitool_v3_1.xlsx")),
+        )
+        .expect(1)
+        .mount(&s)
+        .await;
+    let mut h = Harness::new(
+        spec("od-mobitool-ch"),
+        "factor_table",
+        &format!("{}{p}", s.uri()),
+        t0(),
+    )
+    .await;
+    let rep = h.run(&FactorTable).await.unwrap();
+    assert_eq!(rep.requests, 1);
+    assert!(rep.complete);
+    assert_eq!(h.responses().len(), 1);
+    assert_raw_first(&h.events.all());
+}

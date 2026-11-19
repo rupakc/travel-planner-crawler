@@ -37,8 +37,9 @@ display_requirements: null
 notes: 'Research 2026-11-19 (carbon footprint corpus; ground transport; verdict NEEDS-ADAPTER): Per-ship
   annual CO2 and CO2 per pax-nm for ro-pax ferries and cruise ships in EU ports. Format: xlsx per reporting
   year from JS app - needs xlsx adapter + ship-type filter. Licence (research): open (EU reuse; legal
-  page not found). yearly (around June); robots 404. | Disabled: adapter pending: xlsx per reporting year
-  from JS app - needs xlsx adapter + ship-type filter'
+  page not found). yearly (around June); robots 404. | Disabled: adapter pending: the public emission
+  reports are exported by the JavaScript app only (mrv.emsa.europa.eu robots.txt 404; the binary report
+  path answers 404 without the app''s parameters, 2026-11-19)'
 relevance:
   sections:
   - carbon

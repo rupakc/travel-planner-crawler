@@ -7,37 +7,37 @@ source_class: reference
 licence:
   class: open
   spdx: CC-BY-4.0
-  attribution: 'Our World in Data: per-capita CO2 from international flights, tourism-adjusted'
+  attribution: Our World in Data (ourworldindata.org), based on OECD and UN Tourism; CC BY 4.0
   url: https://creativecommons.org/licenses/by/4.0/
-method: dump
+method: api
 seeds:
-- https://ourworldindata.org/grapher/per-capita-co-emissions-from-international-flights-tourism-adjusted
 - https://ourworldindata.org/grapher/per-capita-co-emissions-from-international-flights-tourism-adjusted.csv
 sitemaps: []
 feeds: []
-adapter: null
+adapter: factor_table
 include: []
 exclude: []
 max_depth: 0
 kinds:
-- article
-- tip
-llm_kinds:
-- tip
+- emission_factor
+llm_kinds: []
 render: never
 cadence: yearly
 min_delay_s: 5
-daily_budget: 20
+daily_budget: 10
 politeness_key: null
-enabled: false
+enabled: true
 needs_key: false
 key_secret: null
 max_retention_days: null
 display_requirements: null
 notes: 'Research 2026-11-19 (carbon footprint corpus; tourism research; verdict ADD): Country aviation
   CO2 allocated by tourism flows (ICCT basis), CSV per grapher. Format: CSV. Licence (research): open
-  (CC BY 4.0). robots allowed; homepage states CC BY. Yearly. | Disabled: adapter pending: csv_filter
-  mapping for this dataset (CSV); the generic reader exists but has no mapping for it yet'
+  (CC BY 4.0). robots allowed; homepage states CC BY. Yearly. | Adapter factor_table (2026-11-19): grapher
+  CSV per-capita-co-emissions-from-international-flights-tourism-adjusted (32 KB; OECD and UN Tourism,
+  kg CO2 per person per year, 2013-2024, unit from the chart''s metadata.json) -> emission_factor records
+  per country (category flights; OWID aggregates skipped). ourworldindata.org robots.txt: Sitemap line
+  only (allowed), re-checked 2026-11-19.'
 relevance:
   sections:
   - carbon

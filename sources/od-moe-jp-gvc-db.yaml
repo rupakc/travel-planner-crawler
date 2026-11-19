@@ -37,7 +37,10 @@ display_requirements: null
 notes: 'Research 2026-11-19 (carbon footprint corpus; official factor sets; verdict NEEDS-ADAPTER): Japanese
   factors per JPY/pkm for business travel, accommodation per night, food. Format: xlsx + pdf. Licence
   (research): open (government standard terms; not fetched). robots disallows only /cgi-bin/. | Disabled:
-  adapter pending: xlsx + pdf'
+  adapter pending: DB_V3-6.xlsx (6 MB, www.env.go.jp robots disallows /cgi-bin/ only, fetched once 2026-11-19):
+  the per-pkm sheet names IDEA product codes without values, the per-yen and per-night sheets are presentation
+  tables with unnamed label columns, and the world grid sheet copies IGES/IEA figures under Japanese country
+  names'
 relevance:
   sections:
   - carbon

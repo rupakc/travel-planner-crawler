@@ -39,7 +39,10 @@ notes: 'Research 2026-11-19 (carbon footprint corpus; food and activities; verdi
   factors (electricity, fuels, refrigerants). Format: xlsx calculator workbook. Licence (research): open
   (reuse with citation under Ley 37/2007). reader: none (xlsx workbook factor sheets); yearly; robots
   200 Crawl-delay 10, Disallow /*?; reuse allowed ''siempre que se cite la fuente''. Crawl-delay 10 s
-  honoured as min_delay_s. | Disabled: adapter pending: xlsx calculator workbook'
+  honoured as min_delay_s. | Disabled: adapter pending: the calculator workbook (calculadora_hc_tcm30-485617.xlsx,
+  robots Crawl-delay 10, fetched once 2026-11-19) lays its factors out one column per year (2007 onwards)
+  under per-section titles, mostly fuels per litre; factor_table reads one value column per table (needs
+  a year-columns-to-rows option)'
 relevance:
   sections:
   - carbon

@@ -37,7 +37,7 @@ use super::{countries, iso3};
 pub const ID: &str = "factor_table";
 
 /// Bumped when a mapping's output changes.
-pub const FILTER_VERSION: &str = "factor-table-v3";
+pub const FILTER_VERSION: &str = "factor-table-v4";
 
 /// Largest decompressed member of a zipped CSV (zip-bomb guard).
 pub const MAX_UNZIPPED_BYTES: usize = 64 * 1024 * 1024;
@@ -55,6 +55,14 @@ pub enum Format {
     /// An Excel workbook (`.xlsx`, `.xlsm`): the named sheet.
     Xlsx {
         /// Sheet name.
+        sheet: &'static str,
+    },
+    /// An Excel workbook whose sheet name changes with the edition (`"mobitool-Faktoren-v3.1"`):
+    /// the first sheet whose name starts with `sheet`. Merged cells below the header take
+    /// the merged region's value in every cell of the region (a merged "Powertrain" cell over
+    /// four rows labels all four), so a group label is never guessed from the row above.
+    XlsxMerged {
+        /// Sheet-name prefix.
         sheet: &'static str,
     },
     /// An OpenDocument spreadsheet (`.ods`): the named sheet.
@@ -101,6 +109,10 @@ pub enum Year {
     /// The last year (19xx/20xx, not followed by another digit) in the file name
     /// (`ghg-emission-factors-hub-2025.xlsx`).
     FileName,
+    /// The year that leads the file name's first run of digits that starts with one
+    /// (`2025_Final_Residual_mix_25052026.xlsx` → 2025, `mobitool-Faktoren-v3.1-20250408.xlsx`
+    /// → 2025): the edition or data year when a later date stamp would mislead [`Year::FileName`].
+    FileNameLeading,
 }
 
 /// Where the geography comes from.
@@ -116,6 +128,20 @@ pub enum Geo {
         /// Categories the column applies to.
         when: &'static [&'static str],
         /// Fallback geography name and code.
+        fallback: (&'static str, &'static str),
+    },
+    /// An ISO 3166-1 alpha-2 column (AIB's `"Country code"`); rows whose code names no
+    /// country are skipped. The geography is the country's English name.
+    Iso2 {
+        /// Alpha-2 column.
+        code: &'static str,
+    },
+    /// The country named in the activity label (`"Train Germany / Electricity mix DE & Diesel"`):
+    /// the first `(substring, name, alpha-2)` rule that the label contains, else the fallback.
+    Label {
+        /// `(substring of the activity label, geography, alpha-2)`.
+        rules: &'static [(&'static str, &'static str, &'static str)],
+        /// Geography and code when no rule matches.
         fallback: (&'static str, &'static str),
     },
     /// An ISO 3166-1 alpha-3 column (`code`), with the name column; rows without a valid
@@ -243,9 +269,12 @@ pub struct FactorMapping {
     /// sheet that holds one table. With an anchor, the table ends at the first row whose first
     /// required cell is empty or starts with "Source" or "Note".
     pub anchor: &'static str,
-    /// Header rows: `1`, or `2` when the column names are split over two rows (a merged
-    /// "Weekend" / "All Week" above a row of time bands): the header row is then the first one
-    /// that, joined cell by cell with the row above it, holds every required column.
+    /// Header rows: `1`, or up to `4` when the column names are split over several rows (a
+    /// merged "Weekend" / "All Week" above a row of time bands; mobitool's "sum" three rows
+    /// above its "[g CO2-eq.]" unit row): the header row is then the first one that, joined
+    /// cell by cell with the 1 to `header_rows - 1` rows right above it (fewest first), holds
+    /// every required column. Header rows are joined as stored (a merged header cell counts
+    /// once, in its first cell).
     pub header_rows: u8,
     /// Columns whose empty cells take the value above them (a merged group label such as
     /// TAG's "Vehicle Type"); a cell in parentheses (`"(Occupants)"`) is a note under the
@@ -340,6 +369,117 @@ const RIVM_PATH: &[&str] = &[
 ];
 const RIVM_PUBLISHER: &str =
     "Dutch National Institute for Public Health and the Environment (RIVM)";
+
+const MOBITOOL_CATEGORIES: &[(&str, &str)] = &[
+    ("Airplane", "flights"),
+    ("Rail /", "rail"),
+    ("Tram", "rail"),
+    ("Coach bus", "coach"),
+    ("bus", "bus"),
+    ("Passenger ship", "ferry"),
+    ("Passenger car", "car"),
+    ("Motorbike", "motorbike"),
+    ("Scooter", "motorbike"),
+    ("", "other"),
+];
+
+/// mobitool rows of trains abroad name the country's electricity mix (`"Electricity mix DE &
+/// Diesel"`); every other row is a Swiss figure.
+const MOBITOOL_COUNTRIES: &[(&str, &str, &str)] = &[
+    ("mix DE", "Germany", "DE"),
+    ("mix FR", "France", "FR"),
+    ("mix IT", "Italy", "IT"),
+    ("mix AT", "Austria", "AT"),
+    ("ENTSO-E", "Europe", ""),
+];
+
+const AIB_PATH: &[&str] = &[
+    "/Residual%20Mix/",
+    "Residual%20mix%20calculation%20results",
+    ".xlsx",
+];
+const AIB: &str = "AIB European Residual Mixes, CO2 emissions per kWh";
+const AIB_PUBLISHER: &str = "Association of Issuing Bodies (AIB)";
+
+const fn aib(dataset: &'static str, column: &'static str, prefix: &'static str) -> FactorMapping {
+    FactorMapping {
+        dataset,
+        dataset_label: AIB,
+        publisher: AIB_PUBLISHER,
+        path_contains: AIB_PATH,
+        format: Format::Xlsx { sheet: "CO2" },
+        anchor: "",
+        header_rows: 1,
+        fill_down: &[],
+        required: &[
+            "Country code",
+            "Production mix CO2",
+            "Residual mix CO2",
+            "Supplier mix CO2",
+        ],
+        keep: &[],
+        value: Col::Name(column),
+        year: Year::FileNameLeading,
+        min_year: 0,
+        skip_zero: false,
+        max_bytes: 2 * 1024 * 1024,
+        output: Output::Factor {
+            activity_prefix: prefix,
+            activity: &[],
+            footnotes: false,
+            categories: &[("", "electricity")],
+            category_from: &[],
+            gas_basis: &[],
+            gas_default: "co2",
+            unit_mass: ("g CO2", ""),
+            unit_per: ("kWh", ""),
+            scope: ("direct combustion CO2", ""),
+            factor_id: "",
+            geo: Geo::Iso2 {
+                code: "Country code",
+            },
+        },
+    }
+}
+
+/// US EPA supply-chain factors: the travel and leisure industries a trip spends money in
+/// (passenger transport, car rental, travel agencies and tours, attractions, lodging, food
+/// service). Freight, casinos, schools and the rest of the economy are not stored.
+const EPA_SC_TRAVEL_NAICS: &[&str] = &[
+    "481111", "481211", "482111", "483112", "483114", "483212", "485111", "485112", "485113",
+    "485210", "485310", "485320", "485510", "487110", "487210", "487990", "532111", "561510",
+    "561520", "711110", "711211", "711310", "712110", "712120", "712130", "712190", "713110",
+    "713910", "713920", "713930", "713990", "721110", "721120", "721191", "721199", "721211",
+    "722410", "722511", "722513", "722514", "722515",
+];
+
+const EPA_SC_CATEGORIES: &[(&str, &str)] = &[
+    ("Scenic", "activity"),
+    ("Air Transportation", "flights"),
+    ("Railroads", "rail"),
+    ("Commuter Rail", "rail"),
+    ("Passenger Transportation", "ferry"),
+    ("Taxi", "taxi"),
+    ("Limousine", "taxi"),
+    ("Charter Bus", "coach"),
+    ("Interurban", "coach"),
+    ("Bus", "bus"),
+    ("Transit", "bus"),
+    ("Car Rental", "car"),
+    ("Hotel", "accommodation"),
+    ("Bed-and-Breakfast", "accommodation"),
+    ("Accommodation", "accommodation"),
+    ("Campgrounds", "accommodation"),
+    ("Restaurants", "food"),
+    ("Drinking", "food"),
+    ("Cafeterias", "food"),
+    ("Snack", "food"),
+    ("", "activity"),
+];
+
+/// The OWID column of the tourism-adjusted aviation chart (old grapher CSV: long headers).
+const OWID_TOURISM_AVIATION: &str =
+    "Per capita CO₂ emissions from international flights, international tourism-adjusted";
 
 const fn concito(
     dataset: &'static str,
@@ -932,6 +1072,173 @@ pub const MAPPINGS: &[FactorMapping] = &[
         "tot-en-met-consumptie",
         "cradle to consumption (NL)",
     ),
+    // mobitool factors v3.1 (PSI for the Swiss FOEN, 2025-04-08): life-cycle g CO2e per
+    // passenger-km (GWP100a; direct, non-exhaust, energy chain, maintenance, vehicle, end of
+    // life and road), the "sum" column, for passenger vehicles in Switzerland and trains in
+    // Germany, France, Italy and Austria. Only rows whose functional unit is pkm (not tkm,
+    // hours or days); merged "Powertrain" cells label every row they cover.
+    FactorMapping {
+        dataset: "mobitool",
+        dataset_label: "mobitool factors (Swiss FOEN / PSI), life-cycle passenger transport",
+        publisher: "mobitool (Swiss Federal Office for the Environment, PSI)",
+        path_contains: &["mobitool-Faktoren-", ".xlsx"],
+        format: Format::XlsxMerged {
+            sheet: "mobitool-Faktoren-",
+        },
+        anchor: "",
+        header_rows: 4,
+        fill_down: &[],
+        required: &[
+            "Transport sub-category",
+            "Vehicle",
+            "Powertrain",
+            "Vehicle description",
+            "Functional unit",
+            "sum [g CO2-eq.]",
+        ],
+        keep: &[Keep {
+            column: "Functional unit",
+            values: &["pkm"],
+        }],
+        value: Col::Name("sum [g CO2-eq.]"),
+        year: Year::FileNameLeading,
+        min_year: 0,
+        skip_zero: true,
+        max_bytes: 12 * 1024 * 1024,
+        output: Output::Factor {
+            activity_prefix: "",
+            activity: &[
+                "Vehicle",
+                "Powertrain",
+                "Vehicle description",
+                "Emission standard",
+            ],
+            footnotes: false,
+            categories: MOBITOOL_CATEGORIES,
+            category_from: &["Transport sub-category", "Vehicle"],
+            gas_basis: &[],
+            gas_default: "co2e",
+            unit_mass: ("g CO2e", ""),
+            unit_per: ("passenger.km", ""),
+            scope: ("life cycle, GWP100a", ""),
+            factor_id: "",
+            geo: Geo::Label {
+                rules: MOBITOOL_COUNTRIES,
+                fallback: ("Switzerland", "CH"),
+            },
+        },
+    },
+    // AIB European Residual Mixes (yearly in May): direct CO2 per kWh of the production mix,
+    // the residual mix (what a consumer without guarantees of origin is supplied) and the
+    // total supplier mix, per country (sheet "CO2"; "NA" cells give no record).
+    aib(
+        "aib-production-mix",
+        "Production mix CO2",
+        "Electricity, production mix",
+    ),
+    aib(
+        "aib-residual-mix",
+        "Residual mix CO2",
+        "Electricity, residual mix",
+    ),
+    aib(
+        "aib-supplier-mix",
+        "Supplier mix CO2",
+        "Electricity, total supplier mix",
+    ),
+    // US EPA Supply Chain GHG Emission Factors v1.3 (USEEIO, US public domain): kg CO2e per
+    // 2022 US dollar spent (purchaser price, with margins), for the travel industries in
+    // EPA_SC_TRAVEL_NAICS. A new dollar year changes the Unit text, so its rows are not
+    // mapped until the unit below is updated.
+    FactorMapping {
+        dataset: "epa-supply-chain",
+        dataset_label: "US EPA Supply Chain GHG Emission Factors (NAICS, with margins)",
+        publisher: EPA,
+        path_contains: &["SupplyChainGHGEmissionFactors_", "_NAICS_CO2e_USD", ".csv"],
+        format: Format::Csv,
+        anchor: "",
+        header_rows: 1,
+        fill_down: &[],
+        required: &[
+            "2017 NAICS Code",
+            "2017 NAICS Title",
+            "GHG",
+            "Unit",
+            "Supply Chain Emission Factors with Margins",
+        ],
+        keep: &[
+            Keep {
+                column: "GHG",
+                values: &["All GHGs"],
+            },
+            Keep {
+                column: "Unit",
+                values: &["kg CO2e/2022 USD, purchaser price"],
+            },
+            Keep {
+                column: "2017 NAICS Code",
+                values: EPA_SC_TRAVEL_NAICS,
+            },
+        ],
+        value: Col::Name("Supply Chain Emission Factors with Margins"),
+        year: Year::FileName,
+        min_year: 0,
+        skip_zero: false,
+        max_bytes: 2 * 1024 * 1024,
+        output: Output::Factor {
+            activity_prefix: "",
+            activity: &["2017 NAICS Title"],
+            footnotes: false,
+            categories: EPA_SC_CATEGORIES,
+            category_from: &["2017 NAICS Title"],
+            gas_basis: &[],
+            gas_default: "co2e",
+            unit_mass: ("kg CO2e", ""),
+            unit_per: ("2022 USD spent (purchaser price)", ""),
+            scope: ("supply chain, with margins", ""),
+            factor_id: "2017 NAICS Code",
+            geo: US,
+        },
+    },
+    // Our World in Data grapher (CC BY 4.0, from OECD and UN Tourism): per-capita CO2 of
+    // international flights, allocated to the country of departure and then adjusted for
+    // tourism (kg per person per year).
+    FactorMapping {
+        dataset: "owid-tourism-aviation",
+        dataset_label: "Our World in Data: per capita CO2 from international flights, tourism-adjusted",
+        publisher: "Our World in Data, based on OECD and UN Tourism",
+        path_contains: &[
+            "/grapher/per-capita-co-emissions-from-international-flights-tourism-adjusted.csv",
+        ],
+        format: Format::Csv,
+        anchor: "",
+        header_rows: 1,
+        fill_down: &[],
+        required: &["Entity", "Code", "Year", OWID_TOURISM_AVIATION],
+        keep: &[],
+        value: Col::Name(OWID_TOURISM_AVIATION),
+        year: Year::Column("Year"),
+        min_year: 0,
+        skip_zero: false,
+        max_bytes: 1024 * 1024,
+        output: Output::Factor {
+            activity_prefix: "International flights, tourism-adjusted CO2 per capita",
+            activity: &[],
+            footnotes: false,
+            categories: &[("", "flights")],
+            category_from: &[],
+            gas_basis: &[],
+            gas_default: "co2",
+            unit_mass: ("kg CO2", ""),
+            unit_per: ("person per year", ""),
+            scope: ("international flights, tourism-adjusted", ""),
+            factor_id: "",
+            geo: Geo::Iso3 {
+                code: "Code",
+                name: "Entity",
+            },
+        },
+    },
     // UK DfT TAG data book (OGL v3), table A1.3.3.2: vehicle occupancies based on vehicle-km
     // travelled (persons per vehicle, driver included), by vehicle type and journey purpose,
     // all-week average. Only cars (each purpose and the average) and PSV (bus and coach) in
@@ -1081,9 +1388,10 @@ fn used_columns(m: &FactorMapping) -> HashSet<&'static str> {
     u.extend(m.fill_down.iter().copied());
     match geo {
         Geo::Fixed(..) => {}
-        Geo::CountryColumn { column, .. } => {
+        Geo::CountryColumn { column, .. } | Geo::Iso2 { code: column } => {
             u.insert(column);
         }
+        Geo::Label { .. } => {}
         Geo::Iso3 { code, name } | Geo::Region { code, name, .. } => {
             u.extend([code, name]);
         }
@@ -1096,10 +1404,24 @@ fn collapse_ws(s: &str) -> String {
     s.split_whitespace().collect::<Vec<_>>().join(" ")
 }
 
-/// Builds the mapping's table from rows of cells (any format).
+/// A merged cell region of a sheet, in row/column indexes of the rows handed to
+/// [`table_from_rows`], with the text of its first cell.
+#[derive(Debug, Clone)]
+struct Merge {
+    rows: (usize, usize),
+    cols: (usize, usize),
+    text: String,
+}
+
+/// Largest number of header rows joined (see [`FactorMapping::header_rows`]).
+const MAX_HEADER_ROWS: usize = 4;
+
+/// Builds the mapping's table from rows of cells (any format). `merges` (XLSX only) fill the
+/// data rows: a cell inside a region that starts below the header takes the region's text.
 fn table_from_rows(
     m: &FactorMapping,
     rows: impl Iterator<Item = Result<Vec<String>>>,
+    merges: &[Merge],
 ) -> Result<Table> {
     let has_required = |cells: &[String]| m.required.iter().all(|r| cells.iter().any(|c| c == r));
     let used = used_columns(m);
@@ -1107,9 +1429,11 @@ fn table_from_rows(
     let mut t = Table::default();
     let mut keep: Vec<usize> = Vec::new();
     let mut label_ix: Option<usize> = None;
-    let mut prev: Vec<String> = Vec::new();
+    let depth = usize::from(m.header_rows).clamp(1, MAX_HEADER_ROWS);
+    let mut above: Vec<Vec<String>> = Vec::new();
     let mut fill: Vec<(usize, String)> = Vec::new();
-    for row in rows {
+    let mut header_at: Option<usize> = None;
+    for (ri, row) in rows.enumerate() {
         let mut cells = row?;
         if !anchored {
             anchored = cells.iter().any(|c| c == m.anchor);
@@ -1119,14 +1443,26 @@ fn table_from_rows(
             // Header cells are compared with their whitespace collapsed (a line break inside a
             // header cell is one space).
             let mut cells: Vec<String> = cells.iter().map(|c| collapse_ws(c)).collect();
-            if m.header_rows == 2 && !has_required(&cells) {
-                let joined = two_row_header(&prev, &cells);
-                if has_required(&joined) {
-                    cells = joined;
+            let raw = cells.clone();
+            if !has_required(&cells) {
+                // Join with the rows right above, fewest first (two rows, then three, ...).
+                for k in 1..depth.min(above.len() + 1) {
+                    let joined = above[above.len() - k..]
+                        .iter()
+                        .rev()
+                        .fold(cells.clone(), |acc, up| two_row_header(up, &acc));
+                    if has_required(&joined) {
+                        cells = joined;
+                        break;
+                    }
                 }
             }
-            prev.clone_from(&cells);
+            above.push(raw);
+            if above.len() > MAX_HEADER_ROWS {
+                above.remove(0);
+            }
             if has_required(&cells) {
+                header_at = Some(ri);
                 fill = m
                     .fill_down
                     .iter()
@@ -1160,6 +1496,21 @@ fn table_from_rows(
                 .unwrap_or("");
             if label.is_empty() || label.starts_with("Source") || label.starts_with("Note") {
                 break;
+            }
+        }
+        if let Some(h) = header_at {
+            for mg in merges
+                .iter()
+                .filter(|mg| mg.rows.0 > h && mg.rows.0 < ri && ri <= mg.rows.1)
+            {
+                if cells.len() <= mg.cols.1 {
+                    cells.resize(mg.cols.1 + 1, String::new());
+                }
+                for c in &mut cells[mg.cols.0..=mg.cols.1] {
+                    if c.is_empty() {
+                        c.clone_from(&mg.text);
+                    }
+                }
             }
         }
         if cells.iter().all(String::is_empty) {
@@ -1228,6 +1579,7 @@ fn csv_table(m: &FactorMapping, body: &[u8]) -> Result<Table> {
             rec.map(|rec| rec.iter().map(|c| c.trim().to_string()).collect())
                 .map_err(|e| Error::Invalid(format!("{ID}: csv: {e}")))
         }),
+        &[],
     )
 }
 
@@ -1269,9 +1621,45 @@ pub fn unzip_member_capped(
 /// (after the anchor, for a stacked table).
 pub fn read_table(m: &FactorMapping, body: &[u8]) -> Result<Table> {
     use calamine::Reader;
+    let mut merges = Vec::new();
     let range = match m.format {
         Format::Csv => return csv_table(m, body),
         Format::ZipCsv { member } => return csv_table(m, &unzip_member(member, body)?),
+        Format::XlsxMerged { sheet } => {
+            let mut wb = calamine::Xlsx::new(Cursor::new(body))
+                .map_err(|e| Error::Invalid(format!("{ID}: xlsx: {e}")))?;
+            let name = wb
+                .sheet_names()
+                .into_iter()
+                .find(|n| n.starts_with(sheet))
+                .ok_or_else(|| Error::Invalid(format!("{ID}: xlsx: no sheet {sheet:?}*")))?;
+            let range = wb
+                .worksheet_range(&name)
+                .map_err(|e| Error::Invalid(format!("{ID}: xlsx sheet {name:?}: {e}")))?;
+            let (r0, c0) = range.start().unwrap_or((0, 0));
+            for d in wb
+                .merge_cells_by_sheet_name(&name)
+                .map_err(|e| Error::Invalid(format!("{ID}: xlsx merged cells: {e}")))?
+            {
+                let (Some(rs), Some(cs)) = (d.start.0.checked_sub(r0), d.start.1.checked_sub(c0))
+                else {
+                    continue;
+                };
+                let text = range
+                    .get((rs as usize, cs as usize))
+                    .map(cell_text)
+                    .unwrap_or_default();
+                if text.is_empty() {
+                    continue;
+                }
+                merges.push(Merge {
+                    rows: (rs as usize, (d.end.0 - r0) as usize),
+                    cols: (cs as usize, (d.end.1 - c0) as usize),
+                    text,
+                });
+            }
+            range
+        }
         Format::Xlsx { sheet } => calamine::Xlsx::new(Cursor::new(body))
             .map_err(|e| Error::Invalid(format!("{ID}: xlsx: {e}")))?
             .worksheet_range(sheet)
@@ -1284,6 +1672,7 @@ pub fn read_table(m: &FactorMapping, body: &[u8]) -> Result<Table> {
     table_from_rows(
         m,
         range.rows().map(|r| Ok(r.iter().map(cell_text).collect())),
+        &merges,
     )
 }
 
@@ -1355,6 +1744,33 @@ pub fn file_name_year(url: &CanonicalUrl) -> Option<i64> {
             .then(|| name.get(i..i + 4)?.parse().ok())
             .flatten()
     })
+}
+
+/// The year that leads the first run of digits in a URL's file name that starts with a
+/// 19xx/20xx year (`2025_Final%20_Residual%20mix_25052026.xlsx` → 2025,
+/// `mobitool-Faktoren-v3.1-20250408.xlsx` → 2025). Percent escapes are not digits.
+pub fn file_name_leading_year(url: &CanonicalUrl) -> Option<i64> {
+    let name = url.as_url().path_segments()?.next_back()?.to_string();
+    let b = name.as_bytes();
+    let mut i = 0;
+    while i < b.len() {
+        if b[i] == b'%' && i + 2 < b.len() {
+            i += 3;
+            continue;
+        }
+        if b[i].is_ascii_digit() {
+            let start = i;
+            while i < b.len() && b[i].is_ascii_digit() {
+                i += 1;
+            }
+            if i - start >= 4 && is_year(&b[start..start + 4]) {
+                return name.get(start..start + 4)?.parse().ok();
+            }
+            continue;
+        }
+        i += 1;
+    }
+    None
 }
 
 /// Drops a trailing footnote letter (`"Passenger Car A"` → `"Passenger Car"`).
@@ -1447,6 +1863,12 @@ fn mapping_items(m: &FactorMapping, url: &CanonicalUrl, body: &[u8]) -> Result<V
         }
         Year::FileName => Some(file_name_year(url).ok_or_else(|| {
             Error::Invalid(format!("{ID}: {}: no year in the file name", m.dataset))
+        })?),
+        Year::FileNameLeading => Some(file_name_leading_year(url).ok_or_else(|| {
+            Error::Invalid(format!(
+                "{ID}: {}: no leading year in the file name",
+                m.dataset
+            ))
         })?),
         Year::Column(_) | Year::FirstYearIn(_) => None,
     };
@@ -1568,6 +1990,20 @@ fn mapping_items(m: &FactorMapping, url: &CanonicalUrl, body: &[u8]) -> Result<V
                     Geo::CountryColumn { fallback, .. } => {
                         (fallback.0.to_string(), fallback.1.to_string())
                     }
+                    Geo::Iso2 { code } => {
+                        let cc = get(row, code);
+                        let Some(country) = countries::name(&cc) else {
+                            continue; // not a country code
+                        };
+                        (country.to_string(), cc)
+                    }
+                    Geo::Label { rules, fallback } => {
+                        let (n, c) = rules
+                            .iter()
+                            .find(|(k, _, _)| label.contains(k))
+                            .map_or(fallback, |&(_, n, c)| (n, c));
+                        (n.to_string(), c.to_string())
+                    }
                     Geo::Iso3 { code, name } => {
                         let Some(cc) = iso3::alpha2(&get(row, code)) else {
                             continue; // regions, aggregates
@@ -1620,7 +2056,10 @@ fn mapping_items(m: &FactorMapping, url: &CanonicalUrl, body: &[u8]) -> Result<V
                     continue;
                 }
                 let fid = get(row, factor_id);
-                let key = match (fid.is_empty(), matches!(geo, Geo::Iso3 { .. })) {
+                let key = match (
+                    fid.is_empty(),
+                    matches!(geo, Geo::Iso3 { .. } | Geo::Iso2 { .. }),
+                ) {
                     (false, _) => fid.clone(),
                     (true, true) => format!("{code}:{act}"),
                     (true, false) => act.clone(),

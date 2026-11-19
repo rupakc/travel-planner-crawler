@@ -40,8 +40,10 @@ display_requirements: null
 notes: 'Research 2026-11-19 (carbon footprint corpus; stays; verdict NEEDS-ADAPTER): Global benchmark
   of hotel carbon/energy per occupied room by 1,300+ geographies (27k hotels); yearly. Format: xlsm workbook
   (~27 MB) + PDF. Licence (research): facts_only. robots 200 (item and bitstream paths allowed); eCommons
-  terms: rights per item, no robot/TDM clause. Needs an xlsm multi-sheet reader. | Disabled: adapter pending:
-  xlsm workbook (~27 MB) + PDF'
+  terms: rights per item, no robot/TDM clause. Needs an xlsm multi-sheet reader. | Disabled: robots.txt:
+  the eCommons bitstream downloads redirect to cf003.cdn.4science.cloud, whose robots.txt answers 403
+  (checked 2026-11-19), so that origin is do-not-crawl; the item page serves the 2025 index as a PDF there
+  too'
 relevance:
   sections:
   - carbon

@@ -357,3 +357,9 @@ plan = `docs/superpowers/plans/2026-11-15-voyager-crawler.md`, r1–r5 = `docs/r
   od-nhts-occupancy stays off: its only published table is inside the SPA's JS bundle (and PDFs);
   computing it from microdata is not copying. New read endpoint `/v1/carbon/occupancy`
   (docs/Crawler-API.md, docs/wiki/Carbon-Footprint-Data.md).
+- 2026-11-19: carbon factor tables, third batch. `factor_table` gains `Format::XlsxMerged` (sheet
+  by name prefix; merged cells below the header fill their region), headers joined over up to
+  four rows, `Geo::Iso2` / `Geo::Label`, `Year::FileNameLeading`; FILTER_VERSION factor-table-v4.
+  On (ramp-3): od-mobitool-ch, carbon-aib-residual-mix, od-epa-supply-chain-ghg (41 travel NAICS,
+  spend-based), od-owid-tourism-aviation. 16 more left off with precise reasons (Cornell CHSB: CDN
+  robots 403; impactco2: no units/years in the CSV; PDFs; wide/block layouts; signed redirects; DNS).

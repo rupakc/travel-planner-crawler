@@ -36,7 +36,9 @@ max_retention_days: null
 display_requirements: null
 notes: 'Research 2026-11-19 (carbon footprint corpus; official factor sets; verdict NEEDS-ADAPTER): Danish
   fuel CO2 factors and guidance on electricity declarations. Format: pdf/xlsx. Licence (research): facts_only;
-  terms not found. robots allows /media/. | Disabled: adapter pending: pdf/xlsx'
+  terms not found. robots allows /media/. | Disabled: adapter pending: both seeds are PDFs (Energistyrelsens
+  standardfaktorer for 2024; el-emissionsfaktorer 2024-2035), checked 2026-11-19 after robots.txt; no
+  PDF table reader'
 relevance:
   sections:
   - carbon

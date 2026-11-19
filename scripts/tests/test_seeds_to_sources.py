@@ -1761,6 +1761,30 @@ FACTOR_TABLE_SOURCES = {
     "od-rivm-food-lca": "emission_factor",
     # Occupancy (2026-11-19): DfT TAG data book table A1.3.3.2.
     "od-dft-tag-databook": "occupancy",
+    # Third batch (2026-11-19): merged cells, multi-row headers, alpha-2 and label countries.
+    "od-mobitool-ch": "emission_factor",
+    "carbon-aib-residual-mix": "emission_factor",
+    "od-epa-supply-chain-ghg": "emission_factor",
+    "od-owid-tourism-aviation": "emission_factor",
+}
+# Third batch (2026-11-19): looked at (robots.txt first, one sample) and left off, with why.
+CARBON_TABLES_3_OFF = {
+    "carbon-cornell-chsb-index": "robots.txt",
+    "impactco2": "adapter pending",
+    "od-jrc-com-ef": "adapter pending",
+    "carbon-jrc-com-factors": "duplicate",
+    "od-miteco-calculadoras": "adapter pending",
+    "carbon-mcti-brazil": "adapter pending",
+    "od-ens-dk-standardfaktorer": "adapter pending",
+    "od-ornl-tedb": "adapter pending",
+    "od-cea-co2-baseline": "adapter pending",
+    "carbon-eccc-nir": "adapter pending",
+    "od-moe-jp-gvc-db": "adapter pending",
+    "od-jp-env-emission-units": "duplicate",
+    "carbon-jp-moe-factors": "re-test from the crawler VM",
+    "od-greenferries": "re-test from the crawler VM",
+    "od-emsa-thetis-mrv": "adapter pending",
+    "od-br-ghg-protocol-tool": "adapter pending",
 }
 # Second batch (2026-11-19): off with these reasons.
 CARBON_TABLES_2_OFF = {
@@ -1773,8 +1797,8 @@ CARBON_TABLES_2_OFF = {
 CARBON_KEYED = {"carbon-ember-api": ("ember_api", "crawler-src-ember-key")}
 # Owner decisions of 2026-11-19 turned on (html, facts only).
 CARBON_OWNER_ON = ("tr-flix-methodology", "carbon-breeam-projects", "carbon-greenbooklive")
-CARBON_COUNTS = {"total": 310, "on": 160, "adapter pending": 117, "needs an API key": 25, "robots.txt": 4,
-                 "duplicate": 1, "gone": 1, "re-test from the crawler VM": 1, "5xx at": 1}
+CARBON_COUNTS = {"total": 310, "on": 164, "adapter pending": 108, "needs an API key": 25, "robots.txt": 5,
+                 "duplicate": 3, "gone": 1, "re-test from the crawler VM": 3, "5xx at": 1}
 CARBON_DENIED = ["https://www.climatiq.io/terms", "https://www.goldstandard.org/", "https://registry.verra.org/",
                  "https://media.amtrak.com/terms-of-use/", "https://ghgprotocol.org/terms-use",
                  "https://www.hestia.earth/explorer"]
@@ -1872,7 +1896,7 @@ def test_carbon_corpus_2026_11_19(generated):
     for sid in ("carbon-climatiq-oefdb", "od-fr-base-carbone-v17", "carbon-ember-grid", "od-sncf-info-ges"):
         assert generated[sid]["enabled"] is False, sid
     # Second batch (2026-11-19): the off rows say exactly why; the on rows name the robots check.
-    for sid, why in CARBON_TABLES_2_OFF.items():
+    for sid, why in {**CARBON_TABLES_2_OFF, **CARBON_TABLES_3_OFF}.items():
         reason = " ".join(generated[sid]["notes"].split()).split("Disabled: ", 1)[1]
         assert generated[sid]["enabled"] is False and reason.startswith(why), (sid, reason)
         assert "2026-11-19" in reason, sid
