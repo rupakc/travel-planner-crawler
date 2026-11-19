@@ -7,36 +7,39 @@ source_class: reference
 licence:
   class: facts_only
   spdx: null
-  attribution: AIB European Residual Mix
+  attribution: Association of Issuing Bodies (AIB), European Residual Mixes 2025
   url: null
-method: dump
+method: api
 seeds:
-- https://www.aib-net.org/facts/european-residual-mix
 - https://www.aib-net.org/sites/default/files/assets/eecs/Residual%20Mix/2025_Final%20_Residual%20mix%20calculation%20results_25052026.xlsx
 sitemaps: []
 feeds: []
-adapter: null
+adapter: factor_table
 include: []
 exclude: []
 max_depth: 0
 kinds:
-- article
-- tip
-llm_kinds:
-- tip
+- emission_factor
+llm_kinds: []
 render: never
 cadence: yearly
 min_delay_s: 5
-daily_budget: 20
+daily_budget: 10
 politeness_key: null
-enabled: false
+enabled: true
 needs_key: false
 key_secret: null
 max_retention_days: null
 display_requirements: null
 notes: 'Research 2026-11-19 (carbon footprint corpus; electricity grid; verdict NEEDS-ADAPTER): Market-based
   residual mix per country. Format: xlsx yearly. Licence (research): facts_only. Yearly (late May). |
-  Disabled: adapter pending: xlsx yearly'
+  Adapter factor_table (2026-11-19): 2025_Final _Residual mix calculation results_25052026.xlsx (80 KB),
+  sheet "CO2": direct g CO2 per kWh of the production mix, the residual mix and the total supplier mix
+  for 34 European countries (ISO alpha-2 codes; "NA" cells give no record) -> emission_factor records
+  (category electricity; not grid_carbon_intensity, whose life-cycle series per country come from Ember/OWID).
+  The year is the one that leads the file name (2025), not the publication stamp. www.aib-net.org robots.txt
+  (2026-11-19): /sites/default/files/ allowed. Next year (late May): replace the seed with the new results
+  file from www.aib-net.org/facts/european-residual-mix.'
 relevance:
   sections:
   - carbon

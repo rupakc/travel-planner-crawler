@@ -37,7 +37,8 @@ display_requirements: null
 notes: 'Research 2026-11-19 (carbon footprint corpus; official factor sets; verdict NEEDS-ADAPTER): National/EU
   electricity consumption factors (IPCC and LCA) incl. Eastern and Southern Mediterranean partners. Format:
   xlsx/csv/pdf on FTP. Licence (research): open (JRC, CC BY 4.0). robots 404 = allowed. | Disabled: adapter
-  pending: xlsx/csv/pdf on FTP'
+  pending: the jeodpp FTP (robots.txt 404, listed 2026-11-19) holds only three 2017 PDFs (dataset/come,
+  coms, comw) and the CC BY 4.0 notice: no xlsx or csv to map'
 relevance:
   sections:
   - carbon

@@ -37,7 +37,9 @@ max_retention_days: null
 display_requirements: null
 notes: 'Research 2026-11-19 (carbon footprint corpus; official factor sets; verdict NEEDS-ADAPTER): India''s
   official grid CO2 factor per fiscal year. Format: pdf + xlsx. Licence (research): facts_only; terms
-  not found. robots Allow: /. | Disabled: adapter pending: pdf + xlsx'
+  not found. robots Allow: /. | Disabled: adapter pending: only the user-guide PDFs are reachable; the
+  CO2 baseline database page answers 404 and no xlsx link was found (cea.nic.in robots Allow /, checked
+  2026-11-19)'
 relevance:
   sections:
   - carbon

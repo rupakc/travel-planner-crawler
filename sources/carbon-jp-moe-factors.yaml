@@ -35,8 +35,8 @@ max_retention_days: null
 display_requirements: null
 notes: 'Research 2026-11-19 (carbon footprint corpus; electricity grid; verdict NEEDS-ADAPTER): Official
   Japanese factors per retailer. Format: pdf/xlsx yearly list. Licence (research): facts_only (terms not
-  found). No response from the research IP (allowed). Yearly, about December. | Disabled: adapter pending:
-  pdf/xlsx yearly list'
+  found). No response from the research IP (allowed). Yearly, about December. | Disabled: re-test from
+  the crawler VM: ghg-santeikohyo.env.go.jp did not resolve (DNS) on 2026-11-19'
 relevance:
   sections:
   - carbon

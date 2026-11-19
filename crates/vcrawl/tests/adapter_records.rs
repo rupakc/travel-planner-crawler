@@ -935,6 +935,27 @@ fn factor_table_records_fit_the_kind_registry() {
             "eurostat_sdg_13_31.json",
             "emission_factor",
         ),
+        // Third batch (2026-11-19): mobitool, AIB residual mixes, EPA supply chain, OWID.
+        (
+            "https://assets.ctfassets.net/4y40wxcxzkmz/a/b/mobitool-Faktoren-v3.1-20250408.xlsx",
+            "factor_mobitool_v3_1.xlsx",
+            "emission_factor",
+        ),
+        (
+            "https://www.aib-net.org/sites/default/files/assets/eecs/Residual%20Mix/2025_Final%20_Residual%20mix%20calculation%20results_25052026.xlsx",
+            "factor_aib_residual_mix_2025.xlsx",
+            "emission_factor",
+        ),
+        (
+            "https://pasteur.epa.gov/uploads/10.23719/1531143/SupplyChainGHGEmissionFactors_v1.3.0_NAICS_CO2e_USD2022.csv",
+            "factor_epa_supply_chain_v1_3.csv",
+            "emission_factor",
+        ),
+        (
+            "https://ourworldindata.org/grapher/per-capita-co-emissions-from-international-flights-tourism-adjusted.csv",
+            "factor_owid_tourism_aviation.csv",
+            "emission_factor",
+        ),
         // Occupancy (2026-11-19): DfT TAG data book table A1.3.3.2.
         (
             "https://assets.publishing.service.gov.uk/media/x/tag-data-book-v2-03.xlsm",

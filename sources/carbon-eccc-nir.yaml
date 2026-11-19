@@ -35,7 +35,9 @@ max_retention_days: null
 display_requirements: null
 notes: 'Research 2026-11-19 (carbon footprint corpus; electricity grid; verdict NEEDS-ADAPTER): Provincial
   grid intensity. Format: csv. Licence (research): open (OGL-Canada). The catalogue is a JS app, so the
-  CSV path needs a look. Yearly (April). | Disabled: adapter pending: csv'
+  CSV path needs a look. Yearly (April). | Disabled: adapter pending: EN_Annex7_Electricity_Intensity.xlsx
+  was found through the catalogue''s path_contents API (robots Allow /, 2026-11-19), but /api/file answers
+  a 302 to a short-lived Azure SAS-signed URL; needs redirect handling that never stores the signature'
 relevance:
   sections:
   - carbon

@@ -36,7 +36,9 @@ display_requirements: null
 notes: 'Research 2026-11-19 (carbon footprint corpus; ground transport; verdict NEEDS-ADAPTER): Btu/CO2
   per passenger-mile by US mode, load factors. Format: xlsx tables per chapter - needs xlsx adapter. Licence
   (research): public domain-like (US DOE/ORNL; terms not found). yearly edition; robots disallows /admin
-  only. | Disabled: adapter pending: xlsx tables per chapter - needs xlsx adapter'
+  only. | Disabled: adapter pending: nothing to map as emission factors: TEDB tables 2.13-2.16 give energy
+  intensities (Btu per passenger-mile) and the chapter 11 CO2 tables are national totals (checked 2026-11-19,
+  robots allows /data/); the crawler never converts energy into emissions'
 relevance:
   sections:
   - carbon

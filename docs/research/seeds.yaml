@@ -18422,7 +18422,7 @@ seeds:
     category: carbon
     name: US EPA Supply Chain GHG Emission Factors v1.3 (USEEIO, by NAICS-6)
     url: https://pasteur.epa.gov/uploads/10.23719/1531143/SupplyChainGHGEmissionFactors_v1.3.0_NAICS_CO2e_USD2022.csv
-    method: dump
+    method: api
     license: US public domain
     cadence: yearly
     needs_key: false
@@ -18819,8 +18819,8 @@ seeds:
   - id: od-mobitool-ch
     category: carbon
     name: mobitool factors v3 (FOEN/SFOE Switzerland)
-    url: https://www.mobitool.ch/de/tools/mobitool-faktoren-v3-0-25.html
-    method: dump
+    url: https://assets.ctfassets.net/4y40wxcxzkmz/oVkB45ifGfz5X44f5Omb1/9d3ef33605fb6154d61d7630536c3a92/mobitool-Faktoren-v3.1-20250408.xlsx
+    method: api
     license: copyright
     cadence: yearly
     needs_key: false
@@ -19486,8 +19486,8 @@ seeds:
   - id: carbon-aib-residual-mix
     category: carbon
     name: AIB European Residual Mix
-    url: https://www.aib-net.org/facts/european-residual-mix
-    method: dump
+    url: https://www.aib-net.org/sites/default/files/assets/eecs/Residual%20Mix/2025_Final%20_Residual%20mix%20calculation%20results_25052026.xlsx
+    method: api
     license: copyright
     cadence: yearly
     needs_key: false
@@ -19961,9 +19961,9 @@ seeds:
   - id: od-owid-tourism-aviation
     category: carbon
     name: 'Our World in Data: per-capita CO2 from international flights, tourism-adjusted'
-    url: https://ourworldindata.org/grapher/per-capita-co-emissions-from-international-flights-tourism-adjusted
-    method: dump
-    license: CC BY 4.0
+    url: https://ourworldindata.org/grapher/per-capita-co-emissions-from-international-flights-tourism-adjusted.csv
+    method: api
+    license: OWID CC BY 4.0; UN Tourism input personal/non-commercial terms
     cadence: yearly
     needs_key: false
     allowed: true

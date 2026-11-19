@@ -114,6 +114,15 @@ Occupancy (2026-11-19; fetched once after the host's robots.txt):
 |---|---|---|---|
 | `factor_dft_tag_occupancy_2026.xlsx` | DfT `tag-data-book-v2-03.xlsm` (May 2026 v2.03, 6 MB) | sheet A1.3.3.2 whole (rows 1-38) and the first 30 rows of sheet A1.3.3, values only (no formulas, styles or macros) copied with openpyxl into a new workbook with the same sheet names; numeric cells then set back to the original file's exact cell texts (openpyxl rounds to 16 digits) | OGL v3 |
 
+Third batch (2026-11-19; each file fetched once after its host's robots.txt):
+
+| File | Source | How it was cut | Licence |
+|---|---|---|---|
+| `factor_mobitool_v3_1.xlsx` | mobitool `mobitool-Faktoren-v3.1-20250408.xlsx` (6 MB, assets.ctfassets.net) | sheet "mobitool-Faktoren-v3.1", rows 1-26, 51-54, 59-64, 100-106, 113-127 and 206-207 (header rows, bikes and buses, coaches, cars, Swiss trains, ship, cable car, trains abroad, airplanes, two freight-rail rows), columns A-AK, values only, with every merged region that lies wholly inside a kept block re-created at its new rows; numeric cells then set back to the original file's exact cell texts; the publisher's three instruction sentences in A3-A5 replaced by placeholders ("(publisher note 1 omitted)"), the dropdown labels and choices in row 1 (indicator GWP100a, functional unit pkm) kept | facts only (all rights reserved; values used as facts) |
+| `factor_aib_residual_mix_2025.xlsx` | AIB `2025_Final _Residual mix calculation results_25052026.xlsx` (80 KB) | sheet "CO2" whole (35 rows) and the first 10 rows of "Residual Mixes", values only | facts only |
+| `factor_epa_supply_chain_v1_3.csv` | US EPA `SupplyChainGHGEmissionFactors_v1.3.0_NAICS_CO2e_USD2022.csv` (120 KB) | header plus 17 rows as published (14 travel industries, farming, freight air, casinos) | US public domain |
+| `factor_owid_tourism_aviation.csv` | OWID `per-capita-co-emissions-from-international-flights-tourism-adjusted.csv` (32 KB) | header plus the Africa, France and United States rows as published | restricted (OWID CC BY 4.0, but the UN Tourism input is under non-commercial terms; source off; test fixture only) |
+
 
 ### ember_api: Ember API carbon intensity (2026-11-19)
 

@@ -35,7 +35,8 @@ max_retention_days: null
 display_requirements: null
 notes: 'Research 2026-11-19 (carbon footprint corpus; aviation; verdict NEEDS-ADAPTER): Brazilian air
   travel and grid factors. Format: xlsx macro workbook. Licence (research): facts_only (terms not found).
-  robots allowed. | Disabled: adapter pending: xlsx macro workbook'
+  robots allowed. | Disabled: adapter pending: the programme page (robots allowed, 2026-11-19) links no
+  workbook; the tool is distributed on request'
 relevance:
   sections:
   - carbon

@@ -7,29 +7,26 @@ source_class: reference
 licence:
   class: facts_only
   spdx: null
-  attribution: mobitool factors v3 (FOEN/SFOE Switzerland)
+  attribution: mobitool factors v3.1 (Swiss Federal Office for the Environment FOEN, PSI)
   url: null
-method: dump
+method: api
 seeds:
-- https://www.mobitool.ch/de/tools/mobitool-faktoren-v3-0-25.html
-- https://www.energieschweiz.ch/umweltrechner-verkehr/
+- https://assets.ctfassets.net/4y40wxcxzkmz/oVkB45ifGfz5X44f5Omb1/9d3ef33605fb6154d61d7630536c3a92/mobitool-Faktoren-v3.1-20250408.xlsx
 sitemaps: []
 feeds: []
-adapter: null
+adapter: factor_table
 include: []
 exclude: []
 max_depth: 0
 kinds:
-- article
-- tip
-llm_kinds:
-- tip
+- emission_factor
+llm_kinds: []
 render: never
 cadence: yearly
 min_delay_s: 5
-daily_budget: 20
+daily_budget: 10
 politeness_key: null
-enabled: false
+enabled: true
 needs_key: false
 key_secret: null
 max_retention_days: null
@@ -37,7 +34,16 @@ display_requirements: null
 notes: 'Research 2026-11-19 (carbon footprint corpus; official factor sets; verdict NEEDS-ADAPTER): Swiss
   LCA factors per pkm/vkm for cars, rail, bus, tram, flights, ships incl. vehicle and infrastructure.
   Format: xlsx multi-sheet. Licence (research): facts_only (all rights reserved; no bot ban). mobitool.ch
-  redirects to energieschweiz.ch; robots allows all but /search. | Disabled: adapter pending: xlsx multi-sheet'
+  redirects to energieschweiz.ch; robots allows all but /search. | Adapter factor_table (2026-11-19):
+  mobitool-Faktoren-v3.1-20250408.xlsx (6 MB, sheet "mobitool-Faktoren-v3.1", PSI for the Swiss FOEN):
+  the "sum" column, life-cycle g CO2e per passenger-km (GWP100a), for every pkm row (about 115: soft mobility,
+  scooters and motorbikes, cars, city buses, coaches, tram, Swiss trains, trains and high-speed trains
+  in DE, FR, IT, AT, passenger ship, cable car, airplane by haul and cabin) -> emission_factor records
+  (CH, or the train''s country from its electricity mix). Freight (tkm), hours and days rows are not stored.
+  The workbook link is on www.energieschweiz.ch/umweltrechner-verkehr/ (www.mobitool.ch redirects there);
+  robots.txt (2026-11-19): www.energieschweiz.ch disallows only /search, assets.ctfassets.net answers
+  404 (allowed). Licence: all rights reserved, facts only. Next edition: replace the seed with the new
+  workbook URL from that page.'
 relevance:
   sections:
   - carbon

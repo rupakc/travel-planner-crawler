@@ -35,7 +35,8 @@ max_retention_days: null
 display_requirements: null
 notes: 'Research 2026-11-19 (carbon footprint corpus; electricity grid; verdict NEEDS-ADAPTER): EU consumed-electricity
   factors. Format: xlsx/csv. Licence (research): open (CC BY 4.0). robots 404. The dataset URL needs a
-  look. | Disabled: adapter pending: xlsx/csv'
+  look. | Disabled: duplicate: the JRC Covenant of Mayors factors are od-jrc-com-ef (PDF-only on the jeodpp
+  FTP, checked 2026-11-19)'
 relevance:
   sections:
   - carbon

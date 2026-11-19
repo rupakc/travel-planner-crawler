@@ -35,7 +35,8 @@ max_retention_days: null
 display_requirements: null
 notes: 'Research 2026-11-19 (carbon footprint corpus; aviation; verdict NEEDS-ADAPTER): Japanese official
   factors incl. air passenger-km and hotel stays. Format: xlsx. Licence (research): facts_only. robots
-  allowed; URL from prior knowledge, verify. | Disabled: adapter pending: xlsx'
+  allowed; URL from prior knowledge, verify. | Disabled: duplicate: the MOE emission-unit database is
+  od-moe-jp-gvc-db (this seed page, estimate_tool.html, answers 404, 2026-11-19)'
 relevance:
   sections:
   - carbon

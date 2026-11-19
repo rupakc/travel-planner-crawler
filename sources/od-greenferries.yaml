@@ -37,7 +37,8 @@ display_requirements: null
 notes: 'Research 2026-11-19 (carbon footprint corpus; ground transport; verdict NEEDS-ADAPTER): Per-ferry
   g CO2/pax-km for 341 ferries and 75 companies. Format: Datasette JSON / SQLite - needs datasette adapter.
   Licence (research): community (open source; no official value). robots no response / 404 (allowed);
-  irregular updates. | Disabled: adapter pending: Datasette JSON / SQLite - needs datasette adapter'
+  irregular updates. | Disabled: re-test from the crawler VM: data.greenferries.org did not resolve (DNS)
+  on 2026-11-19; if it is back, its Datasette tables export CSV for factor_table'
 relevance:
   sections:
   - carbon

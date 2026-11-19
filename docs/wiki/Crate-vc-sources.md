@@ -51,7 +51,10 @@ What each one reads: [Sources and Licences](Sources-and-Licences#built-in-adapte
 Later additions include the open-data readers (2026-11-18) and `factor_table` (2026-11-19,
 CSV/XLSX emission-factor and grid-intensity tables; since 2026-11-19 also ODS, zipped CSV,
 stacked tables found by an anchor cell, and several tables per file; also `occupancy` records,
-two-row headers and filled-down group cells) and `ember_api` (2026-11-19, Ember API
+two-row headers and filled-down group cells; then merged-cell sheets found by a name prefix,
+headers over up to four rows, alpha-2 and label-derived countries, the leading file-name
+year, required dropdown choices above the header, and refusing a file whose rows all fail
+the filters) and `ember_api` (2026-11-19, Ember API
 carbon intensity per country, owner key in the `api_key` query parameter, redacted); see
 [Carbon Footprint Data](Carbon-Footprint-Data).
 Some adapters belong to sources that are disabled in `sources/*.yaml` (for example
