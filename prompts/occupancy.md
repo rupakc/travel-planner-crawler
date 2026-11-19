@@ -41,7 +41,7 @@ one published average vehicle occupancy (persons per vehicle, for example for ca
 
 One `occupancy` record. Required fields: `mode`, `geography`, `value`, `unit`, `basis`, `year`, `publisher`, `dataset`.
 
-Copy `value` exactly as the page gives it (persons per vehicle); never compute an occupancy from other figures (for example passenger-km divided by vehicle-km), never round. Set `includes_driver` only when the page says whether the driver is counted, `basis` to `per_vehicle_km` only for a distance-weighted figure and `per_trip` only for a per-trip one, and `trip_purpose` only when the page splits by purpose. This kind is normally filled by the `factor_table` adapter from the publisher's own tables, not from pages.
+Copy `value` exactly as the page gives it (persons per vehicle); never compute an occupancy from other figures (for example passenger-km divided by vehicle-km), never round. Set `includes_driver` only when the page says whether the driver is counted, `basis` to `per_vehicle_km` only for a distance-weighted figure and `per_trip` only for a per-trip one, and `trip_purpose` only when the page splits by purpose. Set `base_years` only when the page states the survey or data years behind the figure (which can differ from `year`, a value or projection year), and `method_note` only to restate, in one sentence, how the page says the figure was built. This kind is normally filled by the `factor_table` adapter from the publisher's own tables, not from pages.
 
 These fields are checked against the page text and dropped if they do not appear there: `/value`, `/source_url`, `/as_of`, `/evidence/*`.
 

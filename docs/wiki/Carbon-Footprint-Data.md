@@ -8,7 +8,7 @@ Voyager estimates the carbon footprint of a trip: its flights, trains, buses, fe
 |---|---|---|
 | `emission_factor` | record | one published factor, for example 0.11704 kg CO2e per passenger.km for a long-haul economy flight with RF (DESNZ 2026), 6.7 kg CO2e per room per night in France, or 99.48 kg CO2e per kg of beef from the beef herd |
 | `grid_carbon_intensity` | observation | one country's electricity carbon intensity for one year or one month, in gCO2e per kWh; series `grid_ci:<ISO2>:<period>:<basis>` (`period` is `annual` or `monthly`) |
-| `occupancy` | record | one published average vehicle occupancy, in persons per vehicle, for example 1.61 for the average car in Great Britain (DfT TAG, 2023 values, per vehicle-km, driver included). It turns a per-vehicle factor into a per-passenger one |
+| `occupancy` | record | one published average vehicle occupancy, in persons per vehicle, for example 1.61 for the average car in Great Britain (DfT TAG, 2023 value year from NTS 2009-12 survey data, per vehicle-km, driver included). It turns a per-vehicle factor into a per-passenger one |
 
 Each `emission_factor` record carries:
 
@@ -26,7 +26,8 @@ Each `occupancy` record carries:
 - `geography` and `country_code`;
 - `value` and `unit` (`persons per vehicle`), copied as published;
 - `basis`: `per_vehicle_km` (person-km per vehicle-km, the figure to use with per-vehicle-km factors) or `per_trip`, and `includes_driver`;
-- `year`, `publisher`, `dataset` and `as_of` (the edition date when the file states one).
+- `year` (the publisher's value year, which can be later than the data), `base_years` (the survey years behind the figure, when stated) and `method_note` (how the figure was built: survey basis, projection, whether the driver count is stated or derived);
+- `publisher`, `dataset` and `as_of` (the edition date when the file states one).
 
 All three kinds accept official and reference sources only.
 
@@ -64,7 +65,7 @@ A file whose mapped sheet or table is missing is refused as a whole.
 | `od-fueleconomy-gov` | FuelEconomy.gov `vehicles.csv.zip` (public domain) | tailpipe g CO2 per mile per US model, model years from 2022 |
 | `od-concito-big-climate-db` | The Big Climate Database v1.2 (XLSX, CC BY 4.0): sheets DK, GB, NL, FR, ES | kg CO2e per kg per food and country, cradle to retail |
 | `od-rivm-food-lca` | RIVM Dutch food LCA database 2024 (XLSX, CC BY 4.0) | kg CO2e per kg, cradle to retail and cradle to consumption (NL). RIVM: not critically reviewed, so compare food groups rather than single foods |
-| `od-dft-tag-databook` | UK DfT TAG data book (XLSM, OGL v3): sheet A1.3.3.2 | `occupancy` records: persons per vehicle per vehicle-km, 2023 values, all-week average, driver included, for car (work, commuting, other and average) and PSV (bus and coach together, total). The PSV rows per purpose split the total between purposes (they add up to it), so they are not stored. The data book has no taxi or rail occupancy |
+| `od-dft-tag-databook` | UK DfT TAG data book (XLSM, OGL v3): sheet A1.3.3.2 | `occupancy` records: persons per vehicle per vehicle-km, all-week average, driver included, for car (work, commuting, other and average) and PSV (bus and coach together, total). "2023 values" is TAG's value year: the car figures come from NTS survey years 2009-12 and the PSV total from NTS 1999-2001 (`base_years`). The PSV driver is derived, not stated (the sheet adds 1 driver to the work share and the purposes add up to the total): subtract 1 for passengers per bus or coach. The PSV rows per purpose split the total between purposes (they add up to it), so they are not stored. The data book has no taxi or rail occupancy |
 
 US grid factors are `emission_factor` records, not `grid_carbon_intensity` observations: the observation series is keyed per country (`grid_ci:<ISO2>:…`) and in g per kWh, and the crawler never converts units.
 

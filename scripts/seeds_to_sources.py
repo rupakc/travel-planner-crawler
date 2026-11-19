@@ -18630,13 +18630,16 @@ DISABLED.pop('od-dft-tag-databook', None)
 NOTES_APPEND['od-dft-tag-databook'] = (
     'Adapter factor_table (2026-11-19): the data book workbook (tag-data-book-v2-03.xlsm, 6 MB, one '
     'conditional request a year), sheet A1.3.3.2 (vehicle occupancies based on vehicle-km travelled, '
-    '2023 values, all-week average, driver included; two-row header, merged vehicle-type cells) -> '
+    '2023 value year (car from NTS 2009-12, PSV from NTS 1999-2001: base_years), all-week average, '
+    'driver included (stated for car, derived for PSV: method_note); two-row header, merged vehicle-type '
+    'cells) -> '
     'occupancy records for car (work, commuting, other, average) and PSV (bus and coach, total). The PSV '
     'purpose rows split the total between purposes, so they are not stored; LGV/OGV are goods vehicles. '
     'No taxi or rail occupancy in the data book. The carbon table A3.3 is not mapped (it repeats the DESNZ '
     'factors). robots.txt (2026-11-19): www.gov.uk allows the publication page; '
     'assets.publishing.service.gov.uk answers 404 (allowed). Next edition (May/December): replace the seed '
-    'with the new workbook URL from the publication page.')
+    'with the new workbook URL from the publication page, and check that the A1.3.3 source note still '
+    'gives the base years hard-coded in the mapping (test the_tag_base_years_match_the_workbooks_source_note).')
 DISABLED['od-nhts-occupancy'] = (
     'adapter pending: the only published occupancy table (2022 mileage-weighted vehicle occupancy by vehicle '
     'type: car 1.40, van 2.06, SUV 1.67, pickup 1.32, all 1.52) is written into the nhts.ornl.gov '

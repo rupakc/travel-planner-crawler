@@ -249,8 +249,13 @@ for the trip carbon footprint: they turn a per-vehicle factor into a per-passeng
 
 Response: `{"items": [Item], "next_cursor"}`. An item's `data` holds `mode`, `mode_label`,
 `trip_purpose`, `time_period`, `geography`, `country_code`, `value`, `unit`
-(`persons per vehicle`), `basis`, `includes_driver`, `year`, `publisher`, `dataset` and
-`as_of`; the source and licence are in `provenance` and `licence`.
+(`persons per vehicle`), `basis`, `includes_driver`, `year`, `base_years`, `method_note`,
+`publisher`, `dataset` and `as_of`; the source and licence are in `provenance` and `licence`.
+`year` is the publisher's value year, which can be later than the data: `base_years` gives the
+survey years behind the figure (DfT TAG "2023 values": car from NTS 2009-2012, bus and coach
+from NTS 1999-2001), and `method_note` says how it was built. The TAG bus and coach (`bus_coach`)
+total counts one driver, derived from the data book's notes rather than stated: subtract 1 for
+passengers per vehicle before dividing a per-vehicle-km factor by it.
 
 ### `GET /v1/places/resolve`
 

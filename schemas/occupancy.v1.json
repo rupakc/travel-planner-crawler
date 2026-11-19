@@ -91,13 +91,24 @@
     },
     "includes_driver": {
       "type": "boolean",
-      "description": "Whether the driver is counted (true: driver plus passengers)."
+      "description": "Whether the driver is counted (true: driver plus passengers). When it is derived from the publisher's notes rather than stated, `method_note` says so."
     },
     "year": {
       "type": "integer",
       "minimum": 1990,
       "maximum": 2100,
-      "description": "The year the figure is for, as the publisher states it (e.g. a \"2023 values\" table)."
+      "description": "The year the figure is for, as the publisher states it (e.g. a \"2023 values\" table). This can be a value or projection year rather than the year the data were collected: see `base_years`."
+    },
+    "base_years": {
+      "type": "string",
+      "maxLength": 20,
+      "pattern": "^[0-9]{4}(-[0-9]{4})?$",
+      "description": "The survey or observation years the figure is based on, when the publisher states them (\"2009-2012\"), e.g. when a table projects older survey data to its value `year`."
+    },
+    "method_note": {
+      "type": "string",
+      "maxLength": 300,
+      "description": "One sentence on how the publisher built the figure (survey basis, projection, whether the driver count is stated or derived from the publisher's own notes) and how to use it."
     },
     "publisher": {
       "type": "string",

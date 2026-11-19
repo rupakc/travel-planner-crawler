@@ -193,12 +193,10 @@ pub enum Output {
     Occupancy {
         /// Columns joined with `" / "` into the row's label (`"Car / Average Car"`).
         label: &'static [&'static str],
-        /// `(row label, mode, trip purpose)`: exact match on the label.
-        rows: &'static [(&'static str, &'static str, &'static str)],
+        /// The mapped rows (exact match on the label).
+        rows: &'static [OccRow],
         /// `per_vehicle_km` or `per_trip`.
         basis: &'static str,
-        /// Whether the published figures count the driver.
-        includes_driver: bool,
         /// `all_week`, `weekday`, `weekend` (or `""`).
         time_period: &'static str,
         /// Geography ([`Geo::Fixed`]).
@@ -207,6 +205,25 @@ pub enum Output {
         /// (TAG's `"May 2026 v2.03"` → `2026-05-01`).
         as_of_from_preamble: bool,
     },
+}
+
+/// One mapped row of an [`Output::Occupancy`] table.
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub struct OccRow {
+    /// The row label (the `label` columns joined with `" / "`).
+    pub label: &'static str,
+    /// The schema's `mode`.
+    pub mode: &'static str,
+    /// The schema's `trip_purpose`.
+    pub purpose: &'static str,
+    /// Whether the figure counts the driver (stated by the source, or derived from its own
+    /// notes, in which case `method_note` says how).
+    pub includes_driver: bool,
+    /// The survey years the figure is based on, as the source states them (`"2009-2012"`);
+    /// a "value year" table can project older survey data to a later year.
+    pub base_years: &'static str,
+    /// How the publisher built the figure, in a sentence (survey basis, driver, projection).
+    pub method_note: &'static str,
 }
 
 /// One dataset table.
@@ -920,6 +937,11 @@ pub const MAPPINGS: &[FactorMapping] = &[
     // all-week average. Only cars (each purpose and the average) and PSV (bus and coach) in
     // total: the PSV purpose rows split the total between purposes (they add up to it), so
     // they are not occupancies of a trip of that purpose; goods vehicles are not travel.
+    // "2023 values" is TAG's value year, not a survey year: the A1.3.3 source note says car
+    // occupancies come from NTS 2009-12 (driver always 1 plus passengers) and non-car ones from
+    // NTS 1999-2001 (the car purpose values equal A1.3.3's "2010" ones to the last digit). The
+    // PSV driver is not stated: the sheet's notes add 1 for the driver to the work share only,
+    // and work + commuting + other add up to the total, so the total counts one driver.
     FactorMapping {
         dataset: "dft-tag-occupancy",
         dataset_label: "DfT TAG data book, table A1.3.3.2 (vehicle occupancies)",
@@ -939,20 +961,46 @@ pub const MAPPINGS: &[FactorMapping] = &[
         output: Output::Occupancy {
             label: &["Vehicle Type", "Journey Purpose"],
             rows: &[
-                ("Car / Work", "car", "work"),
-                ("Car / Commuting", "car", "commuting"),
-                ("Car / Other", "car", "other"),
-                ("Car / Average Car", "car", "all"),
-                ("PSV / Total", "bus_coach", "all"),
+                tag_car("Car / Work", "work"),
+                tag_car("Car / Commuting", "commuting"),
+                tag_car("Car / Other", "other"),
+                tag_car("Car / Average Car", "all"),
+                OccRow {
+                    label: "PSV / Total",
+                    mode: "bus_coach",
+                    purpose: "all",
+                    includes_driver: true,
+                    base_years: "1999-2001",
+                    method_note: TAG_PSV_NOTE,
+                },
             ],
             basis: "per_vehicle_km",
-            includes_driver: true,
             time_period: "all_week",
             geo: Geo::Fixed("Great Britain", "GB"),
             as_of_from_preamble: true,
         },
     },
 ];
+
+/// TAG A1.3.3.2 car rows: the driver is counted, as A1.3.3's source note states.
+const fn tag_car(label: &'static str, purpose: &'static str) -> OccRow {
+    OccRow {
+        label,
+        mode: "car",
+        purpose,
+        includes_driver: true,
+        base_years: "2009-2012",
+        method_note: TAG_CAR_NOTE,
+    }
+}
+
+const TAG_CAR_NOTE: &str = "TAG 2023 value-year figure from NTS survey years 2009-12 (data book \
+    A1.3.3 source note); driver (always 1) plus passengers, as the source states.";
+
+const TAG_PSV_NOTE: &str = "TAG 2023 value-year figure from NTS survey years 1999-2001 (data book \
+    A1.3.3 source note). Driver included by derivation, not stated: the sheet adds 1 driver to the \
+    work share and the purpose rows add up to this total, so for passengers per bus or coach \
+    subtract 1.";
 
 /// Every mapping that applies to a file row (by URL path), in [`MAPPINGS`] order.
 pub fn mappings_for(url: &CanonicalUrl) -> Vec<&'static FactorMapping> {
@@ -1113,6 +1161,13 @@ fn table_from_rows(
             if label.is_empty() || label.starts_with("Source") || label.starts_with("Note") {
                 break;
             }
+        }
+        if cells.iter().all(String::is_empty) {
+            // A blank row ends a merged group: a row below it never inherits the group.
+            for (_, last) in &mut fill {
+                last.clear();
+            }
+            continue;
         }
         for (i, last) in &mut fill {
             match cells.get(*i).map(String::as_str) {
@@ -1626,7 +1681,6 @@ fn mapping_items(m: &FactorMapping, url: &CanonicalUrl, body: &[u8]) -> Result<V
                 label,
                 rows,
                 basis,
-                includes_driver,
                 time_period,
                 geo,
                 as_of_from_preamble,
@@ -1635,7 +1689,7 @@ fn mapping_items(m: &FactorMapping, url: &CanonicalUrl, body: &[u8]) -> Result<V
                     continue;
                 };
                 let row_label = join(row, label, false);
-                let Some(&(_, mode, purpose)) = rows.iter().find(|r| r.0 == row_label) else {
+                let Some(r) = rows.iter().find(|r| r.label == row_label) else {
                     continue;
                 };
                 let id = format!("{}:{year}:{}", m.dataset, slug(&row_label));
@@ -1646,17 +1700,25 @@ fn mapping_items(m: &FactorMapping, url: &CanonicalUrl, body: &[u8]) -> Result<V
                     .then(|| t.preamble.iter().find_map(|c| month_year(c)))
                     .flatten();
                 let data = obj(vec![
-                    ("mode", Some(json!(mode))),
+                    ("mode", Some(json!(r.mode))),
                     ("mode_label", Some(json!(clip(&row_label, 160)))),
-                    ("trip_purpose", Some(json!(purpose))),
+                    ("trip_purpose", Some(json!(r.purpose))),
                     ("time_period", Some(json!(time_period))),
                     ("geography", Some(json!(geography))),
                     ("country_code", Some(json!(code))),
                     ("value", Some(json!(value))),
                     ("unit", Some(json!("persons per vehicle"))),
                     ("basis", Some(json!(basis))),
-                    ("includes_driver", Some(json!(includes_driver))),
+                    ("includes_driver", Some(json!(r.includes_driver))),
                     ("year", Some(json!(year))),
+                    (
+                        "base_years",
+                        (!r.base_years.is_empty()).then(|| json!(r.base_years)),
+                    ),
+                    (
+                        "method_note",
+                        (!r.method_note.is_empty()).then(|| json!(clip(r.method_note, 300))),
+                    ),
                     ("publisher", Some(json!(m.publisher))),
                     ("dataset", Some(json!(clip(m.dataset_label, 160)))),
                     ("as_of", as_of.map(|d| json!(d))),

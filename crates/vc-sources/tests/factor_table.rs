@@ -686,6 +686,8 @@ fn tag_data_book_yields_car_and_psv_occupancy() {
             "time_period": "all_week", "geography": "Great Britain", "country_code": "GB",
             "value": 1.614689764290009, "unit": "persons per vehicle",
             "basis": "per_vehicle_km", "includes_driver": true, "year": 2023,
+            "base_years": "2009-2012",
+            "method_note": "TAG 2023 value-year figure from NTS survey years 2009-12 (data book A1.3.3 source note); driver (always 1) plus passengers, as the source states.",
             "publisher": "UK Department for Transport (DfT)",
             "dataset": "DfT TAG data book, table A1.3.3.2 (vehicle occupancies)",
             "as_of": "2026-05-01"
@@ -695,6 +697,26 @@ fn tag_data_book_yields_car_and_psv_occupancy() {
     let psv = by_id(&it, "dft-tag-occupancy:2023:psv_total");
     assert_eq!(psv.data["mode"], "bus_coach");
     assert_eq!(psv.data["value"], 13.803079073738786);
+    // "2023 values" is TAG's value year: PSV occupancies come from NTS 1999-2001. The driver is
+    // derived (the sheet adds 1 driver to the work share and the purposes add up to the total),
+    // so the record says so and tells per-passenger users to subtract 1.
+    assert_eq!(psv.data["base_years"], "1999-2001");
+    assert_eq!(psv.data["includes_driver"], true);
+    let note = psv.data["method_note"].as_str().unwrap();
+    assert!(note.contains("by derivation, not stated"), "{note}");
+    assert!(note.contains("subtract 1"), "{note}");
+    assert!(note.chars().count() <= 300);
+    // Every car row is from NTS 2009-12 with the driver stated.
+    for id in ["car_work", "car_commuting", "car_other", "car_average_car"] {
+        let d = &by_id(&it, &format!("dft-tag-occupancy:2023:{id}")).data;
+        assert_eq!(d["base_years"], "2009-2012", "{id}");
+        assert!(
+            d["method_note"]
+                .as_str()
+                .unwrap()
+                .contains("as the source states")
+        );
+    }
     assert_eq!(
         by_id(&it, "dft-tag-occupancy:2023:car_work").data["trip_purpose"],
         "work"
@@ -717,6 +739,41 @@ fn a_two_row_header_is_joined_cell_by_cell() {
     assert!(
         factor_table::read_table(&one, &fixture("factor_dft_tag_occupancy_2026.xlsx")).is_err()
     );
+}
+
+#[test]
+fn the_tag_base_years_match_the_workbooks_source_note() {
+    // The hard-coded base years come from sheet A1.3.3's source note; the fixture is a cut of
+    // the real workbook, so a new edition's note must be checked against them.
+    use calamine::{Reader, open_workbook_auto_from_rs};
+    let mut wb = open_workbook_auto_from_rs(std::io::Cursor::new(fixture(
+        "factor_dft_tag_occupancy_2026.xlsx",
+    )))
+    .unwrap();
+    let r = wb.worksheet_range("A1.3.3").unwrap();
+    let text: Vec<String> = r.cells().map(|(_, _, c)| c.to_string()).collect();
+    assert!(
+        text.iter()
+            .any(|t| t.contains("Car occupancies") && t.contains("(2009-12)"))
+    );
+    assert!(
+        text.iter()
+            .any(|t| t.contains("Non-car occupancies") && t.contains("(1999-2001)"))
+    );
+}
+
+#[test]
+fn a_blank_row_ends_a_filled_down_group() {
+    // A row below a blank one never inherits the vehicle type above the blank.
+    let m = mapping_for(&CanonicalUrl::parse(TAG).unwrap()).unwrap();
+    let csv = "Vehicle Type,Journey Purpose,All Week\nPSV,Work,1.36\n,Total,13.8\n,,\n,Total,99\n";
+    let mut flat = *m;
+    flat.format = factor_table::Format::Csv;
+    flat.header_rows = 1;
+    let t = factor_table::read_table(&flat, csv.as_bytes()).unwrap();
+    let vt = t.header.iter().position(|h| h == "Vehicle Type").unwrap();
+    let vts: Vec<&str> = t.rows.iter().map(|r| r[vt].as_str()).collect();
+    assert_eq!(vts, ["PSV", "PSV", ""]);
 }
 
 #[test]
