@@ -1,14 +1,20 @@
 //! Postgres implementations of [`ClientStore`] and [`Catalog`] (`api_clients`, `sources`,
 //! counts of `records` / `entities` / `changes`).
 
+use std::sync::Arc;
+
 use async_trait::async_trait;
 use chrono::Utc;
-use sqlx::PgPool;
+use sqlx::postgres::PgRow;
+use sqlx::{PgPool, Row};
+use vc_core::index::{Item, ObservationView, ProvenanceView};
 use vc_core::licence::{Licence, LicenceClass};
-use vc_core::{Error, Result};
+use vc_core::records::{ExtractionMethod, ExtractorInfo};
+use vc_core::usepolicy::{IndexUse, ServeUse, UsePolicy};
+use vc_core::{Error, ExtractionRunId, KindId, ModelId, Result, SourceId};
 
 use crate::auth::{ClientStore, StoredClient};
-use crate::catalog::Catalog;
+use crate::catalog::{Catalog, FactorQuery, GridQuery};
 use crate::dto::{LicenceDto, SourceDto, StatsDto};
 
 fn db(e: sqlx::Error) -> Error {
@@ -167,4 +173,146 @@ impl Catalog for PgApiStore {
     async fn ready(&self) -> Result<()> {
         self.ping().await
     }
+
+    async fn carbon_factors(&self, q: &FactorQuery) -> Result<Vec<Item>> {
+        let classes: Vec<String> = q
+            .licence_classes
+            .iter()
+            .filter(|c| c.ingestible())
+            .map(|c| c.as_str().to_string())
+            .collect();
+        if classes.is_empty() {
+            return Ok(Vec::new());
+        }
+        let rows = sqlx::query(
+            "SELECT r.record_id, r.kind, r.title, r.place_ids, r.licence, r.licence_class,
+                    r.conflict, r.updated_at, r.url, r.source_id,
+                    v.kind_schema, v.data, v.excerpt, v.use_policy, v.captured_at, v.attribution,
+                    v.extractor_ver, v.method, v.model_id, v.prompt_hash, v.extraction_run_id
+             FROM records r
+             JOIN record_versions v ON v.record_id = r.record_id AND v.version = r.current_version
+             WHERE r.kind = 'emission_factor' AND r.state IN ('active', 'stale')
+               AND r.current_version > 0 AND r.licence_class = ANY($1)
+               AND v.use_policy->>'index' = 'full' AND v.use_policy->>'serve' <> 'link_only'
+               AND ($2::text IS NULL OR v.data->>'category' = $2)
+               AND ($3::text IS NULL OR v.data->>'country_code' = $3)
+               AND ($4::text IS NULL OR v.data->>'region_code' = $4)
+               AND ($5::int IS NULL OR (CASE WHEN jsonb_typeof(v.data->'year') = 'number'
+                                             THEN (v.data->>'year')::numeric END) = $5)
+               AND ($6::text IS NULL OR v.data->>'gas_basis' = $6)
+               AND ($7::text IS NULL OR strpos(v.data->>'activity', $7) > 0)
+               AND ($8::text IS NULL OR r.source_id = $8)
+             ORDER BY (CASE WHEN jsonb_typeof(v.data->'year') = 'number'
+                            THEN (v.data->>'year')::numeric END) DESC NULLS LAST, r.record_id
+             LIMIT $9 OFFSET $10",
+        )
+        .bind(&classes)
+        .bind(&q.category)
+        .bind(&q.country)
+        .bind(&q.region)
+        .bind(q.year)
+        .bind(&q.gas_basis)
+        .bind(&q.activity)
+        .bind(&q.source)
+        .bind(i64::from(q.limit))
+        .bind(i64::from(q.offset))
+        .fetch_all(&self.pool)
+        .await
+        .map_err(db)?;
+        Ok(rows.iter().filter_map(factor_item).collect())
+    }
+
+    async fn carbon_grid(&self, q: &GridQuery) -> Result<Vec<ObservationView>> {
+        let rows = sqlx::query(
+            "SELECT series_key, observed_at, value, source_id, licence FROM observations
+             WHERE series_key LIKE $1 AND observed_at >= $2 AND observed_at < $3
+               AND NOT tombstoned
+             ORDER BY observed_at DESC, series_key, source_id
+             LIMIT $4",
+        )
+        .bind(q.series_pattern())
+        .bind(q.from)
+        .bind(q.to)
+        .bind(i64::from(q.limit))
+        .fetch_all(&self.pool)
+        .await
+        .map_err(db)?;
+        Ok(rows
+            .iter()
+            .map(|r| ObservationView {
+                series_key: r.get("series_key"),
+                observed_at: r.get("observed_at"),
+                value: r.get("value"),
+                source_id: SourceId(r.get("source_id")),
+                licence: licence_or_restricted(r.get("licence"), "restricted", None),
+            })
+            .collect())
+    }
+}
+
+/// A stored licence, else one of `class` (fail closed: unknown = `restricted`).
+fn licence_or_restricted(
+    v: Option<serde_json::Value>,
+    class: &str,
+    attribution: Option<String>,
+) -> Licence {
+    v.and_then(|v| serde_json::from_value(v).ok())
+        .unwrap_or_else(|| Licence {
+            class: parse_class(class).unwrap_or(LicenceClass::Restricted),
+            spdx: None,
+            attribution: attribution.unwrap_or_default(),
+            url: None,
+        })
+}
+
+fn method_of(s: &str) -> ExtractionMethod {
+    serde_json::from_value(serde_json::Value::String(s.to_string()))
+        .unwrap_or(ExtractionMethod::Adapter)
+}
+
+/// One `emission_factor` row as an [`Item`]; `None` when its use policy does not allow
+/// serving the data (fail closed on an unreadable policy; the SQL already filters on it so
+/// that paging stays exact).
+fn factor_item(row: &PgRow) -> Option<Item> {
+    let policy: UsePolicy =
+        serde_json::from_value(row.get("use_policy")).unwrap_or(UsePolicy::DENY_ALL);
+    if policy.index != IndexUse::Full || policy.serve == ServeUse::LinkOnly {
+        return None;
+    }
+    let class: String = row.get("licence_class");
+    let id: i64 = row.get("record_id");
+    Some(Item {
+        id: id.to_string(),
+        kind: KindId::new(row.get::<String, _>("kind").as_str()),
+        schema: row.get("kind_schema"),
+        title: row.get("title"),
+        excerpt: if policy.serve == ServeUse::Full {
+            row.get("excerpt")
+        } else {
+            None
+        },
+        data: row.get("data"),
+        place_ids: row.get("place_ids"),
+        licence: licence_or_restricted(row.get("licence"), &class, row.get("attribution")),
+        provenance: vec![ProvenanceView {
+            source_id: SourceId(row.get("source_id")),
+            url: row.get::<Option<String>, _>("url").unwrap_or_default(),
+            captured_at: row.get("captured_at"),
+            extractor: ExtractorInfo {
+                version: row.get("extractor_ver"),
+                method: method_of(row.get::<String, _>("method").as_str()),
+                model: row
+                    .get::<Option<String>, _>("model_id")
+                    .map(|m| ModelId(Arc::from(m.as_str()))),
+                prompt_hash: row.get("prompt_hash"),
+                run_id: row
+                    .get::<Option<String>, _>("extraction_run_id")
+                    .and_then(|s| s.parse::<ExtractionRunId>().ok()),
+            },
+        }],
+        conflict: row.get("conflict"),
+        use_policy: policy,
+        updated_at: row.get("updated_at"),
+        score: None,
+    })
 }

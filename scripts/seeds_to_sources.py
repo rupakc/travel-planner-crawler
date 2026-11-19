@@ -18507,6 +18507,113 @@ DISABLED['carbon-electricitymaps-api'] = (
     'needs an API key: https://app.electricitymaps.com/ (free API key from the owner)')
 
 
+# ---------------------------------------------------------------------------------------
+# Carbon factor tables, second batch (2026-11-19): factor_table now reads stacked tables
+# (anchor), several tables per file, ODS and zipped CSV; eurostat_jsonstat maps sdg_13_31.
+# robots.txt was read before any other request to each host (2026-11-19); only the files
+# below and the pages that link them were fetched, and only for fixture excerpts.
+# ---------------------------------------------------------------------------------------
+CARBON_TABLES_2 = {
+    'od-epa-egrid': (
+        'factor_table',
+        'Adapter factor_table (2026-11-19): eGRID2023 summary tables workbook (summary_tables_rev2.xlsx, '
+        '1 MB), Table 1 (subregion) and Table 3 (state) total output emission rates, lb CO2e per MWh -> '
+        'emission_factor records (category electricity) with region_code (eGRID subregion or US state; '
+        'the U.S. row is the national figure). grid_carbon_intensity is keyed per country '
+        '(grid_ci:<ISO2>:...) and in g/kWh, so sub-national rates stay emission factors, unconverted. '
+        'www.epa.gov robots.txt (2026-11-19): /system/files/ allowed. The 25 MB detailed workbook is '
+        'not fetched. Next release: replace the seed with the new summary tables file.'),
+    'od-epa-ef-hub': (
+        'factor_table',
+        'Adapter factor_table (2026-11-19): GHG Emission Factors Hub 2025 workbook (1 MB, one sheet of '
+        'stacked tables): Table 10 (business travel and commuting: car, motorcycle, rail, bus, air by '
+        'haul; kg CO2 per vehicle- or passenger-mile) and Table 2 (mobile combustion, kg CO2 per unit of '
+        'fuel) -> emission_factor records, gas basis co2 (CH4 and N2O are separate columns, never '
+        'summed). www.epa.gov robots.txt (2026-11-19): allowed. Next year: replace the seed (January).'),
+    'od-owid-travel-mode': (
+        'factor_table',
+        'Adapter factor_table (2026-11-19): grapher CSV carbon-footprint-travel-mode (16 modes, UK DESNZ '
+        '2022 factors, g CO2e per passenger-km; flights include the RF uplift) -> emission_factor '
+        'records. ourworldindata.org robots.txt: Sitemap line only (allowed), re-checked 2026-11-19.'),
+    'od-owid-co2-data': (
+        'factor_table',
+        'Adapter factor_table (2026-11-19): owid-co2-data.csv (15 MB, one conditional request a year): '
+        'co2_per_capita, consumption_co2_per_capita and ghg_per_capita (t per person) per country from '
+        '2010 -> emission_factor records (category other; aggregates without an ISO code skipped). '
+        'raw.githubusercontent.com robots.txt: 404 (allowed), re-checked 2026-11-19.'),
+    'od-eea-co2-cars-avg': (
+        'eurostat_jsonstat',
+        'Adapter eurostat_jsonstat (2026-11-19): the EEA datahub item (5d252092) only links Nextcloud '
+        'shares on sdi.eea.europa.eu whose file lists need JavaScript, so the same EEA monitoring series '
+        'is read from Eurostat sdg_13_31 (average g CO2 per km of new passenger cars per country, '
+        '2000-2025, CC BY 4.0, 14 KB JSON-stat) -> emission_factor records (category car; EU27 '
+        'aggregate skipped). ec.europa.eu robots.txt (2026-11-19): /eurostat/api/ allowed; '
+        'www.eea.europa.eu and sdi.eea.europa.eu robots.txt allowed.'),
+    'od-orr-rail-environment': (
+        'factor_table',
+        'Adapter factor_table (2026-11-19): ORR Table 6100 ODS (8 KB, sheet '
+        '6100_Passenger_CO2_emissions) -> one emission_factor per financial year: GB passenger rail, '
+        'g CO2e per passenger-km from traction energy (year = the April it starts; [x] cells skipped). '
+        'ODS through calamine. dataportal.orr.gov.uk robots.txt (2026-11-19) disallows /dashboards/ '
+        'only. Licence: Crown copyright, orr.gov.uk states "All content is available under the Open '
+        'Government Licence v3.0, except where otherwise stated" (2026-11-19).'),
+    'od-fueleconomy-gov': (
+        'factor_table',
+        'Adapter factor_table (2026-11-19): vehicles.csv.zip (2.2 MB, one CSV member) -> one '
+        'emission_factor per model (tailpipe g CO2 per mile, co2TailpipeGpm; EVs 0) for model years from '
+        '2022 (about 7,000 rows). www.fueleconomy.gov robots.txt: the connection is reset on every try '
+        '(HTTP/2 CANCEL, 2026-11-19) while the file answers 200, so no response = allowed (owner rule '
+        '2026-11-18). The REST service is not used.'),
+    'od-concito-big-climate-db': (
+        'factor_table',
+        'Adapter factor_table (2026-11-19): The Big Climate Database v1.2 workbook (1.5 MB), sheets DK, '
+        'GB, NL, FR and ES -> emission_factor records per food and country (kg CO2e per kg, cradle to '
+        'retail incl. iLUC; a 0 total means no figure and is skipped). concito.dk robots.txt '
+        '(2026-11-19): /files/ allowed. Licence CC BY 4.0 (dataset page).'),
+    'od-rivm-food-lca': (
+        'factor_table',
+        'Adapter factor_table (2026-11-19): the 2024 RIVM workbook (0.7 MB), sheets tot-en-met-retail '
+        'and tot-en-met-consumptie -> emission_factor records (kg CO2e per kg, NL). RIVM notes the '
+        'figures are not critically reviewed (ISO 14040): compare food groups, not single foods. The 2019 '
+        'edition is not fetched. www.rivm.nl robots.txt (2026-11-19): /sites/default/files/ allowed; '
+        'CC BY 4.0 stated in the workbook disclaimer.'),
+}
+for _sid, (_adapter, _note) in CARBON_TABLES_2.items():
+    ADAPTERS[_sid] = _adapter
+    KINDS_OVERRIDE[_sid] = ['emission_factor']
+    LLM_KINDS_OVERRIDE[_sid] = []
+    EXTRA_SEEDS[_sid] = []
+    MAX_DEPTH[_sid] = 0
+    DAILY_BUDGET[_sid] = 10
+    DISABLED.pop(_sid, None)
+    NOTES_APPEND[_sid] = _note
+ATTRIBUTION['od-eea-co2-cars-avg'] = 'Source: Eurostat (sdg_13_31), based on European Environment Agency data; CC BY 4.0'
+ATTRIBUTION['od-owid-co2-data'] = 'Our World in Data (ourworldindata.org/co2-and-greenhouse-gas-emissions), CC BY 4.0'
+ATTRIBUTION['od-owid-travel-mode'] = 'Our World in Data (ourworldindata.org), based on UK DESNZ; CC BY 4.0'
+ATTRIBUTION['od-concito-big-climate-db'] = 'The Big Climate Database (CONCITO / 2-0 LCA), CC BY 4.0'
+ATTRIBUTION['od-rivm-food-lca'] = 'RIVM, Database milieubelasting voedingsmiddelen (2024), CC BY 4.0'
+
+DISABLED['od-au-nga-factors'] = (
+    're-test from the crawler VM: www.dcceew.gov.au answered no request from VoyagerBot on 2026-11-19 '
+    '(robots.txt: HTTP/2 stream reset, then a 30 s timeout over HTTP/1.1; the publication page: stream '
+    'reset), so the workbook URL cannot be confirmed; never retried with another identity')
+DISABLED['od-agribalyse-dataverse'] = (
+    'robots.txt: entrepot.recherche.data.gouv.fr disallows everything for User-agent * (only Googlebot '
+    'paths and W3C-checklink are allowed; checked 2026-11-19), so no Dataverse API or file request')
+DISABLED['od-fao-faostat-emissions-intensities'] = (
+    '5xx at robots.txt: fenixservices.fao.org timed out, then answered 521 (Cloudflare: origin down) on '
+    '2026-11-19; a 5xx robots.txt is a disallow (RFC 9309), so the bulk zip was not requested. '
+    'Retry later; the mapping would be zip_stream + factor_table')
+DISABLED['od-dft-tag-databook'] = (
+    'owner decision: the data book (tag-data-book-v2-03.xlsm, 6 MB, www.gov.uk robots allows, '
+    'checked 2026-11-19) holds occupancies (A1.3.3, persons per vehicle) that are not emission factors '
+    'and need their own kind (e.g. vehicle_occupancy); its carbon table A3.3 (kg CO2e per litre and per '
+    'kWh, 2010-2100 forecasts under a three-row merged header) repeats the DESNZ factors')
+DISABLED['od-nhts-occupancy'] = (
+    'adapter pending: NHTS publishes trip microdata (zipped CSV), and occupancy must be computed from it; '
+    'factor_table copies published values only, and occupancy needs its own kind (owner decision)')
+
+
 METHODS = {"html", "rss", "sitemap", "api", "dump"}
 
 

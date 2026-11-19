@@ -36,7 +36,10 @@ display_requirements: null
 notes: 'Research 2026-11-19 (carbon footprint corpus; gaps; verdict NEEDS-ADAPTER): Official UK car/PSV
   occupancy (A1.3.3) and fuel-efficiency tables (A1.3.9-11), needed to turn vehicle-km into passenger-km.
   Updated in May and December. Format: xlsx multi-sheet. Licence (research): OGL v3. www.gov.uk is already
-  crawled by existing sources. | Disabled: adapter pending: xlsx multi-sheet'
+  crawled by existing sources. | Disabled: owner decision: the data book (tag-data-book-v2-03.xlsm, 6
+  MB, www.gov.uk robots allows, checked 2026-11-19) holds occupancies (A1.3.3, persons per vehicle) that
+  are not emission factors and need their own kind (e.g. vehicle_occupancy); its carbon table A3.3 (kg
+  CO2e per litre and per kWh, 2010-2100 forecasts under a three-row merged header) repeats the DESNZ factors'
 relevance:
   sections:
   - carbon

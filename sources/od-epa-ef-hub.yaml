@@ -9,35 +9,36 @@ licence:
   spdx: null
   attribution: US EPA GHG Emission Factors Hub
   url: null
-method: dump
+method: api
 seeds:
-- https://www.epa.gov/climateleadership/ghg-emission-factors-hub
+- https://www.epa.gov/system/files/other-files/2025-01/ghg-emission-factors-hub-2025.xlsx
 sitemaps: []
 feeds: []
-adapter: null
+adapter: factor_table
 include: []
 exclude: []
 max_depth: 0
 kinds:
-- article
-- tip
-llm_kinds:
-- tip
+- emission_factor
+llm_kinds: []
 render: never
 cadence: yearly
 min_delay_s: 5
-daily_budget: 20
+daily_budget: 10
 politeness_key: null
-enabled: false
+enabled: true
 needs_key: false
 key_secret: null
 max_retention_days: null
 display_requirements: null
 notes: 'Research 2026-11-19 (carbon footprint corpus; aviation; verdict NEEDS-ADAPTER): US per-passenger-mile
   factors for air (short/medium/long), rail, bus and car; also grid. Format: xlsx. Licence (research):
-  open (public domain). Published yearly in January; robots allowed. | Disabled: adapter pending: EF Hub
-  workbook is a stack of presentation tables on one sheet (one header per table); needs a per-table factor_table
-  mapping'
+  open (public domain). Published yearly in January; robots allowed. | Adapter factor_table (2026-11-19):
+  GHG Emission Factors Hub 2025 workbook (1 MB, one sheet of stacked tables): Table 10 (business travel
+  and commuting: car, motorcycle, rail, bus, air by haul; kg CO2 per vehicle- or passenger-mile) and Table
+  2 (mobile combustion, kg CO2 per unit of fuel) -> emission_factor records, gas basis co2 (CH4 and N2O
+  are separate columns, never summed). www.epa.gov robots.txt (2026-11-19): allowed. Next year: replace
+  the seed (January).'
 relevance:
   sections:
   - carbon

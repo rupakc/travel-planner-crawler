@@ -7,38 +7,37 @@ source_class: reference
 licence:
   class: open
   spdx: CC-BY-4.0
-  attribution: OWID CO2 and greenhouse gas emissions dataset
+  attribution: Our World in Data (ourworldindata.org/co2-and-greenhouse-gas-emissions), CC BY 4.0
   url: https://creativecommons.org/licenses/by/4.0/
-method: dump
+method: api
 seeds:
 - https://raw.githubusercontent.com/owid/co2-data/master/owid-co2-data.csv
-- https://github.com/owid/co2-data
 sitemaps: []
 feeds: []
-adapter: null
+adapter: factor_table
 include: []
 exclude: []
 max_depth: 0
 kinds:
-- article
-- tip
-llm_kinds:
-- tip
+- emission_factor
+llm_kinds: []
 render: never
 cadence: yearly
 min_delay_s: 5
-daily_budget: 20
+daily_budget: 10
 politeness_key: null
-enabled: false
+enabled: true
 needs_key: false
 key_secret: null
 max_retention_days: null
 display_requirements: null
 notes: 'Research 2026-11-19 (carbon footprint corpus; gaps; verdict ADD): Per-country CO2/GHG per capita
   and consumption-based emissions for every country. Destination context and a fallback for Africa and
-  the Gulf. Yearly. Format: csv. Licence (research): CC BY 4.0 (open). robots 404 (allowed). | Disabled:
-  adapter pending: csv_filter mapping for this dataset (csv); the generic reader exists but has no mapping
-  for it yet'
+  the Gulf. Yearly. Format: csv. Licence (research): CC BY 4.0 (open). robots 404 (allowed). | Adapter
+  factor_table (2026-11-19): owid-co2-data.csv (15 MB, one conditional request a year): co2_per_capita,
+  consumption_co2_per_capita and ghg_per_capita (t per person) per country from 2010 -> emission_factor
+  records (category other; aggregates without an ISO code skipped). raw.githubusercontent.com robots.txt:
+  404 (allowed), re-checked 2026-11-19.'
 relevance:
   sections:
   - carbon

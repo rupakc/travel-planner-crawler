@@ -440,3 +440,192 @@ pub async fn readyz(State(state): State<ApiState>) -> ApiResult<Json<StatusDto>>
 pub async fn openapi_json() -> Response {
     Json(crate::openapi()).into_response()
 }
+
+/// `/v1/carbon/factors` filters (current `emission_factor` records; every filter is exact).
+#[derive(Debug, Default, Deserialize, IntoParams)]
+#[into_params(parameter_in = Query)]
+pub struct CarbonFactorParams {
+    /// `category` (`flights`, `rail`, `bus`, `coach`, `ferry`, `car`, `taxi`, `motorbike`,
+    /// `accommodation`, `food`, `activity`, `electricity`, `fuel`, `other`).
+    pub category: Option<String>,
+    /// ISO 3166-1 alpha-2 `country_code` (e.g. `GB`).
+    pub country: Option<String>,
+    /// `region_code` (eGRID subregion `CAMX`, US state `CA`).
+    pub region: Option<String>,
+    /// Factor-set `year`.
+    pub year: Option<i32>,
+    /// `gas_basis` (`co2`, `co2e`, `co2e_with_rf`, `co2e_without_rf`).
+    pub gas_basis: Option<String>,
+    /// The `activity` slug contains this snake_case text (e.g. `long_haul`).
+    pub activity: Option<String>,
+    /// Source id (e.g. `od-desnz-ghg-factors`).
+    pub source: Option<String>,
+    /// Page size (default 20, max `max_page`).
+    pub limit: Option<u32>,
+    /// `next_cursor` of the previous page.
+    pub cursor: Option<String>,
+}
+
+const FACTOR_CATEGORIES: &[&str] = &[
+    "flights",
+    "rail",
+    "bus",
+    "coach",
+    "ferry",
+    "car",
+    "taxi",
+    "motorbike",
+    "accommodation",
+    "food",
+    "activity",
+    "electricity",
+    "fuel",
+    "other",
+];
+const GAS_BASES: &[&str] = &["co2", "co2e", "co2e_with_rf", "co2e_without_rf"];
+
+fn upper_code(s: Option<String>, max: usize, what: &str) -> ApiResult<Option<String>> {
+    match s
+        .map(|s| s.trim().to_ascii_uppercase())
+        .filter(|s| !s.is_empty())
+    {
+        None => Ok(None),
+        Some(c)
+            if c.len() <= max
+                && c.bytes()
+                    .all(|b| b.is_ascii_uppercase() || b.is_ascii_digit()) =>
+        {
+            Ok(Some(c))
+        }
+        Some(_) => Err(ApiError::BadRequest(format!("{what} must be a code"))),
+    }
+}
+
+fn one_of(s: Option<String>, allowed: &[&str], what: &str) -> ApiResult<Option<String>> {
+    match s.filter(|s| !s.is_empty()) {
+        None => Ok(None),
+        Some(v) if allowed.contains(&v.as_str()) => Ok(Some(v)),
+        Some(_) => Err(ApiError::BadRequest(format!(
+            "{what} must be one of {}",
+            allowed.join(", ")
+        ))),
+    }
+}
+
+/// Published emission factors (kind `emission_factor`), newest factor-set year first:
+/// filtered by category, country, region, year, gas basis, activity and source.
+#[utoipa::path(get, path = "/v1/carbon/factors", tag = "read", params(CarbonFactorParams),
+    security(("bearer" = [])),
+    responses((status = 200, body = ItemPage), (status = 400, body = ErrorBody),
+        (status = 401, body = ErrorBody), (status = 429, body = ErrorBody)))]
+pub async fn carbon_factors(
+    State(state): State<ApiState>,
+    Extension(client): Extension<Client>,
+    p: Result<Query<CarbonFactorParams>, QueryRejection>,
+) -> ApiResult<Json<ItemPage>> {
+    let p = query(p)?;
+    let offset = match p.cursor.as_deref().filter(|c| !c.is_empty()) {
+        None => 0,
+        Some(c) => c
+            .strip_prefix("o:")
+            .and_then(|n| n.parse::<u32>().ok())
+            .ok_or_else(|| ApiError::BadRequest("cursor must be a next_cursor".into()))?,
+    };
+    let activity = match p.activity.filter(|a| !a.is_empty()) {
+        Some(a)
+            if a.len() <= 160
+                && a.bytes()
+                    .all(|b| b.is_ascii_lowercase() || b.is_ascii_digit() || b == b'_') =>
+        {
+            Some(a)
+        }
+        Some(_) => {
+            return Err(ApiError::BadRequest(
+                "activity must be snake_case (a-z, 0-9, _)".into(),
+            ));
+        }
+        None => None,
+    };
+    let shaper = shaper(&state, &client);
+    let limit = limit(&state, p.limit);
+    let q = crate::catalog::FactorQuery {
+        category: one_of(p.category, FACTOR_CATEGORIES, "category")?,
+        country: upper_code(p.country, 2, "country")?,
+        region: upper_code(p.region, 16, "region")?,
+        year: p.year,
+        gas_basis: one_of(p.gas_basis, GAS_BASES, "gas_basis")?,
+        activity,
+        source: p.source.filter(|s| !s.is_empty()),
+        licence_classes: shaper.allowed().to_vec(),
+        limit: limit + 1,
+        offset,
+    };
+    let mut items = state.catalog.carbon_factors(&q).await?;
+    let more = items.len() > limit as usize;
+    items.truncate(limit as usize);
+    Ok(Json(ItemPage {
+        items: items.iter().filter_map(|i| shaper.item(i)).collect(),
+        next_cursor: more.then(|| format!("o:{}", offset.saturating_add(limit))),
+    }))
+}
+
+/// `/v1/carbon/grid` filters.
+#[derive(Debug, Default, Deserialize, IntoParams)]
+#[into_params(parameter_in = Query)]
+pub struct CarbonGridParams {
+    /// ISO 3166-1 alpha-2 country (required).
+    pub country: Option<String>,
+    /// `annual` or `monthly` (default both).
+    pub period: Option<String>,
+    /// `lifecycle` or `direct` (default both).
+    pub basis: Option<String>,
+    /// From (inclusive, RFC 3339; default 2000-01-01).
+    pub from: Option<DateTime<Utc>>,
+    /// To (exclusive, RFC 3339; default now).
+    pub to: Option<DateTime<Utc>>,
+    /// Max points (default 20, max `max_page`).
+    pub limit: Option<u32>,
+}
+
+/// Grid carbon intensity of one country (kind `grid_carbon_intensity`, every series
+/// `grid_ci:<country>:<period>:<basis>` and source), newest first.
+#[utoipa::path(get, path = "/v1/carbon/grid", tag = "read", params(CarbonGridParams),
+    security(("bearer" = [])),
+    responses((status = 200, body = ObservationList), (status = 400, body = ErrorBody),
+        (status = 401, body = ErrorBody), (status = 429, body = ErrorBody)))]
+pub async fn carbon_grid(
+    State(state): State<ApiState>,
+    Extension(client): Extension<Client>,
+    p: Result<Query<CarbonGridParams>, QueryRejection>,
+) -> ApiResult<Json<ObservationList>> {
+    let p = query(p)?;
+    let country = upper_code(p.country, 2, "country")?
+        .filter(|c| c.len() == 2 && c.bytes().all(|b| b.is_ascii_uppercase()))
+        .ok_or_else(|| ApiError::BadRequest("country (ISO 3166-1 alpha-2) is required".into()))?;
+    let to = p.to.unwrap_or_else(Utc::now);
+    let from = p.from.unwrap_or_else(|| {
+        DateTime::parse_from_rfc3339("2000-01-01T00:00:00Z")
+            .map(|d| d.with_timezone(&Utc))
+            .unwrap_or(to)
+    });
+    if from >= to {
+        return Err(ApiError::BadRequest("from must be before to".into()));
+    }
+    let q = crate::catalog::GridQuery {
+        country,
+        period: one_of(p.period, &["annual", "monthly"], "period")?,
+        basis: one_of(p.basis, &["lifecycle", "direct"], "basis")?,
+        from,
+        to,
+        limit: limit(&state, p.limit),
+    };
+    let shaper = shaper(&state, &client);
+    let obs = state.catalog.carbon_grid(&q).await?;
+    Ok(Json(ObservationList {
+        items: obs
+            .iter()
+            .filter(|o| shaper.permits(o.licence.class))
+            .filter_map(ObservationDto::from_core)
+            .collect(),
+    }))
+}

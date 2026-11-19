@@ -116,3 +116,226 @@ async fn pg_store_clients_sources_stats() {
         .expect("send");
     assert_eq!(r.status(), StatusCode::OK);
 }
+
+/// Inserts one current `emission_factor` record (version 1).
+async fn put_factor(
+    pool: &sqlx::PgPool,
+    key: &str,
+    source: &str,
+    class: &str,
+    state: &str,
+    data: serde_json::Value,
+    policy: vc_core::usepolicy::UsePolicy,
+) -> i64 {
+    let id: i64 = sqlx::query_scalar(
+        "INSERT INTO records (kind, source_id, url_key, record_key, licence_class, state,
+                              current_version, licence, url)
+         VALUES ('emission_factor', $1, $2, $3, $4, $5, 1, $6, 'https://example.org/f')
+         RETURNING record_id",
+    )
+    .bind(source)
+    .bind(key.as_bytes())
+    .bind(key)
+    .bind(class)
+    .bind(state)
+    .bind(serde_json::json!({"class": class, "attribution": "Example", "spdx": null, "url": null}))
+    .fetch_one(pool)
+    .await
+    .expect("record");
+    sqlx::query(
+        "INSERT INTO record_versions (record_id, version, capture_id, captured_at, data, data_hash,
+                                      kind_schema, extractor_ver, method, licence_class, use_policy)
+         VALUES ($1, 1, 'c1', now(), $2, '\\x00', 'emission_factor@1', 'adapter:factor_table', 'adapter',
+                 $3, $4)",
+    )
+    .bind(id)
+    .bind(data)
+    .bind(class)
+    .bind(serde_json::to_value(policy).expect("policy"))
+    .execute(pool)
+    .await
+    .expect("version");
+    id
+}
+
+#[tokio::test]
+async fn pg_carbon_factors_and_grid() {
+    use vc_api::catalog::{FactorQuery, GridQuery};
+    use vc_core::usepolicy::UsePolicy;
+    let pool = testkit::pg().await;
+    let store = PgApiStore::new(pool.clone());
+    let full = UsePolicy::ALLOW_ALL;
+    let lh = serde_json::json!({"activity": "flights_long_haul_economy", "category": "flights",
+        "country_code": "GB", "gas_basis": "co2e_with_rf", "year": 2026, "value": 0.117});
+    let a = put_factor(
+        &pool,
+        "a",
+        "od-desnz-ghg-factors",
+        "open",
+        "active",
+        lh.clone(),
+        full,
+    )
+    .await;
+    let mut old = lh.clone();
+    old["year"] = serde_json::json!(2025);
+    let b = put_factor(
+        &pool,
+        "b",
+        "od-desnz-ghg-factors",
+        "open",
+        "stale",
+        old,
+        full,
+    )
+    .await;
+    let camx = serde_json::json!({"activity": "electricity_camx", "category": "electricity",
+        "country_code": "US", "region_code": "CAMX", "gas_basis": "co2e", "year": 2023,
+        "value": 429.983});
+    let c = put_factor(&pool, "c", "od-epa-egrid", "open", "active", camx, full).await;
+    // Never served: tombstoned, share_alike for an open-only client, a deny-all policy.
+    put_factor(
+        &pool,
+        "d",
+        "od-desnz-ghg-factors",
+        "open",
+        "tombstoned",
+        lh.clone(),
+        full,
+    )
+    .await;
+    let sa = put_factor(
+        &pool,
+        "e",
+        "od-concito",
+        "share_alike",
+        "active",
+        lh.clone(),
+        full,
+    )
+    .await;
+    put_factor(
+        &pool,
+        "f",
+        "od-desnz-ghg-factors",
+        "open",
+        "active",
+        lh.clone(),
+        UsePolicy::DENY_ALL,
+    )
+    .await;
+
+    let q = |f: FactorQuery| FactorQuery {
+        licence_classes: vec![LicenceClass::Open],
+        limit: 10,
+        ..f
+    };
+    let ids = |v: Vec<vc_core::index::Item>| v.into_iter().map(|i| i.id).collect::<Vec<_>>();
+    let s = |i: i64| i.to_string();
+    assert_eq!(
+        ids(store
+            .carbon_factors(&q(FactorQuery::default()))
+            .await
+            .expect("q")),
+        [s(a), s(b), s(c)],
+        "newest year first; tombstoned, share_alike and deny-all rows never served"
+    );
+    let flights = FactorQuery {
+        category: Some("flights".into()),
+        country: Some("GB".into()),
+        year: Some(2026),
+        ..FactorQuery::default()
+    };
+    assert_eq!(
+        ids(store.carbon_factors(&q(flights)).await.expect("q")),
+        [s(a)]
+    );
+    let region = FactorQuery {
+        region: Some("CAMX".into()),
+        source: Some("od-epa-egrid".into()),
+        activity: Some("camx".into()),
+        ..FactorQuery::default()
+    };
+    let got = store.carbon_factors(&q(region)).await.expect("q");
+    assert_eq!(ids(got.clone()), [s(c)]);
+    assert_eq!(got[0].data["value"], 429.983);
+    assert_eq!(got[0].provenance[0].source_id.0, "od-epa-egrid");
+    let page2 = FactorQuery {
+        offset: 1,
+        limit: 1,
+        licence_classes: vec![LicenceClass::Open],
+        ..FactorQuery::default()
+    };
+    assert_eq!(ids(store.carbon_factors(&page2).await.expect("q")), [s(b)]);
+    let both = FactorQuery {
+        licence_classes: vec![LicenceClass::Open, LicenceClass::ShareAlike],
+        limit: 10,
+        category: Some("flights".into()),
+        ..FactorQuery::default()
+    };
+    assert!(ids(store.carbon_factors(&both).await.expect("q")).contains(&s(sa)));
+
+    for (series, year, g, tomb) in [
+        ("grid_ci:FR:annual:lifecycle", 2023, 56.0, false),
+        ("grid_ci:FR:annual:lifecycle", 2024, 40.48, false),
+        ("grid_ci:FR:monthly:lifecycle", 2025, 35.0, false),
+        ("grid_ci:FR:annual:lifecycle", 2022, 60.0, true),
+        ("grid_ci:FRX:annual:lifecycle", 2024, 1.0, false),
+        ("grid_ci:DE:annual:lifecycle", 2024, 330.0, false),
+    ] {
+        sqlx::query(
+            "INSERT INTO observations (series_key, observed_at, source_id, value, capture_id,
+                                       captured_at, licence, tombstoned, kind)
+             VALUES ($1, make_timestamptz($2, 1, 1, 0, 0, 0, 'UTC'), 'carbon-owid-grapher-ci', $3,
+                     'c1', now(), $4, $5, 'grid_carbon_intensity')",
+        )
+        .bind(series)
+        .bind(year)
+        .bind(serde_json::json!({"intensity_g_per_kwh": g}))
+        .bind(serde_json::json!({"class": "open", "attribution": "OWID", "spdx": "CC-BY-4.0", "url": null}))
+        .bind(tomb)
+        .execute(&pool)
+        .await
+        .expect("obs");
+    }
+    let t = |y: i32| {
+        chrono::TimeZone::with_ymd_and_hms(&chrono::Utc, y, 1, 1, 0, 0, 0)
+            .single()
+            .expect("t")
+    };
+    let g = GridQuery {
+        country: "FR".into(),
+        period: None,
+        basis: None,
+        from: t(2000),
+        to: t(2030),
+        limit: 10,
+    };
+    let pts = store.carbon_grid(&g).await.expect("grid");
+    let got: Vec<(String, f64)> = pts
+        .iter()
+        .map(|o| {
+            (
+                o.series_key.clone(),
+                o.value["intensity_g_per_kwh"].as_f64().expect("g"),
+            )
+        })
+        .collect();
+    assert_eq!(
+        got,
+        [
+            ("grid_ci:FR:monthly:lifecycle".to_string(), 35.0),
+            ("grid_ci:FR:annual:lifecycle".to_string(), 40.48),
+            ("grid_ci:FR:annual:lifecycle".to_string(), 56.0),
+        ],
+        "newest first, tombstoned and other countries excluded"
+    );
+    assert_eq!(pts[0].licence.class, LicenceClass::Open);
+    let annual = GridQuery {
+        period: Some("annual".into()),
+        basis: Some("lifecycle".into()),
+        limit: 1,
+        ..g
+    };
+    assert_eq!(store.carbon_grid(&annual).await.expect("grid").len(), 1);
+}

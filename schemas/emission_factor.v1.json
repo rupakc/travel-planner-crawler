@@ -59,6 +59,12 @@
       "pattern": "^[A-Z]{2}$",
       "description": "ISO 3166-1 alpha-2 code when the factor is for one country."
     },
+    "region_code": {
+      "type": "string",
+      "maxLength": 16,
+      "pattern": "^[A-Z0-9]{1,16}$",
+      "description": "The publisher's code of a sub-national region when the factor is for one (eGRID subregion \"CAMX\", US state \"CA\"); `country_code` is then the region's country."
+    },
     "unit": {
       "type": "string",
       "maxLength": 80,

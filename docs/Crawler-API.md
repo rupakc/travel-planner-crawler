@@ -191,6 +191,44 @@ Time series (FX rates, weather normals, advisory levels).
 
 Response: `{"items": [{"series_key", "observed_at", "value", "source_id", "licence"}]}`.
 
+### `GET /v1/carbon/factors`
+
+Published emission factors (kind `emission_factor`, added 2026-11-19) for the trip carbon
+footprint, newest factor-set `year` first, then by id. Same item shape and licence shaping as
+`/v1/search`. Every filter is an exact match on the record's field; an invalid value is `400`
+(never a wildcard).
+
+| Parameter | |
+|---|---|
+| `category` | `flights`, `rail`, `bus`, `coach`, `ferry`, `car`, `taxi`, `motorbike`, `accommodation`, `food`, `activity`, `electricity`, `fuel`, `other` |
+| `country` | ISO 3166-1 alpha-2 `country_code` (case-insensitive) |
+| `region` | `region_code`: eGRID subregion (`CAMX`) or US state (`CA`) |
+| `year` | factor-set year |
+| `gas_basis` | `co2`, `co2e`, `co2e_with_rf`, `co2e_without_rf` |
+| `activity` | the `activity` slug contains this snake_case text (`long_haul`) |
+| `source` | source id (`od-desnz-ghg-factors`) |
+| `limit`, `cursor` | page size; `next_cursor` of the previous page |
+
+Response: `{"items": [Item], "next_cursor"}`.
+
+### `GET /v1/carbon/grid`
+
+Grid carbon intensity of one country (kind `grid_carbon_intensity`, added 2026-11-19): every
+series `grid_ci:<country>:<period>:<basis>` and every source, newest first. A shortcut over
+`/v1/observations` for clients that do not know which series exist.
+
+| Parameter | |
+|---|---|
+| `country` | **Required**, ISO 3166-1 alpha-2 |
+| `period` | `annual` or `monthly` (default both) |
+| `basis` | `lifecycle` or `direct` (default both) |
+| `from` | RFC 3339, inclusive; default 2000-01-01 |
+| `to` | RFC 3339, exclusive; default now |
+| `limit` | Max points |
+
+Response: `{"items": [{"series_key", "observed_at", "value", "source_id", "licence"}]}`
+(newest first; `value` holds `intensity_g_per_kwh`, `country_code`, `period`, `basis`, …).
+
 ### `GET /v1/places/resolve`
 
 Resolves a place name to GeoNames candidates, best first.

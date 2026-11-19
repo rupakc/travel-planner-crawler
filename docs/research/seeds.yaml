@@ -16815,8 +16815,8 @@ seeds:
   - id: od-owid-travel-mode
     category: carbon
     name: 'Our World in Data: carbon footprint of travel per km by mode'
-    url: https://ourworldindata.org/grapher/carbon-footprint-travel-mode.csv
-    method: dump
+    url: https://ourworldindata.org/grapher/carbon-footprint-travel-mode.csv?v=1&csvType=full&useColumnShortNames=true
+    method: api
     license: CC BY 4.0
     cadence: yearly
     needs_key: false
@@ -16827,8 +16827,8 @@ seeds:
   - id: od-epa-ef-hub
     category: carbon
     name: US EPA GHG Emission Factors Hub
-    url: https://www.epa.gov/climateleadership/ghg-emission-factors-hub
-    method: dump
+    url: https://www.epa.gov/system/files/other-files/2025-01/ghg-emission-factors-hub-2025.xlsx
+    method: api
     license: US public domain
     cadence: yearly
     needs_key: false
@@ -17278,10 +17278,10 @@ seeds:
       robots 404 on discodata; www.eea.europa.eu allows /en/datahub.'
   - id: od-eea-co2-cars-avg
     category: carbon
-    name: EEA average CO2 from new passenger cars 2000-2024
-    url: https://www.eea.europa.eu/en/datahub/datahubitem-view/5d252092-d328-40d8-bca2-c0734bd6143b
-    method: dump
-    license: Open data licence (see notes)
+    name: EEA average CO2 per km from new passenger cars (Eurostat sdg_13_31)
+    url: https://ec.europa.eu/eurostat/api/dissemination/statistics/1.0/data/sdg_13_31?format=JSON&lang=EN
+    method: api
+    license: CC BY 4.0
     cadence: yearly
     needs_key: false
     allowed: true
@@ -18284,7 +18284,7 @@ seeds:
     category: carbon
     name: RIVM Database milieubelasting voedingsmiddelen (Dutch food LCA database)
     url: https://www.rivm.nl/sites/default/files/2026-03/Database-milieubelasting-voedingsmiddelen-database-versie-23-september-2024-met-tabblad-per-voedingsmiddelengroep.xlsx
-    method: dump
+    method: api
     license: CC BY 4.0
     cadence: yearly
     needs_key: false
@@ -18297,7 +18297,7 @@ seeds:
     category: carbon
     name: The Big Climate Database (CONCITO / 2-0 LCA), v1.2
     url: https://concito.dk/files/media/document/Version%201.2_DK_ENG_rev_18122025_0.xlsx
-    method: dump
+    method: api
     license: CC BY 4.0
     cadence: yearly
     needs_key: false
@@ -18769,8 +18769,8 @@ seeds:
   - id: od-epa-egrid
     category: carbon
     name: US EPA eGRID grid emission rates
-    url: https://www.epa.gov/egrid/detailed-data
-    method: dump
+    url: https://www.epa.gov/system/files/documents/2025-06/summary_tables_rev2.xlsx
+    method: api
     license: US public domain
     cadence: yearly
     needs_key: false
@@ -20263,8 +20263,8 @@ seeds:
   - id: od-orr-rail-environment
     category: carbon
     name: ORR Rail environment statistics (Table 6100 g CO2e/pkm, GB)
-    url: https://dataportal.orr.gov.uk/statistics/infrastructure-and-environment/rail-environment
-    method: dump
+    url: https://dataportal.orr.gov.uk/media/1527/table-6100-estimates-of-normalised-passenger-carbon-dioxide-equivalent-emissions.ods
+    method: api
     license: OGL v3.0
     cadence: yearly
     needs_key: false
@@ -20350,7 +20350,7 @@ seeds:
     category: carbon
     name: OWID CO2 and greenhouse gas emissions dataset
     url: https://raw.githubusercontent.com/owid/co2-data/master/owid-co2-data.csv
-    method: dump
+    method: api
     license: CC BY 4.0
     cadence: yearly
     needs_key: false
