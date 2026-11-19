@@ -84,7 +84,7 @@
           "minItems": 1,
           "uniqueItems": true,
           "items": {
-            "enum": ["flights", "weather", "hotels", "activities", "places", "walking_tours", "events", "visa", "sim", "tips", "emergency_card", "getting_around", "forex", "packing", "itinerary"]
+            "enum": ["flights", "weather", "hotels", "activities", "places", "walking_tours", "events", "visa", "sim", "tips", "emergency_card", "getting_around", "forex", "packing", "itinerary", "carbon"]
           }
         },
         "why": { "type": "string", "minLength": 20, "pattern": "^[^\\n\\r]*\\S[^\\n\\r]*$" }

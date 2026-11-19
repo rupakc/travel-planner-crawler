@@ -127,11 +127,14 @@ pub enum AppSection {
     Packing,
     /// Day-by-day itinerary.
     Itinerary,
+    /// Trip carbon footprint (emission factors and methods for flights, ground transport,
+    /// stays, food and activities; added 2026-11-19).
+    Carbon,
 }
 
 impl AppSection {
     /// Every section, in app order.
-    pub const ALL: [AppSection; 15] = [
+    pub const ALL: [AppSection; 16] = [
         AppSection::Flights,
         AppSection::Weather,
         AppSection::Hotels,
@@ -147,6 +150,7 @@ impl AppSection {
         AppSection::Forex,
         AppSection::Packing,
         AppSection::Itinerary,
+        AppSection::Carbon,
     ];
 
     /// The snake_case spelling used in `sources/*.yaml`.
@@ -167,6 +171,7 @@ impl AppSection {
             AppSection::Forex => "forex",
             AppSection::Packing => "packing",
             AppSection::Itinerary => "itinerary",
+            AppSection::Carbon => "carbon",
         }
     }
 }

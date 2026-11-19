@@ -939,3 +939,24 @@ entries:
   - host: visitljubljana.com
     reason: "robots.txt answered with a challenge page at first full crawl, 2026-11-19: bot wall"
     source: seed:city-ljubljana
+  # --- carbon footprint corpus (research 2026-11-19): terms ban robots/scraping/AI ----------
+  # Hosts that only answered 403/5xx or a challenge to the research IP are NOT listed here.
+  - host: climatiq.io
+    reason: "Terms (climatiq.io/terms): extracting or scraping data and using it for AI/ML are forbidden, 2026-11-19"
+    source: research 2026-11-19 carbon SKIP
+  - host: goldstandard.org
+    reason: "Terms: no use 'to spam, phish, pharm, pretext, spider, crawl, or scrape', 2026-11-19"
+    source: research 2026-11-19 carbon SKIP
+  - host: verra.org
+    reason: "Terms: 'You must not use any robot, scraper, crawler, spider, bot ... large language model, artificial intelligence system', 2026-11-19"
+    source: research 2026-11-19 carbon SKIP
+  - host: media.amtrak.com
+    reason: "Terms of use: no 'robot, spider' or other means to retrieve, index or data mine the site, 2026-11-19"
+    source: research 2026-11-19 carbon SKIP
+  - host: ghgprotocol.org
+    reason: "Terms of use ban 'any robot, spider, rover, scraper, other data mining technology', 2026-11-19"
+    source: research 2026-11-19 carbon SKIP
+  - host: hestia.earth
+    except_hosts: [api.hestia.earth]
+    reason: "Terms: 'Other than as expressly provided for by the HESTIA API, you shall not conduct ... text or data mining or web scraping', 2026-11-19"
+    source: research 2026-11-19 carbon SKIP

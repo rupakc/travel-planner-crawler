@@ -41,6 +41,7 @@ SECTION_TITLES = {
     "forex": "Forex",
     "packing": "Packing list",
     "itinerary": "Itinerary",
+    "carbon": "Carbon footprint",
 }
 
 LICENCE_WORDS = {
@@ -121,6 +122,13 @@ def render(specs: list[dict], licence_only: list[dict] | None = None) -> str:
         "",
         "A new source must name the app section(s) it serves and why, must be about travel, and",
         "is added only with the owner's approval (see CONTRIBUTING.md).",
+        "",
+        "**Carbon footprint** (section `carbon`, added 2026-11-19) holds the emission factors and",
+        "methods used to estimate a trip's footprint: flights (per passenger-km, cabin class, load",
+        "factors, non-CO2 effects, SAF), trains, buses, ferries, cars and taxis, hotel nights (energy",
+        "per room and grid intensity), food and activities. Most factor tables are spreadsheets,",
+        "PDFs or APIs: those sources stay off with \"adapter pending\" or \"needs an API key\" until",
+        "a reader or a key exists.",
         "",
     ]
     for section, title in SECTION_TITLES.items():

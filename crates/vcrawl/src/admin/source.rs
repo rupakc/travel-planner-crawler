@@ -298,7 +298,7 @@ fn draft_relevance(checks: &serde_json::Value) -> serde_json::Value {
     serde_json::json!({
         "sections": ["TODO: the app section(s) it serves (flights, weather, hotels, activities, \
                       places, walking_tours, events, visa, sim, tips, emergency_card, \
-                      getting_around, forex, packing, itinerary)"],
+                      getting_around, forex, packing, itinerary, carbon)"],
         "why": why,
     })
 }
