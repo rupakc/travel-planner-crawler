@@ -1,0 +1,135 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/rupakc/travel-planner-crawler/schemas/occupancy.v1.json",
+  "title": "Vehicle occupancy",
+  "description": "One record: one published average vehicle occupancy (persons per vehicle) for a mode of transport, in a country, year and (where the publisher splits it) trip purpose, exactly as an official or reference dataset publishes it. Voyager use: the trip carbon footprint (turning a per-vehicle factor into a per-passenger one for car, taxi, bus and coach legs) and Local transportation.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "mode",
+    "geography",
+    "value",
+    "unit",
+    "basis",
+    "year",
+    "publisher",
+    "dataset"
+  ],
+  "properties": {
+    "mode": {
+      "type": "string",
+      "enum": [
+        "car",
+        "taxi",
+        "bus",
+        "coach",
+        "bus_coach",
+        "rail",
+        "light_rail",
+        "ferry",
+        "motorcycle",
+        "van",
+        "all_vehicles",
+        "other"
+      ],
+      "description": "The mode of transport the occupancy is for (`bus_coach`: buses and coaches together, e.g. the UK's \"PSV\")."
+    },
+    "mode_label": {
+      "type": "string",
+      "maxLength": 160,
+      "description": "The publisher's own label path of the row (e.g. \"Car / Average Car\", \"PSV / Total\")."
+    },
+    "trip_purpose": {
+      "type": "string",
+      "enum": [
+        "all",
+        "work",
+        "commuting",
+        "leisure",
+        "other"
+      ],
+      "description": "The trip purpose the figure is for (`all` = every purpose; `work` = trips in the course of work, i.e. business travel)."
+    },
+    "time_period": {
+      "type": "string",
+      "enum": [
+        "all_week",
+        "weekday",
+        "weekend"
+      ],
+      "description": "The days the figure averages over, when the publisher splits them."
+    },
+    "geography": {
+      "type": "string",
+      "maxLength": 80,
+      "description": "Where the figure applies: an English country name, a region the publisher names, or \"global\"."
+    },
+    "country_code": {
+      "type": "string",
+      "maxLength": 2,
+      "pattern": "^[A-Z]{2}$",
+      "description": "ISO 3166-1 alpha-2 code when the figure is for one country."
+    },
+    "value": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 1000,
+      "description": "The average occupancy exactly as published, in `unit`."
+    },
+    "unit": {
+      "type": "string",
+      "maxLength": 40,
+      "description": "Unit of `value` (\"persons per vehicle\")."
+    },
+    "basis": {
+      "type": "string",
+      "enum": [
+        "per_vehicle_km",
+        "per_trip"
+      ],
+      "description": "How the average is weighted: by distance (person-km per vehicle-km, the figure for per-passenger-km factors) or per vehicle trip."
+    },
+    "includes_driver": {
+      "type": "boolean",
+      "description": "Whether the driver is counted (true: driver plus passengers)."
+    },
+    "year": {
+      "type": "integer",
+      "minimum": 1990,
+      "maximum": 2100,
+      "description": "The year the figure is for, as the publisher states it (e.g. a \"2023 values\" table)."
+    },
+    "publisher": {
+      "type": "string",
+      "maxLength": 160,
+      "description": "Who publishes the figure (e.g. \"UK Department for Transport (DfT)\")."
+    },
+    "dataset": {
+      "type": "string",
+      "maxLength": 160,
+      "description": "The dataset, table and edition (e.g. \"DfT TAG data book, table A1.3.3.2\")."
+    },
+    "source_url": {
+      "type": "string",
+      "maxLength": 2048,
+      "description": "The page's own link for this item (official site or detail page), copied verbatim from the page.",
+      "pattern": "^https?://[^\\s]+$"
+    },
+    "as_of": {
+      "type": "string",
+      "maxLength": 10,
+      "description": "The \"last updated\", \"valid from\" or publication date the page itself states for this information (YYYY-MM-DD).",
+      "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$"
+    },
+    "evidence": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "maxLength": 300,
+        "description": "A verbatim quote from the page."
+      },
+      "maxItems": 3,
+      "description": "Up to 3 short verbatim quotes from the page that support the most important facts."
+    }
+  }
+}

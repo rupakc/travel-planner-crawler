@@ -108,6 +108,12 @@ Second batch (2026-11-19; each file fetched once after its host's robots.txt, ro
 | `factor_rivm_2024.xlsx` | RIVM `Database-milieubelasting-voedingsmiddelen-database-versie-23-september-2024-...xlsx` | sheets "tot-en-met-retail" and "tot-en-met-consumptie": header plus 3 rows each | CC BY 4.0 |
 | `eurostat_sdg_13_31.json` | Eurostat `sdg_13_31?format=JSON&lang=EN` | the whole response (14 KB) | CC BY 4.0 |
 
+Occupancy (2026-11-19; fetched once after the host's robots.txt):
+
+| File | Source | How it was cut | Licence |
+|---|---|---|---|
+| `factor_dft_tag_occupancy_2026.xlsx` | DfT `tag-data-book-v2-03.xlsm` (May 2026 v2.03, 6 MB) | sheet A1.3.3.2 whole (rows 1-38) and the first 30 rows of sheet A1.3.3, values only (no formulas, styles or macros) copied with openpyxl into a new workbook with the same sheet names; numeric cells then set back to the original file's exact cell texts (openpyxl rounds to 16 digits) | OGL v3 |
+
 
 ### ember_api: Ember API carbon intensity (2026-11-19)
 

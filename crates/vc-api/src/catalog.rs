@@ -1,5 +1,5 @@
 //! Sources, statistics and readiness (`/v1/sources`, `/v1/stats`, `/readyz`), and the carbon
-//! factor reads (`/v1/carbon/factors`, `/v1/carbon/grid`).
+//! reads (`/v1/carbon/factors`, `/v1/carbon/grid`, `/v1/carbon/occupancy`).
 
 use async_trait::async_trait;
 use chrono::{DateTime, Utc};
@@ -56,6 +56,53 @@ impl FactorQuery {
                 .activity
                 .as_deref()
                 .is_none_or(|a| f("activity").is_some_and(|s| s.contains(a)))
+            && self
+                .source
+                .as_deref()
+                .is_none_or(|src| it.provenance.iter().any(|p| p.source_id.0 == src))
+    }
+}
+
+/// Filters of `/v1/carbon/occupancy` (current `occupancy` records: persons per vehicle). Every
+/// filter is an exact match on the record's field; `None` = any.
+#[derive(Debug, Clone, Default, PartialEq)]
+pub struct OccupancyQuery {
+    /// `mode` (`car`, `taxi`, `bus`, `coach`, `bus_coach`, `rail`, …).
+    pub mode: Option<String>,
+    /// `country_code` (ISO 3166-1 alpha-2).
+    pub country: Option<String>,
+    /// `year`.
+    pub year: Option<i32>,
+    /// `trip_purpose` (`all`, `work`, `commuting`, `leisure`, `other`).
+    pub trip_purpose: Option<String>,
+    /// `basis` (`per_vehicle_km`, `per_trip`).
+    pub basis: Option<String>,
+    /// The source id (`od-dft-tag-databook`, …).
+    pub source: Option<String>,
+    /// Licence classes the client may receive (empty = none).
+    pub licence_classes: Vec<LicenceClass>,
+    /// Page size.
+    pub limit: u32,
+    /// Rows to skip.
+    pub offset: u32,
+}
+
+impl OccupancyQuery {
+    /// Whether an item passes the filters (the in-memory form of the SQL `WHERE`).
+    pub fn accepts(&self, it: &Item) -> bool {
+        let f = |k: &str| it.data.get(k).and_then(|v| v.as_str());
+        let eq = |want: &Option<String>, k: &str| want.as_deref().is_none_or(|w| f(k) == Some(w));
+        it.kind.0.as_ref() == "occupancy"
+            && self.licence_classes.contains(&it.licence.class)
+            && it.use_policy.index == IndexUse::Full
+            && it.use_policy.serve != ServeUse::LinkOnly
+            && eq(&self.mode, "mode")
+            && eq(&self.country, "country_code")
+            && eq(&self.trip_purpose, "trip_purpose")
+            && eq(&self.basis, "basis")
+            && self
+                .year
+                .is_none_or(|y| it.data.get("year").and_then(|v| v.as_i64()) == Some(i64::from(y)))
             && self
                 .source
                 .as_deref()
@@ -129,6 +176,12 @@ pub trait Catalog: Send + Sync {
         let _ = q;
         Ok(Vec::new())
     }
+    /// Current, servable `occupancy` records matching `q`, newest year first, then by id; at
+    /// most `q.limit` items after `q.offset`.
+    async fn carbon_occupancy(&self, q: &OccupancyQuery) -> Result<Vec<Item>> {
+        let _ = q;
+        Ok(Vec::new())
+    }
 }
 
 /// An in-memory [`Catalog`].
@@ -140,6 +193,8 @@ pub struct MemCatalog {
     pub factors: Vec<Item>,
     /// `grid_carbon_intensity` points served by [`Catalog::carbon_grid`].
     pub grid: Vec<ObservationView>,
+    /// `occupancy` items served by [`Catalog::carbon_occupancy`].
+    pub occupancy: Vec<Item>,
 }
 
 fn year_of(it: &Item) -> i64 {
@@ -190,5 +245,18 @@ impl Catalog for MemCatalog {
         });
         v.truncate(q.limit as usize);
         Ok(v)
+    }
+    async fn carbon_occupancy(&self, q: &OccupancyQuery) -> Result<Vec<Item>> {
+        let mut v: Vec<Item> = self
+            .occupancy
+            .iter()
+            .filter(|i| q.accepts(i))
+            .cloned()
+            .collect();
+        v.sort_by(|a, b| year_of(b).cmp(&year_of(a)).then_with(|| a.id.cmp(&b.id)));
+        Ok(v.into_iter()
+            .skip(q.offset as usize)
+            .take(q.limit as usize)
+            .collect())
     }
 }

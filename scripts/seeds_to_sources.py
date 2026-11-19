@@ -48,6 +48,8 @@ KINDS = {
     "amenity",
     # 2026-11-19: carbon footprint factor tables (adapter factor_table).
     "emission_factor", "grid_carbon_intensity",
+    # 2026-11-19: average vehicle occupancy, persons per vehicle (adapter factor_table).
+    "occupancy",
 }
 
 
@@ -18612,6 +18614,36 @@ DISABLED['od-dft-tag-databook'] = (
 DISABLED['od-nhts-occupancy'] = (
     'adapter pending: NHTS publishes trip microdata (zipped CSV), and occupancy must be computed from it; '
     'factor_table copies published values only, and occupancy needs its own kind (owner decision)')
+
+
+# ---------------------------------------------------------------------------------------
+# Vehicle occupancy (2026-11-19): new record kind `occupancy` (persons per vehicle), read by
+# factor_table. robots.txt was read before any other request to each host (2026-11-19).
+# ---------------------------------------------------------------------------------------
+ADAPTERS['od-dft-tag-databook'] = 'factor_table'
+KINDS_OVERRIDE['od-dft-tag-databook'] = ['occupancy']
+LLM_KINDS_OVERRIDE['od-dft-tag-databook'] = []
+EXTRA_SEEDS['od-dft-tag-databook'] = []
+MAX_DEPTH['od-dft-tag-databook'] = 0
+DAILY_BUDGET['od-dft-tag-databook'] = 10
+DISABLED.pop('od-dft-tag-databook', None)
+NOTES_APPEND['od-dft-tag-databook'] = (
+    'Adapter factor_table (2026-11-19): the data book workbook (tag-data-book-v2-03.xlsm, 6 MB, one '
+    'conditional request a year), sheet A1.3.3.2 (vehicle occupancies based on vehicle-km travelled, '
+    '2023 values, all-week average, driver included; two-row header, merged vehicle-type cells) -> '
+    'occupancy records for car (work, commuting, other, average) and PSV (bus and coach, total). The PSV '
+    'purpose rows split the total between purposes, so they are not stored; LGV/OGV are goods vehicles. '
+    'No taxi or rail occupancy in the data book. The carbon table A3.3 is not mapped (it repeats the DESNZ '
+    'factors). robots.txt (2026-11-19): www.gov.uk allows the publication page; '
+    'assets.publishing.service.gov.uk answers 404 (allowed). Next edition (May/December): replace the seed '
+    'with the new workbook URL from the publication page.')
+DISABLED['od-nhts-occupancy'] = (
+    'adapter pending: the only published occupancy table (2022 mileage-weighted vehicle occupancy by vehicle '
+    'type: car 1.40, van 2.06, SUV 1.67, pickup 1.32, all 1.52) is written into the nhts.ornl.gov '
+    'single-page app\'s compiled JavaScript bundle (hashed file name, no CSV/XLSX), and the other copies are '
+    'PDFs; the downloadable data is trip microdata (csv.zip), from which occupancy would have to be '
+    'computed with survey weights, and factor_table copies published values only (checked 2026-11-19: '
+    'robots.txt answers the SPA index page, so no rules)')
 
 
 METHODS = {"html", "rss", "sitemap", "api", "dump"}

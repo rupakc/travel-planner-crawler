@@ -128,6 +128,7 @@ const V1_ROUTES: &[&str] = &[
     "/v1/observations?series=fx:USD:EUR",
     "/v1/carbon/factors?category=flights",
     "/v1/carbon/grid?country=FR",
+    "/v1/carbon/occupancy?mode=car",
     "/v1/places/resolve?name=London",
     "/v1/changes",
     "/v1/sources",
@@ -1055,4 +1056,168 @@ async fn carbon_grid_is_one_country_newest_first() {
         let r = h.get(bad).send().await.expect("send");
         assert_eq!(r.status(), StatusCode::BAD_REQUEST, "{bad}");
     }
+}
+
+// ---------------------------------------------------------------------------------------------
+// /v1/carbon/occupancy (2026-11-19): persons per vehicle, mirroring /v1/carbon/factors.
+// ---------------------------------------------------------------------------------------------
+
+fn occ(id: &str, class: LicenceClass, data: Value, source: &str) -> vc_core::index::Item {
+    let mut it = item(id, "occupancy", class);
+    it.data = data;
+    it.provenance = vec![provenance(source, &format!("https://example.org/{id}"))];
+    it
+}
+
+async fn occupancy_harness(classes: &[LicenceClass]) -> Harness {
+    let car = |purpose: &str, year: i32, v: f64| {
+        serde_json::json!({"mode": "car", "trip_purpose": purpose, "country_code": "GB",
+            "basis": "per_vehicle_km", "year": year, "value": v,
+            "unit": "persons per vehicle", "includes_driver": true})
+    };
+    let cat = MemCatalog {
+        occupancy: vec![
+            occ(
+                "1",
+                LicenceClass::Open,
+                car("all", 2023, 1.61),
+                "od-dft-tag-databook",
+            ),
+            occ(
+                "2",
+                LicenceClass::Open,
+                car("work", 2023, 1.12),
+                "od-dft-tag-databook",
+            ),
+            occ(
+                "3",
+                LicenceClass::Open,
+                serde_json::json!({"mode": "bus_coach", "trip_purpose": "all",
+                    "country_code": "GB", "basis": "per_vehicle_km", "year": 2023,
+                    "value": 13.8}),
+                "od-dft-tag-databook",
+            ),
+            occ(
+                "4",
+                LicenceClass::Open,
+                serde_json::json!({"mode": "car", "trip_purpose": "all", "country_code": "US",
+                    "basis": "per_trip", "year": 2022, "value": 1.4}),
+                "od-other-occupancy",
+            ),
+            occ(
+                "5",
+                LicenceClass::ShareAlike,
+                car("all", 2024, 1.5),
+                "od-sa-occupancy",
+            ),
+            // `serve: link_only` is never served (the SQL excludes it).
+            {
+                let mut it = occ("6", LicenceClass::Open, car("all", 2025, 1.7), "od-x");
+                it.use_policy.serve = vc_core::usepolicy::ServeUse::LinkOnly;
+                it
+            },
+        ],
+        // An emission factor is never an occupancy.
+        factors: vec![factor(
+            "9",
+            LicenceClass::Open,
+            serde_json::json!({"activity": "car", "category": "car", "country_code": "GB",
+                "gas_basis": "co2e", "year": 2026, "value": 0.17}),
+            "od-desnz-ghg-factors",
+        )],
+        ..MemCatalog::default()
+    };
+    let state = ApiState::new(
+        ApiConfig::default(),
+        Arc::new(MemIndex::new()),
+        Arc::new(MemPlaces::default()),
+        Arc::new(MemClientStore::new(vec![client(
+            "voyager", "s3cret", classes, 10_000,
+        )])),
+        Arc::new(cat),
+    );
+    let base = start(state).await;
+    Harness {
+        base,
+        http: reqwest::Client::new(),
+        index: Arc::new(MemIndex::new()),
+        token: "voyager.s3cret".into(),
+    }
+}
+
+#[tokio::test]
+async fn carbon_occupancy_filters_by_mode_country_year_purpose_basis_source() {
+    let h = occupancy_harness(ALL).await;
+    // Newest year first, then by id; link_only and emission factors never served.
+    let all = h.json("/v1/carbon/occupancy").await;
+    assert_eq!(ids(&all), ["5", "1", "2", "3", "4"]);
+    assert_eq!(all["items"][1]["kind"], "occupancy");
+    assert_eq!(all["items"][1]["data"]["value"], 1.61);
+    assert_eq!(
+        ids(&h.json("/v1/carbon/occupancy?mode=car&country=gb").await),
+        ["5", "1", "2"]
+    );
+    assert_eq!(
+        ids(&h.json("/v1/carbon/occupancy?mode=car&year=2023").await),
+        ["1", "2"]
+    );
+    assert_eq!(
+        ids(&h.json("/v1/carbon/occupancy?trip_purpose=work").await),
+        ["2"]
+    );
+    assert_eq!(
+        ids(&h.json("/v1/carbon/occupancy?mode=bus_coach").await),
+        ["3"]
+    );
+    assert_eq!(
+        ids(&h.json("/v1/carbon/occupancy?basis=per_trip").await),
+        ["4"]
+    );
+    assert_eq!(
+        ids(&h
+            .json("/v1/carbon/occupancy?source=od-dft-tag-databook&trip_purpose=all")
+            .await),
+        ["1", "3"]
+    );
+    assert!(ids(&h.json("/v1/carbon/occupancy?mode=rail").await).is_empty());
+    // Paging.
+    let p1 = h.json("/v1/carbon/occupancy?limit=3").await;
+    assert_eq!(ids(&p1), ["5", "1", "2"]);
+    let next = p1["next_cursor"].as_str().expect("cursor").to_string();
+    let p2 = h
+        .json(&format!("/v1/carbon/occupancy?limit=3&cursor={next}"))
+        .await;
+    assert_eq!(ids(&p2), ["3", "4"]);
+    assert!(p2["next_cursor"].is_null());
+    // Bad filters are 400, never a wildcard.
+    for bad in [
+        "/v1/carbon/occupancy?mode=plane",
+        "/v1/carbon/occupancy?country=G%25",
+        "/v1/carbon/occupancy?trip_purpose=holiday",
+        "/v1/carbon/occupancy?basis=per_seat",
+        "/v1/carbon/occupancy?cursor=abc",
+        "/v1/carbon/occupancy?year=x",
+    ] {
+        let r = h.get(bad).send().await.expect("send");
+        assert_eq!(r.status(), StatusCode::BAD_REQUEST, "{bad}");
+    }
+}
+
+#[tokio::test]
+async fn carbon_occupancy_respects_the_client_licence_classes() {
+    let h = occupancy_harness(&[LicenceClass::Open]).await;
+    let v = h.json("/v1/carbon/occupancy").await;
+    assert_eq!(ids(&v), ["1", "2", "3", "4"], "share_alike row not served");
+}
+
+#[tokio::test]
+async fn carbon_occupancy_needs_a_token() {
+    let h = occupancy_harness(ALL).await;
+    let r = h
+        .http
+        .get(format!("{}/v1/carbon/occupancy", h.base))
+        .send()
+        .await
+        .expect("send");
+    assert_eq!(r.status(), StatusCode::UNAUTHORIZED);
 }

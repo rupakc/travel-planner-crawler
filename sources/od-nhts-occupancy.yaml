@@ -38,8 +38,12 @@ notes: 'Research 2026-11-19 (carbon footprint corpus; gaps; verdict NEEDS-ADAPTE
   occupancy by vehicle type and purpose (2022: car 1.4, all vehicles 1.5), for per-passenger car and taxi
   factors. Format: zipped CSV trip files that need aggregating. Licence (research): US federal work (public
   domain). robots.txt returns the SPA index (no robots file, so allowed). Terms not found. | Disabled:
-  adapter pending: NHTS publishes trip microdata (zipped CSV), and occupancy must be computed from it;
-  factor_table copies published values only, and occupancy needs its own kind (owner decision)'
+  adapter pending: the only published occupancy table (2022 mileage-weighted vehicle occupancy by vehicle
+  type: car 1.40, van 2.06, SUV 1.67, pickup 1.32, all 1.52) is written into the nhts.ornl.gov single-page
+  app''s compiled JavaScript bundle (hashed file name, no CSV/XLSX), and the other copies are PDFs; the
+  downloadable data is trip microdata (csv.zip), from which occupancy would have to be computed with survey
+  weights, and factor_table copies published values only (checked 2026-11-19: robots.txt answers the SPA
+  index page, so no rules)'
 relevance:
   sections:
   - carbon

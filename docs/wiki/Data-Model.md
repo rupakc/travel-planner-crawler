@@ -150,6 +150,7 @@ A **kind** is a type of record. Each kind is defined by data, not code (see
 | `amenity` | record | public toilets, drinking fountains, free Wi-Fi spots from city registers; official only (added 2026-11-18) |
 | `emission_factor` | record | one published GHG emission factor (kg CO2e per passenger-km, per room-night, per kg of food) as an official/reference table states it, with `region_code` for sub-national factors (eGRID subregion, US state; 2026-11-19); adapters `factor_table` and `eurostat_jsonstat`, official/reference only (added 2026-11-19); served by `/v1/carbon/factors` |
 | `grid_carbon_intensity` | observation | gCO2e per kWh of one country's electricity per year, series `grid_ci:<ISO2>:<period>:<basis>`; adapters `factor_table` and `ember_api` (added 2026-11-19); served by `/v1/carbon/grid` and `/v1/observations` |
+| `occupancy` | record | one published average vehicle occupancy (persons per vehicle) for a mode, country, year and trip purpose, with its `basis` (`per_vehicle_km` or `per_trip`) and whether the driver is counted; adapter `factor_table`, official/reference only (added 2026-11-19); served by `/v1/carbon/occupancy` |
 | `fx_rate`, `weather_normal` | observation | time series |
 | `price_level` | observation | country price level per year and category, series `price_level:<ISO2>:<category>:<basis>` (`eu27_2020_100` Eurostat, `us_1` World Bank; added 2026-11-18) |
 

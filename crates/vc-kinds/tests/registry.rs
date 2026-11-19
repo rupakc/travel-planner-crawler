@@ -229,6 +229,34 @@ fn series_keys_render_from_fixtures() {
         reg.series_key(&KindId::new("emission_factor"), &gi, None),
         None
     );
+    // Occupancy is a record kind (one record per table row), never a series.
+    assert_eq!(reg.series_key(&KindId::new("occupancy"), &gi, None), None);
+}
+
+#[test]
+fn occupancy_is_an_official_or_reference_record_with_a_verbatim_value() {
+    let reg = registry();
+    let k = reg
+        .get(&KindId::new("occupancy"))
+        .expect("occupancy registered");
+    assert_eq!(k.storage, KindStorage::Record);
+    assert_eq!(
+        k.allowed_source_classes,
+        vec![SourceClass::Official, SourceClass::Reference]
+    );
+    assert!(!k.high_stakes);
+    assert!(k.verbatim_fields.iter().any(|f| f == "/value"));
+    // Persons per vehicle are bounded and never negative.
+    let ok = json!({"mode": "car", "geography": "Great Britain", "value": 1.61,
+        "unit": "persons per vehicle", "basis": "per_vehicle_km", "year": 2023,
+        "publisher": "DfT", "dataset": "TAG"});
+    assert!(reg.validate(&KindId::new("occupancy"), &ok).is_ok());
+    let mut neg = ok.clone();
+    neg["value"] = json!(-1);
+    assert!(reg.validate(&KindId::new("occupancy"), &neg).is_err());
+    let mut bad_mode = ok.clone();
+    bad_mode["mode"] = json!("plane");
+    assert!(reg.validate(&KindId::new("occupancy"), &bad_mode).is_err());
 }
 
 #[test]

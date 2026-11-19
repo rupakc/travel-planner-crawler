@@ -14,7 +14,7 @@ use vc_core::usepolicy::{IndexUse, ServeUse, UsePolicy};
 use vc_core::{Error, ExtractionRunId, KindId, ModelId, Result, SourceId};
 
 use crate::auth::{ClientStore, StoredClient};
-use crate::catalog::{Catalog, FactorQuery, GridQuery};
+use crate::catalog::{Catalog, FactorQuery, GridQuery, OccupancyQuery};
 use crate::dto::{LicenceDto, SourceDto, StatsDto};
 
 fn db(e: sqlx::Error) -> Error {
@@ -222,6 +222,52 @@ impl Catalog for PgApiStore {
         Ok(rows.iter().filter_map(factor_item).collect())
     }
 
+    async fn carbon_occupancy(&self, q: &OccupancyQuery) -> Result<Vec<Item>> {
+        let classes: Vec<String> = q
+            .licence_classes
+            .iter()
+            .filter(|c| c.ingestible())
+            .map(|c| c.as_str().to_string())
+            .collect();
+        if classes.is_empty() {
+            return Ok(Vec::new());
+        }
+        let rows = sqlx::query(
+            "SELECT r.record_id, r.kind, r.title, r.place_ids, r.licence, r.licence_class,
+                    r.conflict, r.updated_at, r.url, r.source_id,
+                    v.kind_schema, v.data, v.excerpt, v.use_policy, v.captured_at, v.attribution,
+                    v.extractor_ver, v.method, v.model_id, v.prompt_hash, v.extraction_run_id
+             FROM records r
+             JOIN record_versions v ON v.record_id = r.record_id AND v.version = r.current_version
+             WHERE r.kind = 'occupancy' AND r.state IN ('active', 'stale')
+               AND r.current_version > 0 AND r.licence_class = ANY($1)
+               AND v.use_policy->>'index' = 'full' AND v.use_policy->>'serve' <> 'link_only'
+               AND ($2::text IS NULL OR v.data->>'mode' = $2)
+               AND ($3::text IS NULL OR v.data->>'country_code' = $3)
+               AND ($4::int IS NULL OR (CASE WHEN jsonb_typeof(v.data->'year') = 'number'
+                                             THEN (v.data->>'year')::numeric END) = $4)
+               AND ($5::text IS NULL OR v.data->>'trip_purpose' = $5)
+               AND ($6::text IS NULL OR v.data->>'basis' = $6)
+               AND ($7::text IS NULL OR r.source_id = $7)
+             ORDER BY (CASE WHEN jsonb_typeof(v.data->'year') = 'number'
+                            THEN (v.data->>'year')::numeric END) DESC NULLS LAST, r.record_id
+             LIMIT $8 OFFSET $9",
+        )
+        .bind(&classes)
+        .bind(&q.mode)
+        .bind(&q.country)
+        .bind(q.year)
+        .bind(&q.trip_purpose)
+        .bind(&q.basis)
+        .bind(&q.source)
+        .bind(i64::from(q.limit))
+        .bind(i64::from(q.offset))
+        .fetch_all(&self.pool)
+        .await
+        .map_err(db)?;
+        Ok(rows.iter().filter_map(factor_item).collect())
+    }
+
     async fn carbon_grid(&self, q: &GridQuery) -> Result<Vec<ObservationView>> {
         let rows = sqlx::query(
             "SELECT series_key, observed_at, value, source_id, licence FROM observations
@@ -270,7 +316,7 @@ fn method_of(s: &str) -> ExtractionMethod {
         .unwrap_or(ExtractionMethod::Adapter)
 }
 
-/// One `emission_factor` row as an [`Item`]; `None` when its use policy does not allow
+/// One `emission_factor` or `occupancy` row as an [`Item`]; `None` when its use policy does not allow
 /// serving the data (fail closed on an unreadable policy; the SQL already filters on it so
 /// that paging stays exact).
 fn factor_item(row: &PgRow) -> Option<Item> {

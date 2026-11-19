@@ -1227,3 +1227,5 @@ od-orr-rail-environment            # carbon/getting_around: ORR Table 6100 GB ra
 od-fueleconomy-gov                 # carbon/getting_around: FuelEconomy.gov tailpipe g CO2/mile per US model, from 2022 (api, open, yearly, <= 10/day); factor_table
 od-concito-big-climate-db          # carbon/tips: The Big Climate Database v1.2, food kg CO2e/kg for DK GB NL FR ES (api, open, yearly, <= 10/day); factor_table
 od-rivm-food-lca                   # carbon/tips: RIVM Dutch food LCA 2024, to retail and to consumption (api, open, yearly, <= 10/day); factor_table
+# --- vehicle occupancy (2026-11-19): factor_table, kind occupancy ---
+od-dft-tag-databook                # carbon/getting_around: DfT TAG data book A1.3.3.2 car and PSV persons per vehicle (api, open, yearly, <= 10/day); factor_table
