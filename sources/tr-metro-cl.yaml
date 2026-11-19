@@ -28,7 +28,7 @@ cadence: monthly
 min_delay_s: 5
 daily_budget: 50
 politeness_key: null
-enabled: true
+enabled: false
 needs_key: false
 key_secret: null
 max_retention_days: null
@@ -36,7 +36,8 @@ display_requirements: null
 notes: 'Research 2026-11-18 (corpus LatAm): robots.txt: **AI-bot block** (GPTBot, ClaudeBot, Bytespider,
   ChatGPT-User, OAI-SearchBot), so title and link only; terms: The "Términos y condiciones" link opens
   a privacy page; no clause. No automated-access clause; facts only. robots.txt reserves AI use (AI crawlers
-  blocked), so title and link only: no LLM kinds.'
+  blocked), so title and link only: no LLM kinds. | Disabled: robots.txt 403 at first full crawl 2026-11-19;
+  do not retry another way (host denylisted)'
 relevance:
   sections:
   - getting_around

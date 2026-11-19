@@ -493,6 +493,9 @@ STATE_DEPT_403 = (
 
 # Allowed by research but off in v1, with the reason (restricted ones are automatic).
 DISABLED = {
+    "blog-viewfromthewing": 'challenge page at first full crawl 2026-11-19; do not retry another way (host denylisted)',
+    "news-traveldailynews": 'challenge page at first full crawl 2026-11-19; owner keeps this source: re-test later (not denylisted)',
+    "news-atlasobscura": 'robots.txt 403 at first full crawl 2026-11-19; do not retry another way (host denylisted)',
     "open-meteo": "Free API is non-commercial; replaced by MET Norway (spec §5.9, §17.8).",
     "wikidata-dump": "Full dump too large; Wikidata is queried via SPARQL (spec §5.10).",
     "duffel": "Live fares are a non-goal; they stay on SerpAPI in the app (spec §2).",
@@ -1270,6 +1273,7 @@ _src(
     budget=200,
     include=['^https://www\\.aphis\\.usda\\.gov/(?:pet-travel)'],
     attribution='USDA Animal and Plant Health Inspection Service',
+    off='challenge page at first full crawl 2026-11-19; government site, not denylisted: re-test later',
 )
 _src(
     'abf-travellers',
@@ -2701,6 +2705,7 @@ _src(
     budget=20,
     delay=600,
     include=['^https://www\\.gstc\\.org/(?:certified-hotels-directory|certification)/'],
+    off='challenge page at first full crawl 2026-11-19; do not retry another way (host denylisted)',
 )
 _src(
     'green-tourism-members',
@@ -3528,6 +3533,7 @@ _src(
     llm=['tip'],
     depth=1,
     budget=50,
+    off='challenge page at first full crawl 2026-11-19; do not retry another way (host denylisted)',
 )
 _src(
     'deals-theflightdeal',
@@ -3547,6 +3553,7 @@ _src(
     kinds=['article', 'tip'],
     depth=1,
     budget=50,
+    off='challenge page at first full crawl 2026-11-19; do not retry another way (host denylisted)',
 )
 _src(
     'blog-pointhacks',
@@ -3633,6 +3640,7 @@ _src(
     llm=['tip'],
     depth=1,
     budget=50,
+    off='challenge page at first full crawl 2026-11-19; do not retry another way (host denylisted)',
 )
 _src(
     'walking-freetoursbyfoot',
@@ -3775,6 +3783,7 @@ _src(
     depth=2,
     budget=50,
     include=['^https://www\\.octopus\\.com\\.hk/en/consumer/'],
+    off='challenge page at first full crawl 2026-11-19; do not retry another way (host denylisted)',
 )
 _src(
     'official-myciti',
@@ -4123,6 +4132,7 @@ _src(
     depth=2,
     budget=100,
     include=['^https?://en\\.visiterlyon\\.com/(discover|events|practical|what-to-do)'],
+    off='robots.txt 403 at first full crawl 2026-11-19; do not retry another way (host denylisted)',
 )
 _src(
     'city-bordeaux',
@@ -4134,6 +4144,7 @@ _src(
     depth=1,
     budget=100,
     include=['^https?://www\\.bordeaux-tourisme\\.com/(en/)?'],
+    off='challenge page at first full crawl 2026-11-19; do not retry another way (host denylisted)',
 )
 _src(
     'tb-alsace',
@@ -4234,6 +4245,7 @@ _src(
     depth=2,
     budget=50,
     include=['^https?://www\\.dresden\\.de/en/(tourism|culture|city)'],
+    off='challenge page at first full crawl 2026-11-19; government site, not denylisted: re-test later',
 )
 _src(
     'tb-schwarzwald',
@@ -4599,6 +4611,7 @@ _src(
     depth=1,
     budget=100,
     include=['^https?://salzburg\\.info/en/'],
+    off='challenge page at first full crawl 2026-11-19; do not retry another way (host denylisted)',
 )
 _src(
     'tr-oebb',
@@ -4743,6 +4756,7 @@ _src(
     depth=2,
     budget=50,
     include=['^https?://www\\.vy\\.no/en/'],
+    off='challenge page at first full crawl 2026-11-19; do not retry another way (host denylisted)',
 )
 _src(
     'tr-entur',
@@ -4954,6 +4968,7 @@ _src(
     depth=2,
     budget=100,
     include=['^https?://www\\.visitljubljana\\.com/en/'],
+    off='robots.txt challenge at first full crawl 2026-11-19; do not retry another way (host denylisted)',
 )
 _src(
     'od-podatki-gov-si',
@@ -5032,6 +5047,7 @@ _src(
     depth=2,
     budget=100,
     include=['^https?://www\\.visitmalta\\.com/en/'],
+    off='challenge page at first full crawl 2026-11-19; do not retry another way (host denylisted)',
 )
 _src(
     'tb-bulgaria',
@@ -5163,6 +5179,7 @@ _src(
     depth=1,
     budget=50,
     include=['^https?://tourismus\\.li/en/'],
+    off='robots.txt 403 at first full crawl 2026-11-19; do not retry another way (host denylisted)',
 )
 _src(
     'mus-vatican',
@@ -5808,6 +5825,7 @@ _src(
     depth=1,
     budget=100,
     include=['^https://vermontvacation\\.com/(?:events|things-to-do|trip-ideas|plan)/'],
+    off='challenge page at first full crawl 2026-11-19; do not retry another way (host denylisted)',
 )
 _src(
     'tb-virginia',
@@ -6199,6 +6217,7 @@ _src(
     depth=2,
     budget=100,
     include=['^https://www\\.tourismwinnipeg\\.com/(?:festivals-and-events|things-to-do)(?:/|$)'],
+    off='challenge page at first full crawl 2026-11-19; do not retry another way (host denylisted)',
 )
 _src(
     'city-victoria',
@@ -6310,6 +6329,7 @@ _src(
     depth=1,
     budget=50,
     include=['^https://www\\.flyreagan\\.com/parking-transportation/'],
+    off='robots.txt 403 at first full crawl 2026-11-19 (reserve.flyreagan.com); not denylisted, re-test later',
 )
 _src(
     'tr-massport',
@@ -6321,6 +6341,7 @@ _src(
     depth=1,
     budget=50,
     include=['^https://www\\.massport\\.com/logan-airport/(?:to-from-logan|getting-to-logan|at-logan)'],
+    off='challenge page at first full crawl 2026-11-19; do not retry another way (host denylisted)',
 )
 _src(
     'tr-sfo',
@@ -6355,6 +6376,7 @@ _src(
     depth=1,
     budget=100,
     include=['^https://www\\.fs\\.usda\\.gov/(?:visit|r\\d+|[a-z-]+/recreation)/'],
+    off='challenge page at first full crawl 2026-11-19; government site, not denylisted: re-test later',
 )
 _src(
     'park-blm',
@@ -7201,6 +7223,7 @@ _src(
     depth=1,
     budget=50,
     include=['^https?://vistos\\.mne\\.gov\\.pt/en/national-visas/'],
+    off='robots.txt 403 at first full crawl 2026-11-19; government site, not denylisted: re-test later',
 )
 _src(
     'gov-hr-mup-nomads',
@@ -7989,6 +8012,7 @@ _src(
     depth=1,
     budget=50,
     include=['^https?://www\\.metro\\.cl/(el-viaje|tu-viaje|tarifas)'],
+    off='robots.txt 403 at first full crawl 2026-11-19; do not retry another way (host denylisted)',
 )
 _src(
     'tr-efe',
@@ -8291,6 +8315,7 @@ _src(
     depth=2,
     budget=50,
     include=['^https?://www\\.minasgerais\\.com\\.br/(pt|en)/(destinos|atracoes|eventos)'],
+    off='robots.txt 403 at first full crawl 2026-11-19; do not retry another way (host denylisted)',
 )
 _src(
     'od-data-rio',
@@ -8441,6 +8466,7 @@ _src(
     depth=1,
     budget=100,
     include=['^https?://www\\.lesilesdeguadeloupe\\.com/(activite|agenda|decouvrir)'],
+    off='challenge page at first full crawl 2026-11-19; do not retry another way (host denylisted)',
 )
 _src(
     'tb-stlucia',
@@ -9008,6 +9034,7 @@ _src(
     depth=1,
     budget=50,
     include=['^https?://www\\.tourisme\\.gouv\\.ci/(accueil/actualites|pages)/'],
+    off='robots.txt 403 at first full crawl 2026-11-19; government site, not denylisted: re-test later',
 )
 _src(
     'tb-visitthegambia',
@@ -9196,6 +9223,7 @@ _src(
     depth=1,
     budget=50,
     include=['^https?://www\\.ktb\\.gov\\.tr/(EN-|TR-)\\d+/'],
+    off='robots.txt 403 at first full crawl 2026-11-19; government site, not denylisted: re-test later',
 )
 _src(
     'tb-fujairah',
@@ -9590,6 +9618,7 @@ _src(
     depth=1,
     budget=50,
     include=['^https?://www\\.evisa\\.gov\\.bh/(VISA|faq|eligibility|visa)'],
+    off='robots.txt 403 at first full crawl 2026-11-19; government site, not denylisted: re-test later',
 )
 _src(
     'visa-lb-gsl',
@@ -10183,6 +10212,7 @@ _src(
     depth=1,
     budget=100,
     include=['^https?://www\\.capetownmagazine\\.com/(events|things-to-do|eating-out|nightlife|travel-tips)/'],
+    off='robots.txt 403 at first full crawl 2026-11-19; do not retry another way (host denylisted)',
 )
 _src(
     'news-tourismupdate',
@@ -10237,6 +10267,7 @@ _src(
     llm=['attraction', 'activity', 'event'],
     depth=2,
     budget=100,
+    off='challenge page at first full crawl 2026-11-19; do not retry another way (host denylisted)',
 )
 _src(
     'np-nwr-namibia',
@@ -10630,6 +10661,7 @@ _src(
     depth=2,
     budget=100,
     include=['^https?://www\\.meet-in-shanghai\\.net/en/'],
+    off='challenge page at first full crawl 2026-11-19; do not retry another way (host denylisted)',
 )
 _src(
     'gov-shanghai-en',
@@ -10772,6 +10804,7 @@ _src(
     depth=2,
     budget=50,
     include=['^https?://www\\.hongkongairport\\.com/en/(transport|passenger-guide|shop-dine|flights/[a-z-]+\\.page)'],
+    off='challenge page at first full crawl 2026-11-19; do not retry another way (host denylisted)',
 )
 _src(
     'visa-immd-hk',
@@ -10934,6 +10967,7 @@ _src(
     depth=1,
     budget=50,
     include=['^https?://www\\.angkorenterprise\\.gov\\.kh/en'],
+    off='challenge page at first full crawl 2026-11-19; government site, not denylisted: re-test later',
 )
 _src(
     'tb-sabah',
@@ -10943,6 +10977,7 @@ _src(
     kinds=['place', 'attraction', 'activity', 'event'],
     depth=2,
     budget=100,
+    off='challenge page at first full crawl 2026-11-19; do not retry another way (host denylisted)',
 )
 _src(
     'tb-tourism-malaysia-corp',
@@ -11004,6 +11039,7 @@ _src(
     llm=['attraction', 'tip', 'event'],
     depth=2,
     budget=50,
+    off='challenge page at first full crawl 2026-11-19; do not retry another way (host denylisted)',
 )
 _src(
     'ev-roots-sg',
@@ -11015,6 +11051,7 @@ _src(
     depth=2,
     budget=100,
     include=['^https?://www\\.roots\\.gov\\.sg/(places|stories-landing|ich-landing)'],
+    off='robots.txt challenge at first full crawl 2026-11-19; government site, not denylisted: re-test later',
 )
 _src(
     'ev-nhb-sg',
@@ -11026,6 +11063,7 @@ _src(
     depth=2,
     budget=100,
     include=['^https?://www\\.nhb\\.gov\\.sg/(what-we-do|museums|heritage-trails)'],
+    off='robots.txt challenge at first full crawl 2026-11-19; government site, not denylisted: re-test later',
 )
 _src(
     'wx-nea-sg',
@@ -11080,6 +11118,7 @@ _src(
     depth=2,
     budget=100,
     include=['^https?://www\\.sentosa\\.com\\.sg/en/(things-to-do|events|getting-around|campaigns)'],
+    off='challenge page at first full crawl 2026-11-19; do not retry another way (host denylisted)',
 )
 _src(
     'tb-bali-disparda',
@@ -11111,6 +11150,7 @@ _src(
     llm=['visa_rule'],
     depth=1,
     budget=100,
+    off='robots.txt 403 at first full crawl 2026-11-19; government site, not denylisted: re-test later',
 )
 _src(
     'wx-bmkg',
@@ -11153,6 +11193,7 @@ _src(
     llm=['transport_option'],
     depth=1,
     budget=100,
+    off='challenge page at first full crawl 2026-11-19; government site, not denylisted: re-test later',
 )
 _src(
     'visa-etravel-ph',
@@ -11448,6 +11489,7 @@ _src(
     llm=['tip'],
     depth=1,
     budget=100,
+    off='robots.txt 403 at first full crawl 2026-11-19; do not retry another way (host denylisted)',
 )
 _src(
     'visa-mongolia-immigration',
@@ -11709,6 +11751,7 @@ _src(
     depth=2,
     budget=50,
     include=['^https?://tahititourisme\\.com/(en-[a-z]{2}/)?'],
+    off='challenge page at first full crawl 2026-11-19; do not retry another way (host denylisted)',
 )
 _src(
     'tb-solomons',
@@ -12421,6 +12464,7 @@ _src(
     budget=100,
     seeds=['https://cookislands.travel/de/node/1'],
     include=['^https?://cookislands\\.travel/de/'],
+    off='challenge page at first full crawl 2026-11-19; do not retry another way (host denylisted)',
 )
 _src(
     'gov-tokelau',
@@ -12715,6 +12759,7 @@ _src(
     llm=['tip', 'attraction', 'activity'],
     depth=2,
     budget=100,
+    off='challenge page at first full crawl 2026-11-19; do not retry another way (host denylisted)',
 )
 _src(
     'gov-south-georgia',
@@ -12802,6 +12847,7 @@ _src(
     depth=1,
     budget=100,
     seeds=['https://wander-lush.org/'],
+    off='challenge page at first full crawl 2026-11-19; do not retry another way (host denylisted)',
 )
 _src(
     'tb-ishigaki',
@@ -12918,6 +12964,7 @@ _src(
     depth=1,
     budget=50,
     seeds=['https://www.timelesstuvalu.com/'],
+    off='challenge page at first full crawl 2026-11-19; do not retry another way (host denylisted)',
 )
 _src(
     'gov-torres-strait',
@@ -13747,6 +13794,7 @@ _src(
     depth=1,
     budget=100,
     seeds=['https://portcros-parcnational.fr/'],
+    off='robots.txt 403 at first full crawl 2026-11-19; do not retry another way (host denylisted)',
 )
 _src(
     'tb-belle-ile',
@@ -13866,6 +13914,7 @@ _src(
     depth=1,
     budget=50,
     seeds=['https://www.tourismeilesdelamadeleine.com/'],
+    off='challenge page at first full crawl 2026-11-19; do not retry another way (host denylisted)',
 )
 _src(
     'ref-aeco',
@@ -14271,6 +14320,7 @@ _src(
     depth=1,
     budget=50,
     seeds=['https://www.symi.gr/'],
+    off='robots.txt 403 at first full crawl 2026-11-19; government site, not denylisted: re-test later',
 )
 _src(
     'blog-amorgos',
@@ -14346,6 +14396,7 @@ _src(
     depth=1,
     budget=100,
     seeds=['https://kodiak.org/'],
+    off='challenge page at first full crawl 2026-11-19; do not retry another way (host denylisted)',
 )
 _src(
     'tb-unalaska',
@@ -14487,6 +14538,7 @@ _src(
     budget=50,
     seeds=['https://loslagos.travel/en/welcome-to-south-of-chile/'],
     include=['^https?://loslagos\\.travel/en/'],
+    off='challenge page at first full crawl 2026-11-19; do not retry another way (host denylisted)',
 )
 _src(
     'tb-shetland',

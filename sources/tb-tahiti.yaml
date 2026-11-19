@@ -31,7 +31,7 @@ cadence: monthly
 min_delay_s: 5
 daily_budget: 50
 politeness_key: null
-enabled: true
+enabled: false
 needs_key: false
 key_secret: null
 max_retention_days: null
@@ -39,7 +39,7 @@ display_requirements: null
 notes: 'Research 2026-11-18 (corpus Asia-Pacific): robots.txt: robots 200, path allowed; AI-bot block
   → title + link only; terms: https://www.tahititourisme.com/legals/ read: no robot/AI clause. No automated-access
   clause; facts only. robots.txt reserves AI use (AI crawlers blocked), so title and link only: no LLM
-  kinds.'
+  kinds. | Disabled: challenge page at first full crawl 2026-11-19; do not retry another way (host denylisted)'
 relevance:
   sections:
   - places

@@ -33,7 +33,7 @@ cadence: weekly
 min_delay_s: 5
 daily_budget: 100
 politeness_key: null
-enabled: true
+enabled: false
 needs_key: false
 key_secret: null
 max_retention_days: null
@@ -41,7 +41,8 @@ display_requirements: null
 notes: 'Research 2026-11-18 (corpus Africa-ME): robots.txt: odd absolute-URL disallows for image CDNs
   and the DE/NL events mirrors; terms: terms-of-use page has no text (terms not found). Terms unconfirmed;
   owner accepted for non-commercial use 2026-11-18. Facts only. A Cape Town city guide magazine (no feed),
-  filed under events.'
+  filed under events. | Disabled: robots.txt 403 at first full crawl 2026-11-19; do not retry another
+  way (host denylisted)'
 relevance:
   sections:
   - events

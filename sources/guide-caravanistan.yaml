@@ -28,7 +28,7 @@ cadence: daily
 min_delay_s: 5
 daily_budget: 100
 politeness_key: null
-enabled: true
+enabled: false
 needs_key: false
 key_secret: null
 max_retention_days: null
@@ -36,7 +36,8 @@ display_requirements: null
 notes: 'Research 2026-11-18 (corpus Asia-Pacific): robots.txt: robots.txt redirect loop (no response =
   allowed per owner rule); terms: "Caravanistan is licensed under a Creative Commons Attribution-ShareAlike
   4.0 International License". Licence CC BY-SA 4.0: share_alike, kept separate. robots.txt redirect loop
-  = no response, allowed by the owner rule.'
+  = no response, allowed by the owner rule. | Disabled: robots.txt 403 at first full crawl 2026-11-19;
+  do not retry another way (host denylisted)'
 relevance:
   sections:
   - visa

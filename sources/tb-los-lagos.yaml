@@ -31,7 +31,7 @@ cadence: daily
 min_delay_s: 5
 daily_budget: 50
 politeness_key: null
-enabled: true
+enabled: false
 needs_key: false
 key_secret: null
 max_retention_days: null
@@ -39,7 +39,8 @@ display_requirements: null
 notes: 'Research 2026-11-18 (hidden gems, small islands and remote places; SAmerica/Chile): robots 200
   (* group, 9 disallows, / allowed); AI-bot block (bytespider) → title+link only. Terms: terms not found;
   Bytespider blocked. Terms unconfirmed; owner accepted for non-commercial use 2026-11-18; facts only.
-  robots.txt reserves content from AI crawlers: title and link only, no LLM kinds.'
+  robots.txt reserves content from AI crawlers: title and link only, no LLM kinds. | Disabled: challenge
+  page at first full crawl 2026-11-19; do not retry another way (host denylisted)'
 relevance:
   sections:
   - places

@@ -20,6 +20,67 @@ SEEDS = yaml.safe_load((ROOT / "docs" / "research" / "seeds.yaml").read_text())[
 ALLOWED = [s for s in SEEDS if s["allowed"]]
 DENYLIST = s2s.load_denylist(ROOT / "policy" / "denylist.yaml")
 
+# Refused VoyagerBot on the first full-crawl day (2026-11-19): off in production, out of every
+# ramp. Non-government hosts are denylisted; government ones (and TravelDailyNews, which the
+# owner keeps) stay off for a later re-test.
+FULL_CRAWL_REFUSED_2026_11_19 = {
+    "aphis-pet-travel",
+    "blog-coasttocoast",
+    "blog-frequentmiler",
+    "blog-viewfromthewing",
+    "city-bordeaux",
+    "city-dresden",
+    "city-salzburg",
+    "city-winnipeg",
+    "deals-fly4free",
+    "gstc-certified-hotels",
+    "guide-wanderlush",
+    "news-traveldailynews",
+    "official-octopus",
+    "park-usfs",
+    "pl-sentosa",
+    "ref-iaato",
+    "tb-angkor-enterprise",
+    "tb-brunei",
+    "tb-cook-islands",
+    "tb-guadeloupe",
+    "tb-iles-de-la-madeleine",
+    "tb-kodiak",
+    "tb-los-lagos",
+    "tb-malta",
+    "tb-meet-in-shanghai",
+    "tb-sabah",
+    "tb-tahiti",
+    "tb-tuvalu",
+    "tb-vermont",
+    "tb-wesgro",
+    "tr-hkia",
+    "tr-massport",
+    "tr-miaa-ph",
+    "tr-vy",
+    "guide-caravanistan",
+    "visa-imigrasi-id",
+    "np-port-cros",
+    "tb-liechtenstein",
+    "news-atlasobscura",
+    "mag-capetownmagazine",
+    "visa-bh-evisa",
+    "tr-metro-cl",
+    "tb-minas",
+    "gov-symi",
+    "tb-tourisme-ci",
+    "city-lyon",
+    "gov-pt-vistos",
+    "tb-ktb-turkey",
+    "tr-mwaa",
+    "ev-nhb-sg",
+    "ev-roots-sg",
+    "city-ljubljana",
+}
+FULL_CRAWL_REFUSED_PREFIXES = ("challenge page at first full crawl 2026-11-19",
+                               "robots.txt 403 at first full crawl 2026-11-19",
+                               "robots.txt challenge at first full crawl 2026-11-19")
+
 
 @pytest.fixture(scope="module")
 def generated(tmp_path_factory):
@@ -376,8 +437,14 @@ def test_owner_kept_sources_stay_enabled(generated):
     # Owner decision 2026-11-17: these stay on, each with a relevance entry.
     for sid in ("common-crawl", "enwiki-dump", "inside-airbnb", "news-skift",
                 "news-traveldailynews", "news-simpleflying"):
-        assert generated[sid]["enabled"] is True, sid
         assert generated[sid]["relevance"]["sections"], sid
+        if sid == "news-traveldailynews":
+            # Challenge page at the first full crawl (2026-11-19): kept, off until a re-test.
+            notes = " ".join(generated[sid]["notes"].split())
+            assert generated[sid]["enabled"] is False and "re-test later" in notes, sid
+            assert not any(e["host"] == "traveldailynews.com" for e in DENYLIST)
+            continue
+        assert generated[sid]["enabled"] is True, sid
 
 
 def test_disabled_source_may_name_a_denylisted_host(tmp_path, monkeypatch):
@@ -564,10 +631,11 @@ def test_sustainable_and_budget_sources_2026_11_18(generated):
     ids = _sustain_budget_ids()
     assert len(ids) == 116 and set(SUSTAIN_BUDGET_OFF) <= set(ids)
     r2, r3 = set(_ramp("ramp-2.txt")), set(_ramp("ramp-3.txt"))
-    on = [sid for sid in ids if sid not in SUSTAIN_BUDGET_OFF]
+    refused = set(ids) & FULL_CRAWL_REFUSED_2026_11_19
+    on = [sid for sid in ids if sid not in SUSTAIN_BUDGET_OFF and sid not in refused]
     # adeac-bandera-azul on since 2026-11-18 (personal-use terms, owner accepted); three bot
-    # walls off at ramp end 2026-11-18
-    assert len(on) == 90
+    # walls off at ramp end 2026-11-18; refusals of the first full crawl off 2026-11-19
+    assert len(on) == 90 - len(refused)
     for sid in on:
         spec = generated[sid]
         notes = " ".join(spec["notes"].split())
@@ -643,8 +711,9 @@ def test_north_america_sources_2026_11_18(generated):
     ids = _na_ids()
     assert len(ids) == 98 and set(NA_OFF) <= set(ids) and NA_PERSONAL_USE <= set(ids)
     r2, r3 = set(_ramp("ramp-2.txt")), set(_ramp("ramp-3.txt"))
-    on = [sid for sid in ids if sid not in NA_OFF]
-    assert len(on) == 91
+    refused = set(ids) & FULL_CRAWL_REFUSED_2026_11_19
+    on = [sid for sid in ids if sid not in NA_OFF and sid not in refused]
+    assert len(on) == 91 - len(refused)
     for sid in on:
         spec = generated[sid]
         notes = " ".join(spec["notes"].split())
@@ -822,7 +891,7 @@ def test_batch2_off_sources_say_why(generated):
                 "licence:", "robots.txt", "access route", "owner decision", "dataset retired",
                 "bot wall", "seed unresolved", "relevance:", "re-test from the crawler VM",
                 "terms forbid storage/redistribution", "meta robots", "terms forbid automated access",
-                "5xx at")
+                "5xx at") + FULL_CRAWL_REFUSED_PREFIXES
     for sid in s2s.SOURCE_CLASS:
         spec = generated[sid]
         if spec["enabled"]:
@@ -1112,6 +1181,8 @@ def _corpus_batch_check(generated, ids, off, delays, ai_reserved, personal):
         spec = generated[sid]
         notes = " ".join(spec["notes"].split())
         assert "2026-11-18" in notes, sid
+        if sid in FULL_CRAWL_REFUSED_2026_11_19:
+            continue  # test_full_crawl_refusals_2026_11_19
         if sid in off:
             reason = notes.split("Disabled: ", 1)[1]
             assert spec["enabled"] is False and reason.startswith(off[sid]), (sid, reason)
@@ -1164,7 +1235,7 @@ EUROPE_DENIED = [
     "https://www.publictransport.com.mt/", "https://www.bolognawelcome.com/",
 ]
 EUROPE_STAY_ALLOWED = [
-    "https://visittallinn.ee/sitemap.xml", "https://www.tirol.at/sitemap.xml", "https://www.visitmalta.com/en/",
+    "https://visittallinn.ee/sitemap.xml", "https://www.tirol.at/sitemap.xml",
     "https://www.translink.co.uk/sitemap.xml", "https://www.museiitaliani.it/", "https://www.oebb.at/en/",
     "https://www.cairngorms.co.uk/",
 ]
@@ -1274,7 +1345,7 @@ def test_corpus_latam_2026_11_18(generated):
 
 
 LATAM_DENIED = ["https://www.aruba.com/", "https://www.chilango.com/", "https://serviciomigraciones.cl/"]
-LATAM_STAY_ALLOWED = ["https://www.metro.cl/sitemap.xml", "https://www.curacao.com/en/", "https://www.gob.mx/sectur",
+LATAM_STAY_ALLOWED = ["https://www.curacao.com/en/", "https://www.gob.mx/sectur",
                       "https://www.conaf.cl/sitemap_index.xml"]
 
 # Generic, mapping-driven open-data readers (2026-11-18): on, official, adapter-only kinds,
@@ -1364,7 +1435,7 @@ def test_corpus_africa_me_2026_11_18(generated):
 AFRICA_DENIED = ["https://georgia.travel/", "https://www.isimangaliso.com/", "https://www.thesouthafrican.com/",
                  "https://www.casatramway.ma/", "https://mdlbeast.com/", "https://www.geo.fr/",
                  "https://www.routard.com/", "https://visitethiopia.travel/"]
-AFRICA_STAY_ALLOWED = ["https://visitkzn-sa.com/sitemap.xml", "https://www.capetownmagazine.com/sitemap.xml",
+AFRICA_STAY_ALLOWED = ["https://visitkzn-sa.com/sitemap.xml",
                        "https://www.oncf-voyages.ma/", "https://www.railway.ge/en/sitemap_index.xml"]
 
 
@@ -1497,9 +1568,10 @@ def test_jma_normals_and_bathing_water_2026_11_18(generated):
 # rules of 2026-11-18). Every row of the batch has notes starting "Research 2026-11-18 (hidden
 # gems". Off rows carry one of these reason prefixes; everything else is on, in ramp-2 and
 # ramp-3, facts only unless an open licence was quoted.
-HIDDEN_GEMS_COUNTS = {'total': 220, 'on': 194, 'off': 26}
+# 9 refused at the first full crawl, 2026-11-19
+HIDDEN_GEMS_COUNTS = {'total': 220, 'on': 185, 'off': 35}
 HIDDEN_GEMS_OFF_PREFIXES = ("re-test from the crawler VM", "terms forbid storage/redistribution",
-                            "meta robots", "seed unresolved", "adapter pending")
+                            "meta robots", "seed unresolved", "adapter pending") + FULL_CRAWL_REFUSED_PREFIXES
 # Parked or hijacked official domains: denylisted, never a source.
 HIDDEN_GEMS_DENIED = [
     "https://www.gotobermuda.com/", "https://www.visitgozo.com/", "https://www.iledere.com/",
@@ -1630,3 +1702,23 @@ def test_hidden_gems_part_2_europe_atlantic_americas(generated):
     assert generated["tb-lofoten"]["sitemaps"] == ["https://visitlofoten.com/en/sitemap_index.xml"]
     assert generated["tb-bornholm"]["sitemaps"] == ["https://www.bornholminfo.dk/sitemap.xml"]
     assert generated["tb-american-samoa"]["seeds"] == ["https://www.visitamericansamoa.org/"]
+
+
+def test_full_crawl_refusals_2026_11_19(generated):
+    gov = {"aphis-pet-travel", "city-dresden", "park-usfs", "tb-angkor-enterprise", "tr-miaa-ph",
+           "visa-imigrasi-id", "visa-bh-evisa", "gov-symi", "tb-tourisme-ci", "gov-pt-vistos",
+           "tb-ktb-turkey", "ev-nhb-sg", "ev-roots-sg"}
+    kept = {"news-traveldailynews", "tr-mwaa"}  # off for a re-test, not denylisted
+    assert len(FULL_CRAWL_REFUSED_2026_11_19) == 52
+    for sid in FULL_CRAWL_REFUSED_2026_11_19:
+        spec = generated[sid]
+        reason = " ".join(spec["notes"].split()).split("Disabled: ", 1)[1]
+        assert spec["enabled"] is False and reason.startswith(FULL_CRAWL_REFUSED_PREFIXES), (sid, reason)
+        for ramp in ("ramp-1.txt", "ramp-2.txt", "ramp-3.txt"):
+            assert sid not in _ramp(ramp), (sid, ramp)
+        urls = spec["seeds"] + spec["sitemaps"] + spec["feeds"]
+        hit = any(s2s.denied(u if isinstance(u, str) else u["url"], DENYLIST) for u in urls)
+        if sid in gov or sid in kept:
+            assert "re-test later" in reason and not hit, sid
+        else:
+            assert "host denylisted" in reason and hit, sid

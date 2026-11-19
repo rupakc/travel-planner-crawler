@@ -30,12 +30,13 @@ cadence: monthly
 min_delay_s: 5
 daily_budget: 200
 politeness_key: null
-enabled: true
+enabled: false
 needs_key: false
 key_secret: null
 max_retention_days: null
 display_requirements: null
-notes: robots ok. US federal work, public domain.
+notes: 'robots ok. US federal work, public domain. | Disabled: challenge page at first full crawl 2026-11-19;
+  government site, not denylisted: re-test later'
 relevance:
   sections:
   - tips

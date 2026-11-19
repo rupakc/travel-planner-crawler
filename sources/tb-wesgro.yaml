@@ -32,7 +32,7 @@ cadence: weekly
 min_delay_s: 5
 daily_budget: 100
 politeness_key: null
-enabled: true
+enabled: false
 needs_key: false
 key_secret: null
 max_retention_days: null
@@ -41,7 +41,8 @@ notes: 'Research 2026-11-18 (corpus Africa-ME): robots.txt: allowed (research 20
   information and content from this website for your own personal, non-commercial use. You may not ...
   distribute''. Terms restrict to personal/non-commercial use; owner accepted for non-commercial use 2026-11-18
   (''download information and content from this website for your own personal, non-commercial use. You
-  may not ... distribute''). Facts only.'
+  may not ... distribute''). Facts only. | Disabled: challenge page at first full crawl 2026-11-19; do
+  not retry another way (host denylisted)'
 relevance:
   sections:
   - places

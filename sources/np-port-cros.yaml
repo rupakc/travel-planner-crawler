@@ -33,14 +33,15 @@ cadence: monthly
 min_delay_s: 5
 daily_budget: 100
 politeness_key: null
-enabled: true
+enabled: false
 needs_key: false
 key_secret: null
 max_retention_days: null
 display_requirements: null
 notes: 'Research 2026-11-18 (hidden gems, small islands and remote places; Mediterranean/France): robots
   200 (* group, 23 disallows, / allowed). Terms: mentions légales: copyright reservation only. Terms hold
-  no bot, AI or personal-use clause (copyright only): facts only.'
+  no bot, AI or personal-use clause (copyright only): facts only. | Disabled: robots.txt 403 at first
+  full crawl 2026-11-19; do not retry another way (host denylisted)'
 relevance:
   sections:
   - places

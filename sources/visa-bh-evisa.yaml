@@ -28,13 +28,14 @@ cadence: monthly
 min_delay_s: 5
 daily_budget: 50
 politeness_key: null
-enabled: true
+enabled: false
 needs_key: false
 key_secret: null
 max_retention_days: null
 display_requirements: null
 notes: 'Research 2026-11-18 (corpus Africa-ME): robots.txt: robots answers HTML (no file, allowed); terms:
-  disclaimer only, no bans. No automated-access clause; facts only.'
+  disclaimer only, no bans. No automated-access clause; facts only. | Disabled: robots.txt 403 at first
+  full crawl 2026-11-19; government site, not denylisted: re-test later'
 relevance:
   sections:
   - visa

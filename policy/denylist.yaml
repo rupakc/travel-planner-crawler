@@ -828,3 +828,114 @@ entries:
   - host: kosrae.com
     reason: domain hijacked/parked; never crawl (GoDaddy for-sale lander, onboarding 2026-11-18)
     source: research 2026-11-18 hidden gems onboarding
+  - host: coasttocoast.co.za
+    reason: "challenge page served to VoyagerBot at first full crawl, 2026-11-19: bot wall"
+    source: seed:blog-coasttocoast
+  - host: frequentmiler.com
+    reason: "challenge page served to VoyagerBot at first full crawl, 2026-11-19: bot wall"
+    source: seed:blog-frequentmiler
+  - host: viewfromthewing.com
+    reason: "challenge page served to VoyagerBot at first full crawl, 2026-11-19: bot wall"
+    source: seed:blog-viewfromthewing
+  - host: bordeaux-tourisme.com
+    reason: "challenge page served to VoyagerBot at first full crawl, 2026-11-19: bot wall"
+    source: seed:city-bordeaux
+  - host: salzburg.info
+    reason: "challenge page served to VoyagerBot at first full crawl, 2026-11-19: bot wall"
+    source: seed:city-salzburg
+  - host: tourismwinnipeg.com
+    reason: "challenge page served to VoyagerBot at first full crawl, 2026-11-19: bot wall"
+    source: seed:city-winnipeg
+  - host: fly4free.com
+    reason: "challenge page served to VoyagerBot at first full crawl, 2026-11-19: bot wall"
+    source: seed:deals-fly4free
+  - host: gstc.org
+    reason: "challenge page served to VoyagerBot at first full crawl, 2026-11-19: bot wall"
+    source: seed:gstc-certified-hotels
+  - host: wander-lush.org
+    reason: "challenge page served to VoyagerBot at first full crawl, 2026-11-19: bot wall"
+    source: seed:guide-wanderlush
+  - host: octopus.com.hk
+    reason: "challenge page served to VoyagerBot at first full crawl, 2026-11-19: bot wall"
+    source: seed:official-octopus
+  - host: sentosa.com.sg
+    reason: "challenge page served to VoyagerBot at first full crawl, 2026-11-19: bot wall"
+    source: seed:pl-sentosa
+  - host: iaato.org
+    reason: "challenge page served to VoyagerBot at first full crawl, 2026-11-19: bot wall"
+    source: seed:ref-iaato
+  - host: bruneitourism.com
+    reason: "challenge page served to VoyagerBot at first full crawl, 2026-11-19: bot wall"
+    source: seed:tb-brunei
+  - host: cookislands.travel
+    reason: "challenge page served to VoyagerBot at first full crawl, 2026-11-19: bot wall"
+    source: seed:tb-cook-islands
+  - host: lesilesdeguadeloupe.com
+    reason: "challenge page served to VoyagerBot at first full crawl, 2026-11-19: bot wall"
+    source: seed:tb-guadeloupe
+  - host: tourismeilesdelamadeleine.com
+    reason: "challenge page served to VoyagerBot at first full crawl, 2026-11-19: bot wall"
+    source: seed:tb-iles-de-la-madeleine
+  - host: kodiak.org
+    reason: "challenge page served to VoyagerBot at first full crawl, 2026-11-19: bot wall"
+    source: seed:tb-kodiak
+  - host: loslagos.travel
+    reason: "challenge page served to VoyagerBot at first full crawl, 2026-11-19: bot wall"
+    source: seed:tb-los-lagos
+  - host: visitmalta.com
+    reason: "challenge page served to VoyagerBot at first full crawl, 2026-11-19: bot wall"
+    source: seed:tb-malta
+  - host: meet-in-shanghai.net
+    reason: "challenge page served to VoyagerBot at first full crawl, 2026-11-19: bot wall"
+    source: seed:tb-meet-in-shanghai
+  - host: sabahtourism.com
+    reason: "challenge page served to VoyagerBot at first full crawl, 2026-11-19: bot wall"
+    source: seed:tb-sabah
+  - host: tahititourisme.com
+    reason: "challenge page served to VoyagerBot at first full crawl, 2026-11-19: bot wall"
+    source: seed:tb-tahiti
+  - host: timelesstuvalu.com
+    reason: "challenge page served to VoyagerBot at first full crawl, 2026-11-19: bot wall"
+    source: seed:tb-tuvalu
+  - host: vermontvacation.com
+    reason: "challenge page served to VoyagerBot at first full crawl, 2026-11-19: bot wall"
+    source: seed:tb-vermont
+  - host: wesgro.co.za
+    reason: "challenge page served to VoyagerBot at first full crawl, 2026-11-19: bot wall"
+    source: seed:tb-wesgro
+  - host: hongkongairport.com
+    reason: "challenge page served to VoyagerBot at first full crawl, 2026-11-19: bot wall"
+    source: seed:tr-hkia
+  - host: massport.com
+    reason: "challenge page served to VoyagerBot at first full crawl, 2026-11-19: bot wall"
+    source: seed:tr-massport
+  - host: vy.no
+    reason: "challenge page served to VoyagerBot at first full crawl, 2026-11-19: bot wall"
+    source: seed:tr-vy
+  - host: caravanistan.com
+    reason: "robots.txt answered 403 to VoyagerBot at first full crawl, 2026-11-19"
+    source: seed:guide-caravanistan
+  - host: portcros-parcnational.fr
+    reason: "robots.txt answered 403 to VoyagerBot at first full crawl, 2026-11-19"
+    source: seed:np-port-cros
+  - host: tourismus.li
+    reason: "robots.txt answered 403 to VoyagerBot at first full crawl, 2026-11-19"
+    source: seed:tb-liechtenstein
+  - host: atlasobscura.com
+    reason: "robots.txt answered 403 to VoyagerBot at first full crawl, 2026-11-19"
+    source: seed:news-atlasobscura
+  - host: capetownmagazine.com
+    reason: "robots.txt answered 403 to VoyagerBot at first full crawl, 2026-11-19"
+    source: seed:mag-capetownmagazine
+  - host: metro.cl
+    reason: "robots.txt answered 403 to VoyagerBot at first full crawl, 2026-11-19"
+    source: seed:tr-metro-cl
+  - host: minasgerais.com.br
+    reason: "robots.txt answered 403 to VoyagerBot at first full crawl, 2026-11-19"
+    source: seed:tb-minas
+  - host: en.visiterlyon.com
+    reason: "robots.txt answered 403 to VoyagerBot at first full crawl, 2026-11-19"
+    source: seed:city-lyon
+  - host: visitljubljana.com
+    reason: "robots.txt answered with a challenge page at first full crawl, 2026-11-19: bot wall"
+    source: seed:city-ljubljana

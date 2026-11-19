@@ -30,14 +30,15 @@ cadence: weekly
 min_delay_s: 5
 daily_budget: 100
 politeness_key: null
-enabled: true
+enabled: false
 needs_key: false
 key_secret: null
 max_retention_days: null
 display_requirements: null
 notes: 'Research 2026-11-18 (corpus Europe): robots.txt: allowed; AI-bot block; terms: terms not found.
   Terms unconfirmed; owner accepted for non-commercial use 2026-11-18. Facts only. robots.txt reserves
-  AI use (AI crawlers blocked), so title and link only: no LLM kinds.'
+  AI use (AI crawlers blocked), so title and link only: no LLM kinds. | Disabled: robots.txt challenge
+  at first full crawl 2026-11-19; do not retry another way (host denylisted)'
 relevance:
   sections:
   - activities

@@ -30,14 +30,15 @@ cadence: monthly
 min_delay_s: 5
 daily_budget: 50
 politeness_key: null
-enabled: true
+enabled: false
 needs_key: false
 key_secret: null
 max_retention_days: null
 display_requirements: null
 notes: 'robots.txt (research 2026-11-18): 200, Drupal defaults. Terms read (research 2026-11-18): mwaa.com
   privacy statement and website policy; no automated-access clause, so facts only (headline, link, short
-  excerpt).'
+  excerpt). | Disabled: robots.txt 403 at first full crawl 2026-11-19 (reserve.flyreagan.com); not denylisted,
+  re-test later'
 relevance:
   sections:
   - getting_around

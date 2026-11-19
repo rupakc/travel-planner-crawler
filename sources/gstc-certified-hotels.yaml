@@ -29,7 +29,7 @@ cadence: monthly
 min_delay_s: 600
 daily_budget: 20
 politeness_key: null
-enabled: true
+enabled: false
 needs_key: false
 key_secret: null
 max_retention_days: null
@@ -37,7 +37,8 @@ display_requirements: null
 notes: 'robots.txt (research 2026-11-18): 200, * allows all, Crawl-delay: 600 (one request per 10 min,
   so a small budget). Terms page is an unfilled template (''ENTER YOUR SITE TERMS AND CONDITIONS HERE'');
   no automated-access clause; ''All Rights Reserved''. If the directory is JavaScript-only, render or
-  drop. Terms unconfirmed; owner accepted for non-commercial use 2026-11-18.'
+  drop. Terms unconfirmed; owner accepted for non-commercial use 2026-11-18. | Disabled: challenge page
+  at first full crawl 2026-11-19; do not retry another way (host denylisted)'
 relevance:
   sections:
   - hotels
