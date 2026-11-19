@@ -1,0 +1,71 @@
+{
+ "stats": {
+  "timestamp": "2026-11-19T11:53:03.924016Z",
+  "response_time_in_seconds": 0.511,
+  "rate_limit": "No",
+  "number_of_records": 7,
+  "query_parameters_used": {
+   "is_aggregate_entity": [
+    "false"
+   ],
+   "start_date": [
+    "2000"
+   ]
+  },
+  "available_metrics": [
+   "emissions_intensity_gco2_per_kwh"
+  ],
+  "query_all_dates_value_range": {}
+ },
+ "data": [
+  {
+   "entity": "France",
+   "entity_code": "FRA",
+   "is_aggregate_entity": false,
+   "date": "2023",
+   "emissions_intensity_gco2_per_kwh": 53.29
+  },
+  {
+   "entity": "Germany",
+   "entity_code": "DEU",
+   "is_aggregate_entity": false,
+   "date": "2023",
+   "emissions_intensity_gco2_per_kwh": 363.59
+  },
+  {
+   "entity": "India",
+   "entity_code": "IND",
+   "is_aggregate_entity": false,
+   "date": "2023",
+   "emissions_intensity_gco2_per_kwh": 710.49
+  },
+  {
+   "entity": "France",
+   "entity_code": "FRA",
+   "is_aggregate_entity": false,
+   "date": "2024",
+   "emissions_intensity_gco2_per_kwh": 40.34
+  },
+  {
+   "entity": "Germany",
+   "entity_code": "DEU",
+   "is_aggregate_entity": false,
+   "date": "2024",
+   "emissions_intensity_gco2_per_kwh": 339.87
+  },
+  {
+   "entity": "India",
+   "entity_code": "IND",
+   "is_aggregate_entity": false,
+   "date": "2024",
+   "emissions_intensity_gco2_per_kwh": 702.54
+  },
+  {
+   "entity": "Kosovo",
+   "entity_code": "XKX",
+   "is_aggregate_entity": false,
+   "date": "2024",
+   "emissions_intensity_gco2_per_kwh": 922.99
+  }
+ ]
+}

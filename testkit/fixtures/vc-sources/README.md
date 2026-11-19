@@ -93,3 +93,10 @@ never requested.
 | `factor_owid_food_poore.csv` | OWID grapher `ghg-per-kg-poore.csv?v=1&csvType=full&useColumnShortNames=true` | header plus the first 7 rows | CC BY 4.0 |
 | `factor_owid_grid_ci.csv` | OWID grapher `electricity-mix.csv?frequency=annual&metric=carbon_intensity&source=total&...` | header plus 6 rows (ASEAN and World aggregates, France 2023 and 2024, Germany, India) | CC BY 4.0 |
 
+
+### ember_api: Ember API carbon intensity (2026-11-19)
+
+| File | Source | How it was cut | Licence |
+|---|---|---|---|
+| `ember_ci_yearly.json` | `GET api.ember-energy.org/v1/carbon-intensity/yearly?is_aggregate_entity=false&start_date=2000` (owner key, not stored) | `data` cut to 7 real rows (France, Germany, India 2023 and 2024; Kosovo 2024); `stats.number_of_records` set to 7, `query_value_range` removed | CC BY 4.0 (Ember) |
+| `ember_ci_monthly.json` | `GET …/v1/carbon-intensity/monthly?is_aggregate_entity=false&start_date=2019-01` | `data` cut to 4 real rows (France and New Zealand, January and February 2025); same `stats` edits | CC BY 4.0 (Ember) |

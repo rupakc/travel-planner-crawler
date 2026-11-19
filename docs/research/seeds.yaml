@@ -19126,10 +19126,10 @@ seeds:
   - id: carbon-ember-api
     category: carbon
     name: Ember API
-    url: https://api.ember-energy.org/
+    url: https://api.ember-energy.org/v1/carbon-intensity/yearly?is_aggregate_entity=false&start_date=2000
     method: api
     license: CC BY 4.0
-    cadence: monthly
+    cadence: weekly
     needs_key: true
     allowed: true
     notes: 'Research 2026-11-19 (carbon footprint corpus; electricity grid; verdict API-OR-KEY): Monthly and yearly carbon intensity

@@ -801,6 +801,9 @@ DISPLAY_REQUIREMENTS = {
         "through a Travelpayouts partner link (the owner's marker)."
     ),
 }
+# Secret Manager name of a source's key when it differs from crawler-src-<id>-key.
+KEY_SECRET: dict[str, str] = {}
+
 MAX_RETENTION_DAYS = {
     "ticketmaster": 30, "seatgeek": 30, "eventbrite-api": 30,
     "travelpayouts": 400,  # a year of route-month fare history for trends
@@ -18441,6 +18444,26 @@ DISABLED['od-agribalyse-dataverse'] = (
     'adapter pending: files are reached through the Dataverse API (dataset JSON, then file ids); '
     'entrepot.recherche.data.gouv.fr robots.txt did not answer at research')
 
+# Ember API (2026-11-19): the owner's free key, two calls per refresh (yearly and monthly carbon
+# intensity for every country), adapter ember_api -> grid_carbon_intensity observations.
+ADAPTERS['carbon-ember-api'] = 'ember_api'
+KINDS_OVERRIDE['carbon-ember-api'] = ['grid_carbon_intensity']
+LLM_KINDS_OVERRIDE['carbon-ember-api'] = []
+EXTRA_SEEDS['carbon-ember-api'] = [
+    'https://api.ember-energy.org/v1/carbon-intensity/monthly?is_aggregate_entity=false&start_date=2019-01',
+]
+MAX_DEPTH['carbon-ember-api'] = 0
+DAILY_BUDGET['carbon-ember-api'] = 10
+DISABLED.pop('carbon-ember-api', None)
+KEY_SECRET['carbon-ember-api'] = 'crawler-src-ember-key'
+ATTRIBUTION['carbon-ember-api'] = 'Ember (ember-energy.org), CC BY 4.0'
+NOTES_APPEND['carbon-ember-api'] = (
+    'Adapter ember_api (2026-11-19): /v1/carbon-intensity/yearly (from 2000) and /monthly (from 2019-01) '
+    'without entity_code return every country in one call each (about 5,300 and 7,900 rows) -> '
+    'grid_carbon_intensity observations (life-cycle basis; aggregates skipped). Owner key in Secret Manager '
+    'crawler-src-ember-key, sent as the api_key query parameter and stripped from every stored URL. '
+    'api.ember-energy.org robots.txt: 404 (allowed), checked 2026-11-19. API docs: no rate limit; data CC BY 4.0.')
+
 # Owner decisions (2026-11-19).
 DISABLED.pop('tr-flix-methodology', None)
 EXTRA_SEEDS['tr-flix-methodology'] = [
@@ -18614,7 +18637,7 @@ def build_spec(seed: dict) -> dict:
         "politeness_key": None,
         "enabled": enabled,
         "needs_key": needs_key,
-        "key_secret": f"crawler-src-{sid}-key" if needs_key else None,
+        "key_secret": KEY_SECRET.get(sid, f"crawler-src-{sid}-key") if needs_key else None,
         "max_retention_days": MAX_RETENTION_DAYS.get(sid),
         "display_requirements": DISPLAY_REQUIREMENTS.get(sid),
         "notes": " | ".join(notes) or None,

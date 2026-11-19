@@ -7,7 +7,7 @@ Voyager estimates the carbon footprint of a trip: its flights, trains, buses, fe
 | Kind | Storage | One item is |
 |---|---|---|
 | `emission_factor` | record | one published factor, for example 0.11704 kg CO2e per passenger.km for a long-haul economy flight with RF (DESNZ 2026), 6.7 kg CO2e per room per night in France, or 99.48 kg CO2e per kg of beef from the beef herd |
-| `grid_carbon_intensity` | observation | one country's electricity carbon intensity for one year, in gCO2e per kWh; series `grid_ci:<ISO2>:<period>:<basis>` |
+| `grid_carbon_intensity` | observation | one country's electricity carbon intensity for one year or one month, in gCO2e per kWh; series `grid_ci:<ISO2>:<period>:<basis>` (`period` is `annual` or `monthly`) |
 
 Each `emission_factor` record carries:
 
@@ -43,11 +43,22 @@ Each dataset is one `FactorMapping` in `crates/vc-sources/src/adapters/factor_ta
 
 **Adding a dataset.** Add a mapping, record a small excerpt in `testkit/fixtures/vc-sources/`, and give the source `adapter: factor_table` with the file URL as its only seed. All of these go in `scripts/seeds_to_sources.py`.
 
+## Adapter `ember_api`
+
+The Ember API (`carbon-ember-api`, CC BY 4.0, attribution "Ember") gives the carbon intensity of electricity generation for every country, yearly from 2000 and monthly from 2019. Leaving `entity_code` out returns all countries in one call, so the source has two rows and a weekly refresh costs two requests:
+
+- `/v1/carbon-intensity/yearly?is_aggregate_entity=false&start_date=2000` (about 5,300 rows);
+- `/v1/carbon-intensity/monthly?is_aggregate_entity=false&start_date=2019-01` (about 7,900 rows).
+
+Each country row becomes one `grid_carbon_intensity` observation: `period` `annual` or `monthly`, `date` the first day of the period, `basis` `lifecycle`, `publisher` `Ember`. Region aggregates, unknown codes, missing or negative values and malformed dates are skipped. The same series key as the OWID grid file is used, so the two publishers line up per country.
+
+**The key.** The owner's free key is in Secret Manager as `crawler-src-ember-key` (the source's `key_secret`). Ember takes it as the `api_key` query parameter: the adapter adds it to the request only, strips it from every stored URL, redirect and error, and refuses a leased row that already carries it. Ember states no rate limit; the source's `daily_budget` is 10.
+
 ## Still off
 
 Each of these sources is off, and `docs/SOURCES.md` records its reason.
 
-- **Ember yearly CSV:** its file host's robots.txt disallows everything except PDFs.
+- **Ember yearly CSV:** its file host's robots.txt disallows everything except PDFs. The same data now comes from the Ember API (above).
 - **SNCF:** the files are only available under `/api/`, which robots.txt disallows.
 - **French Base Carbone:** it is on `static.data.gouv.fr`, which robots.txt disallows.
 - **US EPA eGRID and EF Hub, and the Australian NGA factors:** these are presentation workbooks that need per-table mappings.

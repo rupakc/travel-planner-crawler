@@ -22,11 +22,11 @@ use serde_json::{Map, Value, json};
 use vc_core::{CanonicalUrl, Error, Result};
 
 use super::{
-    canada_advisories, canada_offices, countries, ecb_fx, enwiki_visa, eurostat_jsonstat,
-    factor_table, fcdo_content_api, fsa_fhrs, govuk_medical_lists, govuk_world_orgs, html_text,
-    iso3, json_events, nyc_restaurant_inspections, openholidays, phone, socrata,
-    state_dept_advisories, state_dept_country_info, toronto_dinesafe, travelpayouts_fares,
-    udata_resource, wfs_geojson,
+    canada_advisories, canada_offices, countries, ecb_fx, ember_api, enwiki_visa,
+    eurostat_jsonstat, factor_table, fcdo_content_api, fsa_fhrs, govuk_medical_lists,
+    govuk_world_orgs, html_text, iso3, json_events, nyc_restaurant_inspections, openholidays,
+    phone, socrata, state_dept_advisories, state_dept_country_info, toronto_dinesafe,
+    travelpayouts_fares, udata_resource, wfs_geojson,
 };
 
 /// Bumped when a mapping changes (part of the extractor version string of adapter records).
@@ -50,6 +50,7 @@ pub const MAPPED: &[&str] = &[
     "canada_advisories",
     "canada_offices",
     "ecb_fx",
+    "ember_api",
     "enwiki_visa",
     "eurostat_jsonstat",
     "factor_table",
@@ -80,6 +81,7 @@ pub fn records(adapter: &str, url: &CanonicalUrl, body: &[u8]) -> Option<Result<
         "canada_advisories" => canada(body),
         "canada_offices" => canada_offices_records(body),
         "ecb_fx" => ecb(body),
+        "ember_api" => factors(ember_api::items(url, body)),
         "enwiki_visa" => enwiki_visa_records(url, body),
         "eurostat_jsonstat" => eurostat(body),
         "factor_table" => factors(factor_table::items(url, body)),
@@ -535,7 +537,7 @@ fn rows(items: Result<Vec<(Option<String>, &'static str, Value)>>) -> Result<Vec
         .collect())
 }
 
-/// Records of `factor_table`: `emission_factor` records and `grid_carbon_intensity`
+/// Records of `factor_table` and `ember_api`: `emission_factor` records and `grid_carbon_intensity`
 /// observations (series `grid_ci:<ISO2>:<period>:<basis>`, the date is the time axis).
 fn factors(items: Result<Vec<(Option<String>, &'static str, Value)>>) -> Result<Vec<AdapterItem>> {
     Ok(items?

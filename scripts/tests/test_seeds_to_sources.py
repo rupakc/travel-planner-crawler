@@ -965,10 +965,13 @@ def test_batch2_api_and_dump_sources_run_only_on_an_adapter(generated):
             want = (OPEN_DATA_ADAPTERS.get(sid) or ADAPTED_2026_11_18.get(sid)
                     or COUNTRY_INFO_AND_FOOD.get(sid) or WIKIVOYAGE_EDITIONS.get(sid)
                     or OPEN_DATA_READERS.get(sid, (None,))[0] or CARBON_ADAPTERS.get(sid)
-                    or ("factor_table" if sid in FACTOR_TABLE_SOURCES else None))
+                    or ("factor_table" if sid in FACTOR_TABLE_SOURCES else None)
+                    or CARBON_KEYED.get(sid, (None,))[0])
             assert spec["adapter"] == want, sid
             assert spec["enabled"] is (want is not None), sid
-        if spec["needs_key"]:
+        if spec["needs_key"] and sid in CARBON_KEYED:
+            assert spec["enabled"] and spec["key_secret"] == CARBON_KEYED[sid][1], sid
+        elif spec["needs_key"]:
             assert spec["enabled"] is False and spec["key_secret"] == f"crawler-src-{sid}-key", sid
 
 
@@ -979,7 +982,8 @@ def test_batch2_enabled_sources_are_polite_and_scoped(generated):
             continue
         assert spec["method"] in ("html", "rss", "sitemap") or sid in OPEN_DATA_ADAPTERS \
             or sid in ADAPTED_2026_11_18 or sid in COUNTRY_INFO_AND_FOOD or sid in OPEN_DATA_READERS \
-            or sid in WIKIVOYAGE_EDITIONS or sid in CARBON_ADAPTERS or sid in FACTOR_TABLE_SOURCES, sid
+            or sid in WIKIVOYAGE_EDITIONS or sid in CARBON_ADAPTERS or sid in FACTOR_TABLE_SOURCES \
+            or sid in CARBON_KEYED, sid
         assert spec["daily_budget"] <= 500 and spec["max_depth"] <= 2 and spec["min_delay_s"] >= 5, sid
         assert spec["licence"]["class"] in ("open", "facts_only") or (
             (sid in ("openholidays", "enwiki-visa-requirements") + tuple(CORPUS_SHARE_ALIKE)
@@ -1041,7 +1045,7 @@ def test_ramp_2_extends_ramp_1_with_enabled_runnable_sources():
     on = ({sid for sid in s2s.SOURCE_CLASS if committed[sid]["enabled"]} - set(OPEN_DATA_ADAPTERS)
           - set(s2s.GTFS_FEEDS) - set(ADAPTED_2026_11_18) - set(COUNTRY_INFO_AND_FOOD)
           - set(OPEN_DATA_READERS) - set(WIKIVOYAGE_EDITIONS) - set(CARBON_ADAPTERS)
-          - set(FACTOR_TABLE_SOURCES))
+          - set(FACTOR_TABLE_SOURCES) - set(CARBON_KEYED))
     assert on <= set(r2), sorted(on - set(r2))
 
 
@@ -1067,7 +1071,7 @@ def test_ramp_3_is_ramp_2_plus_the_open_data_sources():
     assert r3[: len(r2)] == r2
     assert set(r3[len(r2):]) == (set(OPEN_DATA_ADAPTERS) | s2s.GTFS_ON | set(COUNTRY_INFO_AND_FOOD)
                                  | set(OPEN_DATA_READERS) | set(WIKIVOYAGE_EDITIONS) | set(CARBON_ADAPTERS)
-                                 | set(FACTOR_TABLE_SOURCES))
+                                 | set(FACTOR_TABLE_SOURCES) | set(CARBON_KEYED))
     v = _validator()
     for sid in r3:
         spec = committed[sid]
@@ -1745,9 +1749,11 @@ FACTOR_TABLE_SOURCES = {
     "od-owid-food-ghg": "emission_factor",
     "carbon-owid-grapher-ci": "grid_carbon_intensity",
 }
+# Keyed carbon APIs on with the owner's key (2026-11-19): adapter, Secret Manager name. ramp-3 only.
+CARBON_KEYED = {"carbon-ember-api": ("ember_api", "crawler-src-ember-key")}
 # Owner decisions of 2026-11-19 turned on (html, facts only).
 CARBON_OWNER_ON = ("tr-flix-methodology", "carbon-breeam-projects", "carbon-greenbooklive")
-CARBON_COUNTS = {"total": 310, "on": 149, "adapter pending": 130, "needs an API key": 26, "robots.txt": 3,
+CARBON_COUNTS = {"total": 310, "on": 150, "adapter pending": 130, "needs an API key": 25, "robots.txt": 3,
                  "duplicate": 1, "gone": 1}
 CARBON_DENIED = ["https://www.climatiq.io/terms", "https://www.goldstandard.org/", "https://registry.verra.org/",
                  "https://media.amtrak.com/terms-of-use/", "https://ghgprotocol.org/terms-use",
@@ -1788,6 +1794,15 @@ def test_carbon_corpus_2026_11_19(generated):
                 assert "(free" in reason or "(paid or partner access" in reason, sid
             continue
         on.append(sid)
+        if sid in CARBON_KEYED:
+            adapter, secret = CARBON_KEYED[sid]
+            assert spec["adapter"] == adapter and spec["method"] == "api", sid
+            assert spec["needs_key"] and spec["key_secret"] == secret, sid
+            assert spec["kinds"] == ["grid_carbon_intensity"] and spec["llm_kinds"] == [], sid
+            assert spec["cadence"] == "weekly" and spec["daily_budget"] <= 10 and spec["max_depth"] == 0, sid
+            assert all("api_key" not in u for u in spec["seeds"]), sid
+            assert sid in r3 and sid not in r2, sid
+            continue
         assert not spec["needs_key"] and spec["daily_budget"] <= 100 and spec["max_depth"] <= 1, sid
         assert spec["cadence"] in ("monthly", "quarterly", "yearly"), sid
         if sid in CARBON_ADAPTERS:

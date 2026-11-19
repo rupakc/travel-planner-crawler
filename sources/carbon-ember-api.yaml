@@ -7,37 +7,39 @@ source_class: reference
 licence:
   class: open
   spdx: CC-BY-4.0
-  attribution: Ember API
+  attribution: Ember (ember-energy.org), CC BY 4.0
   url: https://creativecommons.org/licenses/by/4.0/
 method: api
 seeds:
-- https://api.ember-energy.org/
-- https://ember-energy.org/data/api
+- https://api.ember-energy.org/v1/carbon-intensity/yearly?is_aggregate_entity=false&start_date=2000
+- https://api.ember-energy.org/v1/carbon-intensity/monthly?is_aggregate_entity=false&start_date=2019-01
 sitemaps: []
 feeds: []
-adapter: null
+adapter: ember_api
 include: []
 exclude: []
 max_depth: 0
 kinds:
-- article
-- tip
-llm_kinds:
-- tip
+- grid_carbon_intensity
+llm_kinds: []
 render: never
-cadence: monthly
+cadence: weekly
 min_delay_s: 5
-daily_budget: 20
+daily_budget: 10
 politeness_key: null
-enabled: false
+enabled: true
 needs_key: true
-key_secret: crawler-src-carbon-ember-api-key
+key_secret: crawler-src-ember-key
 max_retention_days: null
 display_requirements: null
 notes: 'Research 2026-11-19 (carbon footprint corpus; electricity grid; verdict API-OR-KEY): Monthly and
   yearly carbon intensity per country and region, machine-readable. Format: json REST. Licence (research):
   open (CC BY 4.0). robots 404 (allowed). Free key at https://ember-energy.org/data/api. Needs a JSON
-  adapter. | Disabled: needs an API key: https://ember-energy.org/data/api (free: free key)'
+  adapter. | Adapter ember_api (2026-11-19): /v1/carbon-intensity/yearly (from 2000) and /monthly (from
+  2019-01) without entity_code return every country in one call each (about 5,300 and 7,900 rows) -> grid_carbon_intensity
+  observations (life-cycle basis; aggregates skipped). Owner key in Secret Manager crawler-src-ember-key,
+  sent as the api_key query parameter and stripped from every stored URL. api.ember-energy.org robots.txt:
+  404 (allowed), checked 2026-11-19. API docs: no rate limit; data CC BY 4.0.'
 relevance:
   sections:
   - carbon
