@@ -127,10 +127,35 @@ async fn put_factor(
     data: serde_json::Value,
     policy: vc_core::usepolicy::UsePolicy,
 ) -> i64 {
+    put_record(
+        pool,
+        "emission_factor",
+        key,
+        source,
+        class,
+        state,
+        data,
+        policy,
+    )
+    .await
+}
+
+/// Inserts one current record of `kind` (version 1, adapter `factor_table`).
+#[allow(clippy::too_many_arguments)]
+async fn put_record(
+    pool: &sqlx::PgPool,
+    kind: &str,
+    key: &str,
+    source: &str,
+    class: &str,
+    state: &str,
+    data: serde_json::Value,
+    policy: vc_core::usepolicy::UsePolicy,
+) -> i64 {
     let id: i64 = sqlx::query_scalar(
         "INSERT INTO records (kind, source_id, url_key, record_key, licence_class, state,
                               current_version, licence, url)
-         VALUES ('emission_factor', $1, $2, $3, $4, $5, 1, $6, 'https://example.org/f')
+         VALUES ($7, $1, $2, $3, $4, $5, 1, $6, 'https://example.org/f')
          RETURNING record_id",
     )
     .bind(source)
@@ -139,19 +164,21 @@ async fn put_factor(
     .bind(class)
     .bind(state)
     .bind(serde_json::json!({"class": class, "attribution": "Example", "spdx": null, "url": null}))
+    .bind(kind)
     .fetch_one(pool)
     .await
     .expect("record");
     sqlx::query(
         "INSERT INTO record_versions (record_id, version, capture_id, captured_at, data, data_hash,
                                       kind_schema, extractor_ver, method, licence_class, use_policy)
-         VALUES ($1, 1, 'c1', now(), $2, '\\x00', 'emission_factor@1', 'adapter:factor_table', 'adapter',
+         VALUES ($1, 1, 'c1', now(), $2, '\\x00', $5 || '@1', 'adapter:factor_table', 'adapter',
                  $3, $4)",
     )
     .bind(id)
     .bind(data)
     .bind(class)
     .bind(serde_json::to_value(policy).expect("policy"))
+    .bind(kind)
     .execute(pool)
     .await
     .expect("version");
@@ -338,4 +365,137 @@ async fn pg_carbon_factors_and_grid() {
         ..g
     };
     assert_eq!(store.carbon_grid(&annual).await.expect("grid").len(), 1);
+}
+
+#[tokio::test]
+async fn pg_carbon_occupancy() {
+    use vc_api::catalog::OccupancyQuery;
+    use vc_core::usepolicy::UsePolicy;
+    let pool = testkit::pg().await;
+    let store = PgApiStore::new(pool.clone());
+    let full = UsePolicy::ALLOW_ALL;
+    let tag = "od-dft-tag-databook";
+    let car = |purpose: &str, year: i64, v: f64| {
+        serde_json::json!({"mode": "car", "trip_purpose": purpose, "country_code": "GB",
+            "basis": "per_vehicle_km", "year": year, "value": v,
+            "unit": "persons per vehicle", "includes_driver": true})
+    };
+    let put = |key: &'static str,
+               source: &'static str,
+               class: &'static str,
+               state: &'static str,
+               data: serde_json::Value,
+               policy: UsePolicy| {
+        let pool = pool.clone();
+        async move { put_record(&pool, "occupancy", key, source, class, state, data, policy).await }
+    };
+    let a = put("a", tag, "open", "active", car("all", 2023, 1.61), full).await;
+    let b = put("b", tag, "open", "stale", car("work", 2023, 1.12), full).await;
+    let psv = serde_json::json!({"mode": "bus_coach", "trip_purpose": "all",
+        "country_code": "GB", "basis": "per_vehicle_km", "year": 2023, "value": 13.8});
+    let c = put("c", tag, "open", "active", psv, full).await;
+    let us = serde_json::json!({"mode": "car", "trip_purpose": "all", "country_code": "US",
+        "basis": "per_trip", "year": 2022, "value": 1.4});
+    let d = put("d", "od-other", "open", "active", us, full).await;
+    // Never served: tombstoned, share_alike for an open-only client, a deny-all policy, and an
+    // emission factor (another kind).
+    put("e", tag, "open", "tombstoned", car("all", 2024, 1.5), full).await;
+    let sa = put(
+        "f",
+        "od-sa",
+        "share_alike",
+        "active",
+        car("all", 2024, 1.5),
+        full,
+    )
+    .await;
+    put(
+        "g",
+        tag,
+        "open",
+        "active",
+        car("all", 2025, 1.7),
+        UsePolicy::DENY_ALL,
+    )
+    .await;
+    put_factor(
+        &pool,
+        "h",
+        tag,
+        "open",
+        "active",
+        car("all", 2026, 1.9),
+        full,
+    )
+    .await;
+
+    let q = |f: OccupancyQuery| OccupancyQuery {
+        licence_classes: vec![LicenceClass::Open],
+        limit: 10,
+        ..f
+    };
+    let ids = |v: Vec<vc_core::index::Item>| v.into_iter().map(|i| i.id).collect::<Vec<_>>();
+    let s = |i: i64| i.to_string();
+    let all = store
+        .carbon_occupancy(&q(OccupancyQuery::default()))
+        .await
+        .expect("q");
+    assert_eq!(
+        ids(all.clone()),
+        [s(a), s(b), s(c), s(d)],
+        "newest year first, then id; never other kinds or unservable rows"
+    );
+    assert_eq!(all[0].kind.0.as_ref(), "occupancy");
+    assert_eq!(all[0].data["value"], 1.61);
+    assert_eq!(all[0].provenance[0].source_id.0, tag);
+    let work = OccupancyQuery {
+        mode: Some("car".into()),
+        country: Some("GB".into()),
+        year: Some(2023),
+        trip_purpose: Some("work".into()),
+        basis: Some("per_vehicle_km".into()),
+        source: Some(tag.into()),
+        ..OccupancyQuery::default()
+    };
+    assert_eq!(
+        ids(store.carbon_occupancy(&q(work)).await.expect("q")),
+        [s(b)]
+    );
+    let bus = OccupancyQuery {
+        mode: Some("bus_coach".into()),
+        ..OccupancyQuery::default()
+    };
+    assert_eq!(
+        ids(store.carbon_occupancy(&q(bus)).await.expect("q")),
+        [s(c)]
+    );
+    let per_trip = OccupancyQuery {
+        basis: Some("per_trip".into()),
+        ..OccupancyQuery::default()
+    };
+    assert_eq!(
+        ids(store.carbon_occupancy(&q(per_trip)).await.expect("q")),
+        [s(d)]
+    );
+    let page2 = OccupancyQuery {
+        offset: 1,
+        limit: 2,
+        licence_classes: vec![LicenceClass::Open],
+        ..OccupancyQuery::default()
+    };
+    assert_eq!(
+        ids(store.carbon_occupancy(&page2).await.expect("q")),
+        [s(b), s(c)]
+    );
+    let both = OccupancyQuery {
+        licence_classes: vec![LicenceClass::Open, LicenceClass::ShareAlike],
+        limit: 10,
+        ..OccupancyQuery::default()
+    };
+    assert!(ids(store.carbon_occupancy(&both).await.expect("q")).contains(&s(sa)));
+    let none = OccupancyQuery {
+        limit: 10,
+        ..OccupancyQuery::default()
+    };
+    assert!(store.carbon_occupancy(&none).await.expect("q").is_empty());
 }

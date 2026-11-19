@@ -484,6 +484,17 @@ const FACTOR_CATEGORIES: &[&str] = &[
 ];
 const GAS_BASES: &[&str] = &["co2", "co2e", "co2e_with_rf", "co2e_without_rf"];
 
+/// The offset of a `/v1/carbon/*` `next_cursor` (`o:<n>`; none = 0).
+fn offset_cursor(cursor: Option<&str>) -> ApiResult<u32> {
+    match cursor.filter(|c| !c.is_empty()) {
+        None => Ok(0),
+        Some(c) => c
+            .strip_prefix("o:")
+            .and_then(|n| n.parse::<u32>().ok())
+            .ok_or_else(|| ApiError::BadRequest("cursor must be a next_cursor".into())),
+    }
+}
+
 fn upper_code(s: Option<String>, max: usize, what: &str) -> ApiResult<Option<String>> {
     match s
         .map(|s| s.trim().to_ascii_uppercase())
@@ -524,13 +535,7 @@ pub async fn carbon_factors(
     p: Result<Query<CarbonFactorParams>, QueryRejection>,
 ) -> ApiResult<Json<ItemPage>> {
     let p = query(p)?;
-    let offset = match p.cursor.as_deref().filter(|c| !c.is_empty()) {
-        None => 0,
-        Some(c) => c
-            .strip_prefix("o:")
-            .and_then(|n| n.parse::<u32>().ok())
-            .ok_or_else(|| ApiError::BadRequest("cursor must be a next_cursor".into()))?,
-    };
+    let offset = offset_cursor(p.cursor.as_deref())?;
     let activity = match p.activity.filter(|a| !a.is_empty()) {
         Some(a)
             if a.len() <= 160
@@ -561,6 +566,81 @@ pub async fn carbon_factors(
         offset,
     };
     let mut items = state.catalog.carbon_factors(&q).await?;
+    let more = items.len() > limit as usize;
+    items.truncate(limit as usize);
+    Ok(Json(ItemPage {
+        items: items.iter().filter_map(|i| shaper.item(i)).collect(),
+        next_cursor: more.then(|| format!("o:{}", offset.saturating_add(limit))),
+    }))
+}
+
+/// `/v1/carbon/occupancy` filters (current `occupancy` records; every filter is exact).
+#[derive(Debug, Default, Deserialize, IntoParams)]
+#[into_params(parameter_in = Query)]
+pub struct CarbonOccupancyParams {
+    /// `mode` (`car`, `taxi`, `bus`, `coach`, `bus_coach`, `rail`, `light_rail`, `ferry`,
+    /// `motorcycle`, `van`, `all_vehicles`, `other`).
+    pub mode: Option<String>,
+    /// ISO 3166-1 alpha-2 `country_code` (e.g. `GB`).
+    pub country: Option<String>,
+    /// The `year` the figure is for.
+    pub year: Option<i32>,
+    /// `trip_purpose` (`all`, `work`, `commuting`, `leisure`, `other`).
+    pub trip_purpose: Option<String>,
+    /// `basis` (`per_vehicle_km`, `per_trip`).
+    pub basis: Option<String>,
+    /// Source id (e.g. `od-dft-tag-databook`).
+    pub source: Option<String>,
+    /// Page size (default 20, max `max_page`).
+    pub limit: Option<u32>,
+    /// `next_cursor` of the previous page.
+    pub cursor: Option<String>,
+}
+
+const OCCUPANCY_MODES: &[&str] = &[
+    "car",
+    "taxi",
+    "bus",
+    "coach",
+    "bus_coach",
+    "rail",
+    "light_rail",
+    "ferry",
+    "motorcycle",
+    "van",
+    "all_vehicles",
+    "other",
+];
+const TRIP_PURPOSES: &[&str] = &["all", "work", "commuting", "leisure", "other"];
+const OCCUPANCY_BASES: &[&str] = &["per_vehicle_km", "per_trip"];
+
+/// Published average vehicle occupancies (kind `occupancy`, persons per vehicle), newest year
+/// first: filtered by mode, country, year, trip purpose, basis and source.
+#[utoipa::path(get, path = "/v1/carbon/occupancy", tag = "read", params(CarbonOccupancyParams),
+    security(("bearer" = [])),
+    responses((status = 200, body = ItemPage), (status = 400, body = ErrorBody),
+        (status = 401, body = ErrorBody), (status = 429, body = ErrorBody)))]
+pub async fn carbon_occupancy(
+    State(state): State<ApiState>,
+    Extension(client): Extension<Client>,
+    p: Result<Query<CarbonOccupancyParams>, QueryRejection>,
+) -> ApiResult<Json<ItemPage>> {
+    let p = query(p)?;
+    let offset = offset_cursor(p.cursor.as_deref())?;
+    let shaper = shaper(&state, &client);
+    let limit = limit(&state, p.limit);
+    let q = crate::catalog::OccupancyQuery {
+        mode: one_of(p.mode, OCCUPANCY_MODES, "mode")?,
+        country: upper_code(p.country, 2, "country")?,
+        year: p.year,
+        trip_purpose: one_of(p.trip_purpose, TRIP_PURPOSES, "trip_purpose")?,
+        basis: one_of(p.basis, OCCUPANCY_BASES, "basis")?,
+        source: p.source.filter(|s| !s.is_empty()),
+        licence_classes: shaper.allowed().to_vec(),
+        limit: limit + 1,
+        offset,
+    };
+    let mut items = state.catalog.carbon_occupancy(&q).await?;
     let more = items.len() > limit as usize;
     items.truncate(limit as usize);
     Ok(Json(ItemPage {

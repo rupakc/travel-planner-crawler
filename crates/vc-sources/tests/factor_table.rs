@@ -647,3 +647,189 @@ fn eurostat_sdg_13_31_is_new_car_co2_per_country() {
         "provisional 2025 cells are skipped"
     );
 }
+
+// ---------------------------------------------------------------------------------------------
+// Occupancy (2026-11-19): UK DfT TAG data book table A1.3.3.2, persons per vehicle.
+// ---------------------------------------------------------------------------------------------
+
+const TAG: &str = "https://assets.publishing.service.gov.uk/media/6a576e102f6185941a9a6569/tag-data-book-v2-03.xlsm";
+
+#[test]
+fn tag_data_book_yields_car_and_psv_occupancy() {
+    assert_eq!(
+        factor_table::mappings_for(&CanonicalUrl::parse(TAG).unwrap()).len(),
+        1
+    );
+    let it = items(TAG, &fixture("factor_dft_tag_occupancy_2026.xlsx"));
+    fit(&it);
+    assert!(it.iter().all(|i| i.kind == "occupancy"));
+    assert!(
+        it.iter().all(|i| i.series_key.is_none()),
+        "records, not series"
+    );
+    // Car by purpose and on average, PSV in total; never LGV/OGV or the PSV purpose split.
+    let ids: Vec<&str> = it.iter().filter_map(|i| i.id.as_deref()).collect();
+    assert_eq!(
+        ids,
+        [
+            "dft-tag-occupancy:2023:car_work",
+            "dft-tag-occupancy:2023:car_commuting",
+            "dft-tag-occupancy:2023:car_other",
+            "dft-tag-occupancy:2023:car_average_car",
+            "dft-tag-occupancy:2023:psv_total",
+        ]
+    );
+    assert_eq!(
+        by_id(&it, "dft-tag-occupancy:2023:car_average_car").data,
+        json!({
+            "mode": "car", "mode_label": "Car / Average Car", "trip_purpose": "all",
+            "time_period": "all_week", "geography": "Great Britain", "country_code": "GB",
+            "value": 1.614689764290009, "unit": "persons per vehicle",
+            "basis": "per_vehicle_km", "includes_driver": true, "year": 2023,
+            "base_years": "2009-2012",
+            "method_note": "TAG 2023 value-year figure from NTS survey years 2009-12 (data book A1.3.3 source note); driver (always 1) plus passengers, as the source states.",
+            "publisher": "UK Department for Transport (DfT)",
+            "dataset": "DfT TAG data book, table A1.3.3.2 (vehicle occupancies)",
+            "as_of": "2026-05-01"
+        })
+    );
+    // The "(Occupants)" note under "PSV" does not start a new vehicle group.
+    let psv = by_id(&it, "dft-tag-occupancy:2023:psv_total");
+    assert_eq!(psv.data["mode"], "bus_coach");
+    assert_eq!(psv.data["value"], 13.803079073738786);
+    // "2023 values" is TAG's value year: PSV occupancies come from NTS 1999-2001. The driver is
+    // derived (the sheet adds 1 driver to the work share and the purposes add up to the total),
+    // so the record says so and tells per-passenger users to subtract 1.
+    assert_eq!(psv.data["base_years"], "1999-2001");
+    assert_eq!(psv.data["includes_driver"], true);
+    let note = psv.data["method_note"].as_str().unwrap();
+    assert!(note.contains("by derivation, not stated"), "{note}");
+    assert!(note.contains("subtract 1"), "{note}");
+    assert!(note.chars().count() <= 300);
+    // Every car row is from NTS 2009-12 with the driver stated.
+    for id in ["car_work", "car_commuting", "car_other", "car_average_car"] {
+        let d = &by_id(&it, &format!("dft-tag-occupancy:2023:{id}")).data;
+        assert_eq!(d["base_years"], "2009-2012", "{id}");
+        assert!(
+            d["method_note"]
+                .as_str()
+                .unwrap()
+                .contains("as the source states")
+        );
+    }
+    assert_eq!(
+        by_id(&it, "dft-tag-occupancy:2023:car_work").data["trip_purpose"],
+        "work"
+    );
+    assert_eq!(
+        by_id(&it, "dft-tag-occupancy:2023:car_commuting").data["value"],
+        1.07012895943691
+    );
+}
+
+#[test]
+fn a_two_row_header_is_joined_cell_by_cell() {
+    let m = mapping_for(&CanonicalUrl::parse(TAG).unwrap()).unwrap();
+    let t = factor_table::read_table(m, &fixture("factor_dft_tag_occupancy_2026.xlsx")).unwrap();
+    assert!(t.header.iter().any(|h| h == "All Week"), "{:?}", t.header);
+    assert!(t.header.iter().any(|h| h == "Vehicle Type"));
+    // Without its second header row the sheet is refused.
+    let mut one = *m;
+    one.header_rows = 1;
+    assert!(
+        factor_table::read_table(&one, &fixture("factor_dft_tag_occupancy_2026.xlsx")).is_err()
+    );
+}
+
+#[test]
+fn the_tag_base_years_match_the_workbooks_source_note() {
+    // The hard-coded base years come from sheet A1.3.3's source note; the fixture is a cut of
+    // the real workbook, so a new edition's note must be checked against them.
+    use calamine::{Reader, open_workbook_auto_from_rs};
+    let mut wb = open_workbook_auto_from_rs(std::io::Cursor::new(fixture(
+        "factor_dft_tag_occupancy_2026.xlsx",
+    )))
+    .unwrap();
+    let r = wb.worksheet_range("A1.3.3").unwrap();
+    let text: Vec<String> = r.cells().map(|(_, _, c)| c.to_string()).collect();
+    assert!(
+        text.iter()
+            .any(|t| t.contains("Car occupancies") && t.contains("(2009-12)"))
+    );
+    assert!(
+        text.iter()
+            .any(|t| t.contains("Non-car occupancies") && t.contains("(1999-2001)"))
+    );
+}
+
+#[test]
+fn a_blank_row_ends_a_filled_down_group() {
+    // A row below a blank one never inherits the vehicle type above the blank.
+    let m = mapping_for(&CanonicalUrl::parse(TAG).unwrap()).unwrap();
+    let csv = "Vehicle Type,Journey Purpose,All Week\nPSV,Work,1.36\n,Total,13.8\n,,\n,Total,99\n";
+    let mut flat = *m;
+    flat.format = factor_table::Format::Csv;
+    flat.header_rows = 1;
+    let t = factor_table::read_table(&flat, csv.as_bytes()).unwrap();
+    let vt = t.header.iter().position(|h| h == "Vehicle Type").unwrap();
+    let vts: Vec<&str> = t.rows.iter().map(|r| r[vt].as_str()).collect();
+    assert_eq!(vts, ["PSV", "PSV", ""]);
+}
+
+#[test]
+fn month_year_reads_the_edition_date() {
+    assert_eq!(
+        factor_table::month_year("May 2026 v2.03").as_deref(),
+        Some("2026-05-01")
+    );
+    assert_eq!(
+        factor_table::month_year("december 2025").as_deref(),
+        Some("2025-12-01")
+    );
+    assert_eq!(factor_table::month_year("Mayday 2026"), None);
+    assert_eq!(factor_table::month_year("May v2.03"), None);
+    assert_eq!(factor_table::month_year("Notes"), None);
+}
+
+#[test]
+fn the_tag_mapping_refuses_another_sheet_layout() {
+    // A workbook without sheet A1.3.3.2 maps nothing.
+    let r = records(
+        "factor_table",
+        &CanonicalUrl::parse(TAG).unwrap(),
+        &fixture("factor_concito_v1_2.xlsx"),
+    )
+    .unwrap();
+    assert!(matches!(r, Err(Error::Invalid(_))), "{r:?}");
+}
+
+#[tokio::test]
+async fn the_tag_data_book_is_one_request_spooled_raw() {
+    let p = "/media/6a576e102f6185941a9a6569/tag-data-book-v2-03.xlsm";
+    let s = MockServer::start().await;
+    Mock::given(method("GET"))
+        .and(path(p))
+        .respond_with(
+            ResponseTemplate::new(200)
+                .insert_header(
+                    "content-type",
+                    "application/vnd.ms-excel.sheet.macroEnabled.12",
+                )
+                .set_body_bytes(fixture("factor_dft_tag_occupancy_2026.xlsx")),
+        )
+        .expect(1)
+        .mount(&s)
+        .await;
+    let mut h = Harness::new(
+        spec("od-dft-tag-databook"),
+        "factor_table",
+        &format!("{}{p}", s.uri()),
+        t0(),
+    )
+    .await;
+    let rep = h.run(&FactorTable).await.unwrap();
+    assert_eq!(rep.requests, 1);
+    assert!(rep.complete);
+    assert_eq!(h.responses().len(), 1);
+    assert_raw_first(&h.events.all());
+}

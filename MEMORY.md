@@ -350,3 +350,10 @@ plan = `docs/superpowers/plans/2026-11-15-voyager-crawler.md`, r1–r5 = `docs/r
   rates stay `emission_factor` (lb/MWh, per subregion/state; no unit conversion). Off: AU NGA (no
   response), AGRIBALYSE (robots disallow), FAOSTAT (robots 521), DfT TAG + NHTS (occupancy kind
   pending, owner). New read endpoints `/v1/carbon/factors` and `/v1/carbon/grid` (docs/Crawler-API.md).
+- 2026-11-19: new record kind `occupancy` (persons per vehicle: mode, trip_purpose, basis
+  per_vehicle_km|per_trip, includes_driver, year, as_of), official/reference only, adapter-only.
+  `factor_table` gains `Output::Occupancy` (explicit row-label table), two-row headers and filled-down
+  group cells. od-dft-tag-databook on (TAG A1.3.3.2: car by purpose + average, PSV total; ramp-3).
+  od-nhts-occupancy stays off: its only published table is inside the SPA's JS bundle (and PDFs);
+  computing it from microdata is not copying. New read endpoint `/v1/carbon/occupancy`
+  (docs/Crawler-API.md, docs/wiki/Carbon-Footprint-Data.md).

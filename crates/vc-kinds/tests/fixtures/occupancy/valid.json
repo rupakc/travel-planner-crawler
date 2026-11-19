@@ -1,0 +1,18 @@
+{
+  "mode": "car",
+  "mode_label": "Car / Average Car",
+  "trip_purpose": "all",
+  "time_period": "all_week",
+  "geography": "Great Britain",
+  "country_code": "GB",
+  "value": 1.614689764290009,
+  "unit": "persons per vehicle",
+  "basis": "per_vehicle_km",
+  "includes_driver": true,
+  "year": 2023,
+  "base_years": "2009-2012",
+  "method_note": "TAG 2023 value-year figure from NTS survey years 2009-12 (data book A1.3.3 source note); driver (always 1) plus passengers, as the source states.",
+  "publisher": "UK Department for Transport (DfT)",
+  "dataset": "DfT TAG data book, table A1.3.3.2 (vehicle occupancies)",
+  "as_of": "2026-05-01"
+}

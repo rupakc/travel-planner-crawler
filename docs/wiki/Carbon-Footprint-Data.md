@@ -8,6 +8,7 @@ Voyager estimates the carbon footprint of a trip: its flights, trains, buses, fe
 |---|---|---|
 | `emission_factor` | record | one published factor, for example 0.11704 kg CO2e per passenger.km for a long-haul economy flight with RF (DESNZ 2026), 6.7 kg CO2e per room per night in France, or 99.48 kg CO2e per kg of beef from the beef herd |
 | `grid_carbon_intensity` | observation | one country's electricity carbon intensity for one year or one month, in gCO2e per kWh; series `grid_ci:<ISO2>:<period>:<basis>` (`period` is `annual` or `monthly`) |
+| `occupancy` | record | one published average vehicle occupancy, in persons per vehicle, for example 1.61 for the average car in Great Britain (DfT TAG, 2023 value year from NTS 2009-12 survey data, per vehicle-km, driver included). It turns a per-vehicle factor into a per-passenger one |
 
 Each `emission_factor` record carries:
 
@@ -18,7 +19,17 @@ Each `emission_factor` record carries:
 - `gas_basis`: `co2`, `co2e`, `co2e_with_rf` or `co2e_without_rf`;
 - `scope`, `year`, `publisher`, `dataset` and the publisher's `factor_id`.
 
-Both kinds accept official and reference sources only.
+Each `occupancy` record carries:
+
+- `mode` (`car`, `taxi`, `bus`, `coach`, `bus_coach`, `rail`, `light_rail`, `ferry`, `motorcycle`, `van`, `all_vehicles` or `other`) and `mode_label` (the publisher's own row label);
+- `trip_purpose` (`all`, `work`, `commuting`, `leisure` or `other`) and `time_period` (`all_week`, `weekday` or `weekend`) where the publisher splits them;
+- `geography` and `country_code`;
+- `value` and `unit` (`persons per vehicle`), copied as published;
+- `basis`: `per_vehicle_km` (person-km per vehicle-km, the figure to use with per-vehicle-km factors) or `per_trip`, and `includes_driver`;
+- `year` (the publisher's value year, which can be later than the data), `base_years` (the survey years behind the figure, when stated) and `method_note` (how the figure was built: survey basis, projection, whether the driver count is stated or derived);
+- `publisher`, `dataset` and `as_of` (the edition date when the file states one).
+
+All three kinds accept official and reference sources only.
 
 ## Adapter `factor_table`
 
@@ -35,7 +46,9 @@ Each dataset table is one `FactorMapping` in `crates/vc-sources/src/adapters/fac
 - the year: a column, the first year written in a column (`Apr 2024 to Mar 2025` → 2024), the value header's suffix, the title above the header (`eGRID2023`), or the file name;
 - the unit and scope (fixed text or a column);
 - the category and gas-basis tables;
-- the geography: fixed, a country-name column, an ISO alpha-3 column, or a region code of one country.
+- the geography: fixed, a country-name column, an ISO alpha-3 column, or a region code of one country;
+- for presentation sheets: a header split over two rows (joined cell by cell), and group columns whose empty (merged) cells take the value above them;
+- for `occupancy`: the exact row labels that are mapped, each with its mode and trip purpose, so partial splits and goods vehicles are never stored.
 
 A file whose mapped sheet or table is missing is refused as a whole.
 
@@ -52,6 +65,7 @@ A file whose mapped sheet or table is missing is refused as a whole.
 | `od-fueleconomy-gov` | FuelEconomy.gov `vehicles.csv.zip` (public domain) | tailpipe g CO2 per mile per US model, model years from 2022 |
 | `od-concito-big-climate-db` | The Big Climate Database v1.2 (XLSX, CC BY 4.0): sheets DK, GB, NL, FR, ES | kg CO2e per kg per food and country, cradle to retail |
 | `od-rivm-food-lca` | RIVM Dutch food LCA database 2024 (XLSX, CC BY 4.0) | kg CO2e per kg, cradle to retail and cradle to consumption (NL). RIVM: not critically reviewed, so compare food groups rather than single foods |
+| `od-dft-tag-databook` | UK DfT TAG data book (XLSM, OGL v3): sheet A1.3.3.2 | `occupancy` records: persons per vehicle per vehicle-km, all-week average, driver included, for car (work, commuting, other and average) and PSV (bus and coach together, total). "2023 values" is TAG's value year: the car figures come from NTS survey years 2009-12 and the PSV total from NTS 1999-2001 (`base_years`). The PSV driver is derived, not stated (the sheet adds 1 driver to the work share and the purposes add up to the total): subtract 1 for passengers per bus or coach. The PSV rows per purpose split the total between purposes (they add up to it), so they are not stored. The data book has no taxi or rail occupancy |
 
 US grid factors are `emission_factor` records, not `grid_carbon_intensity` observations: the observation series is keyed per country (`grid_ci:<ISO2>:…`) and in g per kWh, and the crawler never converts units.
 
@@ -61,10 +75,11 @@ US grid factors are `emission_factor` records, not `grid_carbon_intensity` obser
 
 ## Serving to the app
 
-The read API serves both kinds (contract: `docs/Crawler-API.md`):
+The read API serves all three kinds (contract: `docs/Crawler-API.md`):
 
 - `GET /v1/carbon/factors?category=&country=&region=&year=&gas_basis=&activity=&source=&limit=&cursor=` returns current `emission_factor` records, newest factor-set year first, with the same licence shaping as search;
-- `GET /v1/carbon/grid?country=&period=&basis=&from=&to=&limit=` returns every `grid_ci:<country>:…` point of one country, from every source, newest first. `/v1/observations?series=` still serves a single series.
+- `GET /v1/carbon/grid?country=&period=&basis=&from=&to=&limit=` returns every `grid_ci:<country>:…` point of one country, from every source, newest first. `/v1/observations?series=` still serves a single series;
+- `GET /v1/carbon/occupancy?mode=&country=&year=&trip_purpose=&basis=&source=&limit=&cursor=` returns current `occupancy` records, newest year first, with the same licence shaping.
 
 **Adding a dataset.** Add a mapping, record a small excerpt in `testkit/fixtures/vc-sources/`, and give the source `adapter: factor_table` with the file URL as its only seed. All of these go in `scripts/seeds_to_sources.py`.
 
@@ -89,6 +104,6 @@ Each of these sources is off, and `docs/SOURCES.md` records its reason.
 - **Australian NGA factors:** `www.dcceew.gov.au` answered no request from VoyagerBot (robots.txt and the publication page reset or time out), so the workbook URL is unconfirmed. Re-test from the crawler VM.
 - **AGRIBALYSE (Dataverse):** `entrepot.recherche.data.gouv.fr` robots.txt disallows everything for `*`.
 - **FAOSTAT emissions intensities:** `fenixservices.fao.org` robots.txt answered 521 (a 5xx means disallow). Retry later.
-- **DfT TAG data book:** its occupancies are persons per vehicle, not emission factors, so they need their own kind first (owner decision). Its carbon table repeats DESNZ.
-- **US NHTS occupancy:** occupancy has to be computed from trip microdata, and the adapter only copies published values.
+- **DfT TAG data book, carbon table A3.3:** not mapped, since it repeats the DESNZ factors. The occupancy table is on (above).
+- **US NHTS occupancy:** the only published occupancy table (2022, by vehicle type) is written into the site's compiled JavaScript bundle, and its other copies are PDFs. The downloadable data is trip microdata, from which occupancy would have to be computed with survey weights, and the adapter only copies published values.
 - **Electricity Maps:** it needs a free API key from the owner.

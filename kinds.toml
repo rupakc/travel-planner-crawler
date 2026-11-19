@@ -203,3 +203,12 @@ storage = "observation"
 source_classes = ["official", "reference"]
 verbatim = ["/intensity_g_per_kwh", "/source_url", "/as_of", "/evidence/*"]
 series_key = "grid_ci:{country_code}:{period}:{basis}"
+
+# 2026-11-19: average vehicle occupancy (persons per vehicle) for the carbon footprint (adapter
+# `factor_table`, official/reference tables only).
+
+[kinds.occupancy]
+version = 1
+storage = "record"
+source_classes = ["official", "reference"]
+verbatim = ["/value", "/source_url", "/as_of", "/evidence/*"]

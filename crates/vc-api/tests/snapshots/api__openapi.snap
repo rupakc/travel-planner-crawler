@@ -1235,6 +1235,135 @@ expression: json
         ]
       }
     },
+    "/v1/carbon/occupancy": {
+      "get": {
+        "operationId": "carbon_occupancy",
+        "parameters": [
+          {
+            "description": "`mode` (`car`, `taxi`, `bus`, `coach`, `bus_coach`, `rail`, `light_rail`, `ferry`,\n`motorcycle`, `van`, `all_vehicles`, `other`).",
+            "in": "query",
+            "name": "mode",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "ISO 3166-1 alpha-2 `country_code` (e.g. `GB`).",
+            "in": "query",
+            "name": "country",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "The `year` the figure is for.",
+            "in": "query",
+            "name": "year",
+            "required": false,
+            "schema": {
+              "format": "int32",
+              "type": "integer"
+            }
+          },
+          {
+            "description": "`trip_purpose` (`all`, `work`, `commuting`, `leisure`, `other`).",
+            "in": "query",
+            "name": "trip_purpose",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "`basis` (`per_vehicle_km`, `per_trip`).",
+            "in": "query",
+            "name": "basis",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "Source id (e.g. `od-dft-tag-databook`).",
+            "in": "query",
+            "name": "source",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "Page size (default 20, max `max_page`).",
+            "in": "query",
+            "name": "limit",
+            "required": false,
+            "schema": {
+              "format": "int32",
+              "minimum": 0,
+              "type": "integer"
+            }
+          },
+          {
+            "description": "`next_cursor` of the previous page.",
+            "in": "query",
+            "name": "cursor",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ItemPage"
+                }
+              }
+            }
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorBody"
+                }
+              }
+            }
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorBody"
+                }
+              }
+            }
+          },
+          "429": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorBody"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Published average vehicle occupancies (kind `occupancy`, persons per vehicle), newest year\nfirst: filtered by mode, country, year, trip purpose, basis and source.",
+        "tags": [
+          "read"
+        ]
+      }
+    },
     "/v1/changes": {
       "get": {
         "operationId": "changes",

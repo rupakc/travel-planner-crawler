@@ -1759,22 +1759,22 @@ FACTOR_TABLE_SOURCES = {
     "od-fueleconomy-gov": "emission_factor",
     "od-concito-big-climate-db": "emission_factor",
     "od-rivm-food-lca": "emission_factor",
+    # Occupancy (2026-11-19): DfT TAG data book table A1.3.3.2.
+    "od-dft-tag-databook": "occupancy",
 }
 # Second batch (2026-11-19): off with these reasons.
 CARBON_TABLES_2_OFF = {
     "od-au-nga-factors": "re-test from the crawler VM",
     "od-agribalyse-dataverse": "robots.txt",
     "od-fao-faostat-emissions-intensities": "5xx at robots.txt",
-    "od-dft-tag-databook": "owner decision",
     "od-nhts-occupancy": "adapter pending",
 }
 # Keyed carbon APIs on with the owner's key (2026-11-19): adapter, Secret Manager name. ramp-3 only.
 CARBON_KEYED = {"carbon-ember-api": ("ember_api", "crawler-src-ember-key")}
 # Owner decisions of 2026-11-19 turned on (html, facts only).
 CARBON_OWNER_ON = ("tr-flix-methodology", "carbon-breeam-projects", "carbon-greenbooklive")
-CARBON_COUNTS = {"total": 310, "on": 159, "adapter pending": 117, "needs an API key": 25, "robots.txt": 4,
-                 "duplicate": 1, "gone": 1, "owner decision": 1, "re-test from the crawler VM": 1,
-                 "5xx at": 1}
+CARBON_COUNTS = {"total": 310, "on": 160, "adapter pending": 117, "needs an API key": 25, "robots.txt": 4,
+                 "duplicate": 1, "gone": 1, "re-test from the crawler VM": 1, "5xx at": 1}
 CARBON_DENIED = ["https://www.climatiq.io/terms", "https://www.goldstandard.org/", "https://registry.verra.org/",
                  "https://media.amtrak.com/terms-of-use/", "https://ghgprotocol.org/terms-use",
                  "https://www.hestia.earth/explorer"]
@@ -1875,7 +1875,7 @@ def test_carbon_corpus_2026_11_19(generated):
     for sid, why in CARBON_TABLES_2_OFF.items():
         reason = " ".join(generated[sid]["notes"].split()).split("Disabled: ", 1)[1]
         assert generated[sid]["enabled"] is False and reason.startswith(why), (sid, reason)
-        assert "2026-11-19" in reason or sid == "od-nhts-occupancy", sid
+        assert "2026-11-19" in reason, sid
     for sid in set(FACTOR_TABLE_SOURCES) | {"od-eea-co2-cars-avg"}:
         notes = " ".join(generated[sid]["notes"].split())
         if "2026-11-19" in notes:

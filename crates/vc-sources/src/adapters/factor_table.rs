@@ -5,9 +5,9 @@
 //! One leased row = one file: a single request (conditional on the stored validators, capped
 //! at the mapping's `max_bytes`), spooled raw as a WARC `response` (raw first). Nothing is
 //! derived at fetch time beyond a parse check; the processor calls [`items`] on the stored
-//! body and every mapped row becomes one `emission_factor` record or one
-//! `grid_carbon_intensity` observation. No LLM, no unit conversion: values and units are
-//! copied as published.
+//! body and every mapped row becomes one `emission_factor` record, one
+//! `grid_carbon_intensity` observation or one `occupancy` record (persons per vehicle). No
+//! LLM, no unit conversion: values and units are copied as published.
 //!
 //! A file may hold several tables (one sheet per table, or a stack of tables on one sheet):
 //! every mapping whose URL test matches the file is applied ([`mappings_for`]), each with its
@@ -37,7 +37,7 @@ use super::{countries, iso3};
 pub const ID: &str = "factor_table";
 
 /// Bumped when a mapping's output changes.
-pub const FILTER_VERSION: &str = "factor-table-v2";
+pub const FILTER_VERSION: &str = "factor-table-v3";
 
 /// Largest decompressed member of a zipped CSV (zip-bomb guard).
 pub const MAX_UNZIPPED_BYTES: usize = 64 * 1024 * 1024;
@@ -188,6 +188,42 @@ pub enum Output {
         /// `lifecycle` or `direct`.
         basis: &'static str,
     },
+    /// `occupancy` records (average persons per vehicle). Only the rows listed in `rows` are
+    /// mapped; every other row of the table (goods vehicles, partial splits) is skipped.
+    Occupancy {
+        /// Columns joined with `" / "` into the row's label (`"Car / Average Car"`).
+        label: &'static [&'static str],
+        /// The mapped rows (exact match on the label).
+        rows: &'static [OccRow],
+        /// `per_vehicle_km` or `per_trip`.
+        basis: &'static str,
+        /// `all_week`, `weekday`, `weekend` (or `""`).
+        time_period: &'static str,
+        /// Geography ([`Geo::Fixed`]).
+        geo: Geo,
+        /// `as_of` from the first cell above the header that starts with "<Month> <year>"
+        /// (TAG's `"May 2026 v2.03"` → `2026-05-01`).
+        as_of_from_preamble: bool,
+    },
+}
+
+/// One mapped row of an [`Output::Occupancy`] table.
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub struct OccRow {
+    /// The row label (the `label` columns joined with `" / "`).
+    pub label: &'static str,
+    /// The schema's `mode`.
+    pub mode: &'static str,
+    /// The schema's `trip_purpose`.
+    pub purpose: &'static str,
+    /// Whether the figure counts the driver (stated by the source, or derived from its own
+    /// notes, in which case `method_note` says how).
+    pub includes_driver: bool,
+    /// The survey years the figure is based on, as the source states them (`"2009-2012"`);
+    /// a "value year" table can project older survey data to a later year.
+    pub base_years: &'static str,
+    /// How the publisher built the figure, in a sentence (survey basis, driver, projection).
+    pub method_note: &'static str,
 }
 
 /// One dataset table.
@@ -207,6 +243,14 @@ pub struct FactorMapping {
     /// sheet that holds one table. With an anchor, the table ends at the first row whose first
     /// required cell is empty or starts with "Source" or "Note".
     pub anchor: &'static str,
+    /// Header rows: `1`, or `2` when the column names are split over two rows (a merged
+    /// "Weekend" / "All Week" above a row of time bands): the header row is then the first one
+    /// that, joined cell by cell with the row above it, holds every required column.
+    pub header_rows: u8,
+    /// Columns whose empty cells take the value above them (a merged group label such as
+    /// TAG's "Vehicle Type"); a cell in parentheses (`"(Occupants)"`) is a note under the
+    /// group label and is filled over too.
+    pub fill_down: &'static [&'static str],
     /// Columns the header must have (else the file is refused, nothing mapped).
     pub required: &'static [&'static str],
     /// Row filters (all must accept).
@@ -310,6 +354,8 @@ const fn concito(
         path_contains: CONCITO_PATH,
         format: Format::Xlsx { sheet },
         anchor: "",
+        header_rows: 1,
+        fill_down: &[],
         required: CONCITO_REQUIRED,
         keep: &[],
         value: Col::Name("Total kg CO2-eq/kg"),
@@ -347,6 +393,8 @@ const fn rivm(
         path_contains: RIVM_PATH,
         format: Format::Xlsx { sheet },
         anchor: "",
+        header_rows: 1,
+        fill_down: &[],
         required: &["Naam", "NEVO code"],
         keep: &[],
         value: Col::Prefix("Global warming"),
@@ -387,6 +435,8 @@ const fn owid_co2(
         path_contains: OWID_CO2_PATH,
         format: Format::Csv,
         anchor: "",
+        header_rows: 1,
+        fill_down: &[],
         required,
         keep: &[],
         value: Col::Name(column),
@@ -428,6 +478,8 @@ pub const MAPPINGS: &[FactorMapping] = &[
             sheet: "Factors by Category",
         },
         anchor: "",
+        header_rows: 1,
+        fill_down: &[],
         required: &[
             "ID",
             "Scope",
@@ -491,6 +543,8 @@ pub const MAPPINGS: &[FactorMapping] = &[
         path_contains: &["/grapher/ghg-per-kg-poore.csv"],
         format: Format::Csv,
         anchor: "",
+        header_rows: 1,
+        fill_down: &[],
         required: &[
             "entity",
             "year",
@@ -526,6 +580,8 @@ pub const MAPPINGS: &[FactorMapping] = &[
         path_contains: &["/grapher/electricity-mix.csv"],
         format: Format::Csv,
         anchor: "",
+        header_rows: 1,
+        fill_down: &[],
         required: &["entity", "code", "year", "co2_intensity__gco2_kwh"],
         keep: &[],
         value: Col::Name("co2_intensity__gco2_kwh"),
@@ -551,6 +607,8 @@ pub const MAPPINGS: &[FactorMapping] = &[
         path_contains: &["/grapher/carbon-footprint-travel-mode.csv"],
         format: Format::Csv,
         anchor: "",
+        header_rows: 1,
+        fill_down: &[],
         required: &["entity", "year", "transport_emissions_factor"],
         keep: &[],
         value: Col::Name("transport_emissions_factor"),
@@ -614,6 +672,8 @@ pub const MAPPINGS: &[FactorMapping] = &[
         path_contains: EGRID_PATH,
         format: Format::Xlsx { sheet: "Table 1" },
         anchor: "",
+        header_rows: 1,
+        fill_down: &[],
         required: &[
             "eGRID subregion acronym",
             "eGRID subregion name",
@@ -657,6 +717,8 @@ pub const MAPPINGS: &[FactorMapping] = &[
         path_contains: EGRID_PATH,
         format: Format::Xlsx { sheet: "Table 3" },
         anchor: "",
+        header_rows: 1,
+        fill_down: &[],
         required: &["State", "CO₂", "CO₂e"],
         keep: &[],
         value: Col::Name("CO₂e"),
@@ -698,6 +760,8 @@ pub const MAPPINGS: &[FactorMapping] = &[
         path_contains: EF_HUB_PATH,
         format: EF_HUB_SHEET,
         anchor: "Table 10",
+        header_rows: 1,
+        fill_down: &[],
         required: &["Vehicle Type", "Units"],
         keep: &[],
         value: Col::Prefix("CO2 Factor"),
@@ -727,6 +791,8 @@ pub const MAPPINGS: &[FactorMapping] = &[
         path_contains: EF_HUB_PATH,
         format: EF_HUB_SHEET,
         anchor: "Table 2",
+        header_rows: 1,
+        fill_down: &[],
         required: &["Fuel Type", "kg CO2 per unit", "Unit"],
         keep: &[],
         value: Col::Name("kg CO2 per unit"),
@@ -760,6 +826,8 @@ pub const MAPPINGS: &[FactorMapping] = &[
             sheet: "6100_Passenger_CO2_emissions",
         },
         anchor: "",
+        header_rows: 1,
+        fill_down: &[],
         required: &["Time period", ORR_VALUE],
         keep: &[],
         value: Col::Name(ORR_VALUE),
@@ -793,6 +861,8 @@ pub const MAPPINGS: &[FactorMapping] = &[
             member: &["vehicles.csv"],
         },
         anchor: "",
+        header_rows: 1,
+        fill_down: &[],
         required: &["id", "year", "make", "model", "co2TailpipeGpm"],
         keep: &[],
         value: Col::Name("co2TailpipeGpm"),
@@ -862,7 +932,75 @@ pub const MAPPINGS: &[FactorMapping] = &[
         "tot-en-met-consumptie",
         "cradle to consumption (NL)",
     ),
+    // UK DfT TAG data book (OGL v3), table A1.3.3.2: vehicle occupancies based on vehicle-km
+    // travelled (persons per vehicle, driver included), by vehicle type and journey purpose,
+    // all-week average. Only cars (each purpose and the average) and PSV (bus and coach) in
+    // total: the PSV purpose rows split the total between purposes (they add up to it), so
+    // they are not occupancies of a trip of that purpose; goods vehicles are not travel.
+    // "2023 values" is TAG's value year, not a survey year: the A1.3.3 source note says car
+    // occupancies come from NTS 2009-12 (driver always 1 plus passengers) and non-car ones from
+    // NTS 1999-2001 (the car purpose values equal A1.3.3's "2010" ones to the last digit). The
+    // PSV driver is not stated: the sheet's notes add 1 for the driver to the work share only,
+    // and work + commuting + other add up to the total, so the total counts one driver.
+    FactorMapping {
+        dataset: "dft-tag-occupancy",
+        dataset_label: "DfT TAG data book, table A1.3.3.2 (vehicle occupancies)",
+        publisher: "UK Department for Transport (DfT)",
+        path_contains: &["tag-data-book", ".xlsm"],
+        format: Format::Xlsx { sheet: "A1.3.3.2" },
+        anchor: "",
+        header_rows: 2,
+        fill_down: &["Vehicle Type"],
+        required: &["Journey Purpose", "Vehicle Type", "All Week"],
+        keep: &[],
+        value: Col::Name("All Week"),
+        year: Year::Preamble("Vehicle occupancies ("),
+        min_year: 0,
+        skip_zero: true,
+        max_bytes: 12 * 1024 * 1024,
+        output: Output::Occupancy {
+            label: &["Vehicle Type", "Journey Purpose"],
+            rows: &[
+                tag_car("Car / Work", "work"),
+                tag_car("Car / Commuting", "commuting"),
+                tag_car("Car / Other", "other"),
+                tag_car("Car / Average Car", "all"),
+                OccRow {
+                    label: "PSV / Total",
+                    mode: "bus_coach",
+                    purpose: "all",
+                    includes_driver: true,
+                    base_years: "1999-2001",
+                    method_note: TAG_PSV_NOTE,
+                },
+            ],
+            basis: "per_vehicle_km",
+            time_period: "all_week",
+            geo: Geo::Fixed("Great Britain", "GB"),
+            as_of_from_preamble: true,
+        },
+    },
 ];
+
+/// TAG A1.3.3.2 car rows: the driver is counted, as A1.3.3's source note states.
+const fn tag_car(label: &'static str, purpose: &'static str) -> OccRow {
+    OccRow {
+        label,
+        mode: "car",
+        purpose,
+        includes_driver: true,
+        base_years: "2009-2012",
+        method_note: TAG_CAR_NOTE,
+    }
+}
+
+const TAG_CAR_NOTE: &str = "TAG 2023 value-year figure from NTS survey years 2009-12 (data book \
+    A1.3.3 source note); driver (always 1) plus passengers, as the source states.";
+
+const TAG_PSV_NOTE: &str = "TAG 2023 value-year figure from NTS survey years 1999-2001 (data book \
+    A1.3.3 source note). Driver included by derivation, not stated: the sheet adds 1 driver to the \
+    work share and the purpose rows add up to this total, so for passengers per bus or coach \
+    subtract 1.";
 
 /// Every mapping that applies to a file row (by URL path), in [`MAPPINGS`] order.
 pub fn mappings_for(url: &CanonicalUrl) -> Vec<&'static FactorMapping> {
@@ -935,7 +1073,12 @@ fn used_columns(m: &FactorMapping) -> HashSet<&'static str> {
             geo
         }
         Output::GridIntensity { geo, .. } => geo,
+        Output::Occupancy { label, geo, .. } => {
+            u.extend(label.iter().copied());
+            geo
+        }
     };
+    u.extend(m.fill_down.iter().copied());
     match geo {
         Geo::Fixed(..) => {}
         Geo::CountryColumn { column, .. } => {
@@ -964,8 +1107,10 @@ fn table_from_rows(
     let mut t = Table::default();
     let mut keep: Vec<usize> = Vec::new();
     let mut label_ix: Option<usize> = None;
+    let mut prev: Vec<String> = Vec::new();
+    let mut fill: Vec<(usize, String)> = Vec::new();
     for row in rows {
-        let cells = row?;
+        let mut cells = row?;
         if !anchored {
             anchored = cells.iter().any(|c| c == m.anchor);
             continue;
@@ -973,8 +1118,21 @@ fn table_from_rows(
         if t.header.is_empty() {
             // Header cells are compared with their whitespace collapsed (a line break inside a
             // header cell is one space).
-            let cells: Vec<String> = cells.iter().map(|c| collapse_ws(c)).collect();
+            let mut cells: Vec<String> = cells.iter().map(|c| collapse_ws(c)).collect();
+            if m.header_rows == 2 && !has_required(&cells) {
+                let joined = two_row_header(&prev, &cells);
+                if has_required(&joined) {
+                    cells = joined;
+                }
+            }
+            prev.clone_from(&cells);
             if has_required(&cells) {
+                fill = m
+                    .fill_down
+                    .iter()
+                    .filter_map(|f| cells.iter().position(|c| c == f))
+                    .map(|i| (i, String::new()))
+                    .collect();
                 keep = cells
                     .iter()
                     .enumerate()
@@ -1004,6 +1162,27 @@ fn table_from_rows(
                 break;
             }
         }
+        if cells.iter().all(String::is_empty) {
+            // A blank row ends a merged group: a row below it never inherits the group.
+            for (_, last) in &mut fill {
+                last.clear();
+            }
+            continue;
+        }
+        for (i, last) in &mut fill {
+            match cells.get(*i).map(String::as_str) {
+                Some(c) if !c.is_empty() && !(c.starts_with('(') && c.ends_with(')')) => {
+                    last.clone_from(&cells[*i]);
+                }
+                _ if cells.iter().any(|c| !c.is_empty()) && !last.is_empty() => {
+                    if cells.len() <= *i {
+                        cells.resize(*i + 1, String::new());
+                    }
+                    cells[*i].clone_from(last);
+                }
+                _ => {}
+            }
+        }
         if cells.iter().any(|c| !c.is_empty()) {
             t.rows.push(
                 keep.iter()
@@ -1019,6 +1198,22 @@ fn table_from_rows(
         )));
     }
     Ok(t)
+}
+
+/// A header split over two rows, joined cell by cell (`"Weekday"` + `"7am – 10am"` →
+/// `"Weekday 7am – 10am"`; an empty cell takes the other row's text).
+fn two_row_header(above: &[String], row: &[String]) -> Vec<String> {
+    (0..above.len().max(row.len()))
+        .map(|i| {
+            let a = above.get(i).map(String::as_str).unwrap_or("");
+            let b = row.get(i).map(String::as_str).unwrap_or("");
+            match (a.is_empty(), b.is_empty()) {
+                (true, _) => b.to_string(),
+                (false, true) => a.to_string(),
+                (false, false) => format!("{a} {b}"),
+            }
+        })
+        .collect()
 }
 
 fn csv_table(m: &FactorMapping, body: &[u8]) -> Result<Table> {
@@ -1122,6 +1317,31 @@ pub fn first_year(s: &str) -> Option<i64> {
             .then(|| s.get(i..i + 4)?.parse().ok())
             .flatten()
     })
+}
+
+const MONTHS: [&str; 12] = [
+    "January",
+    "February",
+    "March",
+    "April",
+    "May",
+    "June",
+    "July",
+    "August",
+    "September",
+    "October",
+    "November",
+    "December",
+];
+
+/// The first day of the month a text starts with, as `YYYY-MM-01` (`"May 2026 v2.03"` →
+/// `2026-05-01`); `None` unless the text starts with an English month name and a year.
+pub fn month_year(s: &str) -> Option<String> {
+    let mut w = s.split_whitespace();
+    let month = w.next()?;
+    let m = MONTHS.iter().position(|n| n.eq_ignore_ascii_case(month))? + 1;
+    let y = w.next()?;
+    is_year(y.as_bytes()).then(|| format!("{y}-{m:02}-01"))
 }
 
 /// The last 19xx/20xx year in a URL's file name that is not followed by another digit
@@ -1456,6 +1676,54 @@ fn mapping_items(m: &FactorMapping, url: &CanonicalUrl, body: &[u8]) -> Result<V
                     "grid_carbon_intensity",
                     data,
                 ));
+            }
+            Output::Occupancy {
+                label,
+                rows,
+                basis,
+                time_period,
+                geo,
+                as_of_from_preamble,
+            } => {
+                let Geo::Fixed(geography, code) = geo else {
+                    continue;
+                };
+                let row_label = join(row, label, false);
+                let Some(r) = rows.iter().find(|r| r.label == row_label) else {
+                    continue;
+                };
+                let id = format!("{}:{year}:{}", m.dataset, slug(&row_label));
+                if !seen.insert(id.clone()) {
+                    continue;
+                }
+                let as_of = as_of_from_preamble
+                    .then(|| t.preamble.iter().find_map(|c| month_year(c)))
+                    .flatten();
+                let data = obj(vec![
+                    ("mode", Some(json!(r.mode))),
+                    ("mode_label", Some(json!(clip(&row_label, 160)))),
+                    ("trip_purpose", Some(json!(r.purpose))),
+                    ("time_period", Some(json!(time_period))),
+                    ("geography", Some(json!(geography))),
+                    ("country_code", Some(json!(code))),
+                    ("value", Some(json!(value))),
+                    ("unit", Some(json!("persons per vehicle"))),
+                    ("basis", Some(json!(basis))),
+                    ("includes_driver", Some(json!(r.includes_driver))),
+                    ("year", Some(json!(year))),
+                    (
+                        "base_years",
+                        (!r.base_years.is_empty()).then(|| json!(r.base_years)),
+                    ),
+                    (
+                        "method_note",
+                        (!r.method_note.is_empty()).then(|| json!(clip(r.method_note, 300))),
+                    ),
+                    ("publisher", Some(json!(m.publisher))),
+                    ("dataset", Some(json!(clip(m.dataset_label, 160)))),
+                    ("as_of", as_of.map(|d| json!(d))),
+                ]);
+                out.push((Some(id), "occupancy", data));
             }
         }
     }

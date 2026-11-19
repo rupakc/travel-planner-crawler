@@ -935,6 +935,12 @@ fn factor_table_records_fit_the_kind_registry() {
             "eurostat_sdg_13_31.json",
             "emission_factor",
         ),
+        // Occupancy (2026-11-19): DfT TAG data book table A1.3.3.2.
+        (
+            "https://assets.publishing.service.gov.uk/media/x/tag-data-book-v2-03.xlsm",
+            "factor_dft_tag_occupancy_2026.xlsx",
+            "occupancy",
+        ),
     ] {
         let u = vc_core::CanonicalUrl::parse(url).unwrap();
         let adapter = if file.starts_with("eurostat_") {

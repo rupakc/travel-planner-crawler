@@ -20276,8 +20276,8 @@ seeds:
   - id: od-dft-tag-databook
     category: carbon
     name: DfT TAG data book (occupancy, fuel efficiency, carbon values)
-    url: https://www.gov.uk/government/publications/tag-data-book
-    method: dump
+    url: https://assets.publishing.service.gov.uk/media/6a576e102f6185941a9a6569/tag-data-book-v2-03.xlsm
+    method: api
     license: OGL v3.0
     cadence: yearly
     needs_key: false
