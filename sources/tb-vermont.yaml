@@ -33,14 +33,15 @@ cadence: weekly
 min_delay_s: 5
 daily_budget: 100
 politeness_key: null
-enabled: true
+enabled: false
 needs_key: false
 key_secret: null
 max_retention_days: null
 display_requirements: null
 notes: 'robots.txt (research 2026-11-18): 200, disallows /wp-admin/. Terms read (research 2026-11-18):
   /policies-and-terms-of-use/: ''provided for informational purposes only''; no automated-access clause,
-  so facts only (headline, link, short excerpt).'
+  so facts only (headline, link, short excerpt). | Disabled: challenge page at first full crawl 2026-11-19;
+  do not retry another way (host denylisted)'
 relevance:
   sections:
   - events

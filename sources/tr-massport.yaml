@@ -30,13 +30,14 @@ cadence: monthly
 min_delay_s: 5
 daily_budget: 50
 politeness_key: null
-enabled: true
+enabled: false
 needs_key: false
 key_secret: null
 max_retention_days: null
 display_requirements: null
 notes: 'robots.txt (research 2026-11-18): 200, Drupal defaults. Terms not found (research 2026-11-18).
-  Terms unconfirmed; owner accepted for non-commercial use 2026-11-18.'
+  Terms unconfirmed; owner accepted for non-commercial use 2026-11-18. | Disabled: challenge page at first
+  full crawl 2026-11-19; do not retry another way (host denylisted)'
 relevance:
   sections:
   - getting_around

@@ -451,7 +451,6 @@ fn approved_hosts_stay_allowed() {
         // Corpus expansion: Europe (2026-11-18): sources next to new entries
         "https://visittallinn.ee/sitemap.xml",
         "https://www.tirol.at/sitemap.xml",
-        "https://www.visitmalta.com/en/",
         "https://www.translink.co.uk/sitemap.xml",
         "https://www.museiitaliani.it/",
         "https://www.oebb.at/en/",
@@ -462,7 +461,6 @@ fn approved_hosts_stay_allowed() {
         "https://www.denvergov.org/",
         "https://parks.ny.gov/sitemap.xml",
         "https://parks.canada.ca/pn-np",
-        "https://www.tourismwinnipeg.com/festivals-and-events",
         "https://visitindiana.in.gov/sitemap.xml",
         "https://admin.tourismvictoria.com/sitemap.xml",
         "https://www.supernaturalbc.com/sitemap.xml",
@@ -475,13 +473,11 @@ fn approved_hosts_stay_allowed() {
         "https://www.flughafen-zuerich.ch/en/passengers",
         "https://cadw.gov.wales/sitemap.xml",
         // Corpus expansion: Latin America (2026-11-18): sources next to new entries
-        "https://www.metro.cl/sitemap.xml",
         "https://www.curacao.com/en/",
         "https://www.gob.mx/sectur",
         "https://www.conaf.cl/sitemap_index.xml",
         // Corpus expansion: Africa and the Middle East (2026-11-18): sources next to new entries
         "https://visitkzn-sa.com/sitemap.xml",
-        "https://www.capetownmagazine.com/sitemap.xml",
         "https://www.oncf-voyages.ma/",
         "https://www.railway.ge/en/sitemap_index.xml",
         "https://capetown.gov.za/",
@@ -537,6 +533,37 @@ fn hidden_gems_entries_are_denied_and_neighbours_are_not() {
         "https://www.visit-micronesia.fm/",
         "https://www.visitsaaremaa.ee/",
         "https://www.visitjeju.net/",
+    ] {
+        assert_eq!(denied(u), None, "{u} must stay allowed");
+    }
+}
+
+/// First full crawl 2026-11-19: hosts that served a challenge page or answered robots.txt with
+/// 403/a challenge are denied; government hosts that did the same stay off the list (their
+/// sources are off for a later re-test), as do TravelDailyNews and flyreagan.com.
+#[test]
+fn full_crawl_refusals_2026_11_19_are_denied_and_government_hosts_are_not() {
+    for u in [
+        "https://www.visitmalta.com/en/",
+        "https://www.tourismwinnipeg.com/festivals-and-events",
+        "https://www.metro.cl/sitemap.xml",
+        "https://www.capetownmagazine.com/sitemap.xml",
+        "https://www.atlasobscura.com/feeds/latest",
+        "https://en.visiterlyon.com/",
+        "https://www.visitljubljana.com/",
+        "https://www.vy.no/",
+    ] {
+        assert!(denied(u).is_some(), "{u} must be denied");
+    }
+    for u in [
+        "https://www.traveldailynews.com/feed/",
+        "https://www.flyreagan.com/",
+        "https://www.aphis.usda.gov/",
+        "https://www.dresden.de/",
+        "https://www.nhb.gov.sg/",
+        "https://www.roots.gov.sg/sitemap-pages.xml",
+        "https://vistos.mne.gov.pt/",
+        "https://www.ktb.gov.tr/",
     ] {
         assert_eq!(denied(u), None, "{u} must stay allowed");
     }

@@ -30,14 +30,15 @@ cadence: monthly
 min_delay_s: 5
 daily_budget: 50
 politeness_key: null
-enabled: true
+enabled: false
 needs_key: false
 key_secret: null
 max_retention_days: null
 display_requirements: null
 notes: 'Research 2026-11-18 (corpus Asia-Pacific): robots.txt: robots 200, path allowed (/eng/, /chi/
   legacy paths disallowed); terms: https://www.hongkongairport.com/en/terms-of-use.page read: no robot/AI
-  clause. No automated-access clause; facts only.'
+  clause. No automated-access clause; facts only. | Disabled: challenge page at first full crawl 2026-11-19;
+  do not retry another way (host denylisted)'
 relevance:
   sections:
   - getting_around
