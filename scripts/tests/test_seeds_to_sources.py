@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import json
+import re
 import sys
 from pathlib import Path
 
@@ -963,7 +964,7 @@ def test_batch2_api_and_dump_sources_run_only_on_an_adapter(generated):
         if spec["method"] in ("api", "dump"):
             want = (OPEN_DATA_ADAPTERS.get(sid) or ADAPTED_2026_11_18.get(sid)
                     or COUNTRY_INFO_AND_FOOD.get(sid) or WIKIVOYAGE_EDITIONS.get(sid)
-                    or OPEN_DATA_READERS.get(sid, (None,))[0])
+                    or OPEN_DATA_READERS.get(sid, (None,))[0] or CARBON_ADAPTERS.get(sid))
             assert spec["adapter"] == want, sid
             assert spec["enabled"] is (want is not None), sid
         if spec["needs_key"]:
@@ -977,7 +978,7 @@ def test_batch2_enabled_sources_are_polite_and_scoped(generated):
             continue
         assert spec["method"] in ("html", "rss", "sitemap") or sid in OPEN_DATA_ADAPTERS \
             or sid in ADAPTED_2026_11_18 or sid in COUNTRY_INFO_AND_FOOD or sid in OPEN_DATA_READERS \
-            or sid in WIKIVOYAGE_EDITIONS, sid
+            or sid in WIKIVOYAGE_EDITIONS or sid in CARBON_ADAPTERS, sid
         assert spec["daily_budget"] <= 500 and spec["max_depth"] <= 2 and spec["min_delay_s"] >= 5, sid
         assert spec["licence"]["class"] in ("open", "facts_only") or (
             (sid in ("openholidays", "enwiki-visa-requirements") + tuple(CORPUS_SHARE_ALIKE)
@@ -1038,7 +1039,7 @@ def test_ramp_2_extends_ramp_1_with_enabled_runnable_sources():
     # sources come with ramp-3).
     on = ({sid for sid in s2s.SOURCE_CLASS if committed[sid]["enabled"]} - set(OPEN_DATA_ADAPTERS)
           - set(s2s.GTFS_FEEDS) - set(ADAPTED_2026_11_18) - set(COUNTRY_INFO_AND_FOOD)
-          - set(OPEN_DATA_READERS) - set(WIKIVOYAGE_EDITIONS))
+          - set(OPEN_DATA_READERS) - set(WIKIVOYAGE_EDITIONS) - set(CARBON_ADAPTERS))
     assert on <= set(r2), sorted(on - set(r2))
 
 
@@ -1063,7 +1064,7 @@ def test_ramp_3_is_ramp_2_plus_the_open_data_sources():
     assert len(r3) == len(set(r3))
     assert r3[: len(r2)] == r2
     assert set(r3[len(r2):]) == (set(OPEN_DATA_ADAPTERS) | s2s.GTFS_ON | set(COUNTRY_INFO_AND_FOOD)
-                                 | set(OPEN_DATA_READERS) | set(WIKIVOYAGE_EDITIONS))
+                                 | set(OPEN_DATA_READERS) | set(WIKIVOYAGE_EDITIONS) | set(CARBON_ADAPTERS))
     v = _validator()
     for sid in r3:
         spec = committed[sid]
@@ -1293,7 +1294,8 @@ THEMATIC_STAY_ALLOWED = [
 
 
 # Corpus sources whose licence is share_alike (never merged with other licences).
-CORPUS_SHARE_ALIKE = {"customs-sag-cl", "guide-caravanistan"}  # caravanistan: CC BY-SA 4.0
+CORPUS_SHARE_ALIKE = {"customs-sag-cl", "guide-caravanistan",  # caravanistan: CC BY-SA 4.0
+                      "od-google-tim-github"}  # Travel Impact Model docs: CC BY-SA 4.0 (2026-11-19)
 
 
 # --- Corpus expansion: Latin America and the Caribbean (research vetted 2026-11-18) -------
@@ -1722,3 +1724,89 @@ def test_full_crawl_refusals_2026_11_19(generated):
             assert "re-test later" in reason and not hit, sid
         else:
             assert "host denylisted" in reason and hit, sid
+
+
+# --- Carbon footprint corpus (research vetted 2026-11-19) ---------------------------------
+# New app section `carbon`. Every row has notes starting "Research 2026-11-19 (carbon footprint
+# corpus". ADD rows on html/rss/sitemap are on (ramp-2 and ramp-3); Eurostat datasets run on the
+# generic eurostat_jsonstat reader (ramp-3 only); dataset rows wait for a reader, API rows for a
+# key, owner-decision rows for the owner.
+CARBON_ADAPTERS = {
+    "od-eurostat-avia-paoc": "eurostat_jsonstat",
+    "od-eurostat-avia-par": "eurostat_jsonstat",
+    "od-eurostat-air-emissions": "eurostat_jsonstat",
+}
+CARBON_COUNTS = {"total": 310, "on": 143, "adapter pending": 136, "needs an API key": 25, "owner decision": 6}
+CARBON_DENIED = ["https://www.climatiq.io/terms", "https://www.goldstandard.org/", "https://registry.verra.org/",
+                 "https://media.amtrak.com/terms-of-use/", "https://ghgprotocol.org/terms-use",
+                 "https://www.hestia.earth/explorer"]
+CARBON_STAY_ALLOWED = ["https://api.hestia.earth/", "https://www.amtrak.com/", "https://www.myclimate.org/en/"]
+
+
+def _carbon_ids(seeds):
+    return [s["id"] for s in seeds if (s.get("notes") or "").startswith("Research 2026-11-19 (carbon footprint corpus")]
+
+
+def test_carbon_section_is_in_every_closed_list():
+    assert "carbon" in s2s.SECTIONS
+    enum = SCHEMA["properties"]["relevance"]["properties"]["sections"]["items"]["enum"]
+    assert enum[-1] == "carbon"
+
+
+def test_carbon_corpus_2026_11_19(generated):
+    seeds = yaml.safe_load((ROOT / "docs" / "research" / "seeds.yaml").read_text())["seeds"]
+    ids = _carbon_ids(seeds)
+    assert len(ids) == CARBON_COUNTS["total"] == len(set(ids))
+    r2, r3 = set(_ramp("ramp-2.txt")), set(_ramp("ramp-3.txt"))
+    on, reasons = [], {}
+    for sid in ids:
+        spec = generated[sid]
+        notes = " ".join(spec["notes"].split())
+        assert spec["category"] == "carbon" and spec["relevance"]["sections"][0] == "carbon", sid
+        assert spec["source_class"] in ("official", "reference"), sid
+        if not spec["enabled"]:
+            reason = notes.split("Disabled: ", 1)[1]
+            prefix = next(p for p in ("adapter pending", "needs an API key", "owner decision") if reason.startswith(p))
+            reasons[prefix] = reasons.get(prefix, 0) + 1
+            assert sid not in r2 and sid not in r3, sid
+            assert spec["needs_key"] is (prefix == "needs an API key"), sid
+            if spec["needs_key"]:
+                assert spec["key_secret"] == f"crawler-src-{sid}-key" and "https://" in reason, sid
+                assert "(free" in reason or "(paid or partner access" in reason, sid
+            continue
+        on.append(sid)
+        assert not spec["needs_key"] and spec["daily_budget"] <= 100 and spec["max_depth"] <= 1, sid
+        assert spec["cadence"] in ("monthly", "quarterly", "yearly"), sid
+        if sid in CARBON_ADAPTERS:
+            assert spec["adapter"] == CARBON_ADAPTERS[sid] and spec["method"] == "api", sid
+            assert spec["seeds"][0].startswith("https://ec.europa.eu/eurostat/api/dissemination/"), sid
+            assert sid in r3 and sid not in r2, sid
+            continue
+        assert spec["method"] in ("html", "rss", "sitemap") and spec["adapter"] is None, sid
+        assert sid in r2 and sid in r3, sid
+        lic = spec["licence"]["class"]
+        assert lic in ("open", "facts_only") or sid in CORPUS_SHARE_ALIKE, sid
+        if lic == "facts_only":
+            assert "owner accepted for non-commercial use 2026-11-18" in notes, sid
+        if "AI-reserved robots" in notes:
+            assert spec["llm_kinds"] == [], sid
+        # Data files are never html seeds; PDFs are (raw capture).
+        for u in spec["seeds"]:
+            assert not re.search(r"\.(csv|zip|xlsx?|ods|parquet|json)(\?|$)", u), (sid, u)
+        if spec["method"] == "sitemap" and spec["sitemaps"][0].split("/")[2] in (
+                "www.carbontrust.com", "www.untourism.int", "uic.org", "www.transportenvironment.org"):
+            assert spec["include"], sid  # big multi-topic sites: carbon paths only
+    assert len(on) == CARBON_COUNTS["on"]
+    assert reasons == {k: v for k, v in CARBON_COUNTS.items() if k not in ("total", "on")}
+    # Duplicates and merged rows: one source per site.
+    assert "carbon-emsd-hk" not in generated and "impactco2" in generated and "api-impactco2" not in generated
+    assert generated["gov-uba-emissionsdaten"]["include"]
+    # Google TIM: docs on GitHub (share-alike, depth 0), the API waits for a key, google.com stays denied.
+    tim = generated["od-google-tim-github"]
+    assert tim["enabled"] and tim["licence"]["class"] == "share_alike" and tim["max_depth"] == 0
+    assert generated["api-google-tim"]["enabled"] is False and generated["api-google-tim"]["needs_key"]
+    assert generated["od-ghgp-transport-tool"]["enabled"] is False
+    for url in CARBON_DENIED:
+        assert s2s.denied(url, DENYLIST) is not None, url
+    for url in CARBON_STAY_ALLOWED:
+        assert s2s.denied(url, DENYLIST) is None, url

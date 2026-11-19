@@ -320,3 +320,14 @@ plan = `docs/superpowers/plans/2026-11-15-voyager-crawler.md`, r1–r5 = `docs/r
   ramp-3), 13 off (re-test from the crawler VM 5, terms forbid storage/redistribution 4, seed
   unresolved 2, adapter pending 2). (scripts/seeds_to_sources.py, policy/denylist.yaml,
   sources/ramp-2.txt, ramp-3.txt)
+- 2026-11-19: **Carbon footprint corpus + new app section `carbon`** (owner request: trip and
+  activity carbon footprint). `AppSection::Carbon` (vc-core), schema enum, `SECTIONS`, registry
+  heading "Carbon footprint". 310 rows from 9 research briefs (aviation, ground, stays, food and
+  activities, official factors, grid, regional, tourism research, gaps; 253 SKIP not added):
+  143 on (140 html/rss/sitemap in ramp-2 and ramp-3, facts only unless an open licence was
+  quoted, includes on big sites, PDFs raw; 3 Eurostat datasets on eurostat_jsonstat in ramp-3),
+  136 off "adapter pending" (xlsx/PDF/CSV/parquet/API readers, incl. ADD datasets whose generic
+  reader has no mapping yet), 25 off "needs an API key", 6 off "owner decision". Denylisted for
+  terms bans: climatiq.io, goldstandard.org, verra.org, media.amtrak.com, ghgprotocol.org,
+  hestia.earth (except api.hestia.earth). (scripts/seeds_to_sources.py, docs/research/seeds.yaml,
+  policy/denylist.yaml)
