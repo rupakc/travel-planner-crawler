@@ -1742,19 +1742,39 @@ CARBON_ADAPTERS = {
     "od-eurostat-avia-paoc": "eurostat_jsonstat",
     "od-eurostat-avia-par": "eurostat_jsonstat",
     "od-eurostat-air-emissions": "eurostat_jsonstat",
+    # EEA new-car CO2 averages, read from Eurostat sdg_13_31 (2026-11-19).
+    "od-eea-co2-cars-avg": "eurostat_jsonstat",
 }
 # factor_table (2026-11-19): emission-factor and grid-intensity files, ramp-3 only.
 FACTOR_TABLE_SOURCES = {
     "od-desnz-ghg-factors": "emission_factor",
     "od-owid-food-ghg": "emission_factor",
     "carbon-owid-grapher-ci": "grid_carbon_intensity",
+    # Second batch (2026-11-19): stacked tables, several tables per file, ODS, zipped CSV.
+    "od-epa-egrid": "emission_factor",
+    "od-epa-ef-hub": "emission_factor",
+    "od-owid-travel-mode": "emission_factor",
+    "od-owid-co2-data": "emission_factor",
+    "od-orr-rail-environment": "emission_factor",
+    "od-fueleconomy-gov": "emission_factor",
+    "od-concito-big-climate-db": "emission_factor",
+    "od-rivm-food-lca": "emission_factor",
+}
+# Second batch (2026-11-19): off with these reasons.
+CARBON_TABLES_2_OFF = {
+    "od-au-nga-factors": "re-test from the crawler VM",
+    "od-agribalyse-dataverse": "robots.txt",
+    "od-fao-faostat-emissions-intensities": "5xx at robots.txt",
+    "od-dft-tag-databook": "owner decision",
+    "od-nhts-occupancy": "adapter pending",
 }
 # Keyed carbon APIs on with the owner's key (2026-11-19): adapter, Secret Manager name. ramp-3 only.
 CARBON_KEYED = {"carbon-ember-api": ("ember_api", "crawler-src-ember-key")}
 # Owner decisions of 2026-11-19 turned on (html, facts only).
 CARBON_OWNER_ON = ("tr-flix-methodology", "carbon-breeam-projects", "carbon-greenbooklive")
-CARBON_COUNTS = {"total": 310, "on": 150, "adapter pending": 130, "needs an API key": 25, "robots.txt": 3,
-                 "duplicate": 1, "gone": 1}
+CARBON_COUNTS = {"total": 310, "on": 159, "adapter pending": 117, "needs an API key": 25, "robots.txt": 4,
+                 "duplicate": 1, "gone": 1, "owner decision": 1, "re-test from the crawler VM": 1,
+                 "5xx at": 1}
 CARBON_DENIED = ["https://www.climatiq.io/terms", "https://www.goldstandard.org/", "https://registry.verra.org/",
                  "https://media.amtrak.com/terms-of-use/", "https://ghgprotocol.org/terms-use",
                  "https://www.hestia.earth/explorer"]
@@ -1785,7 +1805,8 @@ def test_carbon_corpus_2026_11_19(generated):
         if not spec["enabled"]:
             reason = notes.split("Disabled: ", 1)[1]
             prefix = next(p for p in ("adapter pending", "needs an API key", "owner decision", "robots.txt",
-                                      "duplicate", "gone") if reason.startswith(p))
+                                      "duplicate", "gone", "re-test from the crawler VM", "5xx at")
+                          if reason.startswith(p))
             reasons[prefix] = reasons.get(prefix, 0) + 1
             assert sid not in r2 and sid not in r3, sid
             assert spec["needs_key"] is (prefix == "needs an API key"), sid
@@ -1850,6 +1871,15 @@ def test_carbon_corpus_2026_11_19(generated):
     assert generated["carbon-electricitymaps-api"]["needs_key"] is True
     for sid in ("carbon-climatiq-oefdb", "od-fr-base-carbone-v17", "carbon-ember-grid", "od-sncf-info-ges"):
         assert generated[sid]["enabled"] is False, sid
+    # Second batch (2026-11-19): the off rows say exactly why; the on rows name the robots check.
+    for sid, why in CARBON_TABLES_2_OFF.items():
+        reason = " ".join(generated[sid]["notes"].split()).split("Disabled: ", 1)[1]
+        assert generated[sid]["enabled"] is False and reason.startswith(why), (sid, reason)
+        assert "2026-11-19" in reason or sid == "od-nhts-occupancy", sid
+    for sid in set(FACTOR_TABLE_SOURCES) | {"od-eea-co2-cars-avg"}:
+        notes = " ".join(generated[sid]["notes"].split())
+        if "2026-11-19" in notes:
+            assert "robots.txt" in notes and "Disabled:" not in notes, sid
     for url in CARBON_DENIED:
         assert s2s.denied(url, DENYLIST) is not None, url
     for url in CARBON_STAY_ALLOWED:

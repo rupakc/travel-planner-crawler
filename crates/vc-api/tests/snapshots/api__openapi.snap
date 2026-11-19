@@ -985,6 +985,256 @@ expression: json
         ]
       }
     },
+    "/v1/carbon/factors": {
+      "get": {
+        "operationId": "carbon_factors",
+        "parameters": [
+          {
+            "description": "`category` (`flights`, `rail`, `bus`, `coach`, `ferry`, `car`, `taxi`, `motorbike`,\n`accommodation`, `food`, `activity`, `electricity`, `fuel`, `other`).",
+            "in": "query",
+            "name": "category",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "ISO 3166-1 alpha-2 `country_code` (e.g. `GB`).",
+            "in": "query",
+            "name": "country",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "`region_code` (eGRID subregion `CAMX`, US state `CA`).",
+            "in": "query",
+            "name": "region",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "Factor-set `year`.",
+            "in": "query",
+            "name": "year",
+            "required": false,
+            "schema": {
+              "format": "int32",
+              "type": "integer"
+            }
+          },
+          {
+            "description": "`gas_basis` (`co2`, `co2e`, `co2e_with_rf`, `co2e_without_rf`).",
+            "in": "query",
+            "name": "gas_basis",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "The `activity` slug contains this snake_case text (e.g. `long_haul`).",
+            "in": "query",
+            "name": "activity",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "Source id (e.g. `od-desnz-ghg-factors`).",
+            "in": "query",
+            "name": "source",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "Page size (default 20, max `max_page`).",
+            "in": "query",
+            "name": "limit",
+            "required": false,
+            "schema": {
+              "format": "int32",
+              "minimum": 0,
+              "type": "integer"
+            }
+          },
+          {
+            "description": "`next_cursor` of the previous page.",
+            "in": "query",
+            "name": "cursor",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ItemPage"
+                }
+              }
+            }
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorBody"
+                }
+              }
+            }
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorBody"
+                }
+              }
+            }
+          },
+          "429": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorBody"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Published emission factors (kind `emission_factor`), newest factor-set year first:\nfiltered by category, country, region, year, gas basis, activity and source.",
+        "tags": [
+          "read"
+        ]
+      }
+    },
+    "/v1/carbon/grid": {
+      "get": {
+        "operationId": "carbon_grid",
+        "parameters": [
+          {
+            "description": "ISO 3166-1 alpha-2 country (required).",
+            "in": "query",
+            "name": "country",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "`annual` or `monthly` (default both).",
+            "in": "query",
+            "name": "period",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "`lifecycle` or `direct` (default both).",
+            "in": "query",
+            "name": "basis",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "From (inclusive, RFC 3339; default 2000-01-01).",
+            "in": "query",
+            "name": "from",
+            "required": false,
+            "schema": {
+              "format": "date-time",
+              "type": "string"
+            }
+          },
+          {
+            "description": "To (exclusive, RFC 3339; default now).",
+            "in": "query",
+            "name": "to",
+            "required": false,
+            "schema": {
+              "format": "date-time",
+              "type": "string"
+            }
+          },
+          {
+            "description": "Max points (default 20, max `max_page`).",
+            "in": "query",
+            "name": "limit",
+            "required": false,
+            "schema": {
+              "format": "int32",
+              "minimum": 0,
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ObservationList"
+                }
+              }
+            }
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorBody"
+                }
+              }
+            }
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorBody"
+                }
+              }
+            }
+          },
+          "429": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorBody"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Grid carbon intensity of one country (kind `grid_carbon_intensity`, every series\n`grid_ci:<country>:<period>:<basis>` and source), newest first.",
+        "tags": [
+          "read"
+        ]
+      }
+    },
     "/v1/changes": {
       "get": {
         "operationId": "changes",

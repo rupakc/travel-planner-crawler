@@ -126,6 +126,8 @@ const V1_ROUTES: &[&str] = &[
     "/v1/search?q=x",
     "/v1/articles",
     "/v1/observations?series=fx:USD:EUR",
+    "/v1/carbon/factors?category=flights",
+    "/v1/carbon/grid?country=FR",
     "/v1/places/resolve?name=London",
     "/v1/changes",
     "/v1/sources",
@@ -807,4 +809,250 @@ async fn healthz_follows_the_host_process_health_probe() {
     assert_eq!(r.status(), StatusCode::SERVICE_UNAVAILABLE);
     let body: Value = r.json().await.expect("json");
     assert_eq!(body["status"], "unhealthy");
+}
+
+// ---------------------------------------------------------------------------------------------
+// /v1/carbon (2026-11-19): emission factors and grid intensity for the trip carbon footprint.
+// ---------------------------------------------------------------------------------------------
+
+fn factor(id: &str, class: LicenceClass, data: Value, source: &str) -> vc_core::index::Item {
+    let mut it = item(id, "emission_factor", class);
+    it.data = data;
+    it.provenance = vec![provenance(source, &format!("https://example.org/{id}"))];
+    it
+}
+
+fn grid_point(series: &str, year: i32, g: f64, class: LicenceClass) -> ObservationView {
+    ObservationView {
+        series_key: series.into(),
+        observed_at: chrono::TimeZone::with_ymd_and_hms(&chrono::Utc, year, 1, 1, 0, 0, 0)
+            .single()
+            .expect("date"),
+        value: serde_json::json!({"intensity_g_per_kwh": g, "country_code": &series[8..10]}),
+        source_id: SourceId("carbon-owid-grapher-ci".into()),
+        licence: licence(class),
+    }
+}
+
+async fn carbon_harness(classes: &[LicenceClass]) -> Harness {
+    let cat = MemCatalog {
+        factors: vec![
+            factor(
+                "1",
+                LicenceClass::Open,
+                serde_json::json!({"activity": "flights_long_haul_to_from_uk_economy_class_with_rf",
+                    "category": "flights", "country_code": "GB", "gas_basis": "co2e_with_rf",
+                    "year": 2026, "value": 0.117, "unit": "kg CO2e per passenger.km"}),
+                "od-desnz-ghg-factors",
+            ),
+            factor(
+                "2",
+                LicenceClass::Open,
+                serde_json::json!({"activity": "flights_long_haul_to_from_uk_economy_class_with_rf",
+                    "category": "flights", "country_code": "GB", "gas_basis": "co2e_with_rf",
+                    "year": 2025, "value": 0.12}),
+                "od-desnz-ghg-factors",
+            ),
+            factor(
+                "3",
+                LicenceClass::Open,
+                serde_json::json!({"activity": "electricity_generation_total_output_emission_rate_wecc_california",
+                    "category": "electricity", "country_code": "US", "region_code": "CAMX",
+                    "gas_basis": "co2e", "year": 2023, "value": 429.983}),
+                "od-epa-egrid",
+            ),
+            factor(
+                "4",
+                LicenceClass::ShareAlike,
+                serde_json::json!({"activity": "beef", "category": "food", "country_code": "FR",
+                    "gas_basis": "co2e", "year": 2025, "value": 30.0}),
+                "od-concito-big-climate-db",
+            ),
+            // `serve: link_only` is never served by the factors read (the SQL excludes it).
+            {
+                let mut it = factor(
+                    "5",
+                    LicenceClass::Open,
+                    serde_json::json!({"activity": "beef", "category": "food", "country_code": "FR",
+                        "gas_basis": "co2e", "year": 2025, "value": 31.0}),
+                    "od-concito-big-climate-db",
+                );
+                it.use_policy.serve = vc_core::usepolicy::ServeUse::LinkOnly;
+                it
+            },
+        ],
+        grid: vec![
+            grid_point(
+                "grid_ci:FR:annual:lifecycle",
+                2023,
+                56.0,
+                LicenceClass::Open,
+            ),
+            grid_point(
+                "grid_ci:FR:annual:lifecycle",
+                2024,
+                40.48,
+                LicenceClass::Open,
+            ),
+            grid_point(
+                "grid_ci:FR:monthly:lifecycle",
+                2025,
+                35.0,
+                LicenceClass::Open,
+            ),
+            grid_point(
+                "grid_ci:DE:annual:lifecycle",
+                2024,
+                330.0,
+                LicenceClass::Open,
+            ),
+        ],
+        ..MemCatalog::default()
+    };
+    let state = ApiState::new(
+        ApiConfig::default(),
+        Arc::new(MemIndex::new()),
+        Arc::new(MemPlaces::default()),
+        Arc::new(MemClientStore::new(vec![client(
+            "voyager", "s3cret", classes, 10_000,
+        )])),
+        Arc::new(cat),
+    );
+    let base = start(state).await;
+    Harness {
+        base,
+        http: reqwest::Client::new(),
+        index: Arc::new(MemIndex::new()),
+        token: "voyager.s3cret".into(),
+    }
+}
+
+fn ids(v: &Value) -> Vec<String> {
+    v["items"]
+        .as_array()
+        .expect("items")
+        .iter()
+        .map(|i| i["id"].as_str().expect("id").to_string())
+        .collect()
+}
+
+#[tokio::test]
+async fn carbon_factors_filter_by_category_country_region_year_source() {
+    let h = carbon_harness(ALL).await;
+    // Newest factor-set year first.
+    let all = h.json("/v1/carbon/factors").await;
+    assert_eq!(ids(&all), ["1", "2", "4", "3"]);
+    assert_eq!(all["items"][0]["kind"], "emission_factor");
+    assert_eq!(
+        ids(&h
+            .json("/v1/carbon/factors?category=flights&country=gb")
+            .await),
+        ["1", "2"]
+    );
+    assert_eq!(
+        ids(&h
+            .json("/v1/carbon/factors?category=flights&year=2025")
+            .await),
+        ["2"]
+    );
+    assert_eq!(ids(&h.json("/v1/carbon/factors?region=camx").await), ["3"]);
+    assert_eq!(
+        ids(&h
+            .json("/v1/carbon/factors?source=od-epa-egrid&category=electricity")
+            .await),
+        ["3"]
+    );
+    assert_eq!(
+        ids(&h
+            .json("/v1/carbon/factors?activity=long_haul&gas_basis=co2e_with_rf")
+            .await),
+        ["1", "2"]
+    );
+    assert!(ids(&h.json("/v1/carbon/factors?category=rail").await).is_empty());
+    // Paging.
+    let p1 = h.json("/v1/carbon/factors?limit=2").await;
+    assert_eq!(ids(&p1), ["1", "2"]);
+    let next = p1["next_cursor"].as_str().expect("cursor").to_string();
+    let p2 = h
+        .json(&format!("/v1/carbon/factors?limit=2&cursor={next}"))
+        .await;
+    assert_eq!(ids(&p2), ["4", "3"]);
+    assert!(p2["next_cursor"].is_null());
+    // Bad filters are 400, never a wildcard.
+    for bad in [
+        "/v1/carbon/factors?category=planes",
+        "/v1/carbon/factors?country=G%25",
+        "/v1/carbon/factors?activity=Long%20Haul",
+        "/v1/carbon/factors?gas_basis=ch4",
+        "/v1/carbon/factors?cursor=abc",
+        "/v1/carbon/factors?year=x",
+    ] {
+        let r = h.get(bad).send().await.expect("send");
+        assert_eq!(r.status(), StatusCode::BAD_REQUEST, "{bad}");
+    }
+}
+
+#[tokio::test]
+async fn carbon_factors_respect_the_client_licence_classes() {
+    let h = carbon_harness(&[LicenceClass::Open]).await;
+    let v = h.json("/v1/carbon/factors").await;
+    assert_eq!(
+        ids(&v),
+        ["1", "2", "3"],
+        "share_alike CONCITO row not served"
+    );
+}
+
+#[tokio::test]
+async fn carbon_grid_is_one_country_newest_first() {
+    let h = carbon_harness(ALL).await;
+    let v = h.json("/v1/carbon/grid?country=fr").await;
+    let keys: Vec<(String, String)> = v["items"]
+        .as_array()
+        .expect("items")
+        .iter()
+        .map(|o| {
+            (
+                o["series_key"].as_str().unwrap().to_string(),
+                o["observed_at"].as_str().unwrap()[..4].to_string(),
+            )
+        })
+        .collect();
+    assert_eq!(
+        keys,
+        [
+            (
+                "grid_ci:FR:monthly:lifecycle".to_string(),
+                "2025".to_string()
+            ),
+            (
+                "grid_ci:FR:annual:lifecycle".to_string(),
+                "2024".to_string()
+            ),
+            (
+                "grid_ci:FR:annual:lifecycle".to_string(),
+                "2023".to_string()
+            ),
+        ]
+    );
+    let annual = h
+        .json("/v1/carbon/grid?country=FR&period=annual&basis=lifecycle&limit=1")
+        .await;
+    assert_eq!(annual["items"].as_array().unwrap().len(), 1);
+    assert_eq!(annual["items"][0]["value"]["intensity_g_per_kwh"], 40.48);
+    let y = h
+        .json("/v1/carbon/grid?country=FR&from=2023-06-01T00:00:00Z&to=2025-01-01T00:00:00Z")
+        .await;
+    assert_eq!(y["items"].as_array().unwrap().len(), 1);
+    for bad in [
+        "/v1/carbon/grid",
+        "/v1/carbon/grid?country=FRA",
+        "/v1/carbon/grid?country=F%25",
+        "/v1/carbon/grid?country=FR&period=weekly",
+        "/v1/carbon/grid?country=FR&basis=x",
+        "/v1/carbon/grid?country=FR&from=2025-01-01T00:00:00Z&to=2024-01-01T00:00:00Z",
+    ] {
+        let r = h.get(bad).send().await.expect("send");
+        assert_eq!(r.status(), StatusCode::BAD_REQUEST, "{bad}");
+    }
 }

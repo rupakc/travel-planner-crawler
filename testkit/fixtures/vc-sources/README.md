@@ -93,6 +93,21 @@ never requested.
 | `factor_owid_food_poore.csv` | OWID grapher `ghg-per-kg-poore.csv?v=1&csvType=full&useColumnShortNames=true` | header plus the first 7 rows | CC BY 4.0 |
 | `factor_owid_grid_ci.csv` | OWID grapher `electricity-mix.csv?frequency=annual&metric=carbon_intensity&source=total&...` | header plus 6 rows (ASEAN and World aggregates, France 2023 and 2024, Germany, India) | CC BY 4.0 |
 
+Second batch (2026-11-19; each file fetched once after its host's robots.txt, rows copied unchanged with openpyxl/csv):
+
+| File | Source | How it was cut | Licence |
+|---|---|---|---|
+| `factor_egrid_summary_2023.xlsx` | US EPA `summary_tables_rev2.xlsx` (eGRID2023) | sheets "Table 1" and "Table 3": the title and 3 header rows, then AKGD, CAMX, NYCW and U.S. (Table 1) and CA, NY, VT and U.S. (Table 3) | US public domain |
+| `factor_egrid_puerto_rico_synthetic.xlsx` | synthetic (not real figures), built from the eGRID2023 layout above | the same title and header rows; PRMS, CAMX and U.S. (Table 1) and PR, CA and U.S. (Table 3) with round made-up values, to test the Puerto Rico country mapping | test data, no licence |
+| `factor_epa_ef_hub_2025.xlsx` | US EPA `ghg-emission-factors-hub-2025.xlsx`, sheet "Emission Factors Hub" | sheet rows 1-3, 101-116 (Table 2 with its source lines), 501-517 (Table 10 with its source and notes) and 521-526 (start of Table 11, to check the table end) | US public domain |
+| `factor_owid_travel_mode.csv` | OWID grapher `carbon-footprint-travel-mode.csv?v=1&csvType=full&useColumnShortNames=true` | the whole file (16 rows) | CC BY 4.0 |
+| `factor_owid_co2_data.csv` | OWID `owid-co2-data.csv` (first 80 KB, one Range request) | header plus Afghanistan 2009, 2023, 2024 and Africa 2023, 2024 | CC BY 4.0 |
+| `factor_orr_6100.ods` | ORR `table-6100-estimates-of-normalised-passenger-carbon-dioxide-equivalent-emissions.ods` | the whole file (8 KB) | OGL v3 |
+| `factor_fueleconomy_vehicles.csv.zip` | FuelEconomy.gov `vehicles.csv.zip` | a new deflate ZIP with `vehicles.csv`: header plus a 2021 Toyota Prius, the 2026 Prius (id 49301) and the 2026 Tesla Model Y (id 49743) | US public domain |
+| `factor_concito_v1_2.xlsx` | CONCITO `Version 1.2_DK_ENG_rev_18122025_0.xlsx` | sheets DK, GB, NL, FR, ES: header plus Ra00001, Ra00008 and Ra00010 each | CC BY 4.0 |
+| `factor_rivm_2024.xlsx` | RIVM `Database-milieubelasting-voedingsmiddelen-database-versie-23-september-2024-...xlsx` | sheets "tot-en-met-retail" and "tot-en-met-consumptie": header plus 3 rows each | CC BY 4.0 |
+| `eurostat_sdg_13_31.json` | Eurostat `sdg_13_31?format=JSON&lang=EN` | the whole response (14 KB) | CC BY 4.0 |
+
 
 ### ember_api: Ember API carbon intensity (2026-11-19)
 

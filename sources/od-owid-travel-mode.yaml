@@ -7,37 +7,36 @@ source_class: reference
 licence:
   class: open
   spdx: CC-BY-4.0
-  attribution: 'Our World in Data: carbon footprint of travel per km by mode'
+  attribution: Our World in Data (ourworldindata.org), based on UK DESNZ; CC BY 4.0
   url: https://creativecommons.org/licenses/by/4.0/
-method: dump
+method: api
 seeds:
-- https://ourworldindata.org/grapher/carbon-footprint-travel-mode.csv
-- https://ourworldindata.org/travel-carbon-footprint
+- https://ourworldindata.org/grapher/carbon-footprint-travel-mode.csv?v=1&csvType=full&useColumnShortNames=true
 sitemaps: []
 feeds: []
-adapter: null
+adapter: factor_table
 include: []
 exclude: []
 max_depth: 0
 kinds:
-- article
-- tip
-llm_kinds:
-- tip
+- emission_factor
+llm_kinds: []
 render: never
 cadence: yearly
 min_delay_s: 5
-daily_budget: 20
+daily_budget: 10
 politeness_key: null
-enabled: false
+enabled: true
 needs_key: false
 key_secret: null
 max_retention_days: null
 display_requirements: null
 notes: 'Research 2026-11-19 (carbon footprint corpus; aviation; verdict ADD): g CO2e/pkm for flights,
   rail, bus, ferry and car (CSV confirmed). Format: CSV. Licence (research): open (CC BY 4.0). robots
-  has a sitemap only (all allowed); csv_filter fits; yearly. | Disabled: adapter pending: csv_filter mapping
-  for this dataset (CSV); the generic reader exists but has no mapping for it yet'
+  has a sitemap only (all allowed); csv_filter fits; yearly. | Adapter factor_table (2026-11-19): grapher
+  CSV carbon-footprint-travel-mode (16 modes, UK DESNZ 2022 factors, g CO2e per passenger-km; flights
+  include the RF uplift) -> emission_factor records. ourworldindata.org robots.txt: Sitemap line only
+  (allowed), re-checked 2026-11-19.'
 relevance:
   sections:
   - carbon

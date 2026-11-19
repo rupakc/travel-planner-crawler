@@ -344,3 +344,9 @@ plan = `docs/superpowers/plans/2026-11-15-voyager-crawler.md`, r1–r5 = `docs/r
   2000, monthly from 2019-01, no entity_code = every country), weekly, daily_budget 10. Owner key in
   Secret Manager `crawler-src-ember-key` (new KEY_SECRET override in seeds_to_sources.py); sent as the
   `api_key` query parameter, redacted from stored URLs/redirects/errors; a row carrying it is refused.
+- 2026-11-19: carbon factor tables, second batch: `factor_table` gains stacked-table anchors, ODS
+  (calamine), CSV-in-ZIP and `region_code`; 8 sources on (eGRID, EF Hub, OWID travel mode + CO2,
+  ORR 6100, FuelEconomy.gov, CONCITO, RIVM) + od-eea-co2-cars-avg via Eurostat sdg_13_31. US grid
+  rates stay `emission_factor` (lb/MWh, per subregion/state; no unit conversion). Off: AU NGA (no
+  response), AGRIBALYSE (robots disallow), FAOSTAT (robots 521), DfT TAG + NHTS (occupancy kind
+  pending, owner). New read endpoints `/v1/carbon/factors` and `/v1/carbon/grid` (docs/Crawler-API.md).

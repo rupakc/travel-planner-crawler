@@ -1217,3 +1217,13 @@ od-owid-food-ghg                   # carbon/tips: OWID food GHG per kg, Poore & 
 carbon-owid-grapher-ci             # carbon/hotels: OWID grid carbon intensity per country (api, open, yearly, <= 10/day); factor_table
 # --- Ember API, ember_api (2026-11-19, owner key) ---
 carbon-ember-api                   # carbon/hotels/getting_around: Ember grid carbon intensity per country, yearly + monthly (api, open, weekly, <= 10/day); ember_api
+# --- carbon factor tables, second batch (2026-11-19): factor_table (stacked tables, ODS, zipped CSV) and eurostat_jsonstat ---
+od-epa-egrid                       # carbon/hotels/getting_around: US EPA eGRID2023 subregion and state lb CO2e/MWh (api, open, yearly, <= 10/day); factor_table
+od-epa-ef-hub                      # carbon/flights/getting_around: US EPA GHG Emission Factors Hub 2025, Tables 10 and 2 (api, open, yearly, <= 10/day); factor_table
+od-owid-travel-mode                # carbon/flights/getting_around: OWID g CO2e per passenger-km by mode (api, open, yearly, <= 10/day); factor_table
+od-owid-co2-data                   # carbon/tips: OWID per-capita CO2 and GHG per country, from 2010 (api, open, yearly, <= 10/day); factor_table
+od-eea-co2-cars-avg                # carbon/getting_around: EEA new-car g CO2/km per country via Eurostat sdg_13_31 (api, open, yearly, <= 10/day); eurostat_jsonstat
+od-orr-rail-environment            # carbon/getting_around: ORR Table 6100 GB rail g CO2e per passenger-km (ODS) (api, open, yearly, <= 10/day); factor_table
+od-fueleconomy-gov                 # carbon/getting_around: FuelEconomy.gov tailpipe g CO2/mile per US model, from 2022 (api, open, yearly, <= 10/day); factor_table
+od-concito-big-climate-db          # carbon/tips: The Big Climate Database v1.2, food kg CO2e/kg for DK GB NL FR ES (api, open, yearly, <= 10/day); factor_table
+od-rivm-food-lca                   # carbon/tips: RIVM Dutch food LCA 2024, to retail and to consumption (api, open, yearly, <= 10/day); factor_table

@@ -7,31 +7,26 @@ source_class: reference
 licence:
   class: open
   spdx: CC-BY-4.0
-  attribution: RIVM Database milieubelasting voedingsmiddelen (Dutch food LCA database)
+  attribution: RIVM, Database milieubelasting voedingsmiddelen (2024), CC BY 4.0
   url: https://creativecommons.org/licenses/by/4.0/
-method: dump
+method: api
 seeds:
 - https://www.rivm.nl/sites/default/files/2026-03/Database-milieubelasting-voedingsmiddelen-database-versie-23-september-2024-met-tabblad-per-voedingsmiddelengroep.xlsx
-- https://www.rivm.nl/sites/default/files/2026-03/Database-milieubelasting-voedingsmiddelen-database-versie-4-oktober-2019.xlsx
-- https://www.rivm.nl/voeding/database-milieubelasting-voedingsmiddelen
-- https://www.rivm.nl/rss
 sitemaps: []
 feeds: []
-adapter: null
+adapter: factor_table
 include: []
 exclude: []
 max_depth: 0
 kinds:
-- article
-- tip
-llm_kinds:
-- tip
+- emission_factor
+llm_kinds: []
 render: never
 cadence: yearly
 min_delay_s: 5
-daily_budget: 20
+daily_budget: 10
 politeness_key: null
-enabled: false
+enabled: true
 needs_key: false
 key_secret: null
 max_retention_days: null
@@ -40,8 +35,11 @@ notes: 'Research 2026-11-19 (carbon footprint corpus; food and activities; verdi
   Dutch government LCA of ~250 foods as eaten (kg CO2e per kg, plus land/water), consumer-side incl. cooking:
   a second national food factor set. Format: xlsx multi-sheet (one tab per food group). Licence (research):
   open (CC BY 4.0). reader: none (xlsx multi-sheet factor table); cadence: irregular (2019, 2024 editions);
-  robots 200, paths allowed; CC BY 4.0 linked on dataset page. | Disabled: adapter pending: xlsx multi-sheet
-  (one tab per food group)'
+  robots 200, paths allowed; CC BY 4.0 linked on dataset page. | Adapter factor_table (2026-11-19): the
+  2024 RIVM workbook (0.7 MB), sheets tot-en-met-retail and tot-en-met-consumptie -> emission_factor records
+  (kg CO2e per kg, NL). RIVM notes the figures are not critically reviewed (ISO 14040): compare food groups,
+  not single foods. The 2019 edition is not fetched. www.rivm.nl robots.txt (2026-11-19): /sites/default/files/
+  allowed; CC BY 4.0 stated in the workbook disclaimer.'
 relevance:
   sections:
   - carbon

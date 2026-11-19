@@ -7,31 +7,26 @@ source_class: reference
 licence:
   class: open
   spdx: CC-BY-4.0
-  attribution: The Big Climate Database (CONCITO / 2-0 LCA), v1.2
+  attribution: The Big Climate Database (CONCITO / 2-0 LCA), CC BY 4.0
   url: https://creativecommons.org/licenses/by/4.0/
-method: dump
+method: api
 seeds:
 - https://concito.dk/files/media/document/Version%201.2_DK_ENG_rev_18122025_0.xlsx
-- https://thebigclimatedatabase.com/
-- https://concito.dk/en/thebigclimatedatabase
-- https://concito.dk/en/node/3851
 sitemaps: []
 feeds: []
-adapter: null
+adapter: factor_table
 include: []
 exclude: []
 max_depth: 0
 kinds:
-- article
-- tip
-llm_kinds:
-- tip
+- emission_factor
+llm_kinds: []
 render: never
 cadence: yearly
 min_delay_s: 5
-daily_budget: 20
+daily_budget: 10
 politeness_key: null
-enabled: false
+enabled: true
 needs_key: false
 key_secret: null
 max_retention_days: null
@@ -41,7 +36,10 @@ notes: 'Research 2026-11-19 (carbon footprint corpus; food and activities; verdi
   transport, retail: country-specific food factors. Format: xlsx (Danish market) + full HTML table on
   thebigclimatedatabase.com. Licence (research): open (CC BY 4.0). reader: none (xlsx or HTML table);
   cadence: irregular; robots: concito.dk 200 allowed, thebigclimatedatabase.com 404; terms: ''Licence:
-  CC-BY''. | Disabled: adapter pending: xlsx (Danish market) + full HTML table on thebigclimatedatabase.com'
+  CC-BY''. | Adapter factor_table (2026-11-19): The Big Climate Database v1.2 workbook (1.5 MB), sheets
+  DK, GB, NL, FR and ES -> emission_factor records per food and country (kg CO2e per kg, cradle to retail
+  incl. iLUC; a 0 total means no figure and is skipped). concito.dk robots.txt (2026-11-19): /files/ allowed.
+  Licence CC BY 4.0 (dataset page).'
 relevance:
   sections:
   - carbon

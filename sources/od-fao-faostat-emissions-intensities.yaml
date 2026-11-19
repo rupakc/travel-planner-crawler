@@ -39,8 +39,9 @@ notes: 'Research 2026-11-19 (carbon footprint corpus; food and activities; verdi
   country. Format: zip containing CSV (normalized). Licence (research): open (FAOSTAT statistical data
   CC BY 4.0); FAO site text facts_only. reader: zip_stream + csv_filter; yearly; fenixservices robots:
   no response (allowed under the owner rule); FAO site terms non-commercial, owner accepted. | Disabled:
-  adapter pending: csv_filter mapping for this dataset (zip containing CSV (normalized)); the generic
-  reader exists but has no mapping for it yet'
+  5xx at robots.txt: fenixservices.fao.org timed out, then answered 521 (Cloudflare: origin down) on 2026-11-19;
+  a 5xx robots.txt is a disallow (RFC 9309), so the bulk zip was not requested. Retry later; the mapping
+  would be zip_stream + factor_table'
 relevance:
   sections:
   - carbon

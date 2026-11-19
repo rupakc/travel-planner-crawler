@@ -35,9 +35,10 @@ max_retention_days: null
 display_requirements: null
 notes: 'Research 2026-11-19 (carbon footprint corpus; aviation; verdict NEEDS-ADAPTER): Aviation fuel
   factors and state grid factors. Format: xlsx. Licence (research): open (likely CC BY 4.0, unverified).
-  robots: no response = allowed; URL from prior knowledge, verify. | Disabled: adapter pending: NGA factors
-  workbook is presentation tables; dcceew.gov.au robots.txt did not answer (2026-11-19) and the file URL
-  is not yet confirmed'
+  robots: no response = allowed; URL from prior knowledge, verify. | Disabled: re-test from the crawler
+  VM: www.dcceew.gov.au answered no request from VoyagerBot on 2026-11-19 (robots.txt: HTTP/2 stream reset,
+  then a 30 s timeout over HTTP/1.1; the publication page: stream reset), so the workbook URL cannot be
+  confirmed; never retried with another identity'
 relevance:
   sections:
   - carbon

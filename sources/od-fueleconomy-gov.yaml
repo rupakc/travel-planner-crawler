@@ -12,25 +12,21 @@ licence:
 method: api
 seeds:
 - https://www.fueleconomy.gov/feg/epadata/vehicles.csv.zip
-- https://www.fueleconomy.gov/ws/rest/
-- https://www.fueleconomy.gov/feg/download.shtml
 sitemaps: []
 feeds: []
-adapter: null
+adapter: factor_table
 include: []
 exclude: []
 max_depth: 0
 kinds:
-- article
-- tip
-llm_kinds:
-- tip
+- emission_factor
+llm_kinds: []
 render: never
 cadence: yearly
 min_delay_s: 5
-daily_budget: 20
+daily_budget: 10
 politeness_key: null
-enabled: false
+enabled: true
 needs_key: false
 key_secret: null
 max_retention_days: null
@@ -38,8 +34,11 @@ display_requirements: null
 notes: 'Research 2026-11-19 (carbon footprint corpus; ground transport; verdict ADD): Per-model g CO2/mile,
   MPG and kWh/100mi for every US vehicle 1984-current; rental/own-car trip legs. Format: zip CSV + XML;
   REST. Licence (research): public domain (US Gov work). robots.txt no response (allowed by owner rule);
-  terms not found; updated with model years. | Disabled: adapter pending: csv_filter mapping for this
-  dataset (zip CSV + XML; REST); the generic reader exists but has no mapping for it yet'
+  terms not found; updated with model years. | Adapter factor_table (2026-11-19): vehicles.csv.zip (2.2
+  MB, one CSV member) -> one emission_factor per model (tailpipe g CO2 per mile, co2TailpipeGpm; EVs 0)
+  for model years from 2022 (about 7,000 rows). www.fueleconomy.gov robots.txt: the connection is reset
+  on every try (HTTP/2 CANCEL, 2026-11-19) while the file answers 200, so no response = allowed (owner
+  rule 2026-11-18). The REST service is not used.'
 relevance:
   sections:
   - carbon

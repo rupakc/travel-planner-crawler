@@ -49,7 +49,8 @@ fetcher runs adapters.
 `state_dept_advisories`, `ticketmaster_discovery`, `wikidata_sparql`, `wikivoyage_dump`.
 What each one reads: [Sources and Licences](Sources-and-Licences#built-in-adapters-apis-and-dumps).
 Later additions include the open-data readers (2026-11-18) and `factor_table` (2026-11-19,
-CSV/XLSX emission-factor and grid-intensity tables) and `ember_api` (2026-11-19, Ember API
+CSV/XLSX emission-factor and grid-intensity tables; since 2026-11-19 also ODS, zipped CSV,
+stacked tables found by an anchor cell, and several tables per file) and `ember_api` (2026-11-19, Ember API
 carbon intensity per country, owner key in the `api_key` query parameter, redacted); see
 [Carbon Footprint Data](Carbon-Footprint-Data).
 Some adapters belong to sources that are disabled in `sources/*.yaml` (for example

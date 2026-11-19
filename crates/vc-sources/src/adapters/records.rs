@@ -83,7 +83,7 @@ pub fn records(adapter: &str, url: &CanonicalUrl, body: &[u8]) -> Option<Result<
         "ecb_fx" => ecb(body),
         "ember_api" => factors(ember_api::items(url, body)),
         "enwiki_visa" => enwiki_visa_records(url, body),
-        "eurostat_jsonstat" => eurostat(body),
+        "eurostat_jsonstat" => eurostat(url, body),
         "factor_table" => factors(factor_table::items(url, body)),
         "fcdo_content_api" => fcdo(url, body),
         "fsa_fhrs" => restaurants(fsa_fhrs::items(url, body)),
@@ -870,11 +870,107 @@ fn price_item(
     }
 }
 
-fn eurostat(body: &[u8]) -> Result<Vec<AdapterItem>> {
+/// Eurostat `sdg_13_31` (2026-11-19): average CO2 per km of new passenger cars per country and
+/// year (EEA monitoring data, CC BY 4.0) → `emission_factor` records (category `car`).
+pub const EUROSTAT_CARS_CO2: &str = "sdg_13_31";
+
+/// The `scope` of an `sdg_13_31` cell from its JSON-stat status flags: `b` (break in
+/// series, the test-cycle change) and `e` (estimated) are named in the scope so values across
+/// a break or estimates never look like final, comparable figures; `p` (provisional) cells are
+/// skipped (`None`). Other flags are labelled `flagged`. At most 40 characters (the schema).
+fn cars_co2_scope(status: Option<&str>) -> Option<String> {
+    let flags = status.unwrap_or_default().trim();
+    if flags.contains('p') {
+        return None;
+    }
+    let mut q: Vec<&str> = Vec::new();
+    if flags.contains('b') {
+        q.push("series break");
+    }
+    if flags.contains('e') {
+        q.push("estimated");
+    }
+    if q.is_empty() && !flags.is_empty() {
+        q.push("flagged");
+    }
+    Some(if q.is_empty() {
+        "new registrations, type approval".to_string()
+    } else {
+        format!("type approval; {}", q.join(", "))
+    })
+}
+
+fn eurostat_cars_co2(cube: &eurostat_jsonstat::Cube, geo: usize, time: usize) -> Vec<AdapterItem> {
+    let unit = cube.dim("unit");
+    let as_of = cube.updated.as_deref().and_then(day);
+    let mut out = Vec::new();
+    for c in &cube.cells {
+        if unit.is_some_and(|u| c.coords[u] != "G_KM") || !c.value.is_finite() || c.value < 0.0 {
+            continue;
+        }
+        let Some(code) = eurostat_country(&c.coords[geo]) else {
+            continue; // EU27_2020 and other aggregates
+        };
+        let Ok(year) = c.coords[time].trim().parse::<i32>() else {
+            continue;
+        };
+        let Some(country) = countries::name(&code) else {
+            continue;
+        };
+        let Some(scope) = cars_co2_scope(c.status.as_deref()) else {
+            continue; // provisional: not stored until final
+        };
+        out.push(AdapterItem {
+            kind: "emission_factor",
+            id: Some(format!("eurostat-sdg-13-31:{year}:{code}")),
+            series_key: None,
+            data: obj(vec![
+                ("activity", s("new_passenger_car_average")),
+                (
+                    "activity_label",
+                    s("Average CO2 emissions per km from new passenger cars"),
+                ),
+                ("category", s("car")),
+                ("geography", s(country)),
+                ("country_code", s(code.clone())),
+                ("unit", s("g CO2 per km")),
+                (
+                    "value",
+                    serde_json::Number::from_f64(c.value).map(Value::Number),
+                ),
+                ("gas_basis", s("co2")),
+                ("scope", s(scope)),
+                ("year", Some(json!(year))),
+                (
+                    "publisher",
+                    s("Eurostat, based on European Environment Agency (EEA) monitoring data"),
+                ),
+                (
+                    "dataset",
+                    s(format!(
+                        "Eurostat sdg_13_31: average CO2 emissions per km from new passenger cars {year}"
+                    )),
+                ),
+                ("factor_id", s(EUROSTAT_CARS_CO2)),
+                ("as_of", as_of.clone().map(Value::String)),
+            ]),
+        });
+    }
+    out
+}
+
+fn eurostat(url: &CanonicalUrl, body: &[u8]) -> Result<Vec<AdapterItem>> {
     let cube = eurostat_jsonstat::parse(body)?;
     let (Some(geo), Some(time)) = (cube.dim("geo"), cube.dim("time")) else {
         return Err(Error::Invalid("eurostat: no geo/time dimension".into()));
     };
+    if url
+        .as_url()
+        .path()
+        .ends_with(&format!("/data/{EUROSTAT_CARS_CO2}"))
+    {
+        return Ok(eurostat_cars_co2(&cube, geo, time));
+    }
     let (na, cat) = (cube.dim("na_item"), cube.dim("ppp_cat"));
     let as_of = cube.updated.as_deref().and_then(day);
     let mut out = Vec::new();

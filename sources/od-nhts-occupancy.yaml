@@ -38,7 +38,8 @@ notes: 'Research 2026-11-19 (carbon footprint corpus; gaps; verdict NEEDS-ADAPTE
   occupancy by vehicle type and purpose (2022: car 1.4, all vehicles 1.5), for per-passenger car and taxi
   factors. Format: zipped CSV trip files that need aggregating. Licence (research): US federal work (public
   domain). robots.txt returns the SPA index (no robots file, so allowed). Terms not found. | Disabled:
-  adapter pending: zipped CSV trip files that need aggregating'
+  adapter pending: NHTS publishes trip microdata (zipped CSV), and occupancy must be computed from it;
+  factor_table copies published values only, and occupancy needs its own kind (owner decision)'
 relevance:
   sections:
   - carbon

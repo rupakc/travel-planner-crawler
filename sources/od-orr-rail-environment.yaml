@@ -9,28 +9,24 @@ licence:
   spdx: OGL-UK-3.0
   attribution: Contains public sector information licensed under the Open Government Licence v3.0
   url: https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/
-method: dump
+method: api
 seeds:
-- https://dataportal.orr.gov.uk/statistics/infrastructure-and-environment/rail-environment
-- https://dataportal.orr.gov.uk/media/olmp1eck/rail-emissions-data-catalogue.ods
-- https://dataportal.orr.gov.uk/media/xw4f0ohl/rail-environment-2024-25.pdf
+- https://dataportal.orr.gov.uk/media/1527/table-6100-estimates-of-normalised-passenger-carbon-dioxide-equivalent-emissions.ods
 sitemaps: []
 feeds: []
-adapter: null
+adapter: factor_table
 include: []
 exclude: []
 max_depth: 0
 kinds:
-- article
-- tip
-llm_kinds:
-- tip
+- emission_factor
+llm_kinds: []
 render: never
 cadence: yearly
 min_delay_s: 5
-daily_budget: 20
+daily_budget: 10
 politeness_key: null
-enabled: false
+enabled: true
 needs_key: false
 key_secret: null
 max_retention_days: null
@@ -38,8 +34,12 @@ display_requirements: null
 notes: 'Research 2026-11-19 (carbon footprint corpus; gaps; verdict NEEDS-ADAPTER): Official GB passenger-rail
   g CO2e per pkm (31 g, 2024-25), yearly in November. Tables are ODS, so an ODS reader is needed (the
   release page fits html). Format: ods + pdf + html. Licence (research): UK official statistics, probably
-  OGL v3 (not confirmed). robots disallows only /dashboards/. Terms page has no robot ban. | Disabled:
-  adapter pending: ods + pdf + html'
+  OGL v3 (not confirmed). robots disallows only /dashboards/. Terms page has no robot ban. | Adapter factor_table
+  (2026-11-19): ORR Table 6100 ODS (8 KB, sheet 6100_Passenger_CO2_emissions) -> one emission_factor per
+  financial year: GB passenger rail, g CO2e per passenger-km from traction energy (year = the April it
+  starts; [x] cells skipped). ODS through calamine. dataportal.orr.gov.uk robots.txt (2026-11-19) disallows
+  /dashboards/ only. Licence: Crown copyright, orr.gov.uk states "All content is available under the Open
+  Government Licence v3.0, except where otherwise stated" (2026-11-19).'
 relevance:
   sections:
   - carbon

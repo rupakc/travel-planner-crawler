@@ -889,9 +889,60 @@ fn factor_table_records_fit_the_kind_registry() {
             "factor_owid_grid_ci.csv",
             "grid_carbon_intensity",
         ),
+        // Second batch (2026-11-19).
+        (
+            "https://www.epa.gov/system/files/documents/2025-06/summary_tables_rev2.xlsx",
+            "factor_egrid_summary_2023.xlsx",
+            "emission_factor",
+        ),
+        (
+            "https://www.epa.gov/system/files/other-files/2025-01/ghg-emission-factors-hub-2025.xlsx",
+            "factor_epa_ef_hub_2025.xlsx",
+            "emission_factor",
+        ),
+        (
+            "https://ourworldindata.org/grapher/carbon-footprint-travel-mode.csv",
+            "factor_owid_travel_mode.csv",
+            "emission_factor",
+        ),
+        (
+            "https://raw.githubusercontent.com/owid/co2-data/master/owid-co2-data.csv",
+            "factor_owid_co2_data.csv",
+            "emission_factor",
+        ),
+        (
+            "https://dataportal.orr.gov.uk/media/1527/table-6100-estimates-of-normalised-passenger-carbon-dioxide-equivalent-emissions.ods",
+            "factor_orr_6100.ods",
+            "emission_factor",
+        ),
+        (
+            "https://www.fueleconomy.gov/feg/epadata/vehicles.csv.zip",
+            "factor_fueleconomy_vehicles.csv.zip",
+            "emission_factor",
+        ),
+        (
+            "https://concito.dk/files/media/document/Version%201.2_DK_ENG_rev_18122025_0.xlsx",
+            "factor_concito_v1_2.xlsx",
+            "emission_factor",
+        ),
+        (
+            "https://www.rivm.nl/sites/default/files/2026-03/Database-milieubelasting-voedingsmiddelen-database-versie-23-september-2024-met-tabblad-per-voedingsmiddelengroep.xlsx",
+            "factor_rivm_2024.xlsx",
+            "emission_factor",
+        ),
+        (
+            "https://ec.europa.eu/eurostat/api/dissemination/statistics/1.0/data/sdg_13_31",
+            "eurostat_sdg_13_31.json",
+            "emission_factor",
+        ),
     ] {
         let u = vc_core::CanonicalUrl::parse(url).unwrap();
-        let items = vc_sources::adapters::records::records("factor_table", &u, &recorded(file))
+        let adapter = if file.starts_with("eurostat_") {
+            "eurostat_jsonstat"
+        } else {
+            "factor_table"
+        };
+        let items = vc_sources::adapters::records::records(adapter, &u, &recorded(file))
             .expect("mapped")
             .expect("fixture maps");
         assert!(!items.is_empty(), "{file}");
