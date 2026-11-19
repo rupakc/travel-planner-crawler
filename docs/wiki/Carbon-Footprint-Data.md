@@ -44,9 +44,9 @@ A file whose mapped sheet or table is missing is refused as a whole.
 | `od-desnz-ghg-factors` | UK DESNZ GHG conversion factors, flat file (XLSX, OGL v3, yearly in June) | kg CO2e factors for flights by haul and cabin (with and without RF), ferry, rail, bus, taxi, motorbike, cars, hotel stays per country, and UK grid electricity |
 | `od-owid-food-ghg` | OWID grapher `ghg-per-kg-poore.csv` (CC BY 4.0) | kg CO2e per kg for each food product (Poore and Nemecek 2018, global) |
 | `carbon-owid-grapher-ci` | OWID grapher `electricity-mix.csv`, metric `carbon_intensity` (CC BY 4.0) | gCO2e per kWh per country and year (life-cycle; aggregates skipped) |
-| `od-epa-egrid` | US EPA eGRID2023 summary tables (XLSX, public domain): Table 1 and Table 3 | lb CO2e per MWh, total output emission rate, per eGRID subregion and per US state (`region_code`), plus the US total |
+| `od-epa-egrid` | US EPA eGRID2023 summary tables (XLSX, public domain): Table 1 and Table 3 | lb CO2e per MWh, total output emission rate, per eGRID subregion and per US state (`region_code`), plus the US total (stored once, from Table 3). Puerto Rico (subregion `PRMS`, state `PR`) is stored under its own ISO code `PR` |
 | `od-epa-ef-hub` | US EPA GHG Emission Factors Hub 2025 (XLSX, one sheet of stacked tables): Table 10 and Table 2 | kg CO2 per vehicle-mile or passenger-mile for car, light truck, motorcycle, rail, bus and air by haul; kg CO2 per unit of each transport fuel. CH4 and N2O are separate columns and are not summed into CO2e |
-| `od-owid-travel-mode` | OWID grapher `carbon-footprint-travel-mode.csv` (CC BY 4.0) | g CO2e per passenger-km for 16 UK modes (DESNZ 2022; flights with RF) |
+| `od-owid-travel-mode` | OWID grapher `carbon-footprint-travel-mode.csv` (CC BY 4.0) | g CO2e per passenger-km for 16 UK modes (DESNZ 2022; flights with RF). A secondary copy (scope `secondary copy of UK DESNZ factors`): for GB, prefer `od-desnz-ghg-factors`, the current factors at source |
 | `od-owid-co2-data` | OWID `owid-co2-data.csv` (CC BY 4.0, 15 MB) | t CO2 per person (territorial and consumption-based) and t CO2e per person (GHG) per country, from 2010; category `other`, for destination comparisons |
 | `od-orr-rail-environment` | ORR Table 6100 (ODS, OGL v3) | g CO2e per passenger-km of GB passenger rail per financial year (traction energy) |
 | `od-fueleconomy-gov` | FuelEconomy.gov `vehicles.csv.zip` (public domain) | tailpipe g CO2 per mile per US model, model years from 2022 |
@@ -57,7 +57,7 @@ US grid factors are `emission_factor` records, not `grid_carbon_intensity` obser
 
 ## Eurostat `sdg_13_31` (adapter `eurostat_jsonstat`)
 
-`od-eea-co2-cars-avg` reads the EEA's average CO2 per km of new passenger cars from Eurostat `sdg_13_31` (CC BY 4.0, one 14 KB JSON-stat request a year). The EEA datahub item only links file shares whose lists need JavaScript. Each country and year becomes one `emission_factor` (category `car`, unit `g CO2 per km`); the EU27 aggregate is skipped.
+`od-eea-co2-cars-avg` reads the EEA's average CO2 per km of new passenger cars from Eurostat `sdg_13_31` (CC BY 4.0, one 14 KB JSON-stat request a year). The EEA datahub item only links file shares whose lists need JavaScript. Each country and year becomes one `emission_factor` (category `car`, unit `g CO2 per km`); the EU27 aggregate is skipped. The cube's status flags are kept in `scope`: a break in series (`b`, the 2017 test-cycle change) reads `type approval; series break`, an estimate (`e`) adds `estimated`, so values across the break never look comparable; provisional cells (`p`) are not stored until final.
 
 ## Serving to the app
 

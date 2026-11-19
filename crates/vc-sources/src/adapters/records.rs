@@ -874,6 +874,32 @@ fn price_item(
 /// year (EEA monitoring data, CC BY 4.0) → `emission_factor` records (category `car`).
 pub const EUROSTAT_CARS_CO2: &str = "sdg_13_31";
 
+/// The `scope` of an `sdg_13_31` cell from its JSON-stat status flags: `b` (break in
+/// series, the test-cycle change) and `e` (estimated) are named in the scope so values across
+/// a break or estimates never look like final, comparable figures; `p` (provisional) cells are
+/// skipped (`None`). Other flags are labelled `flagged`. At most 40 characters (the schema).
+fn cars_co2_scope(status: Option<&str>) -> Option<String> {
+    let flags = status.unwrap_or_default().trim();
+    if flags.contains('p') {
+        return None;
+    }
+    let mut q: Vec<&str> = Vec::new();
+    if flags.contains('b') {
+        q.push("series break");
+    }
+    if flags.contains('e') {
+        q.push("estimated");
+    }
+    if q.is_empty() && !flags.is_empty() {
+        q.push("flagged");
+    }
+    Some(if q.is_empty() {
+        "new registrations, type approval".to_string()
+    } else {
+        format!("type approval; {}", q.join(", "))
+    })
+}
+
 fn eurostat_cars_co2(cube: &eurostat_jsonstat::Cube, geo: usize, time: usize) -> Vec<AdapterItem> {
     let unit = cube.dim("unit");
     let as_of = cube.updated.as_deref().and_then(day);
@@ -890,6 +916,9 @@ fn eurostat_cars_co2(cube: &eurostat_jsonstat::Cube, geo: usize, time: usize) ->
         };
         let Some(country) = countries::name(&code) else {
             continue;
+        };
+        let Some(scope) = cars_co2_scope(c.status.as_deref()) else {
+            continue; // provisional: not stored until final
         };
         out.push(AdapterItem {
             kind: "emission_factor",
@@ -910,7 +939,7 @@ fn eurostat_cars_co2(cube: &eurostat_jsonstat::Cube, geo: usize, time: usize) ->
                     serde_json::Number::from_f64(c.value).map(Value::Number),
                 ),
                 ("gas_basis", s("co2")),
-                ("scope", s("new registrations, type approval")),
+                ("scope", s(scope)),
                 ("year", Some(json!(year))),
                 (
                     "publisher",

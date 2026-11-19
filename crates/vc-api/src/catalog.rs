@@ -6,12 +6,12 @@ use chrono::{DateTime, Utc};
 use vc_core::Result;
 use vc_core::index::{Item, ObservationView};
 use vc_core::licence::LicenceClass;
-use vc_core::usepolicy::IndexUse;
+use vc_core::usepolicy::{IndexUse, ServeUse};
 
 use crate::dto::{SourceDto, StatsDto};
 
 /// Filters of `/v1/carbon/factors` (current `emission_factor` records). Every filter is an
-/// exact match on the record's field; `None` = any.
+/// exact match on the record's field except `activity` (a substring of the slug); `None` = any.
 #[derive(Debug, Clone, Default, PartialEq)]
 pub struct FactorQuery {
     /// `category` (`flights`, `rail`, `accommodation`, `electricity`, `food`, …).
@@ -44,6 +44,7 @@ impl FactorQuery {
         it.kind.0.as_ref() == "emission_factor"
             && self.licence_classes.contains(&it.licence.class)
             && it.use_policy.index == IndexUse::Full
+            && it.use_policy.serve != ServeUse::LinkOnly
             && eq(&self.category, "category")
             && eq(&self.country, "country_code")
             && eq(&self.region, "region_code")

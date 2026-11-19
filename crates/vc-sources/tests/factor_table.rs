@@ -136,6 +136,78 @@ fn desnz_flat_file_yields_travel_factors_only() {
 }
 
 #[test]
+fn egrid_puerto_rico_is_its_own_country() {
+    // Synthetic values in the real layout (README): PRMS and PR are ISO 3166-1 PR, not US.
+    let it = items(EGRID, &fixture("factor_egrid_puerto_rico_synthetic.xlsx"));
+    fit(&it);
+    assert_eq!(it.len(), 5, "{it:#?}");
+    let prms = by_id(&it, "egrid-subregion:2023:PRMS");
+    assert_eq!(prms.data["country_code"], "PR");
+    assert_eq!(prms.data["region_code"], "PRMS");
+    assert_eq!(
+        prms.data["geography"],
+        "Puerto Rico Miscellaneous (eGRID subregion PRMS)"
+    );
+    let pr = by_id(&it, "egrid-state:2023:PR");
+    assert_eq!(pr.data["country_code"], "PR");
+    assert_eq!(pr.data["geography"], "Puerto Rico");
+    assert!(pr.data.get("region_code").is_none());
+    assert_eq!(by_id(&it, "egrid-state:2023:CA").data["country_code"], "US");
+    assert_eq!(
+        by_id(&it, "egrid-subregion:2023:CAMX").data["country_code"],
+        "US"
+    );
+    // One national record per country.
+    let mut national: Vec<&str> = it
+        .iter()
+        .filter(|i| i.data.get("region_code").is_none())
+        .map(|i| i.data["country_code"].as_str().unwrap())
+        .collect();
+    national.sort_unstable();
+    assert_eq!(national, ["PR", "US"]);
+}
+
+/// A one-member ZIP (deflate) of `data`, written with sizes in the local header.
+fn zip_of(name: &str, data: &[u8]) -> Vec<u8> {
+    use std::io::Write;
+    let mut e = flate2::write::DeflateEncoder::new(Vec::new(), flate2::Compression::best());
+    e.write_all(data).unwrap();
+    let c = e.finish().unwrap();
+    let mut z = Vec::new();
+    z.extend_from_slice(&0x0403_4b50u32.to_le_bytes());
+    z.extend_from_slice(&20u16.to_le_bytes()); // version
+    z.extend_from_slice(&0u16.to_le_bytes()); // flags
+    z.extend_from_slice(&8u16.to_le_bytes()); // deflate
+    z.extend_from_slice(&[0; 4]); // time, date
+    z.extend_from_slice(&[0; 4]); // crc (not checked)
+    z.extend_from_slice(&u32::try_from(c.len()).unwrap().to_le_bytes());
+    z.extend_from_slice(&u32::try_from(data.len()).unwrap().to_le_bytes());
+    z.extend_from_slice(&u16::try_from(name.len()).unwrap().to_le_bytes());
+    z.extend_from_slice(&0u16.to_le_bytes());
+    z.extend_from_slice(name.as_bytes());
+    z.extend_from_slice(&c);
+    z.extend_from_slice(&0x0605_4b50u32.to_le_bytes());
+    z.extend_from_slice(&[0; 18]);
+    z
+}
+
+#[test]
+fn unzip_member_stops_a_highly_compressible_member_near_the_cap() {
+    let cap = 4 * 1024 * 1024;
+    let body = zip_of("vehicles.csv", &vec![b'a'; cap + 1]);
+    let r = factor_table::unzip_member_capped(&["vehicles.csv"], &body, cap);
+    assert!(matches!(r, Err(Error::Invalid(_))), "{r:?}");
+    // Just under the cap decodes in full.
+    let ok = factor_table::unzip_member_capped(
+        &["vehicles.csv"],
+        &zip_of("vehicles.csv", &vec![b'a'; cap]),
+        cap,
+    )
+    .unwrap();
+    assert_eq!(ok.len(), cap);
+}
+
+#[test]
 fn owid_food_rows_are_global_food_factors() {
     let it = items(FOOD, &fixture("factor_owid_food_poore.csv"));
     fit(&it);
@@ -295,7 +367,14 @@ fn every_new_file_url_has_its_mappings() {
 fn egrid_subregions_and_states_carry_region_codes() {
     let it = items(EGRID, &fixture("factor_egrid_summary_2023.xlsx"));
     fit(&it);
-    assert_eq!(it.len(), 8, "{it:#?}");
+    // 4 + 4 rows, but the U.S. total (in both tables) is stored once, from Table 3.
+    assert_eq!(it.len(), 7, "{it:#?}");
+    let national: Vec<&str> = it
+        .iter()
+        .filter(|i| i.data.get("region_code").is_none())
+        .map(|i| i.id.as_deref().unwrap())
+        .collect();
+    assert_eq!(national, ["egrid-state:2023:U.S."]);
     let camx = by_id(&it, "egrid-subregion:2023:CAMX");
     assert_eq!(
         camx.data,
@@ -370,6 +449,7 @@ fn owid_travel_mode_is_uk_g_per_pkm_with_rf_for_flights() {
     assert_eq!(d.data["unit"], "g CO2e per passenger.km");
     assert_eq!(d.data["value"], 245.87);
     assert_eq!(d.data["country_code"], "GB");
+    assert_eq!(d.data["scope"], "secondary copy of UK DESNZ factors");
     let cats: std::collections::BTreeMap<&str, &str> = it
         .iter()
         .map(|i| {
@@ -547,4 +627,23 @@ fn eurostat_sdg_13_31_is_new_car_co2_per_country() {
     assert_eq!(at.data["category"], "car");
     assert_eq!(at.data["geography"], "Austria");
     assert_eq!(at.data["as_of"], "2026-09-08");
+    assert_eq!(at.data["scope"], "new registrations, type approval");
+    // Status flags: the 2017 break (`be`) and the estimates (`e`) are named in the scope;
+    // provisional 2025 cells (`p`) are not stored.
+    assert_eq!(
+        by_id(&it, "eurostat-sdg-13-31:2017:AT").data["scope"],
+        "type approval; series break, estimated"
+    );
+    assert_eq!(
+        by_id(&it, "eurostat-sdg-13-31:2018:AT").data["scope"],
+        "type approval; estimated"
+    );
+    assert_eq!(
+        by_id(&it, "eurostat-sdg-13-31:2016:AT").data["scope"],
+        "new registrations, type approval"
+    );
+    assert!(
+        it.iter().all(|i| i.data["year"] != 2025),
+        "provisional 2025 cells are skipped"
+    );
 }

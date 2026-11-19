@@ -868,6 +868,18 @@ async fn carbon_harness(classes: &[LicenceClass]) -> Harness {
                     "gas_basis": "co2e", "year": 2025, "value": 30.0}),
                 "od-concito-big-climate-db",
             ),
+            // `serve: link_only` is never served by the factors read (the SQL excludes it).
+            {
+                let mut it = factor(
+                    "5",
+                    LicenceClass::Open,
+                    serde_json::json!({"activity": "beef", "category": "food", "country_code": "FR",
+                        "gas_basis": "co2e", "year": 2025, "value": 31.0}),
+                    "od-concito-big-climate-db",
+                );
+                it.use_policy.serve = vc_core::usepolicy::ServeUse::LinkOnly;
+                it
+            },
         ],
         grid: vec![
             grid_point(

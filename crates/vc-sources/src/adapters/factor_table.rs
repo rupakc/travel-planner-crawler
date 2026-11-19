@@ -140,6 +140,13 @@ pub enum Geo {
         country: (&'static str, &'static str),
         /// The code of the country-total row.
         national: &'static str,
+        /// Whether the country-total row becomes a record (`false` when another table of the
+        /// same file already carries the same total, so it is stored once).
+        emit_national: bool,
+        /// Codes that name a territory with its own ISO 3166-1 code, as `(code, alpha-2,
+        /// name, total)`: stored under that country, as its total when `total` is set, else
+        /// with the code as `region_code` (eGRID's Puerto Rico rows).
+        own_country: &'static [(&'static str, &'static str, &'static str, bool)],
     },
 }
 
@@ -561,7 +568,8 @@ pub const MAPPINGS: &[FactorMapping] = &[
             gas_default: "co2e",
             unit_mass: ("g CO2e", ""),
             unit_per: ("passenger.km", ""),
-            scope: ("", ""),
+            // A secondary copy: od-desnz-ghg-factors stores the same factors at source.
+            scope: ("secondary copy of UK DESNZ factors", ""),
             factor_id: "",
             geo: Geo::Fixed("United Kingdom", "GB"),
         },
@@ -636,6 +644,9 @@ pub const MAPPINGS: &[FactorMapping] = &[
                 label: "eGRID subregion",
                 country: ("United States", "US"),
                 national: "U.S.",
+                // Table 3 carries the same U.S. total; it is stored from there only.
+                emit_national: false,
+                own_country: &[("PRMS", "PR", "Puerto Rico", false)],
             },
         },
     },
@@ -671,6 +682,8 @@ pub const MAPPINGS: &[FactorMapping] = &[
                 label: "US state",
                 country: ("United States", "US"),
                 national: "U.S.",
+                emit_national: true,
+                own_country: &[("PR", "PR", "Puerto Rico", true)],
             },
         },
     },
@@ -1025,13 +1038,28 @@ fn csv_table(m: &FactorMapping, body: &[u8]) -> Result<Table> {
 
 /// The chosen member of a ZIP body, decoded (bounded by [`MAX_UNZIPPED_BYTES`]).
 pub fn unzip_member(member: &'static [&'static str], body: &[u8]) -> Result<Vec<u8>> {
+    unzip_member_capped(member, body, MAX_UNZIPPED_BYTES)
+}
+
+/// Compressed bytes fed to the inflater per step of [`unzip_member`].
+const UNZIP_CHUNK: usize = 1024;
+
+/// [`unzip_member`] with an explicit cap on the decoded size.
+#[doc(hidden)]
+pub fn unzip_member_capped(
+    member: &'static [&'static str],
+    body: &[u8],
+    cap: usize,
+) -> Result<Vec<u8>> {
     let mut z = ZipStream::new(member);
     let mut out = Vec::new();
-    for chunk in body.chunks(64 * 1024) {
+    // Small input chunks keep the overshoot past the cap small: deflate expands at most
+    // ~1032:1, so one 1 KiB chunk adds about 1 MiB before the check.
+    for chunk in body.chunks(UNZIP_CHUNK) {
         z.push(chunk, &mut out)?;
-        if out.len() > MAX_UNZIPPED_BYTES {
+        if out.len() > cap {
             return Err(Error::Invalid(format!(
-                "{ID}: zip member larger than {MAX_UNZIPPED_BYTES} bytes"
+                "{ID}: zip member larger than {cap} bytes"
             )));
         }
     }
@@ -1335,9 +1363,23 @@ fn mapping_items(m: &FactorMapping, url: &CanonicalUrl, body: &[u8]) -> Result<V
                         label: what,
                         country,
                         national,
+                        emit_national,
+                        own_country,
                     } => {
                         let rc = get(row, code);
-                        if rc == national {
+                        let (cc, total) = match own_country.iter().find(|o| o.0 == rc) {
+                            Some(&(_, cc, cname, true)) => {
+                                (cc, Some((cname.to_string(), cc.to_string())))
+                            }
+                            Some(&(_, cc, _, false)) => (cc, None),
+                            None => (country.1, None),
+                        };
+                        if let Some(t) = total {
+                            t
+                        } else if rc == national {
+                            if !emit_national {
+                                continue;
+                            }
                             (country.0.to_string(), country.1.to_string())
                         } else if region_code_ok(&rc) {
                             let n = get(row, name);
@@ -1347,7 +1389,7 @@ fn mapping_items(m: &FactorMapping, url: &CanonicalUrl, body: &[u8]) -> Result<V
                                 format!("{n} ({what} {rc})")
                             };
                             region = rc;
-                            (g, country.1.to_string())
+                            (g, cc.to_string())
                         } else {
                             continue;
                         }

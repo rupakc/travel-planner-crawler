@@ -195,8 +195,8 @@ Response: `{"items": [{"series_key", "observed_at", "value", "source_id", "licen
 
 Published emission factors (kind `emission_factor`, added 2026-11-19) for the trip carbon
 footprint, newest factor-set `year` first, then by id. Same item shape and licence shaping as
-`/v1/search`. Every filter is an exact match on the record's field; an invalid value is `400`
-(never a wildcard).
+`/v1/search`. Every filter is an exact match on the record's field except `activity` (a
+substring of the slug); an invalid value is `400` (never a wildcard).
 
 | Parameter | |
 |---|---|
