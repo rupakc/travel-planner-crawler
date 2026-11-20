@@ -25,8 +25,8 @@ records. `price_level` and `public_holiday` were added on 2026-11-18 (open-data 
 `grid_ci:<ISO2>:<period>:<basis>`) were added on 2026-11-19 for the trip carbon footprint
 (adapter `factor_table`; see [Carbon Footprint Data](Carbon-Footprint-Data)), and so was
 `occupancy` (record: average persons per vehicle by mode, country, year and trip purpose).
-`place_fact` (record, 2026-11-20) is one short fact about a place in our own words (or a
-short share-alike Wikipedia hook kept apart), keyed by GeoNames id and Wikidata QID; see
+`place_fact` (record, 2026-11-20) is one short fact about a place in our own words (never
+source text as written), keyed by GeoNames id and Wikidata QID; see
 [Place Facts Data](Place-Facts-Data).
 `transit_item` (2026-11-18) is one public-transport operator, line or station from a GTFS
 feed (`gtfs_static`): GTFS gives no city, which `transport_option` requires.

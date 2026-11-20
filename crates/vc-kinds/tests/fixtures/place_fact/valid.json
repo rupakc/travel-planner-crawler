@@ -5,8 +5,7 @@
     "admin_level": "admin1",
     "country": "DE",
     "name": "Berlin",
-    "name_lang": "en",
-    "sitelinks": ["dewiki:Berlin", "enwiki:Berlin"]
+    "name_lang": "en"
   },
   "fact_type": "historical",
   "text": "Berlin was founded in 1244.",

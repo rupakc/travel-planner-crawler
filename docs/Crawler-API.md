@@ -261,12 +261,13 @@ passengers per vehicle before dividing a per-vehicle-km factor by it.
 
 Place facts (kind `place_fact`, added 2026-11-20): short facts about one place (a country,
 region, city, town, village or feature), by record id. Every fact is one sentence in our own
-words with its source link, except Wikipedia hooks, which are short share-alike text kept as
-written (`text_origin: source_hook`, never merged with other text, never given to a model).
-Every filter is an exact match on the **resolved place**; an invalid value is `400` (never a
-wildcard). Licence shaping as everywhere: a client only gets the licence classes it may
-receive (hooks are `share_alike`); facts whose use policy is index-none or link-only are not
-listed here.
+words with its source link (`text_origin` `templated` or `rewritten`); a record with any other
+text origin (source text kept as written) is never served, and a short quoted value (an
+official name, a nickname, a motto) is the most a sentence holds of the source. Every filter is
+an exact match on the **resolved place**; an invalid value is `400` (never a wildcard).
+Licence shaping as everywhere: a client only gets the licence classes it may receive; facts
+whose use policy is index-none or link-only are not listed here. Stale records (gone from the
+source's latest capture) are still served, as on every read route.
 
 | Parameter | |
 |---|---|
@@ -276,11 +277,11 @@ listed here.
 | `fact_type` | `historical`, `fun`, `popular`, `unbelievable`, `little_known` |
 | `limit`, `cursor` | page size (default 20, max `max_page`); `next_cursor` of the previous page (`o:<offset>`) |
 
-Hook resolution: a hook record names the articles it links (`place.link_candidates`,
-`<site>:<title>`, bold links first). It is served only when one of them is a sitelink of a
-Wikidata place fact (`place.sitelinks`); the first candidate that matches (lowest record id on
-a tie) gives the hook its place (QID, GeoNames id, country, name). An unresolved hook is not
-served.
+Place resolution: a fact keyed only by its country code (`admin_level: country`, no GeoNames id
+and no QID: a Factbook fact) takes the `geonames_id` and `wikidata_qid` of the Wikidata country
+fact with the same `country` (lowest record id), so `?geonames_id=` and `?wikidata_qid=` find
+it too; with no such fact it is served under its country only. Every other fact's place is its
+own.
 
 Response (`FactPage`):
 
@@ -295,6 +296,7 @@ Response (`FactPage`):
       "text": "Berlin was founded in 1244.",
       "lang": "en",
       "text_en": null,
+      "value_lang": null,
       "text_origin": "templated",
       "llm_ok": true,
       "date_ref": "1244",
@@ -316,11 +318,12 @@ Response (`FactPage`):
 | Field | |
 |---|---|
 | `place` | `geonames_id` (the join key to Voyager's `places`/`features`), `wikidata_qid`, `admin_level` (`country`, `admin1`, `admin2`, `locality`, `village`, `feature`, when known), `country`, `name`, `name_lang`; any may be null (a Factbook fact has only the country) |
-| `fact_type` | `historical` (founding, former names, events, heritage designation), `popular` (nicknames, mottos, symbols, population, area), `unbelievable` (records: highest, lowest, oldest, largest; unusual articles), `little_known` (name origins, twin towns, borders), `fun` (curiosities, "Did you know" hooks) |
+| `fact_type` | `historical` (founding, former names, events, heritage designation), `popular` (nicknames, mottos, symbols, population, area), `unbelievable` (records: highest, lowest, oldest, largest), `little_known` (name origins, twin towns, borders), `fun` (editorial curiosities, rewritten) |
 | `text` | ≤ 280 characters, in `lang` |
 | `text_en` | machine translation made at ingest, when present |
-| `text_origin` | `templated` (our sentence over typed fields), `rewritten` (our rewrite of a source sentence), `source_hook` (share-alike hook as written) |
-| `llm_ok` | false for share-alike text, hooks and AI-reserved sources: never put such text in a prompt |
+| `value_lang` | language of a quoted value in `text` (an official name, nickname or motto; `de` for "Spree-Athen"), else null |
+| `text_origin` | `templated` (our sentence over typed fields) or `rewritten` (our rewrite of a source sentence) |
+| `llm_ok` | false for share-alike text and AI-reserved sources: never put such text in a prompt |
 | `date_ref` | `YYYY`, `YYYY-MM` or `YYYY-MM-DD` (`-YYYY` BCE) the fact refers to |
 | `quantity` | `{value, unit, rank_scope}` behind a record or figure (`m`, `km2`, `people`, `sites`) |
 | `source` | `source_id`, `url` (deep link), `name`, `publisher`, `source_class` (from the source registry), `sourced` (`yes`/`partial`/`no`: whether the source cites its own sources) |

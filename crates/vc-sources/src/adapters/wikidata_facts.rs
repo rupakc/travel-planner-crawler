@@ -34,10 +34,9 @@ use vc_core::media::MediaType;
 use vc_core::sources::{AdapterCtx, AdapterReport, SourceAdapter};
 use vc_core::{CanonicalUrl, Error, Result};
 
-use super::common::{Fetch, append_resource, check_status, fetch_raw, on_origin};
+use super::common::{Fetch, append_resource_with_status, check_status, fetch_raw, on_origin};
 use super::dump::{DumpFilter, DumpSettings, OutputKind, Split, Unit, run_dump};
 use super::place_facts::{Fact, TextOrigin, and_list, date_phrase, number, thousands};
-use super::wiki_hooks;
 
 /// Adapter id.
 pub const ID: &str = "wikidata_facts";
@@ -89,16 +88,10 @@ fn is_dump(url: &CanonicalUrl) -> bool {
 // ---------------------------------------------------------------------------------------------
 // Slimming (dump lines and EntityData bodies alike)
 
-/// The languages whose labels are kept (English first, then the hook languages).
-fn label_langs() -> Vec<&'static str> {
-    let mut v = vec!["en"];
-    for s in wiki_hooks::SITES {
-        if !v.contains(&s.lang) {
-            v.push(s.lang);
-        }
-    }
-    v
-}
+/// The languages whose labels are kept: the sentences are English, so only English labels
+/// and Wikidata's language-independent `mul` labels (names that are the same in every
+/// language written in Latin script).
+const LABEL_LANGS: &[&str] = &["en", "mul"];
 
 fn slim_statement(st: &Value) -> Option<Value> {
     let rank = st.get("rank").and_then(Value::as_str).unwrap_or("normal");
@@ -135,7 +128,7 @@ fn slim_statement(st: &Value) -> Option<Value> {
 }
 
 /// The slim form of one entity (dump line or EntityData item): its id, `modified`, labels in
-/// the kept languages, sitelinks of the hook wikis (`site:Title`) and the fact and key
+/// [`LABEL_LANGS`] and the fact and key
 /// properties. `None` when it is not a place (no P1566 and no P297) or not an item.
 pub fn slim(entity: &Value) -> Option<Value> {
     let id = entity.get("id").and_then(Value::as_str)?;
@@ -152,7 +145,7 @@ pub fn slim(entity: &Value) -> Option<Value> {
 fn slim_any(entity: &Value, id: &str, claims: &Map<String, Value>, full: bool) -> Value {
     let mut labels = Map::new();
     if let Some(l) = entity.get("labels").and_then(Value::as_object) {
-        for lang in label_langs() {
+        for lang in LABEL_LANGS.iter().copied() {
             if let Some(v) = l
                 .get(lang)
                 .and_then(|x| x.get("value"))
@@ -173,23 +166,8 @@ fn slim_any(entity: &Value, id: &str, claims: &Map<String, Value>, full: bool) -
         }
     }
     let mut out = json!({"id": id, "labels": labels, "claims": kept});
-    if full {
-        let mut links = Vec::new();
-        if let Some(sl) = entity.get("sitelinks").and_then(Value::as_object) {
-            for s in wiki_hooks::SITES {
-                if let Some(t) = sl
-                    .get(s.site)
-                    .and_then(|x| x.get("title"))
-                    .and_then(Value::as_str)
-                {
-                    links.push(json!(format!("{}:{t}", s.site)));
-                }
-            }
-        }
-        out["sitelinks"] = Value::Array(links);
-        if let Some(m) = entity.get("modified").and_then(Value::as_str) {
-            out["modified"] = json!(m);
-        }
+    if full && let Some(m) = entity.get("modified").and_then(Value::as_str) {
+        out["modified"] = json!(m);
     }
     out
 }
@@ -313,11 +291,13 @@ fn amount(v: &Value) -> Option<(f64, &str)> {
     a.is_finite().then_some((a, unit))
 }
 
-/// The label of `qid` (English first, else the first kept language).
+/// The English (else `mul`) label of `qid`; `None` without one, so that an English sentence
+/// never carries a label in another language.
 fn label<'a>(labels: &'a Map<String, Value>, qid: &str) -> Option<&'a str> {
     let l = labels.get(qid)?.get("labels")?.as_object()?;
-    l.get("en")
-        .or_else(|| l.values().next())
+    LABEL_LANGS
+        .iter()
+        .find_map(|k| l.get(*k))
         .and_then(Value::as_str)
         .filter(|s| !s.is_empty() && s.chars().count() <= 120)
 }
@@ -389,10 +369,10 @@ struct Place<'a> {
 fn place<'a>(e: &'a Value, labels: &Map<String, Value>) -> Option<Place<'a>> {
     let qid = e["id"].as_str()?;
     let l = e["labels"].as_object()?;
-    let (lang, name) = l
-        .get("en")
-        .map(|v| ("en", v))
-        .or_else(|| l.iter().next().map(|(k, v)| (k.as_str(), v)))?;
+    // English sentences: an English (else `mul`) name, never one in another language.
+    let (lang, name) = LABEL_LANGS
+        .iter()
+        .find_map(|k| l.get(*k).map(|v| (*k, v)))?;
     let name = name.as_str()?.to_string();
     let mut obj = Map::new();
     if let Some(g) = best(e, "P1566")
@@ -424,12 +404,6 @@ fn place<'a>(e: &'a Value, labels: &Map<String, Value>) -> Option<Place<'a>> {
         json!(name.chars().take(200).collect::<String>()),
     );
     obj.insert("name_lang".into(), json!(lang));
-    if let Some(sl) = e["sitelinks"].as_array().filter(|a| !a.is_empty()) {
-        obj.insert(
-            "sitelinks".into(),
-            Value::Array(sl.iter().take(64).cloned().collect()),
-        );
-    }
     Some(Place { qid, name, obj })
 }
 
@@ -466,6 +440,7 @@ pub fn facts(e: &Value, labels: &Map<String, Value>) -> Vec<(String, Value)> {
         confidence: "structured",
         source_url: Some(format!("https://www.wikidata.org/wiki/{}#{prop}", p.qid)),
         as_of: as_of.clone(),
+        value_lang: None,
     };
 
     // historical
@@ -512,11 +487,11 @@ pub fn facts(e: &Value, labels: &Map<String, Value>) -> Vec<(String, Value)> {
             None,
         ));
     }
-    for st in all_statements(e, "P1448").into_iter().take(3) {
-        let Some(t) = st["value"]["text"]
-            .as_str()
-            .filter(|t| !t.is_empty() && t.chars().count() <= 150)
-        else {
+    for st in english_first(all_statements(e, "P1448"))
+        .into_iter()
+        .take(3)
+    {
+        let Some((t, vl)) = mono(st, 150) else {
             continue;
         };
         let key = format!(":{}", super::place_facts::short_hash(t));
@@ -529,7 +504,7 @@ pub fn facts(e: &Value, labels: &Map<String, Value>) -> Vec<(String, Value)> {
                     end.to_string()
                 },
             );
-            out.push(mk(
+            let mut f = mk(
                 "P1448",
                 key,
                 "historical",
@@ -537,9 +512,11 @@ pub fn facts(e: &Value, labels: &Map<String, Value>) -> Vec<(String, Value)> {
                 &[st],
                 Some(r),
                 None,
-            ));
+            );
+            f.value_lang = Some(vl);
+            out.push(f);
         } else if t != name {
-            out.push(mk(
+            let mut f = mk(
                 "P1448",
                 key,
                 "popular",
@@ -547,7 +524,9 @@ pub fn facts(e: &Value, labels: &Map<String, Value>) -> Vec<(String, Value)> {
                 &[st],
                 None,
                 None,
-            ));
+            );
+            f.value_lang = Some(vl);
+            out.push(f);
         }
     }
     for st in all_statements(e, "P1435").into_iter().take(2) {
@@ -572,14 +551,14 @@ pub fn facts(e: &Value, labels: &Map<String, Value>) -> Vec<(String, Value)> {
     }
 
     // popular
-    for st in all_statements(e, "P1449").into_iter().take(3) {
-        let Some(t) = st["value"]["text"]
-            .as_str()
-            .filter(|t| !t.is_empty() && t.chars().count() <= 120)
-        else {
+    for st in english_first(all_statements(e, "P1449"))
+        .into_iter()
+        .take(3)
+    {
+        let Some((t, vl)) = mono(st, 120) else {
             continue;
         };
-        out.push(mk(
+        let mut f = mk(
             "P1449",
             format!(":{}", super::place_facts::short_hash(t)),
             "popular",
@@ -587,14 +566,14 @@ pub fn facts(e: &Value, labels: &Map<String, Value>) -> Vec<(String, Value)> {
             &[st],
             None,
             None,
-        ));
+        );
+        f.value_lang = Some(vl);
+        out.push(f);
     }
-    if let Some(st) = best(e, "P1451")
-        && let Some(t) = st["value"]["text"]
-            .as_str()
-            .filter(|t| !t.is_empty() && t.chars().count() <= 150)
+    if let Some(st) = english_first(statements(e, "P1451")).into_iter().next()
+        && let Some((t, vl)) = mono(st, 150)
     {
-        out.push(mk(
+        let mut f = mk(
             "P1451",
             String::new(),
             "popular",
@@ -602,7 +581,9 @@ pub fn facts(e: &Value, labels: &Map<String, Value>) -> Vec<(String, Value)> {
             &[st],
             None,
             None,
-        ));
+        );
+        f.value_lang = Some(vl);
+        out.push(f);
     }
     if let Some(st) = population(e)
         && let Some((n, "1")) = amount(&st["value"])
@@ -752,6 +733,30 @@ pub fn facts(e: &Value, labels: &Map<String, Value>) -> Vec<(String, Value)> {
     out.into_iter().filter_map(Fact::into_data).collect()
 }
 
+/// A monolingual-text value (P1448, P1449, P1451): its text (non-empty, at most `max`
+/// characters) and its own language, which the record keeps as `value_lang` (the quoted name
+/// or motto may be in another language than the English sentence around it).
+fn mono(st: &Value, max: usize) -> Option<(&str, String)> {
+    let t = st["value"]["text"]
+        .as_str()
+        .filter(|t| !t.is_empty() && t.chars().count() <= max)?;
+    let l = st["value"]["language"]
+        .as_str()
+        .filter(|l| {
+            !l.is_empty()
+                && l.len() <= 16
+                && l.bytes().all(|b| b.is_ascii_alphanumeric() || b == b'-')
+        })
+        .unwrap_or("und");
+    Some((t, l.to_ascii_lowercase()))
+}
+
+/// Statements with an English value first (stable otherwise).
+fn english_first(mut sts: Vec<&Value>) -> Vec<&Value> {
+    sts.sort_by_key(|s| s["value"]["language"].as_str() != Some("en"));
+    sts
+}
+
 /// The population statement: preferred, else the one with the latest P585.
 fn population(e: &Value) -> Option<&Value> {
     let sts = statements(e, "P1082");
@@ -867,13 +872,12 @@ impl SourceAdapter for WikidataFacts {
         };
         let ex = fetch_raw(ctx, url.clone(), &opts, &mut rep).await?;
         check_status(&ex)?;
-        let Some(entity) = entity_of(&ex.body, &qid)? else {
-            // Not a place: nothing to derive.
-            rep.complete = true;
-            return Ok(rep);
-        };
+        let status = ex.status;
+        // Not a place (any more): an empty bundle, so that the facts it had go stale.
+        let entity = entity_of(&ex.body, &qid)?;
         let mut labels = BTreeMap::new();
-        for q in referenced(&entity).into_iter().take(MAX_REFERENCED) {
+        let refs = entity.as_ref().map(referenced).unwrap_or_default();
+        for q in refs.into_iter().take(MAX_REFERENCED) {
             let u = on_origin(&url, &format!("/wiki/Special:EntityData/{q}.json"))?;
             let ex = fetch_raw(ctx, u, &opts, &mut rep).await?;
             match check_status(&ex) {
@@ -885,13 +889,17 @@ impl SourceAdapter for WikidataFacts {
                 labels.insert(q, l);
             }
         }
-        let body = serde_json::to_vec(&bundle(entity, labels))?;
-        append_resource(
+        let body = serde_json::to_vec(&bundle(entity.unwrap_or(Value::Null), labels))?;
+        // The bundle carries the item's own status: it stands for that one response, so the
+        // processor reconciles the row's facts against it (a fact removed on Wikidata goes
+        // stale), unlike a status-less dump batch.
+        append_resource_with_status(
             ctx,
             &url,
             MediaType::Json,
             "application/json",
             Bytes::from(body),
+            Some(status.as_u16()),
             &mut rep,
         )
         .await?;

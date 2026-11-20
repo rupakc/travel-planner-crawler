@@ -1033,7 +1033,7 @@ fn ember_api_records_fit_the_kind_registry() {
 #[test]
 fn place_fact_records_fit_the_kind_registry() {
     // Place facts (2026-11-20): wikidata_facts (a dump batch of the slim Berlin item),
-    // wiki_hooks (a hook page) and factbook_json (a country file).
+    // and factbook_json (a country file).
     let r = root();
     let reg = vc_kinds::FileKindRegistry::load(&vc_config::KindsConfig {
         kinds_toml: r.join("kinds.toml").display().to_string(),
@@ -1055,11 +1055,6 @@ fn place_fact_records_fit_the_kind_registry() {
             batch,
         ),
         (
-            "wiki_hooks",
-            "https://simple.wikipedia.org/wiki/Wikipedia:Did_you_know?action=raw",
-            recorded("wiki_hooks_simple_dyk.txt"),
-        ),
-        (
             "factbook_json",
             "https://raw.githubusercontent.com/factbook/factbook.json/master/europe/gm.json",
             recorded("factbook_gm.json"),
@@ -1077,4 +1072,86 @@ fn place_fact_records_fit_the_kind_registry() {
             }
         }
     }
+}
+
+#[tokio::test]
+async fn a_wikidata_bundle_stales_a_removed_statement_and_an_empty_bundle_stales_all() {
+    // The EntityData bundle carries the item's status (it is one response, not a dump batch),
+    // so a fact whose statement was removed on Wikidata goes stale on the next crawl, and an
+    // item that is no longer a place (an empty bundle) stales every fact of its row.
+    use vc_sources::adapters::wikidata_facts;
+    let r = rig(&[], RigOpts::default()).await;
+    let spec = vc_sources::spec::parse_spec(
+        "id: wikidata-facts-test\nname: Wikidata EntityData (test)\ncategory: facts\n\
+         source_class: reference\nlicence:\n  class: open\n  spdx: CC0-1.0\n  \
+         attribution: Wikidata (CC0 1.0)\nmethod: api\n\
+         seeds:\n- https://www.wikidata.org/wiki/Special:EntityData/Q64.json\n\
+         adapter: wikidata_facts\nkinds:\n- place_fact\nllm_kinds: []\nrender: never\n\
+         cadence: monthly\nmin_delay_s: 5\ndaily_budget: 100\nenabled: true\n",
+    )
+    .expect("spec");
+    vc_sources::seed::seed_sources(&r.pool, &[spec], false)
+        .await
+        .expect("seed");
+    let url = "https://www.wikidata.org/wiki/Special:EntityData/Q64.json";
+    let berlin = wikidata_facts::entity_of(&recorded("wikidata_entity_q64.json"), "Q64")
+        .unwrap()
+        .unwrap();
+    let bundle = |e: serde_json::Value| {
+        serde_json::to_string(&wikidata_facts::bundle(e, Default::default())).unwrap()
+    };
+    // A bundle as the adapter spools it: a `resource` with the item's status.
+    fn cap<'a>(url: &'a str, body: &'a str, minutes: i64) -> Cap<'a> {
+        Cap {
+            media: MediaType::Json,
+            status: Some(200),
+            fetch_mode: FetchMode::Adapter("wikidata_facts".into()),
+            ..Cap::html(url, "wikidata-facts-test", body, at(minutes))
+        }
+    }
+    let states = || async {
+        sqlx::query_as::<_, (String, String)>(
+            "SELECT r.record_key, r.state FROM records r WHERE r.kind = 'place_fact'
+             ORDER BY r.record_key",
+        )
+        .fetch_all(&r.pool)
+        .await
+        .unwrap()
+    };
+    let b1 = bundle(berlin.clone());
+    assert_processed(&run(&r, cap(url, &b1, 0)).await);
+    let s1 = states().await;
+    assert!(s1.len() >= 3, "{s1:?}");
+    assert!(s1.iter().all(|(_, st)| st == "active"));
+
+    // The nickname (P1449) is removed on Wikidata.
+    let mut fewer = berlin.clone();
+    fewer["claims"]
+        .as_object_mut()
+        .unwrap()
+        .remove("P1449")
+        .expect("Berlin has a nickname");
+    let b2 = bundle(fewer);
+    assert_processed(&run(&r, cap(url, &b2, 60)).await);
+    let s2 = states().await;
+    let stale: Vec<&String> = s2
+        .iter()
+        .filter(|(_, st)| st == "stale")
+        .map(|(k, _)| k)
+        .collect();
+    assert_eq!(stale.len(), 1, "only the removed nickname: {s2:?}");
+    let data: serde_json::Value = sqlx::query_scalar(
+        "SELECT v.data FROM records r JOIN record_versions v
+           ON v.record_id = r.record_id AND v.version = r.current_version
+         WHERE r.state = 'stale'",
+    )
+    .fetch_one(&r.pool)
+    .await
+    .unwrap();
+    assert_eq!(data["source_field"], "wikidata:P1449");
+
+    // The item is no longer a place: an empty bundle stales everything.
+    let b3 = bundle(serde_json::Value::Null);
+    assert_processed(&run(&r, cap(url, &b3, 120)).await);
+    assert!(states().await.iter().all(|(_, st)| st == "stale"));
 }

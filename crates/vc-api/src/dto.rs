@@ -501,8 +501,8 @@ pub struct StatusDto {
     pub status: String,
 }
 
-/// The place of a fact (`/v1/facts`): the resolved place (a hook takes the Wikidata place it
-/// was resolved to).
+/// The place of a fact (`/v1/facts`): the resolved place (a bare country takes the GeoNames id
+/// and QID of the Wikidata country fact).
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize, ToSchema)]
 pub struct FactPlaceDto {
     /// GeoNames id (the primary join key).
@@ -556,16 +556,19 @@ pub struct FactDto {
     pub place: FactPlaceDto,
     /// `historical`, `fun`, `popular`, `unbelievable` or `little_known`.
     pub fact_type: String,
-    /// One sentence in our own words (≤ 280 characters), or a short share-alike hook when
-    /// `text_origin` is `source_hook`.
+    /// One sentence in our own words (≤ 280 characters); a quoted value in it (a name, a
+    /// nickname, a motto) is the most it holds of the source.
     pub text: String,
     /// Language of `text` (BCP 47).
     pub lang: Option<String>,
     /// Machine translation to English, when one was made at ingest.
     pub text_en: Option<String>,
-    /// `templated`, `rewritten` or `source_hook`.
+    /// Language of a quoted value in `text` (a name, nickname or motto), when it has one.
+    pub value_lang: Option<String>,
+    /// `templated` (our template over typed fields) or `rewritten` (our rewrite of a source
+    /// sentence).
     pub text_origin: String,
-    /// Whether `text` may be given to a model: always false for share-alike text, hooks and
+    /// Whether `text` may be given to a model: always false for share-alike text and
     /// AI-reserved sources.
     pub llm_ok: bool,
     /// Year or date the fact refers to (`1244`, `1806-10-27`, `-0500`).

@@ -69,7 +69,7 @@ All are `GET`. Lists default to 20 items, capped at 100.
 | `/v1/carbon/factors?category=&country=&region=&year=&gas_basis=&activity=&source=` | published emission factors (`emission_factor`), newest year first ([Carbon footprint data](Carbon-Footprint-Data)) |
 | `/v1/carbon/grid?country=&period=&basis=&from=&to=` | grid carbon intensity of one country, every series and source, newest first |
 | `/v1/carbon/occupancy?mode=&country=&year=&trip_purpose=&basis=&source=` | published average vehicle occupancies (`occupancy`, persons per vehicle), newest year first |
-| `/v1/facts?geonames_id=&wikidata_qid=&country=&fact_type=` | place facts (`place_fact`), by record id; Wikipedia hooks only once resolved to a Wikidata place ([Place facts data](Place-Facts-Data)) |
+| `/v1/facts?geonames_id=&wikidata_qid=&country=&fact_type=` | place facts (`place_fact`), by record id; our own sentences only; a country-only fact also found by its country's GeoNames id and QID ([Place facts data](Place-Facts-Data)) |
 | `/v1/places/resolve?name=&country=&lat=&lon=&lang=` | GeoNames candidates for a place name |
 | `/v1/changes?since=&kinds=&limit=` | the change feed (`upsert`, `tombstone`, `redirect`) |
 | `/v1/sources` | the enabled, non-restricted sources |

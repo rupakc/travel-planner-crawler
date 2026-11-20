@@ -57,8 +57,8 @@ year, required dropdown choices above the header, and refusing a file whose rows
 the filters) and `ember_api` (2026-11-19, Ember API
 carbon intensity per country, owner key in the `api_key` query parameter, redacted); see
 [Carbon Footprint Data](Carbon-Footprint-Data). The place-fact adapters `wikidata_facts`
-(Wikidata EntityData and dump lines), `wiki_hooks` (Wikipedia DYK/OTD/unusual-articles
-wikitext) and `factbook_json` (CIA World Factbook final edition) followed on 2026-11-20; see
+(Wikidata EntityData and dump lines) and `factbook_json` (CIA World Factbook final edition)
+followed on 2026-11-20; see
 [Place Facts Data](Place-Facts-Data).
 Some adapters belong to sources that are disabled in `sources/*.yaml` (for example
 `nager_holidays` and `mobility_database_catalog`, whose robots.txt disallows us or redirects

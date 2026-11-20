@@ -239,12 +239,28 @@ pub(crate) async fn append_resource(
     body: Bytes,
     report: &mut AdapterReport,
 ) -> Result<()> {
+    append_resource_with_status(ctx, url, media, content_type, body, None, report).await
+}
+
+/// Appends a `resource` record with an HTTP status. A status-less adapter `resource` is a dump
+/// batch (one of many sharing a URL, so absence from it stales nothing); one derived from a
+/// single response (a bundle) carries that response's status, so the processor reconciles
+/// the URL's records against it in full.
+pub(crate) async fn append_resource_with_status(
+    ctx: &mut AdapterCtx<'_>,
+    url: &CanonicalUrl,
+    media: MediaType,
+    content_type: &str,
+    body: Bytes,
+    status: Option<u16>,
+    report: &mut AdapterReport,
+) -> Result<()> {
     let m = meta(
         ctx,
         url,
         CaptureRole::Primary,
         media,
-        None,
+        status,
         &body,
         Validators::default(),
     );

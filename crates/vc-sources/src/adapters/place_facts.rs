@@ -1,6 +1,7 @@
-//! Shared helpers of the `place_fact` adapters (`wikidata_facts`, `wiki_hooks`,
-//! `factbook_json`): one fact = one short sentence in our own words (or, for share-alike hooks
-//! only, the short hook as written), keyed to a place, with its source and licence.
+//! Shared helpers of the `place_fact` adapters (`wikidata_facts`, `factbook_json`): one fact =
+//! one short sentence in our own words, keyed to a place, with its source and licence. Source
+//! text is never copied: a short quoted value (a name, a nickname, a motto) is the most a
+//! sentence holds.
 //!
 //! Pure: no I/O, no logging of content.
 
@@ -23,15 +24,12 @@ pub const FACT_TYPES: &[&str] = &[
 pub enum TextOrigin {
     /// Our own sentence template over typed fields.
     Templated,
-    /// A short share-alike hook kept as the source wrote it (never merged, never sent to a model).
-    SourceHook,
 }
 
 impl TextOrigin {
     fn as_str(self) -> &'static str {
         match self {
             TextOrigin::Templated => "templated",
-            TextOrigin::SourceHook => "source_hook",
         }
     }
 }
@@ -67,6 +65,8 @@ pub struct Fact {
     pub source_url: Option<String>,
     /// `as_of`.
     pub as_of: Option<String>,
+    /// `value_lang`: the language of a quoted value (a name, nickname or motto) in `text`.
+    pub value_lang: Option<String>,
 }
 
 impl Fact {
@@ -78,7 +78,7 @@ impl Fact {
         if !(8..=MAX_TEXT_CHARS).contains(&n) || !FACT_TYPES.contains(&self.fact_type) {
             return None;
         }
-        let keyed = ["geonames_id", "wikidata_qid", "country", "link_candidates"]
+        let keyed = ["geonames_id", "wikidata_qid", "country"]
             .iter()
             .any(|k| self.place.contains_key(*k));
         if !keyed {
@@ -90,10 +90,10 @@ impl Fact {
         d.insert("text".into(), json!(text));
         d.insert("lang".into(), json!(self.lang));
         d.insert("text_origin".into(), json!(self.origin.as_str()));
-        d.insert(
-            "llm_ok".into(),
-            json!(self.origin != TextOrigin::SourceHook && self.licence.0 != "share_alike"),
-        );
+        d.insert("llm_ok".into(), json!(self.licence.0 != "share_alike"));
+        if let Some(l) = self.value_lang {
+            d.insert("value_lang".into(), json!(l));
+        }
         if let Some(r) = self.date_ref {
             d.insert("date_ref".into(), json!(r));
         }

@@ -134,9 +134,8 @@ def render(specs: list[dict], licence_only: list[dict] | None = None) -> str:
         "**Place facts** (section `facts`, added 2026-11-20) holds short facts about countries,",
         "regions, cities, towns, villages and features (historical, fun, popular, record-breaking",
         "and little-known), each one sentence in our own words with its source link. The first",
-        "readers are structured: Wikidata properties, Wikipedia \"Did you know\" / \"On this day\" /",
-        "unusual-articles hooks (share-alike, kept apart, never sent to a model) and the frozen CIA",
-        "World Factbook JSON (see docs/wiki/Place-Facts-Data.md).",
+        "readers are structured: Wikidata properties and the frozen CIA World Factbook JSON (see",
+        "docs/wiki/Place-Facts-Data.md).",
         "",
     ]
     for section, title in SECTION_TITLES.items():

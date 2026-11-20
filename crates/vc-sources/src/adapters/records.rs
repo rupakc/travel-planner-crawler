@@ -27,7 +27,7 @@ use super::{
     govuk_medical_lists, govuk_world_orgs, html_text, iso3, json_events,
     nyc_restaurant_inspections, openholidays, phone, socrata, state_dept_advisories,
     state_dept_country_info, toronto_dinesafe, travelpayouts_fares, udata_resource, wfs_geojson,
-    wiki_hooks, wikidata_facts,
+    wikidata_facts,
 };
 
 /// Bumped when a mapping changes (part of the extractor version string of adapter records).
@@ -73,7 +73,6 @@ pub const MAPPED: &[&str] = &[
     "udata_resource",
     "wdi_csv",
     "wfs_geojson",
-    "wiki_hooks",
     "wikidata_facts",
     "wikivoyage_dump",
 ];
@@ -107,14 +106,13 @@ pub fn records(adapter: &str, url: &CanonicalUrl, body: &[u8]) -> Option<Result<
         "udata_resource" => rows(udata_resource::items(url, body)),
         "wdi_csv" => wdi(body),
         "wfs_geojson" => rows(wfs_geojson::items(url, body)),
-        "wiki_hooks" => place_facts(wiki_hooks::items(url, body)),
         "wikidata_facts" => place_facts(wikidata_facts::items(body)),
         "wikivoyage_dump" => wikivoyage(body),
         _ => return None,
     })
 }
 
-/// `place_fact` items (`wikidata_facts`, `wiki_hooks`, `factbook_json`).
+/// `place_fact` items (`wikidata_facts`, `factbook_json`).
 fn place_facts(items: Result<Vec<(String, Value)>>) -> Result<Vec<AdapterItem>> {
     Ok(items?
         .into_iter()

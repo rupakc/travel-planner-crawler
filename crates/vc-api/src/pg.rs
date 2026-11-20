@@ -278,9 +278,9 @@ impl Catalog for PgApiStore {
         if classes.is_empty() {
             return Ok(Vec::new());
         }
-        // `cur`: current place facts. A hook (link candidates, no QID) takes the place of the
-        // first Wikidata place fact (lowest record id) that lists its first matching candidate
-        // among its sitelinks; an unresolved hook is not served. Filters apply to that place.
+        // `cur`: current place facts. A bare country (ISO code only, no GeoNames id or QID,
+        // e.g. a Factbook fact) takes the GeoNames id and QID of the first Wikidata country
+        // fact (lowest record id) of the same country. Filters apply to that resolved place.
         let rows = sqlx::query(
             "WITH cur AS (
                 SELECT r.record_id, r.kind, r.title, r.place_ids, r.licence, r.licence_class,
@@ -295,20 +295,25 @@ impl Catalog for PgApiStore {
                   AND r.current_version > 0
              ), served AS (
                 SELECT c.*,
-                       CASE WHEN (c.data->'place') ? 'link_candidates'
+                       CASE WHEN c.data->'place'->>'admin_level' = 'country'
+                                 AND (c.data->'place') ? 'country'
+                                 AND NOT ((c.data->'place') ? 'geonames_id')
                                  AND NOT ((c.data->'place') ? 'wikidata_qid')
-                            THEN (SELECT w.data->'place'
-                                  FROM jsonb_array_elements_text(c.data->'place'->'link_candidates')
-                                       WITH ORDINALITY AS l(t, i)
-                                  JOIN cur w ON (w.data->'place') ? 'wikidata_qid'
-                                            AND jsonb_typeof(w.data->'place'->'sitelinks') = 'array'
-                                            AND (w.data->'place'->'sitelinks') ? l.t
-                                  ORDER BY l.i, w.record_id
-                                  LIMIT 1)
+                            THEN COALESCE(c.data->'place' || (
+                                  SELECT jsonb_strip_nulls(jsonb_build_object(
+                                           'geonames_id', w.data->'place'->'geonames_id',
+                                           'wikidata_qid', w.data->'place'->'wikidata_qid'))
+                                  FROM cur w
+                                  WHERE (w.data->'place') ? 'wikidata_qid'
+                                    AND w.data->'place'->>'admin_level' = 'country'
+                                    AND w.data->'place'->>'country' = c.data->'place'->>'country'
+                                  ORDER BY w.record_id
+                                  LIMIT 1), c.data->'place')
                             ELSE c.data->'place' END AS rplace
                 FROM cur c
                 WHERE c.licence_class = ANY($1)
                   AND c.use_policy->>'index' = 'full' AND c.use_policy->>'serve' <> 'link_only'
+                  AND COALESCE(c.data->>'text_origin', 'templated') IN ('templated', 'rewritten')
              )
              SELECT s.*, src.name AS source_name, src.source_class AS source_class
              FROM served s

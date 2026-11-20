@@ -63,7 +63,6 @@ pub mod travelpayouts_fares;
 pub mod udata_resource;
 pub mod wdi_csv;
 pub mod wfs_geojson;
-pub mod wiki_hooks;
 pub mod wikidata_facts;
 pub mod wikidata_sparql;
 pub mod wikivoyage_dump;
@@ -102,7 +101,6 @@ pub static REGISTRY: &[&dyn SourceAdapter] = &[
     &udata_resource::UdataResource::DEFAULT,
     &wdi_csv::WdiCsv::DEFAULT,
     &wfs_geojson::WfsGeojson,
-    &wiki_hooks::WikiHooks,
     &wikidata_facts::WikidataFacts::DEFAULT,
     &wikidata_sparql::WikidataSparql::DEFAULT,
     &wikivoyage_dump::WikivoyageDump::DEFAULT,
@@ -201,7 +199,6 @@ pub fn registry_with(cfg: &vc_config::SourcesConfig) -> Vec<Box<dyn SourceAdapte
         Box::new(udata_resource::UdataResource::new(d.clone())),
         Box::new(wdi_csv::WdiCsv::new(d.clone())),
         Box::new(wfs_geojson::WfsGeojson),
-        Box::new(wiki_hooks::WikiHooks),
         Box::new(wikidata_facts::WikidataFacts::new(d.clone())),
         Box::new(wikidata_sparql::WikidataSparql::DEFAULT),
         Box::new(wikivoyage_dump::WikivoyageDump::new(d)),

@@ -1224,8 +1224,8 @@ async fn carbon_occupancy_needs_a_token() {
 }
 
 // ---------------------------------------------------------------------------------------------
-// /v1/facts (2026-11-20): place facts; Wikipedia hooks served only once resolved to a Wikidata
-// place through its sitelinks.
+// /v1/facts (2026-11-20): place facts in our own words; a country known only by its ISO code
+// (a Factbook fact) takes the GeoNames id and QID of the Wikidata country fact.
 // ---------------------------------------------------------------------------------------------
 
 fn fact(id: &str, class: LicenceClass, data: Value, source: &str) -> vc_core::index::Item {
@@ -1238,13 +1238,21 @@ fn fact(id: &str, class: LicenceClass, data: Value, source: &str) -> vc_core::in
 
 fn berlin_place() -> Value {
     serde_json::json!({"geonames_id": 2950159, "wikidata_qid": "Q64", "admin_level": "admin1",
-        "country": "DE", "name": "Berlin", "name_lang": "en",
-        "sitelinks": ["dewiki:Berlin", "simplewiki:Berlin"]})
+        "country": "DE", "name": "Berlin", "name_lang": "en"})
+}
+
+fn factbook(country: &str, name: &str, text: &str) -> Value {
+    serde_json::json!({"place": {"country": country, "admin_level": "country", "name": name,
+            "native_id": "factbook:xx"},
+        "fact_type": "unbelievable", "text": text,
+        "text_origin": "templated", "llm_ok": true, "confidence": "structured",
+        "quantity": {"value": 2963.0, "unit": "m", "rank_scope": format!("highest point of {name}")},
+        "as_of": "2026-02-04"})
 }
 
 async fn facts_harness(classes: &[LicenceClass]) -> Harness {
-    let wd = |text: &str, ty: &str, extra: Value| {
-        let mut d = serde_json::json!({"place": berlin_place(), "fact_type": ty, "text": text,
+    let wd = |place: Value, text: &str, ty: &str, extra: Value| {
+        let mut d = serde_json::json!({"place": place, "fact_type": ty, "text": text,
             "lang": "en", "text_origin": "templated", "llm_ok": true, "confidence": "structured",
             "source_url": "https://www.wikidata.org/wiki/Q64#P571", "as_of": "2026-11-20",
             "source": {"name": "Wikidata", "publisher": "Wikidata contributors", "sourced": "yes"}});
@@ -1253,12 +1261,8 @@ async fn facts_harness(classes: &[LicenceClass]) -> Harness {
         }
         d
     };
-    let hook = |text: &str, cands: Value| {
-        serde_json::json!({"place": {"link_candidates": cands}, "fact_type": "fun",
-            "text": text, "lang": "en", "text_origin": "source_hook", "llm_ok": false,
-            "confidence": "extracted",
-            "source_url": "https://simple.wikipedia.org/wiki/Wikipedia:Did_you_know"})
-    };
+    let germany = serde_json::json!({"geonames_id": 2921044, "wikidata_qid": "Q183",
+        "admin_level": "country", "country": "DE", "name": "Germany", "name_lang": "en"});
     let cat = MemCatalog {
         sources: vec![vc_api::dto::SourceDto {
             source_id: "wikidata-facts".into(),
@@ -1274,6 +1278,7 @@ async fn facts_harness(classes: &[LicenceClass]) -> Harness {
                 "1",
                 LicenceClass::Open,
                 wd(
+                    berlin_place(),
                     "Berlin was founded in 1244.",
                     "historical",
                     serde_json::json!({"date_ref": "1244"}),
@@ -1284,42 +1289,43 @@ async fn facts_harness(classes: &[LicenceClass]) -> Harness {
                 "2",
                 LicenceClass::Open,
                 wd(
-                    "Berlin had a population of 3,700,577 in 2025.",
+                    berlin_place(),
+                    "Berlin is nicknamed \u{201c}Spree-Athen\u{201d}.",
                     "popular",
-                    serde_json::json!({"quantity": {"value": 3700577.0, "unit": "people"}}),
+                    serde_json::json!({"value_lang": "de"}),
                 ),
                 "wikidata-facts",
             ),
-            // A hook: resolved through `simplewiki:Berlin` (the second candidate).
+            // The Wikidata country fact that a bare Factbook country resolves to.
             fact(
                 "3",
-                LicenceClass::ShareAlike,
-                hook(
-                    "... that Berlin has more bridges than Venice?",
-                    serde_json::json!(["simplewiki:Venice", "simplewiki:Berlin"]),
+                LicenceClass::Open,
+                wd(
+                    germany,
+                    "Germany had a population of 83,445,000 in 2024.",
+                    "popular",
+                    serde_json::json!({"quantity": {"value": 83445000.0, "unit": "people"}}),
                 ),
-                "wiki-facts-simple",
+                "wikidata-facts",
             ),
-            // A hook nothing resolves: never served.
+            // Source text kept as written (no adapter makes these): never served.
             fact(
                 "4",
                 LicenceClass::ShareAlike,
-                hook(
-                    "... that Atlantis is not on any map at all?",
-                    serde_json::json!(["simplewiki:Atlantis"]),
-                ),
+                serde_json::json!({"place": berlin_place(), "fact_type": "fun",
+                    "text": "... that a copied sentence is never served?",
+                    "text_origin": "source_hook", "llm_ok": false, "confidence": "extracted"}),
                 "wiki-facts-simple",
             ),
-            // A country fact (Factbook).
+            // A bare country (Factbook): resolved to Q183 / 2921044.
             fact(
                 "5",
                 LicenceClass::Open,
-                serde_json::json!({"place": {"country": "DE", "admin_level": "country", "name": "Germany"},
-                    "fact_type": "unbelievable",
-                    "text": "The highest point of Germany is Zugspitze (2,963 m).",
-                    "text_origin": "templated", "llm_ok": true, "confidence": "structured",
-                    "quantity": {"value": 2963.0, "unit": "m", "rank_scope": "highest point of Germany"},
-                    "as_of": "2026-02-04"}),
+                factbook(
+                    "DE",
+                    "Germany",
+                    "The highest point of Germany is Zugspitze (2,963 m).",
+                ),
                 "od-factbook-json",
             ),
             // Link-only: never served here.
@@ -1328,7 +1334,8 @@ async fn facts_harness(classes: &[LicenceClass]) -> Harness {
                     "6",
                     LicenceClass::Open,
                     wd(
-                        "Berlin is nicknamed Spree-Athen.",
+                        berlin_place(),
+                        "Berlin lies 34 m above sea level.",
                         "popular",
                         serde_json::json!({}),
                     ),
@@ -1346,6 +1353,17 @@ async fn facts_harness(classes: &[LicenceClass]) -> Harness {
                     "text_origin": "rewritten", "llm_ok": true, "ai_bot_blocked": true,
                     "confidence": "extracted"}),
                 "fx-example",
+            ),
+            // A bare country with no Wikidata country fact: served under its country only.
+            fact(
+                "9",
+                LicenceClass::Open,
+                factbook(
+                    "FR",
+                    "France",
+                    "The highest point of France is Mont Blanc (4,805 m).",
+                ),
+                "od-factbook-json",
             ),
         ],
         ..MemCatalog::default()
@@ -1369,19 +1387,20 @@ async fn facts_harness(classes: &[LicenceClass]) -> Harness {
 }
 
 #[tokio::test]
-async fn facts_filter_by_place_country_and_type_and_resolve_hooks() {
+async fn facts_filter_by_place_country_and_type_and_resolve_bare_countries() {
     let h = facts_harness(ALL).await;
     let all = h.json("/v1/facts").await;
     assert_eq!(
         ids(&all),
-        ["1", "2", "3", "5", "7"],
-        "unresolved hooks and link-only never served"
+        ["1", "2", "3", "5", "7", "9"],
+        "source text as written and link-only never served"
     );
     let f1 = &all["items"][0];
     assert_eq!(f1["place"]["wikidata_qid"], "Q64");
     assert_eq!(f1["place"]["geonames_id"], 2950159);
     assert_eq!(f1["fact_type"], "historical");
     assert_eq!(f1["text"], "Berlin was founded in 1244.");
+    assert_eq!(f1["text_origin"], "templated");
     assert_eq!(f1["date_ref"], "1244");
     assert_eq!(f1["llm_ok"], true);
     assert_eq!(f1["confidence"], "structured");
@@ -1399,43 +1418,48 @@ async fn facts_filter_by_place_country_and_type_and_resolve_hooks() {
     );
     assert_eq!(f1["source"]["sourced"], "yes");
     assert_eq!(f1["licence"]["class"], "open");
-    assert!(f1.get("sitelinks").is_none() && f1["place"].get("sitelinks").is_none());
-    // The hook takes Berlin's place; it is share-alike and never for a model.
-    let hook = &all["items"][2];
-    assert_eq!(hook["place"]["wikidata_qid"], "Q64");
-    assert_eq!(hook["place"]["country"], "DE");
-    assert_eq!(hook["text_origin"], "source_hook");
-    assert_eq!(hook["llm_ok"], false);
-    assert_eq!(hook["licence"]["class"], "share_alike");
-    assert_eq!(
-        hook["as_of"], "2026-11-01",
-        "the capture date (t0) when the data has none"
-    );
-    assert_eq!(
-        all["items"][3]["quantity"]["rank_scope"],
-        "highest point of Germany"
-    );
+    assert!(f1["value_lang"].is_null());
+    assert_eq!(all["items"][1]["value_lang"], "de");
+    // The Factbook fact takes Germany's GeoNames id and QID; its own name stays.
+    let fb = &all["items"][3];
+    assert_eq!(fb["place"]["wikidata_qid"], "Q183");
+    assert_eq!(fb["place"]["geonames_id"], 2921044);
+    assert_eq!(fb["place"]["country"], "DE");
+    assert_eq!(fb["place"]["name"], "Germany");
+    assert_eq!(fb["quantity"]["rank_scope"], "highest point of Germany");
     assert_eq!(all["items"][4]["llm_ok"], false, "AI-reserved source");
     assert_eq!(all["items"][4]["ai_bot_blocked"], true);
-
+    let fr = &all["items"][5];
+    assert!(fr["place"]["wikidata_qid"].is_null() && fr["place"]["geonames_id"].is_null());
     assert_eq!(
-        ids(&h.json("/v1/facts?wikidata_qid=Q64").await),
-        ["1", "2", "3"]
+        fr["as_of"], "2026-02-04",
+        "the edition date, not the capture date"
     );
+
+    assert_eq!(ids(&h.json("/v1/facts?wikidata_qid=Q64").await), ["1", "2"]);
+    assert_eq!(ids(&h.json("/v1/facts?wikidata_qid=q64").await), ["1", "2"]);
     assert_eq!(
-        ids(&h.json("/v1/facts?wikidata_qid=q64").await),
-        ["1", "2", "3"]
+        ids(&h.json("/v1/facts?wikidata_qid=Q183").await),
+        ["3", "5"]
     );
     assert_eq!(
         ids(&h.json("/v1/facts?geonames_id=2950159").await),
-        ["1", "2", "3", "7"]
+        ["1", "2", "7"]
+    );
+    assert_eq!(
+        ids(&h.json("/v1/facts?geonames_id=2921044").await),
+        ["3", "5"]
     );
     assert_eq!(
         ids(&h.json("/v1/facts?country=de&fact_type=unbelievable").await),
         ["5"]
     );
-    assert_eq!(ids(&h.json("/v1/facts?fact_type=fun").await), ["3"]);
-    assert!(ids(&h.json("/v1/facts?country=FR").await).is_empty());
+    assert_eq!(
+        ids(&h.json("/v1/facts?fact_type=popular").await),
+        ["2", "3"]
+    );
+    assert_eq!(ids(&h.json("/v1/facts?country=FR").await), ["9"]);
+    assert!(ids(&h.json("/v1/facts?country=IT").await).is_empty());
     // Paging.
     let p1 = h.json("/v1/facts?limit=2").await;
     assert_eq!(ids(&p1), ["1", "2"]);
@@ -1448,8 +1472,7 @@ async fn facts_filter_by_place_country_and_type_and_resolve_hooks() {
             p2["next_cursor"].as_str().unwrap()
         ))
         .await;
-    assert_eq!(ids(&p3), ["7"]);
-    assert!(p3["next_cursor"].is_null());
+    assert_eq!(ids(&p3), ["7", "9"]);
     for bad in [
         "/v1/facts?fact_type=trivia",
         "/v1/facts?wikidata_qid=P31",
@@ -1469,8 +1492,8 @@ async fn facts_respect_the_client_licence_classes() {
     let h = facts_harness(&[LicenceClass::Open]).await;
     assert_eq!(
         ids(&h.json("/v1/facts").await),
-        ["1", "2", "5"],
-        "no share-alike hooks, no facts-only"
+        ["1", "2", "3", "5", "9"],
+        "no facts-only"
     );
 }
 

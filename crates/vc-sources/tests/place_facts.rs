@@ -1,5 +1,4 @@
-//! Place facts (2026-11-20): `wikidata_facts` (Wikidata EntityData and dump lines),
-//! `wiki_hooks` (Wikipedia "Did you know" / "On this day" / unusual-articles wikitext) and
+//! Place facts (2026-11-20): `wikidata_facts` (Wikidata EntityData and dump lines) and
 //! `factbook_json` (CIA World Factbook final edition via factbook.json), against small
 //! fixtures (`testkit/fixtures/vc-sources/README.md`). Every item must fit `place_fact.v1`.
 
@@ -9,13 +8,12 @@ use std::io::Write;
 
 use common::{Harness, assert_raw_first, fixture, t0};
 use serde_json::{Map, Value, json};
-use vc_core::{CanonicalUrl, Error, SourceId};
+use vc_core::{CanonicalUrl, Error};
 use vc_sources::adapters;
 use vc_sources::adapters::factbook_json::{self, FactbookJson};
 use vc_sources::adapters::records::{AdapterItem, MAPPED, records};
-use vc_sources::adapters::wiki_hooks::{self, HookPage, WikiHooks};
 use vc_sources::adapters::wikidata_facts::{self, WikidataFacts};
-use wiremock::matchers::{method, path, query_param};
+use wiremock::matchers::{method, path};
 use wiremock::{Mock, MockServer, ResponseTemplate};
 
 const Q64: &str = "https://www.wikidata.org/wiki/Special:EntityData/Q64.json";
@@ -84,8 +82,8 @@ fn berlin() -> Value {
 }
 
 #[test]
-fn the_three_adapters_are_registered_and_mapped() {
-    for id in ["wikidata_facts", "wiki_hooks", "factbook_json"] {
+fn the_place_fact_adapters_are_registered_and_mapped() {
+    for id in ["wikidata_facts", "factbook_json"] {
         assert!(adapters::get(id).is_some(), "{id}");
         assert!(MAPPED.contains(&id), "{id}");
         assert!(adapters::registry().iter().any(|a| a.id() == id), "{id}");
@@ -111,7 +109,7 @@ fn entity_data_urls_name_their_qid() {
 }
 
 #[test]
-fn slim_keeps_the_fact_properties_labels_and_hook_sitelinks() {
+fn slim_keeps_the_fact_properties_and_english_labels_only() {
     let e = berlin();
     assert_eq!(e["id"], "Q64");
     assert_eq!(e["labels"]["en"], "Berlin");
@@ -125,17 +123,16 @@ fn slim_keeps_the_fact_properties_labels_and_hook_sitelinks() {
         !claims.contains_key("P31"),
         "only the fact and key properties"
     );
-    let links: Vec<&str> = e["sitelinks"]
-        .as_array()
-        .unwrap()
-        .iter()
-        .map(|v| v.as_str().unwrap())
-        .collect();
-    assert!(links.contains(&"dewiki:Berlin") && links.contains(&"frwiki:Berlin"));
+    // English sentences: only English and language-independent (`mul`) labels are kept,
+    // and no sitelinks.
     assert!(
-        !links.iter().any(|l| l.starts_with("enwiki:")),
-        "enwiki has no hook pages listed"
+        e["labels"]
+            .as_object()
+            .unwrap()
+            .keys()
+            .all(|k| k == "en" || k == "mul")
     );
+    assert!(e.get("sitelinks").is_none());
     // Not a place: no GeoNames id and no ISO code.
     let refs: Value = serde_json::from_slice(&fixture("wikidata_entity_refs.json")).unwrap();
     let olympics = serde_json::to_vec(&refs["Q8150"]).unwrap();
@@ -262,6 +259,10 @@ fn berlin_facts_are_templated_sentences_with_a_keyed_place() {
         text(nick),
         "Berlin is nicknamed \u{201c}Spree-Athen\u{201d}."
     );
+    assert_eq!(
+        nick.data["value_lang"], "de",
+        "the quoted value's own language"
+    );
     // The official name equals the label: no fact.
     assert!(by_field(&it, "wikidata:P1448").is_empty());
     let elev = one("wikidata:P2044");
@@ -329,12 +330,66 @@ fn bce_and_deprecated_statements() {
         it.iter()
             .any(|(_, d)| d["text"] == "The motto of Old Town is \u{201c}Semper fidelis\u{201d}.")
     );
+    let motto = it
+        .iter()
+        .find(|(_, d)| d["source_field"] == "wikidata:P1451")
+        .unwrap();
+    assert_eq!(motto.1["value_lang"], "la");
     // A deprecated statement is dropped when slimming.
     let raw = json!({"id": "Q2", "claims": {"P1566": [{"rank": "normal", "mainsnak": {"snaktype": "value", "datavalue": {"value": "9"}}}],
         "P571": [{"rank": "deprecated", "mainsnak": {"snaktype": "value", "datavalue": {"value": {"time": "+1900-00-00T00:00:00Z", "precision": 9}}}}]},
         "labels": {"en": {"value": "X Town"}}});
     let s = wikidata_facts::slim(&raw).unwrap();
     assert!(s["claims"].get("P571").is_none());
+}
+
+#[test]
+fn english_sentences_never_carry_a_label_in_another_language() {
+    // No English (or `mul`) label: no English sentence about the place at all.
+    let e = json!({"id": "Q3", "labels": {"ar": "\u{0628}\u{0644}\u{062f}\u{0629}"},
+    "claims": {
+        "P1566": [{"rank": "normal", "value": "456", "q": {}, "refs": false}],
+        "P571": [{"rank": "normal", "value": {"time": "+1900-00-00T00:00:00Z", "precision": 9}, "q": {}, "refs": false}]
+    }});
+    assert!(wikidata_facts::facts(&e, &Map::new()).is_empty());
+    // A `mul` label is a name in every language: used, and recorded as such.
+    let mut m = e.clone();
+    m["labels"] = json!({"mul": "Qtown", "ar": "x"});
+    let it = wikidata_facts::facts(&m, &Map::new());
+    assert_eq!(it[0].1["text"], "Qtown was founded in 1900.");
+    assert_eq!(it[0].1["place"]["name_lang"], "mul");
+    // A referenced item (a twin town) with no English label is left out of the sentence.
+    let mut t = m.clone();
+    t["claims"]["P190"] = json!([
+        {"rank": "normal", "value": {"id": "Q10"}, "q": {}, "refs": false},
+        {"rank": "normal", "value": {"id": "Q11"}, "q": {}, "refs": false}
+    ]);
+    let mut labels = Map::new();
+    labels.insert("Q10".into(), json!({"labels": {"ar": "y"}}));
+    labels.insert("Q11".into(), json!({"labels": {"en": "Elsewhere"}}));
+    let it = wikidata_facts::facts(&t, &labels);
+    let twin = it
+        .iter()
+        .find(|(_, d)| d["source_field"] == "wikidata:P190")
+        .unwrap();
+    assert_eq!(
+        twin.1["text"],
+        "Qtown is twinned with Elsewhere and 1 other place."
+    );
+    // English values first among several nicknames.
+    let mut n = m.clone();
+    n["claims"]["P1449"] = json!([
+        {"rank": "normal", "value": {"text": "Q-Stadt", "language": "de"}, "q": {}, "refs": false},
+        {"rank": "normal", "value": {"text": "Q City", "language": "en"}, "q": {}, "refs": false}
+    ]);
+    let it = wikidata_facts::facts(&n, &Map::new());
+    let nicks: Vec<&Value> = it
+        .iter()
+        .filter(|(_, d)| d["source_field"] == "wikidata:P1449")
+        .map(|(_, d)| d)
+        .collect();
+    assert_eq!(nicks[0]["value_lang"], "en");
+    assert_eq!(nicks[1]["value_lang"], "de");
 }
 
 fn entity_data_server_paths() -> Vec<(String, Vec<u8>)> {
@@ -388,6 +443,9 @@ async fn entity_data_row_spools_raw_subresources_then_one_bundle() {
         9
     );
     assert_eq!(roles.last(), Some(&vc_core::store::CaptureRole::Primary));
+    // The bundle carries the item's status: it is one response, not a dump batch, so the
+    // processor reconciles the row's facts against it (a removed statement goes stale).
+    assert_eq!(h.sink.records.last().unwrap().meta.status, Some(200));
     let res = h.resources();
     assert_eq!(res.len(), 1);
     let it = records(
@@ -405,7 +463,7 @@ async fn entity_data_row_spools_raw_subresources_then_one_bundle() {
 }
 
 #[tokio::test]
-async fn a_non_place_item_makes_no_bundle_and_a_challenge_stops() {
+async fn a_non_place_item_makes_an_empty_bundle_and_a_challenge_stops() {
     let s = MockServer::start().await;
     let refs: Value = serde_json::from_slice(&fixture("wikidata_entity_refs.json")).unwrap();
     Mock::given(method("GET"))
@@ -424,7 +482,20 @@ async fn a_non_place_item_makes_no_bundle_and_a_challenge_stops() {
     .await;
     let rep = h.run(&WikidataFacts::DEFAULT).await.unwrap();
     assert_eq!(rep.requests, 1);
-    assert!(h.resources().is_empty());
+    // An empty bundle with the item's status: the facts the row had (when it was a place)
+    // go stale.
+    let res = h.resources();
+    assert_eq!(res.len(), 1);
+    assert_eq!(h.sink.records.last().unwrap().meta.status, Some(200));
+    let it = records(
+        "wikidata_facts",
+        &CanonicalUrl::parse("https://www.wikidata.org/wiki/Special:EntityData/Q8150.json")
+            .unwrap(),
+        &res[0].1,
+    )
+    .unwrap()
+    .unwrap();
+    assert!(it.is_empty());
 
     let s2 = MockServer::start().await;
     Mock::given(method("GET"))
@@ -502,186 +573,6 @@ async fn an_unknown_row_makes_no_request() {
 }
 
 // ---------------------------------------------------------------------------------------------
-// wiki_hooks
-
-#[test]
-fn every_listed_wiki_and_page_is_unique() {
-    let mut sites: Vec<&str> = wiki_hooks::SITES.iter().map(|s| s.site).collect();
-    assert_eq!(sites.len(), 37);
-    sites.sort_unstable();
-    sites.dedup();
-    assert_eq!(sites.len(), 37);
-    let pages: usize = wiki_hooks::SITES.iter().map(|s| s.pages.len()).sum();
-    assert_eq!(pages, 93);
-    for s in wiki_hooks::SITES {
-        assert!(s.host.ends_with(".wikipedia.org"), "{}", s.host);
-        assert_eq!(wiki_hooks::site_by_host(s.host).unwrap().site, s.site);
-        for (p, k) in s.pages {
-            assert_eq!(wiki_hooks::page_kind(s, p), Some(*k), "{p}");
-            assert!(!p.contains(['?', '#']) || p.ends_with('?'), "{p}");
-        }
-    }
-    let de = wiki_hooks::site_by_host("de.wikipedia.org").unwrap();
-    assert_eq!(
-        wiki_hooks::page_kind(de, "Wikipedia:Hauptseite/Jahrestage/November/20"),
-        Some(HookPage::Otd),
-        "an archive subpage"
-    );
-    assert_eq!(wiki_hooks::page_kind(de, "Berlin"), None);
-    assert_eq!(
-        wiki_hooks::page_kind(de, "Wikipedia:Kuriosit%C3%A4tenkabinett"),
-        Some(HookPage::Unusual),
-        "percent-encoded titles"
-    );
-}
-
-fn hook_items(url: &str, file: &str) -> Vec<AdapterItem> {
-    records(
-        "wiki_hooks",
-        &CanonicalUrl::parse(url).unwrap(),
-        &fixture(file),
-    )
-    .unwrap()
-    .unwrap()
-}
-
-#[test]
-fn dyk_hooks_keep_short_share_alike_text_and_their_link_candidates() {
-    let it = hook_items(
-        "https://simple.wikipedia.org/wiki/Wikipedia:Did_you_know?action=raw",
-        "wiki_hooks_simple_dyk.txt",
-    );
-    fit(&it);
-    let texts: Vec<&str> = it.iter().map(text).collect();
-    assert_eq!(
-        texts,
-        vec![
-            "... that Berlin has more bridges than Venice?",
-            "... that the Arkenberge, the highest point of the German capital, is a former rubble hill?",
-            "... that the village of Hallstatt was copied in China?",
-            "... that Lake Bled has an island with a church?",
-        ],
-        "refs, edge templates and files removed; inner templates, unlinked and short hooks and duplicates dropped"
-    );
-    for i in &it {
-        assert_eq!(i.data["text_origin"], "source_hook");
-        assert_eq!(
-            i.data["llm_ok"], false,
-            "share-alike text never goes to a model"
-        );
-        assert_eq!(i.data["licence"]["class"], "share_alike");
-        assert_eq!(i.data["licence"]["spdx"], "CC-BY-SA-4.0");
-        assert_eq!(i.data["fact_type"], "fun");
-        assert_eq!(i.data["lang"], "en", "Simple English");
-        assert_eq!(i.data["confidence"], "extracted");
-        assert_eq!(
-            i.data["source_url"],
-            "https://simple.wikipedia.org/wiki/Wikipedia:Did_you_know"
-        );
-        assert!(
-            i.data["place"].get("wikidata_qid").is_none(),
-            "resolved by the read API"
-        );
-    }
-    assert_eq!(
-        it[1].data["place"]["link_candidates"],
-        json!(["simplewiki:Arkenberge", "simplewiki:Berlin"]),
-        "bold links first, then the others by their target"
-    );
-    assert_eq!(
-        it[2].data["place"]["link_candidates"],
-        json!(["simplewiki:Hallstatt (village)", "simplewiki:China"])
-    );
-}
-
-#[test]
-fn otd_lines_give_the_year_and_unusual_tables_their_rows() {
-    let otd = hook_items(
-        "https://de.wikipedia.org/wiki/Wikipedia:Hauptseite/Jahrestage?action=raw",
-        "wiki_hooks_de_otd.txt",
-    );
-    fit(&otd);
-    assert_eq!(otd.len(), 2);
-    assert_eq!(otd[0].data["date_ref"], "1244");
-    assert_eq!(otd[0].data["fact_type"], "historical");
-    assert_eq!(
-        text(&otd[0]),
-        "1244 – Erste urkundliche Erwähnung der Stadt Berlin in einer Urkunde."
-    );
-    assert_eq!(
-        otd[0].data["place"]["link_candidates"],
-        json!(["dewiki:Berlin"]),
-        "year articles are not places"
-    );
-    assert_eq!(otd[1].data["date_ref"], "1806");
-    assert_eq!(otd[0].data["lang"], "de");
-
-    let unusual = hook_items(
-        "https://fr.wikipedia.org/wiki/Wikip%C3%A9dia:Articles_insolites?action=raw",
-        "wiki_hooks_fr_unusual.txt",
-    );
-    fit(&unusual);
-    assert_eq!(unusual.len(), 2);
-    assert_eq!(unusual[0].data["fact_type"], "unbelievable");
-    assert!(text(&unusual[0]).starts_with("Baarle-Hertog \u{2014} Une commune"));
-    assert_eq!(
-        unusual[0].data["place"]["link_candidates"],
-        json!(["frwiki:Baarle-Hertog"])
-    );
-}
-
-#[test]
-fn a_page_that_is_not_listed_is_refused() {
-    let r = records(
-        "wiki_hooks",
-        &CanonicalUrl::parse("https://de.wikipedia.org/wiki/Berlin?action=raw").unwrap(),
-        b"* [[Berlin]] is a city with a long enough line.",
-    )
-    .unwrap();
-    assert!(matches!(r, Err(Error::Invalid(_))));
-}
-
-#[tokio::test]
-async fn a_hook_row_fetches_the_raw_wikitext_once() {
-    let s = MockServer::start().await;
-    Mock::given(method("GET"))
-        .and(path("/wiki/Wikipedia:Did_you_know"))
-        .and(query_param("action", "raw"))
-        .respond_with(
-            ResponseTemplate::new(200)
-                .insert_header("content-type", "text/x-wiki; charset=UTF-8")
-                .set_body_bytes(fixture("wiki_hooks_simple_dyk.txt")),
-        )
-        .expect(1)
-        .mount(&s)
-        .await;
-    let mut spec = common::spec("wikidata-dump");
-    spec.id = SourceId("wiki-facts-test".into());
-    let mut h = Harness::new(
-        spec,
-        "wiki_hooks",
-        &format!("{}/wiki/Wikipedia:Did_you_know", s.uri()),
-        t0(),
-    )
-    .await;
-    let rep = h.run(&WikiHooks).await.unwrap();
-    assert_eq!(rep.requests, 1);
-    assert!(rep.complete);
-    assert_raw_first(&h.events.all());
-    assert_eq!(h.responses().len(), 1);
-    assert!(h.responses()[0].url.as_str().ends_with("?action=raw"));
-
-    let mut h2 = Harness::new(
-        common::spec("wikidata-dump"),
-        "wiki_hooks",
-        &format!("{}/wiki/Berlin", s.uri()),
-        t0(),
-    )
-    .await;
-    assert!(matches!(h2.run(&WikiHooks).await, Err(Error::Invalid(_))));
-}
-
-// ---------------------------------------------------------------------------------------------
 // factbook_json
 
 #[test]
@@ -730,7 +621,7 @@ fn factbook_country_file_facts() {
     );
     assert_eq!(
         text(one("factbook:Government/National symbol(s)")),
-        "National symbols of Germany: eagle."
+        "Germany has eagle as its national symbol."
     );
     assert_eq!(
         text(one("factbook:Government/Country name/former")),
@@ -796,4 +687,23 @@ async fn a_factbook_row_fetches_its_file() {
         h2.run(&FactbookJson).await,
         Err(Error::Invalid(_))
     ));
+}
+
+#[test]
+fn factbook_symbols_become_our_own_sentence() {
+    let s = |f: &str| factbook_json::symbols_sentence("Testland", f);
+    assert_eq!(
+        s("bald eagle, rose; national colors: red, white, blue").as_deref(),
+        Some(
+            "Testland has bald eagle and rose as its national symbols, and its national \
+             colours are red, white and blue."
+        )
+    );
+    assert_eq!(
+        s("national colors: green, white").as_deref(),
+        Some("The national colours of Testland are green and white.")
+    );
+    // Prose or parenthesised notes are not a list of names: no fact.
+    assert_eq!(s("eagle (a symbol used since the 12th century)"), None);
+    assert_eq!(s(""), None);
 }

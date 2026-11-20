@@ -246,7 +246,7 @@ expression: json
             "description": "Licence (share-alike: never merge with other text; keep the attribution)."
           },
           "llm_ok": {
-            "description": "Whether `text` may be given to a model: always false for share-alike text, hooks and\nAI-reserved sources.",
+            "description": "Whether `text` may be given to a model: always false for share-alike text and\nAI-reserved sources.",
             "type": "boolean"
           },
           "place": {
@@ -269,7 +269,7 @@ expression: json
             "description": "Source."
           },
           "text": {
-            "description": "One sentence in our own words (≤ 280 characters), or a short share-alike hook when\n`text_origin` is `source_hook`.",
+            "description": "One sentence in our own words (≤ 280 characters); a quoted value in it (a name, a\nnickname, a motto) is the most it holds of the source.",
             "type": "string"
           },
           "text_en": {
@@ -280,13 +280,20 @@ expression: json
             ]
           },
           "text_origin": {
-            "description": "`templated`, `rewritten` or `source_hook`.",
+            "description": "`templated` (our template over typed fields) or `rewritten` (our rewrite of a source\nsentence).",
             "type": "string"
           },
           "updated_at": {
             "description": "Last update of the record.",
             "format": "date-time",
             "type": "string"
+          },
+          "value_lang": {
+            "description": "Language of a quoted value in `text` (a name, nickname or motto), when it has one.",
+            "type": [
+              "string",
+              "null"
+            ]
           }
         },
         "required": [
@@ -328,7 +335,7 @@ expression: json
         "type": "object"
       },
       "FactPlaceDto": {
-        "description": "The place of a fact (`/v1/facts`): the resolved place (a hook takes the Wikidata place it\nwas resolved to).",
+        "description": "The place of a fact (`/v1/facts`): the resolved place (a bare country takes the GeoNames id\nand QID of the Wikidata country fact).",
         "properties": {
           "admin_level": {
             "description": "`country`, `admin1`, `admin2`, `locality`, `village` or `feature`, when known.",
@@ -2023,7 +2030,7 @@ expression: json
             "bearer": []
           }
         ],
-        "summary": "Place facts (kind `place_fact`): short facts about one place (historical, fun, popular,\nrecord-breaking, little known), by record id: filtered by GeoNames id, Wikidata QID,\ncountry and fact type. Wikipedia hooks appear only once resolved to a Wikidata place.",
+        "summary": "Place facts (kind `place_fact`): short facts about one place (historical, fun, popular,\nrecord-breaking, little known), by record id: filtered by GeoNames id, Wikidata QID,\ncountry and fact type. Only our own sentences are served (`templated` or `rewritten`).",
         "tags": [
           "read"
         ]

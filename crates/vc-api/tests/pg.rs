@@ -501,7 +501,7 @@ async fn pg_carbon_occupancy() {
 }
 
 #[tokio::test]
-async fn pg_facts_resolve_hooks_and_filter_by_place() {
+async fn pg_facts_resolve_bare_countries_and_filter_by_place() {
     use vc_api::catalog::FactQuery;
     use vc_core::usepolicy::UsePolicy;
     let pool = testkit::pg().await;
@@ -517,15 +517,17 @@ async fn pg_facts_resolve_hooks_and_filter_by_place() {
     .expect("source");
     let full = UsePolicy::ALLOW_ALL;
     let berlin = serde_json::json!({"geonames_id": 2950159, "wikidata_qid": "Q64",
-        "country": "DE", "name": "Berlin", "sitelinks": ["dewiki:Berlin", "simplewiki:Berlin"]});
-    let wd = |text: &str, ty: &str| {
-        serde_json::json!({"place": berlin, "fact_type": ty, "text": text,
+        "country": "DE", "name": "Berlin"});
+    let germany = serde_json::json!({"geonames_id": 2921044, "wikidata_qid": "Q183",
+        "admin_level": "country", "country": "DE", "name": "Germany"});
+    let wd = |place: &serde_json::Value, text: &str, ty: &str| {
+        serde_json::json!({"place": place, "fact_type": ty, "text": text,
             "text_origin": "templated", "llm_ok": true, "confidence": "structured"})
     };
-    let hook = |cands: serde_json::Value| {
-        serde_json::json!({"place": {"link_candidates": cands}, "fact_type": "fun",
-            "text": "... that a hook is resolved?", "text_origin": "source_hook",
-            "llm_ok": false, "confidence": "extracted"})
+    let bare = |cc: &str, text: &str| {
+        serde_json::json!({"place": {"country": cc, "admin_level": "country"},
+            "fact_type": "unbelievable", "text": text,
+            "text_origin": "templated", "confidence": "structured"})
     };
     let put = |key: &'static str,
                source: &'static str,
@@ -541,7 +543,7 @@ async fn pg_facts_resolve_hooks_and_filter_by_place() {
         "wikidata-facts",
         "open",
         "active",
-        wd("Berlin was founded in 1244.", "historical"),
+        wd(&berlin, "Berlin was founded in 1244.", "historical"),
         full,
     )
     .await;
@@ -550,29 +552,36 @@ async fn pg_facts_resolve_hooks_and_filter_by_place() {
         "wikidata-facts",
         "open",
         "stale",
-        wd("Berlin covers an area of 891.12 km².", "popular"),
+        wd(&berlin, "Berlin covers an area of 891.12 km².", "popular"),
         full,
     )
     .await;
-    let h = put(
+    let g = put(
+        "g",
+        "wikidata-facts",
+        "open",
+        "active",
+        wd(
+            &germany,
+            "Germany covers an area of 357,588 km².",
+            "popular",
+        ),
+        full,
+    )
+    .await;
+    let mut rw = wd(&berlin, "A rewritten share-alike sentence.", "fun");
+    rw["text_origin"] = serde_json::json!("rewritten");
+    rw["llm_ok"] = serde_json::json!(false);
+    let e = put("e", "fx-example", "share_alike", "active", rw, full).await;
+    // Source text kept as written, tombstoned, deny-all: never served.
+    let mut hook = wd(&berlin, "... that a copied hook is never served?", "fun");
+    hook["text_origin"] = serde_json::json!("source_hook");
+    put(
         "h",
         "wiki-facts-simple",
         "share_alike",
         "active",
-        hook(serde_json::json!([
-            "simplewiki:Venice",
-            "simplewiki:Berlin"
-        ])),
-        full,
-    )
-    .await;
-    // Unresolved hook, tombstoned, deny-all: never served.
-    put(
-        "u",
-        "wiki-facts-simple",
-        "share_alike",
-        "active",
-        hook(serde_json::json!(["simplewiki:Atlantis"])),
+        hook,
         full,
     )
     .await;
@@ -581,7 +590,7 @@ async fn pg_facts_resolve_hooks_and_filter_by_place() {
         "wikidata-facts",
         "open",
         "tombstoned",
-        wd("A tombstoned fact about Berlin.", "fun"),
+        wd(&berlin, "A tombstoned fact about Berlin.", "fun"),
         full,
     )
     .await;
@@ -590,21 +599,35 @@ async fn pg_facts_resolve_hooks_and_filter_by_place() {
         "wikidata-facts",
         "open",
         "active",
-        wd("A fact no client may see here.", "fun"),
+        wd(&berlin, "A fact no client may see here.", "fun"),
         UsePolicy::DENY_ALL,
     )
     .await;
-    let c = put("c", "od-factbook-json", "open", "active",
-        serde_json::json!({"place": {"country": "DE", "admin_level": "country"},
-            "fact_type": "unbelievable", "text": "The highest point of Germany is Zugspitze (2,963 m).",
-            "text_origin": "templated", "confidence": "structured"}), full).await;
+    let c = put(
+        "c",
+        "od-factbook-json",
+        "open",
+        "active",
+        bare("DE", "The highest point of Germany is Zugspitze (2,963 m)."),
+        full,
+    )
+    .await;
+    let f = put(
+        "f",
+        "od-factbook-json",
+        "open",
+        "active",
+        bare("FR", "The highest point of France is Mont Blanc (4,805 m)."),
+        full,
+    )
+    .await;
     // Another kind with a `place` key is never a fact.
     put(
         "o",
         "wikidata-facts",
         "open",
         "active",
-        wd("Not a fact kind at all.", "fun"),
+        wd(&berlin, "Not a fact kind at all.", "fun"),
         full,
     )
     .await;
@@ -622,28 +645,37 @@ async fn pg_facts_resolve_hooks_and_filter_by_place() {
         |v: &[vc_api::catalog::FactRow]| v.iter().map(|r| r.item.id.clone()).collect::<Vec<_>>();
     let s = |i: i64| i.to_string();
     let all = store.facts(&q(FactQuery::default())).await.expect("q");
-    assert_eq!(ids(&all), [s(a), s(b), s(h), s(c)]);
+    assert_eq!(ids(&all), [s(a), s(b), s(g), s(e), s(c), s(f)]);
     assert_eq!(all[0].source_name.as_deref(), Some("Wikidata EntityData"));
     assert_eq!(all[0].source_class.as_deref(), Some("reference"));
-    assert_eq!(
-        all[2].place["wikidata_qid"], "Q64",
-        "the hook took Berlin's place"
-    );
-    assert_eq!(all[3].source_name, None, "no registry row");
-    let by_qid = FactQuery {
-        wikidata_qid: Some("Q64".into()),
+    assert_eq!(all[4].place["wikidata_qid"], "Q183", "Germany's QID");
+    assert_eq!(all[4].place["geonames_id"], 2921044);
+    assert_eq!(all[4].place["country"], "DE");
+    assert!(all[5].place.get("wikidata_qid").is_none(), "no Wikidata FR");
+    assert_eq!(all[4].source_name, None, "no registry row");
+    let by_qid = |qid: &str| FactQuery {
+        wikidata_qid: Some(qid.into()),
         ..FactQuery::default()
     };
     assert_eq!(
-        ids(&store.facts(&q(by_qid)).await.expect("q")),
-        [s(a), s(b), s(h)]
+        ids(&store.facts(&q(by_qid("Q64"))).await.expect("q")),
+        [s(a), s(b), s(e)]
+    );
+    assert_eq!(
+        ids(&store.facts(&q(by_qid("Q183"))).await.expect("q")),
+        [s(g), s(c)]
     );
     let by_gn = FactQuery {
+        geonames_id: Some(2921044),
+        ..FactQuery::default()
+    };
+    assert_eq!(ids(&store.facts(&q(by_gn)).await.expect("q")), [s(g), s(c)]);
+    let by_gn_type = FactQuery {
         geonames_id: Some(2950159),
         fact_type: Some("fun".into()),
         ..FactQuery::default()
     };
-    assert_eq!(ids(&store.facts(&q(by_gn)).await.expect("q")), [s(h)]);
+    assert_eq!(ids(&store.facts(&q(by_gn_type)).await.expect("q")), [s(e)]);
     let by_country = FactQuery {
         country: Some("DE".into()),
         fact_type: Some("unbelievable".into()),
@@ -657,7 +689,7 @@ async fn pg_facts_resolve_hooks_and_filter_by_place() {
     };
     assert_eq!(
         ids(&store.facts(&open_only).await.expect("q")),
-        [s(a), s(b), s(c)]
+        [s(a), s(b), s(g), s(c), s(f)]
     );
     let page2 = FactQuery {
         offset: 1,
@@ -665,7 +697,7 @@ async fn pg_facts_resolve_hooks_and_filter_by_place() {
         ..q(FactQuery::default())
     };
     let page2 = FactQuery { limit: 2, ..page2 };
-    assert_eq!(ids(&store.facts(&page2).await.expect("q")), [s(b), s(h)]);
+    assert_eq!(ids(&store.facts(&page2).await.expect("q")), [s(b), s(g)]);
     let none = FactQuery {
         licence_classes: vec![],
         ..FactQuery::default()

@@ -52,7 +52,7 @@ fn all_sources_yaml_load_and_validate() {
     // Every built-in adapter is used by a source, and every adapter a source names exists.
     // Exception (2026-11-20): the place-fact readers ship before their sources (the research's
     // ADD rows come in a separate PR, which removes this list).
-    const SOURCES_PENDING: &[&str] = &["factbook_json", "wiki_hooks", "wikidata_facts"];
+    const SOURCES_PENDING: &[&str] = &["factbook_json", "wikidata_facts"];
     for a in SOURCES_PENDING {
         assert!(
             !used.contains(a),

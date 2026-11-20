@@ -2,7 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://github.com/rupakc/travel-planner-crawler/schemas/place_fact.v1.json",
   "title": "Place fact",
-  "description": "One record: one short fact about one place (a country, region, city, town, village or feature), written as one sentence in our own words, with the source link. Historical, fun, popular, record-breaking (`unbelievable`) or little-known. We never copy article text: `text` is a templated or rewritten sentence; the only exception is a short share-alike hook (`text_origin: source_hook`), which is kept apart, attributed and never sent to a model (`llm_ok: false`). Voyager use: the place facts section (and Places to see, the itinerary).",
+  "description": "One record: one short fact about one place (a country, region, city, town, village or feature), written as one sentence in our own words, with the source link. Historical, fun, popular, record-breaking (`unbelievable`) or little-known. We never copy article text: `text` is a templated or rewritten sentence, and a short quoted value (a name, a nickname, a motto; its language in `value_lang`) is the most it holds of the source. Voyager use: the place facts section (and Places to see, the itinerary).",
   "type": "object",
   "additionalProperties": false,
   "required": [
@@ -16,7 +16,7 @@
     "place": {
       "type": "object",
       "additionalProperties": false,
-      "description": "The place the fact is about. At least one key: `geonames_id` (the primary join key), `wikidata_qid`, `country` (country-level facts) or `link_candidates` (a hook not yet resolved; served only once a Wikidata place resolves it).",
+      "description": "The place the fact is about. At least one key: `geonames_id` (the primary join key), `wikidata_qid` or `country` (country-level facts; the read API adds a bare country's GeoNames id and QID from a Wikidata country fact).",
       "properties": {
         "geonames_id": {
           "type": "integer",
@@ -63,26 +63,6 @@
           "type": "string",
           "maxLength": 80,
           "description": "The source's own id of the place, as `<scheme>:<id>` (e.g. `gnis:1234`, `factbook:gm`)."
-        },
-        "sitelinks": {
-          "type": "array",
-          "maxItems": 64,
-          "items": {
-            "type": "string",
-            "maxLength": 300,
-            "description": "`<site>:<title>` (e.g. `dewiki:Berlin`)."
-          },
-          "description": "Wikidata facts only: the place's Wikipedia articles in the hook languages, used to resolve hooks to this place."
-        },
-        "link_candidates": {
-          "type": "array",
-          "maxItems": 8,
-          "items": {
-            "type": "string",
-            "maxLength": 300,
-            "description": "`<site>:<title>` of an article the hook links (bold links first)."
-          },
-          "description": "Hook facts only: the articles the hook links, in order. The first one that is a Wikidata place's sitelink is the place."
         }
       }
     },
@@ -95,13 +75,13 @@
         "unbelievable",
         "little_known"
       ],
-      "description": "`historical`: founding, former names, events, heritage designation. `popular`: nicknames, mottos, symbols, well-known figures (population, area). `unbelievable`: records and superlatives (highest, lowest, oldest, largest). `little_known`: name origins, twin towns, borders, curiosities. `fun`: editorial curiosities and hooks."
+      "description": "`historical`: founding, former names, events, heritage designation. `popular`: nicknames, mottos, symbols, well-known figures (population, area). `unbelievable`: records and superlatives (highest, lowest, oldest, largest). `little_known`: name origins, twin towns, borders, curiosities. `fun`: editorial curiosities, rewritten in our own words."
     },
     "text": {
       "type": "string",
       "minLength": 8,
       "maxLength": 280,
-      "description": "The fact: one sentence in our own words, in `lang` (a short share-alike hook only when `text_origin` is `source_hook`)."
+      "description": "The fact: one sentence in our own words, in `lang`. Never a sentence copied from the source."
     },
     "lang": {
       "type": "string",
@@ -118,10 +98,15 @@
       "type": "string",
       "enum": [
         "templated",
-        "rewritten",
-        "source_hook"
+        "rewritten"
       ],
-      "description": "`templated`: built from typed fields with our own sentence template. `rewritten`: our own rewrite of a sentence of the source. `source_hook`: a short hook kept as the source wrote it (share-alike only; never merged, never sent to a model)."
+      "description": "`templated`: built from typed fields with our own sentence template. `rewritten`: our own rewrite of a sentence of the source (the extractors to come; share-alike text is never rewritten by a model)."
+    },
+    "value_lang": {
+      "type": "string",
+      "maxLength": 16,
+      "pattern": "^[a-z]{2,3}(-[a-z0-9]{1,8})*$",
+      "description": "Language (BCP 47, lower case; `und` when unknown) of a quoted value in `text` (an official name, nickname or motto), which may differ from `lang`."
     },
     "llm_ok": {
       "type": "boolean",
@@ -161,7 +146,7 @@
     "source_field": {
       "type": "string",
       "maxLength": 120,
-      "description": "The source field the fact comes from (`wikidata:P571`, `factbook:Geography/Elevation/highest point`, `dyk`, `otd`, `unusual`)."
+      "description": "The source field the fact comes from (`wikidata:P571`, `factbook:Geography/Elevation/highest point`)."
     },
     "source": {
       "type": "object",
@@ -242,7 +227,7 @@
     "source_url": {
       "type": "string",
       "maxLength": 2048,
-      "description": "Deep link to the fact at the source (a Wikidata statement, a Wikipedia article or hook page, a Factbook country file).",
+      "description": "Deep link to the fact at the source (a Wikidata statement, a Factbook country file, a page).",
       "pattern": "^https?://[^\\s]+$"
     },
     "as_of": {

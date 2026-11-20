@@ -1,5 +1,0 @@
-<!-- Synthetic test page built for the wiki_hooks tests (structure of an "anniversaries" page; texts written for this fixture). -->
-== November ==
-* [[1244]] – Erste urkundliche Erwähnung der Stadt '''[[Berlin]]''' in einer Urkunde.
-* 1806: Truppen ziehen in [[Berlin]] ein, wie eine erfundene Testzeile behauptet.
-* [[Kategorie:Testkategorie]]

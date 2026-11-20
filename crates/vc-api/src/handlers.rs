@@ -726,7 +726,12 @@ pub(crate) fn fact_dto(row: &crate::catalog::FactRow, shaper: &Shaper) -> Option
     let prov = it.provenance.first();
     let ai_blocked = d.get("ai_bot_blocked").and_then(|v| v.as_bool()) == Some(true);
     let share_alike = it.licence.class == LicenceClass::ShareAlike;
-    let hook = d.get("text_origin").and_then(|v| v.as_str()) == Some("source_hook");
+    // Only our own sentences are served: a record with any other text origin (source text
+    // as written) is never listed.
+    let origin = str_of(d, "text_origin").unwrap_or_else(|| "templated".into());
+    if origin != "templated" && origin != "rewritten" {
+        return None;
+    }
     Some(FactDto {
         id: it.id.clone(),
         place: FactPlaceDto {
@@ -741,10 +746,10 @@ pub(crate) fn fact_dto(row: &crate::catalog::FactRow, shaper: &Shaper) -> Option
         text,
         lang: str_of(d, "lang"),
         text_en: str_of(d, "text_en"),
-        text_origin: str_of(d, "text_origin").unwrap_or_else(|| "templated".into()),
+        value_lang: str_of(d, "value_lang"),
+        text_origin: origin,
         llm_ok: d.get("llm_ok").and_then(|v| v.as_bool()).unwrap_or(false)
             && !share_alike
-            && !hook
             && !ai_blocked,
         date_ref: str_of(d, "date_ref"),
         quantity: q.and_then(|q| {
@@ -777,7 +782,7 @@ pub(crate) fn fact_dto(row: &crate::catalog::FactRow, shaper: &Shaper) -> Option
 
 /// Place facts (kind `place_fact`): short facts about one place (historical, fun, popular,
 /// record-breaking, little known), by record id: filtered by GeoNames id, Wikidata QID,
-/// country and fact type. Wikipedia hooks appear only once resolved to a Wikidata place.
+/// country and fact type. Only our own sentences are served (`templated` or `rewritten`).
 #[utoipa::path(get, path = "/v1/facts", tag = "read", params(FactParams),
     security(("bearer" = [])),
     responses((status = 200, body = FactPage), (status = 400, body = ErrorBody),

@@ -303,6 +303,13 @@ fn place_fact_is_a_record_with_a_bounded_own_words_sentence() {
         reg.validate(&id, &restricted).is_err(),
         "restricted is never a fact licence"
     );
+    // Source text is never kept as written: there is no hook origin.
+    let mut hook = ok.clone();
+    hook["text_origin"] = json!("source_hook");
+    assert!(reg.validate(&id, &hook).is_err(), "no source_hook origin");
+    let mut quoted = ok.clone();
+    quoted["value_lang"] = json!("de");
+    assert!(reg.validate(&id, &quoted).is_ok());
 }
 
 #[test]

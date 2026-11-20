@@ -28,7 +28,7 @@ use vc_core::{CanonicalUrl, Error, Result};
 
 use super::common::{Fetch, check_status, fetch_raw};
 use super::countries;
-use super::place_facts::{Fact, TextOrigin, number, parse_english_date, strip_html};
+use super::place_facts::{Fact, TextOrigin, and_list, number, parse_english_date, strip_html};
 
 /// Adapter id.
 pub const ID: &str = "factbook_json";
@@ -73,6 +73,62 @@ fn parse_num(s: &str) -> Option<f64> {
         .parse()
         .ok()
         .filter(|x: &f64| x.is_finite())
+}
+
+/// Our sentence over the Factbook's "National symbol(s)" list (`eagle; national colors:
+/// black, red, yellow`): the symbols and the colours as lists, never the field as written.
+/// `None` when an item is not a short name (prose, parentheses) or nothing is left.
+pub fn symbols_sentence(name: &str, field: &str) -> Option<String> {
+    let mut symbols: Vec<String> = Vec::new();
+    let mut colours: Vec<String> = Vec::new();
+    let short = |x: &str| {
+        let x = x.trim().trim_end_matches('.').trim();
+        (!x.is_empty() && x.chars().count() <= 40 && !x.contains(['(', ')', ':', '"']))
+            .then(|| x.to_string())
+    };
+    for seg in field.split(';') {
+        let seg = seg.trim();
+        if seg.is_empty() {
+            continue;
+        }
+        let low = seg.to_ascii_lowercase();
+        if let Some(rest) = low
+            .strip_prefix("national colors:")
+            .or_else(|| low.strip_prefix("national colours:"))
+        {
+            let rest = &seg[seg.len() - rest.len()..];
+            for c in rest.split(',').map(|c| c.trim().trim_start_matches("and ")) {
+                colours.push(short(c)?);
+            }
+        } else if seg.contains(':') {
+            // Other labelled parts (anthems and the like) are left out.
+            continue;
+        } else {
+            for x in seg.split(',') {
+                symbols.push(short(x)?);
+            }
+        }
+    }
+    if symbols.len() > 5 || colours.len() > 6 {
+        return None;
+    }
+    let plural = if symbols.len() == 1 { "" } else { "s" };
+    match (symbols.is_empty(), colours.is_empty()) {
+        (true, true) => None,
+        (true, false) => Some(format!(
+            "The national colours of {name} are {}.",
+            and_list(&colours)
+        )),
+        (false, true) => Some(format!(
+            "{name} has {} as its national symbol{plural}.",
+            and_list(&symbols)
+        )),
+        (false, false) => Some(format!(
+            "{name} has {} as its national symbol{plural}, and its national colours are {}.",
+            and_list(&symbols),
+            and_list(&colours)
+        )),
+    }
 }
 
 /// The `place_fact` items of one Factbook country file. Pure.
@@ -126,6 +182,7 @@ pub fn items(url: &CanonicalUrl, body: &[u8]) -> Result<Vec<(String, Value)>> {
         confidence: "structured",
         source_url: Some(src_url.clone()),
         as_of: Some(EDITION.into()),
+        value_lang: None,
     };
     let mut out = Vec::new();
     for (key, word) in [("highest point", "highest"), ("lowest point", "lowest")] {
@@ -189,11 +246,12 @@ pub fn items(url: &CanonicalUrl, body: &[u8]) -> Result<Vec<(String, Value)>> {
     }
     if let Some(t) = text(&v, &["Government", "National symbol(s)"])
         && t.chars().count() <= 200
+        && let Some(sentence) = symbols_sentence(&name, &t)
     {
         out.push(mk(
             "Government/National symbol(s)",
             "popular",
-            format!("National symbols of {name}: {}.", t.trim_end_matches('.')),
+            sentence,
             None,
             None,
         ));
