@@ -19006,7 +19006,7 @@ FACTS_REUSE: dict[str, str] = {
     'wikivoyage-dump-ru': 'the "История" / "Tarihçe" sections of city articles',
 }
 # Adapters that emit place_fact rows themselves (no LLM).
-FACTS_ADAPTER_IDS = {"wikidata_facts", "wiki_hooks", "factbook_json"}
+FACTS_ADAPTER_IDS = {"wikidata_facts", "factbook_json"}
 
 
 def facts_reuse_on(sid: str, llm_kinds: list[str], lclass: str) -> bool:

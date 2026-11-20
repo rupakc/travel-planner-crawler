@@ -7,7 +7,7 @@
 Every website and dataset the crawler knows, grouped by the part of the Voyager app it
 feeds. A source that serves several parts is listed under each of them.
 
-**1968 sources, 1422 on, 546 off.**
+**1968 sources, 1385 on, 583 off.**
 
 - **What we take**: the traveller-facing data the source gives (its `relevance.why`).
 - **Licence**: *open* (free reuse with credit), *share-alike* (kept apart from other
@@ -28,9 +28,8 @@ a reader or a key exists.
 **Place facts** (section `facts`, added 2026-11-20) holds short facts about countries,
 regions, cities, towns, villages and features (historical, fun, popular, record-breaking
 and little-known), each one sentence in our own words with its source link. The first
-readers are structured: Wikidata properties, Wikipedia "Did you know" / "On this day" /
-unusual-articles hooks (share-alike, kept apart, never sent to a model) and the frozen CIA
-World Factbook JSON (see docs/wiki/Place-Facts-Data.md).
+readers are structured: Wikidata properties and the frozen CIA World Factbook JSON (see
+docs/wiki/Place-Facts-Data.md).
 
 ## Flights
 
@@ -3592,43 +3591,6 @@ World Factbook JSON (see docs/wiki/Place-Facts-Data.md).
 | `visitscotland` | `www.visitscotland.com` | Official Scottish road trips, itineraries, events and food trails, for the itinerary, Activities, Events and Places to see. | facts only | yes | no |
 | `visitsweden` | `visitsweden.com` | Official Swedish destinations and trip ideas, for Places to see and the itinerary. | facts only | yes | no |
 | `wien-info` | `www.wien.info` | Vienna events, Heurigen wine taverns, coffee houses and suggested itineraries, for Events, Activities, the itinerary and Places to see. | facts only | yes | no |
-| `wiki-facts-ar` | `ar.wikipedia.org` | ar Wikipedia hook pages (Did you know, On this day, unusual articles): short sourced hooks that name places, for Place facts and Itinerary. | share-alike | yes | no |
-| `wiki-facts-bg` | `bg.wikipedia.org` | bg Wikipedia hook pages (Did you know, On this day, unusual articles): short sourced hooks that name places, for Place facts and Itinerary. | share-alike | yes | no |
-| `wiki-facts-bn` | `bn.wikipedia.org` | bn Wikipedia hook pages (Did you know, On this day, unusual articles): short sourced hooks that name places, for Place facts and Itinerary. | share-alike | yes | no |
-| `wiki-facts-ca` | `ca.wikipedia.org` | ca Wikipedia hook pages (Did you know, On this day, unusual articles): short sourced hooks that name places, for Place facts and Itinerary. | share-alike | yes | no |
-| `wiki-facts-cs` | `cs.wikipedia.org` | cs Wikipedia hook pages (Did you know, On this day, unusual articles): short sourced hooks that name places, for Place facts and Itinerary. | share-alike | yes | no |
-| `wiki-facts-da` | `da.wikipedia.org` | da Wikipedia hook pages (Did you know, On this day, unusual articles): short sourced hooks that name places, for Place facts and Itinerary. | share-alike | yes | no |
-| `wiki-facts-de` | `de.wikipedia.org` | de Wikipedia hook pages (Did you know, On this day, unusual articles): short sourced hooks that name places, for Place facts and Itinerary. | share-alike | yes | no |
-| `wiki-facts-es` | `es.wikipedia.org` | es Wikipedia hook pages (Did you know, On this day, unusual articles): short sourced hooks that name places, for Place facts and Itinerary. | share-alike | yes | no |
-| `wiki-facts-et` | `et.wikipedia.org` | et Wikipedia hook pages (Did you know, On this day, unusual articles): short sourced hooks that name places, for Place facts and Itinerary. | share-alike | yes | no |
-| `wiki-facts-fa` | `fa.wikipedia.org` | fa Wikipedia hook pages (Did you know, On this day, unusual articles): short sourced hooks that name places, for Place facts and Itinerary. | share-alike | yes | no |
-| `wiki-facts-fi` | `fi.wikipedia.org` | fi Wikipedia hook pages (Did you know, On this day, unusual articles): short sourced hooks that name places, for Place facts and Itinerary. | share-alike | yes | no |
-| `wiki-facts-fr` | `fr.wikipedia.org` | fr Wikipedia hook pages (Did you know, On this day, unusual articles): short sourced hooks that name places, for Place facts and Itinerary. | share-alike | yes | no |
-| `wiki-facts-he` | `he.wikipedia.org` | he Wikipedia hook pages (Did you know, On this day, unusual articles): short sourced hooks that name places, for Place facts and Itinerary. | share-alike | yes | no |
-| `wiki-facts-hi` | `hi.wikipedia.org` | hi Wikipedia hook pages (Did you know, On this day, unusual articles): short sourced hooks that name places, for Place facts and Itinerary. | share-alike | yes | no |
-| `wiki-facts-hu` | `hu.wikipedia.org` | hu Wikipedia hook pages (Did you know, On this day, unusual articles): short sourced hooks that name places, for Place facts and Itinerary. | share-alike | yes | no |
-| `wiki-facts-id` | `id.wikipedia.org` | id Wikipedia hook pages (Did you know, On this day, unusual articles): short sourced hooks that name places, for Place facts and Itinerary. | share-alike | yes | no |
-| `wiki-facts-it` | `it.wikipedia.org` | it Wikipedia hook pages (Did you know, On this day, unusual articles): short sourced hooks that name places, for Place facts and Itinerary. | share-alike | yes | no |
-| `wiki-facts-ja` | `ja.wikipedia.org` | ja Wikipedia hook pages (Did you know, On this day, unusual articles): short sourced hooks that name places, for Place facts and Itinerary. | share-alike | yes | no |
-| `wiki-facts-ko` | `ko.wikipedia.org` | ko Wikipedia hook pages (Did you know, On this day, unusual articles): short sourced hooks that name places, for Place facts and Itinerary. | share-alike | yes | no |
-| `wiki-facts-ms` | `ms.wikipedia.org` | ms Wikipedia hook pages (Did you know, On this day, unusual articles): short sourced hooks that name places, for Place facts and Itinerary. | share-alike | yes | no |
-| `wiki-facts-nb` | `no.wikipedia.org` | no Wikipedia hook pages (Did you know, On this day, unusual articles): short sourced hooks that name places, for Place facts and Itinerary. | share-alike | yes | no |
-| `wiki-facts-nl` | `nl.wikipedia.org` | nl Wikipedia hook pages (Did you know, On this day, unusual articles): short sourced hooks that name places, for Place facts and Itinerary. | share-alike | yes | no |
-| `wiki-facts-pl` | `pl.wikipedia.org` | pl Wikipedia hook pages (Did you know, On this day, unusual articles): short sourced hooks that name places, for Place facts and Itinerary. | share-alike | yes | no |
-| `wiki-facts-pt` | `pt.wikipedia.org` | pt Wikipedia hook pages (Did you know, On this day, unusual articles): short sourced hooks that name places, for Place facts and Itinerary. | share-alike | yes | no |
-| `wiki-facts-ro` | `ro.wikipedia.org` | ro Wikipedia hook pages (Did you know, On this day, unusual articles): short sourced hooks that name places, for Place facts and Itinerary. | share-alike | yes | no |
-| `wiki-facts-ru` | `ru.wikipedia.org` | ru Wikipedia hook pages (Did you know, On this day, unusual articles): short sourced hooks that name places, for Place facts and Itinerary. | share-alike | yes | no |
-| `wiki-facts-simple` | `simple.wikipedia.org` | simple Wikipedia hook pages (Did you know, On this day, unusual articles): short sourced hooks that name places, for Place facts and Itinerary. | share-alike | yes | no |
-| `wiki-facts-sk` | `sk.wikipedia.org` | sk Wikipedia hook pages (Did you know, On this day, unusual articles): short sourced hooks that name places, for Place facts and Itinerary. | share-alike | yes | no |
-| `wiki-facts-sl` | `sl.wikipedia.org` | sl Wikipedia hook pages (Did you know, On this day, unusual articles): short sourced hooks that name places, for Place facts and Itinerary. | share-alike | yes | no |
-| `wiki-facts-sr` | `sr.wikipedia.org` | sr Wikipedia hook pages (Did you know, On this day, unusual articles): short sourced hooks that name places, for Place facts and Itinerary. | share-alike | yes | no |
-| `wiki-facts-sv` | `sv.wikipedia.org` | sv Wikipedia hook pages (Did you know, On this day, unusual articles): short sourced hooks that name places, for Place facts and Itinerary. | share-alike | yes | no |
-| `wiki-facts-ta` | `ta.wikipedia.org` | ta Wikipedia hook pages (Did you know, On this day, unusual articles): short sourced hooks that name places, for Place facts and Itinerary. | share-alike | yes | no |
-| `wiki-facts-th` | `th.wikipedia.org` | th Wikipedia hook pages (Did you know, On this day, unusual articles): short sourced hooks that name places, for Place facts and Itinerary. | share-alike | yes | no |
-| `wiki-facts-tr` | `tr.wikipedia.org` | tr Wikipedia hook pages (Did you know, On this day, unusual articles): short sourced hooks that name places, for Place facts and Itinerary. | share-alike | yes | no |
-| `wiki-facts-uk` | `uk.wikipedia.org` | uk Wikipedia hook pages (Did you know, On this day, unusual articles): short sourced hooks that name places, for Place facts and Itinerary. | share-alike | yes | no |
-| `wiki-facts-vi` | `vi.wikipedia.org` | vi Wikipedia hook pages (Did you know, On this day, unusual articles): short sourced hooks that name places, for Place facts and Itinerary. | share-alike | yes | no |
-| `wiki-facts-zh` | `zh.wikipedia.org` | zh Wikipedia hook pages (Did you know, On this day, unusual articles): short sourced hooks that name places, for Place facts and Itinerary. | share-alike | yes | no |
 | `wine-routes-spain` | `wineroutesofspain.com` | Rutas del Vino de España (ACEVIN official): 37 certified wine routes, wineries, events, for Activities, Events and the itinerary. | facts only | yes | no |
 | `wine-wosa` | `www.wosa.co.za` | Wines of South Africa (WOSA): Cape winelands routes, for Activities and the itinerary. | facts only | yes | no |
 | `worldbank-wdi-bulk` | `databank.worldbank.org` | Price level ratio and purchasing-power parity for every country, for Travel tips cost guidance and itinerary budgets. | open | yes | no |
@@ -3645,6 +3607,43 @@ World Factbook JSON (see docs/wiki/Place-Facts-Data.md).
 | `ontd-night-trains` | `back-on-track-eu.github.io` | All of about 205 regular European sleeper-train lines (operators, stops, days, classes), the flight-free option for an itinerary leg in Local transportation. | share-alike | no | no |
 | `sg-hawker-centres` | `api-production.data.gov.sg` | Singapore's cheap-food hawker centres with locations and cleaning-closure dates, for Places to see, Travel tips and the itinerary. | open | no | no |
 | `visitrwanda` | `visitrwanda.com` | Official Rwandan itineraries, events and destinations, for the itinerary, Events and Places to see. | facts only | no | no |
+| `wiki-facts-ar` | `ar.wikipedia.org` | ar Wikipedia hook pages (Did you know, On this day, unusual articles): short sourced hooks that name places, for Place facts and Itinerary. | share-alike | no | no |
+| `wiki-facts-bg` | `bg.wikipedia.org` | bg Wikipedia hook pages (Did you know, On this day, unusual articles): short sourced hooks that name places, for Place facts and Itinerary. | share-alike | no | no |
+| `wiki-facts-bn` | `bn.wikipedia.org` | bn Wikipedia hook pages (Did you know, On this day, unusual articles): short sourced hooks that name places, for Place facts and Itinerary. | share-alike | no | no |
+| `wiki-facts-ca` | `ca.wikipedia.org` | ca Wikipedia hook pages (Did you know, On this day, unusual articles): short sourced hooks that name places, for Place facts and Itinerary. | share-alike | no | no |
+| `wiki-facts-cs` | `cs.wikipedia.org` | cs Wikipedia hook pages (Did you know, On this day, unusual articles): short sourced hooks that name places, for Place facts and Itinerary. | share-alike | no | no |
+| `wiki-facts-da` | `da.wikipedia.org` | da Wikipedia hook pages (Did you know, On this day, unusual articles): short sourced hooks that name places, for Place facts and Itinerary. | share-alike | no | no |
+| `wiki-facts-de` | `de.wikipedia.org` | de Wikipedia hook pages (Did you know, On this day, unusual articles): short sourced hooks that name places, for Place facts and Itinerary. | share-alike | no | no |
+| `wiki-facts-es` | `es.wikipedia.org` | es Wikipedia hook pages (Did you know, On this day, unusual articles): short sourced hooks that name places, for Place facts and Itinerary. | share-alike | no | no |
+| `wiki-facts-et` | `et.wikipedia.org` | et Wikipedia hook pages (Did you know, On this day, unusual articles): short sourced hooks that name places, for Place facts and Itinerary. | share-alike | no | no |
+| `wiki-facts-fa` | `fa.wikipedia.org` | fa Wikipedia hook pages (Did you know, On this day, unusual articles): short sourced hooks that name places, for Place facts and Itinerary. | share-alike | no | no |
+| `wiki-facts-fi` | `fi.wikipedia.org` | fi Wikipedia hook pages (Did you know, On this day, unusual articles): short sourced hooks that name places, for Place facts and Itinerary. | share-alike | no | no |
+| `wiki-facts-fr` | `fr.wikipedia.org` | fr Wikipedia hook pages (Did you know, On this day, unusual articles): short sourced hooks that name places, for Place facts and Itinerary. | share-alike | no | no |
+| `wiki-facts-he` | `he.wikipedia.org` | he Wikipedia hook pages (Did you know, On this day, unusual articles): short sourced hooks that name places, for Place facts and Itinerary. | share-alike | no | no |
+| `wiki-facts-hi` | `hi.wikipedia.org` | hi Wikipedia hook pages (Did you know, On this day, unusual articles): short sourced hooks that name places, for Place facts and Itinerary. | share-alike | no | no |
+| `wiki-facts-hu` | `hu.wikipedia.org` | hu Wikipedia hook pages (Did you know, On this day, unusual articles): short sourced hooks that name places, for Place facts and Itinerary. | share-alike | no | no |
+| `wiki-facts-id` | `id.wikipedia.org` | id Wikipedia hook pages (Did you know, On this day, unusual articles): short sourced hooks that name places, for Place facts and Itinerary. | share-alike | no | no |
+| `wiki-facts-it` | `it.wikipedia.org` | it Wikipedia hook pages (Did you know, On this day, unusual articles): short sourced hooks that name places, for Place facts and Itinerary. | share-alike | no | no |
+| `wiki-facts-ja` | `ja.wikipedia.org` | ja Wikipedia hook pages (Did you know, On this day, unusual articles): short sourced hooks that name places, for Place facts and Itinerary. | share-alike | no | no |
+| `wiki-facts-ko` | `ko.wikipedia.org` | ko Wikipedia hook pages (Did you know, On this day, unusual articles): short sourced hooks that name places, for Place facts and Itinerary. | share-alike | no | no |
+| `wiki-facts-ms` | `ms.wikipedia.org` | ms Wikipedia hook pages (Did you know, On this day, unusual articles): short sourced hooks that name places, for Place facts and Itinerary. | share-alike | no | no |
+| `wiki-facts-nb` | `no.wikipedia.org` | no Wikipedia hook pages (Did you know, On this day, unusual articles): short sourced hooks that name places, for Place facts and Itinerary. | share-alike | no | no |
+| `wiki-facts-nl` | `nl.wikipedia.org` | nl Wikipedia hook pages (Did you know, On this day, unusual articles): short sourced hooks that name places, for Place facts and Itinerary. | share-alike | no | no |
+| `wiki-facts-pl` | `pl.wikipedia.org` | pl Wikipedia hook pages (Did you know, On this day, unusual articles): short sourced hooks that name places, for Place facts and Itinerary. | share-alike | no | no |
+| `wiki-facts-pt` | `pt.wikipedia.org` | pt Wikipedia hook pages (Did you know, On this day, unusual articles): short sourced hooks that name places, for Place facts and Itinerary. | share-alike | no | no |
+| `wiki-facts-ro` | `ro.wikipedia.org` | ro Wikipedia hook pages (Did you know, On this day, unusual articles): short sourced hooks that name places, for Place facts and Itinerary. | share-alike | no | no |
+| `wiki-facts-ru` | `ru.wikipedia.org` | ru Wikipedia hook pages (Did you know, On this day, unusual articles): short sourced hooks that name places, for Place facts and Itinerary. | share-alike | no | no |
+| `wiki-facts-simple` | `simple.wikipedia.org` | simple Wikipedia hook pages (Did you know, On this day, unusual articles): short sourced hooks that name places, for Place facts and Itinerary. | share-alike | no | no |
+| `wiki-facts-sk` | `sk.wikipedia.org` | sk Wikipedia hook pages (Did you know, On this day, unusual articles): short sourced hooks that name places, for Place facts and Itinerary. | share-alike | no | no |
+| `wiki-facts-sl` | `sl.wikipedia.org` | sl Wikipedia hook pages (Did you know, On this day, unusual articles): short sourced hooks that name places, for Place facts and Itinerary. | share-alike | no | no |
+| `wiki-facts-sr` | `sr.wikipedia.org` | sr Wikipedia hook pages (Did you know, On this day, unusual articles): short sourced hooks that name places, for Place facts and Itinerary. | share-alike | no | no |
+| `wiki-facts-sv` | `sv.wikipedia.org` | sv Wikipedia hook pages (Did you know, On this day, unusual articles): short sourced hooks that name places, for Place facts and Itinerary. | share-alike | no | no |
+| `wiki-facts-ta` | `ta.wikipedia.org` | ta Wikipedia hook pages (Did you know, On this day, unusual articles): short sourced hooks that name places, for Place facts and Itinerary. | share-alike | no | no |
+| `wiki-facts-th` | `th.wikipedia.org` | th Wikipedia hook pages (Did you know, On this day, unusual articles): short sourced hooks that name places, for Place facts and Itinerary. | share-alike | no | no |
+| `wiki-facts-tr` | `tr.wikipedia.org` | tr Wikipedia hook pages (Did you know, On this day, unusual articles): short sourced hooks that name places, for Place facts and Itinerary. | share-alike | no | no |
+| `wiki-facts-uk` | `uk.wikipedia.org` | uk Wikipedia hook pages (Did you know, On this day, unusual articles): short sourced hooks that name places, for Place facts and Itinerary. | share-alike | no | no |
+| `wiki-facts-vi` | `vi.wikipedia.org` | vi Wikipedia hook pages (Did you know, On this day, unusual articles): short sourced hooks that name places, for Place facts and Itinerary. | share-alike | no | no |
+| `wiki-facts-zh` | `zh.wikipedia.org` | zh Wikipedia hook pages (Did you know, On this day, unusual articles): short sourced hooks that name places, for Place facts and Itinerary. | share-alike | no | no |
 
 ## Carbon footprint
 
@@ -4185,43 +4184,6 @@ World Factbook JSON (see docs/wiki/Place-Facts-Data.md).
 | `visitmaldives` | `visitmaldives.com` | Official Maldives islands, resorts areas and sights, for Places to see; also history and curiosities for Place facts. | facts only | yes | no |
 | `visitqatar` | `visitqatar.com` | Qatar's official events calendar, things to do and itineraries, for Events, Activities and the itinerary; also history and curiosities for Place facts. | facts only | yes | no |
 | `visitsaudi` | `www.visitsaudi.com` | Official Saudi destinations, events and things to do, for Events and Places to see; also history and curiosities for Place facts. | facts only | yes | no |
-| `wiki-facts-ar` | `ar.wikipedia.org` | ar Wikipedia hook pages (Did you know, On this day, unusual articles): short sourced hooks that name places, for Place facts and Itinerary. | share-alike | yes | no |
-| `wiki-facts-bg` | `bg.wikipedia.org` | bg Wikipedia hook pages (Did you know, On this day, unusual articles): short sourced hooks that name places, for Place facts and Itinerary. | share-alike | yes | no |
-| `wiki-facts-bn` | `bn.wikipedia.org` | bn Wikipedia hook pages (Did you know, On this day, unusual articles): short sourced hooks that name places, for Place facts and Itinerary. | share-alike | yes | no |
-| `wiki-facts-ca` | `ca.wikipedia.org` | ca Wikipedia hook pages (Did you know, On this day, unusual articles): short sourced hooks that name places, for Place facts and Itinerary. | share-alike | yes | no |
-| `wiki-facts-cs` | `cs.wikipedia.org` | cs Wikipedia hook pages (Did you know, On this day, unusual articles): short sourced hooks that name places, for Place facts and Itinerary. | share-alike | yes | no |
-| `wiki-facts-da` | `da.wikipedia.org` | da Wikipedia hook pages (Did you know, On this day, unusual articles): short sourced hooks that name places, for Place facts and Itinerary. | share-alike | yes | no |
-| `wiki-facts-de` | `de.wikipedia.org` | de Wikipedia hook pages (Did you know, On this day, unusual articles): short sourced hooks that name places, for Place facts and Itinerary. | share-alike | yes | no |
-| `wiki-facts-es` | `es.wikipedia.org` | es Wikipedia hook pages (Did you know, On this day, unusual articles): short sourced hooks that name places, for Place facts and Itinerary. | share-alike | yes | no |
-| `wiki-facts-et` | `et.wikipedia.org` | et Wikipedia hook pages (Did you know, On this day, unusual articles): short sourced hooks that name places, for Place facts and Itinerary. | share-alike | yes | no |
-| `wiki-facts-fa` | `fa.wikipedia.org` | fa Wikipedia hook pages (Did you know, On this day, unusual articles): short sourced hooks that name places, for Place facts and Itinerary. | share-alike | yes | no |
-| `wiki-facts-fi` | `fi.wikipedia.org` | fi Wikipedia hook pages (Did you know, On this day, unusual articles): short sourced hooks that name places, for Place facts and Itinerary. | share-alike | yes | no |
-| `wiki-facts-fr` | `fr.wikipedia.org` | fr Wikipedia hook pages (Did you know, On this day, unusual articles): short sourced hooks that name places, for Place facts and Itinerary. | share-alike | yes | no |
-| `wiki-facts-he` | `he.wikipedia.org` | he Wikipedia hook pages (Did you know, On this day, unusual articles): short sourced hooks that name places, for Place facts and Itinerary. | share-alike | yes | no |
-| `wiki-facts-hi` | `hi.wikipedia.org` | hi Wikipedia hook pages (Did you know, On this day, unusual articles): short sourced hooks that name places, for Place facts and Itinerary. | share-alike | yes | no |
-| `wiki-facts-hu` | `hu.wikipedia.org` | hu Wikipedia hook pages (Did you know, On this day, unusual articles): short sourced hooks that name places, for Place facts and Itinerary. | share-alike | yes | no |
-| `wiki-facts-id` | `id.wikipedia.org` | id Wikipedia hook pages (Did you know, On this day, unusual articles): short sourced hooks that name places, for Place facts and Itinerary. | share-alike | yes | no |
-| `wiki-facts-it` | `it.wikipedia.org` | it Wikipedia hook pages (Did you know, On this day, unusual articles): short sourced hooks that name places, for Place facts and Itinerary. | share-alike | yes | no |
-| `wiki-facts-ja` | `ja.wikipedia.org` | ja Wikipedia hook pages (Did you know, On this day, unusual articles): short sourced hooks that name places, for Place facts and Itinerary. | share-alike | yes | no |
-| `wiki-facts-ko` | `ko.wikipedia.org` | ko Wikipedia hook pages (Did you know, On this day, unusual articles): short sourced hooks that name places, for Place facts and Itinerary. | share-alike | yes | no |
-| `wiki-facts-ms` | `ms.wikipedia.org` | ms Wikipedia hook pages (Did you know, On this day, unusual articles): short sourced hooks that name places, for Place facts and Itinerary. | share-alike | yes | no |
-| `wiki-facts-nb` | `no.wikipedia.org` | no Wikipedia hook pages (Did you know, On this day, unusual articles): short sourced hooks that name places, for Place facts and Itinerary. | share-alike | yes | no |
-| `wiki-facts-nl` | `nl.wikipedia.org` | nl Wikipedia hook pages (Did you know, On this day, unusual articles): short sourced hooks that name places, for Place facts and Itinerary. | share-alike | yes | no |
-| `wiki-facts-pl` | `pl.wikipedia.org` | pl Wikipedia hook pages (Did you know, On this day, unusual articles): short sourced hooks that name places, for Place facts and Itinerary. | share-alike | yes | no |
-| `wiki-facts-pt` | `pt.wikipedia.org` | pt Wikipedia hook pages (Did you know, On this day, unusual articles): short sourced hooks that name places, for Place facts and Itinerary. | share-alike | yes | no |
-| `wiki-facts-ro` | `ro.wikipedia.org` | ro Wikipedia hook pages (Did you know, On this day, unusual articles): short sourced hooks that name places, for Place facts and Itinerary. | share-alike | yes | no |
-| `wiki-facts-ru` | `ru.wikipedia.org` | ru Wikipedia hook pages (Did you know, On this day, unusual articles): short sourced hooks that name places, for Place facts and Itinerary. | share-alike | yes | no |
-| `wiki-facts-simple` | `simple.wikipedia.org` | simple Wikipedia hook pages (Did you know, On this day, unusual articles): short sourced hooks that name places, for Place facts and Itinerary. | share-alike | yes | no |
-| `wiki-facts-sk` | `sk.wikipedia.org` | sk Wikipedia hook pages (Did you know, On this day, unusual articles): short sourced hooks that name places, for Place facts and Itinerary. | share-alike | yes | no |
-| `wiki-facts-sl` | `sl.wikipedia.org` | sl Wikipedia hook pages (Did you know, On this day, unusual articles): short sourced hooks that name places, for Place facts and Itinerary. | share-alike | yes | no |
-| `wiki-facts-sr` | `sr.wikipedia.org` | sr Wikipedia hook pages (Did you know, On this day, unusual articles): short sourced hooks that name places, for Place facts and Itinerary. | share-alike | yes | no |
-| `wiki-facts-sv` | `sv.wikipedia.org` | sv Wikipedia hook pages (Did you know, On this day, unusual articles): short sourced hooks that name places, for Place facts and Itinerary. | share-alike | yes | no |
-| `wiki-facts-ta` | `ta.wikipedia.org` | ta Wikipedia hook pages (Did you know, On this day, unusual articles): short sourced hooks that name places, for Place facts and Itinerary. | share-alike | yes | no |
-| `wiki-facts-th` | `th.wikipedia.org` | th Wikipedia hook pages (Did you know, On this day, unusual articles): short sourced hooks that name places, for Place facts and Itinerary. | share-alike | yes | no |
-| `wiki-facts-tr` | `tr.wikipedia.org` | tr Wikipedia hook pages (Did you know, On this day, unusual articles): short sourced hooks that name places, for Place facts and Itinerary. | share-alike | yes | no |
-| `wiki-facts-uk` | `uk.wikipedia.org` | uk Wikipedia hook pages (Did you know, On this day, unusual articles): short sourced hooks that name places, for Place facts and Itinerary. | share-alike | yes | no |
-| `wiki-facts-vi` | `vi.wikipedia.org` | vi Wikipedia hook pages (Did you know, On this day, unusual articles): short sourced hooks that name places, for Place facts and Itinerary. | share-alike | yes | no |
-| `wiki-facts-zh` | `zh.wikipedia.org` | zh Wikipedia hook pages (Did you know, On this day, unusual articles): short sourced hooks that name places, for Place facts and Itinerary. | share-alike | yes | no |
 | `api-europeana` | `api.europeana.eu` | Europeana Search and Record API: Museum and cultural-heritage records (50M items) with places and dates, for Places to see and Events; also history and curiosities for Place facts. | open | no | yes |
 | `arch-digitalnz-mch` | `api.digitalnz.org` | DigitalNZ API, filtered to Manatū Taonga (Te Ara, NZHistory): Te Ara and NZHistory records (title, description, link). This is the only reachable route to MCH content, for Place facts and Places to see. | facts only | no | yes |
 | `arch-hal-africa` | `api.archives-ouvertes.fr` | HAL open archive (incl. DUMAS theses): theses and articles on African town histories, for Place facts. | facts only | no | no |
@@ -4334,6 +4296,43 @@ World Factbook JSON (see docs/wiki/Place-Facts-Data.md).
 | `wiki-dump-uk` | `dumps.wikimedia.org` | uk Wikipedia dump: history, name-origin and record facts in place articles, for Place facts. | share-alike | no | no |
 | `wiki-dump-yo` | `dumps.wikimedia.org` | Yoruba Wikipedia dump: Yoruba towns and kingdoms, for Place facts. | share-alike | no | no |
 | `wiki-dump-zu` | `dumps.wikimedia.org` | Zulu Wikipedia dump: KwaZulu-Natal places, for Place facts. | share-alike | no | no |
+| `wiki-facts-ar` | `ar.wikipedia.org` | ar Wikipedia hook pages (Did you know, On this day, unusual articles): short sourced hooks that name places, for Place facts and Itinerary. | share-alike | no | no |
+| `wiki-facts-bg` | `bg.wikipedia.org` | bg Wikipedia hook pages (Did you know, On this day, unusual articles): short sourced hooks that name places, for Place facts and Itinerary. | share-alike | no | no |
+| `wiki-facts-bn` | `bn.wikipedia.org` | bn Wikipedia hook pages (Did you know, On this day, unusual articles): short sourced hooks that name places, for Place facts and Itinerary. | share-alike | no | no |
+| `wiki-facts-ca` | `ca.wikipedia.org` | ca Wikipedia hook pages (Did you know, On this day, unusual articles): short sourced hooks that name places, for Place facts and Itinerary. | share-alike | no | no |
+| `wiki-facts-cs` | `cs.wikipedia.org` | cs Wikipedia hook pages (Did you know, On this day, unusual articles): short sourced hooks that name places, for Place facts and Itinerary. | share-alike | no | no |
+| `wiki-facts-da` | `da.wikipedia.org` | da Wikipedia hook pages (Did you know, On this day, unusual articles): short sourced hooks that name places, for Place facts and Itinerary. | share-alike | no | no |
+| `wiki-facts-de` | `de.wikipedia.org` | de Wikipedia hook pages (Did you know, On this day, unusual articles): short sourced hooks that name places, for Place facts and Itinerary. | share-alike | no | no |
+| `wiki-facts-es` | `es.wikipedia.org` | es Wikipedia hook pages (Did you know, On this day, unusual articles): short sourced hooks that name places, for Place facts and Itinerary. | share-alike | no | no |
+| `wiki-facts-et` | `et.wikipedia.org` | et Wikipedia hook pages (Did you know, On this day, unusual articles): short sourced hooks that name places, for Place facts and Itinerary. | share-alike | no | no |
+| `wiki-facts-fa` | `fa.wikipedia.org` | fa Wikipedia hook pages (Did you know, On this day, unusual articles): short sourced hooks that name places, for Place facts and Itinerary. | share-alike | no | no |
+| `wiki-facts-fi` | `fi.wikipedia.org` | fi Wikipedia hook pages (Did you know, On this day, unusual articles): short sourced hooks that name places, for Place facts and Itinerary. | share-alike | no | no |
+| `wiki-facts-fr` | `fr.wikipedia.org` | fr Wikipedia hook pages (Did you know, On this day, unusual articles): short sourced hooks that name places, for Place facts and Itinerary. | share-alike | no | no |
+| `wiki-facts-he` | `he.wikipedia.org` | he Wikipedia hook pages (Did you know, On this day, unusual articles): short sourced hooks that name places, for Place facts and Itinerary. | share-alike | no | no |
+| `wiki-facts-hi` | `hi.wikipedia.org` | hi Wikipedia hook pages (Did you know, On this day, unusual articles): short sourced hooks that name places, for Place facts and Itinerary. | share-alike | no | no |
+| `wiki-facts-hu` | `hu.wikipedia.org` | hu Wikipedia hook pages (Did you know, On this day, unusual articles): short sourced hooks that name places, for Place facts and Itinerary. | share-alike | no | no |
+| `wiki-facts-id` | `id.wikipedia.org` | id Wikipedia hook pages (Did you know, On this day, unusual articles): short sourced hooks that name places, for Place facts and Itinerary. | share-alike | no | no |
+| `wiki-facts-it` | `it.wikipedia.org` | it Wikipedia hook pages (Did you know, On this day, unusual articles): short sourced hooks that name places, for Place facts and Itinerary. | share-alike | no | no |
+| `wiki-facts-ja` | `ja.wikipedia.org` | ja Wikipedia hook pages (Did you know, On this day, unusual articles): short sourced hooks that name places, for Place facts and Itinerary. | share-alike | no | no |
+| `wiki-facts-ko` | `ko.wikipedia.org` | ko Wikipedia hook pages (Did you know, On this day, unusual articles): short sourced hooks that name places, for Place facts and Itinerary. | share-alike | no | no |
+| `wiki-facts-ms` | `ms.wikipedia.org` | ms Wikipedia hook pages (Did you know, On this day, unusual articles): short sourced hooks that name places, for Place facts and Itinerary. | share-alike | no | no |
+| `wiki-facts-nb` | `no.wikipedia.org` | no Wikipedia hook pages (Did you know, On this day, unusual articles): short sourced hooks that name places, for Place facts and Itinerary. | share-alike | no | no |
+| `wiki-facts-nl` | `nl.wikipedia.org` | nl Wikipedia hook pages (Did you know, On this day, unusual articles): short sourced hooks that name places, for Place facts and Itinerary. | share-alike | no | no |
+| `wiki-facts-pl` | `pl.wikipedia.org` | pl Wikipedia hook pages (Did you know, On this day, unusual articles): short sourced hooks that name places, for Place facts and Itinerary. | share-alike | no | no |
+| `wiki-facts-pt` | `pt.wikipedia.org` | pt Wikipedia hook pages (Did you know, On this day, unusual articles): short sourced hooks that name places, for Place facts and Itinerary. | share-alike | no | no |
+| `wiki-facts-ro` | `ro.wikipedia.org` | ro Wikipedia hook pages (Did you know, On this day, unusual articles): short sourced hooks that name places, for Place facts and Itinerary. | share-alike | no | no |
+| `wiki-facts-ru` | `ru.wikipedia.org` | ru Wikipedia hook pages (Did you know, On this day, unusual articles): short sourced hooks that name places, for Place facts and Itinerary. | share-alike | no | no |
+| `wiki-facts-simple` | `simple.wikipedia.org` | simple Wikipedia hook pages (Did you know, On this day, unusual articles): short sourced hooks that name places, for Place facts and Itinerary. | share-alike | no | no |
+| `wiki-facts-sk` | `sk.wikipedia.org` | sk Wikipedia hook pages (Did you know, On this day, unusual articles): short sourced hooks that name places, for Place facts and Itinerary. | share-alike | no | no |
+| `wiki-facts-sl` | `sl.wikipedia.org` | sl Wikipedia hook pages (Did you know, On this day, unusual articles): short sourced hooks that name places, for Place facts and Itinerary. | share-alike | no | no |
+| `wiki-facts-sr` | `sr.wikipedia.org` | sr Wikipedia hook pages (Did you know, On this day, unusual articles): short sourced hooks that name places, for Place facts and Itinerary. | share-alike | no | no |
+| `wiki-facts-sv` | `sv.wikipedia.org` | sv Wikipedia hook pages (Did you know, On this day, unusual articles): short sourced hooks that name places, for Place facts and Itinerary. | share-alike | no | no |
+| `wiki-facts-ta` | `ta.wikipedia.org` | ta Wikipedia hook pages (Did you know, On this day, unusual articles): short sourced hooks that name places, for Place facts and Itinerary. | share-alike | no | no |
+| `wiki-facts-th` | `th.wikipedia.org` | th Wikipedia hook pages (Did you know, On this day, unusual articles): short sourced hooks that name places, for Place facts and Itinerary. | share-alike | no | no |
+| `wiki-facts-tr` | `tr.wikipedia.org` | tr Wikipedia hook pages (Did you know, On this day, unusual articles): short sourced hooks that name places, for Place facts and Itinerary. | share-alike | no | no |
+| `wiki-facts-uk` | `uk.wikipedia.org` | uk Wikipedia hook pages (Did you know, On this day, unusual articles): short sourced hooks that name places, for Place facts and Itinerary. | share-alike | no | no |
+| `wiki-facts-vi` | `vi.wikipedia.org` | vi Wikipedia hook pages (Did you know, On this day, unusual articles): short sourced hooks that name places, for Place facts and Itinerary. | share-alike | no | no |
+| `wiki-facts-zh` | `zh.wikipedia.org` | zh Wikipedia hook pages (Did you know, On this day, unusual articles): short sourced hooks that name places, for Place facts and Itinerary. | share-alike | no | no |
 | `wikidata-dump` | `dumps.wikimedia.org` | Facts about places and sights from Wikidata for Places to see; the full dump is too large, so off; also history and curiosities for Place facts. | open | no | no |
 | `wikisource-dump-en` | `dumps.wikimedia.org` | English Wikisource dump (EB1911, gazetteers): dated public-domain descriptions ("in 1911 X was…") for historical facts; join via Wikidata P1343, for Place facts and Places to see. | share-alike | no | no |
 | `wp-zh-dyk` | `dumps.wikimedia.org` | zh.wikipedia "你知道吗" (新条目推荐): 15+ years of "did you know" hooks, for Place facts. | share-alike | no | no |
