@@ -16,7 +16,8 @@ sitemaps: []
 feeds: []
 adapter: null
 include: []
-exclude: []
+exclude:
+- ^https?://www\.sahapedia\.org/(?:user|admin|search)
 max_depth: 1
 kinds:
 - place_fact

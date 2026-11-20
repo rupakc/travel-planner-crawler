@@ -19166,6 +19166,7 @@ _facts(
     cls='official',
     seeds=['https://awhf.net/southern-africa/'],
     feeds=['https://awhf.net/feed/'],
+    exclude=['^https?://awhf\\.net/(?:calendar|wp-)'],
 )
 _facts(
     'her-zamani',
@@ -19184,6 +19185,7 @@ _facts(
     delay=10,
     sitemaps=['https://africanrockart.org/sitemap.xml'],
     feeds=['https://africanrockart.org/feed/'],
+    exclude=['^https?://africanrockart\\.org/(?:wp-)'],
 )
 _facts(
     'fx-encyclopaedia-africana',
@@ -19256,6 +19258,7 @@ _facts(
     cls='editorial',
     sitemaps=['https://www.bibleplaces.com/sitemap_index.xml'],
     feeds=['https://bibleplaces.com/feed/'],
+    exclude=['^https?://www\\.bibleplaces\\.com/(?:shop|product|cart|wp-)', '^https?://bibleplaces\\.com/(?:shop|product|cart|wp-)'],
 )
 _facts(
     'arch-bibalex',
@@ -19602,6 +19605,7 @@ _facts(
     cls='reference',
     llm=False,
     seeds=['https://www.sahapedia.org/'],
+    exclude=['^https?://www\\.sahapedia\\.org/(?:user|admin|search)'],
 )
 _facts(
     'fx-siam-society',

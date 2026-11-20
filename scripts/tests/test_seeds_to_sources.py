@@ -2073,8 +2073,11 @@ FACTS_INCLUDE_CARRIED = {
     "arch-adeac": "(top|texthtml|catalog)", "arch-nysl": None, "fx-palace-museum": None,
     "gov-in-kachchh": None, "gov-in-madurai": None, "gov-rcu-alula": None, "gov-oman-mht": None,
     "her-in-intach": None, "her-my-pht": None, "her-nysm": None, "od-digital-giza": None,
-    "tb-brand-south-africa": None, "fx-historic-hawaii": None, "her-ogebc": None,
+    "tb-brand-south-africa": None,
 }
+# "Anything but these paths" includes (`^/(?!a|b)`) become excludes: the crawler's regex engine
+# has no lookahead.
+FACTS_EXCLUDE_CARRIED = {"fx-historic-hawaii": "donate", "her-ogebc": "shop", "fx-sahapedia": "admin"}
 # Crawl-delays the shifted rows had lost.
 FACTS_DELAYS = {"arch-adeac": 10, "arch-awm": 10, "arch-sudan-memory": 10, "fx-victorian-places": 10,
                 "gov-nvculture": 10, "her-jp-bunka-online": 10}
@@ -2108,6 +2111,9 @@ def test_place_facts_research_rows_parsed_whole_2026_11_20(generated):
         if sid in facts:
             inc = generated[sid]["include"]
             assert inc and (part is None or any(part in r for r in inc)), sid
+    for sid, part in FACTS_EXCLUDE_CARRIED.items():
+        if sid in facts:
+            assert any(part in r for r in generated[sid]["exclude"]), sid
     for sid, d in FACTS_DELAYS.items():
         if sid in facts:
             assert generated[sid]["min_delay_s"] == d, sid

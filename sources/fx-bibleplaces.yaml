@@ -17,7 +17,9 @@ feeds:
 - https://bibleplaces.com/feed/
 adapter: null
 include: []
-exclude: []
+exclude:
+- ^https?://www\.bibleplaces\.com/(?:shop|product|cart|wp-)
+- ^https?://bibleplaces\.com/(?:shop|product|cart|wp-)
 max_depth: 1
 kinds:
 - place_fact

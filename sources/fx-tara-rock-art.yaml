@@ -17,7 +17,8 @@ feeds:
 - https://africanrockart.org/feed/
 adapter: null
 include: []
-exclude: []
+exclude:
+- ^https?://africanrockart\.org/(?:wp-)
 max_depth: 1
 kinds:
 - place_fact
