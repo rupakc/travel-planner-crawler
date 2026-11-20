@@ -34,6 +34,7 @@ pub mod ecb_fx;
 pub mod ember_api;
 pub mod enwiki_visa;
 pub mod eurostat_jsonstat;
+pub mod factbook_json;
 pub mod factor_table;
 pub mod fcdo_content_api;
 pub mod fsa_fhrs;
@@ -49,6 +50,7 @@ pub mod nyc_restaurant_inspections;
 pub mod openholidays;
 pub mod ourairports_csv;
 pub mod phone;
+pub mod place_facts;
 pub mod records;
 pub mod row_map;
 pub mod se_travel_dump;
@@ -61,6 +63,8 @@ pub mod travelpayouts_fares;
 pub mod udata_resource;
 pub mod wdi_csv;
 pub mod wfs_geojson;
+pub mod wiki_hooks;
+pub mod wikidata_facts;
 pub mod wikidata_sparql;
 pub mod wikivoyage_dump;
 
@@ -74,6 +78,7 @@ pub static REGISTRY: &[&dyn SourceAdapter] = &[
     &ember_api::EmberApi,
     &enwiki_visa::EnwikiVisa::DEFAULT,
     &eurostat_jsonstat::EurostatJsonStat,
+    &factbook_json::FactbookJson,
     &factor_table::FactorTable,
     &fcdo_content_api::FcdoContentApi,
     &fsa_fhrs::FsaFhrs::DEFAULT,
@@ -97,6 +102,8 @@ pub static REGISTRY: &[&dyn SourceAdapter] = &[
     &udata_resource::UdataResource::DEFAULT,
     &wdi_csv::WdiCsv::DEFAULT,
     &wfs_geojson::WfsGeojson,
+    &wiki_hooks::WikiHooks,
+    &wikidata_facts::WikidataFacts::DEFAULT,
     &wikidata_sparql::WikidataSparql::DEFAULT,
     &wikivoyage_dump::WikivoyageDump::DEFAULT,
 ];
@@ -166,6 +173,7 @@ pub fn registry_with(cfg: &vc_config::SourcesConfig) -> Vec<Box<dyn SourceAdapte
         Box::new(ember_api::EmberApi),
         Box::new(enwiki_visa::EnwikiVisa::new(d.clone())),
         Box::new(eurostat_jsonstat::EurostatJsonStat),
+        Box::new(factbook_json::FactbookJson),
         Box::new(factor_table::FactorTable),
         Box::new(fcdo_content_api::FcdoContentApi),
         Box::new(fsa_fhrs::FsaFhrs::DEFAULT),
@@ -193,6 +201,8 @@ pub fn registry_with(cfg: &vc_config::SourcesConfig) -> Vec<Box<dyn SourceAdapte
         Box::new(udata_resource::UdataResource::new(d.clone())),
         Box::new(wdi_csv::WdiCsv::new(d.clone())),
         Box::new(wfs_geojson::WfsGeojson),
+        Box::new(wiki_hooks::WikiHooks),
+        Box::new(wikidata_facts::WikidataFacts::new(d.clone())),
         Box::new(wikidata_sparql::WikidataSparql::DEFAULT),
         Box::new(wikivoyage_dump::WikivoyageDump::new(d)),
     ]

@@ -14,7 +14,7 @@ use vc_core::usepolicy::{IndexUse, ServeUse, UsePolicy};
 use vc_core::{Error, ExtractionRunId, KindId, ModelId, Result, SourceId};
 
 use crate::auth::{ClientStore, StoredClient};
-use crate::catalog::{Catalog, FactorQuery, GridQuery, OccupancyQuery};
+use crate::catalog::{Catalog, FactQuery, FactRow, FactorQuery, GridQuery, OccupancyQuery};
 use crate::dto::{LicenceDto, SourceDto, StatsDto};
 
 fn db(e: sqlx::Error) -> Error {
@@ -268,6 +268,85 @@ impl Catalog for PgApiStore {
         Ok(rows.iter().filter_map(factor_item).collect())
     }
 
+    async fn facts(&self, q: &FactQuery) -> Result<Vec<FactRow>> {
+        let classes: Vec<String> = q
+            .licence_classes
+            .iter()
+            .filter(|c| c.ingestible())
+            .map(|c| c.as_str().to_string())
+            .collect();
+        if classes.is_empty() {
+            return Ok(Vec::new());
+        }
+        // `cur`: current place facts. A hook (link candidates, no QID) takes the place of the
+        // first Wikidata place fact (lowest record id) that lists its first matching candidate
+        // among its sitelinks; an unresolved hook is not served. Filters apply to that place.
+        let rows = sqlx::query(
+            "WITH cur AS (
+                SELECT r.record_id, r.kind, r.title, r.place_ids, r.licence, r.licence_class,
+                       r.conflict, r.updated_at, r.url, r.source_id,
+                       v.kind_schema, v.data, v.excerpt, v.use_policy, v.captured_at,
+                       v.attribution, v.extractor_ver, v.method, v.model_id, v.prompt_hash,
+                       v.extraction_run_id
+                FROM records r
+                JOIN record_versions v
+                  ON v.record_id = r.record_id AND v.version = r.current_version
+                WHERE r.kind = 'place_fact' AND r.state IN ('active', 'stale')
+                  AND r.current_version > 0
+             ), served AS (
+                SELECT c.*,
+                       CASE WHEN (c.data->'place') ? 'link_candidates'
+                                 AND NOT ((c.data->'place') ? 'wikidata_qid')
+                            THEN (SELECT w.data->'place'
+                                  FROM jsonb_array_elements_text(c.data->'place'->'link_candidates')
+                                       WITH ORDINALITY AS l(t, i)
+                                  JOIN cur w ON (w.data->'place') ? 'wikidata_qid'
+                                            AND jsonb_typeof(w.data->'place'->'sitelinks') = 'array'
+                                            AND (w.data->'place'->'sitelinks') ? l.t
+                                  ORDER BY l.i, w.record_id
+                                  LIMIT 1)
+                            ELSE c.data->'place' END AS rplace
+                FROM cur c
+                WHERE c.licence_class = ANY($1)
+                  AND c.use_policy->>'index' = 'full' AND c.use_policy->>'serve' <> 'link_only'
+             )
+             SELECT s.*, src.name AS source_name, src.source_class AS source_class
+             FROM served s
+             LEFT JOIN sources src ON src.source_id = s.source_id
+             WHERE s.rplace IS NOT NULL
+               AND ($2::bigint IS NULL
+                    OR (CASE WHEN jsonb_typeof(s.rplace->'geonames_id') = 'number'
+                             THEN (s.rplace->>'geonames_id')::numeric END) = $2
+                    OR $2 = ANY(s.place_ids))
+               AND ($3::text IS NULL OR s.rplace->>'wikidata_qid' = $3)
+               AND ($4::text IS NULL OR s.rplace->>'country' = $4)
+               AND ($5::text IS NULL OR s.data->>'fact_type' = $5)
+             ORDER BY s.record_id
+             LIMIT $6 OFFSET $7",
+        )
+        .bind(&classes)
+        .bind(q.geonames_id)
+        .bind(&q.wikidata_qid)
+        .bind(&q.country)
+        .bind(&q.fact_type)
+        .bind(i64::from(q.limit))
+        .bind(i64::from(q.offset))
+        .fetch_all(&self.pool)
+        .await
+        .map_err(db)?;
+        Ok(rows
+            .iter()
+            .filter_map(|row| {
+                Some(FactRow {
+                    item: factor_item(row)?,
+                    place: row.get("rplace"),
+                    source_name: row.get("source_name"),
+                    source_class: row.get("source_class"),
+                })
+            })
+            .collect())
+    }
+
     async fn carbon_grid(&self, q: &GridQuery) -> Result<Vec<ObservationView>> {
         let rows = sqlx::query(
             "SELECT series_key, observed_at, value, source_id, licence FROM observations
@@ -316,7 +395,7 @@ fn method_of(s: &str) -> ExtractionMethod {
         .unwrap_or(ExtractionMethod::Adapter)
 }
 
-/// One `emission_factor` or `occupancy` row as an [`Item`]; `None` when its use policy does not allow
+/// One `emission_factor`, `occupancy` or `place_fact` row as an [`Item`]; `None` when its use policy does not allow
 /// serving the data (fail closed on an unreadable policy; the SQL already filters on it so
 /// that paging stays exact).
 fn factor_item(row: &PgRow) -> Option<Item> {

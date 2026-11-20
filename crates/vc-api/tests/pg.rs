@@ -499,3 +499,176 @@ async fn pg_carbon_occupancy() {
     };
     assert!(store.carbon_occupancy(&none).await.expect("q").is_empty());
 }
+
+#[tokio::test]
+async fn pg_facts_resolve_hooks_and_filter_by_place() {
+    use vc_api::catalog::FactQuery;
+    use vc_core::usepolicy::UsePolicy;
+    let pool = testkit::pg().await;
+    let store = PgApiStore::new(pool.clone());
+    sqlx::query(
+        "INSERT INTO sources (source_id, name, category, source_class, licence_class, licence,
+                              method, enabled, spec, spec_hash)
+         VALUES ('wikidata-facts', 'Wikidata EntityData', 'facts', 'reference', 'open',
+                 '{\"class\": \"open\", \"attribution\": \"Wikidata\"}', 'api', true, '{}', 'h')",
+    )
+    .execute(&pool)
+    .await
+    .expect("source");
+    let full = UsePolicy::ALLOW_ALL;
+    let berlin = serde_json::json!({"geonames_id": 2950159, "wikidata_qid": "Q64",
+        "country": "DE", "name": "Berlin", "sitelinks": ["dewiki:Berlin", "simplewiki:Berlin"]});
+    let wd = |text: &str, ty: &str| {
+        serde_json::json!({"place": berlin, "fact_type": ty, "text": text,
+            "text_origin": "templated", "llm_ok": true, "confidence": "structured"})
+    };
+    let hook = |cands: serde_json::Value| {
+        serde_json::json!({"place": {"link_candidates": cands}, "fact_type": "fun",
+            "text": "... that a hook is resolved?", "text_origin": "source_hook",
+            "llm_ok": false, "confidence": "extracted"})
+    };
+    let put = |key: &'static str,
+               source: &'static str,
+               class: &'static str,
+               state: &'static str,
+               data: serde_json::Value,
+               policy: UsePolicy| {
+        let pool = pool.clone();
+        async move { put_record(&pool, "place_fact", key, source, class, state, data, policy).await }
+    };
+    let a = put(
+        "a",
+        "wikidata-facts",
+        "open",
+        "active",
+        wd("Berlin was founded in 1244.", "historical"),
+        full,
+    )
+    .await;
+    let b = put(
+        "b",
+        "wikidata-facts",
+        "open",
+        "stale",
+        wd("Berlin covers an area of 891.12 km².", "popular"),
+        full,
+    )
+    .await;
+    let h = put(
+        "h",
+        "wiki-facts-simple",
+        "share_alike",
+        "active",
+        hook(serde_json::json!([
+            "simplewiki:Venice",
+            "simplewiki:Berlin"
+        ])),
+        full,
+    )
+    .await;
+    // Unresolved hook, tombstoned, deny-all: never served.
+    put(
+        "u",
+        "wiki-facts-simple",
+        "share_alike",
+        "active",
+        hook(serde_json::json!(["simplewiki:Atlantis"])),
+        full,
+    )
+    .await;
+    put(
+        "t",
+        "wikidata-facts",
+        "open",
+        "tombstoned",
+        wd("A tombstoned fact about Berlin.", "fun"),
+        full,
+    )
+    .await;
+    put(
+        "d",
+        "wikidata-facts",
+        "open",
+        "active",
+        wd("A fact no client may see here.", "fun"),
+        UsePolicy::DENY_ALL,
+    )
+    .await;
+    let c = put("c", "od-factbook-json", "open", "active",
+        serde_json::json!({"place": {"country": "DE", "admin_level": "country"},
+            "fact_type": "unbelievable", "text": "The highest point of Germany is Zugspitze (2,963 m).",
+            "text_origin": "templated", "confidence": "structured"}), full).await;
+    // Another kind with a `place` key is never a fact.
+    put(
+        "o",
+        "wikidata-facts",
+        "open",
+        "active",
+        wd("Not a fact kind at all.", "fun"),
+        full,
+    )
+    .await;
+    sqlx::query("UPDATE records SET kind = 'article' WHERE record_key = 'o'")
+        .execute(&pool)
+        .await
+        .expect("kind");
+
+    let q = |f: FactQuery| FactQuery {
+        licence_classes: vec![LicenceClass::Open, LicenceClass::ShareAlike],
+        limit: 10,
+        ..f
+    };
+    let ids =
+        |v: &[vc_api::catalog::FactRow]| v.iter().map(|r| r.item.id.clone()).collect::<Vec<_>>();
+    let s = |i: i64| i.to_string();
+    let all = store.facts(&q(FactQuery::default())).await.expect("q");
+    assert_eq!(ids(&all), [s(a), s(b), s(h), s(c)]);
+    assert_eq!(all[0].source_name.as_deref(), Some("Wikidata EntityData"));
+    assert_eq!(all[0].source_class.as_deref(), Some("reference"));
+    assert_eq!(
+        all[2].place["wikidata_qid"], "Q64",
+        "the hook took Berlin's place"
+    );
+    assert_eq!(all[3].source_name, None, "no registry row");
+    let by_qid = FactQuery {
+        wikidata_qid: Some("Q64".into()),
+        ..FactQuery::default()
+    };
+    assert_eq!(
+        ids(&store.facts(&q(by_qid)).await.expect("q")),
+        [s(a), s(b), s(h)]
+    );
+    let by_gn = FactQuery {
+        geonames_id: Some(2950159),
+        fact_type: Some("fun".into()),
+        ..FactQuery::default()
+    };
+    assert_eq!(ids(&store.facts(&q(by_gn)).await.expect("q")), [s(h)]);
+    let by_country = FactQuery {
+        country: Some("DE".into()),
+        fact_type: Some("unbelievable".into()),
+        ..FactQuery::default()
+    };
+    assert_eq!(ids(&store.facts(&q(by_country)).await.expect("q")), [s(c)]);
+    let open_only = FactQuery {
+        licence_classes: vec![LicenceClass::Open],
+        limit: 10,
+        ..FactQuery::default()
+    };
+    assert_eq!(
+        ids(&store.facts(&open_only).await.expect("q")),
+        [s(a), s(b), s(c)]
+    );
+    let page2 = FactQuery {
+        offset: 1,
+        limit: 2,
+        ..q(FactQuery::default())
+    };
+    let page2 = FactQuery { limit: 2, ..page2 };
+    assert_eq!(ids(&store.facts(&page2).await.expect("q")), [s(b), s(h)]);
+    let none = FactQuery {
+        licence_classes: vec![],
+        ..FactQuery::default()
+    };
+    assert!(store.facts(&none).await.expect("q").is_empty());
+}

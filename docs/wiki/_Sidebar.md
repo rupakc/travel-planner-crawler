@@ -13,6 +13,7 @@
 - [Processing and Extraction](Processing-and-Extraction)
 - [Data Model](Data-Model)
 - [Carbon Footprint Data](Carbon-Footprint-Data)
+- [Place Facts Data](Place-Facts-Data)
 - [Sources and Licences](Sources-and-Licences)
 - [Sources (registry)](Sources)
 - [Gemini and Budgets](Gemini-and-Budgets)

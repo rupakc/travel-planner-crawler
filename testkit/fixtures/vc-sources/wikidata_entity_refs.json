@@ -1,0 +1,807 @@
+{
+ "Q183": {
+  "entities": {
+   "Q183": {
+    "pageid": 322,
+    "ns": 0,
+    "title": "Q183",
+    "lastrevid": 2571882737,
+    "modified": "2026-11-19T06:50:24Z",
+    "type": "item",
+    "id": "Q183",
+    "labels": {
+     "en": {
+      "language": "en",
+      "value": "Germany"
+     },
+     "de": {
+      "language": "de",
+      "value": "Deutschland"
+     }
+    },
+    "descriptions": {},
+    "aliases": {},
+    "claims": {
+     "P297": [
+      {
+       "mainsnak": {
+        "snaktype": "value",
+        "property": "P297",
+        "hash": "e562e1204a566fea7392f14ec20c6a98896c6c00",
+        "datavalue": {
+         "value": "DE",
+         "type": "string"
+        },
+        "datatype": "external-id"
+       },
+       "type": "statement",
+       "id": "q183$A945083A-AAD3-4793-B94A-5FB16F00174C",
+       "rank": "normal",
+       "references": []
+      }
+     ],
+     "P31": [
+      {
+       "mainsnak": {
+        "snaktype": "value",
+        "property": "P31",
+        "hash": "c0756f7fedfc54b5b296b7d6dbbcf17a8e134d78",
+        "datavalue": {
+         "value": {
+          "entity-type": "item",
+          "numeric-id": 3624078,
+          "id": "Q3624078"
+         },
+         "type": "wikibase-entityid"
+        },
+        "datatype": "wikibase-item"
+       },
+       "type": "statement",
+       "id": "q183$7F17CEF2-2897-4C4D-9D1C-B31DC979AF5C",
+       "rank": "preferred",
+       "references": [
+        {
+         "hash": "d16b070e46fb04d0e8daacdc39faa2909d3404bc",
+         "snaks": {
+          "P248": [
+           {
+            "snaktype": "value",
+            "property": "P248",
+            "hash": "f57e2eb6a38e905416fa0cfa112aee5c0e546d1f",
+            "datavalue": {
+             "value": {
+              "entity-type": "item",
+              "numeric-id": 1206379,
+              "id": "Q1206379"
+             },
+             "type": "wikibase-entityid"
+            },
+            "datatype": "wikibase-item"
+           }
+          ]
+         },
+         "snaks-order": [
+          "P248"
+         ]
+        }
+       ]
+      }
+     ]
+    },
+    "sitelinks": {}
+   }
+  }
+ },
+ "Q19259618": {
+  "entities": {
+   "Q19259618": {
+    "pageid": 20826866,
+    "ns": 0,
+    "title": "Q19259618",
+    "lastrevid": 1951426907,
+    "modified": "2023-08-10T21:17:43Z",
+    "type": "item",
+    "id": "Q19259618",
+    "labels": {
+     "en": {
+      "language": "en",
+      "value": "Arkenberge"
+     },
+     "de": {
+      "language": "de",
+      "value": "Arkenberge"
+     }
+    },
+    "descriptions": {},
+    "aliases": {},
+    "claims": {
+     "P2044": [
+      {
+       "mainsnak": {
+        "snaktype": "value",
+        "property": "P2044",
+        "hash": "b31d86f8312fcef3a82245daee090f4fec28ae57",
+        "datavalue": {
+         "value": {
+          "amount": "+121.9",
+          "unit": "http://www.wikidata.org/entity/Q11573",
+          "upperBound": "+122.0",
+          "lowerBound": "+121.8"
+         },
+         "type": "quantity"
+        },
+        "datatype": "quantity"
+       },
+       "type": "statement",
+       "qualifiers": {
+        "P2241": [
+         {
+          "snaktype": "value",
+          "property": "P2241",
+          "hash": "bbc6c58f1da8302dab36f235a559edbea75a810d",
+          "datavalue": {
+           "value": {
+            "entity-type": "item",
+            "numeric-id": 21887121,
+            "id": "Q21887121"
+           },
+           "type": "wikibase-entityid"
+          },
+          "datatype": "wikibase-item"
+         }
+        ]
+       },
+       "qualifiers-order": [
+        "P2241"
+       ],
+       "id": "Q19259618$c69137ff-4ca4-a6b1-fb28-0b5bbd75ab4c",
+       "rank": "deprecated",
+       "references": [
+        {
+         "hash": "2f18861798cf9655faeda85a377923686d2003fd",
+         "snaks": {
+          "P854": [
+           {
+            "snaktype": "value",
+            "property": "P854",
+            "hash": "bb30eb0e758df953227f0e265ba511384900693f",
+            "datavalue": {
+             "value": "http://www.tagesspiegel.de/berlin/teufelsberg-oder-arkenberge-zum-wettstreit-um-den-hoechsten-gipfel-berlins/11413932.html",
+             "type": "string"
+            },
+            "datatype": "url"
+           }
+          ]
+         },
+         "snaks-order": [
+          "P854"
+         ]
+        }
+       ]
+      }
+     ],
+     "P31": [
+      {
+       "mainsnak": {
+        "snaktype": "value",
+        "property": "P31",
+        "hash": "0ea5a6de16a4692cbc706d6e86ad126fab6990e7",
+        "datavalue": {
+         "value": {
+          "entity-type": "item",
+          "numeric-id": 819511,
+          "id": "Q819511"
+         },
+         "type": "wikibase-entityid"
+        },
+        "datatype": "wikibase-item"
+       },
+       "type": "statement",
+       "id": "Q19259618$2b75cbff-46d8-ebb3-570b-a992e0ae4d6a",
+       "rank": "normal",
+       "references": []
+      }
+     ]
+    },
+    "sitelinks": {}
+   }
+  }
+ },
+ "Q65079568": {
+  "entities": {
+   "Q65079568": {
+    "pageid": 64721218,
+    "ns": 0,
+    "title": "Q65079568",
+    "lastrevid": 2499974917,
+    "modified": "2026-05-31T09:17:57Z",
+    "type": "item",
+    "id": "Q65079568",
+    "labels": {
+     "en": {
+      "language": "en",
+      "value": "Fall of Berlin"
+     },
+     "de": {
+      "language": "de",
+      "value": "Französische Einnahme Berlins"
+     }
+    },
+    "descriptions": {},
+    "aliases": {},
+    "claims": {
+     "P31": [
+      {
+       "mainsnak": {
+        "snaktype": "value",
+        "property": "P31",
+        "hash": "4fa1783d4cfdddbd24616e28fab46d9c00a29a54",
+        "datavalue": {
+         "value": {
+          "entity-type": "item",
+          "numeric-id": 188055,
+          "id": "Q188055"
+         },
+         "type": "wikibase-entityid"
+        },
+        "datatype": "wikibase-item"
+       },
+       "type": "statement",
+       "id": "Q65079568$49411a6d-4844-1f68-5066-c4d52431cc9b",
+       "rank": "normal",
+       "references": []
+      }
+     ]
+    },
+    "sitelinks": {}
+   }
+  }
+ },
+ "Q8150": {
+  "entities": {
+   "Q8150": {
+    "pageid": 9435,
+    "ns": 0,
+    "title": "Q8150",
+    "lastrevid": 2559706666,
+    "modified": "2026-10-22T16:11:43Z",
+    "type": "item",
+    "id": "Q8150",
+    "labels": {
+     "en": {
+      "language": "en",
+      "value": "1936 Summer Olympics"
+     },
+     "de": {
+      "language": "de",
+      "value": "Olympische Sommerspiele 1936"
+     }
+    },
+    "descriptions": {},
+    "aliases": {},
+    "claims": {
+     "P31": [
+      {
+       "mainsnak": {
+        "snaktype": "value",
+        "property": "P31",
+        "hash": "61835315a64168c669f3000308416a69108207ad",
+        "datavalue": {
+         "value": {
+          "entity-type": "item",
+          "numeric-id": 135976384,
+          "id": "Q135976384"
+         },
+         "type": "wikibase-entityid"
+        },
+        "datatype": "wikibase-item"
+       },
+       "type": "statement",
+       "qualifiers": {
+        "P7452": [
+         {
+          "snaktype": "value",
+          "property": "P7452",
+          "hash": "f9f842b41f249e5504d48025c7ad6d7b5bfc7496",
+          "datavalue": {
+           "value": {
+            "entity-type": "item",
+            "numeric-id": 71536040,
+            "id": "Q71536040"
+           },
+           "type": "wikibase-entityid"
+          },
+          "datatype": "wikibase-item"
+         }
+        ]
+       },
+       "qualifiers-order": [
+        "P7452"
+       ],
+       "id": "Q8150$c58923ba-4454-49ed-0b28-4326bf19d0e8",
+       "rank": "preferred",
+       "references": []
+      }
+     ]
+    },
+    "sitelinks": {}
+   }
+  }
+ },
+ "Q65": {
+  "entities": {
+   "Q65": {
+    "pageid": 192,
+    "ns": 0,
+    "title": "Q65",
+    "lastrevid": 2572076488,
+    "modified": "2026-11-19T14:34:53Z",
+    "type": "item",
+    "id": "Q65",
+    "labels": {
+     "en": {
+      "language": "en",
+      "value": "Los Angeles"
+     },
+     "de": {
+      "language": "de",
+      "value": "Los Angeles"
+     }
+    },
+    "descriptions": {},
+    "aliases": {},
+    "claims": {
+     "P2044": [
+      {
+       "mainsnak": {
+        "snaktype": "value",
+        "property": "P2044",
+        "hash": "4412a8fcc0ce5725bbf79d0d2f2210b3e55d6f13",
+        "datavalue": {
+         "value": {
+          "amount": "+106",
+          "unit": "http://www.wikidata.org/entity/Q11573"
+         },
+         "type": "quantity"
+        },
+        "datatype": "quantity"
+       },
+       "type": "statement",
+       "id": "Q65$605C5023-A621-4059-A455-938BA1379DA6",
+       "rank": "normal",
+       "references": [
+        {
+         "hash": "c7c8e4bf50f85692c1830bcb8e475180c5b8db25",
+         "snaks": {
+          "P854": [
+           {
+            "snaktype": "value",
+            "property": "P854",
+            "hash": "5f57f10ce28a5dc3c0d8f4f649b97e4e3d2625ef",
+            "datavalue": {
+             "value": "https://it-ch.topographic-map.com/map-qqbkl/Los-Angeles/?zoom=19&center=34.05369%2C-118.2428&popup=34.05379%2C-118.24289",
+             "type": "string"
+            },
+            "datatype": "url"
+           }
+          ]
+         },
+         "snaks-order": [
+          "P854"
+         ]
+        }
+       ]
+      }
+     ],
+     "P31": [
+      {
+       "mainsnak": {
+        "snaktype": "value",
+        "property": "P31",
+        "hash": "db91cba01cde9fefec8b8a247e11181cdc7f455c",
+        "datavalue": {
+         "value": {
+          "entity-type": "item",
+          "numeric-id": 13218391,
+          "id": "Q13218391"
+         },
+         "type": "wikibase-entityid"
+        },
+        "datatype": "wikibase-item"
+       },
+       "type": "statement",
+       "qualifiers": {
+        "P7452": [
+         {
+          "snaktype": "value",
+          "property": "P7452",
+          "hash": "f9f842b41f249e5504d48025c7ad6d7b5bfc7496",
+          "datavalue": {
+           "value": {
+            "entity-type": "item",
+            "numeric-id": 71536040,
+            "id": "Q71536040"
+           },
+           "type": "wikibase-entityid"
+          },
+          "datatype": "wikibase-item"
+         }
+        ]
+       },
+       "qualifiers-order": [
+        "P7452"
+       ],
+       "id": "q65$9B1D9297-0A26-4706-B8B3-C574277E3621",
+       "rank": "preferred",
+       "references": [
+        {
+         "hash": "ba73239a71013be856fd038231377597d8b9bf9d",
+         "snaks": {
+          "P813": [
+           {
+            "snaktype": "value",
+            "property": "P813",
+            "hash": "972e586d22d05738a96d6cc4e615aa85c1159be2",
+            "datavalue": {
+             "value": {
+              "time": "+2020-04-07T00:00:00Z",
+              "timezone": 0,
+              "before": 0,
+              "after": 0,
+              "precision": 11,
+              "calendarmodel": "http://www.wikidata.org/entity/Q1985727"
+             },
+             "type": "time"
+            },
+            "datatype": "time"
+           }
+          ]
+         },
+         "snaks-order": [
+          "P813"
+         ]
+        }
+       ]
+      }
+     ]
+    },
+    "sitelinks": {}
+   }
+  }
+ },
+ "Q90": {
+  "entities": {
+   "Q90": {
+    "pageid": 221,
+    "ns": 0,
+    "title": "Q90",
+    "lastrevid": 2571885447,
+    "modified": "2026-11-19T06:54:28Z",
+    "type": "item",
+    "id": "Q90",
+    "labels": {
+     "en": {
+      "language": "en",
+      "value": "Paris"
+     },
+     "de": {
+      "language": "de",
+      "value": "Paris"
+     }
+    },
+    "descriptions": {},
+    "aliases": {},
+    "claims": {
+     "P2044": [
+      {
+       "mainsnak": {
+        "snaktype": "value",
+        "property": "P2044",
+        "hash": "13e2142d655d9cb4e1f8184d6c544bb24dd6f14e",
+        "datavalue": {
+         "value": {
+          "amount": "+28",
+          "unit": "http://www.wikidata.org/entity/Q11573",
+          "upperBound": "+29",
+          "lowerBound": "+27"
+         },
+         "type": "quantity"
+        },
+        "datatype": "quantity"
+       },
+       "type": "statement",
+       "id": "Q90$a2e1c0a8-4648-5394-978a-e4ea225e6618",
+       "rank": "normal",
+       "references": [
+        {
+         "hash": "d4bd87b862b12d99d26e86472d44f26858dee639",
+         "snaks": {
+          "P143": [
+           {
+            "snaktype": "value",
+            "property": "P143",
+            "hash": "f30cbd35620c4ea6d0633aaf0210a8916130469b",
+            "datavalue": {
+             "value": {
+              "entity-type": "item",
+              "numeric-id": 8447,
+              "id": "Q8447"
+             },
+             "type": "wikibase-entityid"
+            },
+            "datatype": "wikibase-item"
+           }
+          ]
+         },
+         "snaks-order": [
+          "P143"
+         ]
+        }
+       ]
+      }
+     ],
+     "P31": [
+      {
+       "mainsnak": {
+        "snaktype": "value",
+        "property": "P31",
+        "hash": "3041443888781d9fe3945eb1e821e351bb836e86",
+        "datavalue": {
+         "value": {
+          "entity-type": "item",
+          "numeric-id": 484170,
+          "id": "Q484170"
+         },
+         "type": "wikibase-entityid"
+        },
+        "datatype": "wikibase-item"
+       },
+       "type": "statement",
+       "qualifiers": {
+        "P582": [
+         {
+          "snaktype": "value",
+          "property": "P582",
+          "hash": "629ab30d43ec676600110d19a4baf29ae8510fd3",
+          "datavalue": {
+           "value": {
+            "time": "+2018-12-31T00:00:00Z",
+            "timezone": 0,
+            "before": 0,
+            "after": 0,
+            "precision": 11,
+            "calendarmodel": "http://www.wikidata.org/entity/Q1985727"
+           },
+           "type": "time"
+          },
+          "datatype": "time"
+         }
+        ]
+       },
+       "qualifiers-order": [
+        "P582"
+       ],
+       "id": "Q90$e0daf5b2-4666-a46d-2b08-cbe4db3eb1ac",
+       "rank": "normal",
+       "references": [
+        {
+         "hash": "8fc96690e69db19b59441bc13396f66248332357",
+         "snaks": {
+          "P854": [
+           {
+            "snaktype": "value",
+            "property": "P854",
+            "hash": "05399bd3c26773370b216497009b32eef1aa60a7",
+            "datavalue": {
+             "value": "https://www.vie-publique.fr/fiches/20152-paris-collectivite-territoriale-specifique",
+             "type": "string"
+            },
+            "datatype": "url"
+           }
+          ]
+         },
+         "snaks-order": [
+          "P854"
+         ]
+        }
+       ]
+      }
+     ]
+    },
+    "sitelinks": {}
+   }
+  }
+ },
+ "Q1208": {
+  "entities": {
+   "Q1208": {
+    "pageid": 1575,
+    "ns": 0,
+    "title": "Q1208",
+    "lastrevid": 2571898788,
+    "modified": "2026-11-19T07:29:54Z",
+    "type": "item",
+    "id": "Q1208",
+    "labels": {
+     "en": {
+      "language": "en",
+      "value": "Brandenburg"
+     },
+     "de": {
+      "language": "de",
+      "value": "Brandenburg"
+     }
+    },
+    "descriptions": {},
+    "aliases": {},
+    "claims": {
+     "P2044": [
+      {
+       "mainsnak": {
+        "snaktype": "value",
+        "property": "P2044",
+        "hash": "e36988e6d23d3049497734926dfaa6f08f19e880",
+        "datavalue": {
+         "value": {
+          "amount": "+0",
+          "unit": "http://www.wikidata.org/entity/Q11573"
+         },
+         "type": "quantity"
+        },
+        "datatype": "quantity"
+       },
+       "type": "statement",
+       "id": "Q1208$DC360CA6-EFE6-456B-8B81-37802AB51D16",
+       "rank": "normal",
+       "references": [
+        {
+         "hash": "d5847b9b6032aa8b13dae3c2dfd9ed5d114d21b3",
+         "snaks": {
+          "P143": [
+           {
+            "snaktype": "value",
+            "property": "P143",
+            "hash": "5a343e7e758a4282a01316d3e959b6e653b767fc",
+            "datavalue": {
+             "value": {
+              "entity-type": "item",
+              "numeric-id": 11920,
+              "id": "Q11920"
+             },
+             "type": "wikibase-entityid"
+            },
+            "datatype": "wikibase-item"
+           }
+          ]
+         },
+         "snaks-order": [
+          "P143"
+         ]
+        }
+       ]
+      }
+     ],
+     "P31": [
+      {
+       "mainsnak": {
+        "snaktype": "value",
+        "property": "P31",
+        "hash": "6daedc52e2de56c25f0c1e454b91f2be97bb0b87",
+        "datavalue": {
+         "value": {
+          "entity-type": "item",
+          "numeric-id": 1221156,
+          "id": "Q1221156"
+         },
+         "type": "wikibase-entityid"
+        },
+        "datatype": "wikibase-item"
+       },
+       "type": "statement",
+       "id": "Q1208$CFBEC37F-9CDF-46CA-BB61-528F72AF7FE4",
+       "rank": "normal",
+       "references": []
+      }
+     ]
+    },
+    "sitelinks": {}
+   }
+  }
+ },
+ "Q6115": {
+  "entities": {
+   "Q6115": {
+    "pageid": 7222,
+    "ns": 0,
+    "title": "Q6115",
+    "lastrevid": 2543988597,
+    "modified": "2026-09-11T13:11:49Z",
+    "type": "item",
+    "id": "Q6115",
+    "labels": {
+     "en": {
+      "language": "en",
+      "value": "Barnim District"
+     },
+     "de": {
+      "language": "de",
+      "value": "Landkreis Barnim"
+     }
+    },
+    "descriptions": {},
+    "aliases": {},
+    "claims": {
+     "P2044": [
+      {
+       "mainsnak": {
+        "snaktype": "value",
+        "property": "P2044",
+        "hash": "c310d727c2bba5408ba35d51ef1bd2f996e16292",
+        "datavalue": {
+         "value": {
+          "amount": "+32",
+          "unit": "http://www.wikidata.org/entity/Q11573"
+         },
+         "type": "quantity"
+        },
+        "datatype": "quantity"
+       },
+       "type": "statement",
+       "id": "Q6115$e0010f75-f580-45dd-bef1-b45edc8c0f3c",
+       "rank": "normal",
+       "references": [
+        {
+         "hash": "233919096fc1f5b7cc5f10bca0f05b62bc850f45",
+         "snaks": {
+          "P248": [
+           {
+            "snaktype": "value",
+            "property": "P248",
+            "hash": "1b3ef912a2bd61e18dd43abd184337eb010b2e96",
+            "datavalue": {
+             "value": {
+              "entity-type": "item",
+              "numeric-id": 830106,
+              "id": "Q830106"
+             },
+             "type": "wikibase-entityid"
+            },
+            "datatype": "wikibase-item"
+           }
+          ]
+         },
+         "snaks-order": [
+          "P248"
+         ]
+        }
+       ]
+      }
+     ],
+     "P31": [
+      {
+       "mainsnak": {
+        "snaktype": "value",
+        "property": "P31",
+        "hash": "7ec533073f2c9c4109ac226ed81fd3ecaba34c03",
+        "datavalue": {
+         "value": {
+          "entity-type": "item",
+          "numeric-id": 61793460,
+          "id": "Q61793460"
+         },
+         "type": "wikibase-entityid"
+        },
+        "datatype": "wikibase-item"
+       },
+       "type": "statement",
+       "id": "Q6115$7be576b1-42ba-c5de-6e85-0aede241c552",
+       "rank": "normal",
+       "references": []
+      }
+     ]
+    },
+    "sitelinks": {}
+   }
+  }
+ }
+}

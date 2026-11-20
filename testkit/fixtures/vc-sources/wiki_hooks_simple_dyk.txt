@@ -1,0 +1,12 @@
+<!-- Synthetic test page built for the wiki_hooks tests: the structure follows the "Did you know" pages, the hook texts are written for this fixture. -->
+{{Shortcut|WP:DYK}}
+'''Did you know...'''
+<noinclude>Editors: add new hooks at the top.</noinclude>
+* ... that '''[[Berlin]]''' has more bridges than [[Venice]]?<ref>A source.</ref>
+* ... that the '''[[Arkenberge]]''', the highest point of [[Berlin|the German capital]], is a former rubble hill?
+* ... that the village of '''[[Hallstatt (village)|Hallstatt]]''' was copied in [[China]]?{{-}}
+* ... that '''[[Some article]]''' is about a {{convert|3|km|mi}} tunnel?
+* ... that [[File:Example.jpg|thumb|An image]] '''[[Lake Bled]]''' has an island with a church?
+* ... that this line has no link at all and is long enough?
+* ... that '''[[Berlin]]''' has more bridges than [[Venice]]?
+* short [[X]]

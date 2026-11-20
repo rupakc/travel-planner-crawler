@@ -212,3 +212,12 @@ version = 1
 storage = "record"
 source_classes = ["official", "reference"]
 verbatim = ["/value", "/source_url", "/as_of", "/evidence/*"]
+
+# 2026-11-20: place facts (section `facts`): one short fact per record, in our own words, from
+# structured sources first (adapters `wikidata_facts`, `wiki_hooks`, `factbook_json`).
+
+[kinds.place_fact]
+version = 1
+storage = "record"
+source_classes = ["official", "reference", "editorial"]
+verbatim = ["/date_ref", "/source_url", "/as_of", "/evidence/*"]

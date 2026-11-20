@@ -75,6 +75,11 @@ impl Shaper {
         }
     }
 
+    /// The longest excerpt this client is served (≤ 300 characters).
+    pub fn excerpt_max(&self) -> usize {
+        self.excerpt_max
+    }
+
     /// The classes this client may receive.
     pub fn allowed(&self) -> &[LicenceClass] {
         &self.allowed

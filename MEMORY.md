@@ -371,3 +371,14 @@ plan = `docs/superpowers/plans/2026-11-15-voyager-crawler.md`, r1–r5 = `docs/r
   reached the Cornell CDN (cf003.cdn.4science.cloud) before its robots.txt was read, because the
   download redirected there. Resolve redirect targets (HEAD or no-follow) and read each new
   host's robots.txt before any GET to it.
+- 2026-11-20: place facts. New app section `facts` and record kind `place_fact` (one fact = one
+  sentence in our own words + source link, `text` ≤ 280 chars, keyed by GeoNames id / Wikidata
+  QID / country). Structured readers first, no LLM: `wikidata_facts` (EntityData item + up to 12
+  referenced items for labels, all raw as subresources, one bundle resource as the primary
+  capture; or dump lines without labels), `wiki_hooks` (37 Wikipedias, 93 DYK/OTD/unusual pages,
+  every path robots-checked 2026-11-20; hooks kept as written, `share_alike`, `llm_ok: false`,
+  served only once resolved to a Wikidata place via its sitelinks) and `factbook_json` (CIA
+  World Factbook final edition 2026-02-04 via factbook.json, CC0). GNIS feature history left
+  for later (prose needs the rewrite step and a GNIS→GeoNames join). `GET /v1/facts`
+  (geonames_id, wikidata_qid, country, fact_type, offset cursor). No sources added here: the
+  1,499 research ADD rows come in a separate PR. See docs/wiki/Place-Facts-Data.md.

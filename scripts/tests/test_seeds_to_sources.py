@@ -1811,7 +1811,16 @@ def _carbon_ids(seeds):
 def test_carbon_section_is_in_every_closed_list():
     assert "carbon" in s2s.SECTIONS
     enum = SCHEMA["properties"]["relevance"]["properties"]["sections"]["items"]["enum"]
-    assert enum[-1] == "carbon"
+    assert "carbon" in enum
+
+
+def test_facts_section_is_in_every_closed_list():
+    # Place facts (2026-11-20): the last section of every closed list, in the same order.
+    assert s2s.SECTIONS[-1] == "facts"
+    enum = SCHEMA["properties"]["relevance"]["properties"]["sections"]["items"]["enum"]
+    assert enum[-1] == "facts" and list(s2s.SECTIONS) == enum
+    import sources_doc
+    assert list(sources_doc.SECTION_TITLES)[-1] == "facts"
 
 
 def test_carbon_corpus_2026_11_19(generated):

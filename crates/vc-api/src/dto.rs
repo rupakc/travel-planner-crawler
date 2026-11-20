@@ -500,3 +500,97 @@ pub struct StatusDto {
     /// `ok` or `ready`.
     pub status: String,
 }
+
+/// The place of a fact (`/v1/facts`): the resolved place (a hook takes the Wikidata place it
+/// was resolved to).
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize, ToSchema)]
+pub struct FactPlaceDto {
+    /// GeoNames id (the primary join key).
+    pub geonames_id: Option<i64>,
+    /// Wikidata QID.
+    pub wikidata_qid: Option<String>,
+    /// `country`, `admin1`, `admin2`, `locality`, `village` or `feature`, when known.
+    pub admin_level: Option<String>,
+    /// ISO 3166-1 alpha-2 country.
+    pub country: Option<String>,
+    /// Name in the source.
+    pub name: Option<String>,
+    /// Language of `name`.
+    pub name_lang: Option<String>,
+}
+
+/// A figure behind a record or statistic.
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize, ToSchema)]
+pub struct FactQuantityDto {
+    /// The figure.
+    pub value: f64,
+    /// Unit (`m`, `km2`, `people`, `sites`, …).
+    pub unit: String,
+    /// What a record is a record of (`highest point of Germany`).
+    pub rank_scope: Option<String>,
+}
+
+/// Where a fact comes from.
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize, ToSchema)]
+pub struct FactSourceDto {
+    /// Source id (`sources/*.yaml`).
+    pub source_id: String,
+    /// Deep link to the fact at the source.
+    pub url: String,
+    /// Name of the work (else the source's registry name).
+    pub name: Option<String>,
+    /// Publisher.
+    pub publisher: Option<String>,
+    /// `official`, `reference`, `editorial`, `community` or `commercial_api`.
+    pub source_class: Option<String>,
+    /// Whether the source cites its own sources for it: `yes`, `partial` or `no`.
+    pub sourced: Option<String>,
+}
+
+/// One place fact.
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize, ToSchema)]
+pub struct FactDto {
+    /// Record id.
+    pub id: String,
+    /// The place.
+    pub place: FactPlaceDto,
+    /// `historical`, `fun`, `popular`, `unbelievable` or `little_known`.
+    pub fact_type: String,
+    /// One sentence in our own words (≤ 280 characters), or a short share-alike hook when
+    /// `text_origin` is `source_hook`.
+    pub text: String,
+    /// Language of `text` (BCP 47).
+    pub lang: Option<String>,
+    /// Machine translation to English, when one was made at ingest.
+    pub text_en: Option<String>,
+    /// `templated`, `rewritten` or `source_hook`.
+    pub text_origin: String,
+    /// Whether `text` may be given to a model: always false for share-alike text, hooks and
+    /// AI-reserved sources.
+    pub llm_ok: bool,
+    /// Year or date the fact refers to (`1244`, `1806-10-27`, `-0500`).
+    pub date_ref: Option<String>,
+    /// The figure behind it (structured sources only).
+    pub quantity: Option<FactQuantityDto>,
+    /// Source.
+    pub source: FactSourceDto,
+    /// Licence (share-alike: never merge with other text; keep the attribution).
+    pub licence: LicenceDto,
+    /// Crawl, edit or edition date (YYYY-MM-DD).
+    pub as_of: Option<String>,
+    /// `structured`, `extracted` or `corroborated`.
+    pub confidence: String,
+    /// The source's robots.txt blocks AI bots.
+    pub ai_bot_blocked: bool,
+    /// Last update of the record.
+    pub updated_at: DateTime<Utc>,
+}
+
+/// A page of facts.
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize, ToSchema)]
+pub struct FactPage {
+    /// Facts, by record id.
+    pub items: Vec<FactDto>,
+    /// Pass back as `cursor` for the next page.
+    pub next_cursor: Option<String>,
+}

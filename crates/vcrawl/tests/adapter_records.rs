@@ -1029,3 +1029,52 @@ fn ember_api_records_fit_the_kind_registry() {
         }
     }
 }
+
+#[test]
+fn place_fact_records_fit_the_kind_registry() {
+    // Place facts (2026-11-20): wikidata_facts (a dump batch of the slim Berlin item),
+    // wiki_hooks (a hook page) and factbook_json (a country file).
+    let r = root();
+    let reg = vc_kinds::FileKindRegistry::load(&vc_config::KindsConfig {
+        kinds_toml: r.join("kinds.toml").display().to_string(),
+        schemas_dir: r.join("schemas").display().to_string(),
+        prompts_dir: r.join("prompts").display().to_string(),
+    })
+    .expect("kind registry");
+    let berlin = vc_sources::adapters::wikidata_facts::entity_of(
+        &recorded("wikidata_entity_q64.json"),
+        "Q64",
+    )
+    .unwrap()
+    .unwrap();
+    let batch = serde_json::to_vec(&serde_json::json!([berlin])).unwrap();
+    for (adapter, url, body) in [
+        (
+            "wikidata_facts",
+            "https://dumps.wikimedia.org/wikidatawiki/entities/latest-all.json.gz",
+            batch,
+        ),
+        (
+            "wiki_hooks",
+            "https://simple.wikipedia.org/wiki/Wikipedia:Did_you_know?action=raw",
+            recorded("wiki_hooks_simple_dyk.txt"),
+        ),
+        (
+            "factbook_json",
+            "https://raw.githubusercontent.com/factbook/factbook.json/master/europe/gm.json",
+            recorded("factbook_gm.json"),
+        ),
+    ] {
+        let u = vc_core::CanonicalUrl::parse(url).unwrap();
+        let items = vc_sources::adapters::records::records(adapter, &u, &body)
+            .expect("mapped")
+            .expect("fixture maps");
+        assert!(!items.is_empty(), "{adapter}");
+        for it in items {
+            assert_eq!(it.kind, "place_fact", "{adapter}");
+            if let Err(e) = reg.validate(&vc_core::KindId::new(it.kind), &it.data) {
+                panic!("{adapter}: does not fit: {e:?}\n{:#}", it.data);
+            }
+        }
+    }
+}

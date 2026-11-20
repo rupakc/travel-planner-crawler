@@ -201,6 +201,253 @@ expression: json
         ],
         "type": "object"
       },
+      "FactDto": {
+        "description": "One place fact.",
+        "properties": {
+          "ai_bot_blocked": {
+            "description": "The source's robots.txt blocks AI bots.",
+            "type": "boolean"
+          },
+          "as_of": {
+            "description": "Crawl, edit or edition date (YYYY-MM-DD).",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "confidence": {
+            "description": "`structured`, `extracted` or `corroborated`.",
+            "type": "string"
+          },
+          "date_ref": {
+            "description": "Year or date the fact refers to (`1244`, `1806-10-27`, `-0500`).",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "fact_type": {
+            "description": "`historical`, `fun`, `popular`, `unbelievable` or `little_known`.",
+            "type": "string"
+          },
+          "id": {
+            "description": "Record id.",
+            "type": "string"
+          },
+          "lang": {
+            "description": "Language of `text` (BCP 47).",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "licence": {
+            "$ref": "#/components/schemas/LicenceDto",
+            "description": "Licence (share-alike: never merge with other text; keep the attribution)."
+          },
+          "llm_ok": {
+            "description": "Whether `text` may be given to a model: always false for share-alike text, hooks and\nAI-reserved sources.",
+            "type": "boolean"
+          },
+          "place": {
+            "$ref": "#/components/schemas/FactPlaceDto",
+            "description": "The place."
+          },
+          "quantity": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/FactQuantityDto",
+                "description": "The figure behind it (structured sources only)."
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "source": {
+            "$ref": "#/components/schemas/FactSourceDto",
+            "description": "Source."
+          },
+          "text": {
+            "description": "One sentence in our own words (≤ 280 characters), or a short share-alike hook when\n`text_origin` is `source_hook`.",
+            "type": "string"
+          },
+          "text_en": {
+            "description": "Machine translation to English, when one was made at ingest.",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "text_origin": {
+            "description": "`templated`, `rewritten` or `source_hook`.",
+            "type": "string"
+          },
+          "updated_at": {
+            "description": "Last update of the record.",
+            "format": "date-time",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "place",
+          "fact_type",
+          "text",
+          "text_origin",
+          "llm_ok",
+          "source",
+          "licence",
+          "confidence",
+          "ai_bot_blocked",
+          "updated_at"
+        ],
+        "type": "object"
+      },
+      "FactPage": {
+        "description": "A page of facts.",
+        "properties": {
+          "items": {
+            "description": "Facts, by record id.",
+            "items": {
+              "$ref": "#/components/schemas/FactDto"
+            },
+            "type": "array"
+          },
+          "next_cursor": {
+            "description": "Pass back as `cursor` for the next page.",
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "items"
+        ],
+        "type": "object"
+      },
+      "FactPlaceDto": {
+        "description": "The place of a fact (`/v1/facts`): the resolved place (a hook takes the Wikidata place it\nwas resolved to).",
+        "properties": {
+          "admin_level": {
+            "description": "`country`, `admin1`, `admin2`, `locality`, `village` or `feature`, when known.",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "country": {
+            "description": "ISO 3166-1 alpha-2 country.",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "geonames_id": {
+            "description": "GeoNames id (the primary join key).",
+            "format": "int64",
+            "type": [
+              "integer",
+              "null"
+            ]
+          },
+          "name": {
+            "description": "Name in the source.",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "name_lang": {
+            "description": "Language of `name`.",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "wikidata_qid": {
+            "description": "Wikidata QID.",
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "type": "object"
+      },
+      "FactQuantityDto": {
+        "description": "A figure behind a record or statistic.",
+        "properties": {
+          "rank_scope": {
+            "description": "What a record is a record of (`highest point of Germany`).",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "unit": {
+            "description": "Unit (`m`, `km2`, `people`, `sites`, …).",
+            "type": "string"
+          },
+          "value": {
+            "description": "The figure.",
+            "format": "double",
+            "type": "number"
+          }
+        },
+        "required": [
+          "value",
+          "unit"
+        ],
+        "type": "object"
+      },
+      "FactSourceDto": {
+        "description": "Where a fact comes from.",
+        "properties": {
+          "name": {
+            "description": "Name of the work (else the source's registry name).",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "publisher": {
+            "description": "Publisher.",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "source_class": {
+            "description": "`official`, `reference`, `editorial`, `community` or `commercial_api`.",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "source_id": {
+            "description": "Source id (`sources/*.yaml`).",
+            "type": "string"
+          },
+          "sourced": {
+            "description": "Whether the source cites its own sources for it: `yes`, `partial` or `no`.",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "url": {
+            "description": "Deep link to the fact at the source.",
+            "type": "string"
+          }
+        },
+        "required": [
+          "source_id",
+          "url"
+        ],
+        "type": "object"
+      },
       "IndexUseDto": {
         "description": "What may be indexed and served.",
         "enum": [
@@ -1666,6 +1913,117 @@ expression: json
           }
         ],
         "summary": "One entity with its claims; a merged entity answers `301` to its successor.",
+        "tags": [
+          "read"
+        ]
+      }
+    },
+    "/v1/facts": {
+      "get": {
+        "operationId": "facts",
+        "parameters": [
+          {
+            "description": "GeoNames id of the place (e.g. `2950159`).",
+            "in": "query",
+            "name": "geonames_id",
+            "required": false,
+            "schema": {
+              "format": "int64",
+              "type": "integer"
+            }
+          },
+          {
+            "description": "Wikidata QID of the place (e.g. `Q64`).",
+            "in": "query",
+            "name": "wikidata_qid",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "ISO 3166-1 alpha-2 country of the place (e.g. `DE`).",
+            "in": "query",
+            "name": "country",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "`historical`, `fun`, `popular`, `unbelievable` or `little_known`.",
+            "in": "query",
+            "name": "fact_type",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "Page size (default 20, max `max_page`).",
+            "in": "query",
+            "name": "limit",
+            "required": false,
+            "schema": {
+              "format": "int32",
+              "minimum": 0,
+              "type": "integer"
+            }
+          },
+          {
+            "description": "`next_cursor` of the previous page.",
+            "in": "query",
+            "name": "cursor",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FactPage"
+                }
+              }
+            }
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorBody"
+                }
+              }
+            }
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorBody"
+                }
+              }
+            }
+          },
+          "429": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorBody"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Place facts (kind `place_fact`): short facts about one place (historical, fun, popular,\nrecord-breaking, little known), by record id: filtered by GeoNames id, Wikidata QID,\ncountry and fact type. Wikipedia hooks appear only once resolved to a Wikidata place.",
         "tags": [
           "read"
         ]

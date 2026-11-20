@@ -260,6 +260,52 @@ fn occupancy_is_an_official_or_reference_record_with_a_verbatim_value() {
 }
 
 #[test]
+fn place_fact_is_a_record_with_a_bounded_own_words_sentence() {
+    let reg = registry();
+    let id = KindId::new("place_fact");
+    let k = reg.get(&id).expect("place_fact registered");
+    assert_eq!(k.storage, KindStorage::Record);
+    assert_eq!(
+        k.allowed_source_classes,
+        vec![
+            SourceClass::Official,
+            SourceClass::Reference,
+            SourceClass::Editorial
+        ]
+    );
+    assert!(!k.high_stakes);
+    assert!(k.verbatim_fields.iter().any(|f| f == "/date_ref"));
+    // Our own sentence is never verbatim-checked (it is not the page's text).
+    assert!(!k.verbatim_fields.iter().any(|f| f == "/text"));
+    assert_eq!(reg.series_key(&id, &json!({}), None), None);
+    let ok = json!({"place": {"wikidata_qid": "Q64", "country": "DE"}, "fact_type": "historical",
+        "text": "Berlin was founded in 1244.", "text_origin": "templated",
+        "confidence": "structured", "date_ref": "1244"});
+    assert!(reg.validate(&id, &ok).is_ok());
+    let mut long = ok.clone();
+    long["text"] = json!("x".repeat(281));
+    assert!(
+        reg.validate(&id, &long).is_err(),
+        "text is at most 280 characters"
+    );
+    let mut bad_type = ok.clone();
+    bad_type["fact_type"] = json!("trivia");
+    assert!(reg.validate(&id, &bad_type).is_err());
+    let mut bad_qid = ok.clone();
+    bad_qid["place"]["wikidata_qid"] = json!("P31");
+    assert!(reg.validate(&id, &bad_qid).is_err());
+    let mut bad_date = ok.clone();
+    bad_date["date_ref"] = json!("in 1244");
+    assert!(reg.validate(&id, &bad_date).is_err());
+    let mut restricted = ok.clone();
+    restricted["licence"] = json!({"class": "restricted", "attribution": "x"});
+    assert!(
+        reg.validate(&id, &restricted).is_err(),
+        "restricted is never a fact licence"
+    );
+}
+
+#[test]
 fn verbatim_pointers_are_concrete_and_cover_provenance() {
     let reg = registry();
     for k in reg.all() {

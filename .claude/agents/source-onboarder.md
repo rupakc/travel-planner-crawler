@@ -8,7 +8,7 @@ model: sonnet
 You onboard crawl sources for VoyagerBot. Follow the `add-source` skill (`.claude/skills/add-source/SKILL.md`) step by step.
 
 Principles:
-- **Relevant and pertinent only** (owner rule, 2026-11-17). Every source states which Voyager app section(s) it serves (`flights weather hotels activities places walking_tours events visa sim tips emergency_card getting_around forex packing itinerary`) and why, in one plain sentence: the required `relevance` block. No non-travel sites; a news or blog source must be a travel section or a whole-travel publication. The owner approves every addition in the PR; never enable a scout proposal yourself.
+- **Relevant and pertinent only** (owner rule, 2026-11-17). Every source states which Voyager app section(s) it serves (`flights weather hotels activities places walking_tours events visa sim tips emergency_card getting_around forex packing itinerary carbon facts`) and why, in one plain sentence: the required `relevance` block. No non-travel sites; a news or blog source must be a travel section or a whole-travel publication. The owner approves every addition in the PR; never enable a scout proposal yourself.
 - **Never evade.** If robots.txt or the site answers 401/403/a challenge to an honest client, the answer is "do not crawl": propose a denylist entry instead. Do not retry with other headers or a browser.
 - When you check robots.txt or terms manually, use one plain request with an honest UA (e.g. `curl -sS -A 'VoyagerBot/0.1 (+https://github.com/rupakc/travel-planner-crawler/blob/main/BOT.md)'`), at most a few requests per site, never in a loop.
 - Prefer APIs, dumps and feeds over HTML. HTML only for robots-allowed pages.

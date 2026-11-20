@@ -1,0 +1,265 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/rupakc/travel-planner-crawler/schemas/place_fact.v1.json",
+  "title": "Place fact",
+  "description": "One record: one short fact about one place (a country, region, city, town, village or feature), written as one sentence in our own words, with the source link. Historical, fun, popular, record-breaking (`unbelievable`) or little-known. We never copy article text: `text` is a templated or rewritten sentence; the only exception is a short share-alike hook (`text_origin: source_hook`), which is kept apart, attributed and never sent to a model (`llm_ok: false`). Voyager use: the place facts section (and Places to see, the itinerary).",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "place",
+    "fact_type",
+    "text",
+    "text_origin",
+    "confidence"
+  ],
+  "properties": {
+    "place": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "The place the fact is about. At least one key: `geonames_id` (the primary join key), `wikidata_qid`, `country` (country-level facts) or `link_candidates` (a hook not yet resolved; served only once a Wikidata place resolves it).",
+      "properties": {
+        "geonames_id": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 99999999999,
+          "description": "GeoNames id of the place (from Wikidata P1566, or the source's own GeoNames link)."
+        },
+        "wikidata_qid": {
+          "type": "string",
+          "maxLength": 16,
+          "pattern": "^Q[1-9][0-9]{0,14}$",
+          "description": "Wikidata item id of the place."
+        },
+        "admin_level": {
+          "type": "string",
+          "enum": [
+            "country",
+            "admin1",
+            "admin2",
+            "locality",
+            "village",
+            "feature"
+          ],
+          "description": "What kind of place it is, when the source makes it clear."
+        },
+        "country": {
+          "type": "string",
+          "maxLength": 2,
+          "pattern": "^[A-Z]{2}$",
+          "description": "ISO 3166-1 alpha-2 code of the place's country (the country itself for country-level facts)."
+        },
+        "name": {
+          "type": "string",
+          "maxLength": 200,
+          "description": "The place's name as the source gives it."
+        },
+        "name_lang": {
+          "type": "string",
+          "maxLength": 16,
+          "pattern": "^[a-z]{2,3}(-[A-Za-z0-9]{1,8})*$",
+          "description": "Language of `name` (BCP 47)."
+        },
+        "native_id": {
+          "type": "string",
+          "maxLength": 80,
+          "description": "The source's own id of the place, as `<scheme>:<id>` (e.g. `gnis:1234`, `factbook:gm`)."
+        },
+        "sitelinks": {
+          "type": "array",
+          "maxItems": 64,
+          "items": {
+            "type": "string",
+            "maxLength": 300,
+            "description": "`<site>:<title>` (e.g. `dewiki:Berlin`)."
+          },
+          "description": "Wikidata facts only: the place's Wikipedia articles in the hook languages, used to resolve hooks to this place."
+        },
+        "link_candidates": {
+          "type": "array",
+          "maxItems": 8,
+          "items": {
+            "type": "string",
+            "maxLength": 300,
+            "description": "`<site>:<title>` of an article the hook links (bold links first)."
+          },
+          "description": "Hook facts only: the articles the hook links, in order. The first one that is a Wikidata place's sitelink is the place."
+        }
+      }
+    },
+    "fact_type": {
+      "type": "string",
+      "enum": [
+        "historical",
+        "fun",
+        "popular",
+        "unbelievable",
+        "little_known"
+      ],
+      "description": "`historical`: founding, former names, events, heritage designation. `popular`: nicknames, mottos, symbols, well-known figures (population, area). `unbelievable`: records and superlatives (highest, lowest, oldest, largest). `little_known`: name origins, twin towns, borders, curiosities. `fun`: editorial curiosities and hooks."
+    },
+    "text": {
+      "type": "string",
+      "minLength": 8,
+      "maxLength": 280,
+      "description": "The fact: one sentence in our own words, in `lang` (a short share-alike hook only when `text_origin` is `source_hook`)."
+    },
+    "lang": {
+      "type": "string",
+      "maxLength": 16,
+      "pattern": "^[a-z]{2,3}(-[A-Za-z0-9]{1,8})*$",
+      "description": "Language of `text` (BCP 47)."
+    },
+    "text_en": {
+      "type": "string",
+      "maxLength": 280,
+      "description": "Optional English translation made at ingest (always machine-translated)."
+    },
+    "text_origin": {
+      "type": "string",
+      "enum": [
+        "templated",
+        "rewritten",
+        "source_hook"
+      ],
+      "description": "`templated`: built from typed fields with our own sentence template. `rewritten`: our own rewrite of a sentence of the source. `source_hook`: a short hook kept as the source wrote it (share-alike only; never merged, never sent to a model)."
+    },
+    "llm_ok": {
+      "type": "boolean",
+      "description": "Whether the text may be given to a model (false for share-alike text and AI-reserved sources)."
+    },
+    "date_ref": {
+      "type": "string",
+      "maxLength": 11,
+      "pattern": "^-?[0-9]{4}(-[0-9]{2}(-[0-9]{2})?)?$",
+      "description": "The year, month or day the fact refers to (`1244`, `1806-10-27`; a leading `-` for BCE), for \"on this day\" and timelines."
+    },
+    "quantity": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "value",
+        "unit"
+      ],
+      "properties": {
+        "value": {
+          "type": "number",
+          "description": "The figure as the structured source gives it."
+        },
+        "unit": {
+          "type": "string",
+          "maxLength": 40,
+          "description": "Unit (`m`, `km2`, `people`, `sites`, …)."
+        },
+        "rank_scope": {
+          "type": "string",
+          "maxLength": 120,
+          "description": "What a record is a record of (e.g. `highest point of Germany`)."
+        }
+      },
+      "description": "The figure behind a record or statistic (structured sources only)."
+    },
+    "source_field": {
+      "type": "string",
+      "maxLength": 120,
+      "description": "The source field the fact comes from (`wikidata:P571`, `factbook:Geography/Elevation/highest point`, `dyk`, `otd`, `unusual`)."
+    },
+    "source": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "name": {
+          "type": "string",
+          "maxLength": 160,
+          "description": "Name of the work (e.g. \"Wikidata\", \"The World Factbook (factbook.json)\")."
+        },
+        "publisher": {
+          "type": "string",
+          "maxLength": 160,
+          "description": "Who publishes it."
+        },
+        "sourced": {
+          "type": "string",
+          "enum": [
+            "yes",
+            "partial",
+            "no"
+          ],
+          "description": "Whether the source cites its own sources for this fact (Wikidata: the statement has references)."
+        }
+      },
+      "description": "The work the fact comes from (the API adds the source id and class from the source registry)."
+    },
+    "licence": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "class",
+        "attribution"
+      ],
+      "properties": {
+        "class": {
+          "type": "string",
+          "enum": [
+            "open",
+            "share_alike",
+            "facts_only",
+            "api_terms"
+          ],
+          "description": "Licence class of the fact."
+        },
+        "spdx": {
+          "type": "string",
+          "maxLength": 40,
+          "description": "SPDX id (`CC0-1.0`, `CC-BY-SA-4.0`)."
+        },
+        "attribution": {
+          "type": "string",
+          "maxLength": 300,
+          "description": "Attribution text to show with the fact."
+        }
+      },
+      "description": "Licence of the fact. Share-alike text is never merged into our own wording or sent to a model."
+    },
+    "confidence": {
+      "type": "string",
+      "enum": [
+        "structured",
+        "extracted",
+        "corroborated"
+      ],
+      "description": "`structured`: taken from a typed field. `extracted`: a rule or model extraction from text (`evidence_offset` kept). `corroborated`: two independent sources agree."
+    },
+    "evidence_offset": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 100000000,
+      "description": "For extracted facts: the character offset of the evidence span in the captured text."
+    },
+    "ai_bot_blocked": {
+      "type": "boolean",
+      "description": "True when the source's robots.txt blocks AI bots: only a title and link may be shown, never extracted text."
+    },
+    "source_url": {
+      "type": "string",
+      "maxLength": 2048,
+      "description": "Deep link to the fact at the source (a Wikidata statement, a Wikipedia article or hook page, a Factbook country file).",
+      "pattern": "^https?://[^\\s]+$"
+    },
+    "as_of": {
+      "type": "string",
+      "maxLength": 10,
+      "description": "Crawl date, the source's edit date or a frozen edition's date (CIA World Factbook: 2026-02-04), YYYY-MM-DD.",
+      "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$"
+    },
+    "evidence": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "maxLength": 300,
+        "description": "A verbatim quote from the page."
+      },
+      "maxItems": 3,
+      "description": "Up to 3 short verbatim quotes from the page that support the fact (extracted facts)."
+    }
+  }
+}

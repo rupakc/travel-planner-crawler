@@ -45,7 +45,7 @@ PR. No non-travel sites.
 1. Say which part of the Voyager app the source serves and why: the required
    `relevance: {sections: [...], why: "..."}` block. `sections` comes from a closed list
    (`flights weather hotels activities places walking_tours events visa sim tips
-   emergency_card getting_around forex packing itinerary`); `why` is one plain sentence about
+   emergency_card getting_around forex packing itinerary carbon facts`); `why` is one plain sentence about
    the traveller-facing data it gives. A `news` or `blogs` source must read a travel section
    (the URL contains `travel`) or a whole-travel publication listed in
    `crates/vc-sources/src/relevance.rs`. Validation and CI reject a spec that breaks this.

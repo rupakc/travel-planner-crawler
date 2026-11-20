@@ -1,0 +1,23 @@
+{
+  "place": {
+    "geonames_id": 2950159,
+    "wikidata_qid": "Q64",
+    "admin_level": "admin1",
+    "country": "DE",
+    "name": "Berlin",
+    "name_lang": "en",
+    "sitelinks": ["dewiki:Berlin", "enwiki:Berlin"]
+  },
+  "fact_type": "historical",
+  "text": "Berlin was founded in 1244.",
+  "lang": "en",
+  "text_origin": "templated",
+  "llm_ok": true,
+  "date_ref": "1244",
+  "source_field": "wikidata:P571",
+  "source": {"name": "Wikidata", "publisher": "Wikidata contributors (Wikimedia Foundation)", "sourced": "yes"},
+  "licence": {"class": "open", "spdx": "CC0-1.0", "attribution": "Wikidata (CC0)"},
+  "confidence": "structured",
+  "source_url": "https://www.wikidata.org/wiki/Q64#P571",
+  "as_of": "2026-11-20"
+}

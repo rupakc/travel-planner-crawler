@@ -129,6 +129,7 @@ const V1_ROUTES: &[&str] = &[
     "/v1/carbon/factors?category=flights",
     "/v1/carbon/grid?country=FR",
     "/v1/carbon/occupancy?mode=car",
+    "/v1/facts?country=DE",
     "/v1/places/resolve?name=London",
     "/v1/changes",
     "/v1/sources",
@@ -1216,6 +1217,269 @@ async fn carbon_occupancy_needs_a_token() {
     let r = h
         .http
         .get(format!("{}/v1/carbon/occupancy", h.base))
+        .send()
+        .await
+        .expect("send");
+    assert_eq!(r.status(), StatusCode::UNAUTHORIZED);
+}
+
+// ---------------------------------------------------------------------------------------------
+// /v1/facts (2026-11-20): place facts; Wikipedia hooks served only once resolved to a Wikidata
+// place through its sitelinks.
+// ---------------------------------------------------------------------------------------------
+
+fn fact(id: &str, class: LicenceClass, data: Value, source: &str) -> vc_core::index::Item {
+    let mut it = item(id, "place_fact", class);
+    it.data = data;
+    it.place_ids = vec![];
+    it.provenance = vec![provenance(source, &format!("https://example.org/{id}"))];
+    it
+}
+
+fn berlin_place() -> Value {
+    serde_json::json!({"geonames_id": 2950159, "wikidata_qid": "Q64", "admin_level": "admin1",
+        "country": "DE", "name": "Berlin", "name_lang": "en",
+        "sitelinks": ["dewiki:Berlin", "simplewiki:Berlin"]})
+}
+
+async fn facts_harness(classes: &[LicenceClass]) -> Harness {
+    let wd = |text: &str, ty: &str, extra: Value| {
+        let mut d = serde_json::json!({"place": berlin_place(), "fact_type": ty, "text": text,
+            "lang": "en", "text_origin": "templated", "llm_ok": true, "confidence": "structured",
+            "source_url": "https://www.wikidata.org/wiki/Q64#P571", "as_of": "2026-11-20",
+            "source": {"name": "Wikidata", "publisher": "Wikidata contributors", "sourced": "yes"}});
+        for (k, v) in extra.as_object().unwrap() {
+            d[k] = v.clone();
+        }
+        d
+    };
+    let hook = |text: &str, cands: Value| {
+        serde_json::json!({"place": {"link_candidates": cands}, "fact_type": "fun",
+            "text": text, "lang": "en", "text_origin": "source_hook", "llm_ok": false,
+            "confidence": "extracted",
+            "source_url": "https://simple.wikipedia.org/wiki/Wikipedia:Did_you_know"})
+    };
+    let cat = MemCatalog {
+        sources: vec![vc_api::dto::SourceDto {
+            source_id: "wikidata-facts".into(),
+            name: "Wikidata EntityData".into(),
+            category: "facts".into(),
+            source_class: "reference".into(),
+            licence: vc_api::dto::LicenceDto::from_core(&licence(LicenceClass::Open)).unwrap(),
+            method: "api".into(),
+            enabled: true,
+        }],
+        facts: vec![
+            fact(
+                "1",
+                LicenceClass::Open,
+                wd(
+                    "Berlin was founded in 1244.",
+                    "historical",
+                    serde_json::json!({"date_ref": "1244"}),
+                ),
+                "wikidata-facts",
+            ),
+            fact(
+                "2",
+                LicenceClass::Open,
+                wd(
+                    "Berlin had a population of 3,700,577 in 2025.",
+                    "popular",
+                    serde_json::json!({"quantity": {"value": 3700577.0, "unit": "people"}}),
+                ),
+                "wikidata-facts",
+            ),
+            // A hook: resolved through `simplewiki:Berlin` (the second candidate).
+            fact(
+                "3",
+                LicenceClass::ShareAlike,
+                hook(
+                    "... that Berlin has more bridges than Venice?",
+                    serde_json::json!(["simplewiki:Venice", "simplewiki:Berlin"]),
+                ),
+                "wiki-facts-simple",
+            ),
+            // A hook nothing resolves: never served.
+            fact(
+                "4",
+                LicenceClass::ShareAlike,
+                hook(
+                    "... that Atlantis is not on any map at all?",
+                    serde_json::json!(["simplewiki:Atlantis"]),
+                ),
+                "wiki-facts-simple",
+            ),
+            // A country fact (Factbook).
+            fact(
+                "5",
+                LicenceClass::Open,
+                serde_json::json!({"place": {"country": "DE", "admin_level": "country", "name": "Germany"},
+                    "fact_type": "unbelievable",
+                    "text": "The highest point of Germany is Zugspitze (2,963 m).",
+                    "text_origin": "templated", "llm_ok": true, "confidence": "structured",
+                    "quantity": {"value": 2963.0, "unit": "m", "rank_scope": "highest point of Germany"},
+                    "as_of": "2026-02-04"}),
+                "od-factbook-json",
+            ),
+            // Link-only: never served here.
+            {
+                let mut it = fact(
+                    "6",
+                    LicenceClass::Open,
+                    wd(
+                        "Berlin is nicknamed Spree-Athen.",
+                        "popular",
+                        serde_json::json!({}),
+                    ),
+                    "wikidata-facts",
+                );
+                it.use_policy.serve = ServeUse::LinkOnly;
+                it
+            },
+            // An AI-reserved editorial fact: served, but never marked for a model.
+            fact(
+                "7",
+                LicenceClass::FactsOnly,
+                serde_json::json!({"place": {"geonames_id": 2950159, "country": "DE"},
+                    "fact_type": "little_known", "text": "A rewritten sentence about Berlin.",
+                    "text_origin": "rewritten", "llm_ok": true, "ai_bot_blocked": true,
+                    "confidence": "extracted"}),
+                "fx-example",
+            ),
+        ],
+        ..MemCatalog::default()
+    };
+    let state = ApiState::new(
+        ApiConfig::default(),
+        Arc::new(MemIndex::new()),
+        Arc::new(MemPlaces::default()),
+        Arc::new(MemClientStore::new(vec![client(
+            "voyager", "s3cret", classes, 10_000,
+        )])),
+        Arc::new(cat),
+    );
+    let base = start(state).await;
+    Harness {
+        base,
+        http: reqwest::Client::new(),
+        index: Arc::new(MemIndex::new()),
+        token: "voyager.s3cret".into(),
+    }
+}
+
+#[tokio::test]
+async fn facts_filter_by_place_country_and_type_and_resolve_hooks() {
+    let h = facts_harness(ALL).await;
+    let all = h.json("/v1/facts").await;
+    assert_eq!(
+        ids(&all),
+        ["1", "2", "3", "5", "7"],
+        "unresolved hooks and link-only never served"
+    );
+    let f1 = &all["items"][0];
+    assert_eq!(f1["place"]["wikidata_qid"], "Q64");
+    assert_eq!(f1["place"]["geonames_id"], 2950159);
+    assert_eq!(f1["fact_type"], "historical");
+    assert_eq!(f1["text"], "Berlin was founded in 1244.");
+    assert_eq!(f1["date_ref"], "1244");
+    assert_eq!(f1["llm_ok"], true);
+    assert_eq!(f1["confidence"], "structured");
+    assert_eq!(f1["as_of"], "2026-11-20");
+    assert_eq!(f1["source"]["source_id"], "wikidata-facts");
+    assert_eq!(
+        f1["source"]["url"],
+        "https://www.wikidata.org/wiki/Q64#P571"
+    );
+    assert_eq!(f1["source"]["name"], "Wikidata");
+    assert_eq!(f1["source"]["publisher"], "Wikidata contributors");
+    assert_eq!(
+        f1["source"]["source_class"], "reference",
+        "from the source registry"
+    );
+    assert_eq!(f1["source"]["sourced"], "yes");
+    assert_eq!(f1["licence"]["class"], "open");
+    assert!(f1.get("sitelinks").is_none() && f1["place"].get("sitelinks").is_none());
+    // The hook takes Berlin's place; it is share-alike and never for a model.
+    let hook = &all["items"][2];
+    assert_eq!(hook["place"]["wikidata_qid"], "Q64");
+    assert_eq!(hook["place"]["country"], "DE");
+    assert_eq!(hook["text_origin"], "source_hook");
+    assert_eq!(hook["llm_ok"], false);
+    assert_eq!(hook["licence"]["class"], "share_alike");
+    assert_eq!(
+        hook["as_of"], "2026-11-01",
+        "the capture date (t0) when the data has none"
+    );
+    assert_eq!(
+        all["items"][3]["quantity"]["rank_scope"],
+        "highest point of Germany"
+    );
+    assert_eq!(all["items"][4]["llm_ok"], false, "AI-reserved source");
+    assert_eq!(all["items"][4]["ai_bot_blocked"], true);
+
+    assert_eq!(
+        ids(&h.json("/v1/facts?wikidata_qid=Q64").await),
+        ["1", "2", "3"]
+    );
+    assert_eq!(
+        ids(&h.json("/v1/facts?wikidata_qid=q64").await),
+        ["1", "2", "3"]
+    );
+    assert_eq!(
+        ids(&h.json("/v1/facts?geonames_id=2950159").await),
+        ["1", "2", "3", "7"]
+    );
+    assert_eq!(
+        ids(&h.json("/v1/facts?country=de&fact_type=unbelievable").await),
+        ["5"]
+    );
+    assert_eq!(ids(&h.json("/v1/facts?fact_type=fun").await), ["3"]);
+    assert!(ids(&h.json("/v1/facts?country=FR").await).is_empty());
+    // Paging.
+    let p1 = h.json("/v1/facts?limit=2").await;
+    assert_eq!(ids(&p1), ["1", "2"]);
+    let next = p1["next_cursor"].as_str().expect("cursor").to_string();
+    let p2 = h.json(&format!("/v1/facts?limit=2&cursor={next}")).await;
+    assert_eq!(ids(&p2), ["3", "5"]);
+    let p3 = h
+        .json(&format!(
+            "/v1/facts?limit=2&cursor={}",
+            p2["next_cursor"].as_str().unwrap()
+        ))
+        .await;
+    assert_eq!(ids(&p3), ["7"]);
+    assert!(p3["next_cursor"].is_null());
+    for bad in [
+        "/v1/facts?fact_type=trivia",
+        "/v1/facts?wikidata_qid=P31",
+        "/v1/facts?wikidata_qid=Q0",
+        "/v1/facts?country=D%25",
+        "/v1/facts?geonames_id=-1",
+        "/v1/facts?geonames_id=x",
+        "/v1/facts?cursor=abc",
+    ] {
+        let r = h.get(bad).send().await.expect("send");
+        assert_eq!(r.status(), StatusCode::BAD_REQUEST, "{bad}");
+    }
+}
+
+#[tokio::test]
+async fn facts_respect_the_client_licence_classes() {
+    let h = facts_harness(&[LicenceClass::Open]).await;
+    assert_eq!(
+        ids(&h.json("/v1/facts").await),
+        ["1", "2", "5"],
+        "no share-alike hooks, no facts-only"
+    );
+}
+
+#[tokio::test]
+async fn facts_need_a_token() {
+    let h = facts_harness(ALL).await;
+    let r = h
+        .http
+        .get(format!("{}/v1/facts", h.base))
         .send()
         .await
         .expect("send");

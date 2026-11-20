@@ -1,0 +1,9 @@
+<!-- Synthetic test page built for the wiki_hooks tests (structure of an "unusual articles" table; texts written for this fixture). -->
+{| class="wikitable"
+|-
+! Article !! Pourquoi
+|-
+| [[Baarle-Hertog]] || Une commune dont les frontières traversent des maisons et des cafés.
+|-
+| [[Arkenberge]] || Une colline formée de gravats, devenue le point culminant de Berlin.
+|}

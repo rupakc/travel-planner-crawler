@@ -1,0 +1,1234 @@
+{
+ "entities": {
+  "Q64": {
+   "pageid": 190,
+   "ns": 0,
+   "title": "Q64",
+   "lastrevid": 2571881896,
+   "modified": "2026-11-19T06:48:47Z",
+   "type": "item",
+   "id": "Q64",
+   "labels": {
+    "en": {
+     "language": "en",
+     "value": "Berlin"
+    },
+    "de": {
+     "language": "de",
+     "value": "Berlin"
+    },
+    "fr": {
+     "language": "fr",
+     "value": "Berlin"
+    }
+   },
+   "descriptions": {
+    "en": {
+     "language": "en",
+     "value": "federated state, capital and largest city of Germany"
+    }
+   },
+   "aliases": {},
+   "claims": {
+    "P1566": [
+     {
+      "mainsnak": {
+       "snaktype": "value",
+       "property": "P1566",
+       "hash": "a7c1589d3ca8ffb7a43d27dcc5b5ae7ef7a32eff",
+       "datavalue": {
+        "value": "2950159",
+        "type": "string"
+       },
+       "datatype": "external-id"
+      },
+      "type": "statement",
+      "id": "Q64$83517B8A-8EE8-4DEA-AA19-79B8727B8479",
+      "rank": "normal",
+      "references": [
+       {
+        "hash": "88694a0f4d1486770c269f7db16a1982f74da69d",
+        "snaks": {
+         "P248": [
+          {
+           "snaktype": "value",
+           "property": "P248",
+           "hash": "1b3ef912a2bd61e18dd43abd184337eb010b2e96",
+           "datavalue": {
+            "value": {
+             "entity-type": "item",
+             "numeric-id": 830106,
+             "id": "Q830106"
+            },
+            "type": "wikibase-entityid"
+           },
+           "datatype": "wikibase-item"
+          }
+         ]
+        },
+        "snaks-order": [
+         "P248"
+        ]
+       }
+      ]
+     },
+     {
+      "mainsnak": {
+       "snaktype": "value",
+       "property": "P1566",
+       "hash": "cbffbb0c66957ac3c9fca165120cb487bc187aec",
+       "datavalue": {
+        "value": "2950157",
+        "type": "string"
+       },
+       "datatype": "external-id"
+      },
+      "type": "statement",
+      "id": "Q64$d390cb62-442c-1fb1-2eec-4709690b9123",
+      "rank": "normal",
+      "references": []
+     }
+    ],
+    "P571": [
+     {
+      "mainsnak": {
+       "snaktype": "value",
+       "property": "P571",
+       "hash": "56204e6b4576e7c52dc24290c6f48eacb7957bea",
+       "datavalue": {
+        "value": {
+         "time": "+1244-00-00T00:00:00Z",
+         "timezone": 0,
+         "before": 0,
+         "after": 0,
+         "precision": 9,
+         "calendarmodel": "http://www.wikidata.org/entity/Q1985786"
+        },
+        "type": "time"
+       },
+       "datatype": "time"
+      },
+      "type": "statement",
+      "id": "Q64$E3806EC8-210D-4380-BCF7-B05592E5555B",
+      "rank": "normal",
+      "references": [
+       {
+        "hash": "a9980e823c98f6dd9b7c8d4ca28319c510b4250a",
+        "snaks": {
+         "P854": [
+          {
+           "snaktype": "value",
+           "property": "P854",
+           "hash": "9bffff9e0b5a99f93d68814b2c1768fa50885283",
+           "datavalue": {
+            "value": "https://www.berlin.de/berlin-im-ueberblick/geschichte/die-mittelalterliche-handelsstadt/",
+            "type": "string"
+           },
+           "datatype": "url"
+          }
+         ]
+        },
+        "snaks-order": [
+         "P854"
+        ]
+       }
+      ]
+     }
+    ],
+    "P793": [
+     {
+      "mainsnak": {
+       "snaktype": "value",
+       "property": "P793",
+       "hash": "1b4abc994a49813427a1f89d8b5ba05169b4ccba",
+       "datavalue": {
+        "value": {
+         "entity-type": "item",
+         "numeric-id": 65079568,
+         "id": "Q65079568"
+        },
+        "type": "wikibase-entityid"
+       },
+       "datatype": "wikibase-item"
+      },
+      "type": "statement",
+      "qualifiers": {
+       "P585": [
+        {
+         "snaktype": "value",
+         "property": "P585",
+         "hash": "6534d9c2eb9136398f83e2b8b3dbba889b0c864a",
+         "datavalue": {
+          "value": {
+           "time": "+1806-10-27T00:00:00Z",
+           "timezone": 0,
+           "before": 0,
+           "after": 0,
+           "precision": 11,
+           "calendarmodel": "http://www.wikidata.org/entity/Q1985727"
+          },
+          "type": "time"
+         },
+         "datatype": "time"
+        }
+       ]
+      },
+      "qualifiers-order": [
+       "P585"
+      ],
+      "id": "Q64$DC9D04C5-3E21-4C49-B1B9-7D868E57C202",
+      "rank": "normal",
+      "references": []
+     },
+     {
+      "mainsnak": {
+       "snaktype": "value",
+       "property": "P793",
+       "hash": "45bb703aa319732442ac37601dc59e7c8e823e8c",
+       "datavalue": {
+        "value": {
+         "entity-type": "item",
+         "numeric-id": 8150,
+         "id": "Q8150"
+        },
+        "type": "wikibase-entityid"
+       },
+       "datatype": "wikibase-item"
+      },
+      "type": "statement",
+      "qualifiers": {
+       "P585": [
+        {
+         "snaktype": "value",
+         "property": "P585",
+         "hash": "9a745b9454b0ebe8d0af5ec242ae08b4e4a540f5",
+         "datavalue": {
+          "value": {
+           "time": "+1936-00-00T00:00:00Z",
+           "timezone": 0,
+           "before": 0,
+           "after": 0,
+           "precision": 9,
+           "calendarmodel": "http://www.wikidata.org/entity/Q1985727"
+          },
+          "type": "time"
+         },
+         "datatype": "time"
+        }
+       ]
+      },
+      "qualifiers-order": [
+       "P585"
+      ],
+      "id": "Q64$8ec80fc7-4030-bd0e-40c1-e3067e3e13be",
+      "rank": "normal",
+      "references": []
+     }
+    ],
+    "P1448": [
+     {
+      "mainsnak": {
+       "snaktype": "value",
+       "property": "P1448",
+       "hash": "4ff56df5bb54cccae4efd3fa5a198ff75680eac4",
+       "datavalue": {
+        "value": {
+         "text": "Berlin",
+         "language": "de"
+        },
+        "type": "monolingualtext"
+       },
+       "datatype": "monolingualtext"
+      },
+      "type": "statement",
+      "id": "Q64$8840c7e9-44a5-565b-0894-a011ea6cefe9",
+      "rank": "normal",
+      "references": []
+     }
+    ],
+    "P1449": [
+     {
+      "mainsnak": {
+       "snaktype": "value",
+       "property": "P1449",
+       "hash": "f19ed93f00fdf046b0d4e61f802e112bf1a87b9f",
+       "datavalue": {
+        "value": {
+         "text": "Spree-Athen",
+         "language": "de"
+        },
+        "type": "monolingualtext"
+       },
+       "datatype": "monolingualtext"
+      },
+      "type": "statement",
+      "id": "Q64$af1c9fd4-4a84-d92e-c64d-1a6cbdc91e4a",
+      "rank": "normal",
+      "references": []
+     }
+    ],
+    "P610": [
+     {
+      "mainsnak": {
+       "snaktype": "value",
+       "property": "P610",
+       "hash": "7adb829d94a1d6eb328dcce068f647f17a57c1c9",
+       "datavalue": {
+        "value": {
+         "entity-type": "item",
+         "numeric-id": 19259618,
+         "id": "Q19259618"
+        },
+        "type": "wikibase-entityid"
+       },
+       "datatype": "wikibase-item"
+      },
+      "type": "statement",
+      "qualifiers": {
+       "P2044": [
+        {
+         "snaktype": "value",
+         "property": "P2044",
+         "hash": "b2800b9b9a84a8e4d44e4b6e29697cdc361e0cca",
+         "datavalue": {
+          "value": {
+           "amount": "+121.9",
+           "unit": "http://www.wikidata.org/entity/Q11573"
+          },
+          "type": "quantity"
+         },
+         "datatype": "quantity"
+        }
+       ]
+      },
+      "qualifiers-order": [
+       "P2044"
+      ],
+      "id": "Q64$fe5767c9-4d4b-2d3a-2a13-9a3072793753",
+      "rank": "normal",
+      "references": [
+       {
+        "hash": "e43b1cc9b71d1713d4d6cb76e2abd0b5c36c2a27",
+        "snaks": {
+         "P854": [
+          {
+           "snaktype": "value",
+           "property": "P854",
+           "hash": "bb30eb0e758df953227f0e265ba511384900693f",
+           "datavalue": {
+            "value": "http://www.tagesspiegel.de/berlin/teufelsberg-oder-arkenberge-zum-wettstreit-um-den-hoechsten-gipfel-berlins/11413932.html",
+            "type": "string"
+           },
+           "datatype": "url"
+          }
+         ]
+        },
+        "snaks-order": [
+         "P854"
+        ]
+       }
+      ]
+     }
+    ],
+    "P2044": [
+     {
+      "mainsnak": {
+       "snaktype": "value",
+       "property": "P2044",
+       "hash": "d10306e62633ec24c8a16ffa72c0aec87ffe6900",
+       "datavalue": {
+        "value": {
+         "amount": "+34",
+         "unit": "http://www.wikidata.org/entity/Q11573",
+         "upperBound": "+35",
+         "lowerBound": "+33"
+        },
+        "type": "quantity"
+       },
+       "datatype": "quantity"
+      },
+      "type": "statement",
+      "id": "Q64$34951eca-4223-38c0-dc7b-5215fcb8dc3c",
+      "rank": "normal",
+      "references": []
+     }
+    ],
+    "P2046": [
+     {
+      "mainsnak": {
+       "snaktype": "value",
+       "property": "P2046",
+       "hash": "63887eea414f79a05255aaa203e96755911f071c",
+       "datavalue": {
+        "value": {
+         "amount": "+891.69",
+         "unit": "http://www.wikidata.org/entity/Q712226"
+        },
+        "type": "quantity"
+       },
+       "datatype": "quantity"
+      },
+      "type": "statement",
+      "id": "Q64$e8fc75c3-4a04-53f9-31e1-4ccb4061f679",
+      "rank": "normal",
+      "references": [
+       {
+        "hash": "c04a9a2ae832aafeff63cd55bc083ec4514adf17",
+        "snaks": {
+         "P813": [
+          {
+           "snaktype": "value",
+           "property": "P813",
+           "hash": "21a72ba0a6d16dc7b17c31141cf2758c030e8b2e",
+           "datavalue": {
+            "value": {
+             "time": "+2020-05-30T00:00:00Z",
+             "timezone": 0,
+             "before": 0,
+             "after": 0,
+             "precision": 11,
+             "calendarmodel": "http://www.wikidata.org/entity/Q1985727"
+            },
+            "type": "time"
+           },
+           "datatype": "time"
+          }
+         ]
+        },
+        "snaks-order": [
+         "P813"
+        ]
+       }
+      ]
+     },
+     {
+      "mainsnak": {
+       "snaktype": "value",
+       "property": "P2046",
+       "hash": "412e4e4cc43a16356cde9e48bce9d74d94e026c5",
+       "datavalue": {
+        "value": {
+         "amount": "+891.12",
+         "unit": "http://www.wikidata.org/entity/Q712226"
+        },
+        "type": "quantity"
+       },
+       "datatype": "quantity"
+      },
+      "type": "statement",
+      "qualifiers": {
+       "P585": [
+        {
+         "snaktype": "value",
+         "property": "P585",
+         "hash": "f4e1bbc6e9b3a72c2e1fd3e6061f4c7e7f5acad9",
+         "datavalue": {
+          "value": {
+           "time": "+2016-00-00T00:00:00Z",
+           "timezone": 0,
+           "before": 0,
+           "after": 0,
+           "precision": 9,
+           "calendarmodel": "http://www.wikidata.org/entity/Q1985727"
+          },
+          "type": "time"
+         },
+         "datatype": "time"
+        },
+        {
+         "snaktype": "value",
+         "property": "P585",
+         "hash": "745b29605c9c7cf8a1060810e30146ddb0260f3e",
+         "datavalue": {
+          "value": {
+           "time": "+2017-12-31T00:00:00Z",
+           "timezone": 0,
+           "before": 0,
+           "after": 0,
+           "precision": 11,
+           "calendarmodel": "http://www.wikidata.org/entity/Q1985727"
+          },
+          "type": "time"
+         },
+         "datatype": "time"
+        }
+       ]
+      },
+      "qualifiers-order": [
+       "P585"
+      ],
+      "id": "Q64$6e0fbae9-4145-8b40-645c-613b3dbe14bc",
+      "rank": "preferred",
+      "references": [
+       {
+        "hash": "6a9584393b4f3bd86e108c46356afc26d8d0fba7",
+        "snaks": {
+         "P854": [
+          {
+           "snaktype": "value",
+           "property": "P854",
+           "hash": "6e85cfb0fd4b45ee5ead4091a64e7f934af3f8d4",
+           "datavalue": {
+            "value": "https://www.destatis.de/DE/ZahlenFakten/LaenderRegionen/Regionales/Gemeindeverzeichnis/Administrativ/Aktuell/05Staedte.html",
+            "type": "string"
+           },
+           "datatype": "url"
+          }
+         ]
+        },
+        "snaks-order": [
+         "P854"
+        ]
+       }
+      ]
+     }
+    ],
+    "P1082": [
+     {
+      "mainsnak": {
+       "snaktype": "value",
+       "property": "P1082",
+       "hash": "abf809ec385db2e154ac8881064fde358cbdb18d",
+       "datavalue": {
+        "value": {
+         "amount": "+3700577",
+         "unit": "1"
+        },
+        "type": "quantity"
+       },
+       "datatype": "quantity"
+      },
+      "type": "statement",
+      "qualifiers": {
+       "P1540": [
+        {
+         "snaktype": "value",
+         "property": "P1540",
+         "hash": "372f0c105e401d601d8474fb510bacecdb6b1a8b",
+         "datavalue": {
+          "value": {
+           "amount": "+1819065",
+           "unit": "1"
+          },
+          "type": "quantity"
+         },
+         "datatype": "quantity"
+        }
+       ],
+       "P1539": [
+        {
+         "snaktype": "value",
+         "property": "P1539",
+         "hash": "62a692c6e9ac7fea28c38bf776d756bd31f3ef5e",
+         "datavalue": {
+          "value": {
+           "amount": "+1881512",
+           "unit": "1"
+          },
+          "type": "quantity"
+         },
+         "datatype": "quantity"
+        }
+       ],
+       "P585": [
+        {
+         "snaktype": "value",
+         "property": "P585",
+         "hash": "fc5ada4b23e19520b8f3231e33810b41d216d4ec",
+         "datavalue": {
+          "value": {
+           "time": "+2025-12-31T00:00:00Z",
+           "timezone": 0,
+           "before": 0,
+           "after": 0,
+           "precision": 11,
+           "calendarmodel": "http://www.wikidata.org/entity/Q1985727"
+          },
+          "type": "time"
+         },
+         "datatype": "time"
+        }
+       ],
+       "P459": [
+        {
+         "snaktype": "value",
+         "property": "P459",
+         "hash": "9a17db6b8b930e6ccfe5013df9d6840428dc679d",
+         "datavalue": {
+          "value": {
+           "entity-type": "item",
+           "numeric-id": 52679562,
+           "id": "Q52679562"
+          },
+          "type": "wikibase-entityid"
+         },
+         "datatype": "wikibase-item"
+        }
+       ]
+      },
+      "qualifiers-order": [
+       "P1540",
+       "P1539",
+       "P585",
+       "P459"
+      ],
+      "id": "Q64$C5506726-07D8-4E52-8AB4-BB5FB9317501",
+      "rank": "preferred",
+      "references": [
+       {
+        "hash": "3384faddfcb22f1d6f76da385283f5e62ee583e1",
+        "snaks": {
+         "P248": [
+          {
+           "snaktype": "value",
+           "property": "P248",
+           "hash": "1b7daad3a5a7de1f68fb43b6aad6d5a9f7e401f3",
+           "datavalue": {
+            "value": {
+             "entity-type": "item",
+             "numeric-id": 141265959,
+             "id": "Q141265959"
+            },
+            "type": "wikibase-entityid"
+           },
+           "datatype": "wikibase-item"
+          }
+         ]
+        },
+        "snaks-order": [
+         "P248"
+        ]
+       }
+      ]
+     },
+     {
+      "mainsnak": {
+       "snaktype": "value",
+       "property": "P1082",
+       "hash": "f03ea5a8d22059f3a41c3fdc514ffab3e9cee2bf",
+       "datavalue": {
+        "value": {
+         "amount": "+3913644",
+         "unit": "1"
+        },
+        "type": "quantity"
+       },
+       "datatype": "quantity"
+      },
+      "type": "statement",
+      "qualifiers": {
+       "P585": [
+        {
+         "snaktype": "value",
+         "property": "P585",
+         "hash": "fc5ada4b23e19520b8f3231e33810b41d216d4ec",
+         "datavalue": {
+          "value": {
+           "time": "+2025-12-31T00:00:00Z",
+           "timezone": 0,
+           "before": 0,
+           "after": 0,
+           "precision": 11,
+           "calendarmodel": "http://www.wikidata.org/entity/Q1985727"
+          },
+          "type": "time"
+         },
+         "datatype": "time"
+        }
+       ],
+       "P1540": [
+        {
+         "snaktype": "value",
+         "property": "P1540",
+         "hash": "0da391d3139e07dcd0260e62d4a195922e967770",
+         "datavalue": {
+          "value": {
+           "amount": "+1940675",
+           "unit": "1"
+          },
+          "type": "quantity"
+         },
+         "datatype": "quantity"
+        }
+       ],
+       "P1539": [
+        {
+         "snaktype": "value",
+         "property": "P1539",
+         "hash": "f726b6f2afb091dffcf612d6e00b847e034b1ef0",
+         "datavalue": {
+          "value": {
+           "amount": "+1972969",
+           "unit": "1"
+          },
+          "type": "quantity"
+         },
+         "datatype": "quantity"
+        }
+       ],
+       "P459": [
+        {
+         "snaktype": "value",
+         "property": "P459",
+         "hash": "9b22a39bca7a17b18161e91334db65c7d1dac742",
+         "datavalue": {
+          "value": {
+           "entity-type": "item",
+           "numeric-id": 15194024,
+           "id": "Q15194024"
+          },
+          "type": "wikibase-entityid"
+         },
+         "datatype": "wikibase-item"
+        }
+       ]
+      },
+      "qualifiers-order": [
+       "P585",
+       "P1540",
+       "P1539",
+       "P459"
+      ],
+      "id": "Q64$d789393f-445d-f810-b5ce-84543997a922",
+      "rank": "normal",
+      "references": [
+       {
+        "hash": "cb411f78717444f163ddbe38f390ff5960933c96",
+        "snaks": {
+         "P854": [
+          {
+           "snaktype": "value",
+           "property": "P854",
+           "hash": "edee7bcfea0f8e162de79db56931c23bc87486bf",
+           "datavalue": {
+            "value": "https://download.statistik-berlin-brandenburg.de/b50a3a074782ec0e/e0095590e436/SB_A01-05-00_2025h02_BE.pdf",
+            "type": "string"
+           },
+           "datatype": "url"
+          }
+         ]
+        },
+        "snaks-order": [
+         "P854"
+        ]
+       }
+      ]
+     },
+     {
+      "mainsnak": {
+       "snaktype": "value",
+       "property": "P1082",
+       "hash": "a233eb405c16ebc8f24a7d4264559efa5100a28f",
+       "datavalue": {
+        "value": {
+         "amount": "+3685265",
+         "unit": "1"
+        },
+        "type": "quantity"
+       },
+       "datatype": "quantity"
+      },
+      "type": "statement",
+      "qualifiers": {
+       "P1540": [
+        {
+         "snaktype": "value",
+         "property": "P1540",
+         "hash": "380ba4d1cb7282f02a1cf4f463f27c2e88378963",
+         "datavalue": {
+          "value": {
+           "amount": "+1810259",
+           "unit": "1"
+          },
+          "type": "quantity"
+         },
+         "datatype": "quantity"
+        }
+       ],
+       "P1539": [
+        {
+         "snaktype": "value",
+         "property": "P1539",
+         "hash": "3b3ac9d939b3d1ab38763ecf7e401073684498b4",
+         "datavalue": {
+          "value": {
+           "amount": "+1875006",
+           "unit": "1"
+          },
+          "type": "quantity"
+         },
+         "datatype": "quantity"
+        }
+       ],
+       "P585": [
+        {
+         "snaktype": "value",
+         "property": "P585",
+         "hash": "db7b80a0cf1703f7e9bbfe5c0919469fe27db170",
+         "datavalue": {
+          "value": {
+           "time": "+2024-12-31T00:00:00Z",
+           "timezone": 0,
+           "before": 0,
+           "after": 0,
+           "precision": 11,
+           "calendarmodel": "http://www.wikidata.org/entity/Q1985727"
+          },
+          "type": "time"
+         },
+         "datatype": "time"
+        }
+       ],
+       "P459": [
+        {
+         "snaktype": "value",
+         "property": "P459",
+         "hash": "9a17db6b8b930e6ccfe5013df9d6840428dc679d",
+         "datavalue": {
+          "value": {
+           "entity-type": "item",
+           "numeric-id": 52679562,
+           "id": "Q52679562"
+          },
+          "type": "wikibase-entityid"
+         },
+         "datatype": "wikibase-item"
+        }
+       ]
+      },
+      "qualifiers-order": [
+       "P1540",
+       "P1539",
+       "P585",
+       "P459"
+      ],
+      "id": "Q64$0BB4ABC1-4A10-4DCF-A090-326FF9EB77FB",
+      "rank": "normal",
+      "references": [
+       {
+        "hash": "b7204c41da15f2852f9188e65787d1f985a21348",
+        "snaks": {
+         "P248": [
+          {
+           "snaktype": "value",
+           "property": "P248",
+           "hash": "9e82734f98f333ed80124aeacc1a460b8a277594",
+           "datavalue": {
+            "value": {
+             "entity-type": "item",
+             "numeric-id": 137944348,
+             "id": "Q137944348"
+            },
+            "type": "wikibase-entityid"
+           },
+           "datatype": "wikibase-item"
+          }
+         ]
+        },
+        "snaks-order": [
+         "P248"
+        ]
+       }
+      ]
+     }
+    ],
+    "P190": [
+     {
+      "mainsnak": {
+       "snaktype": "value",
+       "property": "P190",
+       "hash": "984c63f3c38c924056f8d92b8fa56960d8fe14fe",
+       "datavalue": {
+        "value": {
+         "entity-type": "item",
+         "numeric-id": 65,
+         "id": "Q65"
+        },
+        "type": "wikibase-entityid"
+       },
+       "datatype": "wikibase-item"
+      },
+      "type": "statement",
+      "qualifiers": {
+       "P580": [
+        {
+         "snaktype": "value",
+         "property": "P580",
+         "hash": "be75a3059a3570d96ec943fe87f9d77714cede1e",
+         "datavalue": {
+          "value": {
+           "time": "+1967-06-27T00:00:00Z",
+           "timezone": 0,
+           "before": 0,
+           "after": 0,
+           "precision": 11,
+           "calendarmodel": "http://www.wikidata.org/entity/Q1985727"
+          },
+          "type": "time"
+         },
+         "datatype": "time"
+        }
+       ]
+      },
+      "qualifiers-order": [
+       "P580"
+      ],
+      "id": "q64$9A084383-320F-4DB8-B26E-A1EBAB7A82B1",
+      "rank": "normal",
+      "references": [
+       {
+        "hash": "386708caed31aea596216a3f19f89551f55ac31e",
+        "snaks": {
+         "P854": [
+          {
+           "snaktype": "value",
+           "property": "P854",
+           "hash": "0076cd402cb387db3f4a65c406632797159c01a1",
+           "datavalue": {
+            "value": "https://www.berlin.de/rbmskzl/politik/senatskanzlei/internationales/staedtepartnerschaften/#headline_1_9",
+            "type": "string"
+           },
+           "datatype": "url"
+          }
+         ]
+        },
+        "snaks-order": [
+         "P854"
+        ]
+       }
+      ]
+     },
+     {
+      "mainsnak": {
+       "snaktype": "value",
+       "property": "P190",
+       "hash": "7d7252993555dff2df797e3e381c345314d9cab9",
+       "datavalue": {
+        "value": {
+         "entity-type": "item",
+         "numeric-id": 90,
+         "id": "Q90"
+        },
+        "type": "wikibase-entityid"
+       },
+       "datatype": "wikibase-item"
+      },
+      "type": "statement",
+      "qualifiers": {
+       "P580": [
+        {
+         "snaktype": "value",
+         "property": "P580",
+         "hash": "2fd349672885c7bc73a478bf899f17f1472b9fcd",
+         "datavalue": {
+          "value": {
+           "time": "+1987-07-02T00:00:00Z",
+           "timezone": 0,
+           "before": 0,
+           "after": 0,
+           "precision": 11,
+           "calendarmodel": "http://www.wikidata.org/entity/Q1985727"
+          },
+          "type": "time"
+         },
+         "datatype": "time"
+        }
+       ]
+      },
+      "qualifiers-order": [
+       "P580"
+      ],
+      "id": "Q64$63E1BCAF-14E3-445A-84E4-94F9BA3DC563",
+      "rank": "normal",
+      "references": [
+       {
+        "hash": "386708caed31aea596216a3f19f89551f55ac31e",
+        "snaks": {
+         "P854": [
+          {
+           "snaktype": "value",
+           "property": "P854",
+           "hash": "0076cd402cb387db3f4a65c406632797159c01a1",
+           "datavalue": {
+            "value": "https://www.berlin.de/rbmskzl/politik/senatskanzlei/internationales/staedtepartnerschaften/#headline_1_9",
+            "type": "string"
+           },
+           "datatype": "url"
+          }
+         ]
+        },
+        "snaks-order": [
+         "P854"
+        ]
+       }
+      ]
+     }
+    ],
+    "P47": [
+     {
+      "mainsnak": {
+       "snaktype": "value",
+       "property": "P47",
+       "hash": "5fbe46f1b499270879225493add94ee4bac678b1",
+       "datavalue": {
+        "value": {
+         "entity-type": "item",
+         "numeric-id": 1208,
+         "id": "Q1208"
+        },
+        "type": "wikibase-entityid"
+       },
+       "datatype": "wikibase-item"
+      },
+      "type": "statement",
+      "id": "q64$0E8C2E73-BA65-418A-852D-D13FF8E6C5D6",
+      "rank": "preferred",
+      "references": []
+     },
+     {
+      "mainsnak": {
+       "snaktype": "value",
+       "property": "P47",
+       "hash": "b1089e702297474e33f47864b7c6d143955e8e2f",
+       "datavalue": {
+        "value": {
+         "entity-type": "item",
+         "numeric-id": 6115,
+         "id": "Q6115"
+        },
+        "type": "wikibase-entityid"
+       },
+       "datatype": "wikibase-item"
+      },
+      "type": "statement",
+      "id": "q64$1A853EAF-775B-4005-80D3-65F21DD6E61C",
+      "rank": "normal",
+      "references": []
+     }
+    ],
+    "P17": [
+     {
+      "mainsnak": {
+       "snaktype": "value",
+       "property": "P17",
+       "hash": "cbecd66e53ccbfe51c6b0bc8cbb5bfd32edfff7b",
+       "datavalue": {
+        "value": {
+         "entity-type": "item",
+         "numeric-id": 148499,
+         "id": "Q148499"
+        },
+        "type": "wikibase-entityid"
+       },
+       "datatype": "wikibase-item"
+      },
+      "type": "statement",
+      "qualifiers": {
+       "P582": [
+        {
+         "snaktype": "value",
+         "property": "P582",
+         "hash": "df1d515c2cb1834d59f6b026cc03daa9c138c865",
+         "datavalue": {
+          "value": {
+           "time": "+1618-08-26T00:00:00Z",
+           "timezone": 0,
+           "before": 0,
+           "after": 0,
+           "precision": 11,
+           "calendarmodel": "http://www.wikidata.org/entity/Q1985727"
+          },
+          "type": "time"
+         },
+         "datatype": "time"
+        }
+       ]
+      },
+      "qualifiers-order": [
+       "P582"
+      ],
+      "id": "Q64$45E45F62-E186-4EC8-B0BC-85D6AE8F12F9",
+      "rank": "normal",
+      "references": []
+     },
+     {
+      "mainsnak": {
+       "snaktype": "value",
+       "property": "P17",
+       "hash": "ef7247b704f4ec0a7df39e83306bb388fea17d5f",
+       "datavalue": {
+        "value": {
+         "entity-type": "item",
+         "numeric-id": 183,
+         "id": "Q183"
+        },
+        "type": "wikibase-entityid"
+       },
+       "datatype": "wikibase-item"
+      },
+      "type": "statement",
+      "qualifiers": {
+       "P580": [
+        {
+         "snaktype": "value",
+         "property": "P580",
+         "hash": "13eff71ba054ad192e12acddfd4ee6725bc28ba9",
+         "datavalue": {
+          "value": {
+           "time": "+1990-10-03T00:00:00Z",
+           "timezone": 0,
+           "before": 0,
+           "after": 0,
+           "precision": 11,
+           "calendarmodel": "http://www.wikidata.org/entity/Q1985727"
+          },
+          "type": "time"
+         },
+         "datatype": "time"
+        }
+       ]
+      },
+      "qualifiers-order": [
+       "P580"
+      ],
+      "id": "Q64$6E01F607-ACD6-4041-B2B8-358087E52A93",
+      "rank": "preferred",
+      "references": [
+       {
+        "hash": "459ad2ed51fd4d48caeb85ee76c6f9b5d92fa800",
+        "snaks": {
+         "P248": [
+          {
+           "snaktype": "value",
+           "property": "P248",
+           "hash": "c619cc6e0e5fe3733a8c4a47939343e5970e0e9d",
+           "datavalue": {
+            "value": {
+             "entity-type": "item",
+             "numeric-id": 265049,
+             "id": "Q265049"
+            },
+            "type": "wikibase-entityid"
+           },
+           "datatype": "wikibase-item"
+          }
+         ]
+        },
+        "snaks-order": [
+         "P248"
+        ]
+       }
+      ]
+     }
+    ],
+    "P300": [
+     {
+      "mainsnak": {
+       "snaktype": "value",
+       "property": "P300",
+       "hash": "26d8c4a130cee7e07695860e4917b3a0a1c63f09",
+       "datavalue": {
+        "value": "DE-BE",
+        "type": "string"
+       },
+       "datatype": "external-id"
+      },
+      "type": "statement",
+      "id": "q64$8C88F067-C67D-4C90-9BAA-A5824D80D75F",
+      "rank": "normal",
+      "references": []
+     }
+    ],
+    "P31": [
+     {
+      "mainsnak": {
+       "snaktype": "value",
+       "property": "P31",
+       "hash": "e2b39b87985fb12185b5ba22939d8f365fd8333d",
+       "datavalue": {
+        "value": {
+         "entity-type": "item",
+         "numeric-id": 1901835,
+         "id": "Q1901835"
+        },
+        "type": "wikibase-entityid"
+       },
+       "datatype": "wikibase-item"
+      },
+      "type": "statement",
+      "qualifiers": {
+       "P580": [
+        {
+         "snaktype": "value",
+         "property": "P580",
+         "hash": "1ad6a2e53783f18115d7c4804fcb7a638f669f49",
+         "datavalue": {
+          "value": {
+           "time": "+1999-00-00T00:00:00Z",
+           "timezone": 0,
+           "before": 0,
+           "after": 0,
+           "precision": 9,
+           "calendarmodel": "http://www.wikidata.org/entity/Q1985727"
+          },
+          "type": "time"
+         },
+         "datatype": "time"
+        }
+       ]
+      },
+      "qualifiers-order": [
+       "P580"
+      ],
+      "id": "q64$6E79C141-9FE6-4996-A895-582DB477D62C",
+      "rank": "normal",
+      "references": [
+       {
+        "hash": "8737a50669efe8e3fa72c0b65f0d3687dc5f36b3",
+        "snaks": {
+         "P854": [
+          {
+           "snaktype": "value",
+           "property": "P854",
+           "hash": "a54e52b8f9e7bf50cb4be2bc799c0727a3221638",
+           "datavalue": {
+            "value": "http://webarchiv.bundestag.de/archive/2008/0912/htdocs_e/history/index.html",
+            "type": "string"
+           },
+           "datatype": "url"
+          }
+         ]
+        },
+        "snaks-order": [
+         "P854"
+        ]
+       }
+      ]
+     }
+    ]
+   },
+   "sitelinks": {
+    "dewiki": {
+     "site": "dewiki",
+     "title": "Berlin",
+     "badges": [
+      "Q17437798"
+     ],
+     "url": "https://de.wikipedia.org/wiki/Berlin"
+    },
+    "enwiki": {
+     "site": "enwiki",
+     "title": "Berlin",
+     "badges": [],
+     "url": "https://en.wikipedia.org/wiki/Berlin"
+    },
+    "frwiki": {
+     "site": "frwiki",
+     "title": "Berlin",
+     "badges": [],
+     "url": "https://fr.wikipedia.org/wiki/Berlin"
+    }
+   }
+  }
+ }
+}

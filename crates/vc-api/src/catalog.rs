@@ -1,5 +1,6 @@
 //! Sources, statistics and readiness (`/v1/sources`, `/v1/stats`, `/readyz`), and the carbon
-//! reads (`/v1/carbon/factors`, `/v1/carbon/grid`, `/v1/carbon/occupancy`).
+//! reads (`/v1/carbon/factors`, `/v1/carbon/grid`, `/v1/carbon/occupancy`) and the place
+//! facts (`/v1/facts`).
 
 use async_trait::async_trait;
 use chrono::{DateTime, Utc};
@@ -110,6 +111,103 @@ impl OccupancyQuery {
     }
 }
 
+/// Filters of `/v1/facts` (current `place_fact` records). The place filters match the
+/// **resolved** place ([`resolve_place`]): a hook is found under the Wikidata place it was
+/// resolved to. `None` = any.
+#[derive(Debug, Clone, Default, PartialEq)]
+pub struct FactQuery {
+    /// GeoNames id of the place.
+    pub geonames_id: Option<i64>,
+    /// Wikidata QID of the place.
+    pub wikidata_qid: Option<String>,
+    /// ISO 3166-1 alpha-2 country of the place.
+    pub country: Option<String>,
+    /// `fact_type`.
+    pub fact_type: Option<String>,
+    /// Licence classes the client may receive (empty = none).
+    pub licence_classes: Vec<LicenceClass>,
+    /// Page size.
+    pub limit: u32,
+    /// Rows to skip.
+    pub offset: u32,
+}
+
+/// One `/v1/facts` row: the record, its resolved place and its source's registry entry.
+#[derive(Debug, Clone, PartialEq)]
+pub struct FactRow {
+    /// The `place_fact` record.
+    pub item: Item,
+    /// The place it is about: its own `place`, or for a hook the `place` of the Wikidata
+    /// place fact one of its `link_candidates` is a sitelink of.
+    pub place: serde_json::Value,
+    /// The source's name (`sources.name`).
+    pub source_name: Option<String>,
+    /// The source's class (`sources.source_class`).
+    pub source_class: Option<String>,
+}
+
+/// Whether a record's own `place` needs resolving (a hook: link candidates, no QID).
+pub fn is_unresolved_hook(place: &serde_json::Value) -> bool {
+    place.get("wikidata_qid").is_none() && place.get("link_candidates").is_some()
+}
+
+/// The place a `place_fact` is about, resolved against `places` (the current place facts):
+/// its own `place` when it has a QID, GeoNames id or country; for a hook, the `place` of the
+/// first Wikidata place fact (lowest id) that lists its first matching link candidate among
+/// its `sitelinks`; `None` when nothing resolves it. The in-memory form of the SQL.
+pub fn resolve_place<'a>(it: &'a Item, places: &'a [Item]) -> Option<&'a serde_json::Value> {
+    let own = it.data.get("place")?;
+    if !is_unresolved_hook(own) {
+        return Some(own);
+    }
+    let cands = own.get("link_candidates")?.as_array()?;
+    for c in cands {
+        let hit = places
+            .iter()
+            .filter(|p| p.kind.0.as_ref() == "place_fact")
+            .filter_map(|p| p.data.get("place").map(|pl| (p, pl)))
+            .filter(|(_, pl)| pl.get("wikidata_qid").is_some())
+            .filter(|(_, pl)| {
+                pl.get("sitelinks")
+                    .and_then(|s| s.as_array())
+                    .is_some_and(|s| s.contains(c))
+            })
+            .min_by_key(|(p, _)| p.id.parse::<i64>().unwrap_or(i64::MAX));
+        if let Some((_, pl)) = hit {
+            return Some(pl);
+        }
+    }
+    None
+}
+
+impl FactQuery {
+    /// Whether an item with its resolved place passes the filters (the in-memory form of the
+    /// SQL `WHERE`).
+    pub fn accepts(&self, it: &Item, place: &serde_json::Value) -> bool {
+        let pf = |k: &str| place.get(k).and_then(|v| v.as_str());
+        it.kind.0.as_ref() == "place_fact"
+            && self.licence_classes.contains(&it.licence.class)
+            && it.use_policy.index == IndexUse::Full
+            && it.use_policy.serve != ServeUse::LinkOnly
+            && self.geonames_id.is_none_or(|g| {
+                place.get("geonames_id").and_then(|v| v.as_i64()) == Some(g)
+                    || it.place_ids.contains(&g)
+            })
+            && self
+                .wikidata_qid
+                .as_deref()
+                .is_none_or(|q| pf("wikidata_qid") == Some(q))
+            && self
+                .country
+                .as_deref()
+                .is_none_or(|c| pf("country") == Some(c))
+            && self
+                .fact_type
+                .as_deref()
+                .is_none_or(|t| it.data.get("fact_type").and_then(|v| v.as_str()) == Some(t))
+    }
+}
+
 /// Filters of `/v1/carbon/grid` (`grid_carbon_intensity` points of one country, newest
 /// first).
 #[derive(Debug, Clone, PartialEq)]
@@ -182,6 +280,12 @@ pub trait Catalog: Send + Sync {
         let _ = q;
         Ok(Vec::new())
     }
+    /// Current, servable `place_fact` records matching `q` (hooks only once resolved), by
+    /// record id; at most `q.limit` rows after `q.offset`.
+    async fn facts(&self, q: &FactQuery) -> Result<Vec<FactRow>> {
+        let _ = q;
+        Ok(Vec::new())
+    }
 }
 
 /// An in-memory [`Catalog`].
@@ -195,6 +299,8 @@ pub struct MemCatalog {
     pub grid: Vec<ObservationView>,
     /// `occupancy` items served by [`Catalog::carbon_occupancy`].
     pub occupancy: Vec<Item>,
+    /// `place_fact` items served by [`Catalog::facts`].
+    pub facts: Vec<Item>,
 }
 
 fn year_of(it: &Item) -> i64 {
@@ -254,6 +360,31 @@ impl Catalog for MemCatalog {
             .cloned()
             .collect();
         v.sort_by(|a, b| year_of(b).cmp(&year_of(a)).then_with(|| a.id.cmp(&b.id)));
+        Ok(v.into_iter()
+            .skip(q.offset as usize)
+            .take(q.limit as usize)
+            .collect())
+    }
+    async fn facts(&self, q: &FactQuery) -> Result<Vec<FactRow>> {
+        let mut v: Vec<FactRow> =
+            self.facts
+                .iter()
+                .filter_map(|i| {
+                    let place = resolve_place(i, &self.facts)?;
+                    q.accepts(i, place).then(|| {
+                        let src = i.provenance.first().and_then(|p| {
+                            self.sources.iter().find(|s| s.source_id == p.source_id.0)
+                        });
+                        FactRow {
+                            item: i.clone(),
+                            place: place.clone(),
+                            source_name: src.map(|s| s.name.clone()),
+                            source_class: src.map(|s| s.source_class.clone()),
+                        }
+                    })
+                })
+                .collect();
+        v.sort_by_key(|r| r.item.id.parse::<i64>().unwrap_or(i64::MAX));
         Ok(v.into_iter()
             .skip(q.offset as usize)
             .take(q.limit as usize)

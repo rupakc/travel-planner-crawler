@@ -40,8 +40,9 @@ pub use schema_lint::DRAFT_2020_12;
 /// The entity kinds of v1 (spec §5.7: 19; plus `cheapest_fare` from 2026-11-17 and
 /// `price_level`, `public_holiday`, `transit_item`, `embassy`, `medical_facility`,
 /// `visa_reference`, `restaurant`, `amenity` from 2026-11-18; `emission_factor`,
-/// `grid_carbon_intensity` and `occupancy` from 2026-11-19), sorted.
-pub const V1_KINDS: [&str; 31] = [
+/// `grid_carbon_intensity` and `occupancy` from 2026-11-19; `place_fact` from 2026-11-20),
+/// sorted.
+pub const V1_KINDS: [&str; 32] = [
     "activity",
     "advisory",
     "airport",
@@ -60,6 +61,7 @@ pub const V1_KINDS: [&str; 31] = [
     "occupancy",
     "packing_hint",
     "place",
+    "place_fact",
     "price_level",
     "public_holiday",
     "qa_thread",
