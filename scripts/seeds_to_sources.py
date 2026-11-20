@@ -30105,6 +30105,2997 @@ _facts(
 )
 
 
+# Place facts corpus, North America, Latin America and the Caribbean (research vetted 2026-11-20).
+_facts(
+    'fx-slavery-remembrance',
+    ['facts', 'places'],
+    'Slavery and Remembrance (Colonial Williamsburg): guide to sites of memory incl. Gorée, Cape Coast, Ouidah, Zanzibar, for Place facts and Places to see.',
+    cls='reference',
+    depth=2,
+    seeds=['https://www.slaveryandremembrance.org/partners/'],
+    include=['^https?://www\\.slaveryandremembrance\\.org/partners/partner/'],
+)
+_facts(
+    'fx-aaregistry',
+    ['facts'],
+    'African American Registry: diaspora history tied to US and African places, for Place facts.',
+    cls='editorial',
+    sitemaps=['https://aaregistry.org/sitemap_index.xml'],
+    include=['^https?://aaregistry\\.org/story/'],
+)
+_facts(
+    'arch-mx-inafed-emm-clone',
+    ['facts'],
+    'git repo of HTML pages (`codigoFuente/<state>/…`, 156 MB); codeload zip → zip_stream plus…: history and curiosities of the places it covers, for Place facts.',
+    cls='reference',
+    off='adapter pending: git repo of HTML pages (`codigoFuente/<state>/…`, 156 MB)',
+    seeds=['https://github.com/'],
+)
+_facts(
+    'od-digital-giza',
+    ['facts', 'places'],
+    'Digital Giza (Harvard): tomb and site records of the Giza plateau, for Place facts and Places to see.',
+    cls='reference',
+    depth=2,
+    seeds=['https://giza.fas.harvard.edu/'],
+    include=['^https?://giza\\.fas\\.harvard\\.edu/(sites|ancientpeople|pubdocs)/'],
+)
+_facts(
+    'her-arce',
+    ['facts'],
+    'American Research Center in Egypt: conservation projects at Egyptian sites, for Place facts.',
+    cls='reference',
+    sitemaps=['https://arce.org/sitemap_index.xml'],
+    feeds=['https://arce.org/feed/'],
+    include=['^https?://arce\\.org/(project|resource)/'],
+)
+_facts(
+    'her-nysm',
+    ['facts', 'activities'],
+    'New York State Museum: NY state history and archaeology by place, for Place facts and Activities.',
+    cls='official',
+    llm=False,
+    depth=2,
+    seeds=['https://www.nysm.nysed.gov/'],
+    include=['^https?://www\\.nysm\\.nysed\\.gov/(research-collections|exhibitions|history)/'],
+)
+_facts(
+    'arch-nysl',
+    ['facts'],
+    'New York State Library: NY town and county history guides, for Place facts.',
+    cls='official',
+    depth=2,
+    seeds=['https://www.nysl.nysed.gov/'],
+    include=['^https?://www\\.nysl\\.nysed\\.gov/(msscfa|scandoclinks|reference)/'],
+)
+_facts(
+    'od-ny-shpo-nrhp',
+    ['facts', 'places'],
+    'NY National Register of Historic Places (NYS SHPO): every NRHP-listed property in NY with listing date, plus state historic sites, for Place facts and Places to see.',
+    cls='official',
+    off='adapter pending: a place_fact mapping for this dataset on the socrata reader',
+    depth=0,
+    delay=5,
+    seeds=['https://data.ny.gov/'],
+    include=['^https?://data\\.ny\\.gov/.*(?:n/a)'],
+)
+_facts(
+    'od-pa-historical-markers',
+    ['facts', 'places', 'walking_tours'],
+    'Pennsylvania Historical Markers (PHMC): about 2,500 official PA marker texts with coordinates. The brief\'s "right URL" for PHMC markers, for Place facts, Places to see and Free walking tours.',
+    cls='official',
+    off='adapter pending: a place_fact mapping for this dataset on the socrata reader',
+    depth=0,
+    delay=5,
+    seeds=['https://data.pa.gov/'],
+    include=['^https?://data\\.pa\\.gov/.*(?:n/a)'],
+)
+_facts(
+    'od-austin-landmarks',
+    ['facts', 'places'],
+    'City of Austin Historical Landmarks: designated city landmarks (Texas capital), for Place facts and Places to see.',
+    cls='official',
+    off='adapter pending: a place_fact mapping for this dataset on the socrata reader',
+    depth=0,
+    delay=5,
+    seeds=['https://datahub.austintexas.gov/'],
+    include=['^https?://datahub\\.austintexas\\.gov/.*(?:n/a)'],
+)
+_facts(
+    'od-baton-rouge-markers',
+    ['facts', 'places'],
+    "Baton Rouge Historic Markers: marker texts in Louisiana's capital, for Place facts and Places to see.",
+    cls='official',
+    off='adapter pending: a place_fact mapping for this dataset on the socrata reader',
+    depth=0,
+    delay=5,
+    seeds=['https://data.brla.gov/'],
+    include=['^https?://data\\.brla\\.gov/.*(?:n/a)'],
+)
+_facts(
+    'od-dallas-markers',
+    ['facts', 'places'],
+    'City of Dallas Historical Markers: history and curiosities of the places it covers, for Place facts and Places to see.',
+    cls='official',
+    off='adapter pending: a place_fact mapping for this dataset on the socrata reader',
+    depth=0,
+    delay=5,
+    seeds=['https://www.dallasopendata.com/'],
+    include=['^https?://www\\.dallasopendata\\.com/.*(?:n/a)'],
+)
+_facts(
+    'od-cincinnati-historic-districts',
+    ['facts', 'places'],
+    'Cincinnati Historic Districts: Ohio gap (Over-the-Rhine and other districts), for Place facts and Places to see.',
+    cls='official',
+    off='adapter pending: a place_fact mapping for this dataset on the socrata reader',
+    depth=0,
+    delay=5,
+    seeds=['https://data.cincinnati-oh.gov/'],
+    include=['^https?://data\\.cincinnati-oh\\.gov/.*(?:n/a)'],
+)
+_facts(
+    'her-hawaii-shpd',
+    ['facts', 'places'],
+    'Hawaii State Historic Preservation Division (DLNR): Hawaii and National Register listings, burial sites, heritage news. Fills the Hawaii gap left by the round-1 timeouts, for Place facts and Places to see.',
+    cls='official',
+    seeds=['https://dlnr.hawaii.gov/shpd/'],
+    sitemaps=['https://dlnr.hawaii.gov/sitemap.xml'],
+    include=['^https?://dlnr\\.hawaii\\.gov/shpd/'],
+)
+_facts(
+    'fx-historic-hawaii',
+    ['facts', 'walking_tours'],
+    "Historic Hawai'i Foundation: Hawaii historic places, plus preservation awards by island, for Place facts and Free walking tours.",
+    cls='editorial',
+    llm=False,
+    sitemaps=['https://historichawaii.org/sitemap.xml'],
+    exclude=['^https?://historichawaii\\.org/(?:wp-|donate|shop)'],
+)
+_facts(
+    'fx-onlineutah',
+    ['facts'],
+    'OnlineUtah (Utah history by city and county): Utah town and county histories. The replacement for Utah History to Go (403), for Place facts.',
+    cls='editorial',
+    depth=2,
+    seeds=['https://onlineutah.us/history.shtml', 'https://onlineutah.us/cities.shtml', 'https://onlineutah.us/counties.shtml'],
+    include=['^https?://onlineutah\\.us/[a-z0-9]+(history)?\\.shtml$'],
+)
+_facts(
+    'gov-nv-shpo-markers',
+    ['facts', 'places', 'walking_tours'],
+    'Nevada State Historic Preservation Office: historical markers: the official texts of about 270 Nevada markers, plus the registers, for Place facts, Places to see and Free walking tours.',
+    cls='official',
+    depth=2,
+    seeds=['https://shpo.nv.gov/nevadas-historical-markers/historical-markers/', 'https://shpo.nv.gov/state-and-national-registers/'],
+    include=['^https?://shpo\\.nv\\.gov/(nevadas-historical-markers|state-and-national-registers)/'],
+)
+_facts(
+    'gov-nvculture',
+    ['facts', 'activities'],
+    'Nevada Department of Tourism and Cultural Affairs: Nevada State Museums (Carson City Mint, Virginia City), for Place facts and Activities.',
+    cls='official',
+    delay=10,
+    sitemaps=['https://nvculture.org/sitemap_index.xml'],
+    include=['^https?://nvculture\\.org/(nevada-state-museums?|historic|museums?)'],
+)
+_facts(
+    'fx-nebraska-studies',
+    ['facts'],
+    'Nebraska Studies (NET / History Nebraska): Nebraska state and town history by era, for Place facts.',
+    cls='editorial',
+    depth=2,
+    delay=10,
+    seeds=['https://nebraskastudies.org/en/pre-1500/'],
+    include=['^https?://nebraskastudies\\.org/en/'],
+)
+_facts(
+    'arch-recollection-wisconsin',
+    ['facts'],
+    'Recollection Wisconsin: Wisconsin community history stories and topics. The replacement for the Wisconsin Historical Society (403), for Place facts.',
+    cls='reference',
+    sitemaps=['https://recollectionwisconsin.org/sitemap.xml'],
+    exclude=['^https?://recollectionwisconsin\\.org/(?:wp-|about/terms)'],
+)
+_facts(
+    'her-nm-hpd',
+    ['facts', 'places'],
+    'New Mexico Historic Preservation Division: State Register and NM historic sites. The replacement for the parked newmexicohistory.org, for Place facts and Places to see.',
+    cls='official',
+    depth=2,
+    seeds=['https://www.nmhistoricpreservation.dca.nm.gov/'],
+    include=['^https?://www\\.nmhistoricpreservation\\.dca\\.nm\\.gov/(registers?|historic-sites|programs?)/'],
+)
+_facts(
+    'her-nm-history-museum',
+    ['facts', 'activities'],
+    "New Mexico History Museum / Palace of the Governors: Santa Fe's Palace of the Governors (1610) and NM history, for Place facts and Activities.",
+    cls='official',
+    depth=2,
+    seeds=['https://www.nmhistorymuseum.dca.nm.gov/'],
+    include=['^https?://www\\.nmhistorymuseum\\.dca\\.nm\\.gov/(exhibitions|palace|about)/'],
+)
+_facts(
+    'od-ca-historical-landmarks',
+    ['facts'],
+    'California Historical Landmarks (data.ca.gov): history and curiosities of the places it covers, for Place facts.',
+    cls='reference',
+    off='adapter pending: CKAN behind a Next.js front end (results render client-side). Needs a CKAN `package_search` reader, or a direct CSV resource through csv_filter',
+    seeds=['https://data.ca.gov/'],
+)
+_facts(
+    'od-utah-gis',
+    ['facts'],
+    'Utah State Geographic Information (AGRC open data): history and curiosities of the places it covers, for Place facts.',
+    cls='reference',
+    off='adapter pending: ArcGIS Hub (JSON/GeoJSON API)',
+    seeds=['https://opendata.gis.utah.gov/'],
+)
+_facts(
+    'arch-ohio-memory',
+    ['facts'],
+    'Ohio Memory (Ohio History Connection and State Library): history and curiosities of the places it covers, for Place facts.',
+    cls='reference',
+    off='adapter pending: CONTENTdm (JS front end, 0 anchors',
+    seeds=['https://ohiomemory.org/'],
+)
+_facts(
+    'arch-kyhistory-digital',
+    ['facts'],
+    'Kentucky Historical Society digital collections: history and curiosities of the places it covers, for Place facts.',
+    cls='reference',
+    off='adapter pending: CONTENTdm (same API as above)',
+    seeds=['https://kyhistory.com/'],
+)
+_facts(
+    'her-us-oh-remarkable',
+    ['facts', 'places', 'walking_tours'],
+    'Remarkable Ohio (Ohio History Connection): about 1,800 Ohio marker texts, for Place facts, Places to see and Free walking tours.',
+    cls='official',
+    llm=False,
+    sitemaps=['https://remarkableohio.org/marker-sitemap.xml'],
+    include=['^https?://remarkableohio\\.org/marker/'],
+)
+_facts(
+    'fx-encyclopedia-arkansas',
+    ['facts', 'places'],
+    'CALS Encyclopedia of Arkansas: an entry for almost every Arkansas town and county, for Place facts and Places to see.',
+    cls='reference',
+    depth=0,
+    sitemaps=['https://encyclopediaofarkansas.net/sitemap_index.xml'],
+    include=['^https?://encyclopediaofarkansas\\.net/entries/'],
+)
+_facts(
+    'fx-tsha-handbook',
+    ['facts', 'places'],
+    'Handbook of Texas (TSHA): every Texas town/county, for Place facts and Places to see.',
+    cls='editorial',
+    llm=False,
+    seeds=['https://www.tshaonline.org/handbook'],
+    sitemaps=['https://www.tshaonline.org/sitemap'],
+    include=['^https?://www\\.tshaonline\\.org/handbook/entries/'],
+)
+_facts(
+    'fx-texas-almanac',
+    ['facts', 'places'],
+    'Texas Almanac (TSHA): town and county profiles, records, "Texas facts", for Place facts and Places to see.',
+    cls='reference',
+    depth=2,
+    seeds=['https://www.texasalmanac.com/places'],
+    include=['^https?://www\\.texasalmanac\\.com/places/|^/articles/'],
+)
+_facts(
+    'fx-encyclopedia-alabama',
+    ['facts', 'places'],
+    'Encyclopedia of Alabama: city and county articles plus state quick facts, for Place facts and Places to see.',
+    cls='reference',
+    llm=False,
+    depth=2,
+    seeds=['https://encyclopediaofalabama.org/quick-facts/', 'https://encyclopediaofalabama.org/category/agriculture/'],
+    include=['^https?://encyclopediaofalabama\\.org/(article|quick-facts)/'],
+)
+_facts(
+    'fx-tennessee-encyclopedia',
+    ['facts', 'places'],
+    'Tennessee Encyclopedia: history and curiosities of the places it covers, for Place facts and Places to see.',
+    cls='editorial',
+    sitemaps=['https://tennesseeencyclopedia.net/sitemap_index.xml'],
+    feeds=['https://tennesseeencyclopedia.net/feed/'],
+    include=['^https?://tennesseeencyclopedia\\.net/entries/'],
+)
+_facts(
+    'fx-mississippi-encyclopedia',
+    ['facts', 'places'],
+    'Mississippi Encyclopedia: county and town entries, for Place facts and Places to see.',
+    cls='reference',
+    depth=0,
+    sitemaps=['http://mississippiencyclopedia.org/sitemap_index.xml'],
+    feeds=['https://mississippiencyclopedia.org/feed/'],
+    include=['^https?://mississippiencyclopedia\\.org/entries/'],
+)
+_facts(
+    'arch-wv-encyclopedia',
+    ['facts', 'places'],
+    'e-WV, the West Virginia Encyclopedia: WV towns and counties, for Place facts and Places to see.',
+    cls='reference',
+    depth=2,
+    seeds=['https://www.wvencyclopedia.org/'],
+    include=['^https?://www\\.wvencyclopedia\\.org/(entries|articles)/'],
+)
+_facts(
+    'gov-ks-kansapedia',
+    ['facts', 'places'],
+    'Kansapedia (Kansas Historical Society): towns, "cool things" curiosities, for Place facts and Places to see.',
+    cls='official',
+    llm=False,
+    depth=2,
+    delay=30,
+    seeds=['https://www.kansashistory.gov/kansapedia/kansapedia/19539', 'https://www.kansashistory.gov/kansapedia/topic/cool-things'],
+    include=['^https?://www\\.kansashistory\\.gov/kansapedia/'],
+)
+_facts(
+    'gov-ok-encyclopedia',
+    ['facts', 'places'],
+    'Encyclopedia of Oklahoma History and Culture (OHS, state agency): town/county histories, for Place facts and Places to see.',
+    cls='official',
+    seeds=['https://www.okhistory.org/publications/encyclopedia'],
+    sitemaps=['https://www.okhistory.org/sitemap.xml'],
+    include=['^https?://www\\.okhistory\\.org/publications/enc/entry'],
+)
+_facts(
+    'fx-online-nevada',
+    ['facts', 'places'],
+    'Online Nevada Encyclopedia: Nevada towns, ghost towns, Las Vegas history, for Place facts and Places to see.',
+    cls='reference',
+    depth=2,
+    delay=10,
+    seeds=['https://www.onlinenevada.org/articles'],
+    include=['^https?://www\\.onlinenevada\\.org/articles/'],
+)
+_facts(
+    'fx-wyohistory',
+    ['facts', 'places', 'itinerary'],
+    'WyoHistory.org (Wyoming State Historical Society): Wyoming places, trails, "Wyoming Places" travel pieces, for Place facts, Places to see and Itinerary.',
+    cls='reference',
+    sitemaps=['https://www.wyohistory.org/sitemap.xml'],
+    include=['^https?://www\\.wyohistory\\.org/encyclopedia/'],
+)
+_facts(
+    'fx-missouri-encyclopedia',
+    ['facts', 'places'],
+    'Missouri Encyclopedia (State Historical Society of Missouri): Missouri places and events, for Place facts and Places to see.',
+    cls='reference',
+    llm=False,
+    sitemaps=['https://missouriencyclopedia.org/sitemap.xml'],
+    include=['^https?://missouriencyclopedia\\.org/places/|^/events/|^/topics/'],
+)
+_facts(
+    'fx-philadelphia-encyclopedia',
+    ['facts', 'places', 'walking_tours'],
+    'Encyclopedia of Greater Philadelphia: neighbourhood and town essays (locations index), for Place facts, Places to see and Free walking tours.',
+    cls='reference',
+    off='enable after a check from the crawler VM: a robots.txt or page fetch failed or timed out from the research laptop (200 (robots NO RESPONSE on www., 200 on the apex host); allow all); read robots.txt, terms and content first',
+    depth=0,
+    sitemaps=['https://philadelphiaencyclopedia.org/sitemap_index.xml'],
+    feeds=['https://philadelphiaencyclopedia.org/feed/'],
+    include=['^https?://philadelphiaencyclopedia\\.org/essays/'],
+)
+_facts(
+    'arch-cleveland-history',
+    ['facts', 'places'],
+    'Encyclopedia of Cleveland History (Case Western): Cleveland neighbourhoods and landmarks, for Place facts and Places to see.',
+    cls='reference',
+    depth=2,
+    seeds=['https://case.edu/ech/'],
+    include=['^https?://case\\.edu/ech/articles/'],
+)
+_facts(
+    'arch-chicago-encyclopedia',
+    ['facts', 'places', 'walking_tours'],
+    'Encyclopedia of Chicago (Newberry Library): community areas, suburbs and landmarks, for Place facts, Places to see and Free walking tours.',
+    cls='reference',
+    off='enable after a check from the crawler VM: a robots.txt or page fetch failed or timed out from the research laptop (robots: no response (timeout) → allowed (owner rule)); read robots.txt, terms and content first',
+    depth=2,
+    seeds=['http://encyclopedia.chicagohistory.org/'],
+    include=['^https?://encyclopedia\\.chicagohistory\\.org/pages/'],
+)
+_facts(
+    'fx-enciclopedia-pr',
+    ['facts', 'places'],
+    'Enciclopedia de Puerto Rico (Fundación Puertorriqueña de las Humanidades): Puerto Rico municipalities and towns, history, bilingual, for Place facts and Places to see.',
+    cls='reference',
+    sitemaps=['https://enciclopediapr.org/wp-sitemap.xml'],
+)
+_facts(
+    'fx-new-england-hist-soc',
+    ['facts', 'places'],
+    'New England Historical Society: town curiosities, "fun facts", New England places, for Place facts and Places to see.',
+    cls='editorial',
+    delay=10,
+    sitemaps=['https://newenglandhistoricalsociety.com/sitemap_index.xml'],
+    feeds=['https://newenglandhistoricalsociety.com/feed/'],
+)
+_facts(
+    'fx-new-york-almanack',
+    ['facts', 'places'],
+    'New York Almanack: local history of NY towns and the Hudson Valley/Adirondacks, for Place facts and Places to see.',
+    cls='editorial',
+    delay=5,
+    feeds=['https://www.newyorkalmanack.com/feed/'],
+)
+_facts(
+    'fx-mnopedia',
+    ['facts', 'places'],
+    'MNopedia (Minnesota Historical Society): history and curiosities of the places it covers, for Place facts and Places to see.',
+    cls='editorial',
+    llm=False,
+    depth=2,
+    seeds=['https://www.mnhs.org/mnopedia'],
+    include=['^https?://www\\.mnhs\\.org/mnopedia/'],
+)
+_facts(
+    'fx-idaho-history',
+    ['facts', 'places'],
+    'Idaho State Historical Society: Reference Series, historic sites, markers, for Place facts and Places to see.',
+    cls='official',
+    sitemaps=['https://history.idaho.gov/sitemap_index.xml'],
+    include=['^https?://history\\.idaho\\.gov/(reference-series|historic-sites|location)/'],
+)
+_facts(
+    'gov-nd-history',
+    ['facts', 'places'],
+    'State Historical Society of North Dakota: ND history: history and curiosities of the places it covers, for Place facts and Places to see.',
+    cls='official',
+    depth=2,
+    seeds=['https://www.history.nd.gov/ndhistory/'],
+    include=['^https?://www\\.history\\.nd\\.gov/ndhistory/,^/historicsites/'],
+)
+_facts(
+    'fx-explore-ky-history',
+    ['facts', 'places', 'walking_tours'],
+    'ExploreKYHistory (Kentucky Historical Society): Kentucky historical markers and tours (Omeka), for Place facts, Places to see and Free walking tours.',
+    cls='official',
+    depth=2,
+    seeds=['https://explorekyhistory.ky.gov/items/browse'],
+    include=['^https?://explorekyhistory\\.ky\\.gov/items/show/'],
+)
+_facts(
+    'fx-indiana-history',
+    ['facts', 'places'],
+    'Indiana Historical Society: Indiana stories and places, for Place facts and Places to see.',
+    cls='reference',
+    sitemaps=['https://indianahistory.org/sitemap_index.xml'],
+    include=['^https?://indianahistory\\.org/stories/|^/places/'],
+)
+_facts(
+    'gov-indiana-markers',
+    ['facts', 'places'],
+    'Indiana Historical Bureau markers: Indiana state historical markers with researched texts, for Place facts and Places to see.',
+    cls='official',
+    sitemaps=['https://www.in.gov/api/vtl/sitemap'],
+    include=['^https?://www\\.in\\.gov/history/'],
+)
+_facts(
+    'her-us-in-markers',
+    ['facts', 'places', 'walking_tours'],
+    'Indiana Historical Bureau markers: marker texts with reviewed source notes, for Place facts, Places to see and Free walking tours.',
+    cls='official',
+    depth=2,
+    seeds=['https://www.in.gov/history/state-historical-markers/'],
+    sitemaps=['https://www.in.gov/api/vtl/sitemap'],
+    include=['^https?://www\\.in\\.gov/history/state-historical-markers/'],
+)
+_facts(
+    'fx-vermont-hs',
+    ['facts'],
+    'Vermont Historical Society: Vermont history (low volume), for Place facts.',
+    cls='editorial',
+    depth=0,
+    sitemaps=['https://vermonthistory.org/sitemap.xml'],
+    include=['^https?://vermonthistory\\.org/(blog|journal)/'],
+)
+_facts(
+    'fx-nh-history',
+    ['facts', 'places'],
+    'New Hampshire Historical Society: NH timeline, objects, for Place facts and Places to see.',
+    cls='reference',
+    sitemaps=['https://www.nhhistory.org/googlesitemap.xml'],
+    include=['^https?://www\\.nhhistory\\.org/(object|timeline|nh-history)/'],
+)
+_facts(
+    'fx-rihs',
+    ['facts', 'places'],
+    'Rhode Island Historical Society: RI history, Providence, for Place facts and Places to see.',
+    cls='reference',
+    llm=False,
+    delay=10,
+    seeds=['https://www.rihs.org/'],
+)
+_facts(
+    'fx-dc-history',
+    ['facts', 'places'],
+    'DC History Center: Washington DC neighbourhood history, for Place facts and Places to see.',
+    cls='reference',
+    feeds=['https://dchistory.org/feed/'],
+)
+_facts(
+    'fx-masshist',
+    ['facts', 'places'],
+    'Massachusetts Historical Society: Boston and Massachusetts history, for Place facts and Places to see.',
+    cls='reference',
+    depth=2,
+    seeds=['https://www.masshist.org/'],
+    include=['^https?://www\\.masshist\\.org/(object-of-the-month|features|online)/'],
+)
+_facts(
+    'fx-alaska-hs',
+    ['facts', 'places'],
+    'Alaska Historical Society: Discover Alaska: Alaska community and site histories, for Place facts and Places to see.',
+    cls='editorial',
+    seeds=['https://alaskahistoricalsociety.org/discover-alaska/'],
+    sitemaps=['https://alaskahistoricalsociety.org/sitemap.xml'],
+    feeds=['https://alaskahistoricalsociety.org/feed/'],
+    include=['^https?://alaskahistoricalsociety\\.org/discover-alaska/'],
+)
+_facts(
+    'fx-historic-detroit',
+    ['facts', 'places', 'walking_tours'],
+    'Historic Detroit: Detroit buildings and their histories, for Place facts, Places to see and Free walking tours.',
+    cls='editorial',
+    depth=2,
+    seeds=['https://historicdetroit.org/'],
+    include=['^https?://historicdetroit\\.org/buildings/|^/architects/'],
+)
+_facts(
+    'fx-foundsf',
+    ['facts', 'places', 'walking_tours'],
+    'FoundSF: San Francisco neighbourhood history, for Place facts, Places to see and Free walking tours.',
+    cls='community',
+    llm=False,
+    off='owner decision: community-written site; the place_fact kind takes official, reference and editorial sources only (kinds.toml). Allow community sources behind corroboration, or keep off?',
+    seeds=['https://www.foundsf.org/api.php'],
+    include=['^https?://www\\.foundsf\\.org/index.php\\?title='],
+)
+_facts(
+    'fx-la-almanac',
+    ['facts', 'places'],
+    'Los Angeles Almanac: LA County cities, records, firsts, trivia, for Place facts and Places to see.',
+    cls='reference',
+    delay=30,
+    seeds=['http://www.laalmanac.com/index.php'],
+)
+_facts(
+    'fx-texasescapes',
+    ['facts', 'places'],
+    'TexasEscapes: Texas small-town and ghost-town histories, for Place facts and Places to see.',
+    cls='editorial',
+    depth=2,
+    seeds=['https://www.texasescapes.com/TOWNS/Texas_ghost_towns.htm'],
+    include=['^https?://www\\.texasescapes\\.com/(TOWNS|TexasHillCountryTowns|.*Towns)/'],
+)
+_facts(
+    'fx-legends-of-america',
+    ['facts', 'places'],
+    'Legends of America: ghost towns, Route 66, Old West places (flag legends as legends), for Place facts and Places to see.',
+    cls='editorial',
+    llm=False,
+    sitemaps=['https://www.legendsofamerica.com/wp-sitemap.xml'],
+)
+_facts(
+    'fx-our-state',
+    ['facts', 'places', 'activities'],
+    'Our State magazine (North Carolina): NC towns, curiosities, for Place facts, Places to see and Activities.',
+    cls='editorial',
+    llm=False,
+    sitemaps=['https://www.ourstate.com/sitemap_index.xml'],
+)
+_facts(
+    'fx-american-heritage',
+    ['facts', 'places'],
+    'American Heritage magazine: historic-sites guide plus essays, for Place facts and Places to see.',
+    cls='editorial',
+    sitemaps=['https://www.americanheritage.com/sitemap.xml'],
+    include=['^https?://www\\.americanheritage\\.com/historic-sites|^/content/'],
+)
+_facts(
+    'gov-census-facts-features',
+    ['facts'],
+    'US Census Bureau Facts for Features / Stats for Stories: counts of places named X, fastest-growing and largest places, holiday-named towns, for Place facts.',
+    cls='official',
+    seeds=['https://www.census.gov/newsroom/facts-for-features.html', 'https://www.census.gov/newsroom/stories.html'],
+    include=['^https?://www\\.census\\.gov/newsroom/(facts-for-features|stories)'],
+)
+_facts(
+    'fx-whitehousehistory',
+    ['facts', 'places'],
+    'White House Historical Association: White House and Lafayette Square facts, for Place facts and Places to see.',
+    cls='reference',
+    llm=False,
+    sitemaps=['https://www.whitehousehistory.org/sitemap.xml'],
+    include=['^https?://www\\.whitehousehistory\\.org/(white-house-facts|bios|history)/'],
+)
+_facts(
+    'fx-explorepahistory',
+    ['facts', 'places'],
+    'ExplorePAhistory (WITF): Pennsylvania historical markers with stories, for Place facts and Places to see.',
+    cls='editorial',
+    llm=False,
+    depth=2,
+    seeds=['https://explorepahistory.com/'],
+    include=['^https?://explorepahistory\\.com/hmarker\\.php|^/kora/'],
+)
+_facts(
+    'fx-dcb',
+    ['facts'],
+    'Dictionary of Canadian Biography: founders and figures of Canadian towns (people-centred; use only for place-linked facts), for Place facts.',
+    cls='reference',
+    depth=2,
+    seeds=['https://www.biographi.ca/en/'],
+    include=['^https?://www\\.biographi\\.ca/en/bio/'],
+)
+_facts(
+    'fx-canadas-history',
+    ['facts', 'places'],
+    "Canada's History: Canadian place history, for Place facts and Places to see.",
+    cls='editorial',
+    depth=2,
+    seeds=['https://www.canadashistory.ca/explore'],
+    include=['^https?://www\\.canadashistory\\.ca/explore/'],
+)
+_facts(
+    'arch-esask',
+    ['facts', 'places'],
+    'Encyclopedia of Saskatchewan (U Regina): Saskatchewan towns and history, for Place facts and Places to see.',
+    cls='reference',
+    depth=2,
+    seeds=['https://esask.uregina.ca/'],
+    include=['^https?://esask\\.uregina\\.ca/entry/'],
+)
+_facts(
+    'fx-mhs-manitoba',
+    ['facts', 'places'],
+    'Manitoba Historical Society: Historic Sites of Manitoba: thousands of Manitoba historic sites with dates, for Place facts and Places to see.',
+    cls='reference',
+    depth=2,
+    seeds=['http://www.mhs.mb.ca/docs/sites/index.shtml'],
+    include=['^https?://www\\.mhs\\.mb\\.ca/docs/sites/|^/docs/mb_history/'],
+)
+_facts(
+    'arch-nova-scotia',
+    ['facts', 'places'],
+    'Nova Scotia Archives (place names, virtual exhibits): NS place-name origins and local history, for Place facts and Places to see.',
+    cls='official',
+    depth=2,
+    seeds=['https://archives.novascotia.ca/'],
+    include=['^https?://archives\\.novascotia\\.ca/(places|virtual|mikmaq)/'],
+)
+_facts(
+    'fx-ameriquefrancaise',
+    ['facts', 'places'],
+    "Encyclopédie du patrimoine culturel de l'Amérique française (U Laval): French heritage sites across North America, for Place facts and Places to see.",
+    cls='reference',
+    depth=2,
+    seeds=['https://www.ameriquefrancaise.org/fr/'],
+    include=['^https?://www\\.ameriquefrancaise\\.org/(fr|en)/article-'],
+)
+_facts(
+    'her-ca-qc-rpcq',
+    ['facts', 'places', 'walking_tours'],
+    'Répertoire du patrimoine culturel du Québec: historical notes on Québec heritage sites, for Place facts, Places to see and Free walking tours.',
+    cls='official',
+    depth=2,
+    seeds=['https://www.patrimoine-culturel.gouv.qc.ca/rpcq/accueil.do?methode=afficher'],
+    include=['^https?://www\\.patrimoine-culturel\\.gouv\\.qc\\.ca/rpcq/detail.do;'],
+)
+_facts(
+    'od-quebec-toponymie',
+    ['facts', 'places'],
+    'Commission de toponymie du Québec, Banque de noms de lieux (records with "Origine et sign…: origin, meaning and history for about 64k Quebec names, for Place facts and Places to see.',
+    cls='official',
+    seeds=['https://toponymie.gouv.qc.ca/plandusite/topos.xml', 'https://toponymie.gouv.qc.ca/ct/accueil.aspx'],
+    include=['^https?://toponymie\\.gouv\\.qc\\.ca/ct/ToposWeb/Fiche\\.aspx'],
+)
+_facts(
+    'fx-heritage-toronto',
+    ['facts', 'places', 'walking_tours'],
+    'Heritage Toronto (plaques, stories): plaque texts, neighbourhood stories, tours, for Place facts, Places to see and Free walking tours.',
+    cls='reference',
+    sitemaps=['https://www.heritagetoronto.org/sitemaps.xml'],
+    include=['^https?://www\\.heritagetoronto\\.org/explore/'],
+)
+_facts(
+    'fx-vancouver-heritage',
+    ['facts', 'places', 'walking_tours'],
+    'Vancouver Heritage Foundation (Places That Matter): plaques and site histories, for Place facts, Places to see and Free walking tours.',
+    cls='reference',
+    depth=2,
+    seeds=['https://www.vancouverheritagefoundation.org/places-that-matter/'],
+    include=['^https?://www\\.vancouverheritagefoundation\\.org/place-that-matters/|^/places-that-matter/'],
+)
+_facts(
+    'arch-heritage-nl',
+    ['facts', 'places'],
+    'Heritage Newfoundland & Labrador (Memorial U): outport and community histories, for Place facts and Places to see.',
+    cls='reference',
+    off='enable after a check from the crawler VM: a robots.txt or page fetch failed or timed out from the research laptop (robots: no response (timeout) → allowed); read robots.txt, terms and content first',
+    depth=2,
+    seeds=['https://www.heritage.nf.ca/'],
+    include=['^https?://www\\.heritage\\.nf\\.ca/articles/'],
+)
+_facts(
+    'arch-memoria-chilena',
+    ['facts', 'places'],
+    'Memoria Chilena (Biblioteca Nacional de Chile): themed mini-sites on Chilean towns, regions and history, for Place facts and Places to see.',
+    cls='official',
+    depth=2,
+    delay=5,
+    seeds=['https://www.memoriachilena.gob.cl/'],
+    include=['^https?://www\\.memoriachilena\\.gob\\.cl/602/w3-(article|propertyvalue)-'],
+)
+_facts(
+    'her-cl-monumentos',
+    ['facts', 'places'],
+    'Consejo de Monumentos Nacionales (Chile): Chilean national monuments with history, for Place facts and Places to see.',
+    cls='official',
+    depth=2,
+    seeds=['https://www.monumentos.gob.cl/'],
+    include=['^https?://www\\.monumentos\\.gob\\.cl/monumentos/'],
+)
+_facts(
+    'fx-chile-precolombino',
+    ['facts', 'places'],
+    'Museo Chileno de Arte Precolombino: Chile antes de Chile: Indigenous peoples and sites of Chile by region, for Place facts and Places to see.',
+    cls='reference',
+    depth=2,
+    seeds=['https://chileprecolombino.cl/'],
+    include=['^https?://chileprecolombino\\.cl/pueblos-originarios/|^/arte-precolombino/'],
+)
+_facts(
+    'gov-cl-bcn-siit',
+    ['facts', 'places'],
+    'BCN Chile SIIT reportes comunales: history and geography of all 346 comunas, for Place facts and Places to see.',
+    cls='official',
+    depth=2,
+    seeds=['https://www.bcn.cl/siit/reportescomunales', 'https://www.bcn.cl/siit', 'https://www.bcn.cl/siit/nuestropais/'],
+    include=['^https?://www\\.bcn\\.cl/siit/(reportescomunales|nuestropais)/'],
+)
+_facts(
+    'fx-colombia-co',
+    ['facts', 'places', 'tips'],
+    'Marca País Colombia: official "datos curiosos", regions, culture, for Place facts, Places to see and Travel tips.',
+    cls='official',
+    sitemaps=['https://colombia.co/sitemap.xml'],
+    include=['^https?://colombia\\.co/(en/)?(pais-colombia|colombia-country|cultura|turismo)/'],
+)
+_facts(
+    'fx-el-historiador',
+    ['facts', 'places'],
+    'El Historiador (Felipe Pigna, Argentina): Argentine history, provinces and cities, for Place facts and Places to see.',
+    cls='editorial',
+    sitemaps=['https://elhistoriador.com.ar/wp-sitemap.xml'],
+)
+_facts(
+    'fx-arqueologia-mexicana',
+    ['facts', 'places'],
+    'Arqueología Mexicana (Editorial Raíces / INAH): archaeological sites and history by Mexican region, for Place facts and Places to see.',
+    cls='editorial',
+    depth=2,
+    seeds=['https://arqueologiamexicana.mx/'],
+    include=['^https?://arqueologiamexicana\\.mx/mexico-antiguo/'],
+)
+_facts(
+    'fx-memoria-politica-mexico',
+    ['facts'],
+    'Memoria Política de México: daily historical events (efemérides) tied to Mexican places, for Place facts.',
+    cls='editorial',
+    depth=2,
+    seeds=['https://www.memoriapoliticademexico.org/'],
+    include=['^https?://www\\.memoriapoliticademexico\\.org/(Efemerides|Textos)/'],
+)
+_facts(
+    'fx-dic-historia-venezuela',
+    ['facts', 'places'],
+    'Diccionario de Historia de Venezuela (Fundación Empresas Polar): entries for Venezuelan towns, states, events, for Place facts and Places to see.',
+    cls='reference',
+    depth=2,
+    seeds=['https://bibliofep.fundacionempresaspolar.org/dhv/'],
+    include=['^https?://bibliofep\\.fundacionempresaspolar\\.org/dhv/entradas/'],
+)
+_facts(
+    'fx-enciclopedia-ecuador',
+    ['facts', 'places'],
+    'Enciclopedia del Ecuador: cantons, parishes, provinces of Ecuador, for Place facts and Places to see.',
+    cls='reference',
+    llm=False,
+    depth=2,
+    seeds=['https://www.enciclopediadelecuador.com/'],
+    include=['^https?://www\\.enciclopediadelecuador\\.com/(geografia|historia)-del-ecuador/'],
+)
+_facts(
+    'fx-portal-guarani',
+    ['facts', 'places'],
+    'Portal Guaraní (Paraguay): Paraguayan towns, history, culture, for Place facts and Places to see.',
+    cls='reference',
+    llm=False,
+    seeds=['https://www.portalguarani.com/siteportgr_index.xml'],
+)
+_facts(
+    'fx-aprende-guatemala',
+    ['facts', 'places'],
+    'Aprende Guatemala (Guatemala.com): municipality and department histories, legends by department, gentilicios, heritage buildings, for Place facts and Places to see.',
+    cls='editorial',
+    llm=False,
+    sitemaps=['https://www.guatemala.com/aprende/sitemaps/sitemap.xml'],
+    include=['^https?://www\\.guatemala\\.com/aprende/'],
+)
+_facts(
+    'gov-mcd-guatemala',
+    ['facts', 'places', 'events'],
+    'Ministerio de Cultura y Deportes de Guatemala: official heritage, archaeological parks, Guatemalan traditions, for Place facts, Places to see and Events.',
+    cls='official',
+    sitemaps=['https://mcd.gob.gt/wp-sitemap.xml'],
+)
+_facts(
+    'her-jnht',
+    ['facts', 'places'],
+    'Jamaica National Heritage Trust: declared national heritage sites by parish, for Place facts and Places to see.',
+    cls='official',
+    off='enable after a check from the crawler VM: robots.txt gave no response from the research laptop (robots allow (Disallow only /_mm/, /_notes/, /_baks/, /MMWIP/)); terms and content not yet seen',
+    depth=2,
+    seeds=['https://www.jnht.com/', 'https://www.jnht.com/trelawny.php'],
+    include=['^https?://www\\.jnht\\.com/[a-z_]+\\.php$'],
+)
+_facts(
+    'her-barbados-national-trust',
+    ['facts', 'places', 'activities'],
+    'Barbados National Trust: trust properties and their history, for Place facts, Places to see and Activities.',
+    cls='official',
+    sitemaps=['https://barbadosnationaltrust.com/sitemap_index.xml'],
+    include=['^https?://barbadosnationaltrust\\.com/(properties|sites)/'],
+)
+_facts(
+    'her-bahamas-national-trust',
+    ['facts', 'places', 'activities'],
+    'Bahamas National Trust: national parks facts (Inagua flamingos and others), for Place facts, Places to see and Activities.',
+    cls='official',
+    sitemaps=['https://bnt.bs/sitemap_index.xml'],
+    include=['^https?://bnt\\.bs/(parks|explore)/'],
+)
+_facts(
+    'arch-digital-commonwealth',
+    ['facts'],
+    'Digital Commonwealth (Massachusetts): history and curiosities of the places it covers, for Place facts.',
+    cls='reference',
+    off='adapter pending: details: Blacklight JSON (`/search.json?q=`); local-history items by town',
+    delay=5,
+    seeds=['https://www.digitalcommonwealth.org/'],
+)
+_facts(
+    'od-native-land',
+    ['facts'],
+    'Native Land Digital: history and curiosities of the places it covers, for Place facts.',
+    cls='reference',
+    off='needs owner key: Native Land Digital API (https://native-land.ca/resources/api-docs; free)',
+    seeds=['https://native-land.ca/'],
+)
+_facts(
+    'arch-dpla-api',
+    ['facts', 'places'],
+    'Digital Public Library of America API: around 50M US items with a `sourceResource.spatial` place field; local-history lookup per town, for Place facts and Places to see.',
+    cls='reference',
+    off='needs owner key: DPLA API (https://api.dp.la/v2/api_key/{email}; free)',
+    seeds=['https://api.dp.la/'],
+)
+_facts(
+    'od-rpcq-donnees-quebec',
+    ['facts', 'places'],
+    'RPCQ open dataset (Données Québec): history and curiosities of the places it covers, for Place facts and Places to see.',
+    cls='reference',
+    off='adapter pending: details: CSV/JSON dump of the Québec heritage register, found through the RPCQ "Données ouvertes" note; host not yet ve…',
+    seeds=['https://www.donneesquebec.ca/'],
+)
+_facts(
+    'od-quebec-toponymes-csv',
+    ['facts'],
+    'Données Québec: Toponymes officiels, Noms traditionnels autochtones, Gentilés: Indigenous traditional names and demonyms; check which columns hold origin text, for Place facts.',
+    cls='official',
+    off='adapter pending: a place_fact mapping for this dataset on the csv_filter reader',
+    depth=0,
+    seeds=['https://www.donneesquebec.ca/recherche/dataset/0d7c1c75-4a46-4a65-bf60-5f7847121055/resource/50ed47a8-51dd-4756-81b6-c8b67a0420f1/'],
+)
+_facts(
+    'gov-mx-inegi-cuentame',
+    ['facts'],
+    'INEGI Cuentame de Mexico: per-state monographs (history, symbols, records), for Place facts.',
+    cls='official',
+    depth=2,
+    seeds=['https://cuentame.inegi.org.mx/'],
+    include=['^https?://cuentame\\.inegi\\.org\\.mx/(monografias|territorio)/'],
+)
+_facts(
+    'arch-nara-archives-gov',
+    ['facts'],
+    'US National Archives (news, Today\'s Document, exhibits): documents tied to places and dates ("Today\'s Document"), for Place facts.',
+    cls='official',
+    depth=2,
+    delay=10,
+    seeds=['https://www.archives.gov/news/topics', 'https://www.archives.gov/historical-docs'],
+    include=['^https?://www\\.archives\\.gov/(news|historical-docs|exhibits|publications/prologue)/'],
+)
+_facts(
+    'fx-saskgenweb-placenames',
+    ['facts', 'places'],
+    'Saskatchewan Place Names (SaskGenWeb): A–Z origins of SK places (post-1905) and NWT (1882–1905), with post-office dates, for Place facts and Places to see.',
+    cls='community',
+    llm=False,
+    off='owner decision: community-written site; the place_fact kind takes official, reference and editorial sources only (kinds.toml). Allow community sources behind corroboration, or keep off?',
+    seeds=['https://saskgenweb.ca/cansk/Saskatchewan/Saskatchewan.html', 'https://saskgenweb.ca/cansk/Saskatchewan/b.html'],
+    include=['^https?://saskgenweb\\.ca/cansk/Saskatchewan/'],
+)
+_facts(
+    'gov-yukon-placenames',
+    ['facts'],
+    'Yukon Geographical Place Names Board: name origins and meanings (Tlingit, Tutchone, Hän) for approved Yukon names, for Place facts.',
+    cls='official',
+    llm=False,
+    seeds=['https://yukonplacenames.ca/', 'https://yukonplacenames.ca/wp-content/uploads/'],
+    feeds=['https://yukonplacenames.ca/feed/'],
+    include=['^https?://yukonplacenames\\.ca/portfolio/'],
+)
+_facts(
+    'od-nwt-placenames',
+    ['facts', 'places'],
+    'NWT Place Names Database (GNWT open data): >4,000 official, traditional and rescinded names with translations, for Place facts and Places to see.',
+    cls='official',
+    off='adapter pending: a place_fact mapping for this dataset on the csv_filter reader',
+    depth=0,
+    delay=10,
+    seeds=['https://opendata.gov.nt.ca/dataset/nwt-place-names-database', 'https://opendata.gov.nt.ca/dataset/nwt-place-names-database/resource/257b5371-2eab-497c-8d2a-baf89c45fcbd'],
+)
+_facts(
+    'arch-dmc-community-stories',
+    ['facts', 'places'],
+    'Community Stories (Digital Museums Canada): hundreds of town and village history exhibits by local museums across Canada, for Place facts and Places to see.',
+    cls='official',
+    depth=2,
+    delay=10,
+    seeds=['https://www.communitystories.ca/'],
+    feeds=['https://www.communitystories.ca/feed/'],
+    include=['^https?://www\\.communitystories\\.ca/(v2|v3|projects)/'],
+)
+_facts(
+    'fx-bchf',
+    ['facts'],
+    'British Columbia Historical Federation: BC "dates of note" and local-history articles, for Place facts.',
+    cls='editorial',
+    sitemaps=['https://bchistory.ca/sitemap_index.xml'],
+    feeds=['https://bchistory.ca/feed/'],
+    exclude=['^https?://bchistory\\.ca/(?:wp-|author/)'],
+)
+_facts(
+    'fx-hsa-alberta',
+    ['facts'],
+    'Historical Society of Alberta: chapter pages with regional history (low volume), for Place facts.',
+    cls='editorial',
+    delay=15,
+    seeds=['https://albertahistory.org/peace-country/'],
+    feeds=['https://albertahistory.org/feed/'],
+    include=['^https?://albertahistory\\.org/(peace-country|central-alberta|edmonton-chapter|chinook-chapter|lethbridge-chapter)/'],
+)
+_facts(
+    'her-heritagenl',
+    ['facts', 'places', 'walking_tours'],
+    'Heritage NL (registered heritage structures): provincial registered heritage structures in NL towns, for Place facts, Places to see and Free walking tours.',
+    cls='official',
+    sitemaps=['https://heritagenl.ca/wp-sitemap.xml'],
+    include=['^https?://heritagenl\\.ca/(discover|heritage-property|programs)/'],
+)
+_facts(
+    'her-calgary-inventory',
+    ['facts', 'walking_tours'],
+    'Heritage Calgary: Inventory of Historic Resources: statements of significance for Calgary buildings and districts, for Place facts and Free walking tours.',
+    cls='official',
+    llm=False,
+    seeds=['https://www.heritagecalgary.ca/explore-inventory'],
+    sitemaps=['https://www.heritagecalgary.ca/sitemap.xml'],
+    include=['^https?://www\\.heritagecalgary\\.ca/(inventory|explore-inventory)/?'],
+)
+_facts(
+    'her-heritagebc',
+    ['facts', 'places'],
+    'Heritage BC (cultural maps, Stop of Interest signs): BC Stop of Interest roadside markers and heritage maps, for Place facts and Places to see.',
+    cls='editorial',
+    depth=2,
+    seeds=['https://heritagebc.ca/learning-centre/', 'https://heritagebc.ca/cultural-maps/'],
+    include=['^https?://heritagebc\\.ca/(cultural-maps|learning-centre)/'],
+)
+_facts(
+    'her-victoria-heritage-houses',
+    ['facts', 'walking_tours'],
+    'Victoria Heritage Foundation house histories: histories of designated houses in Victoria BC, for Place facts and Free walking tours.',
+    cls='official',
+    depth=2,
+    seeds=['https://victoriaheritagefoundation.ca/heritage-houses/'],
+    feeds=['https://victoriaheritagefoundation.ca/feed/'],
+    include=['^https?://victoriaheritagefoundation\\.ca/heritage-houses/'],
+)
+_facts(
+    'arch-vilda',
+    ['facts'],
+    "Alaska's Digital Archives (VILDA): item descriptions of Alaska towns and places, for Place facts.",
+    cls='official',
+    depth=0,
+    delay=5,
+    sitemaps=['http://vilda.alaska.edu/sitemap.xml'],
+    include=['^https?://vilda\\.alaska\\.edu/digital/collection/[^/]+/id/'],
+)
+_facts(
+    'arch-montana-history-portal',
+    ['facts'],
+    'Montana History Portal: Montana town and county history items (covers the Montana Historical Society gap), for Place facts.',
+    cls='official',
+    seeds=['https://www.mtmemory.org/nodes/browse'],
+    sitemaps=['https://www.mtmemory.org/sitemap.xml'],
+    include=['^https?://www\\.mtmemory\\.org/nodes/'],
+)
+_facts(
+    'arch-kansas-memory',
+    ['facts'],
+    'Kansas Memory (Kansas Historical Society): item records and descriptions for Kansas towns, for Place facts.',
+    cls='official',
+    llm=False,
+    depth=2,
+    seeds=['https://www.kansasmemory.gov/category/1', 'https://www.kansasmemory.gov/blog/feed.xml'],
+    include=['^https?://www\\.kansasmemory\\.gov/item/'],
+)
+_facts(
+    'fx-iagenweb',
+    ['facts'],
+    'IAGenWeb county pages: Iowa county and town histories transcribed from county histories, for Place facts.',
+    cls='community',
+    llm=False,
+    off='owner decision: community-written site; the place_fact kind takes official, reference and editorial sources only (kinds.toml). Allow community sources behind corroboration, or keep off?',
+    depth=2,
+    seeds=['https://iagenweb.org/state/map.php', 'https://iagenweb.org/wright/'],
+    include=['^https?://iagenweb\\.org/[a-z]+/(history|towns?|place)[^/]*/?'],
+)
+_facts(
+    'fx-ksgenweb',
+    ['facts'],
+    'KSGenWeb: Kansas county and town histories, for Place facts.',
+    cls='community',
+    llm=False,
+    off='owner decision: community-written site; the place_fact kind takes official, reference and editorial sources only (kinds.toml). Allow community sources behind corroboration, or keep off?',
+    depth=2,
+    seeds=['https://www.ksgenweb.org/county.html'],
+    include=['^https?://www\\.ksgenweb\\.org/(archives|[a-z]+)/'],
+)
+_facts(
+    'fx-ohgenweb',
+    ['facts'],
+    'OHGenWeb townships: Ohio township and county formation facts, for Place facts.',
+    cls='community',
+    llm=False,
+    off='owner decision: community-written site; the place_fact kind takes official, reference and editorial sources only (kinds.toml). Allow community sources behind corroboration, or keep off?',
+    delay=20,
+    seeds=['https://www.ohgenweb.org/townships.php', 'https://www.ohgenweb.org/counties.php'],
+    include=['^https?://www\\.ohgenweb\\.org/(townships|counties)\\.php'],
+)
+_facts(
+    'fx-ncgenweb',
+    ['facts'],
+    'NCGenWeb: NC county formation and town notes, for Place facts.',
+    cls='community',
+    llm=False,
+    off='owner decision: community-written site; the place_fact kind takes official, reference and editorial sources only (kinds.toml). Allow community sources behind corroboration, or keep off?',
+    seeds=['https://www.ncgenweb.us/county-list/'],
+    sitemaps=['https://www.ncgenweb.us/wp-sitemap.xml'],
+    include=['^https?://www\\.ncgenweb\\.us/(county-list|[a-z]+)/'],
+)
+_facts(
+    'fx-mogenweb',
+    ['facts'],
+    'MOGenWeb histories: Missouri county histories index, for Place facts.',
+    cls='community',
+    llm=False,
+    off='owner decision: community-written site; the place_fact kind takes official, reference and editorial sources only (kinds.toml). Allow community sources behind corroboration, or keep off?',
+    seeds=['https://www.mogenweb.org/counties_list.html', 'https://www.mogenweb.org/mo'],
+    include=['^https?://www\\.mogenweb\\.org/(counties_list\\.html|mo,histories\\.htm)'],
+)
+_facts(
+    'fx-kygenweb',
+    ['facts'],
+    'KYGenWeb counties: Kentucky county histories (stands in for the Kentucky Encyclopedia, whose host could not be confirmed), for Place facts.',
+    cls='community',
+    llm=False,
+    off='owner decision: community-written site; the place_fact kind takes official, reference and editorial sources only (kinds.toml). Allow community sources behind corroboration, or keep off?',
+    depth=2,
+    seeds=['https://kygenweb.net/allky/counties/'],
+    include=['^https?://kygenweb\\.net/allky/'],
+)
+_facts(
+    'fx-cogenweb',
+    ['facts'],
+    'COGenWeb counties: Colorado county pages (a Colorado alternative to historycolorado.org), for Place facts.',
+    cls='community',
+    llm=False,
+    off='owner decision: community-written site; the place_fact kind takes official, reference and editorial sources only (kinds.toml). Allow community sources behind corroboration, or keep off?',
+    sitemaps=['https://cogenweb.com/sitemap.xml'],
+    include=['^https?://cogenweb\\.com/[a-z]+/'],
+)
+_facts(
+    'fx-ahgp-usgennet',
+    ['facts'],
+    'American History & Genealogy Project (USGenNet): non-profit hosted county and town histories, for Place facts.',
+    cls='community',
+    llm=False,
+    off='owner decision: community-written site; the place_fact kind takes official, reference and editorial sources only (kinds.toml). Allow community sources behind corroboration, or keep off?',
+    depth=2,
+    seeds=['https://www.usgennet.org/usgnhome/openbook.html'],
+    include=['^https?://www\\.usgennet\\.org/usa/'],
+)
+_facts(
+    'fx-ece-gov-nt-ca',
+    ['facts'],
+    'www.ece.gov.nt.ca: history and curiosities of the places it covers, for Place facts.',
+    cls='editorial',
+    off='adapter pending: format / why: the gazetteer page redirects to a 9 MB PDF table with an "Origins / Remarks" column, so it needs a PDF ta…',
+    seeds=['https://www.ece.gov.nt.ca/'],
+)
+_facts(
+    'fx-ihti-ca',
+    ['facts'],
+    'www.ihti.ca: history and curiosities of the places it covers, for Place facts.',
+    cls='editorial',
+    off='adapter pending: format / why: Wix single-page app: about 1.5 KB of text in the server HTML, so it needs rendering. Robots 200 with site…',
+    seeds=['https://www.ihti.ca/'],
+)
+_facts(
+    'fx-ky-atlas',
+    ['facts', 'places'],
+    'Kentucky Atlas & Gazetteer: a page for every Kentucky county, city and community, for Place facts and Places to see.',
+    cls='reference',
+    depth=2,
+    seeds=['https://kyatlas.com/kentucky-counties.html'],
+    include=['^https?://kyatlas\\.com/(ky-[a-z0-9-]+|\\d{5}|kentucky-[a-z-]+)\\.html'],
+)
+_facts(
+    'arch-illinois-digital-archives',
+    ['facts', 'places'],
+    'Illinois Digital Archives (IDA, State Library): local-history collections from Illinois libraries, for Place facts and Places to see.',
+    cls='official',
+    delay=5,
+    sitemaps=['http://www.idaillinois.org/sitemap.xml'],
+    include=['^https?://www\\.idaillinois\\.org/digital/collection/[^/]+/id/'],
+)
+_facts(
+    'fx-hawaii-alive',
+    ['facts', 'places'],
+    'Hawaiʻi Alive (Bishop Museum): ahupuaʻa, moku and place stories for Hawaiʻi, for Place facts and Places to see.',
+    cls='official',
+    depth=2,
+    seeds=['https://www.hawaiialive.org/explore?kind=resource'],
+    include=['^https?://www\\.hawaiialive\\.org/(resource|realm)/'],
+)
+_facts(
+    'gov-nd-studies',
+    ['facts', 'places'],
+    'North Dakota Studies (SHSND): ND history units with community and county content, for Place facts and Places to see.',
+    cls='official',
+    depth=2,
+    seeds=['https://www.ndstudies.gov/'],
+    include=['^https?://www\\.ndstudies\\.gov/(gr4|gr8|curriculum)/'],
+)
+_facts(
+    'fx-pa-heritage',
+    ['facts', 'places'],
+    'Pennsylvania Heritage Foundation (Trails of History): PA historic sites and towns, for Place facts and Places to see.',
+    cls='editorial',
+    delay=5,
+    sitemaps=['https://www.paheritage.org/sitemap.xml'],
+    include=['^https?://www\\.paheritage\\.org/sites-on-the-pa-trails-of-history/'],
+)
+_facts(
+    'fx-western-mining-history',
+    ['facts', 'places', 'activities'],
+    'Western Mining History (ghost towns): mining camps and ghost towns with dates and photos, for Place facts, Places to see and Activities.',
+    cls='editorial',
+    depth=2,
+    seeds=['https://westernmininghistory.com/towns/'],
+    include=['^https?://westernmininghistory\\.com/towns/'],
+)
+_facts(
+    'fx-ghosttowns-com',
+    ['facts', 'places'],
+    'GhostTowns.com: ghost-town registry by state, for Place facts and Places to see.',
+    cls='community',
+    llm=False,
+    off='owner decision: community-written site; the place_fact kind takes official, reference and editorial sources only (kinds.toml). Allow community sources behind corroboration, or keep off?',
+    seeds=['https://ghosttowns.com/'],
+)
+_facts(
+    'fx-ghost-town-gallery',
+    ['facts', 'places'],
+    'GhostTownGallery: CA, AZ and NV ghost towns with short histories, for Place facts and Places to see.',
+    cls='editorial',
+    depth=2,
+    seeds=['https://www.ghosttowngallery.com/'],
+    include=['^https?://www\\.ghosttowngallery\\.com/htme/'],
+)
+_facts(
+    'fx-ingenweb',
+    ['facts', 'places'],
+    'INGenWeb: Indiana county histories, for Place facts and Places to see.',
+    cls='community',
+    llm=False,
+    off='owner decision: community-written site; the place_fact kind takes official, reference and editorial sources only (kinds.toml). Allow community sources behind corroboration, or keep off?',
+    depth=2,
+    seeds=['http://ingenweb.org/'],
+    include=['^https?://ingenweb\\.org/in[a-z]+/'],
+)
+_facts(
+    'fx-pagenweb',
+    ['facts', 'places'],
+    'PAGenWeb: PA county pages, for Place facts and Places to see.',
+    cls='community',
+    llm=False,
+    off='owner decision: community-written site; the place_fact kind takes official, reference and editorial sources only (kinds.toml). Allow community sources behind corroboration, or keep off?',
+    depth=2,
+    delay=10,
+    seeds=['https://pagenweb.org/counties.htm'],
+    include=['^https?://pagenweb\\.org/.*(?:(host-scoped))'],
+)
+_facts(
+    'fx-usgwarchives',
+    ['facts', 'places'],
+    'USGenWeb Archives: transcribed 19th-century county and town histories, for Place facts and Places to see.',
+    cls='community',
+    llm=False,
+    off='enable after a check from the crawler VM: a robots.txt or page fetch failed or timed out from the research laptop (NO RESPONSE (DNS ok), so allowed; check from the VM); read robots.txt, terms and content first',
+    depth=2,
+    seeds=['http://www.usgwarchives.net/'],
+    include=['^https?://www\\.usgwarchives\\.net/.*(?:(host-scoped))'],
+)
+_facts(
+    'fx-vagenweb',
+    ['facts', 'places'],
+    'VAGenWeb: Virginia county pages, for Place facts and Places to see.',
+    cls='community',
+    llm=False,
+    off='enable after a check from the crawler VM: a robots.txt or page fetch failed or timed out from the research laptop (NO RESPONSE (DNS ok), so allowed); read robots.txt, terms and content first',
+    depth=2,
+    seeds=['http://www.vagenweb.org/'],
+    include=['^https?://www\\.vagenweb\\.org/.*(?:(host-scoped))'],
+)
+_facts(
+    'fx-nl-genweb',
+    ['facts', 'places'],
+    "Newfoundland's Grand Banks (NL GenWeb): outport histories, place-name changes, district directories, for Place facts and Places to see.",
+    cls='community',
+    llm=False,
+    off='owner decision: community-written site; the place_fact kind takes official, reference and editorial sources only (kinds.toml). Allow community sources behind corroboration, or keep off?',
+    seeds=['http://ngb.chebucto.org/GoogleMap.xml', 'https://ngb.chebucto.org/Articles/'],
+    include=['^https?://ngb\\.chebucto\\.org/(Articles|Name-Changes|[A-Za-z_]+/)'],
+)
+_facts(
+    'arch-our-ontario',
+    ['facts', 'places'],
+    'OurOntario (Knowledge Ontario community collections): Ontario community digital collections, for Place facts and Places to see.',
+    cls='official',
+    depth=2,
+    seeds=['https://ourontario.ca/'],
+    include=['^https?://ourontario\\.ca/.*(?:(host-scoped))'],
+)
+_facts(
+    'fx-sa-history-hub',
+    ['facts', 'places'],
+    'SA History Hub (History Trust of SA; ex-Adelaidia): South Australian towns, places and events, for Place facts and Places to see.',
+    cls='official',
+    depth=2,
+    seeds=['https://sahistoryhub.history.sa.gov.au/places'],
+    include=['^https?://sahistoryhub\\.history\\.sa\\.gov\\.au/(places|events|things|people|organisations|subjects)/'],
+)
+_facts(
+    'arch-kete-horowhenua',
+    ['facts', 'places'],
+    'Kete Horowhenua: Horowhenua towns and district history, for Place facts and Places to see.',
+    cls='community',
+    llm=False,
+    off='owner decision: community-written site; the place_fact kind takes official, reference and editorial sources only (kinds.toml). Allow community sources behind corroboration, or keep off?',
+    depth=2,
+    seeds=['https://horowhenua.kete.net.nz/featured-collections'],
+    include=['^https?://horowhenua\\.kete\\.net\\.nz/item/'],
+)
+_facts(
+    'arch-kete-nz',
+    ['facts', 'places'],
+    'Kete (other community ketes): index of NZ district ketes, for Place facts and Places to see.',
+    cls='community',
+    llm=False,
+    off='enable after a check from the crawler VM: a robots.txt or page fetch failed or timed out from the research laptop (NO RESPONSE (DNS ok), so allowed); read robots.txt, terms and content first',
+    depth=2,
+    seeds=['https://kete.net.nz/'],
+    include=['^https?://kete\\.net\\.nz/.*(?:(host-scoped))'],
+)
+_facts(
+    'arch-dsal-imperial-gazetteer',
+    ['facts'],
+    'Imperial Gazetteer of India (DSAL, U. Chicago): 1909 historical facts about towns and districts (mark them as historical), for Place facts.',
+    cls='reference',
+    llm=False,
+    depth=2,
+    seeds=['https://dsal.uchicago.edu/reference/gazetteer/'],
+    include=['^https?://dsal\\.uchicago\\.edu/reference/gazetteer/'],
+)
+_facts(
+    'fx-places-that-matter',
+    ['facts', 'places', 'walking_tours'],
+    "Places That Matter (Vancouver Heritage Foundation): 150+ Vancouver plaque histories. VHF's page now links to this host, for Place facts, Places to see and Free walking tours.",
+    cls='editorial',
+    sitemaps=['https://placesthatmatter.ca/sitemap_index.xml', 'https://placesthatmatter.ca/ptm-sitemap.xml'],
+    include=['^https?://placesthatmatter\\.ca/places-that-matter/'],
+)
+_facts(
+    'fx-historica-canada',
+    ['facts', 'places'],
+    'Historica Canada (Heritage Minutes, guides): Canadian history episodes tied to places. This is the reachable sibling of The Canadian Encyclopedia, for Place facts and Places to see.',
+    cls='editorial',
+    seeds=['https://www.historicacanada.ca/productions/minutes', 'https://www.historicacanada.ca/productions/guides'],
+    sitemaps=['https://www.historicacanada.ca/sitemap.xml'],
+    include=['^https?://www\\.historicacanada\\.ca/(en|fr)/productions/(minutes|guides)/'],
+)
+_facts(
+    'od-us-mi-markers',
+    ['facts', 'places'],
+    'Michigan Historical Markers (MDNR): 1,800+ markers, for Place facts and Places to see.',
+    cls='official',
+    delay=60,
+    sitemaps=['https://gis-michigan.opendata.arcgis.com/sitemap.xml'],
+    include=['^https?://gis-michigan\\.opendata\\.arcgis\\.com/(datasets|content)/'],
+)
+_facts(
+    'od-br-ibge-localidades',
+    ['facts', 'places'],
+    'IBGE API (localidades; Cidades "Histórico"): 5,570 municipios. The "Histórico" text would be the top LatAm origin-of-name source, for Place facts and Places to see.',
+    cls='official',
+    off='adapter pending: api (REST JSON, no key)',
+    depth=0,
+    seeds=['https://servicodados.ibge.gov.br/api/docs/localidades', 'https://servicodados.ibge.gov.br/api/v1/localidades/municipios'],
+    include=['^https?://servicodados\\.ibge\\.gov\\.br/api/v1/'],
+)
+_facts(
+    'od-ibge-localidades',
+    ['facts'],
+    'REST JSON API, no key: history and curiosities of the places it covers, for Place facts.',
+    cls='reference',
+    off='adapter pending: REST JSON API, no key',
+    seeds=['https://servicodados.ibge.gov.br/'],
+)
+_facts(
+    'od-ibge-biblioteca-historico',
+    ['facts'],
+    'REST JSON API, no key: `GET /api/v1/biblioteca?aspas=3&codmun=<6-digit IBGE code>` return…: history and curiosities of the places it covers, for Place facts.',
+    cls='reference',
+    off='adapter pending: REST JSON API, no key: `GET /api/v1/biblioteca?aspas=3&codmun=<6-digit IBGE code>` returns `{code: {MUNICIPIO, ESTADO, HISTORICO, ...}}`',
+    seeds=['https://servicodados.ibge.gov.br/'],
+)
+_facts(
+    'her-us-nc-dncr',
+    ['facts', 'activities', 'places'],
+    'NC Dept of Natural & Cultural Resources: NC history articles and trip ideas, for Place facts, Activities and Places to see.',
+    cls='official',
+    sitemaps=['https://www.dncr.nc.gov/sitemap.xml'],
+    include=['^https?://www\\.dncr\\.nc\\.gov/(about/history|things-do)/'],
+)
+_facts(
+    'fx-ephemeral-ny',
+    ['facts', 'walking_tours'],
+    'Ephemeral New York: NYC buildings/streets history, for Place facts and Free walking tours.',
+    cls='editorial',
+    feeds=['https://ephemeralnewyork.wordpress.com/feed/'],
+)
+_facts(
+    'fx-weirdnj',
+    ['facts', 'places'],
+    'Weird NJ: New Jersey local legends and oddities (legends flagged as legends), for Place facts and Places to see.',
+    cls='editorial',
+    delay=10,
+    feeds=['https://weirdnj.com/feed/'],
+)
+_facts(
+    'fx-canadiangeographic',
+    ['facts', 'places'],
+    'Canadian Geographic: Canadian places, history, records, for Place facts and Places to see.',
+    cls='editorial',
+    sitemaps=['https://canadiangeographic.ca/wp-sitemap.xml'],
+    include=['^https?://canadiangeographic\\.ca/articles/'],
+)
+_facts(
+    'fx-aventuras-na-historia',
+    ['facts'],
+    'Aventuras na História (Brazil): Portuguese-language place history, Brazil, for Place facts.',
+    cls='editorial',
+    feeds=['https://aventurasnahistoria.com.br/feed'],
+)
+_facts(
+    'fx-relatos-historias-mx',
+    ['facts'],
+    'Relatos e Historias en México: Mexican history of towns and sites, for Place facts.',
+    cls='editorial',
+    depth=2,
+    delay=10,
+    seeds=['https://relatosehistorias.mx/'],
+    include=['^https?://relatosehistorias\\.mx/nuestras-historias/|^/la-gaceta/'],
+)
+_facts(
+    'fx-spacing',
+    ['facts'],
+    'Spacing (Canada): Canadian city history (Toronto, Montreal, Vancouver), for Place facts.',
+    cls='editorial',
+    feeds=['https://spacing.ca/feed/'],
+)
+_facts(
+    'fx-superinteressante',
+    ['facts'],
+    'Superinteressante (Brazil): Portuguese-language history curiosities, for Place facts.',
+    cls='editorial',
+    sitemaps=['https://super.abril.com.br/news-sitemap.xml'],
+    include=['^https?://super\\.abril\\.com\\.br/historia/'],
+)
+_facts(
+    'fx-historiahoy',
+    ['facts'],
+    'Historia Hoy (Argentina): Latin American place history, for Place facts.',
+    cls='editorial',
+    feeds=['https://historiahoy.com.ar/feed/'],
+)
+_facts(
+    'fx-hidden-city-phila',
+    ['facts', 'walking_tours'],
+    'Hidden City Philadelphia: Philadelphia buildings and neighbourhood history, for Place facts and Free walking tours.',
+    cls='editorial',
+    sitemaps=['https://hiddencityphila.org/wp-sitemap.xml'],
+    include=['^https?://hiddencityphila\\.org/20\\d\\d/'],
+)
+_facts(
+    'arch-gl-arktisk-institut',
+    ['facts', 'places'],
+    'Arktisk Institut: Greenland settlement histories, expedition and photo databases, for Place facts and Places to see.',
+    cls='official',
+    depth=2,
+    seeds=['https://arktiskinstitut.dk/vidensdatabaserne'],
+    include=['^https?://arktiskinstitut\\.dk/(vidensdatabaserne|arkiverne|formidling)/'],
+)
+_facts(
+    'arch-gl-nka',
+    ['facts', 'places'],
+    'Nunatta Katersugaasivia Allagaateqarfialu (Greenland National Museum and Archives): Greenland heritage, Kujataa and Aasivissuit sites, settlement history (natmus.gl serves the same site), for Place facts and Places to see.',
+    cls='official',
+    depth=2,
+    seeds=['https://nka.gl/katersugaasivik/'],
+    include=['^https?://nka\\.gl/(katersugaasivik|katersat-digitaliusut|allagaateqarfik|ilisimatusarneq-saqqummersitallu)/'],
+)
+_facts(
+    'gov-gl-oqaasileriffik',
+    ['facts'],
+    'Oqaasileriffik (Greenland Language Secretariat, place-name committee): authorised Greenlandic place names and their meanings, for Place facts.',
+    cls='official',
+    seeds=['https://oqaasileriffik.gl/'],
+    feeds=['https://oqaasileriffik.gl/feed/'],
+    include=['^https?://oqaasileriffik\\.gl/(oqaasileriffik|uunga-tunngasoq|20[0-9]{2})/'],
+)
+_facts(
+    'her-nam-aruba',
+    ['facts'],
+    'National Archaeological Museum Aruba: Aruba timeline from the Caquetío to the colonial era, for Place facts.',
+    cls='official',
+    seeds=['http://namaruba.org/timeline', 'http://namaruba.org/info'],
+    feeds=['http://namaruba.org/feed/'],
+)
+_facts(
+    'arch-br-museu-cidade-sp',
+    ['facts'],
+    'Museu da Cidade de São Paulo (pt / São Paulo): São Paulo history (e.g. the Monumento à Independência), for Place facts.',
+    cls='official',
+    feeds=['https://www.museudacidade.prefeitura.sp.gov.br/feed/'],
+    include=['^https?://www\\.museudacidade\\.prefeitura\\.sp\\.gov\\.br/(revista|acervo)/'],
+)
+_facts(
+    'fx-br-saopauloantiga',
+    ['facts', 'walking_tours'],
+    'São Paulo Antiga (pt / São Paulo buildings and streets): histories of individual buildings and streets, for Place facts and Free walking tours.',
+    cls='editorial',
+    llm=False,
+    feeds=['https://saopauloantiga.com.br/feed/'],
+    include=['^https?://saopauloantiga\\.com\\.br/[a-z0-9-]+/$'],
+)
+_facts(
+    'arch-br-ims',
+    ['facts'],
+    'Instituto Moreira Salles (pt / Rio, São Paulo): photo-archive stories on Brazilian cities, for Place facts.',
+    cls='official',
+    depth=2,
+    seeds=['https://ims.com.br/'],
+    include=['^https?://ims\\.com\\.br/(por-dentro-acervos|titulos-colecoes)/'],
+)
+_facts(
+    'her-us-nrhp-npgallery',
+    ['facts', 'places', 'walking_tours'],
+    'NPS NPGallery: National Register of Historic Places: NRHP nomination forms hold dated, sourced histories of more than 97k US places, for Place facts, Places to see and Free walking tours.',
+    cls='official',
+    depth=2,
+    seeds=['https://npgallery.nps.gov/NRHP/'],
+    include=['^https?://npgallery\\.nps\\.gov/NRHP/'],
+)
+_facts(
+    'her-ca-historicplaces',
+    ['facts', 'places'],
+    "Canada's Historic Places (Canadian Register): statements of significance for more than 12k federal, provincial and municipal places. Scope may have shrunk to federal-only in 2026, for Place facts and Places to see.",
+    cls='official',
+    depth=2,
+    seeds=['https://www.historicplaces.ca/en/home-accueil.aspx'],
+    include=['^https?://www\\.historicplaces\\.ca/en/rep-reg/'],
+)
+_facts(
+    'her-us-tx-atlas',
+    ['facts', 'places', 'walking_tours'],
+    'Texas Historic Sites Atlas (THC): more than 16k Texas historical marker texts plus NRHP and cemeteries. Marker text is ideal fact material, for Place facts, Places to see and Free walking tours.',
+    cls='official',
+    depth=2,
+    seeds=['https://atlas.thc.texas.gov/', 'https://atlas.thc.texas.gov/About/AtlasData', 'https://www.thc.texas.gov/preserve/preservation-programs/historical-markers'],
+    include=['^https?://atlas\\.thc\\.texas\\.gov/(Details|About)/', '^https?://www\\.thc\\.texas\\.gov/(Details|About)/'],
+)
+_facts(
+    'her-us-va-dhr',
+    ['facts', 'places'],
+    'Virginia DHR (VLR register + highway markers): Virginia Landmarks Register and marker texts, for Place facts and Places to see.',
+    cls='official',
+    sitemaps=['https://www.dhr.virginia.gov/sitemap.xml'],
+    include=['^https?://www\\.dhr\\.virginia\\.gov/(historic-registers|historical-markers)/'],
+)
+_facts(
+    'od-us-nc-hpo-gis',
+    ['facts', 'places'],
+    'NC HPO GIS data download: North Carolina surveyed and NRHP properties, for Place facts and Places to see.',
+    cls='official',
+    seeds=['https://www.hpo.nc.gov/gis-data-download'],
+    sitemaps=['https://www.hpo.nc.gov/sitemap.xml'],
+    include=['^https?://www\\.hpo\\.nc\\.gov/gis-data-download'],
+)
+_facts(
+    'her-us-ga-markers',
+    ['facts', 'places', 'walking_tours'],
+    'Georgia Historical Society markers: Georgia marker texts, for Place facts, Places to see and Free walking tours.',
+    cls='editorial',
+    depth=2,
+    seeds=['https://www.georgiahistory.com/learn-and-explore/historical-markers/'],
+    include=['^https?://www\\.georgiahistory\\.com/ghmi_marker_updated/'],
+)
+_facts(
+    'her-us-ky-markers',
+    ['facts', 'places', 'walking_tours'],
+    'Kentucky Historical Society markers: more than 2,500 Kentucky marker texts, for Place facts, Places to see and Free walking tours.',
+    cls='official',
+    delay=10,
+    sitemaps=['https://history.ky.gov/markers_sitemap.xml'],
+    include=['^https?://history\\.ky\\.gov/markers/'],
+)
+_facts(
+    'her-us-md-mht',
+    ['facts', 'places'],
+    'Maryland Historical Trust: Maryland Inventory and roadside markers, for Place facts and Places to see.',
+    cls='official',
+    depth=2,
+    seeds=['https://mht.maryland.gov/'],
+    include=['^https?://mht\\.maryland\\.gov/(research|historical_markers)'],
+)
+_facts(
+    'her-us-or-historic-sites',
+    ['facts', 'places'],
+    'Oregon Historic Sites Database: Oregon surveyed historic properties, for Place facts and Places to see.',
+    cls='official',
+    depth=2,
+    seeds=['https://heritagedata.prd.state.or.us/historic/'],
+    include=['^https?://heritagedata\\.prd\\.state\\.or\\.us/historic/index.cfm\\?do=v.dsp_siteSummary'],
+)
+_facts(
+    'her-ca-on-heritagetrust',
+    ['facts', 'places', 'walking_tours'],
+    'Ontario Heritage Trust (provincial plaques): about 1,300 Ontario plaque texts, for Place facts, Places to see and Free walking tours.',
+    cls='official',
+    llm=False,
+    sitemaps=['https://www.heritagetrust.on.ca/sitemaps-1-sitemap.xml'],
+    include=['^https?://www\\.heritagetrust\\.on\\.ca/(plaques|properties)/'],
+)
+_facts(
+    'her-ca-bc-bcrhp',
+    ['facts', 'places'],
+    'BC Register of Historic Places: BC places with heritage-value statements, for Place facts and Places to see.',
+    cls='official',
+    depth=2,
+    delay=10,
+    seeds=['https://apps.nrs.gov.bc.ca/bcrhp/'],
+    include=['^https?://apps\\.nrs\\.gov\\.bc\\.ca/bcrhp/'],
+)
+_facts(
+    'her-ca-ab-hermis',
+    ['facts', 'places'],
+    'Alberta Register of Historic Places (HeRMIS): Alberta designated places with significance statements, for Place facts and Places to see.',
+    cls='official',
+    depth=2,
+    seeds=['https://hermis.alberta.ca/ARHP/'],
+    include=['^https?://hermis\\.alberta\\.ca/ARHP/Details'],
+)
+_facts(
+    'her-ec-inpc',
+    ['facts', 'places'],
+    'INPC Ecuador: Ecuador heritage news and declarations, for Place facts and Places to see.',
+    cls='official',
+    sitemaps=['https://www.patrimoniocultural.gob.ec/wp-sitemap.xml'],
+    include=['^https?://www\\.patrimoniocultural\\.gob\\.ec/(\\d{4}|patrimonio)'],
+)
+_facts(
+    'her-uy-cpcn',
+    ['facts', 'places'],
+    'Comisión del Patrimonio Cultural de la Nación (Uruguay): declared national historic monuments, for Place facts and Places to see.',
+    cls='official',
+    depth=2,
+    seeds=['https://www.gub.uy/ministerio-educacion-cultura/patrimonio-uruguay'],
+    include=['^https?://www\\.gub\\.uy/ministerio-educacion-cultura/(patrimonio-uruguay|politicas-y-gestion)/'],
+)
+_facts(
+    'fx-us-savingplaces',
+    ['facts', 'places'],
+    'National Trust for Historic Preservation: 11 Most Endangered places, stories, Historic Hotels, for Place facts and Places to see.',
+    cls='editorial',
+    depth=2,
+    seeds=['https://savingplaces.org/'],
+    include=['^https?://savingplaces\\.org/(places|stories)/'],
+)
+_facts(
+    'fx-us-npshistory',
+    ['facts', 'places'],
+    'NPS History e-library: historic resource studies and NHL nominations, for Place facts and Places to see.',
+    cls='reference',
+    depth=2,
+    seeds=['https://www.npshistory.com/'],
+    include=['^https?://www\\.npshistory\\.com/(park|publications)/'],
+)
+_facts(
+    'her-us-ny-cris',
+    ['facts'],
+    'NY SHPO Cultural Resource Information System: history and curiosities of the places it covers, for Place facts.',
+    cls='official',
+    off='needs owner key: NYPL Digital Collections API (https://api.repo.nypl.org/; free)',
+    seeds=['https://cris.parks.ny.gov/'],
+)
+_facts(
+    'her-us-wa-wisaard',
+    ['facts'],
+    'Washington WISAARD: history and curiosities of the places it covers, for Place facts.',
+    cls='official',
+    off='needs owner key: Washington WISAARD (sign-up in the notes; free)',
+    seeds=['https://wisaard.dahp.wa.gov/'],
+)
+_facts(
+    'od-us-nrhp-catalog',
+    ['facts'],
+    'NRHP datasets on Data.gov: history and curiosities of the places it covers, for Place facts.',
+    cls='reference',
+    off='adapter pending: CKAN package_search JSON → resource CSV/SHP',
+    seeds=['https://catalog.data.gov/'],
+)
+_facts(
+    'her-pe-geoportal',
+    ['facts'],
+    'Geoportal Ministerio de Cultura Perú: history and curiosities of the places it covers, for Place facts.',
+    cls='official',
+    off='adapter pending: ArcGIS/WMS/WFS layers (archaeological sites)',
+    seeds=['https://geoportal.cultura.gob.pe/'],
+)
+_facts(
+    'her-br-ipatrimonio',
+    ['facts', 'places', 'walking_tours'],
+    'ipatrimônio (Brazilian heritage catalogue): one entry per tombado property, titled "City – Property", federal, state and municipal listings, for Place facts, Places to see and Free walking tours.',
+    cls='reference',
+    seeds=['https://www.ipatrimonio.org/'],
+    feeds=['https://www.ipatrimonio.org/feed/'],
+    include=['^https?://www\\.ipatrimonio\\.org/[a-z0-9-]+/$'],
+)
+_facts(
+    'gov-jm-jis-heritage',
+    ['facts', 'places'],
+    'Jamaica Information Service: heritage sites, parish profiles, Get the Facts: heritage sites by parish, parish facts, "Get the Facts" sheets, for Place facts and Places to see.',
+    cls='official',
+    depth=2,
+    seeds=['https://jis.gov.jm/information/jamaica-heritage-sites/', 'https://jis.gov.jm/information/parish-profiles/', 'https://jis.gov.jm/information/get-the-facts/', 'https://jis.gov.jm/information/jamaican-history/', 'https://jis.gov.jm/clarendon-heritage-sites/'],
+    sitemaps=['https://jis.gov.jm/wp-sitemap.xml'],
+    include=['^https?://jis\\.gov\\.jm/information/(jamaica-heritage-sites|parish-profiles|get-the-facts|jamaican-history)/|^/[a-z-]+-heritage-sites/'],
+)
+_facts(
+    'fx-encyclopedia-pr-en',
+    ['facts', 'places'],
+    'Encyclopedia of Puerto Rico (English edition, FPH): an article for each of the 78 municipios, plus history and environment (the Spanish site is already vetted as fx-enciclopedia-pr), for Place facts and Places to see.',
+    cls='reference',
+    seeds=['https://en.enciclopediapr.org/content_category/municipalities/'],
+    sitemaps=['http://en.enciclopediapr.org/sitemap_index.xml'],
+    include=['^https?://en\\.enciclopediapr\\.org/content/'],
+)
+_facts(
+    'her-bz-nich',
+    ['facts', 'places', 'activities'],
+    'National Institute of Culture and History (Belize): official pages for Maya sites (Xunantunich, Caracol, …) and historic places, for Place facts, Places to see and Activities.',
+    cls='official',
+    sitemaps=['https://nichbelize.org/wp-sitemap.xml'],
+    include=['^https?://nichbelize\\.org/(ia-sites|hoc-map)/|^/[a-z0-9-]+/$'],
+)
+_facts(
+    'her-ht-ispan',
+    ['facts', 'places'],
+    'Institut de Sauvegarde du Patrimoine National (Haiti): Citadelle Laferrière, Sans-Souci, Cap-Haïtien and Jacmel historic centres, national monuments, for Place facts and Places to see.',
+    cls='official',
+    sitemaps=['https://ispan.gouv.ht/wp-sitemap.xml'],
+    feeds=['https://ispan.gouv.ht/feed/'],
+)
+_facts(
+    'arch-manioc',
+    ['facts', 'places'],
+    'Manioc (Université des Antilles digital library): Martinique, Guadeloupe, Guyane and Caribbean history; virtual exhibitions by place, for Place facts and Places to see.',
+    cls='official',
+    depth=2,
+    seeds=['https://www.manioc.org/expositions-virtuelles', 'https://www.manioc.org/plan-site'],
+    include=['^https?://www\\.manioc\\.org/(expositions-virtuelles|collections)/'],
+)
+_facts(
+    'gov-ni-inc',
+    ['facts', 'places'],
+    'Instituto Nicaragüense de Cultura: archaeological site map, declared heritage, history, for Place facts and Places to see.',
+    cls='official',
+    depth=2,
+    seeds=['https://www.inc.gob.ni/mapa-de-sitios-arqueologicos-de-nicaragua/', 'https://www.inc.gob.ni/category/historia/', 'https://www.inc.gob.ni/category/patrimonio/'],
+    feeds=['https://www.inc.gob.ni/feed/'],
+    include=['^https?://www\\.inc\\.gob\\.ni/(category/(historia|patrimonio)|mapa-de-sitios-arqueologicos)/'],
+)
+_facts(
+    'gov-pa-micultura',
+    ['facts', 'places', 'events'],
+    'Ministerio de Cultura de Panamá: heritage declarations and restorations (Villa de Los Santos, Portobelo, …), for Place facts, Places to see and Events.',
+    cls='official',
+    seeds=['https://micultura.gob.pa/patrimonio-cultural/'],
+    sitemaps=['https://micultura.gob.pa/wp-sitemap.xml'],
+    include=['^https?://micultura\\.gob\\.pa/patrimonio-cultural/|^/\\d{4}/\\d{2}/\\d{2}/'],
+)
+_facts(
+    'her-pa-panama-viejo',
+    ['facts', 'places', 'walking_tours'],
+    'Patronato Panamá Viejo: history of the 1519 city, monuments, site map, for Place facts, Places to see and Free walking tours.',
+    cls='official',
+    sitemaps=['https://www.patronatopanamaviejo.org/wp-sitemap.xml'],
+    feeds=['https://www.patronatopanamaviejo.org/feed/'],
+)
+_facts(
+    'fx-museo-nacional-cr',
+    ['facts', 'places'],
+    'Museo Nacional de Costa Rica: Costa Rican history research, San José heritage, archaeology (stone spheres), for Place facts and Places to see.',
+    cls='official',
+    sitemaps=['https://www.museocostarica.go.cr/sitemap_index.xml'],
+    feeds=['https://www.museocostarica.go.cr/feed/'],
+    include=['^https?://www\\.museocostarica\\.go\\.cr/(nuestro-trabajo|exhibiciones|museo)/'],
+)
+_facts(
+    'fx-honduras-tips',
+    ['facts', 'places', 'activities'],
+    'Honduras Tips: curiosities, heritage towns (Gracias, Copán), places, for Place facts, Places to see and Activities.',
+    cls='editorial',
+    sitemaps=['https://www.hondurastips.hn/sitemap_index.xml'],
+    feeds=['https://www.hondurastips.hn/feed/'],
+    include=['^https?://www\\.hondurastips\\.hn/\\d{4}/\\d{2}/\\d{2}/'],
+)
+_facts(
+    'her-hn-ihah',
+    ['facts', 'places'],
+    'Instituto Hondureño de Antropología e Historia: official custodian of Copán and national monuments; ethnohistory of municipios (much of the site is institutional documents: low yield), for Place facts and Places to see.',
+    cls='official',
+    sitemaps=['https://ihah.hn/wp-sitemap.xml'],
+    feeds=['https://ihah.hn/feed/'],
+)
+_facts(
+    'gov-uy-montevideo',
+    ['facts', 'places', 'walking_tours'],
+    'Intendencia de Montevideo: barrio histories, heritage of the Ciudad Vieja, for Place facts, Places to see and Free walking tours.',
+    cls='official',
+    depth=2,
+    seeds=['https://montevideo.gub.uy/'],
+    include=['^https?://montevideo\\.gub\\.uy/(areas-tematicas/cultura|patrimonio|barrios)'],
+)
+_facts(
+    'tb-descubri-montevideo',
+    ['facts', 'places', 'tips'],
+    'Descubrí Montevideo (city tourism): city facts and history, barrios, for Place facts, Places to see and Travel tips.',
+    cls='official',
+    depth=2,
+    seeds=['https://www.descubrimontevideo.uy/datos-generales', 'https://www.descubrimontevideo.uy/'],
+    include=['^https?://www\\.descubrimontevideo\\.uy/(datos-generales|que-hacer|barrios|lugares)'],
+)
+_facts(
+    'tb-quito-turismo',
+    ['facts', 'places', 'walking_tours'],
+    'Quito Turismo: historic centre (UNESCO 1978), churches, legends, for Place facts, Places to see and Free walking tours.',
+    cls='official',
+    seeds=['https://turismo.quito.gob.ec/mapa-del-sitio/'],
+    feeds=['https://turismo.quito.gob.ec/feed/'],
+)
+_facts(
+    'gov-py-snc-declaraciones',
+    ['facts', 'places', 'events'],
+    'Secretaría Nacional de Cultura (Paraguay): heritage declarations by town (Piribebuy, Asunción, …), for Place facts, Places to see and Events.',
+    cls='official',
+    depth=2,
+    seeds=['https://www.cultura.gov.py/category/declaraciones-de-bienes-patrimoniales/', 'https://www.cultura.gov.py/declaraciones-de-interes-cultural-2/'],
+    feeds=['https://www.cultura.gov.py/feed/'],
+    include=['^https?://www\\.cultura\\.gov\\.py/category/declaraciones-de-bienes-patrimoniales/|^/\\d{4}/\\d{2}/'],
+)
+_facts(
+    'her-pr-oech',
+    ['facts', 'places'],
+    'Oficina Estatal de Conservación Histórica (Puerto Rico SHPO): Puerto Rico historic properties and registers, for Place facts and Places to see.',
+    cls='official',
+    depth=2,
+    seeds=['https://www.oech.pr.gov/conservacion-historica'],
+    include=['^https?://www\\.oech\\.pr\\.gov/(conservacion-historica|registro)'],
+)
+_facts(
+    'arch-jm-nlj',
+    ['facts', 'places'],
+    'National Library of Jamaica: "History Notes" on Jamaican places and events, for Place facts and Places to see.',
+    cls='official',
+    depth=2,
+    seeds=['https://nlj.gov.jm/history-notes-jamaica/', 'https://nlj.gov.jm/history/'],
+    sitemaps=['https://nlj.gov.jm/wp-sitemap.xml'],
+    include=['^https?://nlj\\.gov\\.jm/(history|history-notes-jamaica|jamaican-proverbs)[^/]*/'],
+)
+_facts(
+    'arch-tt-nalis',
+    ['facts', 'places'],
+    'NALIS Heritage Digital Library (Trinidad and Tobago): T&T history and heritage notes (an alternative to the banned nationaltrust.tt), for Place facts and Places to see.',
+    cls='official',
+    depth=2,
+    seeds=['https://www.nalis.gov.tt/resources/heritage-digital-library/'],
+    sitemaps=['https://www.nalis.gov.tt/wp-sitemap.xml'],
+    include=['^https?://www\\.nalis\\.gov\\.tt/resources/|^/portfolio/'],
+)
+_facts(
+    'arch-tt-natt',
+    ['facts', 'events'],
+    'National Archives of Trinidad and Tobago: arrival days, heritage features, place history from the archives, for Place facts and Events.',
+    cls='official',
+    delay=10,
+    feeds=['https://natt.gov.tt/rss.xml'],
+)
+_facts(
+    'her-ky-national-trust',
+    ['facts', 'places', 'walking_tours'],
+    'National Trust for the Cayman Islands: historic sites and Sister Islands heritage, for Place facts, Places to see and Free walking tours.',
+    cls='official',
+    seeds=['https://nationaltrust.org.ky/our-work/historic/'],
+    sitemaps=['https://nationaltrust.org.ky/sitemap_index.xml'],
+    include=['^https?://nationaltrust\\.org\\.ky/our-work/|^/tour/'],
+)
+_facts(
+    'her-bm-bnt',
+    ['facts', 'places'],
+    'Bermuda National Trust: historic houses, protected buildings (Bermuda: Atlantic, included for Caribbean-region coverage), for Place facts and Places to see.',
+    cls='official',
+    depth=2,
+    seeds=['https://www.bnt.bm/heritage/historic_houses/', 'https://www.bnt.bm/heritage/buildings_protected/', 'https://www.bnt.bm/heritage/archaeology/', 'https://www.bnt.bm/heritage/historic_cemeteries/'],
+    include=['^https?://www\\.bnt\\.bm/heritage/'],
+)
+_facts(
+    'her-lc-national-trust',
+    ['facts', 'places'],
+    'Saint Lucia National Trust: Pigeon Island, Morne Fortune, Maria Islands, freedom-fighter history, for Place facts and Places to see.',
+    cls='official',
+    depth=2,
+    seeds=['https://saintlucianationaltrust.com/trust-sites/'],
+    feeds=['https://saintlucianationaltrust.com/feed/'],
+    include=['^https?://saintlucianationaltrust\\.com/(trust-sites|sites|programmes/historical|natural-heritage-sites)/'],
+)
+_facts(
+    'fx-barbados-museum',
+    ['facts', 'places'],
+    'Barbados Museum & Historical Society: Garrison and Bridgetown history (UNESCO), collections, for Place facts and Places to see.',
+    cls='official',
+    depth=2,
+    seeds=['https://barbmuse.org.bb/About/History', 'https://barbmuse.org.bb/Discover/Collections'],
+    include=['^https?://barbmuse\\.org\\.bb/(Discover|About)/'],
+)
+_facts(
+    'her-br-iphae-rs',
+    ['facts', 'places'],
+    'IPHAE (Rio Grande do Sul): state-listed properties and historic centres of RS, for Place facts and Places to see.',
+    cls='official',
+    depth=2,
+    seeds=['https://www.iphae.rs.gov.br/bens-tombados', 'https://www.iphae.rs.gov.br/mapa-do-site'],
+    include=['^https?://www\\.iphae\\.rs\\.gov\\.br/(bens-tombados|centros-historicos|inventarios-de-bens-culturais|patrimonio-imaterial)'],
+)
+_facts(
+    'her-br-ipac-ba',
+    ['facts', 'places'],
+    "IPAC (Bahia): Bahia's state-listed properties, archaeological sites, for Place facts and Places to see.",
+    cls='official',
+    depth=2,
+    seeds=['https://www.ba.gov.br/ipac/patrimonio-cultural/bens-culturais', 'https://www.ba.gov.br/ipac/patrimonio-material/bens-tombados/sitios-arqueologicos'],
+    include=['^https?://www\\.ba\\.gov\\.br/ipac/(patrimonio-cultural|patrimonio-material|bens-)'],
+)
+_facts(
+    'her-br-iepha-mg',
+    ['facts', 'places'],
+    'IEPHA (Minas Gerais): Minas Gerais state heritage (Ouro Preto region, baroque towns), for Place facts and Places to see.',
+    cls='official',
+    depth=2,
+    seeds=['https://www.mg.gov.br/iepha'],
+    include=['^https?://www\\.mg\\.gov\\.br/iepha/'],
+)
+_facts(
+    'gov-br-ouro-preto',
+    ['facts', 'places'],
+    'Prefeitura de Ouro Preto: História: an example of the "histórico do município" pattern (UNESCO 1980 town), for Place facts and Places to see.',
+    cls='official',
+    seeds=['https://www.ouropreto.mg.gov.br/historia'],
+    include=['^https?://www\\.ouropreto\\.mg\\.gov\\.br/historia'],
+)
+_facts(
+    'fx-rio-memorias',
+    ['facts', 'places', 'walking_tours'],
+    'Rio Memórias: Rio neighbourhood and street history, "Aqui tem memória" plaques, for Place facts, Places to see and Free walking tours.',
+    cls='editorial',
+    sitemaps=['https://riomemorias.com.br/sitemap.xml'],
+    include=['^https?://riomemorias\\.com\\.br/pt/(museu-virtual|para-a-cidade)'],
+)
+_facts(
+    'fx-todo-argentina',
+    ['facts', 'places'],
+    'Todo Argentina (enciclopedia virtual): Argentine history by period, provinces, for Place facts and Places to see.',
+    cls='reference',
+    depth=2,
+    seeds=['https://www.todo-argentina.net/historia-argentina/historia_argentina.php', 'https://www.todo-argentina.net/'],
+    include=['^https?://www\\.todo-argentina\\.net/(historia-argentina|geografia|provincias)/'],
+)
+_facts(
+    'fx-venezuela-tuya',
+    ['facts', 'places'],
+    'Venezuela Tuya: Venezuelan cities, states, history, for Place facts and Places to see.',
+    cls='editorial',
+    depth=2,
+    seeds=['https://www.venezuelatuya.com/geografia/ciudades.htm', 'https://www.venezuelatuya.com/historia/index.htm'],
+    include=['^https?://www\\.venezuelatuya\\.com/(geografia|historia)/'],
+)
+_facts(
+    'fx-educa-bolivia',
+    ['facts', 'places'],
+    'Educa (Bolivia): a page for each of the 9 departments and municipality profiles (a substitute for the Diccionario histórico de Bolivia, which is not online), for Place facts and Places to see.',
+    cls='editorial',
+    depth=2,
+    delay=10,
+    seeds=['https://www.educa.com.bo/content/historia-de-bolivia'],
+    sitemaps=['https://www.educa.com.bo/sitemap'],
+    include=['^https?://www\\.educa\\.com\\.bo/(content/departamento|geografia-municipios|content/historia)'],
+)
+_facts(
+    'arch-co-senal-memoria',
+    ['facts', 'places'],
+    'Señal Memoria (RTVC archive, Colombia): archive articles on Colombian history and places, for Place facts and Places to see.',
+    cls='official',
+    depth=2,
+    seeds=['https://www.senalmemoria.co/mapa-del-sitio'],
+    include=['^https?://www\\.senalmemoria\\.co/articulos/'],
+)
+_facts(
+    'fx-academia-dominicana-historia',
+    ['facts', 'places'],
+    'Academia Dominicana de la Historia: academic history of the DR (mostly institutional news: low yield), for Place facts and Places to see.',
+    cls='reference',
+    feeds=['https://www.academiadominicanahistoria.org.do/?feed=rss2'],
+)
+_facts(
+    'tb-ar-pueblos-autenticos',
+    ['facts', 'places'],
+    'Pueblos Auténticos (Argentina, national tourism programme): small towns chosen for their heritage identity, with history per town, for Place facts and Places to see.',
+    cls='official',
+    depth=2,
+    delay=10,
+    seeds=['https://www.argentina.gob.ar/pueblos-autenticos'],
+    sitemaps=['https://www.argentina.gob.ar/sitemap.xml'],
+    include=['^https?://www\\.argentina\\.gob\\.ar/pueblos-autenticos', '^https?://www\\.argentina\\.gob\\.ar/turismo/pueblos-autenticos'],
+)
+_facts(
+    'fx-atlas-fgv-br',
+    ['facts'],
+    'atlas.fgv.br: Robots allow it (Crawl-delay 10) and it has no terms of its own. It is a CPDOC product, and the CPDOC website terms say "Não utilizar ferramentas automatizadas … a este Website". Does that ban apply to the atlas?, for Place facts.',
+    cls='editorial',
+    off='owner decision: The atlas has no terms of its own, but the parent CPDOC site bans "ferramentas automatizadas". Does that ban apply to the atlas?',
+    seeds=['https://atlas.fgv.br/'],
+)
+_facts(
+    'fx-mx-enciclopedia-guerrerense',
+    ['facts', 'places'],
+    'Enciclopedia Guerrerense (Guerrero Cultural Siglo XXI A.C.): a state encyclopedia with a municipal atlas (summary per municipio), toponymy, "guerrerismos", biographies, for Place facts and Places to see.',
+    cls='reference',
+    depth=2,
+    seeds=['https://enciclopediagro.mx/atlas-municipal/municipios/', 'https://enciclopediagro.mx/indices/indice-de-municipios/', 'https://enciclopediagro.mx/atlas-municipal/toponimia/'],
+    feeds=['https://enciclopediagro.mx/feed/'],
+    include=['^https?://enciclopediagro\\.mx/(atlas-municipal|indices|cultura-general|[a-z-]+/[a-z0-9-]+)/'],
+)
+_facts(
+    'fx-mx-cronicas-municipales',
+    ['facts', 'places'],
+    'Crónicas Municipales (Baja California Sur): chronicles by a municipal cronista (Mulegé, La Paz, Todos Santos history), for Place facts and Places to see.',
+    cls='editorial',
+    seeds=['https://cronicasmunicipales.com.mx/category/cronicas/', 'https://cronicasmunicipales.com.mx/category/geografia-e-historia/'],
+    feeds=['https://cronicasmunicipales.com.mx/feed/'],
+    include=['^https?://cronicasmunicipales\\.com\\.mx/(category/(cronicas|geografia-e-historia)|[a-z0-9-]+)/$'],
+)
+_facts(
+    'gov-mx-sanctorum-cronista',
+    ['facts', 'places'],
+    'Sanctórum de Lázaro Cárdenas (Tlaxcala): Cronista y Archivo: an official municipal cronista page for a small municipio (village-level history, people, traditions); low yield, for Place facts and Places to see.',
+    cls='official',
+    depth=2,
+    seeds=['https://www.sanctorum.gob.mx/archivo/inicio'],
+    include=['^https?://www\\.sanctorum\\.gob\\.mx/archivo/'],
+)
+_facts(
+    'gov-br-inimutaba',
+    ['facts', 'places'],
+    'Prefeitura de Inimutaba (MG): Histórico do Município: an example of the "histórico do município" pattern (founding, emancipation 1962), plus local heritage, for Place facts and Places to see.',
+    cls='official',
+    seeds=['https://inimutaba.mg.gov.br/historico-do-municipio/', 'https://inimutaba.mg.gov.br/category/secretarias/departamento-cultura-esporte/patrimonio-cultural/'],
+    include=['^https?://inimutaba\\.mg\\.gov\\.br/(historico-do-municipio|category/.*/patrimonio-cultural)/'],
+)
+_facts(
+    'gov-br-camara-guaraci',
+    ['facts', 'places'],
+    'Câmara de Guaraci (SP): Breve histórico: town history (emancipation 1944), for Place facts and Places to see.',
+    cls='official',
+    seeds=['https://www.camaraguaraci.sp.gov.br/historia-do-municipio/'],
+    include=['^https?://www\\.camaraguaraci\\.sp\\.gov\\.br/historia-do-municipio/'],
+)
+_facts(
+    'gov-br-camara-sjmissoes',
+    ['facts', 'places'],
+    'Câmara de São José das Missões (RS): Histórico: town history (installed 1993), for Place facts and Places to see.',
+    cls='official',
+    seeds=['https://www.camarasjm.rs.gov.br/historico-do-municipio/'],
+    include=['^https?://www\\.camarasjm\\.rs\\.gov\\.br/historico-do-municipio/'],
+)
+_facts(
+    'gov-br-pontao',
+    ['facts', 'places'],
+    'Município de Pontão (RS): history, profile, maps, for Place facts and Places to see.',
+    cls='official',
+    seeds=['https://www.pontao.rs.gov.br/o-municipio/historia-do-municipio', 'https://www.pontao.rs.gov.br/o-municipio/perfil'],
+    include=['^https?://www\\.pontao\\.rs\\.gov\\.br/o-municipio/'],
+)
+_facts(
+    'gov-br-santarem',
+    ['facts', 'places', 'activities'],
+    'Prefeitura de Santarém (PA): Amazon city history (Tapajós, Alter do Chão), for Place facts, Places to see and Activities.',
+    cls='official',
+    seeds=['https://santarem.pa.gov.br/institucional/historia-de-santarem', 'https://turismo.santarem.pa.gov.br/historia-de-santarem'],
+    include=['^https?://santarem\\.pa\\.gov\\.br/(institucional/historia-de-santarem|historia-de-santarem)', '^https?://turismo\\.santarem\\.pa\\.gov\\.br/(institucional/historia-de-santarem|historia-de-santarem)'],
+)
+_facts(
+    'gov-br-blumenau',
+    ['facts', 'places'],
+    'Prefeitura de Blumenau (SC): História do município: German-colony founding history, for Place facts and Places to see.',
+    cls='official',
+    seeds=['https://www.blumenau.sc.gov.br/eficiente/sites/blumenau/secao/historia'],
+    include=['^https?://www\\.blumenau\\.sc\\.gov\\.br/eficiente/sites/blumenau/secao/historia'],
+)
+_facts(
+    'gov-br-morretes',
+    ['facts', 'places'],
+    'Prefeitura de Morretes (PR): História da Cidade: colonial river-port town history (Serra do Mar railway town), for Place facts and Places to see.',
+    cls='official',
+    seeds=['https://www.morretes.pr.gov.br/pagina/907_Historia-da-Cidade.html', 'https://www.morretes.pr.gov.br/pagina/697_A-Cidade.html'],
+    include=['^https?://www\\.morretes\\.pr\\.gov\\.br/pagina/(907|697)_'],
+)
+_facts(
+    'gov-br-manaus',
+    ['facts', 'places'],
+    'Prefeitura de Manaus: história e símbolos: city history (rubber boom, Teatro Amazonas), symbols, for Place facts and Places to see.',
+    cls='official',
+    seeds=['https://www.manaus.am.gov.br/turismo/historia/', 'https://www.manaus.am.gov.br/turismo/simbolos-da-cidade/'],
+    sitemaps=['https://www.manaus.am.gov.br/sitemap_index.xml'],
+    include=['^https?://www\\.manaus\\.am\\.gov\\.br/turismo/(historia|simbolos-da-cidade)/'],
+)
+_facts(
+    'gov-br-londrina',
+    ['facts', 'places'],
+    'Prefeitura de Londrina (PR): Sobre Londrina: British-company founding history (1930s), for Place facts and Places to see.',
+    cls='official',
+    seeds=['https://portal.londrina.pr.gov.br/historia-cidade'],
+    include=['^https?://portal\\.londrina\\.pr\\.gov\\.br/(index\\.php/)?historia-cidade'],
+)
+_facts(
+    'gov-br-sabara',
+    ['facts', 'places'],
+    'Prefeitura de Sabará (MG): História: one of the oldest gold-rush towns in Minas Gerais, for Place facts and Places to see.',
+    cls='official',
+    seeds=['https://www.sabara.mg.gov.br/sabara/historia'],
+    include=['^https?://www\\.sabara\\.mg\\.gov\\.br/sabara/'],
+)
+_facts(
+    'gov-br-porto-seguro',
+    ['facts', 'places'],
+    "Prefeitura de Porto Seguro (BA): História: Cabral's 1500 landing, Discovery Coast UNESCO town, for Place facts and Places to see.",
+    cls='official',
+    seeds=['https://www.portoseguro.ba.gov.br/historia'],
+    include=['^https?://www\\.portoseguro\\.ba\\.gov\\.br/historia'],
+)
+_facts(
+    'gov-br-sobral',
+    ['facts', 'places'],
+    'Prefeitura de Sobral (CE): A cidade: history, symbols (Sobral is the 1919 eclipse town that confirmed relativity), for Place facts and Places to see.',
+    cls='official',
+    seeds=['https://www.sobral.ce.gov.br/a-cidade/historia', 'https://www.sobral.ce.gov.br/a-cidade/simbolos'],
+    feeds=['https://www.sobral.ce.gov.br/?format=feed&type=rss'],
+    include=['^https?://www\\.sobral\\.ce\\.gov\\.br/a-cidade/'],
+)
+_facts(
+    'gov-br-igarassu',
+    ['facts', 'places', 'walking_tours'],
+    "Prefeitura de Igarassu (PE): Cidade, monumentos históricos: one of Brazil's oldest towns (1535), with its church of Saints Cosmas and Damian, for Place facts, Places to see and Free walking tours.",
+    cls='official',
+    depth=2,
+    seeds=['https://igarassu.pe.gov.br/cidade/', 'https://igarassu.pe.gov.br/cidade/monumentos-historicos/'],
+    include=['^https?://igarassu\\.pe\\.gov\\.br/cidade/'],
+)
+_facts(
+    'gov-br-santos',
+    ['facts', 'places'],
+    'Prefeitura de Santos (SP): Santos 480 anos: port-city history for the 480th anniversary, for Place facts and Places to see.',
+    cls='official',
+    seeds=['https://www.santos.sp.gov.br/portal/santos-480-anos'],
+    sitemaps=['https://www.santos.sp.gov.br/?q=sitemap.xml'],
+    include=['^https?://www\\.santos\\.sp\\.gov\\.br/portal/santos-480-anos'],
+)
+_facts(
+    'gov-br-sao-cristovao',
+    ['facts', 'places'],
+    'Prefeitura de São Cristóvão (SE): fourth-oldest town in Brazil; São Francisco Square (UNESCO 2010), for Place facts and Places to see.',
+    cls='official',
+    seeds=['https://www.saocristovao.se.gov.br/municipio/saocristovao'],
+    include=['^https?://www\\.saocristovao\\.se\\.gov\\.br/municipio/saocristovao'],
+)
+_facts(
+    'gov-br-pelotas',
+    ['facts', 'places'],
+    'Prefeitura de Pelotas (RS): A cidade: charque-era history, heritage of the historic centre, for Place facts and Places to see.',
+    cls='official',
+    depth=2,
+    seeds=['https://www.pelotas.rs.gov.br/cidade'],
+    include=['^https?://www\\.pelotas\\.rs\\.gov\\.br/cidade'],
+)
+_facts(
+    'gov-br-natal',
+    ['facts', 'places'],
+    'Prefeitura do Natal (RN): Cidade de Natal: city facts (founded 1599, Forte dos Reis Magos), for Place facts and Places to see.',
+    cls='official',
+    seeds=['https://natal.rn.gov.br/cidade-de-natal-rn'],
+    include=['^https?://natal\\.rn\\.gov\\.br/cidade-de-natal-rn'],
+)
+_facts(
+    'gov-br-alcantara',
+    ['facts', 'places'],
+    'Prefeitura de Alcântara (MA): Guia do Município: colonial ruin town (national heritage 1948), for Place facts and Places to see.',
+    cls='official',
+    seeds=['https://www.alcantara.ma.gov.br/guia-do-municipio'],
+    include=['^https?://www\\.alcantara\\.ma\\.gov\\.br/guia-do-municipio'],
+)
+_facts(
+    'gov-br-olinda',
+    ['facts', 'places', 'walking_tours'],
+    'Prefeitura de Olinda (PE): UNESCO 1982 historic centre; low confidence on the seed, for Place facts, Places to see and Free walking tours.',
+    cls='official',
+    depth=2,
+    seeds=['https://olinda.pe.gov.br/'],
+    include=['^https?://olinda\\.pe\\.gov\\.br/(cidade|historia|turismo|patrimonio)'],
+)
+_facts(
+    'her-br-secult-es',
+    ['facts', 'places'],
+    'Secretaria da Cultura do Espírito Santo: patrimônio: state-listed historic sites and landscapes of ES, for Place facts and Places to see.',
+    cls='official',
+    depth=2,
+    seeds=['https://secult.es.gov.br/sitios-historicos-paisagens-seletas-no-espirito-santo', 'https://secult.es.gov.br/publicacoes/patrimonio', 'https://secult.es.gov.br/ciclo-2025-patrimonio-material'],
+    include=['^https?://secult\\.es\\.gov\\.br/(sitios-historicos|publicacoes/patrimonio|ciclo-\\d{4}-patrimonio)'],
+)
+_facts(
+    'her-br-fcms',
+    ['facts', 'places'],
+    'Fundação de Cultura de Mato Grosso do Sul: Memória e Patrimônio: MS state heritage (a state cultural foundation, which the brief asked for), for Place facts and Places to see.',
+    cls='official',
+    depth=2,
+    seeds=['https://www.fundacaodecultura.ms.gov.br/unidade-administrativa/diretoria-de-memoria-e-patrimonio-cultural/'],
+    sitemaps=['https://www.fundacaodecultura.ms.gov.br/wp-sitemap.xml'],
+    include=['^https?://www\\.fundacaodecultura\\.ms\\.gov\\.br/(unidade-administrativa/diretoria-de-memoria|patrimonio)'],
+)
+_facts(
+    'her-co-idpc',
+    ['facts', 'places', 'walking_tours'],
+    'Instituto Distrital de Patrimonio Cultural (Bogotá): Bogotá historic centre (PEMP), heritage environments, intangible heritage, for Place facts, Places to see and Free walking tours.',
+    cls='official',
+    sitemaps=['https://idpc.gov.co/sitemap_index.xml'],
+    feeds=['https://idpc.gov.co/feed/'],
+    include=['^https?://idpc\\.gov\\.co/(patrimonio-cultural-inmaterial|intervencion-del-patrimonio|pemp|patrimonios-en-plural|[a-z0-9-]+)/'],
+)
+_facts(
+    'her-co-ipcc',
+    ['facts', 'places', 'events'],
+    'Instituto de Patrimonio y Cultura de Cartagena: Cartagena walled-city heritage, independence festivities (national heritage), for Place facts, Places to see and Events.',
+    cls='official',
+    sitemaps=['https://ipcc.gov.co/wp-sitemap.xml'],
+    feeds=['https://ipcc.gov.co/feed/'],
+    include=['^https?://ipcc\\.gov\\.co/(patrimonio-cultural-(material|inmaterial)|[a-z0-9-]+)/'],
+)
+_facts(
+    'gov-co-villa-de-leyva',
+    ['facts', 'places', 'activities'],
+    'Alcaldía de Villa de Leyva (Boyacá): Mi Municipio: colonial heritage town; this is the national GOV.CO municipal template (`/MiMunicipio/Paginas/`), which repeats across ~1,100 alcaldías, for Place facts, Places to see and Activities.',
+    cls='official',
+    seeds=['https://www.villadeleyva-boyaca.gov.co/MiMunicipio/Paginas/Informacion-del-Municipio.aspx', 'https://www.villadeleyva-boyaca.gov.co/MiMunicipio/Paginas/Pasado-Presente-y-Futuro.aspx', 'https://www.villadeleyva-boyaca.gov.co/MiMunicipio/Paginas/Nuestros-Simbolos.aspx', 'https://www.villadeleyva-boyaca.gov.co/MiMunicipio/Paginas/Sitios-de-Interes.aspx'],
+    include=['^https?://www\\.villadeleyva-boyaca\\.gov\\.co/MiMunicipio/Paginas/'],
+)
+_facts(
+    'gov-co-popayan',
+    ['facts', 'places', 'events'],
+    'Alcaldía de Popayán (Cauca): Mi Municipio: "white city" history; Holy Week processions (UNESCO intangible), for Place facts, Places to see and Events.',
+    cls='official',
+    seeds=['https://www.popayan.gov.co/MiMunicipio/Paginas/Historia.aspx', 'https://www.popayan.gov.co/MiMunicipio/Paginas/Simbolos.aspx', 'https://www.popayan.gov.co/MiMunicipio/Paginas/Nuestra-Geografia.aspx'],
+    include=['^https?://www\\.popayan\\.gov\\.co/MiMunicipio/Paginas/'],
+)
+_facts(
+    'gov-co-santa-fe-de-antioquia',
+    ['facts', 'places'],
+    'Alcaldía de Santa Fe de Antioquia: Mi Municipio: colonial capital of Antioquia (founded 1541), for Place facts and Places to see.',
+    cls='official',
+    seeds=['https://www.santafedeantioquia-antioquia.gov.co/MiMunicipio/Paginas/Informacion-del-Municipio.aspx', 'https://www.santafedeantioquia-antioquia.gov.co/MiMunicipio/Paginas/Turismo.aspx'],
+    include=['^https?://www\\.santafedeantioquia-antioquia\\.gov\\.co/MiMunicipio/Paginas/'],
+)
+_facts(
+    'her-co-icanh',
+    ['facts', 'places', 'activities'],
+    'Instituto Colombiano de Antropología e Historia: national archaeological parks (San Agustín, Alto de los Ídolos, Teyuna), for Place facts, Places to see and Activities.',
+    cls='official',
+    seeds=['https://www.icanh.gov.co/sobre-nosotros/subdireccion-de-gestion-del-patrimonio'],
+    feeds=['https://www.icanh.gov.co/feed'],
+    include=['^https?://www\\.icanh\\.gov\\.co/(prensa/actualidad-icanh|sobre-nosotros/subdireccion-de-gestion-del-patrimonio)/'],
+)
+_facts(
+    'arch-co-agn',
+    ['facts', 'places'],
+    'Archivo General de la Nación (Colombia): national documentary heritage; regional history items (low-to-medium yield), for Place facts and Places to see.',
+    cls='official',
+    depth=2,
+    seeds=['https://www.archivogeneral.gov.co/patrimonio-documental', 'https://www.archivogeneral.gov.co/estrategia-pedagogica-tu-historia-cuenta'],
+    include=['^https?://www\\.archivogeneral\\.gov\\.co/(patrimonio-documental|estrategia-pedagogica-tu-historia-cuenta)'],
+)
+_facts(
+    'gov-co-scrd-bogota',
+    ['facts', 'places', 'events'],
+    'Secretaría de Cultura, Recreación y Deporte (Bogotá): Bogotá heritage features, "Bogotá en fotos", restorations, for Place facts, Places to see and Events.',
+    cls='official',
+    depth=2,
+    seeds=['https://www.culturarecreacionydeporte.gov.co/es/arte-cultura-y-patrimonio', 'https://www.culturarecreacionydeporte.gov.co/es/editorial/un-portal-para-descubrir-la-ciudad'],
+    sitemaps=['https://www.culturarecreacionydeporte.gov.co/sitemap'],
+    include=['^https?://www\\.culturarecreacionydeporte\\.gov\\.co/es/(arte-cultura-y-patrimonio|editorial)/'],
+)
+_facts(
+    'gov-pe-muni-arequipa',
+    ['facts', 'places', 'walking_tours'],
+    'Municipalidad Provincial de Arequipa: historia y centro histórico: the "white city" (UNESCO 2000), historic centre, for Place facts, Places to see and Free walking tours.',
+    cls='official',
+    seeds=['https://www.muniarequipa.gob.pe/arequipa/historia/', 'https://www.muniarequipa.gob.pe/centro-historico-y-zona-monumental/'],
+    sitemaps=['https://www.muniarequipa.gob.pe/sitemap_index.xml'],
+    include=['^https?://www\\.muniarequipa\\.gob\\.pe/(arequipa/|centro-historico-y-zona-monumental|plan-maestro-centro-historico)'],
+)
+_facts(
+    'gov-pe-muni-puno',
+    ['facts', 'places', 'events'],
+    'Municipalidad Provincial de Puno: Historia de Puno: Lake Titicaca city history; Candelaria festival, for Place facts, Places to see and Events.',
+    cls='official',
+    seeds=['https://portal.munipuno.gob.pe/es/historia-de-puno'],
+    include=['^https?://portal\\.munipuno\\.gob\\.pe/es/historia-de-puno'],
+)
+_facts(
+    'fx-ve-anh',
+    ['facts', 'places'],
+    'Academia Nacional de la Historia (Venezuela): academic history columns and the Boletín (regional and urban history among them), for Place facts and Places to see.',
+    cls='reference',
+    seeds=['https://anhvenezuela.org.ve/resena-historica/'],
+    feeds=['https://anhvenezuela.org.ve/feed/'],
+    include=['^https?://anhvenezuela\\.org\\.ve/[a-z0-9-]+/$'],
+)
+_facts(
+    'gov-ec-loja',
+    ['facts', 'places'],
+    'Municipio de Loja: Historia: city history (founded 1548), music capital of Ecuador, for Place facts and Places to see.',
+    cls='official',
+    delay=10,
+    seeds=['https://www.loja.gob.ec/contenido/historia-de-loja'],
+    include=['^https?://www\\.loja\\.gob\\.ec/contenido/historia-de-loja'],
+)
+_facts(
+    'fx-ec-casa-cultura',
+    ['facts', 'places'],
+    'Casa de la Cultura Ecuatoriana: provincial core pages: provincial history pages (El Oro, …), for Place facts and Places to see.',
+    cls='official',
+    llm=False,
+    depth=2,
+    seeds=['https://casadelacultura.gob.ec/2025.php/posteloro/historia/'],
+    include=['^https?://casadelacultura\\.gob\\.ec/historia/'],
+)
+_facts(
+    'gov-bo-santa-cruz',
+    ['facts', 'places'],
+    'Gobierno Autónomo Municipal de Santa Cruz de la Sierra: Mi Ciudad: city history (founded 1561), urban trees, for Place facts and Places to see.',
+    cls='official',
+    seeds=['https://www.gmsantacruz.gob.bo/Mi-Ciudad/Historia/', 'https://www.gmsantacruz.gob.bo/Mi-Ciudad/Arboles-de-la-Ciudad/'],
+    include=['^https?://www\\.gmsantacruz\\.gob\\.bo/Mi-Ciudad/'],
+)
+_facts(
+    'gov-py-asuncion',
+    ['facts', 'places', 'walking_tours'],
+    'Municipalidad de Asunción: Historia de mis calles: an official series on the stories behind street names (strong little-known facts), for Place facts, Places to see and Free walking tours.',
+    cls='official',
+    depth=2,
+    seeds=['https://www.asuncion.gov.py/category/historia-de-mis-calles/', 'https://www.asuncion.gov.py/cultura-patrimonio-vivo-asuncion'],
+    feeds=['https://www.asuncion.gov.py/feed'],
+    include=['^https?://www\\.asuncion\\.gov\\.py/(category/historia-de-mis-calles|cultura-patrimonio-vivo-asuncion|[a-z0-9-]+)/?$'],
+)
+_facts(
+    'gov-py-encarnacion',
+    ['facts', 'places', 'walking_tours'],
+    'Municipalidad de Encarnación: city history, an official "curiosities" page, historic-buildings circuit, for Place facts, Places to see and Free walking tours.',
+    cls='official',
+    seeds=['https://encarnacion.gov.py/historia-de-la-ciudad/', 'https://encarnacion.gov.py/turismo/curiosidades-de-la-ciudad/', 'https://encarnacion.gov.py/turismo/edificios-historicos/'],
+    sitemaps=['https://encarnacion.gov.py/sitemap_index.xml'],
+    include=['^https?://encarnacion\\.gov\\.py/(historia-de-la-ciudad|turismo/(curiosidades-de-la-ciudad|edificios-historicos))/'],
+)
+_facts(
+    'gov-uy-maldonado',
+    ['facts', 'places'],
+    'Intendencia de Maldonado: department history, plus a page for each of its 8 municipios (Punta del Este, Piriápolis, Garzón), for Place facts and Places to see.',
+    cls='official',
+    seeds=['https://www.maldonado.gub.uy/maldonado-historico', 'https://www.maldonado.gub.uy/municipio/aigua', 'https://www.maldonado.gub.uy/municipio/garzon', 'https://www.maldonado.gub.uy/municipio/piriapolis', 'https://www.maldonado.gub.uy/municipio/puntadeleste', 'https://www.maldonado.gub.uy/municipio/sancarlos', 'https://www.maldonado.gub.uy/municipio/pandeazucar', 'https://www.maldonado.gub.uy/municipio/solisgrande'],
+    include=['^https?://www\\.maldonado\\.gub\\.uy/(maldonado-historico|municipio/[a-z]+)'],
+)
+_facts(
+    'arch-ni-enrique-bolanos',
+    ['facts', 'places'],
+    "Biblioteca Enrique Bolaños (Nicaragua): Nicaragua's largest open digital history library (chroniclers, town histories, independence), for Place facts and Places to see.",
+    cls='reference',
+    depth=2,
+    seeds=['https://www.enriquebolanos.org/coleccion/Cronistas', 'https://www.enriquebolanos.org/coleccion/Fuentes-Hist%C3%B3ricas', 'https://www.enriquebolanos.org/coleccion/Hist%C3%B3rica'],
+    include=['^https?://www\\.enriquebolanos\\.org/(articulo|coleccion|libro)/'],
+)
+_facts(
+    'arch-ni-guerra-nacional',
+    ['facts', 'places'],
+    'La Guerra Nacional 1854–1857 (Biblioteca Enrique Bolaños): William Walker war; Rivas, Granada and San Jacinto history, for Place facts and Places to see.',
+    cls='reference',
+    llm=False,
+    delay=10,
+    seeds=['https://guerranacional.enriquebolanos.org/'],
+)
+_facts(
+    'fx-cu-cubarte',
+    ['facts', 'places'],
+    'Portal Cubarte (Ministerio de Cultura de Cuba): Cuban heritage and national monuments by town (the only Cuban host that answered; every OHC host failed), for Place facts and Places to see.',
+    cls='official',
+    depth=2,
+    seeds=['https://www.cubarte.cult.cu/categorias/historia/', 'https://www.cubarte.cult.cu/categorias/patrimonio/'],
+    include=['^https?://www\\.cubarte\\.cult\\.cu/(categorias/(historia|patrimonio)|blog-cubarte)/'],
+)
+_facts(
+    'arch-mq-archives-territoriales',
+    ['facts', 'places', 'events'],
+    'Archives Territoriales de Martinique: virtual exhibitions, "trésors d\'archives", commemorations, the 1902 Pelée eruption, for Place facts, Places to see and Events.',
+    cls='official',
+    seeds=['https://www.patrimoines-martinique.org/sitemaps/Editorial_1.xml'],
+    include=['^https?://www\\.patrimoines-martinique\\.org/(page|expositions|tresors|commemorations)'],
+)
+_facts(
+    'arch-gp-archives-departementales',
+    ['facts', 'places'],
+    'Archives départementales de la Guadeloupe: Guadeloupe history themes (communes, slavery and abolition), for Place facts and Places to see.',
+    cls='official',
+    sitemaps=['https://www.archivesguadeloupe.fr/sitemap_index.xml'],
+    include=['^https?://www\\.archivesguadeloupe\\.fr/(theme|section|[a-z0-9-]+)/'],
+)
+_facts(
+    'gov-mf-saint-martin',
+    ['facts', 'places'],
+    "Collectivité de Saint-Martin: le patrimoine et l'histoire: French Saint-Martin history and heritage, for Place facts and Places to see.",
+    cls='official',
+    seeds=['https://www.com-saint-martin.fr/thematiques/culture/le-patrimoine-et-lhistoire', 'https://www.com-saint-martin.fr/thematiques/culture/le-patrimoine-immateriel'],
+    include=['^https?://www\\.com-saint-martin\\.fr/thematiques/culture/'],
+)
+_facts(
+    'gov-gp-region',
+    ['facts', 'places'],
+    'Région Guadeloupe: Patrimoine et Archéologie: regional heritage and archaeology (regional inventory programme), for Place facts and Places to see.',
+    cls='official',
+    depth=2,
+    delay=5,
+    seeds=['https://www.regionguadeloupe.fr/Patrimoine-et-Archeologie'],
+    feeds=['https://www.regionguadeloupe.fr/spip.php?page=backend'],
+    include=['^https?://www\\.regionguadeloupe\\.fr/(Patrimoine-et-Archeologie|[A-Z][A-Za-z-]+)'],
+)
+_facts(
+    'her-cw-naam',
+    ['facts', 'places'],
+    'NAAM: National Archaeological Anthropological Memory Management (Curaçao): Curaçao archaeology and monument heritage (an alternative to the Monumentenfonds, whose hostname was not found), for Place facts and Places to see.',
+    cls='official',
+    llm=False,
+    sitemaps=['https://naam.cw/wp-sitemap.xml'],
+    include=['^https?://naam\\.cw/(resources|projects|[a-z0-9-]+)/'],
+)
+_facts(
+    'her-sx-heritage-museum',
+    ['facts', 'places'],
+    'Sint Maarten National Heritage Foundation & Museum: Dutch Sint Maarten history and heritage (Wix site; low yield), for Place facts and Places to see.',
+    cls='official',
+    sitemaps=['https://www.sintmaartenmuseum.org/pages-sitemap.xml'],
+)
+_facts(
+    'her-pe-sigda',
+    ['facts'],
+    'JS GIS application (SIGDA, archaeological-site register): history and curiosities of the places it covers, for Place facts.',
+    cls='official',
+    off='adapter pending: JS GIS application (SIGDA, archaeological-site register)',
+    seeds=['https://sigda.cultura.gob.pe/'],
+)
+_facts(
+    'od-co-sinic',
+    ['facts'],
+    'JS single-page app (Sistema Nacional de Información Cultural: municipal cultural fichas): history and curiosities of the places it covers, for Place facts.',
+    cls='reference',
+    off='adapter pending: JS single-page app (Sistema Nacional de Información Cultural: municipal cultural fichas)',
+    seeds=['https://www.sinic.gov.co/'],
+)
+_facts(
+    'fx-br-historia-cascavel',
+    ['facts'],
+    'Vite/JS app (no sitemap: 404): history and curiosities of the places it covers, for Place facts.',
+    cls='editorial',
+    off='adapter pending: Vite/JS app (no sitemap: 404)',
+    seeds=['https://historiadecascavelpr.com.br/'],
+)
+_facts(
+    'arch-mass-moments',
+    ['facts', 'places'],
+    'Mass Moments (Mass Humanities): a Massachusetts "on this day" almanac tied to towns, for Place facts and Places to see.',
+    cls='reference',
+    off='enable after a check from the crawler VM: a robots.txt or page fetch failed or timed out from the research laptop (robots: no response (timeout) → allowed); read robots.txt, terms and content first',
+    depth=2,
+    seeds=['https://www.massmoments.org/'],
+    include=['^https?://www\\.massmoments\\.org/moment-details/'],
+)
+_facts(
+    'arch-portal-texas-history',
+    ['facts', 'places'],
+    'Portal to Texas History (UNT Libraries): county-tagged historic photos, newspapers and maps (descriptions only), for Place facts and Places to see.',
+    cls='reference',
+    llm=False,
+    delay=5,
+    sitemaps=['https://texashistory.unt.edu/sitemap.xml'],
+    include=['^https?://texashistory\\.unt\\.edu/explore/(collections|partners)/'],
+)
+_facts(
+    'arch-digital-library-georgia',
+    ['facts', 'places'],
+    'Digital Library of Georgia (GALILEO/UGA): county-tagged local history collections; a "DLG API" exists, for Place facts and Places to see.',
+    cls='reference',
+    sitemaps=['https://dlg.usg.edu/sitemap.xml.gz'],
+    include=['^https?://dlg\\.usg\\.edu/(collection|record)/'],
+)
+_facts(
+    'arch-nara-prologue',
+    ['facts', 'places'],
+    'Pieces of History (Prologue blog, US National Archives): archive-sourced stories and anniversaries about US places, for Place facts and Places to see.',
+    cls='official',
+    sitemaps=['https://prologue.blogs.archives.gov/sitemap.xml'],
+    feeds=['https://prologue.blogs.archives.gov/feed/'],
+    include=['^https?://prologue\\.blogs\\.archives\\.gov/20\\d\\d/'],
+)
+_facts(
+    'arch-bl-blogs-archive',
+    ['facts'],
+    'British Library blogs (archive): curator posts on places in BL collections (maps, Asian & African, Americas), for Place facts.',
+    cls='official',
+    sitemaps=['https://blogs-archive.bl.uk/sitemap.xml'],
+    include=['^https?://blogs-archive\\.bl\\.uk/[a-z-]+/20\\d\\d/'],
+)
+_facts(
+    'arch-mhs-manitoba',
+    ['facts', 'places', 'walking_tours'],
+    'Manitoba Historical Society: Historic Sites of Manitoba: a page for each historic site and community, for Place facts, Places to see and Free walking tours.',
+    cls='community',
+    llm=False,
+    off='owner decision: community-written site; the place_fact kind takes official, reference and editorial sources only (kinds.toml). Allow community sources behind corroboration, or keep off?',
+    depth=2,
+    seeds=['https://www.mhs.ca/'],
+    include=['^https?://www\\.mhs\\.ca/docs/sites/'],
+)
+_facts(
+    'arch-inah-repositorio',
+    ['facts', 'places'],
+    'Repositorio Institucional INAH (Mexico; ex-Mediateca): archaeological and historic sites of Mexico (records), for Place facts and Places to see.',
+    cls='official',
+    depth=2,
+    seeds=['https://repositorio.inah.gob.mx/'],
+    include=['^https?://repositorio\\.inah\\.gob\\.mx/(objeto|coleccion)/'],
+)
+_facts(
+    'arch-digitalnc',
+    ['facts'],
+    'DigitalNC (North Carolina Digital Heritage Center): county-tagged NC local history exhibits, for Place facts.',
+    cls='official',
+    off='enable after a check from the crawler VM: a robots.txt or page fetch failed or timed out from the research laptop (robots: no response (timeout) → allowed); read robots.txt, terms and content first',
+    depth=2,
+    seeds=['https://www.digitalnc.org/'],
+    include=['^https?://www\\.digitalnc\\.org/(collections|exhibits)/'],
+)
+_facts(
+    'arch-numerique-banq',
+    ['facts'],
+    'BAnQ numérique (Bibliothèque et Archives nationales du Québec): Québec town history items (descriptions), for Place facts.',
+    cls='official',
+    llm=False,
+    sitemaps=['https://numerique.banq.qc.ca/sitemap_index.xml'],
+    include=['^https?://numerique\\.banq\\.qc\\.ca/patrimoine/details/'],
+)
+_facts(
+    'gov-tx-tsl-symbols',
+    ['facts'],
+    'Texas State Library and Archives: Texas State Symbols: 76 legislated Texas symbols + "About Texas" facts, for Place facts.',
+    cls='official',
+    seeds=['https://www.tsl.texas.gov/ref/abouttx/symbols'],
+    include=['^https?://www\\.tsl\\.texas\\.gov/ref/abouttx/'],
+)
+_facts(
+    'gov-wv-leg-symbols',
+    ['facts'],
+    'West Virginia Legislature: State Symbols: WV symbols with adoption history, for Place facts.',
+    cls='official',
+    seeds=['https://www.wvlegislature.gov/Educational/Kids_Page/symbols.cfm'],
+    include=['^https?://www\\.wvlegislature\\.gov/Educational/Kids_Page/'],
+)
+_facts(
+    'gov-or-blue-book',
+    ['facts', 'places'],
+    'Oregon Blue Book (Secretary of State): symbols, almanac facts, history (first seed facts.aspx was 404; corrected via search), for Place facts and Places to see.',
+    cls='official',
+    seeds=['https://sos.oregon.gov/blue-book/Pages/explore-symbols.aspx', 'https://sos.oregon.gov/blue-book/Pages/explore.aspx'],
+    sitemaps=['https://sos.oregon.gov/sitemap.xml'],
+    include=['^https?://sos\\.oregon\\.gov/blue-book/'],
+)
+_facts(
+    'gov-ct-register-manual',
+    ['facts'],
+    'Connecticut State Register & Manual (state symbols): CT symbols and state facts, for Place facts.',
+    cls='official',
+    seeds=['https://portal.ct.gov/sots/register-manual/'],
+    sitemaps=['https://portal.ct.gov/sitemap.xml'],
+    include=['^https?://portal\\.ct\\.gov/sots/register-manual/'],
+)
+_facts(
+    'gov-ms-mdah',
+    ['facts', 'places'],
+    'Mississippi Dept of Archives and History: markers, state history, for Place facts and Places to see.',
+    cls='official',
+    depth=2,
+    seeds=['https://www.mdah.ms.gov/'],
+    include=['^https?://www\\.mdah\\.ms\\.gov/(explore|new)/'],
+)
+_facts(
+    'gov-ar-sos',
+    ['facts'],
+    'Arkansas Secretary of State (symbols, Capitol): Arkansas symbols, for Place facts.',
+    cls='official',
+    llm=False,
+    delay=5,
+    seeds=['https://www.sos.arkansas.gov/'],
+    include=['^https?://www\\.sos\\.arkansas\\.gov/education/'],
+)
+_facts(
+    'gov-nm-blue-book',
+    ['facts'],
+    'New Mexico Secretary of State (Blue Book): NM symbols, county facts, for Place facts.',
+    cls='official',
+    seeds=['https://www.sos.nm.gov/'],
+    sitemaps=['https://www.sos.nm.gov/wp-sitemap.xml'],
+    include=['^https?://www\\.sos\\.nm\\.gov/.*(?:blue-book)'],
+)
+_facts(
+    'gov-wy-sos',
+    ['facts'],
+    'Wyoming Secretary of State (state symbols): Wyoming symbols, for Place facts.',
+    cls='official',
+    seeds=['https://sos.wyo.gov/'],
+    include=['^https?://sos\\.wyo\\.gov/.*(?:symbol)'],
+)
+_facts(
+    'gov-ri-sos',
+    ['facts'],
+    'Rhode Island Secretary of State (RI history & facts): RI facts and symbols, for Place facts.',
+    cls='official',
+    seeds=['https://www.sos.ri.gov/'],
+    include=['^https?://www\\.sos\\.ri\\.gov/.*(?:(history|facts))'],
+)
+_facts(
+    'gov-ak-library',
+    ['facts'],
+    'Alaska State Library (Alaska facts/symbols): Alaska symbols and facts, for Place facts.',
+    cls='official',
+    seeds=['https://library.alaska.gov/'],
+    include=['^https?://library\\.alaska\\.gov/.*(?:(symbols|facts))'],
+)
+_facts(
+    'gov-on-about',
+    ['facts'],
+    'Ontario: About Ontario: geography, symbols, history, for Place facts.',
+    cls='official',
+    delay=5,
+    seeds=['https://www.ontario.ca/page/about-ontario'],
+    include=['^https?://www\\.ontario\\.ca/page/(about-ontario|ontario-symbols|history-ontario)'],
+)
+_facts(
+    'gov-qc-portrait',
+    ['facts'],
+    'Quebec: Portrait du Quebec: symbols, history, geography, for Place facts.',
+    cls='official',
+    seeds=['https://www.quebec.ca/gouvernement/portrait-quebec'],
+    sitemaps=['https://www.quebec.ca/sitemap.xml'],
+    include=['^https?://www\\.quebec\\.ca/gouvernement/portrait-quebec'],
+)
+_facts(
+    'gov-bc-symbols',
+    ['facts'],
+    'British Columbia: Symbols of B.C.: history and curiosities of the places it covers, for Place facts.',
+    cls='official',
+    seeds=['https://www2.gov.bc.ca/gov/content/governments/celebrating-british-columbia/symbols-of-bc'],
+    sitemaps=['https://www2.gov.bc.ca/sitemap/sitemap_index.xml'],
+    include=['^https?://www2\\.gov\\.bc\\.ca/gov/content/governments/celebrating-british-columbia/'],
+)
+_facts(
+    'gov-mb-symbols',
+    ['facts'],
+    'Manitoba government (provincial symbols): history and curiosities of the places it covers, for Place facts.',
+    cls='official',
+    llm=False,
+    seeds=['https://www.gov.mb.ca/'],
+    include=['^https?://www\\.gov\\.mb\\.ca/.*(?:symbol)'],
+)
+_facts(
+    'gov-ns-symbols',
+    ['facts'],
+    'Nova Scotia government (symbols, history): history and curiosities of the places it covers, for Place facts.',
+    cls='official',
+    seeds=['https://novascotia.ca/'],
+    include=['^https?://novascotia\\.ca/.*(?:symbol)'],
+)
+_facts(
+    'gov-nl',
+    ['facts'],
+    'Newfoundland and Labrador government: history and curiosities of the places it covers, for Place facts.',
+    cls='official',
+    seeds=['https://www.gov.nl.ca/'],
+    sitemaps=['https://assets.gov.nl.ca/gnl-framework/assets/xml/sitemap.xml'],
+    include=['^https?://www\\.gov\\.nl\\.ca/.*(?:(symbols|about))', '^https?://assets\\.gov\\.nl\\.ca/.*(?:(symbols|about))'],
+)
+_facts(
+    'gov-sk',
+    ['facts'],
+    'Saskatchewan government (emblems, about SK): history and curiosities of the places it covers, for Place facts.',
+    cls='official',
+    llm=False,
+    seeds=['https://www.saskatchewan.ca/', 'https://www.saskatchewan.ca/sitemap-xml'],
+    include=['^https?://www\\.saskatchewan\\.ca/government/(emblems|about)'],
+)
+_facts(
+    'gov-nwt',
+    ['facts'],
+    'Northwest Territories government: history and curiosities of the places it covers, for Place facts.',
+    cls='official',
+    delay=10,
+    seeds=['https://www.gov.nt.ca/'],
+    include=['^https?://www\\.gov\\.nt\\.ca/en/(about|symbols)'],
+)
+_facts(
+    'gov-ar-indec',
+    ['facts'],
+    'INDEC Argentina: history and curiosities of the places it covers, for Place facts.',
+    cls='official',
+    llm=False,
+    seeds=['https://www.indec.gob.ar/'],
+    sitemaps=['https://www.indec.gob.ar/sitemap.xml'],
+)
+_facts(
+    'city-dallas-archives',
+    ['facts'],
+    'Dallas Municipal Archives: History & Facts: city firsts, name origin, seal, for Place facts.',
+    cls='official',
+    seeds=['https://dallascityhall.com/government/citysecretary/archives/Pages/Archives_history.aspx'],
+    sitemaps=['https://dallascityhall.com/sitemap.xml'],
+    include=['^https?://dallascityhall\\.com/government/citysecretary/archives/'],
+)
+_facts(
+    'gov-nj-facts',
+    ['facts'],
+    'New Jersey: NJ facts (path to confirm): history and curiosities of the places it covers, for Place facts.',
+    cls='official',
+    seeds=['https://nj.gov/', 'https://nj.gov/nj/about/facts/'],
+    include=['^https?://nj\\.gov/nj/about/'],
+)
+_facts(
+    'gov-ia-iowa-facts',
+    ['facts'],
+    'Iowa Legislature: Iowa facts / Official Register (path to confirm): history and curiosities of the places it covers, for Place facts.',
+    cls='official',
+    seeds=['https://www.legis.iowa.gov/resources/iowaFacts'],
+    sitemaps=['https://www.legis.iowa.gov/sitemap.xml'],
+    include=['^https?://www\\.legis\\.iowa\\.gov/resources/'],
+)
+_facts(
+    'gov-vt-symbols',
+    ['facts'],
+    'Vermont SOS / VSARA: state symbols (path to confirm): history and curiosities of the places it covers, for Place facts.',
+    cls='official',
+    llm=False,
+    seeds=['https://sos.vermont.gov/', 'https://sos.vermont.gov/vsara/learn/symbols/'],
+    include=['^https?://sos\\.vermont\\.gov/vsara/'],
+)
+_facts(
+    'gov-wa-leg-symbols',
+    ['facts'],
+    'Washington Legislature: State Symbols (PDF): WA symbols with RCW citations, for Place facts.',
+    cls='official',
+    off='adapter pending: pdf',
+    depth=0,
+    seeds=['https://leg.wa.gov/media/chohb1rp/2025_wastatesymbols.pdf'],
+)
+_facts(
+    'gov-ca-sos-emblems',
+    ['facts'],
+    'California SOS: State Emblems (California Roster PDF): CA emblems with adoption years, for Place facts.',
+    cls='official',
+    off='adapter pending: pdf',
+    depth=0,
+    seeds=['https://admin.cdn.sos.ca.gov/ca-roster/2026/state-emblems.pdf'],
+)
+_facts(
+    'od-gnis-domestic-names',
+    ['facts', 'places'],
+    'USGS GNIS Domestic Names (official US names with history/description notes): name origin and history for about 1M US features, including the Orth *Dictionary of Alaska Place Names* history, for Place facts and Places to see.',
+    cls='official',
+    llm=False,
+    depth=0,
+    seeds=['https://prd-tnm.s3.amazonaws.com/?prefix=StagedProducts/GeographicNames/DomesticNames/'],
+    include=['^https?://prd-tnm\\.s3\\.amazonaws\\.com/StagedProducts/GeographicNames/DomesticNames/DomesticNames_[A-Z]{2}_Text\\.zip$'],
+)
+_facts(
+    'gov-usgs-bgn-centers',
+    ['facts'],
+    'USGS: US Board on Geographic Names + Geographic Centers: geographic centres of each state and the US, and naming decisions, for Place facts.',
+    cls='official',
+    seeds=['https://www.usgs.gov/us-board-on-geographic-names', 'https://www.usgs.gov/educational-resources/geographic-centers'],
+    sitemaps=['https://www.usgs.gov/sitemap.xml'],
+    include=['^https?://www\\.usgs\\.gov/us-board-on-geographic-names', '^https?://www\\.usgs\\.gov/educational-resources/geographic-centers'],
+)
+_facts(
+    'gov-noaa-scec',
+    ['facts', 'weather'],
+    'NOAA NCEI State Climate Extremes Committee records: official state records (highest and lowest temperature, 24 h rain, snow, hail) with place and date, for Place facts and Weather.',
+    cls='official',
+    seeds=['https://www.ncei.noaa.gov/access/monitoring/scec/records'],
+    include=['^https?://www\\.ncei\\.noaa\\.gov/access/monitoring/scec/'],
+)
+_facts(
+    'gov-nrcan-indigenous-names',
+    ['facts'],
+    'NRCan Geographical Names of Canada: Indigenous place names: meanings of Indigenous names (more than 20k official names), for Place facts.',
+    cls='official',
+    seeds=['https://natural-resources.canada.ca/maps-tools-publications/maps/geographical-names-canada/indigenous-place-names'],
+    include=['^https?://natural-resources\\.canada\\.ca/maps-tools-publications/maps/geographical-names-canada/'],
+)
+_facts(
+    'arch-anla-native-place-names',
+    ['facts'],
+    'Alaska Native Place Names (UAF Alaska Native Language Archive): Native names and their languages for Alaska places, for Place facts.',
+    cls='reference',
+    seeds=['https://www.uaf.edu/anla/collections/map/names/'],
+    include=['^https?://www\\.uaf\\.edu/anla/collections/map/names/'],
+)
+_facts(
+    'gov-hawaii-hbgn',
+    ['facts'],
+    'Hawaiʻi Board on Geographic Names: official Hawaiian names and meanings in meeting documents, for Place facts.',
+    cls='official',
+    delay=10,
+    seeds=['https://planning.hawaii.gov/gis/hbgn/'],
+    sitemaps=['https://planning.hawaii.gov/sitemap.xml'],
+    include=['^https?://planning\\.hawaii\\.gov/gis/hbgn/'],
+)
+_facts(
+    'gov-ibwc-history',
+    ['facts'],
+    'International Boundary and Water Commission (US–Mexico) history: border treaties, river boundary oddities, for Place facts.',
+    cls='official',
+    seeds=['https://www.ibwc.gov/about-us/history/'],
+    include=['^https?://www\\.ibwc\\.gov/about-us/'],
+)
+_facts(
+    'gov-ibc-boundary',
+    ['facts'],
+    "International Boundary Commission (US–Canada): the world's longest land border, monuments, oddities (Point Roberts, Northwest Angle), for Place facts.",
+    cls='official',
+    depth=2,
+    seeds=['https://www.internationalboundarycommission.org/'],
+    include=['^https?://www\\.internationalboundarycommission\\.org/(en|fr)/'],
+)
+_facts(
+    'od-bc-geographical-names',
+    ['facts'],
+    'BC Geographical Names (BCGNIS): records carry origin notes for BC names, for Place facts.',
+    cls='reference',
+    off='adapter pending: format / endpoint: REST web service with JSON/XML records by name ID (https://apps.gov.bc.ca/pub/bcgnws/), no key',
+    seeds=['https://apps.gov.bc.ca/'],
+)
+_facts(
+    'arch-hawaii-soehren',
+    ['facts'],
+    'Soehren Catalog of Hawaiʻi Place Names (UH Mānoa Library): meanings and sources of Hawaiian names, for Place facts.',
+    cls='reference',
+    off='adapter pending: format / endpoint: HTML search form (GET query by name/island)',
+    delay=5,
+    seeds=['https://manoa.hawaii.edu/'],
+)
+_facts(
+    'od-usgs-alaska-dictionary',
+    ['facts'],
+    'Orth, *Dictionary of Alaska Place Names* (USGS PP 567): Alaska name histories (already largely in GNIS), for Place facts.',
+    cls='reference',
+    off='adapter pending: format / endpoint: a single 1,084-page PDF',
+    seeds=['https://pubs.usgs.gov/'],
+)
+_facts(
+    'gov-nasa-eo-iotd',
+    ['facts', 'places'],
+    'NASA Earth Observatory, Image of the Day: a daily satellite image of a named place with a science caption (volcano plumes, salt flats, record floods, city lights), for Place facts and Places to see.',
+    cls='official',
+    delay=5,
+    seeds=['https://science.nasa.gov/earth/earth-observatory/image-of-the-day/'],
+    sitemaps=['https://science.nasa.gov/wp-sitemap.xml'],
+    feeds=['https://science.nasa.gov/feed/'],
+    include=['^https?://science\\.nasa\\.gov/earth/earth-observatory/'],
+)
+_facts(
+    'gov-nasa-astronaut-photos',
+    ['facts', 'places'],
+    'Gateway to Astronaut Photography of Earth: ISS photos of named places with captions (feature, city, record landform), for Place facts and Places to see.',
+    cls='official',
+    seeds=['https://eol.jsc.nasa.gov/'],
+    sitemaps=['https://eol.jsc.nasa.gov/SitemapIndex.xml'],
+    include=['^https?://eol\\.jsc\\.nasa\\.gov/(Collections|ESRS|SearchPhotos/photo)'],
+)
+_facts(
+    'gov-noaa-ocean-facts',
+    ['facts', 'places'],
+    'NOAA National Ocean Service, Ocean Facts: place superlatives (Challenger Deep, highest tides in the Bay of Fundy, the largest marine sanctuaries), for Place facts and Places to see.',
+    cls='official',
+    seeds=['https://oceanservice.noaa.gov/facts/', 'https://oceanservice.noaa.gov/facts/oceanfacts-places.html'],
+    sitemaps=['https://oceanservice.noaa.gov/sitemap.xml'],
+    include=['^https?://oceanservice\\.noaa\\.gov/facts/'],
+)
+_facts(
+    'gov-usgs-earthquake',
+    ['facts'],
+    'USGS Earthquake Hazards: significant and historic earthquakes: "the largest earthquake recorded in X" (date, magnitude, place), for Place facts.',
+    cls='official',
+    seeds=['https://earthquake.usgs.gov/fdsnws/event/1/query?format=geojson&minmagnitude=8&orderby=magnitude', 'https://earthquake.usgs.gov/earthquakes/browse/largest-world.php'],
+    feeds=['https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/significant_month.atom'],
+    include=['^https?://earthquake\\.usgs\\.gov/earthquakes/eventpage/'],
+)
+_facts(
+    'fx-earthquake-usgs-gov',
+    ['facts'],
+    'USGS FDSN event API: only if wfs_geojson cannot take a plain GeoJSON URL, for Place facts.',
+    cls='editorial',
+    off='adapter pending: GeoJSON query API',
+    seeds=['https://earthquake.usgs.gov/'],
+)
+_facts(
+    'gov-state-history-countries',
+    ['facts'],
+    'Office of the Historian, U.S. Department of State: countries: per-country history (first recognition, first diplomatic mission, historical name changes), for Place facts.',
+    cls='official',
+    delay=20,
+    seeds=['https://history.state.gov/countries/all', 'https://history.state.gov/countries/archives'],
+    sitemaps=['https://history.state.gov/sitemap.xml'],
+    include=['^https?://history\\.state\\.gov/countries/'],
+)
+_facts(
+    'arch-country-studies',
+    ['facts', 'places'],
+    'Library of Congress Country Studies (mirror): historical setting, geography and society per country (1986–1998 editions: present facts as "as of 19xx"), for Place facts and Places to see.',
+    cls='reference',
+    depth=2,
+    seeds=['https://countrystudies.us/'],
+    include=['^https?://countrystudies\\.us/[a-z-]+/[0-9]+\\.htm$'],
+)
+_facts(
+    'ref-impact-earth',
+    ['facts'],
+    'Impact Earth (Western University): impact craters: meteorite craters per country (age, diameter); stands in for the Earth Impact Database, which answered 403, for Place facts.',
+    cls='reference',
+    depth=2,
+    seeds=['https://impact.uwo.ca/impact-craters/', 'https://impact.uwo.ca/impact-craters/map/'],
+    feeds=['https://impact.uwo.ca/feed/'],
+    include=['^https?://impact\\.uwo\\.ca/impact-craters/'],
+)
+_facts(
+    'ref-us-champion-trees',
+    ['facts', 'places'],
+    'National Champion Tree Registry (University of Tennessee; was American Forests): the largest tree of each species in the US, by county, for Place facts and Places to see.',
+    cls='reference',
+    depth=2,
+    delay=30,
+    seeds=['https://nationalchampiontree.org/champion-tree-registry/'],
+    include=['^https?://nationalchampiontree\\.org/champion-tree-registry/'],
+)
+_facts(
+    'gov-ar-ign-datos',
+    ['facts'],
+    'IGN Argentina: Datos Argentina: highest peaks, extreme points, longest rivers, the origin of the name "Argentina", for Place facts.',
+    cls='official',
+    delay=10,
+    seeds=['https://www.ign.gob.ar/NuestrasActividades/Geografia/DatosArgentina/OrigenDelNombre'],
+    include=['^https?://www\\.ign\\.gob\\.ar/NuestrasActividades/Geografia/DatosArgentina/'],
+)
+_facts(
+    'fx-volcano-world',
+    ['facts'],
+    'Volcano World (Oregon State University): volcano profiles by country and region, eruption records, for Place facts.',
+    cls='reference',
+    llm=False,
+    depth=2,
+    seeds=['https://volcano.oregonstate.edu/'],
+    include=['^https?://volcano\\.oregonstate\\.edu/(volcano|volcanoes_by_)'],
+)
+_facts(
+    'od-usgs-planetary-names',
+    ['facts'],
+    'Gazetteer of Planetary Nomenclature (USGS/IAU): the craters on Mars and Venus that are named after Earth towns and villages ("a crater on Mars is named after X"), with the origin of each name, for Place facts.',
+    cls='reference',
+    off='adapter pending: search-result exports per target body (CSV, KMZ, shapefile), e.g. `/SearchResults?Target=...`',
+    seeds=['https://planetarynames.wr.usgs.gov/'],
+)
+_facts(
+    'ref-vermont-historical-gazetteer',
+    ['facts'],
+    "Hemenway's Vermont Historical Gazetteer (USGenWeb transcription): town-by-town Vermont histories, for Place facts.",
+    cls='community',
+    llm=False,
+    off='owner decision: community-written site; the place_fact kind takes official, reference and editorial sources only (kinds.toml). Allow community sources behind corroboration, or keep off?',
+    depth=2,
+    seeds=['https://usgenwebsites.org/VTWindham/VermontHistoricalGazetteer/vhgix/vhgix_intro.htm'],
+    include=['^https?://usgenwebsites\\.org/VT[A-Za-z]+/VermontHistoricalGazetteer/'],
+)
+
+
 METHODS = {"html", "rss", "sitemap", "api", "dump"}
 
 
