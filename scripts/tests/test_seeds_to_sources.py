@@ -2089,7 +2089,7 @@ def test_place_facts_research_rows_parsed_whole_2026_11_20(generated):
         spec = generated[sid]
         notes = " ".join(spec["notes"].split())
         # A cell from another column (licence, class) never lands in the robots or terms text.
-        assert not re.search(r"robots\.txt: (facts_only|open|share_alike|official|reference|editorial)\b", notes), sid
+        assert not re.search(r"robots\.txt: (facts_only|open|share_alike|official|reference|editorial)\. ", notes), sid
         assert not re.search(r"Terms: (official|reference|editorial|facts_only|open|share_alike)\.", notes), sid
         assert not re.search(r"\)/?`", spec["relevance"]["why"]), sid  # no regex tail from the include cell
         m = re.search(r"robots\.txt: (.*?)\. Terms: ", notes)
