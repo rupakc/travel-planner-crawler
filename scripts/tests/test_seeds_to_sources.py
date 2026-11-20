@@ -894,7 +894,8 @@ def test_batch2_off_sources_say_why(generated):
                 "terms forbid storage/redistribution", "meta robots", "terms forbid automated access",
                 "5xx at", "duplicate:", "gone:", "restricted licence",
                 # Place facts corpus (2026-11-20).
-                "needs owner key", "enable after a check from the crawler VM", "hook adapter removed") + FULL_CRAWL_REFUSED_PREFIXES
+                "needs owner key", "enable after a check from the crawler VM", "hook adapter removed",
+                "no robots response from VM either") + FULL_CRAWL_REFUSED_PREFIXES
     for sid in s2s.SOURCE_CLASS:
         spec = generated[sid]
         if spec["enabled"]:
@@ -1937,16 +1938,23 @@ FACTS_GROUP = {
     "North America": "americas", "Latin America & Caribbean": "americas",
     "Africa": "africa-me-oceania", "Middle East": "africa-me-oceania", "Oceania": "africa-me-oceania",
 }
+VM_NO_RESPONSE = "no robots response from VM either (2026-11-20)"
 FACTS_COUNTS = {
     "global": {"on": 117, "adapter pending": 62, "needs owner key": 4, "owner decision": 15,
                "hook adapter removed": 37},
-    "europe": {"on": 395, "adapter pending": 57, "enable after a check from the crawler VM": 9, "needs owner key": 5, "owner decision": 36},
-    "asia": {"on": 416, "adapter pending": 24, "enable after a check from the crawler VM": 62, "needs owner key": 2, "owner decision": 1},
-    "americas": {"on": 270, "adapter pending": 32, "enable after a check from the crawler VM": 9, "needs owner key": 4, "owner decision": 18},
-    "africa-me-oceania": {"on": 190, "adapter pending": 23, "enable after a check from the crawler VM": 21, "needs owner key": 1, "owner decision": 8},
+    # After the robots.txt-only check from the crawler VM (2026-11-20) all 101 stay off: "robots.txt"
+    # covers re-read (page check pending), partly answered, 403 and 301 without a Location.
+    "europe": {"on": 395, "adapter pending": 57, VM_NO_RESPONSE: 5, "robots.txt": 4, "needs owner key": 5,
+               "owner decision": 36},
+    "asia": {"on": 416, "adapter pending": 24, VM_NO_RESPONSE: 55, "robots.txt": 7, "needs owner key": 2,
+             "owner decision": 1},
+    "americas": {"on": 270, "adapter pending": 32, VM_NO_RESPONSE: 7, "robots.txt": 2, "needs owner key": 4,
+                 "owner decision": 18},
+    "africa-me-oceania": {"on": 190, "adapter pending": 23, VM_NO_RESPONSE: 20, "robots.txt": 1, "needs owner key": 1,
+                          "owner decision": 8},
 }
 FACTS_OFF_PREFIXES = ("enable after a check from the crawler VM", "adapter pending", "needs owner key",
-                      "owner decision", "seed unresolved", "hook adapter removed")
+                      "owner decision", "seed unresolved", "hook adapter removed", VM_NO_RESPONSE, "robots.txt")
 # The Wikipedia hook pages: the hook reader was taken out of #148 (a hook is share-alike article text).
 FACTS_HOOK_OFF = "hook adapter removed (share-alike text); needs an own-words extractor"
 FACTS_DENIED = ["https://www.treccani.it/enciclopedia/", "https://kotobank.jp/", "https://www.geograph.org.uk/",
@@ -2125,7 +2133,7 @@ def test_place_facts_research_rows_parsed_whole_2026_11_20(generated):
         if sid in facts:
             assert generated[sid]["enabled"] is False, sid
             assert generated[sid]["notes"].split("Disabled: ", 1)[1].startswith(
-                "enable after a check from the crawler VM"), sid
+                ("enable after a check from the crawler VM",) + s2s.FACTS_VM_CHECK_PREFIXES), sid
     # Peepul Tree's terms ban robots on peepultree.world; its other domain is denylisted and not added.
     assert "fx-livehistoryindia" not in facts
     for sid in s2s.FACTS_IDS:
@@ -2133,3 +2141,47 @@ def test_place_facts_research_rows_parsed_whole_2026_11_20(generated):
         if spec["enabled"]:
             for u in spec["seeds"] + spec["sitemaps"] + spec["feeds"]:
                 assert s2s.denied(u, DENYLIST) is None, (sid, u)
+
+
+def test_place_facts_vm_robots_check_2026_11_20(generated):
+    # One GET of /robots.txt per host from the crawler VM. The gate ("read robots.txt, terms and
+    # content first") also needs a page, terms and content check, so a robots.txt answer alone
+    # never turns a source on: all 101 stay off, the reason giving the per-host outcome.
+    r2, r3 = set(_ramp("ramp-2.txt")), set(_ramp("ramp-3.txt"))
+    vm = s2s.FACTS_VM_CHECK
+    assert len(vm) == 101
+    reasons = {}
+    for sid, why in vm.items():
+        spec = generated[sid]
+        assert not spec["enabled"] and sid not in r2 and sid not in r3, sid
+        reason = " ".join(spec["notes"].split()).split("Disabled: ", 1)[1]
+        assert reason.startswith(" ".join(why.split())[:60]), sid
+        prefix = next(p for p in s2s.FACTS_VM_CHECK_PREFIXES if reason.startswith(p))
+        reasons[prefix] = reasons.get(prefix, 0) + 1
+        assert "owner rule allows" not in reason, sid
+        # Each reason carries the per-host outcome (scheme://host: result).
+        assert re.search(r"https?://[^ :]+: (HTTP \d{3}|no response)", reason), sid
+        if prefix == "robots.txt re-read from the crawler VM":
+            assert "seed-page GET from the VM returns 2xx HTML with content" in reason, sid
+            assert re.search(r": HTTP (2\d\d|404)", reason), sid
+    assert reasons == {"robots.txt re-read from the crawler VM": 7, "robots.txt partly answered from the crawler VM": 3,
+                       "no robots response from VM either": 87, "robots.txt 403 from the crawler VM": 3,
+                       "robots.txt answers 301 without a Location": 1}
+    # Multi-host sources list every host, so a partial answer is not hidden behind one label.
+    vch = " ".join(generated["arch-vch-gloucestershire"]["notes"].split())
+    assert "http://vchglos.org.uk: HTTP 200, Crawl-delay 2" in vch and "min_delay_s >= 5" in vch
+    assert "https://tourism.bihar.gov.in: HTTP 404" in " ".join(generated["tb-in-bihar"]["notes"].split())
+    assert "https://www.ilccb.gov.tw: HTTP 301" in " ".join(generated["gov-tw-county-culture-batch"]["notes"].split())
+    wales = " ".join(generated["her-wales-historic-placenames"]["notes"].split())
+    assert "min_delay_s 1000" in wales and "no LLM kinds" in wales
+    # A 403 on robots.txt with no known terms ban: off, not denylisted.
+    for host in ("lahore.punjab.gov.pk", "lahoremuseum.punjab.gov.pk", "archaeology.punjab.gov.pk"):
+        assert s2s.denied(f"https://{host}/", DENYLIST) is None, host
+
+
+def test_no_include_placeholder_tail(generated):
+    # A research-cell placeholder once leaked into include as `.*(?:(host-scoped))`, which no URL
+    # matches, so the crawl never left the seed page (in_scope requires an include hit).
+    for sid, spec in generated.items():
+        for r in spec["include"]:
+            assert "host-scoped" not in r, (sid, r)

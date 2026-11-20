@@ -39,10 +39,11 @@ display_requirements: null
 notes: 'Research 2026-11-20 (place facts corpus; North America; verdict ADD): neighbourhood and town essays
   (locations index), for Place facts, Places to see and Free walking tours. robots.txt: 200 (robots NO
   RESPONSE on www., 200 on the apex host); allow all. Terms: terms not found. Sourced: yes. Terms not
-  read or not found; owner accepted for non-commercial use 2026-11-18. Facts only. | Disabled: enable
-  after a check from the crawler VM: a robots.txt or page fetch failed or timed out from the research
-  laptop (200 (robots NO RESPONSE on www., 200 on the apex host); allow all); read robots.txt, terms and
-  content first'
+  read or not found; owner accepted for non-commercial use 2026-11-18. Facts only. | Disabled: robots.txt
+  re-read from the crawler VM (2026-11-20): https://philadelphiaencyclopedia.org: HTTP 200, allows /,
+  /essays/, /sitemap_index.xml; https://philadelphiaencyclopedia.org: HTTP 200, allows /, /essays/, /feed/;
+  only robots.txt was fetched, so a page, terms and content check is still pending: enable after one seed-page
+  GET from the VM returns 2xx HTML with content'
 relevance:
   sections:
   - facts

@@ -39,9 +39,10 @@ notes: 'Research 2026-11-20 (place facts corpus; Europe (incl. Russia, Turkey); 
   County History parish drafts (Glos), for Place facts and Places to see. robots.txt: http robots 200
   (https timed out); Crawl-delay 2. Terms: terms not found. Sourced: yes. Terms not read or not found;
   owner accepted for non-commercial use 2026-11-18. Facts only. Crawl-delay 5 honoured as min_delay_s.
-  | Disabled: enable after a check from the crawler VM: a robots.txt or page fetch failed or timed out
-  from the research laptop (http robots 200 (https timed out); Crawl-delay 2); read robots.txt, terms
-  and content first'
+  | Disabled: robots.txt partly answered from the crawler VM (2026-11-20): http://vchglos.org.uk: HTTP
+  200, Crawl-delay 2, allows /volumes-in-preparation/, /volumes/; https://vchglos.org.uk: no response
+  (TLS); the https seed is unreachable: switch it to http (then min_delay_s >= 5) and check a page, terms
+  and content before enabling'
 relevance:
   sections:
   - facts

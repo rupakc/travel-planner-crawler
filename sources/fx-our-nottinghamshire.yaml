@@ -16,7 +16,7 @@ sitemaps: []
 feeds: []
 adapter: null
 include:
-- ^https?://www\.ournottinghamshire\.org\.uk/.*(?:(host-scoped))
+- ^https?://www\.ournottinghamshire\.org\.uk/
 exclude: []
 max_depth: 2
 kinds:
@@ -36,9 +36,9 @@ display_requirements: null
 notes: 'Research 2026-11-20 (place facts corpus; Europe (incl. Russia, Turkey); verdict ADD): community-written
   town and village histories, for Place facts and Places to see. robots.txt: NO RESPONSE (DNS ok), so
   allowed; check from the VM. Terms: terms not found. Sourced: partly. Terms not read or not found; owner
-  accepted for non-commercial use 2026-11-18. Facts only. | Disabled: enable after a check from the crawler
-  VM: a robots.txt or page fetch failed or timed out from the research laptop (NO RESPONSE (DNS ok), so
-  allowed; check from the VM); read robots.txt, terms and content first'
+  accepted for non-commercial use 2026-11-18. Facts only. | Disabled: no robots response from VM either
+  (2026-11-20): https://www.ournottinghamshire.org.uk: no response (timeout); reach unverified; terms
+  and content not yet seen'
 relevance:
   sections:
   - facts

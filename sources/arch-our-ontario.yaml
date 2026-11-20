@@ -16,7 +16,7 @@ sitemaps: []
 feeds: []
 adapter: null
 include:
-- ^https?://ourontario\.ca/.*(?:(host-scoped))
+- ^https?://ourontario\.ca/
 exclude: []
 max_depth: 2
 kinds:

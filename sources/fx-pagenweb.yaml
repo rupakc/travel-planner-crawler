@@ -16,7 +16,7 @@ sitemaps: []
 feeds: []
 adapter: null
 include:
-- ^https?://pagenweb\.org/.*(?:(host-scoped))
+- ^https?://pagenweb\.org/
 exclude: []
 max_depth: 2
 kinds:

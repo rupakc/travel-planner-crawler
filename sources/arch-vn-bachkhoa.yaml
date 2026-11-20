@@ -37,8 +37,8 @@ display_requirements: null
 notes: 'Research 2026-11-20 (place facts corpus; Southeast Asia; verdict ADD): national encyclopedia entries
   on provinces, villages, for Place facts. robots.txt: timeout x2. Terms: unchecked. Copyright reserved,
   no bot, scraping, TDM or AI ban quoted; owner accepted for non-commercial use 2026-11-18. Facts only.
-  | Disabled: enable after a check from the crawler VM: robots.txt gave no response from the research
-  laptop (timeout x2); terms and content not yet seen'
+  | Disabled: no robots response from VM either (2026-11-20): https://bachkhoatoanthu.vass.gov.vn: no
+  response (timeout); reach unverified; terms and content not yet seen'
 relevance:
   sections:
   - facts

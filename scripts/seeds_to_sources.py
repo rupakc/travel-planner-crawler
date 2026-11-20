@@ -18809,7 +18809,11 @@ DISABLED.update(CARBON_TABLES_3_OFF)
 #    link) except from share-alike text and AI-reserved robots.txt (title and link only).
 #    Crawl-delays become min_delay_s; cadence monthly or slower; depth <= 2; 100 requests/day.
 #  - Off with the reason first: "enable after a check from the crawler VM" (robots.txt gave no
-#    response from the research laptop), "adapter pending: <format>", "needs owner key:
+#    response from the research laptop; after the VM robots.txt check of 2026-11-20 these read
+#    "robots.txt re-read from the crawler VM" (robots answered, page/terms/content check pending),
+#    "robots.txt partly answered from the crawler VM", "no robots response from VM either",
+#    "robots.txt 403 from the crawler VM" or "robots.txt answers 301 without a Location", see
+#    FACTS_VM_CHECK), "adapter pending: <format>", "needs owner key:
 #    <service>", "owner decision: <question>" (community-written sites included: place_fact
 #    takes official, reference and editorial sources only).
 #  - Structured readers on: factbook_json and wikidata_facts (EntityData); the existing
@@ -21580,7 +21584,7 @@ _facts(
     off='enable after a check from the crawler VM: a robots.txt or page fetch failed or timed out from the research laptop (http robots 404, so allowed (https timed out)); read robots.txt, terms and content first',
     depth=2,
     seeds=['http://suffolkchurches.co.uk/churchlists.htm'],
-    include=['^https?://suffolkchurches\\.co\\.uk/.*(?:(host-scoped))'],
+    include=['^https?://suffolkchurches\\.co\\.uk/'],
 )
 _facts(
     'fx-norfolk-churches',
@@ -21590,7 +21594,7 @@ _facts(
     off='enable after a check from the crawler VM: a robots.txt or page fetch failed or timed out from the research laptop (NO RESPONSE (https + http, DNS resolves), so allowed (owner rule); check from the VM); read robots.txt, terms and content first',
     depth=2,
     seeds=['http://www.norfolkchurches.co.uk/'],
-    include=['^https?://www\\.norfolkchurches\\.co\\.uk/.*(?:(host-scoped))'],
+    include=['^https?://www\\.norfolkchurches\\.co\\.uk/'],
 )
 _facts(
     'fx-hertfordshire-genealogy',
@@ -21612,7 +21616,7 @@ _facts(
     off='enable after a check from the crawler VM: a robots.txt or page fetch failed or timed out from the research laptop (NO RESPONSE (DNS ok), so allowed; check from the VM); read robots.txt, terms and content first',
     depth=2,
     seeds=['https://www.ournottinghamshire.org.uk/'],
-    include=['^https?://www\\.ournottinghamshire\\.org\\.uk/.*(?:(host-scoped))'],
+    include=['^https?://www\\.ournottinghamshire\\.org\\.uk/'],
 )
 _facts(
     'fx-survey-of-london',
@@ -31343,7 +31347,7 @@ _facts(
     depth=2,
     delay=10,
     seeds=['https://pagenweb.org/counties.htm'],
-    include=['^https?://pagenweb\\.org/.*(?:(host-scoped))'],
+    include=['^https?://pagenweb\\.org/'],
 )
 _facts(
     'fx-usgwarchives',
@@ -31354,7 +31358,7 @@ _facts(
     off='enable after a check from the crawler VM: a robots.txt or page fetch failed or timed out from the research laptop (NO RESPONSE (DNS ok), so allowed; check from the VM); read robots.txt, terms and content first',
     depth=2,
     seeds=['http://www.usgwarchives.net/'],
-    include=['^https?://www\\.usgwarchives\\.net/.*(?:(host-scoped))'],
+    include=['^https?://www\\.usgwarchives\\.net/'],
 )
 _facts(
     'fx-vagenweb',
@@ -31365,7 +31369,7 @@ _facts(
     off='enable after a check from the crawler VM: a robots.txt or page fetch failed or timed out from the research laptop (NO RESPONSE (DNS ok), so allowed); read robots.txt, terms and content first',
     depth=2,
     seeds=['http://www.vagenweb.org/'],
-    include=['^https?://www\\.vagenweb\\.org/.*(?:(host-scoped))'],
+    include=['^https?://www\\.vagenweb\\.org/'],
 )
 _facts(
     'fx-nl-genweb',
@@ -31384,7 +31388,7 @@ _facts(
     cls='official',
     depth=2,
     seeds=['https://ourontario.ca/'],
-    include=['^https?://ourontario\\.ca/.*(?:(host-scoped))'],
+    include=['^https?://ourontario\\.ca/'],
 )
 _facts(
     'fx-sa-history-hub',
@@ -31415,7 +31419,7 @@ _facts(
     off='enable after a check from the crawler VM: a robots.txt or page fetch failed or timed out from the research laptop (NO RESPONSE (DNS ok), so allowed); read robots.txt, terms and content first',
     depth=2,
     seeds=['https://kete.net.nz/'],
-    include=['^https?://kete\\.net\\.nz/.*(?:(host-scoped))'],
+    include=['^https?://kete\\.net\\.nz/'],
 )
 _facts(
     'arch-dsal-imperial-gazetteer',
@@ -35237,6 +35241,130 @@ _facts(
     seeds=['https://www.ghanadistricts.com/'],
 )
 
+
+# ---------------------------------------------------------------------------------------
+# Place facts: robots.txt re-checked from the crawler VM (2026-11-20), one GET of /robots.txt per host
+# with the VoyagerBot UA (15 s timeout, 2 s apart, <= 3 redirects); nothing else was fetched. Every
+# source stays off, with the per-host outcome as the reason:
+#  - "robots.txt re-read from the crawler VM": 2xx allowing the seed/include paths, or 404; the gate
+#    also asks for a page, terms and content check, so these wait for one seed-page GET from the VM
+#    (2xx HTML with content) before they go on.
+#  - "robots.txt partly answered from the crawler VM": some hosts answered, a seed host did not.
+#  - "no robots response from VM either": no host answered (timeout, TLS, DNS, reset, refused).
+#  - "robots.txt 403 from the crawler VM": that origin is do-not-crawl (vc-policy 401/403 rule);
+#    denylisted only for a known terms ban (none known).
+#  - "robots.txt answers 301 without a Location": off until it answers 2xx or 404.
+# ---------------------------------------------------------------------------------------
+FACTS_VM_CHECK: dict[str, str] = {
+    'arch-anzac-portal': 'no robots response from VM either (2026-11-20): https://anzacportal.dva.gov.au: no response (reset/closed); reach unverified; terms and content not yet seen',
+    'arch-chicago-encyclopedia': 'no robots response from VM either (2026-11-20): http://encyclopedia.chicagohistory.org: no response (timeout); reach unverified; terms and content not yet seen',
+    'arch-darah': 'no robots response from VM either (2026-11-20): https://darah.org.sa: no response (DNS); reach unverified; terms and content not yet seen',
+    'arch-digitalnc': 'no robots response from VM either (2026-11-20): https://www.digitalnc.org: no response (timeout); reach unverified; terms and content not yet seen',
+    'arch-disa': 'no robots response from VM either (2026-11-20): https://disa.ukzn.ac.za: no response (timeout); reach unverified; terms and content not yet seen',
+    'arch-heritage-nl': 'no robots response from VM either (2026-11-20): https://www.heritage.nf.ca: no response (timeout); reach unverified; terms and content not yet seen',
+    'arch-kete-nz': 'no robots response from VM either (2026-11-20): https://kete.net.nz: no response (timeout); reach unverified; terms and content not yet seen',
+    'arch-kr-jeju-studies': 'no robots response from VM either (2026-11-20): https://www.jst.re.kr: no response (timeout); reach unverified; terms and content not yet seen',
+    'arch-lk-archives': 'no robots response from VM either (2026-11-20): https://www.archives.gov.lk: no response (TLS); reach unverified; terms and content not yet seen',
+    'arch-mass-moments': 'no robots response from VM either (2026-11-20): https://www.massmoments.org: no response (timeout); reach unverified; terms and content not yet seen',
+    'arch-naa': 'no robots response from VM either (2026-11-20): https://www.naa.gov.au: no response (reset/closed); reach unverified; terms and content not yet seen',
+    'arch-nlsa': 'no robots response from VM either (2026-11-20): https://nlsa.ac.za: no response (DNS); reach unverified; terms and content not yet seen',
+    'arch-np-academy': 'no robots response from VM either (2026-11-20): https://nepalacademy.gov.np: no response (timeout); reach unverified; terms and content not yet seen',
+    'arch-np-archives': 'no robots response from VM either (2026-11-20): https://narchives.gov.np: no response (timeout); reach unverified; terms and content not yet seen',
+    'arch-tw-yilan-history': 'robots.txt answers 301 without a Location header from the crawler VM (2026-11-20): https://yihistory.e-land.gov.tw: HTTP 301 without a Location; keep off until it answers 2xx or 404',
+    'arch-vch-gloucestershire': 'robots.txt partly answered from the crawler VM (2026-11-20): http://vchglos.org.uk: HTTP 200, Crawl-delay 2, allows /volumes-in-preparation/, /volumes/; https://vchglos.org.uk: no response (TLS); the https seed is unreachable: switch it to http (then min_delay_s >= 5) and check a page, terms and content before enabling',
+    'arch-vision-of-britain': 'no robots response from VM either (2026-11-20): https://www.visionofbritain.org.uk: no response (TLS); reach unverified; terms and content not yet seen',
+    'arch-vn-bachkhoa': 'no robots response from VM either (2026-11-20): https://bachkhoatoanthu.vass.gov.vn: no response (timeout); reach unverified; terms and content not yet seen',
+    'arch-wits-historical-papers': 'no robots response from VM either (2026-11-20): https://historicalpapers.wits.ac.za: no response (DNS); reach unverified; terms and content not yet seen',
+    'city-joburg': 'robots.txt re-read from the crawler VM (2026-11-20): https://joburg.org.za: HTTP 404 (allow all); only robots.txt was fetched, so a page, terms and content check is still pending: enable after one seed-page GET from the VM returns 2xx HTML with content',
+    'city-jp-kumano': 'no robots response from VM either (2026-11-20): https://www.city.kumano.mie.jp: no response (timeout); reach unverified; terms and content not yet seen',
+    'city-kr-boseong': 'no robots response from VM either (2026-11-20): https://www.boseong.go.kr: no response (timeout); reach unverified; terms and content not yet seen',
+    'city-kr-hadong': 'no robots response from VM either (2026-11-20): https://www.hadong.go.kr: no response (timeout); reach unverified; terms and content not yet seen',
+    'city-kr-namhae': 'no robots response from VM either (2026-11-20): https://www.namhae.go.kr: no response (timeout); https://www.sancheong.go.kr: no response (timeout); https://www.geochang.go.kr: no response (timeout); https://www.gangjin.go.kr: no response (timeout); reach unverified; terms and content not yet seen',
+    'fx-adelaidia': 'no robots response from VM either (2026-11-20): https://adelaidia.history.sa.gov.au: no response (TLS); reach unverified; terms and content not yet seen',
+    'fx-chuantongcunluo-com': 'no robots response from VM either (2026-11-20): https://www.chuantongcunluo.com: no response (TLS); reach unverified; terms and content not yet seen',
+    'fx-cqdfz-cn': 'no robots response from VM either (2026-11-20): https://www.cqdfz.cn: no response (reset/closed); reach unverified; terms and content not yet seen',
+    'fx-gxdfz-org-cn': 'no robots response from VM either (2026-11-20): https://www.gxdfz.org.cn: no response (timeout); https://www.sdsqw.cn: no response (timeout); https://www.ynsdfz.cn: no response (timeout); reach unverified; terms and content not yet seen',
+    'fx-monument-australia': 'no robots response from VM either (2026-11-20): https://monumentaustralia.org.au: no response (DNS); reach unverified; terms and content not yet seen',
+    'fx-norfolk-churches': 'no robots response from VM either (2026-11-20): http://www.norfolkchurches.co.uk: no response (reset/closed); reach unverified; terms and content not yet seen',
+    'fx-our-nottinghamshire': 'no robots response from VM either (2026-11-20): https://www.ournottinghamshire.org.uk: no response (timeout); reach unverified; terms and content not yet seen',
+    'fx-philadelphia-encyclopedia': 'robots.txt re-read from the crawler VM (2026-11-20): https://philadelphiaencyclopedia.org: HTTP 200, allows /, /essays/, /sitemap_index.xml; https://philadelphiaencyclopedia.org: HTTP 200, allows /, /essays/, /feed/; only robots.txt was fetched, so a page, terms and content check is still pending: enable after one seed-page GET from the VM returns 2xx HTML with content',
+    'fx-repetti-toscana': 'no robots response from VM either (2026-11-20): http://www406.regione.toscana.it: no response (timeout); reach unverified; terms and content not yet seen',
+    'fx-sdsqw-cn': 'no robots response from VM either (2026-11-20): https://www.sdsqw.cn: no response (timeout); reach unverified; terms and content not yet seen',
+    'fx-suffolk-churches': 'robots.txt re-read from the crawler VM (2026-11-20): http://suffolkchurches.co.uk: HTTP 404 (allow all); only robots.txt was fetched, so a page, terms and content check is still pending: enable after one seed-page GET from the VM returns 2xx HTML with content (robots.txt answered over http, the scheme of the seed)',
+    'fx-tjdfz-org-cn': 'no robots response from VM either (2026-11-20): https://www.tjdfz.org.cn: no response (timeout); reach unverified; terms and content not yet seen',
+    'fx-usgwarchives': 'no robots response from VM either (2026-11-20): http://www.usgwarchives.net: no response (timeout); reach unverified; terms and content not yet seen',
+    'fx-vagenweb': 'no robots response from VM either (2026-11-20): http://www.vagenweb.org: no response (reset/closed); reach unverified; terms and content not yet seen',
+    'gov-cn-sc-dfz': 'no robots response from VM either (2026-11-20): https://www.scdfz.org.cn: no response (timeout); reach unverified; terms and content not yet seen',
+    'gov-cn-yunnan-digital-villages': 'no robots response from VM either (2026-11-20): https://www.ynszxc.net: no response (timeout); reach unverified; terms and content not yet seen',
+    'gov-dz-culture': 'no robots response from VM either (2026-11-20): https://m-culture.gov.dz: no response (timeout); reach unverified; terms and content not yet seen',
+    'gov-id-kebudayaan': 'no robots response from VM either (2026-11-20): https://kebudayaan.kemenbud.go.id: no response (DNS); reach unverified; terms and content not yet seen',
+    'gov-in-as-districts': 'no robots response from VM either (2026-11-20): https://cachar.gov.in: no response (timeout); reach unverified; terms and content not yet seen',
+    'gov-in-br-portal': 'no robots response from VM either (2026-11-20): https://state.bihar.gov.in: no response (TLS); reach unverified; terms and content not yet seen',
+    'gov-in-gj-districts': 'no robots response from VM either (2026-11-20): https://kutch.gujarat.gov.in: no response (timeout); https://junagadh.gujarat.gov.in: no response (timeout); reach unverified; terms and content not yet seen',
+    'gov-in-gj-gazetteer': 'no robots response from VM either (2026-11-20): https://gazetteer.gujarat.gov.in: no response (timeout); reach unverified; terms and content not yet seen',
+    'gov-in-hr-gazetteers': 'no robots response from VM either (2026-11-20): https://revenueharyana.gov.in: no response (timeout); reach unverified; terms and content not yet seen',
+    'gov-in-ka-gazetteer': 'no robots response from VM either (2026-11-20): https://gazetteer.kar.nic.in: no response (timeout); reach unverified; terms and content not yet seen',
+    'gov-in-ml-artsculture': 'robots.txt re-read from the crawler VM (2026-11-20): https://megartsculture.gov.in: HTTP 404 (allow all); only robots.txt was fetched, so a page, terms and content check is still pending: enable after one seed-page GET from the VM returns 2xx HTML with content',
+    'gov-in-od-culture': 'no robots response from VM either (2026-11-20): https://odishaculture.gov.in: no response (timeout); reach unverified; terms and content not yet seen',
+    'gov-in-od-districts': 'no robots response from VM either (2026-11-20): https://puri.odisha.gov.in: no response (reset/closed); https://ganjam.odisha.gov.in: no response (reset/closed); https://mayurbhanj.odisha.gov.in: no response (reset/closed); reach unverified; terms and content not yet seen',
+    'gov-in-wb-districts-2': 'no robots response from VM either (2026-11-20): https://hooghly.gov.in: no response (timeout); https://murshidabad.gov.in: no response (timeout); https://purbabardhaman.gov.in: no response (timeout); https://north24parganas.gov.in: no response (timeout); https://malda.gov.in: no response (timeout); reach unverified; terms and content not yet seen',
+    'gov-in-wb-portal': 'no robots response from VM either (2026-11-20): https://www.wb.gov.in: no response (timeout); reach unverified; terms and content not yet seen',
+    'gov-iran-mcth': 'no robots response from VM either (2026-11-20): https://mcth.ir: no response (timeout); reach unverified; terms and content not yet seen',
+    'gov-lagis-hessen-ortslexikon': 'robots.txt re-read from the crawler VM (2026-11-20): https://lagis.hessen.de: HTTP 200, allows /, /de/subjects/, /sitemaps/sitemap.xml; https://lagis.hessen.de: HTTP 200, allows /, /de/subjects/, /sitemaps/sitemap_historisches-ortslexikon_01.xml; only robots.txt was fetched, so a page, terms and content check is still pending: enable after one seed-page GET from the VM returns 2xx HTML with content (server-rendered content: the portal is a JavaScript app and render stays never)',
+    'gov-np-lalitpur': 'no robots response from VM either (2026-11-20): https://lalitpurmun.gov.np: no response (timeout); reach unverified; terms and content not yet seen',
+    'gov-np-pokhara': 'no robots response from VM either (2026-11-20): https://pokharamun.gov.np: no response (timeout); reach unverified; terms and content not yet seen',
+    'gov-pk-pb-districts': 'robots.txt 403 from the crawler VM (2026-11-20): https://lahore.punjab.gov.pk: HTTP 403; https://multan.punjab.gov.pk: HTTP 403; https://punjab.gov.pk: no response (timeout); those origins are do-not-crawl; no terms ban known, so not denylisted',
+    'gov-tw-county-culture-batch': 'robots.txt partly answered from the crawler VM (2026-11-20): https://www.culture.taichung.gov.tw: no response (timeout); https://khcc.gov.tw: no response (timeout); https://www.mlc.gov.tw: no response (timeout); https://www.nthcc.gov.tw: no response (timeout); https://www.cabcy.gov.tw: no response (TLS); https://www.cultural.pthg.gov.tw: no response (refused); https://www.ccl.ttct.edu.tw: no response (timeout); https://www.phhcc.gov.tw: no response (timeout); https://www.kmccc.edu.tw: no response (timeout); https://www.ilccb.gov.tw: HTTP 301 without a Location; https://www.klccab.gov.tw: no response (refused); most seeds unreachable; terms and content not yet seen',
+    'gov-tw-place-names': 'no robots response from VM either (2026-11-20): https://gn.moi.gov.tw: no response (timeout); reach unverified; terms and content not yet seen',
+    'her-amafa': 'no robots response from VM either (2026-11-20): https://amafa.org.za: no response (DNS); reach unverified; terms and content not yet seen',
+    'her-au-nsw-shi': 'no robots response from VM either (2026-11-20): https://hms.heritage.nsw.gov.au: no response (DNS); reach unverified; terms and content not yet seen',
+    'her-bahrain-baca': 'no robots response from VM either (2026-11-20): https://culture.gov.bh: no response (timeout); reach unverified; terms and content not yet seen',
+    'her-bn-museums': 'no robots response from VM either (2026-11-20): https://museums.gov.bn: no response (TLS); reach unverified; terms and content not yet seen',
+    'her-bt-doc': 'no robots response from VM either (2026-11-20): https://doc.gov.bt: no response (timeout); reach unverified; terms and content not yet seen',
+    'her-cassini-ehess': 'no robots response from VM either (2026-11-20): http://cassini.ehess.fr: no response (timeout); reach unverified; terms and content not yet seen',
+    'her-cn-dmctv': 'no robots response from VM either (2026-11-20): https://www.dmctv.cn: no response (timeout); reach unverified; terms and content not yet seen',
+    'her-cn-ihchina': 'no robots response from VM either (2026-11-20): https://www.ihchina.cn: no response (timeout); reach unverified; terms and content not yet seen',
+    'her-ethiopia-eha': 'no robots response from VM either (2026-11-20): https://ehap.insa.gov.et: no response (refused); reach unverified; terms and content not yet seen',
+    'her-id-jogjacagar': 'no robots response from VM either (2026-11-20): https://jogjacagar.jogjaprov.go.id: no response (timeout); reach unverified; terms and content not yet seen',
+    'her-id-wbtb': 'no robots response from VM either (2026-11-20): https://warisanbudaya.kemenbud.go.id: no response (DNS); reach unverified; terms and content not yet seen',
+    'her-idpc-maroc': 'no robots response from VM either (2026-11-20): https://idpc.ma: no response (DNS); reach unverified; terms and content not yet seen',
+    'her-in-as-archaeology': 'no robots response from VM either (2026-11-20): https://archaeology.assam.gov.in: no response (timeout); reach unverified; terms and content not yet seen',
+    'her-in-ka-archaeology': 'no robots response from VM either (2026-11-20): https://archaeology.karnataka.gov.in: no response (timeout); reach unverified; terms and content not yet seen',
+    'her-in-kl-archaeology': 'no robots response from VM either (2026-11-20): https://archaeology.kerala.gov.in: no response (timeout); reach unverified; terms and content not yet seen',
+    'her-in-mp-archaeology': 'no robots response from VM either (2026-11-20): https://archaeology.mp.gov.in: no response (timeout); reach unverified; terms and content not yet seen',
+    'her-in-nmma': 'no robots response from VM either (2026-11-20): https://nmma.nic.in: no response (timeout); reach unverified; terms and content not yet seen',
+    'her-in-tn-archaeology': 'no robots response from VM either (2026-11-20): https://www.tnarch.gov.in: no response (timeout); reach unverified; terms and content not yet seen',
+    'her-inp-rnrt': 'no robots response from VM either (2026-11-20): https://inp.rnrt.tn: no response (timeout); reach unverified; terms and content not yet seen',
+    'her-jnht': 'robots.txt re-read from the crawler VM (2026-11-20): https://www.jnht.com: HTTP 200, allows /; https://www.jnht.com: HTTP 200, allows /, /trelawny.php; only robots.txt was fetched, so a page, terms and content check is still pending: enable after one seed-page GET from the VM returns 2xx HTML with content',
+    'her-jordan-doa': 'no robots response from VM either (2026-11-20): https://doa.gov.jo: no response (timeout); reach unverified; terms and content not yet seen',
+    'her-jp-mie-bunka': 'no robots response from VM either (2026-11-20): https://www.bunka.pref.mie.lg.jp: no response (timeout); reach unverified; terms and content not yet seen',
+    'her-lk-archaeology': 'no robots response from VM either (2026-11-20): https://www.archaeology.gov.lk: no response (timeout); reach unverified; terms and content not yet seen',
+    'her-lk-ccf': 'no robots response from VM either (2026-11-20): https://ccf.gov.lk: no response (timeout); reach unverified; terms and content not yet seen',
+    'her-my-sarawak-museum': 'no robots response from VM either (2026-11-20): https://museum.sarawak.gov.my: no response (timeout); reach unverified; terms and content not yet seen',
+    'her-petra': 'no robots response from VM either (2026-11-20): https://visitpetra.jo: no response (timeout); reach unverified; terms and content not yet seen',
+    'her-ph-ncca': 'no robots response from VM either (2026-11-20): https://ncca.gov.ph: no response (DNS); reach unverified; terms and content not yet seen',
+    'her-pk-lahore-museum': 'robots.txt 403 from the crawler VM (2026-11-20): https://lahoremuseum.punjab.gov.pk: HTTP 403; those origins are do-not-crawl; no terms ban known, so not denylisted',
+    'her-pk-punjab-archaeology': 'robots.txt 403 from the crawler VM (2026-11-20): https://archaeology.punjab.gov.pk: HTTP 403; those origins are do-not-crawl; no terms ban known, so not denylisted',
+    'her-sahris': 'no robots response from VM either (2026-11-20): https://sahris.sahra.org.za: no response (timeout); reach unverified; terms and content not yet seen',
+    'her-vn-hue': 'no robots response from VM either (2026-11-20): https://hueworldheritage.org.vn: no response (timeout); reach unverified; terms and content not yet seen',
+    'her-wales-historic-placenames': 'robots.txt re-read from the crawler VM (2026-11-20): https://historicplacenames.rcahmw.gov.uk: HTTP 200, Crawl-delay 1000, AI bots blocked (gptbot, claudebot, ccbot, google-extended), allows /, /blog/, /placenames/; https://historicplacenames.rcahmw.gov.uk: HTTP 200, Crawl-delay 1000, AI bots blocked (gptbot, claudebot, ccbot, google-extended), allows /blog/, /placenames/; only robots.txt was fetched, so a page, terms and content check is still pending: enable after one seed-page GET from the VM returns 2xx HTML with content; when enabled keep min_delay_s 1000 (Crawl-delay) and no LLM kinds (AI bots blocked)',
+    'od-mega-jordan': 'no robots response from VM either (2026-11-20): https://megajordan.org: no response (refused); reach unverified; terms and content not yet seen',
+    'od-th-finearts': 'no robots response from VM either (2026-11-20): https://data.finearts.go.th: no response (TLS); reach unverified; terms and content not yet seen',
+    'od-tw-ihp-placenames': 'no robots response from VM either (2026-11-20): http://archive.ihp.sinica.edu.tw: no response (timeout); reach unverified; terms and content not yet seen',
+    'tb-bt-tourism': 'no robots response from VM either (2026-11-20): https://www.tourism.gov.bt: no response (timeout); reach unverified; terms and content not yet seen',
+    'tb-in-bihar': 'robots.txt partly answered from the crawler VM (2026-11-20): https://bihartourism.gov.in: no response (timeout); https://tourism.bihar.gov.in: HTTP 404 (allow all); the first seed is unreachable; terms and content not yet seen',
+    'tb-in-haryana': 'no robots response from VM either (2026-11-20): https://www.haryanatourism.gov.in: no response (TLS); reach unverified; terms and content not yet seen',
+    'tb-in-jharkhand': 'no robots response from VM either (2026-11-20): https://www.jharkhandtourism.gov.in: no response (timeout); reach unverified; terms and content not yet seen',
+    'tb-in-mp-gov': 'no robots response from VM either (2026-11-20): https://tourism.mp.gov.in: no response (timeout); reach unverified; terms and content not yet seen',
+    'tb-in-up': 'no robots response from VM either (2026-11-20): https://www.uptourism.gov.in: no response (timeout); reach unverified; terms and content not yet seen',
+}
+FACTS_VM_CHECK_PREFIXES = ("robots.txt re-read from the crawler VM", "robots.txt partly answered from the crawler VM",
+                           "no robots response from VM either", "robots.txt 403 from the crawler VM",
+                           "robots.txt answers 301 without a Location")
+for _sid, _why in FACTS_VM_CHECK.items():
+    assert DISABLED[_sid].startswith('enable after a check from the crawler VM'), _sid
+    assert _why.startswith(FACTS_VM_CHECK_PREFIXES), _sid
+    DISABLED[_sid] = _why
 
 METHODS = {"html", "rss", "sitemap", "api", "dump"}
 

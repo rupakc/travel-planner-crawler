@@ -36,9 +36,9 @@ max_retention_days: null
 display_requirements: null
 notes: 'Research 2026-11-20 (place facts corpus; East Asia; verdict ADD): historical place names of China
   with dynasties, for Place facts. robots.txt: robots timeout. Terms: not read. Sourced: yes. Terms not
-  read or not found; owner accepted for non-commercial use 2026-11-18. Facts only. | Disabled: enable
-  after a check from the crawler VM: robots.txt gave no response from the research laptop (robots timeout);
-  terms and content not yet seen'
+  read or not found; owner accepted for non-commercial use 2026-11-18. Facts only. | Disabled: no robots
+  response from VM either (2026-11-20): http://archive.ihp.sinica.edu.tw: no response (timeout); reach
+  unverified; terms and content not yet seen'
 relevance:
   sections:
   - facts
