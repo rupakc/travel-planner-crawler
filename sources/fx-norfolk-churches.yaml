@@ -16,7 +16,7 @@ sitemaps: []
 feeds: []
 adapter: null
 include:
-- ^https?://www\.norfolkchurches\.co\.uk/.*(?:(host-scoped))
+- ^https?://www\.norfolkchurches\.co\.uk/
 exclude: []
 max_depth: 2
 kinds:
@@ -38,8 +38,8 @@ notes: 'Research 2026-11-20 (place facts corpus; Europe (incl. Russia, Turkey); 
   village and church essays, for Place facts and Places to see. robots.txt: NO RESPONSE (https + http,
   DNS resolves), so allowed (owner rule); check from the VM. Terms: terms not found (unreachable). Sourced:
   partly. Terms not read or not found; owner accepted for non-commercial use 2026-11-18. Facts only. |
-  Disabled: no robots response from VM either (2026-11-20); owner rule allows, but reach unverified (reset/closed);
-  terms and content not yet seen'
+  Disabled: no robots response from VM either (2026-11-20): http://www.norfolkchurches.co.uk: no response
+  (reset/closed); reach unverified; terms and content not yet seen'
 relevance:
   sections:
   - facts

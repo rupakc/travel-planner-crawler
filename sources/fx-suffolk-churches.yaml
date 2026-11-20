@@ -16,7 +16,7 @@ sitemaps: []
 feeds: []
 adapter: null
 include:
-- ^https?://suffolkchurches\.co\.uk/.*(?:(host-scoped))
+- ^https?://suffolkchurches\.co\.uk/
 exclude: []
 max_depth: 2
 kinds:
@@ -29,7 +29,7 @@ cadence: yearly
 min_delay_s: 5
 daily_budget: 100
 politeness_key: null
-enabled: true
+enabled: false
 needs_key: false
 key_secret: null
 max_retention_days: null
@@ -37,8 +37,10 @@ display_requirements: null
 notes: 'Research 2026-11-20 (place facts corpus; Europe (incl. Russia, Turkey); verdict ADD): a village
   and church essay for each of 600+ Suffolk churches, for Place facts and Places to see. robots.txt: http
   robots 404, so allowed (https timed out). Terms: terms not found. Sourced: partly. Terms not read or
-  not found; owner accepted for non-commercial use 2026-11-18. Facts only. | Robots checked from the crawler
-  VM 2026-11-20: suffolkchurches.co.uk/robots.txt 404 over http (allow all); on.'
+  not found; owner accepted for non-commercial use 2026-11-18. Facts only. | Disabled: robots.txt re-read
+  from the crawler VM (2026-11-20): http://suffolkchurches.co.uk: HTTP 404 (allow all); only robots.txt
+  was fetched, so a page, terms and content check is still pending: enable after one seed-page GET from
+  the VM returns 2xx HTML with content (robots.txt answered over http, the scheme of the seed)'
 relevance:
   sections:
   - facts

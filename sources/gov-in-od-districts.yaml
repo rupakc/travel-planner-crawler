@@ -38,8 +38,10 @@ display_requirements: null
 notes: 'Research 2026-11-20 (place facts corpus; South Asia; verdict ADD): history and curiosities of
   the places it covers, for Place facts and Places to see. Terms: terms not found. Terms not read or not
   found; owner accepted for non-commercial use 2026-11-18. Facts only. result: connection reset (all 3).
-  Seed: the host root (the research row names no URL). | Disabled: no robots response from VM either (2026-11-20);
-  owner rule allows, but reach unverified (reset/closed); terms and content not yet seen'
+  Seed: the host root (the research row names no URL). | Disabled: no robots response from VM either (2026-11-20):
+  https://puri.odisha.gov.in: no response (reset/closed); https://ganjam.odisha.gov.in: no response (reset/closed);
+  https://mayurbhanj.odisha.gov.in: no response (reset/closed); reach unverified; terms and content not
+  yet seen'
 relevance:
   sections:
   - facts

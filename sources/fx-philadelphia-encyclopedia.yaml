@@ -31,7 +31,7 @@ cadence: monthly
 min_delay_s: 5
 daily_budget: 100
 politeness_key: null
-enabled: true
+enabled: false
 needs_key: false
 key_secret: null
 max_retention_days: null
@@ -39,9 +39,11 @@ display_requirements: null
 notes: 'Research 2026-11-20 (place facts corpus; North America; verdict ADD): neighbourhood and town essays
   (locations index), for Place facts, Places to see and Free walking tours. robots.txt: 200 (robots NO
   RESPONSE on www., 200 on the apex host); allow all. Terms: terms not found. Sourced: yes. Terms not
-  read or not found; owner accepted for non-commercial use 2026-11-18. Facts only. | Robots checked from
-  the crawler VM 2026-11-20: philadelphiaencyclopedia.org/robots.txt 200, allows the seed, sitemap and
-  feed paths (/, /essays/, /sitemap_index.xml, /feed/); on.'
+  read or not found; owner accepted for non-commercial use 2026-11-18. Facts only. | Disabled: robots.txt
+  re-read from the crawler VM (2026-11-20): https://philadelphiaencyclopedia.org: HTTP 200, allows /,
+  /essays/, /sitemap_index.xml; https://philadelphiaencyclopedia.org: HTTP 200, allows /, /essays/, /feed/;
+  only robots.txt was fetched, so a page, terms and content check is still pending: enable after one seed-page
+  GET from the VM returns 2xx HTML with content'
 relevance:
   sections:
   - facts

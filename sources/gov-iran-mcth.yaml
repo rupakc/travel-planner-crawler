@@ -36,8 +36,8 @@ display_requirements: null
 notes: 'Research 2026-11-20 (place facts corpus; Middle East; verdict ADD): national heritage register
   (may be geo-blocked), for Place facts. Terms: terms not found. Terms not read or not found; owner accepted
   for non-commercial use 2026-11-18. Facts only. curl result: timeout. Seed: the host root (the research
-  row names no URL). | Disabled: no robots response from VM either (2026-11-20); owner rule allows, but
-  reach unverified (timeout); terms and content not yet seen'
+  row names no URL). | Disabled: no robots response from VM either (2026-11-20): https://mcth.ir: no response
+  (timeout); reach unverified; terms and content not yet seen'
 relevance:
   sections:
   - facts

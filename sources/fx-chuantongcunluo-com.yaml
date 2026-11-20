@@ -37,8 +37,8 @@ notes: 'Research 2026-11-20 (place facts corpus; East Asia; verdict ADD): histor
   places it covers, for Place facts. robots.txt: empty reply; identity unconfirmed (dmctv.cn is the official
   museum, already listed). Terms: terms not found. Terms not read or not found; owner accepted for non-commercial
   use 2026-11-18. Facts only. Seed: the host root (the research row names no URL). | Disabled: no robots
-  response from VM either (2026-11-20); owner rule allows, but reach unverified (TLS); terms and content
-  not yet seen'
+  response from VM either (2026-11-20): https://www.chuantongcunluo.com: no response (TLS); reach unverified;
+  terms and content not yet seen'
 relevance:
   sections:
   - facts

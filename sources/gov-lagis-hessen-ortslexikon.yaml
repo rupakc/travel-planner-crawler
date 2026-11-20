@@ -30,7 +30,7 @@ cadence: quarterly
 min_delay_s: 5
 daily_budget: 100
 politeness_key: null
-enabled: true
+enabled: false
 needs_key: false
 key_secret: null
 max_retention_days: null
@@ -43,9 +43,11 @@ notes: 'Research 2026-11-20 (place facts corpus; Europe (incl. Russia, Turkey); 
   may need rendering: check the HTML before enabling…. Terms: terms not found (Impressum not fetched).
   Sourced: yes (records cite sources). Terms not read or not found; owner accepted for non-commercial
   use 2026-11-18. Facts only. AI-reserved robots.txt (or Content-Signal): title and link only, no LLM
-  kinds. | Robots checked from the crawler VM 2026-11-20: lagis.hessen.de/robots.txt 200, allows /de/subjects/
-  and both sitemaps; the portal is a JavaScript app and render stays never, so it may yield few pages;
-  on.'
+  kinds. | Disabled: robots.txt re-read from the crawler VM (2026-11-20): https://lagis.hessen.de: HTTP
+  200, allows /, /de/subjects/, /sitemaps/sitemap.xml; https://lagis.hessen.de: HTTP 200, allows /, /de/subjects/,
+  /sitemaps/sitemap_historisches-ortslexikon_01.xml; only robots.txt was fetched, so a page, terms and
+  content check is still pending: enable after one seed-page GET from the VM returns 2xx HTML with content
+  (server-rendered content: the portal is a JavaScript app and render stays never)'
 relevance:
   sections:
   - facts

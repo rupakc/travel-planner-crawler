@@ -28,7 +28,7 @@ cadence: monthly
 min_delay_s: 5
 daily_budget: 100
 politeness_key: null
-enabled: true
+enabled: false
 needs_key: false
 key_secret: null
 max_retention_days: null
@@ -36,7 +36,9 @@ display_requirements: null
 notes: 'Research 2026-11-20 (place facts corpus; Africa; verdict ADD): city history pages, for Place facts.
   Terms: terms not found. Terms not read or not found; owner accepted for non-commercial use 2026-11-18.
   Facts only. curl result: robots 404, homepage timeout. Seed: the host root (the research row names no
-  URL). | Robots checked from the crawler VM 2026-11-20: joburg.org.za/robots.txt 404 (allow all); on.'
+  URL). | Disabled: robots.txt re-read from the crawler VM (2026-11-20): https://joburg.org.za: HTTP 404
+  (allow all); only robots.txt was fetched, so a page, terms and content check is still pending: enable
+  after one seed-page GET from the VM returns 2xx HTML with content'
 relevance:
   sections:
   - facts

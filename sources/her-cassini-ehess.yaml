@@ -38,7 +38,8 @@ notes: 'Research 2026-11-20 (place facts corpus; Europe (incl. Russia, Turkey); 
   commune''s history of names, mergers and population since the 18th century, for Place facts. robots.txt:
   timeout on https and http (round 1: unreachable too). Terms: unknown. Terms not read or not found; owner
   accepted for non-commercial use 2026-11-18. Facts only. | Disabled: no robots response from VM either
-  (2026-11-20); owner rule allows, but reach unverified (timeout); terms and content not yet seen'
+  (2026-11-20): http://cassini.ehess.fr: no response (timeout); reach unverified; terms and content not
+  yet seen'
 relevance:
   sections:
   - facts

@@ -47,8 +47,13 @@ notes: 'Research 2026-11-20 (place facts corpus; East Asia; verdict ADD): county
   history (11 hosts; give each its own id on import), for Place facts. robots.txt: robots timeout or connection
   refused (klccab) from a European IP; allowed per owner rule. Terms: not read. Terms not read or not
   found; owner accepted for non-commercial use 2026-11-18. Facts only. Seed: the host root (the research
-  row names no URL). | Disabled: no robots response from VM either (2026-11-20); owner rule allows, but
-  reach unverified (TLS, refused, timeout); terms and content not yet seen'
+  row names no URL). | Disabled: robots.txt partly answered from the crawler VM (2026-11-20): https://www.culture.taichung.gov.tw:
+  no response (timeout); https://khcc.gov.tw: no response (timeout); https://www.mlc.gov.tw: no response
+  (timeout); https://www.nthcc.gov.tw: no response (timeout); https://www.cabcy.gov.tw: no response (TLS);
+  https://www.cultural.pthg.gov.tw: no response (refused); https://www.ccl.ttct.edu.tw: no response (timeout);
+  https://www.phhcc.gov.tw: no response (timeout); https://www.kmccc.edu.tw: no response (timeout); https://www.ilccb.gov.tw:
+  HTTP 301 without a Location; https://www.klccab.gov.tw: no response (refused); most seeds unreachable;
+  terms and content not yet seen'
 relevance:
   sections:
   - facts

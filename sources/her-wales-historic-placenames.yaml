@@ -29,7 +29,7 @@ cadence: yearly
 min_delay_s: 1000
 daily_budget: 100
 politeness_key: null
-enabled: true
+enabled: false
 needs_key: false
 key_secret: null
 max_retention_days: null
@@ -40,9 +40,12 @@ notes: 'Research 2026-11-20 (place facts corpus; Europe (incl. Russia, Turkey); 
   out (25 s), so crawl very slowly or ask for the dataset. Terms: terms not found (page unreachable).
   Sourced: yes (source per form). Terms not read or not found; owner accepted for non-commercial use 2026-11-18.
   Facts only. AI-reserved robots.txt (or Content-Signal): title and link only, no LLM kinds. Crawl-delay
-  1000 honoured as min_delay_s. | Robots checked from the crawler VM 2026-11-20: historicplacenames.rcahmw.gov.uk/robots.txt
-  200, allows /, /blog/ and /placenames/; Crawl-delay 1000 kept as min_delay_s; AI bots blocked, so no
-  LLM kinds; on.'
+  1000 honoured as min_delay_s. | Disabled: robots.txt re-read from the crawler VM (2026-11-20): https://historicplacenames.rcahmw.gov.uk:
+  HTTP 200, Crawl-delay 1000, AI bots blocked (gptbot, claudebot, ccbot, google-extended), allows /, /blog/,
+  /placenames/; https://historicplacenames.rcahmw.gov.uk: HTTP 200, Crawl-delay 1000, AI bots blocked
+  (gptbot, claudebot, ccbot, google-extended), allows /blog/, /placenames/; only robots.txt was fetched,
+  so a page, terms and content check is still pending: enable after one seed-page GET from the VM returns
+  2xx HTML with content; when enabled keep min_delay_s 1000 (Crawl-delay) and no LLM kinds (AI bots blocked)'
 relevance:
   sections:
   - facts
