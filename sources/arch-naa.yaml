@@ -37,9 +37,8 @@ display_requirements: null
 notes: 'Research 2026-11-20 (place facts corpus; Oceania; verdict ADD): archive stories about Australian
   places and events, for Place facts. robots.txt: robots: no response (HTTP/2 error and timeout) → allowed.
   Terms: terms not found (unreachable; re-check). Sourced: yes. Terms not read or not found; owner accepted
-  for non-commercial use 2026-11-18. Facts only. | Disabled: enable after a check from the crawler VM:
-  a robots.txt or page fetch failed or timed out from the research laptop (robots: no response (HTTP/2
-  error and timeout) → allowed); read robots.txt, terms and content first'
+  for non-commercial use 2026-11-18. Facts only. | Disabled: no robots response from VM either (2026-11-20);
+  owner rule allows, but reach unverified (reset/closed); terms and content not yet seen'
 relevance:
   sections:
   - facts

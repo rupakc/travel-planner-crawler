@@ -36,9 +36,8 @@ max_retention_days: null
 display_requirements: null
 notes: 'Research 2026-11-20 (place facts corpus; East Asia; verdict ADD): ICH items by county, for Place
   facts. robots.txt: re-check: timeout again. Terms: unknown. Terms not read or not found; owner accepted
-  for non-commercial use 2026-11-18. Facts only. | Disabled: enable after a check from the crawler VM:
-  robots.txt gave no response from the research laptop (re-check: timeout again); terms and content not
-  yet seen'
+  for non-commercial use 2026-11-18. Facts only. | Disabled: no robots response from VM either (2026-11-20);
+  owner rule allows, but reach unverified (timeout); terms and content not yet seen'
 relevance:
   sections:
   - facts

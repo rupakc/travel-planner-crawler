@@ -30,7 +30,7 @@ cadence: yearly
 min_delay_s: 5
 daily_budget: 100
 politeness_key: null
-enabled: false
+enabled: true
 needs_key: false
 key_secret: null
 max_retention_days: null
@@ -39,9 +39,8 @@ notes: 'Research 2026-11-20 (place facts corpus; Latin America & Caribbean; verd
   heritage sites by parish, for Place facts and Places to see. robots.txt: robots allow (Disallow only
   /_mm/, /_notes/, /_baks/, /MMWIP/). Terms: legal page: copyright only (round 1). Sourced: yes. Copyright
   reserved, no bot, scraping, TDM or AI ban quoted; owner accepted for non-commercial use 2026-11-18.
-  Facts only. | Disabled: enable after a check from the crawler VM: robots.txt gave no response from the
-  research laptop (robots allow (Disallow only /_mm/, /_notes/, /_baks/, /MMWIP/)); terms and content
-  not yet seen'
+  Facts only. | Robots checked from the crawler VM 2026-11-20: www.jnht.com/robots.txt 200, allows / and
+  /trelawny.php; on.'
 relevance:
   sections:
   - facts

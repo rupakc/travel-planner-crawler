@@ -38,8 +38,9 @@ display_requirements: null
 notes: 'Research 2026-11-20 (place facts corpus; South Asia; verdict ADD): history and curiosities of
   the places it covers, for Place facts. Terms: terms not found. Terms not read or not found; owner accepted
   for non-commercial use 2026-11-18. Facts only. result: timeout (all 3). Seed: the host root (the research
-  row names no URL). | Disabled: enable after a check from the crawler VM: robots.txt gave no response
-  from the research laptop (result: timeout (all 3)); terms and content not yet seen'
+  row names no URL). | Disabled: robots.txt 403 from the crawler VM (2026-11-20): https://lahore.punjab.gov.pk:
+  HTTP 403; https://multan.punjab.gov.pk: HTTP 403; https://punjab.gov.pk: no response (timeout); those
+  origins are do-not-crawl; no terms ban known, so not denylisted'
 relevance:
   sections:
   - facts

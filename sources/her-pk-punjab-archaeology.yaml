@@ -37,8 +37,9 @@ display_requirements: null
 notes: 'Research 2026-11-20 (place facts corpus; South Asia; verdict ADD): 400+ protected monuments, Punjab
   Special Premises Ordinance 1985, for Place facts and Places to see. robots.txt: timeout x2 (15 s, 40
   s). Terms: unchecked. Copyright reserved, no bot, scraping, TDM or AI ban quoted; owner accepted for
-  non-commercial use 2026-11-18. Facts only. | Disabled: enable after a check from the crawler VM: robots.txt
-  gave no response from the research laptop (timeout x2 (15 s, 40 s)); terms and content not yet seen'
+  non-commercial use 2026-11-18. Facts only. | Disabled: robots.txt 403 from the crawler VM (2026-11-20):
+  https://archaeology.punjab.gov.pk: HTTP 403; those origins are do-not-crawl; no terms ban known, so
+  not denylisted'
 relevance:
   sections:
   - facts

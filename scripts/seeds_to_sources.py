@@ -35238,6 +35238,129 @@ _facts(
 )
 
 
+# ---------------------------------------------------------------------------------------
+# Place facts: robots.txt re-checked from the crawler VM (2026-11-20), one GET of /robots.txt
+# per host with the VoyagerBot UA (15 s timeout, 2 s apart, <= 3 redirects). 2xx with the seed
+# and include paths allowed, or 404/410 -> on (ramp-2 and ramp-3). Still no response -> off
+# (the owner rule would allow it, but terms and content were never seen). 401/403 -> off, that
+# origin do-not-crawl, denylisted only for a known terms ban (none known). 3xx with no Location
+# -> off.
+# ---------------------------------------------------------------------------------------
+FACTS_VM_CHECK_ON: dict[str, str] = {
+    'city-joburg': 'joburg.org.za/robots.txt 404 (allow all)',
+    'fx-philadelphia-encyclopedia': 'philadelphiaencyclopedia.org/robots.txt 200, allows the seed, sitemap and feed paths (/, /essays/, /sitemap_index.xml, /feed/)',
+    'fx-suffolk-churches': 'suffolkchurches.co.uk/robots.txt 404 over http (allow all)',
+    'gov-in-ml-artsculture': 'megartsculture.gov.in/robots.txt 404 (allow all)',
+    'gov-lagis-hessen-ortslexikon': ('lagis.hessen.de/robots.txt 200, allows /de/subjects/ and both sitemaps; the '
+                                     'portal is a JavaScript app and render stays never, so it may yield few pages'),
+    'her-jnht': 'www.jnht.com/robots.txt 200, allows / and /trelawny.php',
+    'her-wales-historic-placenames': ('historicplacenames.rcahmw.gov.uk/robots.txt 200, allows /, /blog/ and '
+                                      '/placenames/; Crawl-delay 1000 kept as min_delay_s; AI bots blocked, so no LLM kinds'),
+}
+FACTS_VM_CHECK_OFF: dict[str, str] = {
+    'arch-anzac-portal': 'no robots response from VM either (2026-11-20); owner rule allows, but reach unverified (reset/closed); terms and content not yet seen',
+    'arch-chicago-encyclopedia': 'no robots response from VM either (2026-11-20); owner rule allows, but reach unverified (timeout); terms and content not yet seen',
+    'arch-darah': 'no robots response from VM either (2026-11-20); owner rule allows, but reach unverified (DNS); terms and content not yet seen',
+    'arch-digitalnc': 'no robots response from VM either (2026-11-20); owner rule allows, but reach unverified (timeout); terms and content not yet seen',
+    'arch-disa': 'no robots response from VM either (2026-11-20); owner rule allows, but reach unverified (timeout); terms and content not yet seen',
+    'arch-heritage-nl': 'no robots response from VM either (2026-11-20); owner rule allows, but reach unverified (timeout); terms and content not yet seen',
+    'arch-kete-nz': 'no robots response from VM either (2026-11-20); owner rule allows, but reach unverified (timeout); terms and content not yet seen',
+    'arch-kr-jeju-studies': 'no robots response from VM either (2026-11-20); owner rule allows, but reach unverified (timeout); terms and content not yet seen',
+    'arch-lk-archives': 'no robots response from VM either (2026-11-20); owner rule allows, but reach unverified (TLS); terms and content not yet seen',
+    'arch-mass-moments': 'no robots response from VM either (2026-11-20); owner rule allows, but reach unverified (timeout); terms and content not yet seen',
+    'arch-naa': 'no robots response from VM either (2026-11-20); owner rule allows, but reach unverified (reset/closed); terms and content not yet seen',
+    'arch-nlsa': 'no robots response from VM either (2026-11-20); owner rule allows, but reach unverified (DNS); terms and content not yet seen',
+    'arch-np-academy': 'no robots response from VM either (2026-11-20); owner rule allows, but reach unverified (timeout); terms and content not yet seen',
+    'arch-np-archives': 'no robots response from VM either (2026-11-20); owner rule allows, but reach unverified (timeout); terms and content not yet seen',
+    'arch-tw-yilan-history': 'robots.txt answers 301 without a Location header from the crawler VM (2026-11-20); keep off until it answers 2xx or 404',
+    'arch-vch-gloucestershire': 'no robots response from VM either (2026-11-20); owner rule allows, but reach unverified (TLS); terms and content not yet seen',
+    'arch-vision-of-britain': 'no robots response from VM either (2026-11-20); owner rule allows, but reach unverified (TLS); terms and content not yet seen',
+    'arch-vn-bachkhoa': 'no robots response from VM either (2026-11-20); owner rule allows, but reach unverified (timeout); terms and content not yet seen',
+    'arch-wits-historical-papers': 'no robots response from VM either (2026-11-20); owner rule allows, but reach unverified (DNS); terms and content not yet seen',
+    'city-jp-kumano': 'no robots response from VM either (2026-11-20); owner rule allows, but reach unverified (timeout); terms and content not yet seen',
+    'city-kr-boseong': 'no robots response from VM either (2026-11-20); owner rule allows, but reach unverified (timeout); terms and content not yet seen',
+    'city-kr-hadong': 'no robots response from VM either (2026-11-20); owner rule allows, but reach unverified (timeout); terms and content not yet seen',
+    'city-kr-namhae': 'no robots response from VM either (2026-11-20); owner rule allows, but reach unverified (timeout); terms and content not yet seen',
+    'fx-adelaidia': 'no robots response from VM either (2026-11-20); owner rule allows, but reach unverified (TLS); terms and content not yet seen',
+    'fx-chuantongcunluo-com': 'no robots response from VM either (2026-11-20); owner rule allows, but reach unverified (TLS); terms and content not yet seen',
+    'fx-cqdfz-cn': 'no robots response from VM either (2026-11-20); owner rule allows, but reach unverified (reset/closed); terms and content not yet seen',
+    'fx-gxdfz-org-cn': 'no robots response from VM either (2026-11-20); owner rule allows, but reach unverified (timeout); terms and content not yet seen',
+    'fx-monument-australia': 'no robots response from VM either (2026-11-20); owner rule allows, but reach unverified (DNS); terms and content not yet seen',
+    'fx-norfolk-churches': 'no robots response from VM either (2026-11-20); owner rule allows, but reach unverified (reset/closed); terms and content not yet seen',
+    'fx-our-nottinghamshire': 'no robots response from VM either (2026-11-20); owner rule allows, but reach unverified (timeout); terms and content not yet seen',
+    'fx-repetti-toscana': 'no robots response from VM either (2026-11-20); owner rule allows, but reach unverified (timeout); terms and content not yet seen',
+    'fx-sdsqw-cn': 'no robots response from VM either (2026-11-20); owner rule allows, but reach unverified (timeout); terms and content not yet seen',
+    'fx-tjdfz-org-cn': 'no robots response from VM either (2026-11-20); owner rule allows, but reach unverified (timeout); terms and content not yet seen',
+    'fx-usgwarchives': 'no robots response from VM either (2026-11-20); owner rule allows, but reach unverified (timeout); terms and content not yet seen',
+    'fx-vagenweb': 'no robots response from VM either (2026-11-20); owner rule allows, but reach unverified (reset/closed); terms and content not yet seen',
+    'gov-cn-sc-dfz': 'no robots response from VM either (2026-11-20); owner rule allows, but reach unverified (timeout); terms and content not yet seen',
+    'gov-cn-yunnan-digital-villages': 'no robots response from VM either (2026-11-20); owner rule allows, but reach unverified (timeout); terms and content not yet seen',
+    'gov-dz-culture': 'no robots response from VM either (2026-11-20); owner rule allows, but reach unverified (timeout); terms and content not yet seen',
+    'gov-id-kebudayaan': 'no robots response from VM either (2026-11-20); owner rule allows, but reach unverified (DNS); terms and content not yet seen',
+    'gov-in-as-districts': 'no robots response from VM either (2026-11-20); owner rule allows, but reach unverified (timeout); terms and content not yet seen',
+    'gov-in-br-portal': 'no robots response from VM either (2026-11-20); owner rule allows, but reach unverified (TLS); terms and content not yet seen',
+    'gov-in-gj-districts': 'no robots response from VM either (2026-11-20); owner rule allows, but reach unverified (timeout); terms and content not yet seen',
+    'gov-in-gj-gazetteer': 'no robots response from VM either (2026-11-20); owner rule allows, but reach unverified (timeout); terms and content not yet seen',
+    'gov-in-hr-gazetteers': 'no robots response from VM either (2026-11-20); owner rule allows, but reach unverified (timeout); terms and content not yet seen',
+    'gov-in-ka-gazetteer': 'no robots response from VM either (2026-11-20); owner rule allows, but reach unverified (timeout); terms and content not yet seen',
+    'gov-in-od-culture': 'no robots response from VM either (2026-11-20); owner rule allows, but reach unverified (timeout); terms and content not yet seen',
+    'gov-in-od-districts': 'no robots response from VM either (2026-11-20); owner rule allows, but reach unverified (reset/closed); terms and content not yet seen',
+    'gov-in-wb-districts-2': 'no robots response from VM either (2026-11-20); owner rule allows, but reach unverified (timeout); terms and content not yet seen',
+    'gov-in-wb-portal': 'no robots response from VM either (2026-11-20); owner rule allows, but reach unverified (timeout); terms and content not yet seen',
+    'gov-iran-mcth': 'no robots response from VM either (2026-11-20); owner rule allows, but reach unverified (timeout); terms and content not yet seen',
+    'gov-np-lalitpur': 'no robots response from VM either (2026-11-20); owner rule allows, but reach unverified (timeout); terms and content not yet seen',
+    'gov-np-pokhara': 'no robots response from VM either (2026-11-20); owner rule allows, but reach unverified (timeout); terms and content not yet seen',
+    'gov-pk-pb-districts': 'robots.txt 403 from the crawler VM (2026-11-20): https://lahore.punjab.gov.pk: HTTP 403; https://multan.punjab.gov.pk: HTTP 403; https://punjab.gov.pk: no response (timeout); those origins are do-not-crawl; no terms ban known, so not denylisted',
+    'gov-tw-county-culture-batch': 'no robots response from VM either (2026-11-20); owner rule allows, but reach unverified (TLS, refused, timeout); terms and content not yet seen',
+    'gov-tw-place-names': 'no robots response from VM either (2026-11-20); owner rule allows, but reach unverified (timeout); terms and content not yet seen',
+    'her-amafa': 'no robots response from VM either (2026-11-20); owner rule allows, but reach unverified (DNS); terms and content not yet seen',
+    'her-au-nsw-shi': 'no robots response from VM either (2026-11-20); owner rule allows, but reach unverified (DNS); terms and content not yet seen',
+    'her-bahrain-baca': 'no robots response from VM either (2026-11-20); owner rule allows, but reach unverified (timeout); terms and content not yet seen',
+    'her-bn-museums': 'no robots response from VM either (2026-11-20); owner rule allows, but reach unverified (TLS); terms and content not yet seen',
+    'her-bt-doc': 'no robots response from VM either (2026-11-20); owner rule allows, but reach unverified (timeout); terms and content not yet seen',
+    'her-cassini-ehess': 'no robots response from VM either (2026-11-20); owner rule allows, but reach unverified (timeout); terms and content not yet seen',
+    'her-cn-dmctv': 'no robots response from VM either (2026-11-20); owner rule allows, but reach unverified (timeout); terms and content not yet seen',
+    'her-cn-ihchina': 'no robots response from VM either (2026-11-20); owner rule allows, but reach unverified (timeout); terms and content not yet seen',
+    'her-ethiopia-eha': 'no robots response from VM either (2026-11-20); owner rule allows, but reach unverified (refused); terms and content not yet seen',
+    'her-id-jogjacagar': 'no robots response from VM either (2026-11-20); owner rule allows, but reach unverified (timeout); terms and content not yet seen',
+    'her-id-wbtb': 'no robots response from VM either (2026-11-20); owner rule allows, but reach unverified (DNS); terms and content not yet seen',
+    'her-idpc-maroc': 'no robots response from VM either (2026-11-20); owner rule allows, but reach unverified (DNS); terms and content not yet seen',
+    'her-in-as-archaeology': 'no robots response from VM either (2026-11-20); owner rule allows, but reach unverified (timeout); terms and content not yet seen',
+    'her-in-ka-archaeology': 'no robots response from VM either (2026-11-20); owner rule allows, but reach unverified (timeout); terms and content not yet seen',
+    'her-in-kl-archaeology': 'no robots response from VM either (2026-11-20); owner rule allows, but reach unverified (timeout); terms and content not yet seen',
+    'her-in-mp-archaeology': 'no robots response from VM either (2026-11-20); owner rule allows, but reach unverified (timeout); terms and content not yet seen',
+    'her-in-nmma': 'no robots response from VM either (2026-11-20); owner rule allows, but reach unverified (timeout); terms and content not yet seen',
+    'her-in-tn-archaeology': 'no robots response from VM either (2026-11-20); owner rule allows, but reach unverified (timeout); terms and content not yet seen',
+    'her-inp-rnrt': 'no robots response from VM either (2026-11-20); owner rule allows, but reach unverified (timeout); terms and content not yet seen',
+    'her-jordan-doa': 'no robots response from VM either (2026-11-20); owner rule allows, but reach unverified (timeout); terms and content not yet seen',
+    'her-jp-mie-bunka': 'no robots response from VM either (2026-11-20); owner rule allows, but reach unverified (timeout); terms and content not yet seen',
+    'her-lk-archaeology': 'no robots response from VM either (2026-11-20); owner rule allows, but reach unverified (timeout); terms and content not yet seen',
+    'her-lk-ccf': 'no robots response from VM either (2026-11-20); owner rule allows, but reach unverified (timeout); terms and content not yet seen',
+    'her-my-sarawak-museum': 'no robots response from VM either (2026-11-20); owner rule allows, but reach unverified (timeout); terms and content not yet seen',
+    'her-petra': 'no robots response from VM either (2026-11-20); owner rule allows, but reach unverified (timeout); terms and content not yet seen',
+    'her-ph-ncca': 'no robots response from VM either (2026-11-20); owner rule allows, but reach unverified (DNS); terms and content not yet seen',
+    'her-pk-lahore-museum': 'robots.txt 403 from the crawler VM (2026-11-20): https://lahoremuseum.punjab.gov.pk: HTTP 403; those origins are do-not-crawl; no terms ban known, so not denylisted',
+    'her-pk-punjab-archaeology': 'robots.txt 403 from the crawler VM (2026-11-20): https://archaeology.punjab.gov.pk: HTTP 403; those origins are do-not-crawl; no terms ban known, so not denylisted',
+    'her-sahris': 'no robots response from VM either (2026-11-20); owner rule allows, but reach unverified (timeout); terms and content not yet seen',
+    'her-vn-hue': 'no robots response from VM either (2026-11-20); owner rule allows, but reach unverified (timeout); terms and content not yet seen',
+    'od-mega-jordan': 'no robots response from VM either (2026-11-20); owner rule allows, but reach unverified (refused); terms and content not yet seen',
+    'od-th-finearts': 'no robots response from VM either (2026-11-20); owner rule allows, but reach unverified (TLS); terms and content not yet seen',
+    'od-tw-ihp-placenames': 'no robots response from VM either (2026-11-20); owner rule allows, but reach unverified (timeout); terms and content not yet seen',
+    'tb-bt-tourism': 'no robots response from VM either (2026-11-20); owner rule allows, but reach unverified (timeout); terms and content not yet seen',
+    'tb-in-bihar': 'no robots response from VM either (2026-11-20); owner rule allows, but reach unverified (timeout); terms and content not yet seen',
+    'tb-in-haryana': 'no robots response from VM either (2026-11-20); owner rule allows, but reach unverified (TLS); terms and content not yet seen',
+    'tb-in-jharkhand': 'no robots response from VM either (2026-11-20); owner rule allows, but reach unverified (timeout); terms and content not yet seen',
+    'tb-in-mp-gov': 'no robots response from VM either (2026-11-20); owner rule allows, but reach unverified (timeout); terms and content not yet seen',
+    'tb-in-up': 'no robots response from VM either (2026-11-20); owner rule allows, but reach unverified (timeout); terms and content not yet seen',
+}
+for _sid, _seen in FACTS_VM_CHECK_ON.items():
+    assert DISABLED.pop(_sid).startswith('enable after a check from the crawler VM'), _sid
+    NOTES_APPEND[_sid] = ' '.join(filter(None, (NOTES_APPEND.get(_sid), f'Robots checked from the crawler VM 2026-11-20: {_seen}; on.')))
+for _sid, _why in FACTS_VM_CHECK_OFF.items():
+    assert DISABLED[_sid].startswith('enable after a check from the crawler VM'), _sid
+    DISABLED[_sid] = _why
+
+
 METHODS = {"html", "rss", "sitemap", "api", "dump"}
 
 

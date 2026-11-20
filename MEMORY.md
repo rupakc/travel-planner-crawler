@@ -408,3 +408,9 @@ plan = `docs/superpowers/plans/2026-11-15-voyager-crawler.md`, r1–r5 = `docs/r
 - 2026-11-20: **Place facts sources, part 5 of 5 (Africa, the Middle East and Oceania).** 243 sources (`_facts`,
   category `facts`): 190 on (html/rss/sitemap, ramp-2 and ramp-3), 53 off (adapter pending 23, enable after a check from the crawler VM 21, needs owner key 1, owner decision 8).
   (scripts/seeds_to_sources.py, docs/research/seeds.yaml)
+- 2026-11-20: **Place facts: robots.txt re-checked from the crawler VM.** The 101 facts sources off with "enable after a
+  check from the crawler VM" got one GET of /robots.txt per host from the VM: 7 on (2xx allowing the seed/include
+  paths, or 404; ramp-2 and ramp-3), 90 still no response (off: "no robots response from VM either (2026-11-20)";
+  the owner rule would allow them, but terms and content were never seen), 3 robots.txt 403 (Punjab, Pakistan
+  government hosts: off, not denylisted, no terms ban known), 1 robots.txt 301 with no Location (off).
+  (scripts/seeds_to_sources.py `FACTS_VM_CHECK_ON` / `FACTS_VM_CHECK_OFF`)

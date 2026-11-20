@@ -39,9 +39,8 @@ notes: 'Research 2026-11-20 (place facts corpus; Europe (incl. Russia, Turkey); 
   County History parish drafts (Glos), for Place facts and Places to see. robots.txt: http robots 200
   (https timed out); Crawl-delay 2. Terms: terms not found. Sourced: yes. Terms not read or not found;
   owner accepted for non-commercial use 2026-11-18. Facts only. Crawl-delay 5 honoured as min_delay_s.
-  | Disabled: enable after a check from the crawler VM: a robots.txt or page fetch failed or timed out
-  from the research laptop (http robots 200 (https timed out); Crawl-delay 2); read robots.txt, terms
-  and content first'
+  | Disabled: no robots response from VM either (2026-11-20); owner rule allows, but reach unverified
+  (TLS); terms and content not yet seen'
 relevance:
   sections:
   - facts

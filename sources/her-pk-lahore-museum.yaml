@@ -36,9 +36,9 @@ display_requirements: null
 notes: 'Research 2026-11-20 (place facts corpus; South Asia; verdict ADD): history and curiosities of
   the places it covers, for Place facts and Places to see. Terms: terms not found. Terms not read or not
   found; owner accepted for non-commercial use 2026-11-18. Facts only. result: timeout (lahoremuseum.org:
-  certificate expired). Seed: the host root (the research row names no URL). | Disabled: enable after
-  a check from the crawler VM: robots.txt gave no response from the research laptop (result: timeout (lahoremuseum.org:
-  certificate expired)); terms and content not yet seen'
+  certificate expired). Seed: the host root (the research row names no URL). | Disabled: robots.txt 403
+  from the crawler VM (2026-11-20): https://lahoremuseum.punjab.gov.pk: HTTP 403; those origins are do-not-crawl;
+  no terms ban known, so not denylisted'
 relevance:
   sections:
   - facts

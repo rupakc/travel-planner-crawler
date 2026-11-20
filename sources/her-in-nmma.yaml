@@ -37,8 +37,8 @@ display_requirements: null
 notes: 'Research 2026-11-20 (place facts corpus; South Asia; verdict ADD): built-heritage inventory with
   dates, for Place facts and Places to see. robots.txt: timeout (reach-unverified). Terms: not read. Sourced:
   yes. Terms not read or not found; owner accepted for non-commercial use 2026-11-18. Facts only. | Disabled:
-  enable after a check from the crawler VM: a robots.txt or page fetch failed or timed out from the research
-  laptop (timeout (reach-unverified)); read robots.txt, terms and content first'
+  no robots response from VM either (2026-11-20); owner rule allows, but reach unverified (timeout); terms
+  and content not yet seen'
 relevance:
   sections:
   - facts

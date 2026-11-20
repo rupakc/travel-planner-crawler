@@ -2532,6 +2532,14 @@ gov-landgate-wa-names                    # facts: html, facts_only, yearly, 100/
 fx-placenames-australia                  # facts: sitemap, facts_only, quarterly, 100/day
 gov-nz-linz-nzgb                         # facts: sitemap, open, monthly, 100/day
 gov-nz-geonet                            # facts: sitemap, open, monthly, 100/day
+# --- place facts: robots.txt checked from the crawler VM (2026-11-20) ---
+fx-suffolk-churches                      # facts: html, facts_only, yearly, 100/day
+gov-lagis-hessen-ortslexikon             # facts: sitemap, facts_only, quarterly, 100/day
+her-wales-historic-placenames            # facts: html, facts_only, yearly, 100/day
+city-joburg                              # facts: html, facts_only, monthly, 100/day
+gov-in-ml-artsculture                    # facts: html, facts_only, monthly, 100/day
+fx-philadelphia-encyclopedia             # facts: sitemap, facts_only, monthly, 100/day
+her-jnht                                 # facts: html, facts_only, yearly, 100/day
 
 # --- ramp-3: open-data adapters (2026-11-18) ---
 openholidays               # events/tips: public + school holidays per country, this year and next (OpenHolidays API, ODbL share_alike, monthly, ~73 requests/month); openholidays adapter -> public_holiday

@@ -37,8 +37,8 @@ display_requirements: null
 notes: 'Research 2026-11-20 (place facts corpus; Europe (incl. Russia, Turkey); verdict ADD): a 19th-century
   public-domain entry for every Tuscan village and parish, for Place facts. robots.txt: timeout. Terms:
   unknown. Terms not read or not found; owner accepted for non-commercial use 2026-11-18. Facts only.
-  | Disabled: enable after a check from the crawler VM: robots.txt gave no response from the research
-  laptop (timeout); terms and content not yet seen'
+  | Disabled: no robots response from VM either (2026-11-20); owner rule allows, but reach unverified
+  (timeout); terms and content not yet seen'
 relevance:
   sections:
   - facts

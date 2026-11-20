@@ -894,7 +894,8 @@ def test_batch2_off_sources_say_why(generated):
                 "terms forbid storage/redistribution", "meta robots", "terms forbid automated access",
                 "5xx at", "duplicate:", "gone:", "restricted licence",
                 # Place facts corpus (2026-11-20).
-                "needs owner key", "enable after a check from the crawler VM", "hook adapter removed") + FULL_CRAWL_REFUSED_PREFIXES
+                "needs owner key", "enable after a check from the crawler VM", "hook adapter removed",
+                "no robots response from VM either") + FULL_CRAWL_REFUSED_PREFIXES
     for sid in s2s.SOURCE_CLASS:
         spec = generated[sid]
         if spec["enabled"]:
@@ -1937,16 +1938,20 @@ FACTS_GROUP = {
     "North America": "americas", "Latin America & Caribbean": "americas",
     "Africa": "africa-me-oceania", "Middle East": "africa-me-oceania", "Oceania": "africa-me-oceania",
 }
+VM_NO_RESPONSE = "no robots response from VM either (2026-11-20)"
 FACTS_COUNTS = {
     "global": {"on": 117, "adapter pending": 62, "needs owner key": 4, "owner decision": 15,
                "hook adapter removed": 37},
-    "europe": {"on": 395, "adapter pending": 57, "enable after a check from the crawler VM": 9, "needs owner key": 5, "owner decision": 36},
-    "asia": {"on": 416, "adapter pending": 24, "enable after a check from the crawler VM": 62, "needs owner key": 2, "owner decision": 1},
-    "americas": {"on": 270, "adapter pending": 32, "enable after a check from the crawler VM": 9, "needs owner key": 4, "owner decision": 18},
-    "africa-me-oceania": {"on": 190, "adapter pending": 23, "enable after a check from the crawler VM": 21, "needs owner key": 1, "owner decision": 8},
+    # After the robots.txt check from the crawler VM (2026-11-20): 7 on, 90 still no response, 4 refused.
+    "europe": {"on": 398, "adapter pending": 57, VM_NO_RESPONSE: 6, "needs owner key": 5, "owner decision": 36},
+    "asia": {"on": 417, "adapter pending": 24, VM_NO_RESPONSE: 57, "robots.txt": 4, "needs owner key": 2,
+             "owner decision": 1},
+    "americas": {"on": 272, "adapter pending": 32, VM_NO_RESPONSE: 7, "needs owner key": 4, "owner decision": 18},
+    "africa-me-oceania": {"on": 191, "adapter pending": 23, VM_NO_RESPONSE: 20, "needs owner key": 1,
+                          "owner decision": 8},
 }
 FACTS_OFF_PREFIXES = ("enable after a check from the crawler VM", "adapter pending", "needs owner key",
-                      "owner decision", "seed unresolved", "hook adapter removed")
+                      "owner decision", "seed unresolved", "hook adapter removed", VM_NO_RESPONSE, "robots.txt")
 # The Wikipedia hook pages: the hook reader was taken out of #148 (a hook is share-alike article text).
 FACTS_HOOK_OFF = "hook adapter removed (share-alike text); needs an own-words extractor"
 FACTS_DENIED = ["https://www.treccani.it/enciclopedia/", "https://kotobank.jp/", "https://www.geograph.org.uk/",
@@ -2101,7 +2106,9 @@ def test_place_facts_research_rows_parsed_whole_2026_11_20(generated):
         assert not re.search(r"\)/?`", spec["relevance"]["why"]), sid  # no regex tail from the include cell
         m = re.search(r"robots\.txt: (.*?)\. Terms: ", notes)
         if spec["enabled"] and not spec["adapter"]:
-            assert not (m and FACTS_UNVERIFIED_ROBOTS.search(m.group(1))), sid
+            # Unless robots.txt was read from the crawler VM since (2026-11-20).
+            if sid not in s2s.FACTS_VM_CHECK_ON:
+                assert not (m and FACTS_UNVERIFIED_ROBOTS.search(m.group(1))), sid
             # The copyright boilerplate is only said when the terms were read.
             t = re.search(r"Terms: (.*?)\. (Sourced|Copyright|Terms|Share|Open)", notes)
             if t and re.search(r"not read|not found|unreachable", t.group(1)):
@@ -2122,10 +2129,10 @@ def test_place_facts_research_rows_parsed_whole_2026_11_20(generated):
         if sid in facts:
             assert generated[sid]["min_delay_s"] == d, sid
     for sid in FACTS_RESEARCH_OFF:
-        if sid in facts:
+        if sid in facts and sid not in s2s.FACTS_VM_CHECK_ON:
             assert generated[sid]["enabled"] is False, sid
             assert generated[sid]["notes"].split("Disabled: ", 1)[1].startswith(
-                "enable after a check from the crawler VM"), sid
+                ("enable after a check from the crawler VM", VM_NO_RESPONSE)), sid
     # Peepul Tree's terms ban robots on peepultree.world; its other domain is denylisted and not added.
     assert "fx-livehistoryindia" not in facts
     for sid in s2s.FACTS_IDS:
@@ -2133,3 +2140,23 @@ def test_place_facts_research_rows_parsed_whole_2026_11_20(generated):
         if spec["enabled"]:
             for u in spec["seeds"] + spec["sitemaps"] + spec["feeds"]:
                 assert s2s.denied(u, DENYLIST) is None, (sid, u)
+
+
+def test_place_facts_vm_robots_check_2026_11_20(generated):
+    r2, r3 = set(_ramp("ramp-2.txt")), set(_ramp("ramp-3.txt"))
+    on, off = s2s.FACTS_VM_CHECK_ON, s2s.FACTS_VM_CHECK_OFF
+    assert len(on) == 7 and len(off) == 94 and not set(on) & set(off)
+    for sid in on:
+        spec = generated[sid]
+        notes = " ".join(spec["notes"].split())
+        assert spec["enabled"] and "Robots checked from the crawler VM 2026-11-20" in notes, sid
+        assert sid in r2 and sid in r3, sid
+    wales = generated["her-wales-historic-placenames"]
+    assert wales["min_delay_s"] == 1000 and wales["llm_kinds"] == []
+    for sid, why in off.items():
+        spec = generated[sid]
+        assert not spec["enabled"] and sid not in r2 and sid not in r3, sid
+        assert " ".join(spec["notes"].split()).split("Disabled: ", 1)[1].startswith(" ".join(why.split())[:40]), sid
+    # A 403 on robots.txt with no known terms ban: off, not denylisted.
+    for host in ("lahore.punjab.gov.pk", "lahoremuseum.punjab.gov.pk", "archaeology.punjab.gov.pk"):
+        assert s2s.denied(f"https://{host}/", DENYLIST) is None, host

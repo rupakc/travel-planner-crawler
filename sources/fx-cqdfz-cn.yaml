@@ -36,8 +36,8 @@ display_requirements: null
 notes: 'Research 2026-11-20 (place facts corpus; East Asia; verdict ADD): history and curiosities of the
   places it covers, for Place facts. robots.txt: HTTP/2 protocol error. Terms: terms not found. Terms
   not read or not found; owner accepted for non-commercial use 2026-11-18. Facts only. Seed: the host
-  root (the research row names no URL). | Disabled: enable after a check from the crawler VM: robots.txt
-  gave no response from the research laptop (HTTP/2 protocol error); terms and content not yet seen'
+  root (the research row names no URL). | Disabled: no robots response from VM either (2026-11-20); owner
+  rule allows, but reach unverified (reset/closed); terms and content not yet seen'
 relevance:
   sections:
   - facts

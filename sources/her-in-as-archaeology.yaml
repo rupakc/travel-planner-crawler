@@ -37,8 +37,8 @@ display_requirements: null
 notes: 'Research 2026-11-20 (place facts corpus; South Asia; verdict ADD): state-protected sites of Assam,
   for Place facts and Places to see. robots.txt: timeout x2 (DNS resolves). Terms: unchecked. Copyright
   reserved, no bot, scraping, TDM or AI ban quoted; owner accepted for non-commercial use 2026-11-18.
-  Facts only. | Disabled: enable after a check from the crawler VM: robots.txt gave no response from the
-  research laptop (timeout x2 (DNS resolves)); terms and content not yet seen'
+  Facts only. | Disabled: no robots response from VM either (2026-11-20); owner rule allows, but reach
+  unverified (timeout); terms and content not yet seen'
 relevance:
   sections:
   - facts
