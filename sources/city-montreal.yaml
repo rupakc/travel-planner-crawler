@@ -43,7 +43,8 @@ display_requirements: null
 notes: 'robots.txt (research 2026-11-18): 200, no AI-bot block (onboarding re-read 2026-11-18); the sitemap
   is one flat urlset. terms restrict to personal/non-commercial use; owner accepted for non-commercial
   use 2026-11-18 (''pour votre usage et information à des fins personnelles et non commerciales''). Facts
-  only (headline, link, short excerpt). | Place facts (research 2026-11-20): also in brief: -'
+  only (headline, link, short excerpt). | Place facts (research 2026-11-20): history, name-origin and
+  curiosity pages of the places it covers'
 relevance:
   sections:
   - events

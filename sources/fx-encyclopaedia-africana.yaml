@@ -3,7 +3,7 @@
 id: fx-encyclopaedia-africana
 name: Encyclopaedia Africana Project
 category: facts
-source_class: editorial
+source_class: reference
 licence:
   class: facts_only
   spdx: null
@@ -16,7 +16,9 @@ sitemaps:
 feeds:
 - https://encyclopaediaafricana.com/feed/
 adapter: null
-include: []
+include:
+- ^https?://encyclopaediaafricana\.com/(homelands|heroes-and-heroines|[a-z0-9-]+/)$
+- ^https?://encyclopaediaafricana\.com/[^?#]*sitemap
 exclude: []
 max_depth: 1
 kinds:
@@ -34,11 +36,11 @@ needs_key: false
 key_secret: null
 max_retention_days: null
 display_requirements: null
-notes: 'Research 2026-11-20 (place facts corpus; Global / multi-country; verdict ADD): heroes-and-heroines,
-  for Place facts. robots.txt: facts_only. Terms: reference. Sourced: shop paths; Crawl-delay 3. Copyright
-  reserved, no bot, scraping, TDM or AI ban quoted; owner accepted for non-commercial use 2026-11-18.
-  Facts only.'
+notes: 'Research 2026-11-20 (place facts corpus; Global / multi-country; verdict ADD): entries on African
+  homelands, kingdoms and heroes, for Place facts. robots.txt: shop paths; Crawl-delay 3. Terms: terms
+  not found (privacy only). Sourced: partly (says peer-reviewed). Terms not read or not found; owner accepted
+  for non-commercial use 2026-11-18. Facts only. Crawl-delay 5 honoured as min_delay_s.'
 relevance:
   sections:
   - facts
-  why: 'Encyclopaedia Africana Project: heroes-and-heroines, for Place facts.'
+  why: 'Encyclopaedia Africana Project: entries on African homelands, kingdoms and heroes, for Place facts.'

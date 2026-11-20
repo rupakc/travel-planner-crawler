@@ -33,10 +33,10 @@ key_secret: null
 max_retention_days: null
 display_requirements: null
 notes: 'Research 2026-11-20 (place facts corpus; Global / multi-country; verdict NEEDS-ADAPTER): history
-  and curiosities of the places it covers, for Place facts. Terms: terms not found. Terms not found; owner
-  accepted for non-commercial use 2026-11-18. Facts only. AI-reserved robots.txt (or Content-Signal):
-  title and link only, no LLM kinds. format: OSM PBF/XML planet with `start_date`/`end_date` (maybe readable
-  by the geofabrik PBF path) ; notes: Licence reportedly CC0, but www.openhistoricalmap.org/copyright
+  and curiosities of the places it covers, for Place facts. Terms: terms not found. Terms not read or
+  not found; owner accepted for non-commercial use 2026-11-18. Facts only. AI-reserved robots.txt (or
+  Content-Signal): title and link only, no LLM kinds. format: OSM PBF/XML planet with `start_date`/`end_date`
+  (maybe readable by the geofabrik PBF path) ; notes: Licence reportedly CC0, but www.openhistoricalmap.org/copyright
   answered a Cloudflare 403, so verify it. Planet robots 200: `Allow: /`, Content-Signal…. Seed: the host
   root (the research row names no URL). | Disabled: adapter pending: OSM PBF/XML planet with `start_date`/`end_date`
   (maybe readable by the geofabrik PBF path)'

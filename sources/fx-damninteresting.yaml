@@ -36,9 +36,9 @@ display_requirements: null
 notes: 'Research 2026-11-20 (place facts corpus; Global / multi-country; verdict ADD): obscure true stories,
   many about places, for Place facts. robots.txt: AI-bot blocks (GPTBot, ClaudeBot, anthropic-ai, PerplexityBot,
   meta) -> title+link only; Crawl-delay 5. Terms: no terms page; /about-us/ai-policy/ describes their
-  own LLM use, no ban. Sourced: yes (sources listed). Copyright reserved, no bot, scraping, TDM or AI
-  ban quoted; owner accepted for non-commercial use 2026-11-18. Facts only. AI-reserved robots.txt (or
-  Content-Signal): title and link only, no LLM kinds. Crawl-delay 5 honoured as min_delay_s.'
+  own LLM use, no ban. Sourced: yes (sources listed). Terms not read or not found; owner accepted for
+  non-commercial use 2026-11-18. Facts only. AI-reserved robots.txt (or Content-Signal): title and link
+  only, no LLM kinds. Crawl-delay 5 honoured as min_delay_s.'
 relevance:
   sections:
   - facts

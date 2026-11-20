@@ -34,11 +34,13 @@ needs_key: false
 key_secret: null
 max_retention_days: null
 display_requirements: null
-notes: 'Research 2026-11-20 (place facts corpus; Global / multi-country; verdict ADD): product, for Place
-  facts. robots.txt: facts, places: archaeological site histories in Israel, Palestine, Jordan and Egypt.
-  Terms: facts_only. Sourced: editorial. Copyright reserved, no bot, scraping, TDM or AI ban quoted; owner
-  accepted for non-commercial use 2026-11-18. Facts only.'
+notes: 'Research 2026-11-20 (place facts corpus; Global / multi-country; verdict ADD): archaeological
+  site histories in Israel, Palestine, Jordan and Egypt, for Place facts and Places to see. robots.txt:
+  WooCommerce paths only. Terms: copyright page covers photo licensing only. Sourced: yes. Copyright reserved,
+  no bot, scraping, TDM or AI ban quoted; owner accepted for non-commercial use 2026-11-18. Facts only.'
 relevance:
   sections:
   - facts
-  why: 'BiblePlaces.com: product, for Place facts.'
+  - places
+  why: 'BiblePlaces.com: archaeological site histories in Israel, Palestine, Jordan and Egypt, for Place
+    facts and Places to see.'

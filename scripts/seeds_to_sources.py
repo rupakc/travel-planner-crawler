@@ -760,14 +760,15 @@ RELEVANCE: dict[str, tuple[list[str], str]] = {
 }
 
 
-def relevance(sid: str) -> dict:
-    """The `relevance:` block for a seed; a seed without one fails generation."""
+def relevance(sid: str, facts: bool = False) -> dict:
+    """The `relevance:` block for a seed; a seed without one fails generation. `facts` appends
+    the Place facts section (an existing source wired for place_fact, see facts_reuse_on)."""
     if sid not in RELEVANCE:
         raise MappingError(
             f"{sid}: no RELEVANCE entry; name the app section(s) it serves and why"
         )
     sections, why = RELEVANCE[sid]
-    if sid in FACTS_REUSE and "facts" not in sections:
+    if facts and "facts" not in sections:
         sections = list(sections) + ["facts"]
         why = f"{why.rstrip().rstrip('.')}; also history and curiosities for Place facts."
     bad = [s for s in sections if s not in SECTIONS]
@@ -18846,8 +18847,8 @@ FACTS_REUSE: dict[str, str] = {
     'capetown-gov': 'add history-of-Cape-Town pages; terms personal/non-commercial',
     'cbsa-travellers': 'add path ^/en/canadian-heritage/services/provincial-territorial-symbols-canada/ (13 province/territory symbol profiles); terms allow non-commercial reproduction',
     'city-ba-ciudad': 'add city history pages; CC BY 2.5 AR',
-    'city-krakow': 'also in brief: -',
-    'city-montreal': 'also in brief: -',
+    'city-krakow': 'history, name-origin and curiosity pages of the places it covers',
+    'city-montreal': 'history, name-origin and curiosity pages of the places it covers',
     'city-yerevan': '"History of Yerevan" and district pages (founding in 782 BC as Erebuni)',
     'colombia-travel': 'not refetched; each has "history" / "did you know" / destination pages that can feed `facts`',
     'culturetrip': "'facts about X' articles",
@@ -18855,7 +18856,7 @@ FACTS_REUSE: dict[str, str] = {
     'doc-nz-api': 'historic places on conservation land (history text per site)',
     'doc-nz-parks': 'historic places on conservation land (history text per site)',
     'egymonuments': 'Cairo city facts: monuments by district (also covers the Cairo city-page brief) / Egyptian monuments',
-    'enwiki-dump': '"Etymology"/"Toponymy"/"Name" sections of settlement articles; list pages "List of highest towns by country", "List of enclaves and exclaves", "Extreme points of …", "List of geographic centres" (use only with citations) / place properties (founding date, highest point, records) and "Did you know" items; es/pt wikis for municipalities / extract: Project-namespace pages already in the dump: `Wikipe',
+    'enwiki-dump': '"Etymology"/"Toponymy"/"Name" sections of settlement articles; list pages "List of highest towns by country", "List of enclaves and exclaves", "Extreme points of …", "List of geographic centres" (use only with citations) / place properties (founding date, highest point, records) and "Did you know" items; es/pt wikis for municipalities',
     'ev-roots-sg': 'place history and curiosities sections / history, name-origin and curiosity pages of the places it covers / Singapore Monuments GeoJSON; Roots.sg historic sites and markers',
     'goturkiye': 'history, name-origin and curiosity pages of the places it covers',
     'gov-aad': 'Antarctic superlatives (coldest, windiest)',
@@ -18887,7 +18888,7 @@ FACTS_REUSE: dict[str, str] = {
     'od-data-gv-at': 'Vienna Kulturgut datasets (monuments, plaques)',
     'od-data-public-lu': 'immeubles et objets classés',
     'od-data-qld': 'Queensland Heritage Register XML (history + significance) / Queensland place names gazetteer, which has a "history/origin" field',
-    'od-datos-gov-co': 'Socrata datasets found via /api/catalog/v1?q=patrimonio: 6zkz-uunt (Inventario Patrimonio Arquitectónico de Risaralda), k2b5-jms2 (Patrimonio Natural y Construido, Palmira), c2kj-cqd8 (POT sitios arqueológicos), wkf9-a8bn (BIC grupo urbano)',
+    'od-datos-gov-co': 'Socrata datasets found via /api/catalog/v1?q=patrimonio: 6zkz-uunt (Inventario Patrimonio Arquitectónico de Risaralda), k2b5-jms2 (Patrimonio Natural y Construido, Palmira), c2kj-cqd8 (POT sitios arqueológicos)',
     'od-fr-merimee': 'Mérimée "historique" field and protection dates',
     'od-nl-rijksmonumenten': 'listing descriptions: build year, architect, notable events / rijksmonument descriptions (RCE content CC0; RCE\'s "AI-gebruik" page not read)',
     'od-ramsar-rsis': 'the first designated site per country, the largest wetland, the site\'s "justification" criteria',
@@ -18996,7 +18997,7 @@ FACTS_REUSE: dict[str, str] = {
     'visitmaldives': 'destination "history/culture/facts" pages',
     'visitqatar': 'Qatar museum and site histories / Msheireb and Doha old-town facts',
     'visitsaudi': 'Riyadh and Diriyah facts',
-    'wikidata-dump': 'Philippine NHCP historical markers (items with P1435 heritage designation + coordinates; the NHCP gap); China\'s 全国重点文物保护单位 (P1435 = Major Historical and Cultural Site Protected at the National Level) with batch dates; Vietnamese special nat / place properties (founding date, highest point, records) and "Did you know" items; es/pt wikis for municipalities / P1435 heritage designation + date qualifi',
+    'wikidata-dump': 'Philippine NHCP historical markers (items with P1435 heritage designation + coordinates; the NHCP gap); China\'s 全国重点文物保护单位 (P1435 = Major Historical and Cultural Site Protected at the National Level) with batch dates / place properties (founding date, highest point, records) and "Did you know" items; es/pt wikis for municipalities',
     'wikivoyage-dump': 'extract: "Understand"/"History" sections (short history per destination), "Talk"/"Respect" for cultural curiosities, `{{quickbar}}` fields / "Understand" sections (history), with no superlatives unless cited',
     'wikivoyage-dump-de': '"Hintergrund"/"Comprendre"/"Da sapere"/"Historia" sections of city/region pages',
     'wikivoyage-dump-es': 'place properties (founding date, highest point, records) and "Did you know" items; es/pt wikis for municipalities',
@@ -19004,6 +19005,18 @@ FACTS_REUSE: dict[str, str] = {
     'wikivoyage-dump-he': '"Understand" history paragraphs',
     'wikivoyage-dump-ru': 'the "История" / "Tarihçe" sections of city articles',
 }
+# Adapters that emit place_fact rows themselves (no LLM).
+FACTS_ADAPTER_IDS = {"wikidata_facts", "wiki_hooks", "factbook_json"}
+
+
+def facts_reuse_on(sid: str, llm_kinds: list[str], lclass: str) -> bool:
+    """A FACTS_REUSE source gets `facts` and place_fact only where something can produce one:
+    its adapter emits place_fact, or it already has LLM kinds and is not share-alike."""
+    if sid not in FACTS_REUSE:
+        return False
+    return ADAPTERS.get(sid) in FACTS_ADAPTER_IDS or (bool(llm_kinds) and lclass != "share_alike")
+
+
 for _sid, _what in FACTS_REUSE.items():
     NOTES_APPEND[_sid] = " ".join(filter(None, (NOTES_APPEND.get(_sid), f"Place facts (research 2026-11-20): {_what}")))
 # The dump route of wikidata_facts (items with a GeoNames id or an ISO 3166-1 code, slimmed on the
@@ -19130,23 +19143,26 @@ _facts(
 )
 _facts(
     'her-apartheid-museum',
-    ['facts'],
-    'Apartheid Museum: about, for Place facts.',
+    ['facts', 'activities'],
+    'Apartheid Museum: history and curiosities of the places it covers, for Place facts and Activities.',
     cls='official',
+    depth=2,
     seeds=['https://www.apartheidmuseum.org/'],
+    include=['^https?://www\\.apartheidmuseum\\.org/(exhibitions|about|learn)'],
 )
 _facts(
     'arch-mandela-foundation',
     ['facts'],
-    'Nelson Mandela Foundation: content)/`, for Place facts.',
-    cls='reference',
+    'Nelson Mandela Foundation: Mandela-linked places (Qunu, Mvezo, Houghton), for Place facts.',
+    cls='official',
     llm=False,
     seeds=['https://www.nelsonmandela.org/'],
+    include=['^https?://www\\.nelsonmandela\\.org/(news|content)/'],
 )
 _facts(
     'her-awhf',
     ['facts'],
-    'African World Heritage Fund: wp-)`, for Place facts.',
+    'African World Heritage Fund: pan-African World Heritage site facts, for Place facts.',
     cls='official',
     seeds=['https://awhf.net/southern-africa/'],
     feeds=['https://awhf.net/feed/'],
@@ -19172,10 +19188,12 @@ _facts(
 _facts(
     'fx-encyclopaedia-africana',
     ['facts'],
-    'Encyclopaedia Africana Project: heroes-and-heroines, for Place facts.',
-    cls='editorial',
+    'Encyclopaedia Africana Project: entries on African homelands, kingdoms and heroes, for Place facts.',
+    cls='reference',
+    delay=5,
     sitemaps=['https://encyclopaediaafricana.com/sitemap.xml'],
     feeds=['https://encyclopaediaafricana.com/feed/'],
+    include=['^https?://encyclopaediaafricana\\.com/(homelands|heroes-and-heroines|[a-z0-9-]+/)$'],
 )
 _facts(
     'fx-conversation-africa',
@@ -19207,10 +19225,12 @@ _facts(
 )
 _facts(
     'fx-discover-islamic-art',
-    ['facts'],
-    'Discover Islamic Art (Museum With No Frontiers): monuments)`, for Place facts.',
-    cls='editorial',
+    ['facts', 'places'],
+    'Discover Islamic Art (Museum With No Frontiers): monument records for Islamic heritage across MENA, for Place facts and Places to see.',
+    cls='reference',
+    depth=2,
     seeds=['https://islamicart.museumwnf.org/'],
+    include=['^https?://islamicart\\.museumwnf\\.org/(database_item|monuments)'],
 )
 _facts(
     'fx-qantara',
@@ -19231,8 +19251,8 @@ _facts(
 )
 _facts(
     'fx-bibleplaces',
-    ['facts'],
-    'BiblePlaces.com: product, for Place facts.',
+    ['facts', 'places'],
+    'BiblePlaces.com: archaeological site histories in Israel, Palestine, Jordan and Egypt, for Place facts and Places to see.',
     cls='editorial',
     sitemaps=['https://www.bibleplaces.com/sitemap_index.xml'],
     feeds=['https://bibleplaces.com/feed/'],
@@ -19240,9 +19260,10 @@ _facts(
 _facts(
     'arch-bibalex',
     ['facts'],
-    'Bibliotheca Alexandrina: Page)/`, for Place facts.',
-    cls='reference',
+    'Bibliotheca Alexandrina: Alexandria and Egypt heritage projects (Memory of Modern Egypt lives on a subdomain, not vetted), for Place facts.',
+    cls='official',
     seeds=['https://www.bibalex.org/en/default'],
+    include=['^https?://www\\.bibalex\\.org/en/(Project|Page)/'],
 )
 _facts(
     'wiki-dump-ar',
@@ -19409,11 +19430,13 @@ _facts(
 )
 _facts(
     'fx-african-world-heritage',
-    ['facts'],
-    'African World Heritage Sites: natural-places, for Place facts.',
+    ['facts', 'places'],
+    'African World Heritage Sites: per-site histories of every African World Heritage site, for Place facts and Places to see.',
     cls='editorial',
     llm=False,
+    depth=2,
     seeds=['https://africanworldheritagesites.org/'],
+    include=['^https?://africanworldheritagesites\\.org/(cultural-places|natural-places|[a-z-]+/[a-z-]+\\.html)'],
 )
 _facts(
     'fx-historylink',
@@ -19574,17 +19597,20 @@ _facts(
 )
 _facts(
     'fx-sahapedia',
-    ['facts'],
-    'Sahapedia: search)`, for Place facts.',
-    cls='editorial',
+    ['facts', 'walking_tours', 'places'],
+    'Sahapedia: heritage-walk and city-culture essays, for Place facts, Free walking tours and Places to see.',
+    cls='reference',
+    llm=False,
     seeds=['https://www.sahapedia.org/'],
 )
 _facts(
     'fx-siam-society',
     ['facts'],
-    'The Siam Society (Journal of the Siam Society): publications)`, for Place facts.',
-    cls='editorial',
+    'The Siam Society (Journal of the Siam Society): Thai local history (peer-reviewed), for Place facts.',
+    cls='reference',
+    delay=5,
     sitemaps=['https://thesiamsociety.org/index.php/sitemap.xml'],
+    include=['^https?://thesiamsociety\\.org/(en/)?(jss|journal|publications)'],
 )
 _facts(
     'arch-digitalnz-mch',
@@ -21279,9 +21305,10 @@ def build_spec(seed: dict) -> dict:
 
     kinds = KINDS_OVERRIDE.get(sid, KINDS_BY_CATEGORY.get(category, []))
     llm_kinds = LLM_KINDS_OVERRIDE.get(sid, LLM_KINDS_BY_CATEGORY.get(category, []))
-    if sid in FACTS_REUSE and "place_fact" not in kinds:
+    facts = facts_reuse_on(sid, llm_kinds, lclass)
+    if facts and "place_fact" not in kinds:
         kinds = list(kinds) + ["place_fact"]
-        if llm_kinds and lclass != "share_alike":
+        if ADAPTERS.get(sid) not in FACTS_ADAPTER_IDS:
             llm_kinds = list(llm_kinds) + ["place_fact"]
     if not set(llm_kinds) <= set(kinds) or not set(kinds) <= KINDS:
         raise MappingError(f"{sid}: bad kinds {kinds} / llm_kinds {llm_kinds}")
@@ -21305,6 +21332,10 @@ def build_spec(seed: dict) -> dict:
         notes.append(f"Disabled: {DISABLED[sid]}")
     if sid in NOTES_APPEND:
         notes.append(NOTES_APPEND[sid])
+    if sid in FACTS_REUSE and not facts:
+        notes.append("Place facts: not wired yet (no LLM kinds on non-share-alike text and no adapter that "
+                     "emits place_fact), so no `facts` section or place_fact kind; the note above is what to "
+                     "extract once a reader exists.")
     if seed["cadence"] in {"never", "semiannual", "on_change", "4x_daily", "hourly_cache"}:
         notes.append(f"Research cadence: {seed['cadence']}.")
 
@@ -21350,7 +21381,7 @@ def build_spec(seed: dict) -> dict:
         "max_retention_days": MAX_RETENTION_DAYS.get(sid),
         "display_requirements": DISPLAY_REQUIREMENTS.get(sid),
         "notes": " | ".join(notes) or None,
-        "relevance": relevance(sid),
+        "relevance": relevance(sid, facts),
     }
     return spec
 

@@ -20394,8 +20394,8 @@ seeds:
     allowed: true
     notes: 'Research 2026-11-20 (place facts corpus; Global / multi-country; verdict ADD): Identité culturelle: DRC cultural
       identity and local history programmes per province, for Place facts. robots.txt: 200; Crawl-delay 10. Terms: terms not
-      found. Sourced: partly. Terms not found; owner accepted for non-commercial use 2026-11-18. Facts only. Crawl-delay 10
-      honoured as min_delay_s.'
+      found. Sourced: partly. Terms not read or not found; owner accepted for non-commercial use 2026-11-18. Facts only. Crawl-delay
+      10 honoured as min_delay_s.'
   - id: fx-kapitalis-culture
     category: facts
     name: Kapitalis (culture)
@@ -20406,8 +20406,8 @@ seeds:
     needs_key: false
     allowed: true
     notes: 'Research 2026-11-20 (place facts corpus; Global / multi-country; verdict ADD): Tunisian heritage, for Place facts.
-      robots.txt: 404 (allowed). Terms: terms not found. Sourced: no. Terms not found; owner accepted for non-commercial use
-      2026-11-18. Facts only.'
+      robots.txt: 404 (allowed). Terms: terms not found. Sourced: no. Terms not read or not found; owner accepted for non-commercial
+      use 2026-11-18. Facts only.'
   - id: gov-sabanew-yemen
     category: facts
     name: Saba Net (sabanew.net)
@@ -20418,22 +20418,22 @@ seeds:
     needs_key: false
     allowed: true
     notes: 'Research 2026-11-20 (place facts corpus; Global / multi-country; verdict ADD): Yemeni heritage news (thin; politically
-      contested agency), for Place facts. robots.txt: 200 CS. Terms: terms not found. Sourced: no. Terms not found; owner accepted
-      for non-commercial use 2026-11-18. Facts only.'
+      contested agency), for Place facts. robots.txt: 200 CS. Terms: terms not found. Sourced: no. Terms not read or not found;
+      owner accepted for non-commercial use 2026-11-18. Facts only.'
   - id: arch-openedition-journals
     category: facts
     name: OpenEdition Journals (Cahiers d'études africaines, Afriques, Journal des africanistes, Revue des mondes musulmans,
       Arabian Humanities)
     url: https://journals.openedition.org/feed.php
     method: html
-    license: Copyright; no automated-access clause
+    license: Copyright; terms not found
     cadence: monthly
     needs_key: false
     allowed: true
     notes: 'Research 2026-11-20 (place facts corpus; Global / multi-country; verdict ADD): peer-reviewed place histories for
       cities and villages across Africa and the Arab world, for Place facts. robots.txt: 200; /oai, /lodel disallowed. Terms:
-      GTCU page JS-rendered (unread); legal notice has no ban. Sourced: yes. Copyright reserved, no bot, scraping, TDM or AI
-      ban quoted; owner accepted for non-commercial use 2026-11-18. Facts only.'
+      GTCU page JS-rendered (unread); legal notice has no ban. Sourced: yes. Terms not read or not found; owner accepted for
+      non-commercial use 2026-11-18. Facts only.'
   - id: arch-openedition-books
     category: facts
     name: OpenEdition Books (IRD, IFRA, IFPO, CEMCA presses)
@@ -20505,8 +20505,8 @@ seeds:
     needs_key: false
     allowed: true
     notes: 'Research 2026-11-20 (place facts corpus; Global / multi-country; verdict ADD): Afrika Zamani and African history
-      publications (low direct yield), for Place facts. robots.txt: 200. Terms: terms not found. Sourced: yes. Terms not found;
-      owner accepted for non-commercial use 2026-11-18. Facts only.'
+      publications (low direct yield), for Place facts. robots.txt: 200. Terms: terms not found. Sourced: yes. Terms not read
+      or not found; owner accepted for non-commercial use 2026-11-18. Facts only.'
   - id: her-alecso
     category: facts
     name: ALECSO (Arab League Educational, Cultural and Scientific Organization)
@@ -20517,20 +20517,20 @@ seeds:
     needs_key: false
     allowed: true
     notes: 'Research 2026-11-20 (place facts corpus; Global / multi-country; verdict ADD): Arab heritage lists and culture news
-      (low yield), for Place facts. robots.txt: 200 (Joomla). Terms: terms not found. Sourced: partly. Terms not found; owner
-      accepted for non-commercial use 2026-11-18. Facts only.'
+      (low yield), for Place facts. robots.txt: 200 (Joomla). Terms: terms not found. Sourced: partly. Terms not read or not
+      found; owner accepted for non-commercial use 2026-11-18. Facts only.'
   - id: her-apartheid-museum
     category: facts
     name: Apartheid Museum
     url: https://www.apartheidmuseum.org/
     method: html
-    license: Copyright; no automated-access clause
+    license: Copyright; terms not found
     cadence: monthly
     needs_key: false
     allowed: true
-    notes: 'Research 2026-11-20 (place facts corpus; Global / multi-country; verdict ADD): about, for Place facts. robots.txt:
-      facts_only. Terms: official (museum). Sourced: /craft/ only. Copyright reserved, no bot, scraping, TDM or AI ban quoted;
-      owner accepted for non-commercial use 2026-11-18. Facts only.'
+    notes: 'Research 2026-11-20 (place facts corpus; Global / multi-country; verdict ADD): history and curiosities of the places
+      it covers, for Place facts and Activities. robots.txt: /craft/ only. Terms: terms not found (privacy PDF only). Sourced:
+      no. Terms not read or not found; owner accepted for non-commercial use 2026-11-18. Facts only.'
   - id: arch-mandela-foundation
     category: facts
     name: Nelson Mandela Foundation
@@ -20540,22 +20540,23 @@ seeds:
     cadence: monthly
     needs_key: false
     allowed: true
-    notes: 'Research 2026-11-20 (place facts corpus; Global / multi-country; verdict ADD): content)/`, for Place facts. robots.txt:
-      official (archive). Terms: /craft/ only; AI-block (ClaudeBot, GPTBot, CCBot, Google-Extended…). Sourced: Website Policy
-      PDF has no crawler clause. Copyright reserved, no bot, scraping, TDM or AI ban quoted; owner accepted for non-commercial
-      use 2026-11-18. Facts only. AI-reserved robots.txt (or Content-Signal): title and link only, no LLM kinds.'
+    notes: 'Research 2026-11-20 (place facts corpus; Global / multi-country; verdict ADD): Mandela-linked places (Qunu, Mvezo,
+      Houghton), for Place facts. robots.txt: /craft/ only; AI-block (ClaudeBot, GPTBot, CCBot, Google-Extended…). Terms: Website
+      Policy PDF has no crawler clause. Sourced: partly. Copyright reserved, no bot, scraping, TDM or AI ban quoted; owner accepted
+      for non-commercial use 2026-11-18. Facts only. AI-reserved robots.txt (or Content-Signal): title and link only, no LLM
+      kinds.'
   - id: her-awhf
     category: facts
     name: African World Heritage Fund
     url: https://awhf.net/feed/
     method: rss
-    license: Copyright; no automated-access clause
+    license: Copyright; terms not found
     cadence: monthly
     needs_key: false
     allowed: true
-    notes: 'Research 2026-11-20 (place facts corpus; Global / multi-country; verdict ADD): wp-)`, for Place facts. robots.txt:
-      official (intergovernmental). Terms: calendar views, /author/. Sourced: terms not found. Copyright reserved, no bot, scraping,
-      TDM or AI ban quoted; owner accepted for non-commercial use 2026-11-18. Facts only.'
+    notes: 'Research 2026-11-20 (place facts corpus; Global / multi-country; verdict ADD): pan-African World Heritage site facts,
+      for Place facts. robots.txt: calendar views, /author/. Terms: terms not found. Sourced: partly. Terms not read or not
+      found; owner accepted for non-commercial use 2026-11-18. Facts only.'
   - id: her-zamani
     category: facts
     name: Zamani Project (University of Cape Town)
@@ -20567,8 +20568,8 @@ seeds:
     allowed: true
     notes: 'Research 2026-11-20 (place facts corpus; Global / multi-country; verdict ADD): pages on documented heritage sites
       across Africa and the Middle East (Lalibela, Gondar, Kilwa, Petra…), for Place facts and Places to see. robots.txt: robots
-      404. Terms: terms not found (privacy only). Sourced: yes. Terms not found; owner accepted for non-commercial use 2026-11-18.
-      Facts only.'
+      404. Terms: terms not found (privacy only). Sourced: yes. Terms not read or not found; owner accepted for non-commercial
+      use 2026-11-18. Facts only.'
   - id: fx-tara-rock-art
     category: facts
     name: 'TARA: Trust for African Rock Art'
@@ -20580,19 +20581,21 @@ seeds:
     allowed: true
     notes: 'Research 2026-11-20 (place facts corpus; Global / multi-country; verdict ADD): Trust for African Rock Art: rock-art
       sites by country, for Place facts and Places to see. robots.txt: /wp-admin/; Crawl-delay 10. Terms: terms not found. Sourced:
-      yes. Terms not found; owner accepted for non-commercial use 2026-11-18. Facts only. Crawl-delay 10 honoured as min_delay_s.'
+      yes. Terms not read or not found; owner accepted for non-commercial use 2026-11-18. Facts only. Crawl-delay 10 honoured
+      as min_delay_s.'
   - id: fx-encyclopaedia-africana
     category: facts
     name: Encyclopaedia Africana Project
     url: https://encyclopaediaafricana.com/sitemap.xml
     method: sitemap
-    license: Copyright; no automated-access clause
+    license: Copyright; terms not found
     cadence: monthly
     needs_key: false
     allowed: true
-    notes: 'Research 2026-11-20 (place facts corpus; Global / multi-country; verdict ADD): heroes-and-heroines, for Place facts.
-      robots.txt: facts_only. Terms: reference. Sourced: shop paths; Crawl-delay 3. Copyright reserved, no bot, scraping, TDM
-      or AI ban quoted; owner accepted for non-commercial use 2026-11-18. Facts only.'
+    notes: 'Research 2026-11-20 (place facts corpus; Global / multi-country; verdict ADD): entries on African homelands, kingdoms
+      and heroes, for Place facts. robots.txt: shop paths; Crawl-delay 3. Terms: terms not found (privacy only). Sourced: partly
+      (says peer-reviewed). Terms not read or not found; owner accepted for non-commercial use 2026-11-18. Facts only. Crawl-delay
+      5 honoured as min_delay_s.'
   - id: fx-conversation-africa
     category: facts
     name: The Conversation Africa
@@ -20639,13 +20642,13 @@ seeds:
     name: Discover Islamic Art (Museum With No Frontiers)
     url: https://islamicart.museumwnf.org/
     method: html
-    license: Copyright; no automated-access clause
+    license: Copyright; terms not found
     cadence: quarterly
     needs_key: false
     allowed: true
-    notes: 'Research 2026-11-20 (place facts corpus; Global / multi-country; verdict ADD): monuments)`, for Place facts. robots.txt:
-      reference (museum consortium). Terms: robots 404 (allowed). Sourced: legal notice is a JS SPA, so terms not found. Copyright
-      reserved, no bot, scraping, TDM or AI ban quoted; owner accepted for non-commercial use 2026-11-18. Facts only.'
+    notes: 'Research 2026-11-20 (place facts corpus; Global / multi-country; verdict ADD): monument records for Islamic heritage
+      across MENA, for Place facts and Places to see. robots.txt: robots 404 (allowed). Terms: legal notice is a JS SPA, so
+      terms not found. Sourced: yes. Terms not read or not found; owner accepted for non-commercial use 2026-11-18. Facts only.'
   - id: fx-qantara
     category: facts
     name: 'Qantara: Mediterranean heritage (Institut du monde arabe)'
@@ -20681,21 +20684,22 @@ seeds:
     cadence: monthly
     needs_key: false
     allowed: true
-    notes: 'Research 2026-11-20 (place facts corpus; Global / multi-country; verdict ADD): product, for Place facts. robots.txt:
-      facts, places: archaeological site histories in Israel, Palestine, Jordan and Egypt. Terms: facts_only. Sourced: editorial.
-      Copyright reserved, no bot, scraping, TDM or AI ban quoted; owner accepted for non-commercial use 2026-11-18. Facts only.'
+    notes: 'Research 2026-11-20 (place facts corpus; Global / multi-country; verdict ADD): archaeological site histories in
+      Israel, Palestine, Jordan and Egypt, for Place facts and Places to see. robots.txt: WooCommerce paths only. Terms: copyright
+      page covers photo licensing only. Sourced: yes. Copyright reserved, no bot, scraping, TDM or AI ban quoted; owner accepted
+      for non-commercial use 2026-11-18. Facts only.'
   - id: arch-bibalex
     category: facts
     name: Bibliotheca Alexandrina
     url: https://www.bibalex.org/en/default
     method: html
-    license: Copyright; no automated-access clause
+    license: Copyright; terms not found
     cadence: quarterly
     needs_key: false
     allowed: true
-    notes: 'Research 2026-11-20 (place facts corpus; Global / multi-country; verdict ADD): Page)/`, for Place facts. robots.txt:
-      official. Terms: robots 404. Sourced: terms not found. Copyright reserved, no bot, scraping, TDM or AI ban quoted; owner
-      accepted for non-commercial use 2026-11-18. Facts only.'
+    notes: 'Research 2026-11-20 (place facts corpus; Global / multi-country; verdict ADD): Alexandria and Egypt heritage projects
+      (Memory of Modern Egypt lives on a subdomain, not vetted), for Place facts. robots.txt: robots 404. Terms: terms not found.
+      Sourced: partly. Terms not read or not found; owner accepted for non-commercial use 2026-11-18. Facts only.'
   - id: wiki-dump-ar
     category: facts
     name: Arabic Wikipedia dump
@@ -20864,10 +20868,10 @@ seeds:
     needs_key: false
     allowed: true
     notes: 'Research 2026-11-20 (place facts corpus; Global / multi-country; verdict NEEDS-ADAPTER): history and curiosities
-      of the places it covers, for Place facts. Terms: terms not found. Terms not found; owner accepted for non-commercial use
-      2026-11-18. Facts only. format: React SPA plus CSV/SPSS downloads of the voyages and ports databases ; note: robots returns
-      the SPA (no robots file, so allowed); terms not found; ports of embarkation per African town, fully sourced. Seed: the
-      host root (the research row names no URL).'
+      of the places it covers, for Place facts. Terms: terms not found. Terms not read or not found; owner accepted for non-commercial
+      use 2026-11-18. Facts only. format: React SPA plus CSV/SPSS downloads of the voyages and ports databases ; note: robots
+      returns the SPA (no robots file, so allowed); terms not found; ports of embarkation per African town, fully sourced. Seed:
+      the host root (the research row names no URL).'
   - id: od-althurayya
     category: facts
     name: al-Ṯurayyā gazetteer (early Islamic world)
@@ -20878,9 +20882,9 @@ seeds:
     needs_key: false
     allowed: true
     notes: 'Research 2026-11-20 (place facts corpus; Global / multi-country; verdict NEEDS-ADAPTER): history and curiosities
-      of the places it covers, for Place facts. Terms: terms not found. Terms not found; owner accepted for non-commercial use
-      2026-11-18. Facts only. format: static GeoJSON/JSON on GitHub (not WFS) ; note: robots 404; licence not stated on page;
-      about 2,000 Islamic-era places with routes. Seed: the host root (the research row names no URL).'
+      of the places it covers, for Place facts. Terms: terms not found. Terms not read or not found; owner accepted for non-commercial
+      use 2026-11-18. Facts only. format: static GeoJSON/JSON on GitHub (not WFS) ; note: robots 404; licence not stated on
+      page; about 2,000 Islamic-era places with routes. Seed: the host root (the research row names no URL).'
   - id: od-topostext
     category: facts
     name: ToposText
@@ -20891,10 +20895,10 @@ seeds:
     needs_key: false
     allowed: true
     notes: 'Research 2026-11-20 (place facts corpus; Global / multi-country; verdict NEEDS-ADAPTER): history and curiosities
-      of the places it covers, for Place facts. Terms: terms not found. Terms not found; owner accepted for non-commercial use
-      2026-11-18. Facts only. format: downloads at https://topostext.org/TT-downloads (KML/CSV of places linked to ancient texts)
-      ; note: robots 404; licence not found; could go through csv_filter once the format is checked. Seed: the host root (the
-      research row names no URL).'
+      of the places it covers, for Place facts. Terms: terms not found. Terms not read or not found; owner accepted for non-commercial
+      use 2026-11-18. Facts only. format: downloads at https://topostext.org/TT-downloads (KML/CSV of places linked to ancient
+      texts) ; note: robots 404; licence not found; could go through csv_filter once the format is checked. Seed: the host root
+      (the research row names no URL).'
   - id: fx-world-history-encyclopedia
     category: facts
     name: World History Encyclopedia
@@ -20913,14 +20917,15 @@ seeds:
     name: African World Heritage Sites
     url: https://africanworldheritagesites.org/
     method: html
-    license: Copyright; no automated-access clause
+    license: Copyright; terms not found
     cadence: yearly
     needs_key: false
     allowed: true
-    notes: 'Research 2026-11-20 (place facts corpus; Global / multi-country; verdict ADD): natural-places, for Place facts.
-      robots.txt: facts_only. Terms: editorial. Sourced: 200; blocks GPTBot, ClaudeBot, CCBot, Google-Extended and o…. Copyright
-      reserved, no bot, scraping, TDM or AI ban quoted; owner accepted for non-commercial use 2026-11-18. Facts only. AI-reserved
-      robots.txt (or Content-Signal): title and link only, no LLM kinds.'
+    notes: 'Research 2026-11-20 (place facts corpus; Global / multi-country; verdict ADD): per-site histories of every African
+      World Heritage site, for Place facts and Places to see. robots.txt: 200; blocks GPTBot, ClaudeBot, CCBot, Google-Extended
+      and other AI bots (→ store title + link only). Terms: terms not found. Sourced: partly. Terms not read or not found; owner
+      accepted for non-commercial use 2026-11-18. Facts only. AI-reserved robots.txt (or Content-Signal): title and link only,
+      no LLM kinds.'
   - id: fx-historylink
     category: facts
     name: HistoryLink.org (Washington State history)
@@ -20932,8 +20937,9 @@ seeds:
     allowed: true
     notes: 'Research 2026-11-20 (place facts corpus; Global / multi-country; verdict ADD): town essays, "This Day" items, for
       Place facts and Places to see. robots.txt: GPTBot/ClaudeBot/CCBot/Google-Extended/Bytespider blocked + Content-Signal
-      -> title+link only. Terms: terms not found. Sourced: yes. Terms not found; owner accepted for non-commercial use 2026-11-18.
-      Facts only. AI-reserved robots.txt (or Content-Signal): title and link only, no LLM kinds. also in brief: libraries-archives.'
+      -> title+link only. Terms: terms not found. Sourced: yes. Terms not read or not found; owner accepted for non-commercial
+      use 2026-11-18. Facts only. AI-reserved robots.txt (or Content-Signal): title and link only, no LLM kinds. also in brief:
+      libraries-archives.'
   - id: fx-encyclopedia-virginia
     category: facts
     name: Encyclopedia Virginia
@@ -20945,7 +20951,8 @@ seeds:
     allowed: true
     notes: 'Research 2026-11-20 (place facts corpus; Global / multi-country; verdict ADD): history and curiosities of the places
       it covers, for Place facts and Places to see. robots.txt: robots allow; /wp-json/ and /search/ disallowed; AdsBot blocked.
-      Terms: terms not found. Sourced: yes. Terms not found; owner accepted for non-commercial use 2026-11-18. Facts only.'
+      Terms: terms not found. Sourced: yes. Terms not read or not found; owner accepted for non-commercial use 2026-11-18. Facts
+      only.'
   - id: fx-64-parishes
     category: facts
     name: 64 Parishes
@@ -20958,7 +20965,8 @@ seeds:
     notes: 'Research 2026-11-20 (place facts corpus; Global / multi-country; verdict ADD): history and curiosities of the places
       it covers, for Place facts and Places to see. robots.txt: allowed, no AI blocks; Crawl-delay 10 (round 1). Terms: only
       https://64parishes.org/privacy-policy and a social-media code of conduct; no ToU, so it stays "terms not found". Sourced:
-      yes. Terms not found; owner accepted for non-commercial use 2026-11-18. Facts only. Crawl-delay 10 honoured as min_delay_s.'
+      yes. Terms not read or not found; owner accepted for non-commercial use 2026-11-18. Facts only. Crawl-delay 10 honoured
+      as min_delay_s.'
   - id: fx-connecticut-history
     category: facts
     name: ConnecticutHistory.org (CT Humanities)
@@ -20996,7 +21004,7 @@ seeds:
     allowed: true
     notes: 'Research 2026-11-20 (place facts corpus; Global / multi-country; verdict ADD): Caribbean island and town history
       items (descriptions only), for Place facts. robots.txt: Some item disallows; React app (titles may need render). Terms:
-      terms not found. Sourced: yes. Terms not found; owner accepted for non-commercial use 2026-11-18. Facts only.'
+      terms not found. Sourced: yes. Terms not read or not found; owner accepted for non-commercial use 2026-11-18. Facts only.'
   - id: fx-cervantes-historia
     category: facts
     name: Biblioteca Virtual Miguel de Cervantes (history portals)
@@ -21021,7 +21029,7 @@ seeds:
     allowed: true
     notes: 'Research 2026-11-20 (place facts corpus; Global / multi-country; verdict ADD): Newcastle and Hunter Valley place
       histories, for Place facts and Free walking tours. robots.txt: 200; allow all. Terms: terms not found. Sourced: yes. Terms
-      not found; owner accepted for non-commercial use 2026-11-18. Facts only.'
+      not read or not found; owner accepted for non-commercial use 2026-11-18. Facts only.'
   - id: arch-auckland-museum
     category: facts
     name: Auckland War Memorial Museum stories
@@ -21071,8 +21079,8 @@ seeds:
     needs_key: false
     allowed: true
     notes: 'Research 2026-11-20 (place facts corpus; Global / multi-country; verdict ADD): NY place-name origins list, for Place
-      facts. robots.txt: 404 (allowed). Terms: terms not found. Sourced: partly. Terms not found; owner accepted for non-commercial
-      use 2026-11-18. Facts only.'
+      facts. robots.txt: 404 (allowed). Terms: terms not found. Sourced: partly. Terms not read or not found; owner accepted
+      for non-commercial use 2026-11-18. Facts only.'
   - id: fx-genealogy-trails
     category: facts
     name: Genealogy Trails county histories
@@ -21110,8 +21118,8 @@ seeds:
     needs_key: false
     allowed: true
     notes: 'Research 2026-11-20 (place facts corpus; Global / multi-country; verdict ADD): the trust''s Cornish monument sites,
-      for Place facts and Places to see. robots.txt: 200; allow all. Terms: terms not found. Sourced: yes. Terms not found;
-      owner accepted for non-commercial use 2026-11-18. Facts only.'
+      for Place facts and Places to see. robots.txt: 200; allow all. Terms: terms not found. Sourced: yes. Terms not read or
+      not found; owner accepted for non-commercial use 2026-11-18. Facts only.'
   - id: fx-lincstothepast-com
     category: facts
     name: www.lincstothepast.com
@@ -21122,9 +21130,9 @@ seeds:
     needs_key: false
     allowed: true
     notes: 'Research 2026-11-20 (place facts corpus; Global / multi-country; verdict NEEDS-ADAPTER): history and curiosities
-      of the places it covers, for Place facts. Terms: terms not found. Terms not found; owner accepted for non-commercial use
-      2026-11-18. Facts only. format: the home page is a JS app (no crawlable links); http robots 200. Needs its search API.
-      Seed: the host root (the research row names no URL).'
+      of the places it covers, for Place facts. Terms: terms not found. Terms not read or not found; owner accepted for non-commercial
+      use 2026-11-18. Facts only. format: the home page is a JS app (no crawlable links); http robots 200. Needs its search
+      API. Seed: the host root (the research row names no URL).'
   - id: fx-mainehistory-org
     category: facts
     name: mainehistory.org
@@ -21135,33 +21143,34 @@ seeds:
     needs_key: false
     allowed: true
     notes: 'Research 2026-11-20 (place facts corpus; Global / multi-country; verdict NEEDS-ADAPTER): history and curiosities
-      of the places it covers, for Place facts. Terms: terms not found. Terms not found; owner accepted for non-commercial use
-      2026-11-18. Facts only. format: the home page is a 4.7 KB JS app shell; robots allowed (AI blocks); mainememory.net is
-      already covered. Seed: the host root (the research row names no URL).'
+      of the places it covers, for Place facts. Terms: terms not found. Terms not read or not found; owner accepted for non-commercial
+      use 2026-11-18. Facts only. format: the home page is a 4.7 KB JS app shell; robots allowed (AI blocks); mainememory.net
+      is already covered. Seed: the host root (the research row names no URL).'
   - id: fx-sahapedia
     category: facts
     name: Sahapedia
     url: https://www.sahapedia.org/
     method: html
-    license: Open data licence (see notes)
+    license: CC BY-NC-SA (owner accepted, kept separate)
     cadence: monthly
     needs_key: false
     allowed: true
-    notes: 'Research 2026-11-20 (place facts corpus; Global / multi-country; verdict ADD): search)`, for Place facts. robots.txt:
-      facts_only (CC BY-NC-SA 4.0). Terms: reference. Sourced: Drupal default (core assets) allowed. Open licence (Open data
-      licence (see notes)).'
+    notes: 'Research 2026-11-20 (place facts corpus; Global / multi-country; verdict ADD): heritage-walk and city-culture essays,
+      for Place facts, Free walking tours and Places to see. robots.txt: Drupal default (core assets) allowed. Terms: §16: "Spiders,
+      bots, and scripts… must obey all reasonable restrictions on mass downloading" (bots permitted politely); content CC BY-NC-SA
+      4.0. Sourced: yes. Share-alike: kept apart, never merged into our own wording and never sent to a model (no LLM kinds).'
   - id: fx-siam-society
     category: facts
     name: The Siam Society (Journal of the Siam Society)
     url: https://thesiamsociety.org/index.php/sitemap.xml
     method: sitemap
-    license: Copyright; no automated-access clause
+    license: Copyright; terms not found
     cadence: quarterly
     needs_key: false
     allowed: true
-    notes: 'Research 2026-11-20 (place facts corpus; Global / multi-country; verdict ADD): publications)`, for Place facts.
-      robots.txt: facts_only. Terms: reference. Sourced: `Allow: /`, Crawl-delay 3. Copyright reserved, no bot, scraping, TDM
-      or AI ban quoted; owner accepted for non-commercial use 2026-11-18. Facts only.'
+    notes: 'Research 2026-11-20 (place facts corpus; Global / multi-country; verdict ADD): Thai local history (peer-reviewed),
+      for Place facts. robots.txt: `Allow: /`, Crawl-delay 3. Terms: terms not found. Sourced: yes. Terms not read or not found;
+      owner accepted for non-commercial use 2026-11-18. Facts only. Crawl-delay 5 honoured as min_delay_s.'
   - id: arch-digitalnz-mch
     category: facts
     name: DigitalNZ API, filtered to Manatū Taonga (Te Ara, NZHistory)
@@ -21231,7 +21240,7 @@ seeds:
     allowed: true
     notes: 'Research 2026-11-20 (place facts corpus; Global / multi-country; verdict ADD): historical curiosities, many about
       specific towns and places, for Place facts. robots.txt: allowed, no AI blocks. Terms: terms not found. Sourced: yes (each
-      post cites its source). Terms not found; owner accepted for non-commercial use 2026-11-18. Facts only.'
+      post cites its source). Terms not read or not found; owner accepted for non-commercial use 2026-11-18. Facts only.'
   - id: fx-sapiens
     category: facts
     name: SAPIENS (anthropology magazine)
@@ -21294,7 +21303,7 @@ seeds:
     allowed: true
     notes: 'Research 2026-11-20 (place facts corpus; Global / multi-country; verdict ADD): origins of place names, landmarks,
       little-known history, for Place facts. robots.txt: allowed. Terms: terms not found. Sourced: yes (bibliography per article).
-      Terms not found; owner accepted for non-commercial use 2026-11-18. Facts only.'
+      Terms not read or not found; owner accepted for non-commercial use 2026-11-18. Facts only.'
   - id: fx-hakai
     category: facts
     name: Hakai Magazine
@@ -21305,8 +21314,8 @@ seeds:
     needs_key: false
     allowed: true
     notes: 'Research 2026-11-20 (place facts corpus; Global / multi-country; verdict ADD): coastal places, islands, ports, for
-      Place facts and Places to see. robots.txt: allowed. Terms: terms not found. Sourced: yes. Terms not found; owner accepted
-      for non-commercial use 2026-11-18. Facts only.'
+      Place facts and Places to see. robots.txt: allowed. Terms: terms not found. Sourced: yes. Terms not read or not found;
+      owner accepted for non-commercial use 2026-11-18. Facts only.'
   - id: fx-archaeology-mag
     category: facts
     name: Archaeology Magazine (AIA)
@@ -21318,22 +21327,22 @@ seeds:
     allowed: true
     notes: 'Research 2026-11-20 (place facts corpus; Global / multi-country; verdict ADD): discoveries at named sites, for Place
       facts and Places to see. robots.txt: allowed. Terms: terms not found on site (AIA ''Copyright and Disclaimer'' seen in
-      search only: copyright reserved). Sourced: yes. Terms not found; owner accepted for non-commercial use 2026-11-18. Facts
-      only.'
+      search only: copyright reserved). Sourced: yes. Terms not read or not found; owner accepted for non-commercial use 2026-11-18.
+      Facts only.'
   - id: fx-damninteresting
     category: facts
     name: Damn Interesting
     url: https://www.damninteresting.com/feeds/everything/
     method: rss
-    license: Copyright; no automated-access clause
+    license: Copyright; terms not found
     cadence: monthly
     needs_key: false
     allowed: true
     notes: 'Research 2026-11-20 (place facts corpus; Global / multi-country; verdict ADD): obscure true stories, many about
       places, for Place facts. robots.txt: AI-bot blocks (GPTBot, ClaudeBot, anthropic-ai, PerplexityBot, meta) -> title+link
       only; Crawl-delay 5. Terms: no terms page; /about-us/ai-policy/ describes their own LLM use, no ban. Sourced: yes (sources
-      listed). Copyright reserved, no bot, scraping, TDM or AI ban quoted; owner accepted for non-commercial use 2026-11-18.
-      Facts only. AI-reserved robots.txt (or Content-Signal): title and link only, no LLM kinds. Crawl-delay 5 honoured as min_delay_s.'
+      listed). Terms not read or not found; owner accepted for non-commercial use 2026-11-18. Facts only. AI-reserved robots.txt
+      (or Content-Signal): title and link only, no LLM kinds. Crawl-delay 5 honoured as min_delay_s.'
   - id: fx-lookup-london
     category: facts
     name: Look Up London
@@ -21358,8 +21367,8 @@ seeds:
     needs_key: false
     allowed: true
     notes: 'Research 2026-11-20 (place facts corpus; Global / multi-country; verdict ADD): East London street and building history,
-      for Place facts. robots.txt: allowed. Terms: terms not found. Sourced: partial. Terms not found; owner accepted for non-commercial
-      use 2026-11-18. Facts only.'
+      for Place facts. robots.txt: allowed. Terms: terms not found. Sourced: partial. Terms not read or not found; owner accepted
+      for non-commercial use 2026-11-18. Facts only.'
   - id: fx-historyhit
     category: facts
     name: History Hit (places)
@@ -21384,7 +21393,7 @@ seeds:
     allowed: true
     notes: 'Research 2026-11-20 (place facts corpus; Global / multi-country; verdict ADD): London street-by-street history,
       for Place facts and Free walking tours. robots.txt: allowed. Terms: terms not found. Sourced: yes (maps, archives cited).
-      Terms not found; owner accepted for non-commercial use 2026-11-18. Facts only.'
+      Terms not read or not found; owner accepted for non-commercial use 2026-11-18. Facts only.'
   - id: fx-abandonedspaces
     category: facts
     name: Abandoned Spaces
@@ -21432,8 +21441,8 @@ seeds:
     needs_key: false
     allowed: true
     notes: 'Research 2026-11-20 (place facts corpus; Global / multi-country; verdict ADD): historical context of places in old
-      photos (low priority), for Place facts. robots.txt: allowed. Terms: terms not found. Sourced: partial. Terms not found;
-      owner accepted for non-commercial use 2026-11-18. Facts only.'
+      photos (low priority), for Place facts. robots.txt: allowed. Terms: terms not found. Sourced: partial. Terms not read
+      or not found; owner accepted for non-commercial use 2026-11-18. Facts only.'
   - id: fx-comeheretome
     category: facts
     name: Come Here To Me (Dublin)
@@ -21444,8 +21453,8 @@ seeds:
     needs_key: false
     allowed: true
     notes: 'Research 2026-11-20 (place facts corpus; Global / multi-country; verdict ADD): Dublin street/pub/building history,
-      for Place facts. robots.txt: allowed. Terms: terms not found. Sourced: yes. Terms not found; owner accepted for non-commercial
-      use 2026-11-18. Facts only.'
+      for Place facts. robots.txt: allowed. Terms: terms not found. Sourced: yes. Terms not read or not found; owner accepted
+      for non-commercial use 2026-11-18. Facts only.'
   - id: fx-atlas-of-wonders
     category: facts
     name: Atlas of Wonders
@@ -21456,8 +21465,8 @@ seeds:
     needs_key: false
     allowed: true
     notes: 'Research 2026-11-20 (place facts corpus; Global / multi-country; verdict ADD): natural/man-made wonders (low priority),
-      for Place facts and Places to see. robots.txt: allowed. Terms: terms not found. Sourced: partial. Terms not found; owner
-      accepted for non-commercial use 2026-11-18. Facts only.'
+      for Place facts and Places to see. robots.txt: allowed. Terms: terms not found. Sourced: partial. Terms not read or not
+      found; owner accepted for non-commercial use 2026-11-18. Facts only.'
   - id: fx-bowery-boys
     category: facts
     name: The Bowery Boys
@@ -21468,8 +21477,8 @@ seeds:
     needs_key: false
     allowed: true
     notes: 'Research 2026-11-20 (place facts corpus; Global / multi-country; verdict ADD): NYC neighbourhood history, for Place
-      facts and Free walking tours. robots.txt: allowed. Terms: terms not found. Sourced: yes. Terms not found; owner accepted
-      for non-commercial use 2026-11-18. Facts only.'
+      facts and Free walking tours. robots.txt: allowed. Terms: terms not found. Sourced: yes. Terms not read or not found;
+      owner accepted for non-commercial use 2026-11-18. Facts only.'
   - id: fx-exploring-castles
     category: facts
     name: Exploring Castles
@@ -21480,8 +21489,8 @@ seeds:
     needs_key: false
     allowed: true
     notes: 'Research 2026-11-20 (place facts corpus; Global / multi-country; verdict ADD): castle histories, Europe, for Place
-      facts and Places to see. robots.txt: allowed. Terms: terms not found. Sourced: partial. Terms not found; owner accepted
-      for non-commercial use 2026-11-18. Facts only.'
+      facts and Places to see. robots.txt: allowed. Terms: terms not found. Sourced: partial. Terms not read or not found; owner
+      accepted for non-commercial use 2026-11-18. Facts only.'
   - id: fx-daily-jstor-org
     category: facts
     name: JSTOR Daily
@@ -21494,8 +21503,8 @@ seeds:
     notes: 'Research 2026-11-20 (place facts corpus; Global / multi-country; verdict OWNER-DECISION): "nor may you undertake
       any activity such as computer programs that automatically download or export JSTOR Daily content and that may interfere
       with, disrupt or otherwise burden" the servers; a polite feed reader arguabl…, for Place facts and Travel tips. Terms:
-      terms not found. Terms not found; owner accepted for non-commercial use 2026-11-18. Facts only. notes: robots allowed;
-      feed /feed/ likely. Seed: the host root (the research row names no URL).'
+      terms not found. Terms not read or not found; owner accepted for non-commercial use 2026-11-18. Facts only. notes: robots
+      allowed; feed /feed/ likely. Seed: the host root (the research row names no URL).'
   - id: arch-regionalgeschichte-net
     category: facts
     name: regionalgeschichte.net (Institut für Geschichtliche Landeskunde, Mainz)
@@ -21514,7 +21523,7 @@ seeds:
     name: Enciclopèdia.cat (Gran Enciclopèdia Catalana)
     url: https://www.enciclopedia.cat/
     method: html
-    license: Copyright; no automated-access clause
+    license: Copyright; terms not found
     cadence: monthly
     needs_key: false
     allowed: true
@@ -21522,9 +21531,8 @@ seeds:
       and many villages and hamlets (history, heritage, population), for Place facts and Places to see. robots.txt: Crawl-delay
       10 (also a ClaudeBot group with Crawl-delay 10, no block); `/cerca/gec` disallowed. Terms: "Qualsevol reproducció total
       o parcial… requereix l''autorització escrita" (copyright only; terms on grupenciclopedia.cat, whose robots.txt was not
-      read, see note). Sourced: yes. Copyright reserved, no bot, scraping, TDM or AI ban quoted; owner accepted for non-commercial
-      use 2026-11-18. Facts only. AI-reserved robots.txt (or Content-Signal): title and link only, no LLM kinds. Crawl-delay
-      10 honoured as min_delay_s.'
+      read, see note). Sourced: yes. Terms not read or not found; owner accepted for non-commercial use 2026-11-18. Facts only.
+      AI-reserved robots.txt (or Content-Signal): title and link only, no LLM kinds. Crawl-delay 10 honoured as min_delay_s.'
   - id: fx-erih
     category: facts
     name: European Route of Industrial Heritage
@@ -21536,8 +21544,8 @@ seeds:
     allowed: true
     notes: 'Research 2026-11-20 (place facts corpus; Global / multi-country; verdict ADD): industrial heritage sites with history
       across Europe, for Place facts, Places to see and Activities. robots.txt: AI bots blocked; Content-Signal search=yes,ai-train=no,use=reference
-      -> title+link only. Terms: terms not found. Sourced: yes. Terms not found; owner accepted for non-commercial use 2026-11-18.
-      Facts only. AI-reserved robots.txt (or Content-Signal): title and link only, no LLM kinds.'
+      -> title+link only. Terms: terms not found. Sourced: yes. Terms not read or not found; owner accepted for non-commercial
+      use 2026-11-18. Facts only. AI-reserved robots.txt (or Content-Signal): title and link only, no LLM kinds.'
   - id: wiki-dump-de
     category: facts
     name: 'Wikipedia (de) dump: place articles'
@@ -22014,8 +22022,8 @@ seeds:
     allowed: true
     notes: 'Research 2026-11-20 (place facts corpus; Global / multi-country; verdict ADD): Westphalian towns, regions and history,
       for Place facts and Places to see. robots.txt: Crawl-delay 5–10; AI-bot blocks (ClaudeBot, GPTBot). Terms: Impressum:
-      no use ban found; terms not found. Sourced: yes. Terms not found; owner accepted for non-commercial use 2026-11-18. Facts
-      only. AI-reserved robots.txt (or Content-Signal): title and link only, no LLM kinds. Crawl-delay 5 honoured as min_delay_s.'
+      no use ban found; terms not found. Sourced: yes. Terms not read or not found; owner accepted for non-commercial use 2026-11-18.
+      Facts only. AI-reserved robots.txt (or Content-Signal): title and link only, no LLM kinds. Crawl-delay 5 honoured as min_delay_s.'
   - id: od-spc-sdd-country
     category: facts
     name: SPC Statistics for Development Division country pages
@@ -22028,8 +22036,8 @@ seeds:
     notes: 'Research 2026-11-20 (place facts corpus; Global / multi-country; verdict ADD): official key figures for 22 Pacific
       countries and territories (population, land area, EEZ), for Place facts. robots.txt: allowed for VoyagerBot; Cloudflare-managed
       AI-bot block (anthropic-ai, GPTBot, CCBot..) → title+link only. Terms: terms not found on home. Sourced: yes (official
-      statistics). Terms not found; owner accepted for non-commercial use 2026-11-18. Facts only. AI-reserved robots.txt (or
-      Content-Signal): title and link only, no LLM kinds.'
+      statistics). Terms not read or not found; owner accepted for non-commercial use 2026-11-18. Facts only. AI-reserved robots.txt
+      (or Content-Signal): title and link only, no LLM kinds.'
   - id: her-virunga
     category: facts
     name: Virunga National Park
@@ -22053,8 +22061,8 @@ seeds:
     needs_key: false
     allowed: true
     notes: 'Research 2026-11-20 (place facts corpus; Global / multi-country; verdict ADD): The Quill volcano, marine park (Sint
-      Eustatius), for Place facts and Activities. robots.txt: allowed. Terms: terms not found. Sourced: no. Terms not found;
-      owner accepted for non-commercial use 2026-11-18. Facts only.'
+      Eustatius), for Place facts and Activities. robots.txt: allowed. Terms: terms not found. Sourced: no. Terms not read or
+      not found; owner accepted for non-commercial use 2026-11-18. Facts only.'
   - id: her-stinapa-bonaire
     category: facts
     name: STINAPA Bonaire
@@ -22079,7 +22087,7 @@ seeds:
     allowed: true
     notes: 'Research 2026-11-20 (place facts corpus; Global / multi-country; verdict ADD): history of Saba villages (The Bottom,
       Windwardside), for Place facts and Free walking tours. robots.txt: allowed. Terms: terms not found. Sourced: partly. Terms
-      not found; owner accepted for non-commercial use 2026-11-18. Facts only.'
+      not read or not found; owner accepted for non-commercial use 2026-11-18. Facts only.'
   - id: her-terramar-bonaire
     category: facts
     name: TERRAMAR Museum (Bonaire)
@@ -22091,7 +22099,7 @@ seeds:
     allowed: true
     notes: 'Research 2026-11-20 (place facts corpus; Global / multi-country; verdict ADD): archaeology and history of Bonaire
       and the ABC islands (terramarmuseum.com redirects here), for Place facts. robots.txt: allowed. Terms: terms not found.
-      Sourced: partly. Terms not found; owner accepted for non-commercial use 2026-11-18. Facts only.'
+      Sourced: partly. Terms not read or not found; owner accepted for non-commercial use 2026-11-18. Facts only.'
   - id: fx-factsanddetails
     category: facts
     name: Facts and Details (Jeffrey Hays)
@@ -22103,8 +22111,8 @@ seeds:
     allowed: true
     notes: 'Research 2026-11-20 (place facts corpus; Global / multi-country; verdict ADD): deep, sourced pages on Kazakhstan,
       Kyrgyzstan, Tajikistan, Turkmenistan, Uzbekistan, Mongolia, Myanmar, Laos, Cambodia, Brunei, for Place facts. robots.txt:
-      robots.txt 404 = allowed. Terms: terms not found. Sourced: yes (source list on every page). Terms not found; owner accepted
-      for non-commercial use 2026-11-18. Facts only.'
+      robots.txt 404 = allowed. Terms: terms not found. Sourced: yes (source list on every page). Terms not read or not found;
+      owner accepted for non-commercial use 2026-11-18. Facts only.'
   - id: gov-akdn-historic-cities
     category: facts
     name: Aga Khan Trust for Culture / Historic Cities Programme
@@ -22117,7 +22125,7 @@ seeds:
     notes: 'Research 2026-11-20 (place facts corpus; Global / multi-country; verdict ADD): restored sites such as Bagh-e Babur
       and Herat old city (Afghanistan), Djenné/Mopti/Timbuktu mosques (Mali), Bukhara, Zanzibar, for Place facts and Places
       to see. robots.txt: allowed (/test only). akdn.org redirects to the.akdn. Terms: terms not found (not linked on home).
-      Sourced: partly. Terms not found; owner accepted for non-commercial use 2026-11-18. Facts only.'
+      Sourced: partly. Terms not read or not found; owner accepted for non-commercial use 2026-11-18. Facts only.'
   - id: fx-turquoise-mountain
     category: facts
     name: Turquoise Mountain
@@ -22129,7 +22137,7 @@ seeds:
     allowed: true
     notes: 'Research 2026-11-20 (place facts corpus; Global / multi-country; verdict ADD): Murad Khani old city (Kabul), Yangon
       heritage buildings, for Place facts. robots.txt: allowed. Terms: terms not found (privacy policy only). Sourced: no. Terms
-      not found; owner accepted for non-commercial use 2026-11-18. Facts only.'
+      not read or not found; owner accepted for non-commercial use 2026-11-18. Facts only.'
   - id: tb-nouvellecaledonie
     category: facts
     name: Nouvelle-Calédonie Tourisme
@@ -22155,7 +22163,7 @@ seeds:
     allowed: true
     notes: 'Research 2026-11-20 (place facts corpus; Global / multi-country; verdict ADD): peer-reviewed Pacific history and
       place studies; use open-access articles only, for Place facts. robots.txt: allowed (/cache/). Terms: terms not found.
-      Sourced: yes. Terms not found; owner accepted for non-commercial use 2026-11-18. Facts only.'
+      Sourced: yes. Terms not read or not found; owner accepted for non-commercial use 2026-11-18. Facts only.'
   - id: fx-seasite-niu
     category: facts
     name: SEAsite (Northern Illinois University)
@@ -22179,8 +22187,8 @@ seeds:
     needs_key: false
     allowed: true
     notes: 'Research 2026-11-20 (place facts corpus; Global / multi-country; verdict ADD): curated West African heritage collections
-      and exhibits, for Place facts. robots.txt: robots.txt 404 = allowed. Terms: terms not found. Sourced: yes. Terms not found;
-      owner accepted for non-commercial use 2026-11-18. Facts only.'
+      and exhibits, for Place facts. robots.txt: robots.txt 404 = allowed. Terms: terms not found. Sourced: yes. Terms not read
+      or not found; owner accepted for non-commercial use 2026-11-18. Facts only.'
   - id: fx-craterre
     category: facts
     name: CRAterre (earthen architecture)
@@ -22217,9 +22225,9 @@ seeds:
     needs_key: false
     allowed: true
     notes: 'Research 2026-11-20 (place facts corpus; Global / multi-country; verdict NEEDS-ADAPTER): history and curiosities
-      of the places it covers, for Place facts. Terms: terms not found. Terms not found; owner accepted for non-commercial use
-      2026-11-18. Facts only. format / note: JS SPA (/assets only, robots 404); needs JS rendering. Seed: the host root (the
-      research row names no URL).'
+      of the places it covers, for Place facts. Terms: terms not found. Terms not read or not found; owner accepted for non-commercial
+      use 2026-11-18. Facts only. format / note: JS SPA (/assets only, robots 404); needs JS rendering. Seed: the host root
+      (the research row names no URL).'
   - id: od-grottocenter
     category: facts
     name: Grottocenter (open cave database, CC BY-SA)
@@ -22271,7 +22279,7 @@ seeds:
     allowed: true
     notes: 'Research 2026-11-20 (place facts corpus; Global / multi-country; verdict ADD): European Heritage Awards and "7 Most
       Endangered" site write-ups, for Place facts and Places to see. robots.txt: allowed. Terms: terms not found (privacy only).
-      Sourced: partly. Terms not found; owner accepted for non-commercial use 2026-11-18. Facts only.'
+      Sourced: partly. Terms not read or not found; owner accepted for non-commercial use 2026-11-18. Facts only.'
   - id: od-uk-openplaques-dmn
     category: facts
     name: Public-domain mirror of Open Plaques (dataset https://datamillnorth.org/dataset/open-plaques-2rxxd). openplaques.org
@@ -22284,8 +22292,8 @@ seeds:
     allowed: true
     notes: 'Research 2026-11-20 (place facts corpus; Global / multi-country; verdict OWNER-DECISION): //datamillnorth.org/dataset/open-plaques-2rxxd).
       openplaques.org itself has robots `Disallow: /` for every bot, so the owner should decide whether a third-party mirror
-      is acceptable. Data Mill North blocks AI bots in ro…, for Place facts. Terms: terms not found. Terms not found; owner
-      accepted for non-commercial use 2026-11-18. Facts only. Seed: the host root (the research row names no URL).'
+      is acceptable. Data Mill North blocks AI bots in ro…, for Place facts. Terms: terms not found. Terms not read or not found;
+      owner accepted for non-commercial use 2026-11-18. Facts only. Seed: the host root (the research row names no URL).'
   - id: fx-haiti-reference
     category: facts
     name: Haïti Référence
@@ -22297,7 +22305,7 @@ seeds:
     allowed: true
     notes: 'Research 2026-11-20 (place facts corpus; Global / multi-country; verdict ADD): long-running Haitian reference site
       (history, regions, notables, culture), for Place facts and Places to see. robots.txt: robots 404 = allowed. Terms: terms
-      not found. Sourced: partly. Terms not found; owner accepted for non-commercial use 2026-11-18. Facts only.'
+      not found. Sourced: partly. Terms not read or not found; owner accepted for non-commercial use 2026-11-18. Facts only.'
   - id: fx-historia-nuevo-mundo
     category: facts
     name: Historia del Nuevo Mundo
@@ -22322,7 +22330,7 @@ seeds:
     allowed: true
     notes: 'Research 2026-11-20 (place facts corpus; Global / multi-country; verdict ADD): Detroit landmarks and neighbourhoods,
       for Place facts, Places to see and Free walking tours. robots.txt: Drupal defaults. Terms: terms (iubenda T&C) not fetched;
-      terms not found. Sourced: yes. Terms not found; owner accepted for non-commercial use 2026-11-18. Facts only.'
+      terms not found. Sourced: yes. Terms not read or not found; owner accepted for non-commercial use 2026-11-18. Facts only.'
   - id: arch-sachsen-digital
     category: facts
     name: sachsen.digital (SLUB Dresden)
@@ -22348,7 +22356,7 @@ seeds:
     allowed: true
     notes: 'Research 2026-11-20 (place facts corpus; Global / multi-country; verdict ADD): geolocated London history records,
       for Place facts and Free walking tours. robots.txt: Open. Terms: Terms page is JS-only (empty to curl); terms not found.
-      Sourced: partly. Terms not found; owner accepted for non-commercial use 2026-11-18. Facts only.'
+      Sourced: partly. Terms not read or not found; owner accepted for non-commercial use 2026-11-18. Facts only.'
   - id: arch-nypl-api
     category: facts
     name: NYPL Digital Collections API
@@ -22439,8 +22447,8 @@ seeds:
     allowed: true
     notes: 'Research 2026-11-20 (place facts corpus; Global / multi-country; verdict ADD): history and curiosities of the places
       it covers, for Place facts and Places to see. robots.txt: all AI bots blocked incl. ClaudeBot -> title+link only. Terms:
-      terms not found (avis-legal 404). Sourced: yes. Terms not found; owner accepted for non-commercial use 2026-11-18. Facts
-      only. AI-reserved robots.txt (or Content-Signal): title and link only, no LLM kinds. also in brief: -.'
+      terms not found (avis-legal 404). Sourced: yes. Terms not read or not found; owner accepted for non-commercial use 2026-11-18.
+      Facts only. AI-reserved robots.txt (or Content-Signal): title and link only, no LLM kinds. also in brief: -.'
   - id: api-qlever-wikidata
     category: facts
     name: QLever SPARQL over Wikidata (Univ. of Freiburg)
@@ -22505,8 +22513,8 @@ seeds:
     notes: 'Research 2026-11-20 (place facts corpus; Global / multi-country; verdict ADD): record facts ("tallest building in
       X, completed 20xx, N m") from the height-criteria authority, for Place facts and Places to see. robots.txt: 200; `*` allowed
       except `/map/`; Content-Signal ai-train=no; blocks CCBot, ClaudeBot, GPTBot. Terms: terms not found (terms-of-use URL
-      404); sourced: yes (verified heights). Terms not found; owner accepted for non-commercial use 2026-11-18. Facts only.
-      AI-reserved robots.txt (or Content-Signal): title and link only, no LLM kinds.'
+      404); sourced: yes (verified heights). Terms not read or not found; owner accepted for non-commercial use 2026-11-18.
+      Facts only. AI-reserved robots.txt (or Content-Signal): title and link only, no LLM kinds.'
   - id: od-dbpedia
     category: facts
     name: DBpedia (SPARQL + Databus dumps)
@@ -22532,9 +22540,9 @@ seeds:
     needs_key: true
     allowed: true
     notes: 'Research 2026-11-20 (place facts corpus; Global / multi-country; verdict API-OR-KEY): /`, Content-Signal ai-input=yes,
-      for Place facts. Terms: terms not found. Terms not found; owner accepted for non-commercial use 2026-11-18. Facts only.
-      key / sign-up: https://enterprise.wikimedia.com/pricing/ (free account) ; free?: yes, free tier (monthly request allowance
-      + twice-monthly snapshots). Seed: the host root (the research row names no URL).'
+      for Place facts. Terms: terms not found. Terms not read or not found; owner accepted for non-commercial use 2026-11-18.
+      Facts only. key / sign-up: https://enterprise.wikimedia.com/pricing/ (free account) ; free?: yes, free tier (monthly request
+      allowance + twice-monthly snapshots). Seed: the host root (the research row names no URL).'
   - id: fx-api-geonames-org
     category: facts
     name: GeoNames web services
@@ -22546,8 +22554,9 @@ seeds:
     allowed: true
     notes: 'Research 2026-11-20 (place facts corpus; Global / multi-country; verdict API-OR-KEY): /` and www `Disallow: /dump/`;
       api host gave no response in research. The app already ships GeoNames-derived data offline (backend/app/db/data), for
-      Place facts. Terms: terms not found. Terms not found; owner accepted for non-commercial use 2026-11-18. Facts only. key
-      / sign-up: free username https://www.geonames.org/login ; free?: yes. Seed: the host root (the research row names no URL).'
+      Place facts. Terms: terms not found. Terms not read or not found; owner accepted for non-commercial use 2026-11-18. Facts
+      only. key / sign-up: free username https://www.geonames.org/login ; free?: yes. Seed: the host root (the research row
+      names no URL).'
   - id: fx-atlantides-org
     category: facts
     name: Pleiades gazetteer of ancient places
@@ -22558,8 +22567,8 @@ seeds:
     needs_key: false
     allowed: true
     notes: 'Research 2026-11-20 (place facts corpus; Global / multi-country; verdict NEEDS-ADAPTER): history and curiosities
-      of the places it covers, for Place facts. Terms: terms not found. Terms not found; owner accepted for non-commercial use
-      2026-11-18. Facts only. AI-reserved robots.txt (or Content-Signal): title and link only, no LLM kinds. format: gzipped
+      of the places it covers, for Place facts. Terms: terms not found. Terms not read or not found; owner accepted for non-commercial
+      use 2026-11-18. Facts only. AI-reserved robots.txt (or Content-Signal): title and link only, no LLM kinds. format: gzipped
       JSON/CSV dump https://atlantides.org/downloads/pleiades/json/ ; notes: CC BY 3.0 (open); per-place descriptions, periods,
       names; pleiades.stoa.org robots 200 (Crawl-delay 3, AI-bot block, `/places` not disallowed); atlantides robots 404 (allow….
       Seed: the host root (the research row names no URL).'
@@ -22573,8 +22582,8 @@ seeds:
     needs_key: false
     allowed: true
     notes: 'Research 2026-11-20 (place facts corpus; Global / multi-country; verdict NEEDS-ADAPTER): history and curiosities
-      of the places it covers, for Place facts. Terms: terms not found. Terms not found; owner accepted for non-commercial use
-      2026-11-18. Facts only. format: REST JSON, no key: https://lobid.org/gnd/search?q=…&filter=type:PlaceOrGeographicName&format=json
+      of the places it covers, for Place facts. Terms: terms not found. Terms not read or not found; owner accepted for non-commercial
+      use 2026-11-18. Facts only. format: REST JSON, no key: https://lobid.org/gnd/search?q=…&filter=type:PlaceOrGeographicName&format=json
       ; notes: CC0; fields such as `biographicalOrHistoricalInformation`, `dateOfEstablishment`, variant (historic) names; robots
       disallows `/resource/ /api/ /…. Seed: the host root (the research row names no URL).'
   - id: fx-planet-openhistoricalmap-org
@@ -22587,11 +22596,11 @@ seeds:
     needs_key: false
     allowed: true
     notes: 'Research 2026-11-20 (place facts corpus; Global / multi-country; verdict NEEDS-ADAPTER): history and curiosities
-      of the places it covers, for Place facts. Terms: terms not found. Terms not found; owner accepted for non-commercial use
-      2026-11-18. Facts only. AI-reserved robots.txt (or Content-Signal): title and link only, no LLM kinds. format: OSM PBF/XML
-      planet with `start_date`/`end_date` (maybe readable by the geofabrik PBF path) ; notes: Licence reportedly CC0, but www.openhistoricalmap.org/copyright
-      answered a Cloudflare 403, so verify it. Planet robots 200: `Allow: /`, Content-Signal…. Seed: the host root (the research
-      row names no URL).'
+      of the places it covers, for Place facts. Terms: terms not found. Terms not read or not found; owner accepted for non-commercial
+      use 2026-11-18. Facts only. AI-reserved robots.txt (or Content-Signal): title and link only, no LLM kinds. format: OSM
+      PBF/XML planet with `start_date`/`end_date` (maybe readable by the geofabrik PBF path) ; notes: Licence reportedly CC0,
+      but www.openhistoricalmap.org/copyright answered a Cloudflare 403, so verify it. Planet robots 200: `Allow: /`, Content-Signal….
+      Seed: the host root (the research row names no URL).'
   - id: fx-kaikki-org
     category: facts
     name: Kaikki.org (machine-readable Wiktionary)
@@ -22602,8 +22611,8 @@ seeds:
     needs_key: false
     allowed: true
     notes: 'Research 2026-11-20 (place facts corpus; Global / multi-country; verdict NEEDS-ADAPTER): history and curiosities
-      of the places it covers, for Place facts. Terms: terms not found. Terms not found; owner accepted for non-commercial use
-      2026-11-18. Facts only. format: JSONL(.gz) extracts per language ; notes: CC BY-SA (from Wiktionary); place-name etymologies
+      of the places it covers, for Place facts. Terms: terms not found. Terms not read or not found; owner accepted for non-commercial
+      use 2026-11-18. Facts only. format: JSONL(.gz) extracts per language ; notes: CC BY-SA (from Wiktionary); place-name etymologies
       ("From Latin Londinium…"); robots allows except `/dictionary/search/`; sitemaps listed. Seed: the host root (the research
       row names no URL).'
   - id: fx-population-un-org
@@ -22616,8 +22625,8 @@ seeds:
     needs_key: false
     allowed: true
     notes: 'Research 2026-11-20 (place facts corpus; Global / multi-country; verdict NEEDS-ADAPTER): history and curiosities
-      of the places it covers, for Place facts. Terms: terms not found. Terms not found; owner accepted for non-commercial use
-      2026-11-18. Facts only. format: XLSX files (WUP 2018/2025 city series 1950–2050) ; notes: Robots redirect to www.un.org
+      of the places it covers, for Place facts. Terms: terms not found. Terms not read or not found; owner accepted for non-commercial
+      use 2026-11-18. Facts only. format: XLSX files (WUP 2018/2025 city series 1950–2050) ; notes: Robots redirect to www.un.org
       root file (allowed, Crawl-delay 10); UN terms allow reuse with citation; xlsx reader needed. Seed: the host root (the
       research row names no URL).'
   - id: fx-peaklist
@@ -22631,8 +22640,8 @@ seeds:
     allowed: true
     notes: 'Research 2026-11-20 (place facts corpus; Global / multi-country; verdict ADD): highest and most prominent peaks
       per country and region, for Place facts. robots.txt: http only (https certificate invalid); Crawl-delay 10. Terms: terms
-      not found. Sourced: yes. Terms not found; owner accepted for non-commercial use 2026-11-18. Facts only. Crawl-delay 10
-      honoured as min_delay_s.'
+      not found. Sourced: yes. Terms not read or not found; owner accepted for non-commercial use 2026-11-18. Facts only. Crawl-delay
+      10 honoured as min_delay_s.'
   - id: od-wmo-extremes
     category: facts
     name: WMO World Weather and Climate Extremes Archive
@@ -22687,7 +22696,7 @@ seeds:
     allowed: true
     notes: 'Research 2026-11-20 (place facts corpus; Global / multi-country; verdict ADD): documented tripoints and enclaves
       (Baarle, Llívia…), for Place facts and Places to see. robots.txt: WP default. Terms: terms not found. Sourced: partly.
-      Terms not found; owner accepted for non-commercial use 2026-11-18. Facts only.'
+      Terms not read or not found; owner accepted for non-commercial use 2026-11-18. Facts only.'
   - id: fx-jankrogh-geosite
     category: facts
     name: Jan S. Krogh's GeoSite (tripoints of the world, true enclaves)
@@ -22699,8 +22708,8 @@ seeds:
     allowed: true
     notes: 'Research 2026-11-20 (place facts corpus; Global / multi-country; verdict ADD): catalogue of every international
       tripoint and enclave, for Place facts. robots.txt: http only (the https certificate does not match the name); robots 404.
-      Terms: terms not found. Sourced: yes (treaties, visits). Terms not found; owner accepted for non-commercial use 2026-11-18.
-      Facts only.'
+      Terms: terms not found. Sourced: yes (treaties, visits). Terms not read or not found; owner accepted for non-commercial
+      use 2026-11-18. Facts only.'
   - id: fx-poles-inaccessibility
     category: facts
     name: Poles of Inaccessibility
@@ -22711,8 +22720,8 @@ seeds:
     needs_key: false
     allowed: true
     notes: 'Research 2026-11-20 (place facts corpus; Global / multi-country; verdict ADD): remotest point of each country and
-      continent, for Place facts. robots.txt: allow all. Terms: terms not found. Sourced: partly. Terms not found; owner accepted
-      for non-commercial use 2026-11-18. Facts only.'
+      continent, for Place facts. robots.txt: allow all. Terms: terms not found. Sourced: partly. Terms not read or not found;
+      owner accepted for non-commercial use 2026-11-18. Facts only.'
   - id: fx-highpointers
     category: facts
     name: Highpointers Club (US state high points)
@@ -22723,8 +22732,8 @@ seeds:
     needs_key: false
     allowed: true
     notes: 'Research 2026-11-20 (place facts corpus; Global / multi-country; verdict ADD): highest point of each US state, for
-      Place facts. robots.txt: Crawl-delay 10. Terms: terms not found (privacy policy only). Sourced: partly. Terms not found;
-      owner accepted for non-commercial use 2026-11-18. Facts only. Crawl-delay 10 honoured as min_delay_s.'
+      Place facts. robots.txt: Crawl-delay 10. Terms: terms not found (privacy policy only). Sourced: partly. Terms not read
+      or not found; owner accepted for non-commercial use 2026-11-18. Facts only. Crawl-delay 10 honoured as min_delay_s.'
   - id: gov-ungegn
     category: facts
     name: UN Group of Experts on Geographical Names
@@ -22743,27 +22752,27 @@ seeds:
     name: Statoids (administrative divisions of countries)
     url: https://www.statoids.com/factoids.html
     method: html
-    license: Copyright; no automated-access clause
+    license: Copyright; terms not found
     cadence: monthly
     needs_key: false
     allowed: true
     notes: 'Research 2026-11-20 (place facts corpus; Global / multi-country; verdict ADD): largest, smallest and oldest provinces
       and counties, odd boundaries, name changes, for Place facts. robots.txt: 200, empty file = allowed. Terms: details.html:
-      no ban; terms page not found. Sourced: yes (details page plus a bibliography; cites national stati…. Copyright reserved,
-      no bot, scraping, TDM or AI ban quoted; owner accepted for non-commercial use 2026-11-18. Facts only.'
+      no ban; terms page not found. Sourced: yes (details page plus a bibliography; cites national stati…. Terms not read or
+      not found; owner accepted for non-commercial use 2026-11-18. Facts only.'
   - id: ref-nsidc-glacier-facts
     category: facts
     name: 'NSIDC: Glacier quick facts'
     url: https://nsidc.org/learn/parts-cryosphere/glaciers/glacier-quick-facts
     method: html
-    license: Copyright; no automated-access clause
+    license: Copyright; terms not found
     cadence: yearly
     needs_key: false
     allowed: true
     notes: 'Research 2026-11-20 (place facts corpus; Global / multi-country; verdict ADD): Glacier quick facts: largest, longest
       and fastest glaciers and where they are, for Place facts. robots.txt: 200, Crawl-delay 5. Terms: terms not checked (fetch
-      limit); no ban seen on the page. Sourced: yes. Copyright reserved, no bot, scraping, TDM or AI ban quoted; owner accepted
-      for non-commercial use 2026-11-18. Facts only. Crawl-delay 5 honoured as min_delay_s.'
+      limit); no ban seen on the page. Sourced: yes. Terms not read or not found; owner accepted for non-commercial use 2026-11-18.
+      Facts only. Crawl-delay 5 honoured as min_delay_s.'
   - id: ref-oldlist
     category: facts
     name: 'OldList: a database of old trees (Rocky Mountain Tree-Ring Research)'
@@ -22775,8 +22784,8 @@ seeds:
     allowed: true
     notes: 'Research 2026-11-20 (place facts corpus; Global / multi-country; verdict ADD): a database of old trees (Rocky Mountain
       Tree-Ring Research): the oldest dated trees per species and site (Methuselah, Old Tjikko), for Place facts. robots.txt:
-      robots 404 = allowed. Terms: terms not found. Sourced: yes (dated cores plus a reference list). Terms not found; owner
-      accepted for non-commercial use 2026-11-18. Facts only.'
+      robots 404 = allowed. Terms: terms not found. Sourced: yes (dated cores plus a reference list). Terms not read or not
+      found; owner accepted for non-commercial use 2026-11-18. Facts only.'
   - id: ref-ancient-yew
     category: facts
     name: Ancient Yew Group
@@ -22801,8 +22810,8 @@ seeds:
     allowed: true
     notes: 'Research 2026-11-20 (place facts corpus; Global / multi-country; verdict ADD): the highest bridges by country and
       region (height, year), for Place facts. robots.txt: 200; /w/ is disallowed (so no Atom feed). Terms: the disclaimer page
-      answers 404: terms not found. Sourced: yes (survey heights, references). Terms not found; owner accepted for non-commercial
-      use 2026-11-18. Facts only.'
+      answers 404: terms not found. Sourced: yes (survey heights, references). Terms not read or not found; owner accepted for
+      non-commercial use 2026-11-18. Facts only.'
   - id: ref-structurae
     category: facts
     name: Structurae (international database of structures)
@@ -22815,8 +22824,8 @@ seeds:
     notes: 'Research 2026-11-20 (place facts corpus; Global / multi-country; verdict ADD): records per structure (longest, tallest,
       oldest bridge, dam or tower) by town, for Place facts and Places to see. robots.txt: 200; AI-bot blocks; `Content-Signal:
       search=yes,ai-train=no,use=reference` (title+link only). Terms: licensing page covers images only; terms not found. Sourced:
-      yes (bibliography per structure). Terms not found; owner accepted for non-commercial use 2026-11-18. Facts only. AI-reserved
-      robots.txt (or Content-Signal): title and link only, no LLM kinds.'
+      yes (bibliography per structure). Terms not read or not found; owner accepted for non-commercial use 2026-11-18. Facts
+      only. AI-reserved robots.txt (or Content-Signal): title and link only, no LLM kinds.'
   - id: fx-geology-com
     category: facts
     name: 'Geology.com: records'
@@ -22829,7 +22838,7 @@ seeds:
     notes: 'Research 2026-11-20 (place facts corpus; Global / multi-country; verdict ADD): records: geological superlatives
       with places (highest waterfall, deepest ocean point, biggest tsunami), for Place facts. robots.txt: 200, allow all. Terms:
       terms not found (/terms-of-use.shtml answers 404). Sourced: partial (written by geologists; cites sources on some pages).
-      Terms not found; owner accepted for non-commercial use 2026-11-18. Facts only.'
+      Terms not read or not found; owner accepted for non-commercial use 2026-11-18. Facts only.'
   - id: ref-peakvisor
     category: facts
     name: PeakVisor
@@ -22841,8 +22850,8 @@ seeds:
     allowed: true
     notes: 'Research 2026-11-20 (place facts corpus; Global / multi-country; verdict ADD): the highest peak and prominence per
       region, park and country, for Place facts. robots.txt: 200; AI bots explicitly allowed. Terms: about page: no ban; terms
-      not found. Sourced: partial (data from OSM and elevation models). Terms not found; owner accepted for non-commercial use
-      2026-11-18. Facts only.'
+      not found. Sourced: partial (data from OSM and elevation models). Terms not read or not found; owner accepted for non-commercial
+      use 2026-11-18. Facts only.'
   - id: gov-esa-earth-from-space
     category: facts
     name: 'ESA: Earth from Space'
@@ -22869,7 +22878,7 @@ seeds:
     notes: 'Research 2026-11-20 (place facts corpus; Global / multi-country; verdict ADD): about 300 member cities with their
       World Heritage inscription and history (not a UNESCO host, so the unesco.org denial does not apply), for Place facts and
       Places to see. robots.txt: 200, empty disallow. Terms: about page only; terms not found. Sourced: partial (city-supplied
-      text). Terms not found; owner accepted for non-commercial use 2026-11-18. Facts only.'
+      text). Terms not read or not found; owner accepted for non-commercial use 2026-11-18. Facts only.'
   - id: fx-henokiens
     category: facts
     name: Les Hénokiens (family companies 200+ years old)
@@ -22881,8 +22890,8 @@ seeds:
     allowed: true
     notes: 'Research 2026-11-20 (place facts corpus; Global / multi-country; verdict ADD): the oldest family companies by town
       (Hōshi Ryokan, 718; Beretta, 1526) with founding years, for Place facts and Places to see. robots.txt: robots 404 = allowed.
-      Terms: terms not found. Sourced: yes (founding dates checked for membership). Terms not found; owner accepted for non-commercial
-      use 2026-11-18. Facts only.'
+      Terms: terms not found. Sourced: yes (founding dates checked for membership). Terms not read or not found; owner accepted
+      for non-commercial use 2026-11-18. Facts only.'
   - id: od-glims
     category: facts
     name: GLIMS glacier inventory
@@ -22893,9 +22902,9 @@ seeds:
     needs_key: false
     allowed: true
     notes: 'Research 2026-11-20 (place facts corpus; Global / multi-country; verdict NEEDS-ADAPTER): the largest glaciers per
-      region, for Place facts. robots.txt: 200; disallow /cgi-bin, /for_glims_only. Terms: terms not found. Terms not found;
-      owner accepted for non-commercial use 2026-11-18. Facts only. format: shapefile/GeoJSON downloads (via NSIDC). Seed: the
-      host root (the research row names no URL).'
+      region, for Place facts. robots.txt: 200; disallow /cgi-bin, /for_glims_only. Terms: terms not found. Terms not read or
+      not found; owner accepted for non-commercial use 2026-11-18. Facts only. format: shapefile/GeoJSON downloads (via NSIDC).
+      Seed: the host root (the research row names no URL).'
   - id: fx-songramernotebook-com
     category: facts
     name: songramernotebook.com
@@ -22908,8 +22917,8 @@ seeds:
     notes: 'Research 2026-11-20 (place facts corpus; Global / multi-country; verdict OWNER-DECISION): transcribed newspaper
       clippings and book excerpts, mostly third-party copyright. robots.txt allows (wp-sitemap listed); terms not found. Useful
       for 1971 events by district, but the rights in the archived material are un…, for Place facts. Terms: terms not found.
-      Terms not found; owner accepted for non-commercial use 2026-11-18. Facts only. Seed: the host root (the research row names
-      no URL).'
+      Terms not read or not found; owner accepted for non-commercial use 2026-11-18. Facts only. Seed: the host root (the research
+      row names no URL).'
   - id: fx-seaarch
     category: facts
     name: 'SEAArch: Southeast Asian Archaeology'
@@ -22948,9 +22957,9 @@ seeds:
     allowed: true
     notes: 'Research 2026-11-20 (place facts corpus; Global / multi-country; verdict ADD): history of thousands of towns and
       shtetls in Central and Eastern Europe, for Place facts. robots.txt: only UA `008` blocked; www.jewishgen.org blocks ClaudeBot
-      from /jcr-uk/ only, Crawl-delay 2. Terms: disclaimer link 404: terms not found. Sourced: yes. Terms not found; owner accepted
-      for non-commercial use 2026-11-18. Facts only. AI-reserved robots.txt (or Content-Signal): title and link only, no LLM
-      kinds. Crawl-delay 5 honoured as min_delay_s.'
+      from /jcr-uk/ only, Crawl-delay 2. Terms: disclaimer link 404: terms not found. Sourced: yes. Terms not read or not found;
+      owner accepted for non-commercial use 2026-11-18. Facts only. AI-reserved robots.txt (or Content-Signal): title and link
+      only, no LLM kinds. Crawl-delay 5 honoured as min_delay_s.'
   - id: wiki-facts-zh
     category: facts
     name: 'Wikipedia (zh): Did you know / On this day / unusual articles'

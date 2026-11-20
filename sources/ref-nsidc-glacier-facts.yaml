@@ -36,9 +36,8 @@ max_retention_days: null
 display_requirements: null
 notes: 'Research 2026-11-20 (place facts corpus; Global / multi-country; verdict ADD): Glacier quick facts:
   largest, longest and fastest glaciers and where they are, for Place facts. robots.txt: 200, Crawl-delay
-  5. Terms: terms not checked (fetch limit); no ban seen on the page. Sourced: yes. Copyright reserved,
-  no bot, scraping, TDM or AI ban quoted; owner accepted for non-commercial use 2026-11-18. Facts only.
-  Crawl-delay 5 honoured as min_delay_s.'
+  5. Terms: terms not checked (fetch limit); no ban seen on the page. Sourced: yes. Terms not read or
+  not found; owner accepted for non-commercial use 2026-11-18. Facts only. Crawl-delay 5 honoured as min_delay_s.'
 relevance:
   sections:
   - facts

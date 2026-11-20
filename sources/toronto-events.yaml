@@ -20,7 +20,6 @@ exclude: []
 max_depth: 0
 kinds:
 - event
-- place_fact
 llm_kinds: []
 render: never
 cadence: daily
@@ -36,10 +35,10 @@ notes: 'open.toronto.ca robots 200; ckan0 host robots.txt 200, Allow: /api/ (che
   information licensed under the Open Government Licence – Toronto''. | Disabled: dataset retired: open.toronto.ca
   lists festivals-events as Retired with no resources (checked 2026-11-18); nothing to read until the
   City republishes it | Place facts (research 2026-11-20): add /explore-enjoy/history-art-culture/ (heritage
-  plaques, city history)'
+  plaques, city history) | Place facts: not wired yet (no LLM kinds on non-share-alike text and no adapter
+  that emits place_fact), so no `facts` section or place_fact kind; the note above is what to extract
+  once a reader exists.'
 relevance:
   sections:
   - events
-  - facts
-  why: Festivals and events listed by the City of Toronto, for the Events section; also history and curiosities
-    for Place facts.
+  why: Festivals and events listed by the City of Toronto, for the Events section.

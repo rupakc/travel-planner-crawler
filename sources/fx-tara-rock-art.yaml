@@ -36,8 +36,8 @@ max_retention_days: null
 display_requirements: null
 notes: 'Research 2026-11-20 (place facts corpus; Global / multi-country; verdict ADD): Trust for African
   Rock Art: rock-art sites by country, for Place facts and Places to see. robots.txt: /wp-admin/; Crawl-delay
-  10. Terms: terms not found. Sourced: yes. Terms not found; owner accepted for non-commercial use 2026-11-18.
-  Facts only. Crawl-delay 10 honoured as min_delay_s.'
+  10. Terms: terms not found. Sourced: yes. Terms not read or not found; owner accepted for non-commercial
+  use 2026-11-18. Facts only. Crawl-delay 10 honoured as min_delay_s.'
 relevance:
   sections:
   - facts

@@ -21,7 +21,6 @@ max_depth: 0
 kinds:
 - place
 - attraction
-- place_fact
 llm_kinds: []
 render: never
 cadence: monthly
@@ -40,9 +39,10 @@ notes: 'Research 2026-11-18 (hidden gems, small islands and remote places; World
   LLM kinds. | Disabled: terms forbid storage/redistribution ("You may not redistribute the WDPCA ...
   Data"; no commercial use; a GDB/SHP adapter would also be needed) | Place facts (research 2026-11-20):
   extract: Designation year and type of protected areas ("national park since 1872") / the oldest and
-  largest protected area per country (designation year, area)'
+  largest protected area per country (designation year, area) | Place facts: not wired yet (no LLM kinds
+  on non-share-alike text and no adapter that emits place_fact), so no `facts` section or place_fact kind;
+  the note above is what to extract once a reader exists.'
 relevance:
   sections:
   - places
-  - facts
-  why: WDPA protected areas, for Places to see; also history and curiosities for Place facts.
+  why: WDPA protected areas, for Places to see.

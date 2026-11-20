@@ -22,7 +22,6 @@ max_depth: 1
 kinds:
 - event
 - tip
-- place_fact
 llm_kinds: []
 render: never
 cadence: weekly
@@ -38,11 +37,12 @@ notes: 'Research 2026-11-18 (corpus Asia-Pacific): robots.txt: robots 200, path 
   → title + link only; terms: "may not be copied, reproduced or imitated ... unless expressly permitted"
   (copyright reservation; no robot clause). No automated-access clause; facts only. robots.txt reserves
   AI use (AI crawlers blocked), so title and link only: no LLM kinds. | Place facts (research 2026-11-20):
-  state and city heritage pages, Langkawi legends'
+  state and city heritage pages, Langkawi legends | Place facts: not wired yet (no LLM kinds on non-share-alike
+  text and no adapter that emits place_fact), so no `facts` section or place_fact kind; the note above
+  is what to extract once a reader exists.'
 relevance:
   sections:
   - events
   - tips
-  - facts
   why: 'Tourism Malaysia (corporate site): Tourism Malaysia campaigns, events and media releases, for
-    Events and Travel tips; also history and curiosities for Place facts.'
+    Events and Travel tips.'

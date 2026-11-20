@@ -36,9 +36,9 @@ display_requirements: null
 notes: 'Research 2026-11-20 (place facts corpus; Global / multi-country; verdict OWNER-DECISION): transcribed
   newspaper clippings and book excerpts, mostly third-party copyright. robots.txt allows (wp-sitemap listed);
   terms not found. Useful for 1971 events by district, but the rights in the archived material are un…,
-  for Place facts. Terms: terms not found. Terms not found; owner accepted for non-commercial use 2026-11-18.
-  Facts only. Seed: the host root (the research row names no URL). | Disabled: owner decision: 1971 Liberation
-  War archive made mostly of third-party copyrighted clippings; the rights are unclear.'
+  for Place facts. Terms: terms not found. Terms not read or not found; owner accepted for non-commercial
+  use 2026-11-18. Facts only. Seed: the host root (the research row names no URL). | Disabled: owner decision:
+  1971 Liberation War archive made mostly of third-party copyrighted clippings; the rights are unclear.'
 relevance:
   sections:
   - facts

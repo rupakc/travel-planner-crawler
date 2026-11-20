@@ -3,7 +3,7 @@
 id: arch-bibalex
 name: Bibliotheca Alexandrina
 category: facts
-source_class: reference
+source_class: official
 licence:
   class: facts_only
   spdx: null
@@ -15,7 +15,8 @@ seeds:
 sitemaps: []
 feeds: []
 adapter: null
-include: []
+include:
+- ^https?://www\.bibalex\.org/en/(Project|Page)/
 exclude: []
 max_depth: 1
 kinds:
@@ -33,10 +34,12 @@ needs_key: false
 key_secret: null
 max_retention_days: null
 display_requirements: null
-notes: 'Research 2026-11-20 (place facts corpus; Global / multi-country; verdict ADD): Page)/`, for Place
-  facts. robots.txt: official. Terms: robots 404. Sourced: terms not found. Copyright reserved, no bot,
-  scraping, TDM or AI ban quoted; owner accepted for non-commercial use 2026-11-18. Facts only.'
+notes: 'Research 2026-11-20 (place facts corpus; Global / multi-country; verdict ADD): Alexandria and
+  Egypt heritage projects (Memory of Modern Egypt lives on a subdomain, not vetted), for Place facts.
+  robots.txt: robots 404. Terms: terms not found. Sourced: partly. Terms not read or not found; owner
+  accepted for non-commercial use 2026-11-18. Facts only.'
 relevance:
   sections:
   - facts
-  why: 'Bibliotheca Alexandrina: Page)/`, for Place facts.'
+  why: 'Bibliotheca Alexandrina: Alexandria and Egypt heritage projects (Memory of Modern Egypt lives
+    on a subdomain, not vetted), for Place facts.'

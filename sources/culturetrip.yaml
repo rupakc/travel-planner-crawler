@@ -22,7 +22,6 @@ kinds:
 - article
 - place
 - attraction
-- place_fact
 llm_kinds: []
 render: never
 cadence: weekly
@@ -38,12 +37,13 @@ notes: 'robots allows * except /checkout; blocks AI-training bots (AI reservatio
   | Disabled: robots.txt answers, but the sitemap and every page time out for an honest bot (tested from
   a laptop and from the prod VM 2026-11-17) — effectively a bot wall; do not retry another way; owner
   asked for it — re-test only with a plain request. | Place facts (research 2026-11-20): ''facts about
-  X'' articles'
+  X'' articles | Place facts: not wired yet (no LLM kinds on non-share-alike text and no adapter that
+  emits place_fact), so no `facts` section or place_fact kind; the note above is what to extract once
+  a reader exists.'
 relevance:
   sections:
   - places
   - activities
   - tips
-  - facts
   why: Culture Trip destination guides (title and link only) for Places to see, Activities and Travel
-    tips; every page times out for our bot, so off; also history and curiosities for Place facts.
+    tips; every page times out for our bot, so off.

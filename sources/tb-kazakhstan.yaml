@@ -26,7 +26,6 @@ kinds:
 - activity
 - event
 - tip
-- place_fact
 llm_kinds: []
 render: never
 cadence: weekly
@@ -42,13 +41,14 @@ notes: 'Research 2026-11-18 (corpus Asia-Pacific): robots.txt: robots 200, path 
   → title + link only; /cabinet/, /api/ disallowed; terms: https://kazakhstan.travel/ru/terms read: no
   robot/AI clause. No automated-access clause; facts only. robots.txt reserves AI use (AI crawlers blocked),
   so title and link only: no LLM kinds. | Place facts (research 2026-11-20): history, name-origin and
-  curiosity pages of the places it covers'
+  curiosity pages of the places it covers | Place facts: not wired yet (no LLM kinds on non-share-alike
+  text and no adapter that emits place_fact), so no `facts` section or place_fact kind; the note above
+  is what to extract once a reader exists.'
 relevance:
   sections:
   - places
   - activities
   - events
   - tips
-  - facts
   why: 'Kazakh Tourism (kazakhstan.travel): Kazakhstan destinations, routes and events, for Places to
-    see, Activities, Events and Travel tips; also history and curiosities for Place facts.'
+    see, Activities, Events and Travel tips.'

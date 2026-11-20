@@ -36,8 +36,8 @@ max_retention_days: null
 display_requirements: null
 notes: 'Research 2026-11-20 (place facts corpus; Global / multi-country; verdict ADD): Identité culturelle:
   DRC cultural identity and local history programmes per province, for Place facts. robots.txt: 200; Crawl-delay
-  10. Terms: terms not found. Sourced: partly. Terms not found; owner accepted for non-commercial use
-  2026-11-18. Facts only. Crawl-delay 10 honoured as min_delay_s.'
+  10. Terms: terms not found. Sourced: partly. Terms not read or not found; owner accepted for non-commercial
+  use 2026-11-18. Facts only. Crawl-delay 10 honoured as min_delay_s.'
 relevance:
   sections:
   - facts

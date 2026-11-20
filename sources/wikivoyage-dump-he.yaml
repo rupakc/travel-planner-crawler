@@ -22,7 +22,6 @@ kinds:
 - place
 - attraction
 - hotel
-- place_fact
 llm_kinds: []
 render: never
 cadence: monthly
@@ -37,11 +36,12 @@ display_requirements: null
 notes: 'dumps.wikimedia.org/robots.txt 404 (allowed, checked 2026-11-18); WMF terms forbid only abusive
   automated use. pages-articles.xml.bz2 of 2026-11-01: 13163939 bytes, streamed and filtered on the fly
   (never stored whole), in the 02-05 UTC dump window. Hebrew listing templates mapped in wikivoyage_dump::EDITIONS.
-  | Place facts (research 2026-11-20): "Understand" history paragraphs'
+  | Place facts (research 2026-11-20): "Understand" history paragraphs | Place facts: not wired yet (no
+  LLM kinds on non-share-alike text and no adapter that emits place_fact), so no `facts` section or place_fact
+  kind; the note above is what to extract once a reader exists.'
 relevance:
   sections:
   - places
   - hotels
-  - facts
   why: 'Hebrew Wikivoyage destination guides: destinations, sights and places to stay with coordinates,
-    for Places to see and Hotels; also history and curiosities for Place facts.'
+    for Places to see and Hotels.'

@@ -38,9 +38,9 @@ display_requirements: null
 notes: 'Research 2026-11-20 (place facts corpus; Global / multi-country; verdict OWNER-DECISION): //datamillnorth.org/dataset/open-plaques-2rxxd).
   openplaques.org itself has robots `Disallow: /` for every bot, so the owner should decide whether a
   third-party mirror is acceptable. Data Mill North blocks AI bots in ro…, for Place facts. Terms: terms
-  not found. Terms not found; owner accepted for non-commercial use 2026-11-18. Facts only. Seed: the
-  host root (the research row names no URL). | Disabled: owner decision: Public-domain mirror of Open
-  Plaques, but openplaques.org itself disallows all bots. Is a third-party mirror acceptable?'
+  not found. Terms not read or not found; owner accepted for non-commercial use 2026-11-18. Facts only.
+  Seed: the host root (the research row names no URL). | Disabled: owner decision: Public-domain mirror
+  of Open Plaques, but openplaques.org itself disallows all bots. Is a third-party mirror acceptable?'
 relevance:
   sections:
   - facts

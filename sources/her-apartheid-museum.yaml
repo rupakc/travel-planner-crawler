@@ -15,9 +15,10 @@ seeds:
 sitemaps: []
 feeds: []
 adapter: null
-include: []
+include:
+- ^https?://www\.apartheidmuseum\.org/(exhibitions|about|learn)
 exclude: []
-max_depth: 1
+max_depth: 2
 kinds:
 - place_fact
 - article
@@ -33,10 +34,12 @@ needs_key: false
 key_secret: null
 max_retention_days: null
 display_requirements: null
-notes: 'Research 2026-11-20 (place facts corpus; Global / multi-country; verdict ADD): about, for Place
-  facts. robots.txt: facts_only. Terms: official (museum). Sourced: /craft/ only. Copyright reserved,
-  no bot, scraping, TDM or AI ban quoted; owner accepted for non-commercial use 2026-11-18. Facts only.'
+notes: 'Research 2026-11-20 (place facts corpus; Global / multi-country; verdict ADD): history and curiosities
+  of the places it covers, for Place facts and Activities. robots.txt: /craft/ only. Terms: terms not
+  found (privacy PDF only). Sourced: no. Terms not read or not found; owner accepted for non-commercial
+  use 2026-11-18. Facts only.'
 relevance:
   sections:
   - facts
-  why: 'Apartheid Museum: about, for Place facts.'
+  - activities
+  why: 'Apartheid Museum: history and curiosities of the places it covers, for Place facts and Activities.'

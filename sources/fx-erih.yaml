@@ -39,8 +39,8 @@ display_requirements: null
 notes: 'Research 2026-11-20 (place facts corpus; Global / multi-country; verdict ADD): industrial heritage
   sites with history across Europe, for Place facts, Places to see and Activities. robots.txt: AI bots
   blocked; Content-Signal search=yes,ai-train=no,use=reference -> title+link only. Terms: terms not found.
-  Sourced: yes. Terms not found; owner accepted for non-commercial use 2026-11-18. Facts only. AI-reserved
-  robots.txt (or Content-Signal): title and link only, no LLM kinds.'
+  Sourced: yes. Terms not read or not found; owner accepted for non-commercial use 2026-11-18. Facts only.
+  AI-reserved robots.txt (or Content-Signal): title and link only, no LLM kinds.'
 relevance:
   sections:
   - facts

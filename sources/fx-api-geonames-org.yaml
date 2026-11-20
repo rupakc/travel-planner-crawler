@@ -35,8 +35,8 @@ max_retention_days: null
 display_requirements: null
 notes: 'Research 2026-11-20 (place facts corpus; Global / multi-country; verdict API-OR-KEY): /` and www
   `Disallow: /dump/`; api host gave no response in research. The app already ships GeoNames-derived data
-  offline (backend/app/db/data), for Place facts. Terms: terms not found. Terms not found; owner accepted
-  for non-commercial use 2026-11-18. Facts only. key / sign-up: free username https://www.geonames.org/login
+  offline (backend/app/db/data), for Place facts. Terms: terms not found. Terms not read or not found;
+  owner accepted for non-commercial use 2026-11-18. Facts only. key / sign-up: free username https://www.geonames.org/login
   ; free?: yes. Seed: the host root (the research row names no URL). | Disabled: needs owner key: GeoNames
   web services (https://www.geonames.org/login; free)'
 relevance:

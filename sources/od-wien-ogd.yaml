@@ -24,7 +24,6 @@ max_depth: 0
 kinds:
 - attraction
 - amenity
-- place_fact
 llm_kinds: []
 render: never
 cadence: monthly
@@ -39,11 +38,12 @@ display_requirements: null
 notes: 'Four small GeoJSON layers (63 sights, 138 museums, 191 public toilets, 233 free Wi-Fi spots; 2026-11-18).
   robots.txt answers 404 (allowed). data.gv.at datasets are CC BY 4.0 (the terms page is an SPA). Adapter
   wfs_geojson: one request per layer a month. | Place facts (research 2026-11-20): Vienna Kulturgut datasets
-  (monuments, plaques)'
+  (monuments, plaques) | Place facts: not wired yet (no LLM kinds on non-share-alike text and no adapter
+  that emits place_fact), so no `facts` section or place_fact kind; the note above is what to extract
+  once a reader exists.'
 relevance:
   sections:
   - places
   - tips
-  - facts
   why: Vienna's sights and museums plus its public toilets and free Wi-Fi spots, for Places to see and
-    Travel tips; also history and curiosities for Place facts.
+    Travel tips.

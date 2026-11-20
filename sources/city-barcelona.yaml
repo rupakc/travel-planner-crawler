@@ -35,9 +35,9 @@ max_retention_days: null
 display_requirements: null
 notes: 'Research 2026-11-20 (place facts corpus; Global / multi-country; verdict ADD): history and curiosities
   of the places it covers, for Place facts and Places to see. robots.txt: all AI bots blocked incl. ClaudeBot
-  -> title+link only. Terms: terms not found (avis-legal 404). Sourced: yes. Terms not found; owner accepted
-  for non-commercial use 2026-11-18. Facts only. AI-reserved robots.txt (or Content-Signal): title and
-  link only, no LLM kinds. also in brief: -.'
+  -> title+link only. Terms: terms not found (avis-legal 404). Sourced: yes. Terms not read or not found;
+  owner accepted for non-commercial use 2026-11-18. Facts only. AI-reserved robots.txt (or Content-Signal):
+  title and link only, no LLM kinds. also in brief: -.'
 relevance:
   sections:
   - facts

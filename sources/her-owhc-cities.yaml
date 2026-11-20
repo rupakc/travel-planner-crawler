@@ -39,8 +39,8 @@ display_requirements: null
 notes: 'Research 2026-11-20 (place facts corpus; Global / multi-country; verdict ADD): about 300 member
   cities with their World Heritage inscription and history (not a UNESCO host, so the unesco.org denial
   does not apply), for Place facts and Places to see. robots.txt: 200, empty disallow. Terms: about page
-  only; terms not found. Sourced: partial (city-supplied text). Terms not found; owner accepted for non-commercial
-  use 2026-11-18. Facts only.'
+  only; terms not found. Sourced: partial (city-supplied text). Terms not read or not found; owner accepted
+  for non-commercial use 2026-11-18. Facts only.'
 relevance:
   sections:
   - facts

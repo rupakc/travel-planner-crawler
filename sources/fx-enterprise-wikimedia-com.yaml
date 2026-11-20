@@ -34,10 +34,10 @@ key_secret: crawler-src-fx-enterprise-wikimedia-com-key
 max_retention_days: null
 display_requirements: null
 notes: 'Research 2026-11-20 (place facts corpus; Global / multi-country; verdict API-OR-KEY): /`, Content-Signal
-  ai-input=yes, for Place facts. Terms: terms not found. Terms not found; owner accepted for non-commercial
-  use 2026-11-18. Facts only. key / sign-up: https://enterprise.wikimedia.com/pricing/ (free account)
-  ; free?: yes, free tier (monthly request allowance + twice-monthly snapshots). Seed: the host root (the
-  research row names no URL). | Disabled: needs owner key: Wikimedia Enterprise (https://enterprise.wikimedia.com/pricing/;
+  ai-input=yes, for Place facts. Terms: terms not found. Terms not read or not found; owner accepted for
+  non-commercial use 2026-11-18. Facts only. key / sign-up: https://enterprise.wikimedia.com/pricing/
+  (free account) ; free?: yes, free tier (monthly request allowance + twice-monthly snapshots). Seed:
+  the host root (the research row names no URL). | Disabled: needs owner key: Wikimedia Enterprise (https://enterprise.wikimedia.com/pricing/;
   free)'
 relevance:
   sections:

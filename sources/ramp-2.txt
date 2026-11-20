@@ -1186,7 +1186,7 @@ arch-puke-ariki                          # facts: sitemap, facts_only, monthly, 
 arch-canterbury-museum                   # facts: sitemap, open, monthly, 100/day
 her-keys-to-the-past                     # facts: sitemap, facts_only, quarterly, 100/day
 her-cornwall-heritage-trust              # facts: html, facts_only, yearly, 100/day
-fx-sahapedia                             # facts: html, open, monthly, 100/day
+fx-sahapedia                             # facts: html, share_alike, monthly, 100/day
 fx-siam-society                          # facts: sitemap, facts_only, quarterly, 100/day
 fx-historyextra                          # facts: sitemap, facts_only, monthly, 100/day
 fx-guinness-records                      # facts: html, facts_only, monthly, 100/day

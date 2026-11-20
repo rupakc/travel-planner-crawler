@@ -33,9 +33,9 @@ key_secret: null
 max_retention_days: null
 display_requirements: null
 notes: 'Research 2026-11-20 (place facts corpus; Global / multi-country; verdict NEEDS-ADAPTER): history
-  and curiosities of the places it covers, for Place facts. Terms: terms not found. Terms not found; owner
-  accepted for non-commercial use 2026-11-18. Facts only. AI-reserved robots.txt (or Content-Signal):
-  title and link only, no LLM kinds. format: gzipped JSON/CSV dump https://atlantides.org/downloads/pleiades/json/
+  and curiosities of the places it covers, for Place facts. Terms: terms not found. Terms not read or
+  not found; owner accepted for non-commercial use 2026-11-18. Facts only. AI-reserved robots.txt (or
+  Content-Signal): title and link only, no LLM kinds. format: gzipped JSON/CSV dump https://atlantides.org/downloads/pleiades/json/
   ; notes: CC BY 3.0 (open); per-place descriptions, periods, names; pleiades.stoa.org robots 200 (Crawl-delay
   3, AI-bot block, `/places` not disallowed); atlantides robots 404 (allow…. Seed: the host root (the
   research row names no URL). | Disabled: adapter pending: gzipped JSON/CSV dump https://atlantides.org/downloads/pleiades/json/'

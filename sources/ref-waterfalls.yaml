@@ -21,7 +21,6 @@ max_depth: 2
 kinds:
 - place
 - attraction
-- place_fact
 llm_kinds: []
 render: never
 cadence: monthly
@@ -39,10 +38,10 @@ notes: 'Research 2026-11-18 (hidden gems, small islands and remote places; World
   prior written consent" (copyright); AI-bot block + ai-train=no → title+link. Terms hold no bot, AI or
   personal-use clause (copyright only): facts only. robots.txt reserves content from AI crawlers: title
   and link only, no LLM kinds. | Place facts (research 2026-11-20): the tallest and largest-volume waterfalls
-  per country'
+  per country | Place facts: not wired yet (no LLM kinds on non-share-alike text and no adapter that emits
+  place_fact), so no `facts` section or place_fact kind; the note above is what to extract once a reader
+  exists.'
 relevance:
   sections:
   - places
-  - facts
-  why: 'World Waterfall Database: waterfalls, access notes, for Places to see; also history and curiosities
-    for Place facts.'
+  why: 'World Waterfall Database: waterfalls, access notes, for Places to see.'

@@ -39,9 +39,8 @@ notes: 'Research 2026-11-20 (place facts corpus; Global / multi-country; verdict
   and Places to see. robots.txt: Crawl-delay 10 (also a ClaudeBot group with Crawl-delay 10, no block);
   `/cerca/gec` disallowed. Terms: "Qualsevol reproducció total o parcial… requereix l''autorització escrita"
   (copyright only; terms on grupenciclopedia.cat, whose robots.txt was not read, see note). Sourced: yes.
-  Copyright reserved, no bot, scraping, TDM or AI ban quoted; owner accepted for non-commercial use 2026-11-18.
-  Facts only. AI-reserved robots.txt (or Content-Signal): title and link only, no LLM kinds. Crawl-delay
-  10 honoured as min_delay_s.'
+  Terms not read or not found; owner accepted for non-commercial use 2026-11-18. Facts only. AI-reserved
+  robots.txt (or Content-Signal): title and link only, no LLM kinds. Crawl-delay 10 honoured as min_delay_s.'
 relevance:
   sections:
   - facts

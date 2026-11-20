@@ -15,9 +15,10 @@ seeds:
 sitemaps: []
 feeds: []
 adapter: null
-include: []
+include:
+- ^https?://africanworldheritagesites\.org/(cultural-places|natural-places|[a-z-]+/[a-z-]+\.html)
 exclude: []
-max_depth: 1
+max_depth: 2
 kinds:
 - place_fact
 - article
@@ -32,12 +33,14 @@ needs_key: false
 key_secret: null
 max_retention_days: null
 display_requirements: null
-notes: 'Research 2026-11-20 (place facts corpus; Global / multi-country; verdict ADD): natural-places,
-  for Place facts. robots.txt: facts_only. Terms: editorial. Sourced: 200; blocks GPTBot, ClaudeBot, CCBot,
-  Google-Extended and o…. Copyright reserved, no bot, scraping, TDM or AI ban quoted; owner accepted for
-  non-commercial use 2026-11-18. Facts only. AI-reserved robots.txt (or Content-Signal): title and link
-  only, no LLM kinds.'
+notes: 'Research 2026-11-20 (place facts corpus; Global / multi-country; verdict ADD): per-site histories
+  of every African World Heritage site, for Place facts and Places to see. robots.txt: 200; blocks GPTBot,
+  ClaudeBot, CCBot, Google-Extended and other AI bots (→ store title + link only). Terms: terms not found.
+  Sourced: partly. Terms not read or not found; owner accepted for non-commercial use 2026-11-18. Facts
+  only. AI-reserved robots.txt (or Content-Signal): title and link only, no LLM kinds.'
 relevance:
   sections:
   - facts
-  why: 'African World Heritage Sites: natural-places, for Place facts.'
+  - places
+  why: 'African World Heritage Sites: per-site histories of every African World Heritage site, for Place
+    facts and Places to see.'

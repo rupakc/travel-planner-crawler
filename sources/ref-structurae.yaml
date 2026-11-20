@@ -38,8 +38,8 @@ notes: 'Research 2026-11-20 (place facts corpus; Global / multi-country; verdict
   (longest, tallest, oldest bridge, dam or tower) by town, for Place facts and Places to see. robots.txt:
   200; AI-bot blocks; `Content-Signal: search=yes,ai-train=no,use=reference` (title+link only). Terms:
   licensing page covers images only; terms not found. Sourced: yes (bibliography per structure). Terms
-  not found; owner accepted for non-commercial use 2026-11-18. Facts only. AI-reserved robots.txt (or
-  Content-Signal): title and link only, no LLM kinds.'
+  not read or not found; owner accepted for non-commercial use 2026-11-18. Facts only. AI-reserved robots.txt
+  (or Content-Signal): title and link only, no LLM kinds.'
 relevance:
   sections:
   - facts

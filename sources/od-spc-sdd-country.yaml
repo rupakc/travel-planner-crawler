@@ -57,9 +57,9 @@ display_requirements: null
 notes: 'Research 2026-11-20 (place facts corpus; Global / multi-country; verdict ADD): official key figures
   for 22 Pacific countries and territories (population, land area, EEZ), for Place facts. robots.txt:
   allowed for VoyagerBot; Cloudflare-managed AI-bot block (anthropic-ai, GPTBot, CCBot..) → title+link
-  only. Terms: terms not found on home. Sourced: yes (official statistics). Terms not found; owner accepted
-  for non-commercial use 2026-11-18. Facts only. AI-reserved robots.txt (or Content-Signal): title and
-  link only, no LLM kinds.'
+  only. Terms: terms not found on home. Sourced: yes (official statistics). Terms not read or not found;
+  owner accepted for non-commercial use 2026-11-18. Facts only. AI-reserved robots.txt (or Content-Signal):
+  title and link only, no LLM kinds.'
 relevance:
   sections:
   - facts

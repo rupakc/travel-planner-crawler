@@ -34,11 +34,11 @@ key_secret: null
 max_retention_days: null
 display_requirements: null
 notes: 'Research 2026-11-20 (place facts corpus; Global / multi-country; verdict NEEDS-ADAPTER): history
-  and curiosities of the places it covers, for Place facts. Terms: terms not found. Terms not found; owner
-  accepted for non-commercial use 2026-11-18. Facts only. format: static GeoJSON/JSON on GitHub (not WFS)
-  ; note: robots 404; licence not stated on page; about 2,000 Islamic-era places with routes. Seed: the
-  host root (the research row names no URL). | Disabled: adapter pending: static GeoJSON/JSON on GitHub
-  (not WFS)'
+  and curiosities of the places it covers, for Place facts. Terms: terms not found. Terms not read or
+  not found; owner accepted for non-commercial use 2026-11-18. Facts only. format: static GeoJSON/JSON
+  on GitHub (not WFS) ; note: robots 404; licence not stated on page; about 2,000 Islamic-era places with
+  routes. Seed: the host root (the research row names no URL). | Disabled: adapter pending: static GeoJSON/JSON
+  on GitHub (not WFS)'
 relevance:
   sections:
   - facts

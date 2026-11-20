@@ -36,9 +36,9 @@ display_requirements: null
 notes: 'Research 2026-11-20 (place facts corpus; Global / multi-country; verdict ADD): record facts ("tallest
   building in X, completed 20xx, N m") from the height-criteria authority, for Place facts and Places
   to see. robots.txt: 200; `*` allowed except `/map/`; Content-Signal ai-train=no; blocks CCBot, ClaudeBot,
-  GPTBot. Terms: terms not found (terms-of-use URL 404); sourced: yes (verified heights). Terms not found;
-  owner accepted for non-commercial use 2026-11-18. Facts only. AI-reserved robots.txt (or Content-Signal):
-  title and link only, no LLM kinds.'
+  GPTBot. Terms: terms not found (terms-of-use URL 404); sourced: yes (verified heights). Terms not read
+  or not found; owner accepted for non-commercial use 2026-11-18. Facts only. AI-reserved robots.txt (or
+  Content-Signal): title and link only, no LLM kinds.'
 relevance:
   sections:
   - facts

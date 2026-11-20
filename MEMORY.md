@@ -375,23 +375,20 @@ plan = `docs/superpowers/plans/2026-11-15-voyager-crawler.md`, r1–r5 = `docs/r
   sentence in our own words + source link, `text` ≤ 280 chars, keyed by GeoNames id / Wikidata
   QID / country). Structured readers first, no LLM: `wikidata_facts` (EntityData item + up to 12
   referenced items for labels, all raw as subresources, one bundle resource as the primary
-  capture, carrying the item's status so the row is reconciled in full and removed statements go
-  stale; an item that is no longer a place gets an empty bundle; or dump lines without labels;
-  English/`mul` labels only, quoted values keep `value_lang`) and `factbook_json` (CIA World
-  Factbook final edition 2026-02-04 via factbook.json, CC0; country-only facts get the GeoNames
-  id and QID of the Wikidata country fact at read time). A Wikipedia DYK/OTD hook reader was
-  dropped in review: a hook is copied CC BY-SA article text and cannot be rewritten without a
-  model, so `/v1/facts` serves only `templated`/`rewritten` text. GNIS feature history left
+  capture; or dump lines without labels), `wiki_hooks` (37 Wikipedias, 93 DYK/OTD/unusual pages,
+  every path robots-checked 2026-11-20; hooks kept as written, `share_alike`, `llm_ok: false`,
+  served only once resolved to a Wikidata place via its sitelinks) and `factbook_json` (CIA
+  World Factbook final edition 2026-02-04 via factbook.json, CC0). GNIS feature history left
   for later (prose needs the rewrite step and a GNIS→GeoNames join). `GET /v1/facts`
   (geonames_id, wikidata_qid, country, fact_type, offset cursor). No sources added here: the
   1,499 research ADD rows come in a separate PR. See docs/wiki/Place-Facts-Data.md.
 - 2026-11-20: **Place facts sources, part 1 of 5 (global + structured readers).** 235 sources
-  (`_facts`, category `facts`): 117 on (od-factbook-json on factbook_json and od-wikidata-entitydata
-  on wikidata_facts, ramp-3 only; the rest html/rss/sitemap in ramp-2 and ramp-3, place_fact +
-  article, no LLM for share-alike or AI-reserved), 118 off (hook adapter removed 37: the
-  `wiki-facts-*` Wikipedia DYK/OTD/unusual-articles pages, share-alike text, need an own-words
-  extractor; adapter pending 62, needs owner key 4, owner decision 15). 165 existing sources get `facts` +
-  place_fact (FACTS_REUSE); wikidata-dump gets wikidata_facts (still off). 42 terms-ban hosts
-  denylisted; tb-uzbekistan off (terms ban automated copying). Europe, Asia, Americas and
+  (`_facts`, category `facts`): 154 on (37 `wiki-facts-*` on wiki_hooks, od-factbook-json on
+  factbook_json, od-wikidata-entitydata on wikidata_facts, all ramp-3 only; the rest html/rss/sitemap
+  in ramp-2 and ramp-3, place_fact + article, no LLM for share-alike or AI-reserved), 81 off
+  (adapter pending 62, needs owner key 4, owner decision 15). Of 165 FACTS_REUSE sources, 137 get
+  `facts` + place_fact (facts_reuse_on: LLM kinds on non-share-alike text, or a place_fact adapter);
+  wikidata-dump gets wikidata_facts (still off). 48 terms-ban hosts denylisted (with livehistoryindia.com,
+  Peepul Tree's other domain); the S3WaaS/a2i families get 20 requests/day per host; tb-uzbekistan off (terms ban automated copying). Europe, Asia, Americas and
   Africa/Middle East/Oceania follow in their own PRs. (scripts/seeds_to_sources.py,
   docs/wiki/Place-Facts-Data.md)

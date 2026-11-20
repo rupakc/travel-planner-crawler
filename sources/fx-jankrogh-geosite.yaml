@@ -36,9 +36,9 @@ display_requirements: null
 notes: 'Research 2026-11-20 (place facts corpus; Global / multi-country; verdict ADD): catalogue of every
   international tripoint and enclave, for Place facts. robots.txt: http only (the https certificate does
   not match the name); robots 404. Terms: terms not found. Sourced: yes (treaties, visits). Terms not
-  found; owner accepted for non-commercial use 2026-11-18. Facts only. | Disabled: owner decision: community-written
-  site; the place_fact kind takes official, reference and editorial sources only (kinds.toml). Allow community
-  sources behind corroboration, or keep off?'
+  read or not found; owner accepted for non-commercial use 2026-11-18. Facts only. | Disabled: owner decision:
+  community-written site; the place_fact kind takes official, reference and editorial sources only (kinds.toml).
+  Allow community sources behind corroboration, or keep off?'
 relevance:
   sections:
   - facts

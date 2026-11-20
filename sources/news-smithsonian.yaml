@@ -20,7 +20,6 @@ exclude: []
 max_depth: 1
 kinds:
 - article
-- place_fact
 llm_kinds: []
 render: never
 cadence: h2
@@ -33,12 +32,12 @@ key_secret: null
 max_retention_days: null
 display_requirements: null
 notes: 'RSS verified 2026-11-15 | Place facts (research 2026-11-20): add feeds https://www.smithsonianmag.com/rss/history/
-  and /rss/smart-news/ (robots ok, history feed 200); extract place facts from History'
+  and /rss/smart-news/ (robots ok, history feed 200); extract place facts from History | Place facts:
+  not wired yet (no LLM kinds on non-share-alike text and no adapter that emits place_fact), so no `facts`
+  section or place_fact kind; the note above is what to extract once a reader exists.'
 relevance:
   sections:
   - tips
   - places
-  - facts
   why: Smithsonian Travel travel-section articles (destination features, openings, travel disruptions)
-    for Travel tips and Places to see (headline, link and a short excerpt only); also history and curiosities
-    for Place facts.
+    for Travel tips and Places to see (headline, link and a short excerpt only).

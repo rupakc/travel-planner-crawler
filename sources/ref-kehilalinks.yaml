@@ -36,11 +36,11 @@ display_requirements: null
 notes: 'Research 2026-11-20 (place facts corpus; Global / multi-country; verdict ADD): history of thousands
   of towns and shtetls in Central and Eastern Europe, for Place facts. robots.txt: only UA `008` blocked;
   www.jewishgen.org blocks ClaudeBot from /jcr-uk/ only, Crawl-delay 2. Terms: disclaimer link 404: terms
-  not found. Sourced: yes. Terms not found; owner accepted for non-commercial use 2026-11-18. Facts only.
-  AI-reserved robots.txt (or Content-Signal): title and link only, no LLM kinds. Crawl-delay 5 honoured
-  as min_delay_s. | Disabled: owner decision: community-written site; the place_fact kind takes official,
-  reference and editorial sources only (kinds.toml). Allow community sources behind corroboration, or
-  keep off?'
+  not found. Sourced: yes. Terms not read or not found; owner accepted for non-commercial use 2026-11-18.
+  Facts only. AI-reserved robots.txt (or Content-Signal): title and link only, no LLM kinds. Crawl-delay
+  5 honoured as min_delay_s. | Disabled: owner decision: community-written site; the place_fact kind takes
+  official, reference and editorial sources only (kinds.toml). Allow community sources behind corroboration,
+  or keep off?'
 relevance:
   sections:
   - facts

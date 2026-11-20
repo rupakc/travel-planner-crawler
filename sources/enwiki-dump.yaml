@@ -24,7 +24,6 @@ kinds:
 - place
 - emergency_numbers
 - packing_hint
-- place_fact
 llm_kinds: []
 render: never
 cadence: monthly
@@ -39,15 +38,14 @@ display_requirements: null
 notes: 'shared by flights, visa, sim, emergency, packing | Place facts (research 2026-11-20): "Etymology"/"Toponymy"/"Name"
   sections of settlement articles; list pages "List of highest towns by country", "List of enclaves and
   exclaves", "Extreme points of …", "List of geographic centres" (use only with citations) / place properties
-  (founding date, highest point, records) and "Did you know" items; es/pt wikis for municipalities / extract:
-  Project-namespace pages already in the dump: `Wikipe'
+  (founding date, highest point, records) and "Did you know" items; es/pt wikis for municipalities | Place
+  facts: not wired yet (no LLM kinds on non-share-alike text and no adapter that emits place_fact), so
+  no `facts` section or place_fact kind; the note above is what to extract once a reader exists.'
 relevance:
   sections:
   - places
   - flights
   - emergency_card
   - packing
-  - facts
   why: 'Facts from English Wikipedia: places, airport destination tables, emergency numbers and plug and
-    voltage types, for Places to see, Flights, the Emergency card and the Packing list; also history and
-    curiosities for Place facts.'
+    voltage types, for Places to see, Flights, the Emergency card and the Packing list.'

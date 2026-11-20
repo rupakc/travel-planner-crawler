@@ -38,8 +38,8 @@ display_requirements: null
 notes: 'Research 2026-11-20 (place facts corpus; Global / multi-country; verdict ADD): history and curiosities
   of the places it covers, for Place facts and Places to see. robots.txt: allowed, no AI blocks; Crawl-delay
   10 (round 1). Terms: only https://64parishes.org/privacy-policy and a social-media code of conduct;
-  no ToU, so it stays "terms not found". Sourced: yes. Terms not found; owner accepted for non-commercial
-  use 2026-11-18. Facts only. Crawl-delay 10 honoured as min_delay_s.'
+  no ToU, so it stays "terms not found". Sourced: yes. Terms not read or not found; owner accepted for
+  non-commercial use 2026-11-18. Facts only. Crawl-delay 10 honoured as min_delay_s.'
 relevance:
   sections:
   - facts

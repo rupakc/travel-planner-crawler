@@ -21,7 +21,6 @@ max_depth: 0
 kinds:
 - attraction
 - event
-- place_fact
 llm_kinds: []
 render: never
 cadence: monthly
@@ -39,11 +38,12 @@ notes: 'robots 404 (allowed). ''You are allowed to browse, download, distribute,
   venues; data dictionary www.lcsd.gov.hk/datagovhk/event/data_dictionary.pdf) served from www.lcsd.gov.hk,
   not data.gov.hk; needs a per-dataset XML join reader and a robots.txt check of www.lcsd.gov.hk (json_events
   reads JSON lists only; checked 2026-11-18) | Place facts (research 2026-11-20): AMO declared monuments
-  and graded buildings datasets / AMO declared monuments list'
+  and graded buildings datasets / AMO declared monuments list | Place facts: not wired yet (no LLM kinds
+  on non-share-alike text and no adapter that emits place_fact), so no `facts` section or place_fact kind;
+  the note above is what to extract once a reader exists.'
 relevance:
   sections:
   - places
   - events
-  - facts
   why: Official opening hours and admission of Hong Kong museums and attractions, plus cultural programmes
-    and major events, for Places to see and Events; also history and curiosities for Place facts.
+    and major events, for Places to see and Events.

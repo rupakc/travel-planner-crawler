@@ -1088,3 +1088,23 @@ entries:
   - host: poblesdecatalunya.cat
     reason: "Terms ban automated access or TDM/AI: 'Queden prohibits qualsevol dels recursos tecnològics o tècnics, pels quals un tercer… puguin beneficiar-se… dels continguts', 2026-11-20"
     source: research 2026-11-20 place facts SKIP
+  # Review of the place-facts PRs (2026-11-20): research SKIP rows whose terms ban bots, scraping,
+  # TDM or AI, and the other domain of a publisher whose terms ban robots.
+  - host: livehistoryindia.com
+    reason: "Same publisher as peepultree.world (Peepul Tree), whose terms ban 'robot, spider or other automatic device'; livehistoryindia.com/robots.txt returns the Peepul Tree app, 2026-11-20"
+    source: research 2026-11-20 place facts SKIP (review)
+  - host: aljazeera.net
+    reason: "Terms ban automated access or TDM/AI: robots.txt comment and T&C forbid 'text and data mining', AI/LLM use and cached datasets, 2026-11-20"
+    source: research 2026-11-20 place facts SKIP (review)
+  - host: nyasatimes.com
+    reason: "Terms ban automated access or TDM/AI: 'use any automated means, including ... robots, scripts, or spiders, to access, monitor, data scrape', 2026-11-20"
+    source: research 2026-11-20 place facts SKIP (review)
+  - host: icesco.org
+    reason: "Terms ban automated access or TDM/AI: 'Conducting data mining or any other similar activity' prohibited, 2026-11-20"
+    source: research 2026-11-20 place facts SKIP (review)
+  - host: atheer.om
+    reason: "Terms ban automated access or TDM/AI: 'يُحظر ... استخدام أدوات آلية لاستخراج محتواه بصورة جماعية دون إذن' (bulk automated extraction banned), 2026-11-20"
+    source: research 2026-11-20 place facts SKIP (review)
+  - host: assamtourismonline.com
+    reason: "Same operator (Assam Tourism Development Corporation) as assamtourism.gov.in, whose terms ban robots; robots.txt also blocks AI bots, 2026-11-20"
+    source: research 2026-11-20 place facts SKIP (review)

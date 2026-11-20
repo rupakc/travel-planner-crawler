@@ -34,8 +34,8 @@ key_secret: null
 max_retention_days: null
 display_requirements: null
 notes: 'Research 2026-11-20 (place facts corpus; Global / multi-country; verdict NEEDS-ADAPTER): history
-  and curiosities of the places it covers, for Place facts. Terms: terms not found. Terms not found; owner
-  accepted for non-commercial use 2026-11-18. Facts only. format: downloads at https://topostext.org/TT-downloads
+  and curiosities of the places it covers, for Place facts. Terms: terms not found. Terms not read or
+  not found; owner accepted for non-commercial use 2026-11-18. Facts only. format: downloads at https://topostext.org/TT-downloads
   (KML/CSV of places linked to ancient texts) ; note: robots 404; licence not found; could go through
   csv_filter once the format is checked. Seed: the host root (the research row names no URL). | Disabled:
   adapter pending: downloads at https://topostext.org/TT-downloads (KML/CSV of places linked to ancient

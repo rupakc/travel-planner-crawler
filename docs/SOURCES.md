@@ -7,7 +7,7 @@
 Every website and dataset the crawler knows, grouped by the part of the Voyager app it
 feeds. A source that serves several parts is listed under each of them.
 
-**1968 sources, 1385 on, 583 off.**
+**1968 sources, 1422 on, 546 off.**
 
 - **What we take**: the traveller-facing data the source gives (its `relevance.why`).
 - **Licence**: *open* (free reuse with credit), *share-alike* (kept apart from other
@@ -28,8 +28,9 @@ a reader or a key exists.
 **Place facts** (section `facts`, added 2026-11-20) holds short facts about countries,
 regions, cities, towns, villages and features (historical, fun, popular, record-breaking
 and little-known), each one sentence in our own words with its source link. The first
-readers are structured: Wikidata properties and the frozen CIA World Factbook JSON (see
-docs/wiki/Place-Facts-Data.md).
+readers are structured: Wikidata properties, Wikipedia "Did you know" / "On this day" /
+unusual-articles hooks (share-alike, kept apart, never sent to a model) and the frozen CIA
+World Factbook JSON (see docs/wiki/Place-Facts-Data.md).
 
 ## Flights
 
@@ -69,7 +70,7 @@ docs/wiki/Place-Facts-Data.md).
 | `deals-urlaubspiraten` | `www.urlaubspiraten.de` | Error fares and budget package deals (German edition of TravelPirates) from Urlaubspiraten, for Flights and Hotels (headline, link and a short excerpt only). | facts only | yes | no |
 | `deals-urlaubstracker` | `www.urlaubstracker.de` | German cheap-travel deals and guides from Urlaubstracker, for Flights, Hotels and Travel tips (headline, link and a short excerpt only). | facts only | yes | no |
 | `deals-viajerospiratas` | `www.viajerospiratas.es` | Error fares and budget package deals (Spanish edition of TravelPirates) from Viajeros Piratas, for Flights and Hotels (headline, link and a short excerpt only). | facts only | yes | no |
-| `enwiki-dump` | `dumps.wikimedia.org` | Facts from English Wikipedia: places, airport destination tables, emergency numbers and plug and voltage types, for Places to see, Flights, the Emergency card and the Packing list; also history and curiosities for Place facts. | share-alike | yes | no |
+| `enwiki-dump` | `dumps.wikimedia.org` | Facts from English Wikipedia: places, airport destination tables, emergency numbers and plug and voltage types, for Places to see, Flights, the Emergency card and the Packing list. | share-alike | yes | no |
 | `gov-afdc-saf` | `afdc.energy.gov` | US DOE AFDC sustainable aviation fuel: SAF pathways and life-cycle reductions, for the trip Carbon footprint and Flights. | open | yes | no |
 | `gov-bazl-engine-emissions` | `www.bazl.admin.ch` | Swiss FOCA aircraft engine emissions: Emission data for piston and turboprop engines that are missing from the ICAO databank, for the trip Carbon footprint and Flights. | facts only | yes | no |
 | `gov-catsa` | `www.catsa-acsta.gc.ca` | CATSA: What can I bring (Canada): Canadian airport-security item rules, for the Packing list and Flights. | facts only | yes | no |
@@ -317,7 +318,7 @@ docs/wiki/Place-Facts-Data.md).
 | `od-tgo-cfo-ef` | `thaicarbonlabel.tgo.or.th` | Thailand TGO emission factors for CFO: Thai official factors (fuels, grid 0.4750 kg CO2e/kWh from 2026, transport), for the trip Carbon footprint, Hotels and Local transportation. | facts only | yes | no |
 | `od-tgo-tver-grid` | `ghgreduction.tgo.or.th` | Thailand TGO T-VER emission factors (grid, GWP): Thai grid factors by year, for the trip Carbon footprint and Hotels. | facts only | yes | no |
 | `official-hihostels` | `www.hihostels.com` | The non-profit Hostelling International hostel network with locations and facilities worldwide, for the Hotels section. | facts only | yes | no |
-| `osm-geofabrik` | `download.geofabrik.de` | OpenStreetMap hotels, sights and transit stops per region, for Hotels, Places to see and Local transportation; also history and curiosities for Place facts. | share-alike | yes | no |
+| `osm-geofabrik` | `download.geofabrik.de` | OpenStreetMap hotels, sights and transit stops per region, for Hotels, Places to see and Local transportation. | share-alike | yes | no |
 | `overpass` | `overpass-api.de` | Targeted OpenStreetMap lookups of hotels and sights around a destination, for Hotels and Places to see. | share-alike | yes | no |
 | `overture-places` | `docs.overturemaps.org` | Open points of interest (hotels, sights) with names and coordinates, for Hotels and Places to see. | open | yes | no |
 | `ref-acir-compostelle` | `www.chemins-compostelle.com` | ACIR: French Ways of St James, stages, news, for Walking tours, the itinerary and Hotels. | facts only | yes | no |
@@ -345,16 +346,16 @@ docs/wiki/Place-Facts-Data.md).
 | `the-long-run` | `www.thelongrun.org` | GSTC-aligned nature lodges, reserves and travel businesses worldwide, for Hotels and Activities. | facts only | yes | no |
 | `vakinn-is` | `www.vakinn.is` | Iceland's official list of quality and eco-certified stays and tour operators, for Hotels and Activities. | facts only | yes | no |
 | `viabono` | `www.viabono.de` | Viabono-certified eco hotels and holiday homes in Germany, for the Hotels section. | facts only | yes | no |
-| `wikivoyage-dump` | `dumps.wikimedia.org` | Wikivoyage destination guides (sights, things to do, where to stay, getting around, SIM and tips) for those app sections; also history and curiosities for Place facts. | share-alike | yes | no |
+| `wikivoyage-dump` | `dumps.wikimedia.org` | Wikivoyage destination guides (sights, things to do, where to stay, getting around, SIM and tips) for those app sections. | share-alike | yes | no |
 | `wikivoyage-dump-bn` | `dumps.wikimedia.org` | Bengali Wikivoyage destination guides: destinations, sights and places to stay with coordinates, for Places to see and Hotels. | share-alike | yes | no |
 | `wikivoyage-dump-cs` | `dumps.wikimedia.org` | Czech Wikivoyage destination guides: destinations, sights and places to stay with coordinates, for Places to see and Hotels. | share-alike | yes | no |
-| `wikivoyage-dump-de` | `dumps.wikimedia.org` | German Wikivoyage destination guides: destinations, sights and places to stay with coordinates, for Places to see and Hotels; also history and curiosities for Place facts. | share-alike | yes | no |
+| `wikivoyage-dump-de` | `dumps.wikimedia.org` | German Wikivoyage destination guides: destinations, sights and places to stay with coordinates, for Places to see and Hotels. | share-alike | yes | no |
 | `wikivoyage-dump-el` | `dumps.wikimedia.org` | Greek Wikivoyage destination guides: destinations, sights and places to stay with coordinates, for Places to see and Hotels. | share-alike | yes | no |
-| `wikivoyage-dump-es` | `dumps.wikimedia.org` | Spanish Wikivoyage destination guides: destinations, sights and places to stay with coordinates, for Places to see and Hotels; also history and curiosities for Place facts. | share-alike | yes | no |
-| `wikivoyage-dump-fa` | `dumps.wikimedia.org` | Persian Wikivoyage destination guides: destinations, sights and places to stay with coordinates, for Places to see and Hotels; also history and curiosities for Place facts. | share-alike | yes | no |
+| `wikivoyage-dump-es` | `dumps.wikimedia.org` | Spanish Wikivoyage destination guides: destinations, sights and places to stay with coordinates, for Places to see and Hotels. | share-alike | yes | no |
+| `wikivoyage-dump-fa` | `dumps.wikimedia.org` | Persian Wikivoyage destination guides: destinations, sights and places to stay with coordinates, for Places to see and Hotels. | share-alike | yes | no |
 | `wikivoyage-dump-fi` | `dumps.wikimedia.org` | Finnish Wikivoyage destination guides: destinations, sights and places to stay with coordinates, for Places to see and Hotels. | share-alike | yes | no |
 | `wikivoyage-dump-fr` | `dumps.wikimedia.org` | French Wikivoyage destination guides: destinations, sights and places to stay with coordinates, for Places to see and Hotels. | share-alike | yes | no |
-| `wikivoyage-dump-he` | `dumps.wikimedia.org` | Hebrew Wikivoyage destination guides: destinations, sights and places to stay with coordinates, for Places to see and Hotels; also history and curiosities for Place facts. | share-alike | yes | no |
+| `wikivoyage-dump-he` | `dumps.wikimedia.org` | Hebrew Wikivoyage destination guides: destinations, sights and places to stay with coordinates, for Places to see and Hotels. | share-alike | yes | no |
 | `wikivoyage-dump-hi` | `dumps.wikimedia.org` | Hindi Wikivoyage destination guides: destinations, sights and places to stay with coordinates, for Places to see and Hotels. | share-alike | yes | no |
 | `wikivoyage-dump-id` | `dumps.wikimedia.org` | Indonesian Wikivoyage destination guides: destinations, sights and places to stay with coordinates, for Places to see and Hotels. | share-alike | yes | no |
 | `wikivoyage-dump-it` | `dumps.wikimedia.org` | Italian Wikivoyage destination guides: destinations, sights and places to stay with coordinates, for Places to see and Hotels. | share-alike | yes | no |
@@ -362,7 +363,7 @@ docs/wiki/Place-Facts-Data.md).
 | `wikivoyage-dump-nl` | `dumps.wikimedia.org` | Dutch Wikivoyage destination guides: destinations, sights and places to stay with coordinates, for Places to see and Hotels. | share-alike | yes | no |
 | `wikivoyage-dump-pl` | `dumps.wikimedia.org` | Polish Wikivoyage destination guides: destinations, sights and places to stay with coordinates, for Places to see and Hotels. | share-alike | yes | no |
 | `wikivoyage-dump-pt` | `dumps.wikimedia.org` | Portuguese Wikivoyage destination guides: destinations, sights and places to stay with coordinates, for Places to see and Hotels. | share-alike | yes | no |
-| `wikivoyage-dump-ru` | `dumps.wikimedia.org` | Russian Wikivoyage destination guides: destinations, sights and places to stay with coordinates, for Places to see and Hotels; also history and curiosities for Place facts. | share-alike | yes | no |
+| `wikivoyage-dump-ru` | `dumps.wikimedia.org` | Russian Wikivoyage destination guides: destinations, sights and places to stay with coordinates, for Places to see and Hotels. | share-alike | yes | no |
 | `wikivoyage-dump-sv` | `dumps.wikimedia.org` | Swedish Wikivoyage destination guides: destinations, sights and places to stay with coordinates, for Places to see and Hotels. | share-alike | yes | no |
 | `wikivoyage-dump-tr` | `dumps.wikimedia.org` | Turkish Wikivoyage destination guides: destinations, sights and places to stay with coordinates, for Places to see and Hotels. | share-alike | yes | no |
 | `wikivoyage-dump-uk` | `dumps.wikimedia.org` | Ukrainian Wikivoyage destination guides: destinations, sights and places to stay with coordinates, for Places to see and Hotels. | share-alike | yes | no |
@@ -613,6 +614,7 @@ docs/wiki/Place-Facts-Data.md).
 | `guide-capeverdeislands` | `www.capeverdeislands.org` | Cape Verde Islands travel info (private), for Places to see and Activities. | facts only | yes | no |
 | `guide-tioman` | `www.tioman.org` | Tioman Island info, for Places to see and Activities. | facts only | yes | no |
 | `hanen-ecotourism-norway` | `www.hanen.no` | Norway's ecotourism-certified rural stays, farm stays and experiences, for Hotels and Activities. | facts only | yes | no |
+| `her-apartheid-museum` | `www.apartheidmuseum.org` | Apartheid Museum: history and curiosities of the places it covers, for Place facts and Activities. | facts only | yes | no |
 | `her-statia-park` | `statiapark.org` | St. Eustatius National Parks (STENAPA): The Quill volcano, marine park (Sint Eustatius), for Place facts and Activities. | facts only | yes | no |
 | `her-stinapa-bonaire` | `stinapabonaire.org` | STINAPA Bonaire: Washington Slagbaai NP, Bonaire marine park (stinapa.org redirects here), for Place facts and Activities. | facts only | yes | no |
 | `her-virunga` | `virunga.org` | Virunga National Park: Africa's oldest national park (1925), mountain gorillas, Nyiragongo (DRC), for Place facts and Activities. | facts only | yes | no |
@@ -621,7 +623,7 @@ docs/wiki/Place-Facts-Data.md).
 | `laliste` | `www.laliste.com` | La Liste restaurant rankings (names, scores and cities as facts), for Activities. | facts only | yes | no |
 | `liveriga` | `www.liveriga.com` | Riga's official tourism portal: sights, things to do, events and visitor advice, for Places to see, Activities, Events and Travel tips. | facts only | yes | no |
 | `mag-hongkongcheapo` | `hongkongcheapo.com` | Hong Kong Cheapo: Budget Hong Kong guides and events (same publisher as Tokyo Cheapo), for Activities, Events and Travel tips. | facts only | yes | no |
-| `mag-mexicodesconocido` | `www.mexicodesconocido.com.mx` | Mexican destinations, festivals and things to do (Spanish) from the travel magazine México Desconocido, for Places to see, Events and Activities (headline, link and a short excerpt only); also history and curiosities for Place facts. | facts only | yes | no |
+| `mag-mexicodesconocido` | `www.mexicodesconocido.com.mx` | Mexican destinations, festivals and things to do (Spanish) from the travel magazine México Desconocido, for Places to see, Events and Activities (headline, link and a short excerpt only). | facts only | yes | no |
 | `mathallen-oslo` | `mathallenoslo.no` | Vendors, opening hours and visitor information for the Mathallen food hall in Oslo, for Places to see and Activities. | facts only | yes | no |
 | `melbourne-whatson` | `whatson.melbourne.vic.gov.au` | Melbourne events plus the city's restaurant and bar listings, for Events and Activities. | facts only | yes | no |
 | `mkt-borough-market` | `boroughmarket.org.uk` | Borough Market: traveller information, for Places to see, Activities and Events. | facts only | yes | no |
@@ -809,7 +811,7 @@ docs/wiki/Place-Facts-Data.md).
 | `tb-kamchatka` | `visitkamchatka.ru` | Kamchatka tourism portal, for Places to see and Activities. | facts only | yes | no |
 | `tb-kansas` | `www.travelks.com` | Official Kansas events and things to do, for Events and Activities. | facts only | yes | no |
 | `tb-karnataka` | `karnatakatourism.org` | Karnataka Tourism: Karnataka destinations (Hampi, Mysuru, Coorg), for Places to see and Activities; also history and curiosities for Place facts. | facts only | yes | no |
-| `tb-kazakhstan` | `kazakhstan.travel` | Kazakh Tourism (kazakhstan.travel): Kazakhstan destinations, routes and events, for Places to see, Activities, Events and Travel tips; also history and curiosities for Place facts. | facts only | yes | no |
+| `tb-kazakhstan` | `kazakhstan.travel` | Kazakh Tourism (kazakhstan.travel): Kazakhstan destinations, routes and events, for Places to see, Activities, Events and Travel tips. | facts only | yes | no |
 | `tb-kentucky` | `www.kentuckytourism.com` | Official Kentucky events, the Bourbon Trail and state parks, for Events, Activities and Places to see. | facts only | yes | no |
 | `tb-kerala` | `www.keralatourism.org` | Kerala Tourism: Kerala destinations, festival and event calendar, houseboats, for Places to see, Events and Activities; also history and curiosities for Place facts. | facts only | yes | no |
 | `tb-kiribati` | `kiribatitourism.gov.ki` | Official Kiribati islands, sights, getting there and around; almost no other source covers the outer atolls, for Places to see, Activities, Local transportation and Travel tips. | facts only | yes | no |
@@ -839,7 +841,7 @@ docs/wiki/Place-Facts-Data.md).
 | `tb-missouri` | `www.visitmo.com` | Official Missouri events, trip ideas and things to do, for Events and Activities. | facts only | yes | no |
 | `tb-miyakojima` | `miyako-guide.net` | Miyakojima Tourism Association, for Places to see, Activities and Events. | facts only | yes | no |
 | `tb-mljet` | `www.mljet.hr` | TZO Mljet: island, national park, ferries, for Places to see and Activities. | facts only | yes | no |
-| `tb-moldova` | `moldova.travel` | Moldova Travel: Official Moldova destinations and things to do (FCDO and the US advise against travel to Transnistria only), for Places to see and Activities; also history and curiosities for Place facts. | facts only | yes | no |
+| `tb-moldova` | `moldova.travel` | Moldova Travel: Official Moldova destinations and things to do (FCDO and the US advise against travel to Transnistria only), for Places to see and Activities. | facts only | yes | no |
 | `tb-monaco` | `www.visitmonaco.com` | Visit Monaco: official visitor guide, for Activities, Events and Places to see. | facts only | yes | no |
 | `tb-montana` | `visitmt.com` | Official Montana events, things to do and Glacier/Yellowstone gateway towns, for Events, Activities and Places to see. | facts only | yes | no |
 | `tb-montenegro` | `www.montenegro.travel` | Montenegro Travel (National Tourism Organisation): official visitor guide, for Places to see and Activities. | facts only | yes | no |
@@ -993,7 +995,7 @@ docs/wiki/Place-Facts-Data.md).
 | `visitscotland` | `www.visitscotland.com` | Official Scottish road trips, itineraries, events and food trails, for the itinerary, Activities, Events and Places to see. | facts only | yes | no |
 | `visitseoul` | `english.visitseoul.net` | Seoul restaurants, attractions and editors' picks, for Activities and Places to see. | facts only | yes | no |
 | `wien-info` | `www.wien.info` | Vienna events, Heurigen wine taverns, coffee houses and suggested itineraries, for Events, Activities, the itinerary and Places to see. | facts only | yes | no |
-| `wikivoyage-dump` | `dumps.wikimedia.org` | Wikivoyage destination guides (sights, things to do, where to stay, getting around, SIM and tips) for those app sections; also history and curiosities for Place facts. | share-alike | yes | no |
+| `wikivoyage-dump` | `dumps.wikimedia.org` | Wikivoyage destination guides (sights, things to do, where to stay, getting around, SIM and tips) for those app sections. | share-alike | yes | no |
 | `wine-alsace-civa` | `www.vinsalsace.com` | Vins d'Alsace (CIVA): Route des Vins: Alsace Wine Route villages, wine events, for Activities and Events. | facts only | yes | no |
 | `wine-deutsche-weinstrasse` | `www.deutsche-weinstrasse.de` | Deutsche Weinstraße (Pfalz tourism): Pfalz wine festivals and route stops, for Events and Activities. | facts only | yes | no |
 | `wine-great-wine-capitals` | `www.greatwinecapitals.com` | Great Wine Capitals Global Network: Best Of Wine Tourism winners in 12 wine capitals, for Activities. | facts only | yes | no |
@@ -1017,9 +1019,9 @@ docs/wiki/Place-Facts-Data.md).
 | `city-turismo-cdmx` | `turismo.cdmx.gob.mx` | Turismo CDMX (Secretaría de Turismo): official visitor guide, for Places to see, Activities and Free walking tours. | facts only | no | no |
 | `city-winnipeg` | `www.tourismwinnipeg.com` | Winnipeg festivals, events and things to do, for Events and Activities. | facts only | no | no |
 | `cst-costa-rica` | `turismo-sostenible.co.cr` | Costa Rica's official sustainability certification for hotels and tour operators, for Hotels and Activities. | facts only | no | no |
-| `culturetrip` | `theculturetrip.com` | Culture Trip destination guides (title and link only) for Places to see, Activities and Travel tips; every page times out for our bot, so off; also history and curiosities for Place facts. | facts only | no | no |
+| `culturetrip` | `theculturetrip.com` | Culture Trip destination guides (title and link only) for Places to see, Activities and Travel tips; every page times out for our bot, so off. | facts only | no | no |
 | `datatourisme-fr` | `diffuseur.datatourisme.fr` | Every French tourist office's events, restaurants, sights and walking or driving tours in one national feed, for Events, Activities, Places to see and the itinerary. | open | no | yes |
-| `doc-nz-api` | `api.doc.govt.nz` | New Zealand track, hut and campsite records with current alerts, for Places to see, Activities and Travel tips; also history and curiosities for Place facts. | open | no | yes |
+| `doc-nz-api` | `api.doc.govt.nz` | New Zealand track, hut and campsite records with current alerts, for Places to see, Activities and Travel tips. | open | no | yes |
 | `ea-bathing-water-profiles` | `environment.data.gov.uk` | Water quality classification of designated bathing beaches in England, for Places to see, Activities and Travel tips. | open | no | no |
 | `failte-ireland-od` | `failteireland.developer.azure-api.net` | Every Fáilte Ireland-listed attraction and activity provider in Ireland, for Places to see and Activities. | open | no | yes |
 | `germany-kg` | `open-data-germany.org` | Events, sights and tours from German regional tourist boards, for Events, Places to see and Activities. | open | no | yes |
@@ -1036,7 +1038,7 @@ docs/wiki/Place-Facts-Data.md).
 | `myswitzerland-open-data` | `opendata.myswitzerland.io` | Swiss sights, experiences and tours as structured data, for Places to see, Activities and the itinerary. | facts only | no | yes |
 | `np-knps-korea` | `english.knps.or.kr` | Korea National Park Service: official visitor guide, for Places to see and Activities. | facts only | no | no |
 | `np-port-cros` | `portcros-parcnational.fr` | Port-Cros NP (Porquerolles): access rules, visitor caps, for Places to see, Activities and Travel tips. | facts only | no | no |
-| `nps-data-api` | `developer.nps.gov` | US national park things to do, events and tours as structured data, for Activities, Events and the itinerary; also history and curiosities for Place facts. | facts only | no | yes |
+| `nps-data-api` | `developer.nps.gov` | US national park things to do, events and tours as structured data, for Activities, Events and the itinerary. | facts only | no | yes |
 | `od-canada-ckan` | `open.canada.ca` | Federal datasets of Parks Canada places and attractions, for Places to see and Activities. | open | no | no |
 | `od-data-gov-sg` | `data.gov.sg` | data.gov.sg: Singapore attractions, parks, museums and hawker centre datasets, for Places to see and Activities; also history and curiosities for Place facts. | open | no | no |
 | `od-data-qld` | `www.data.qld.gov.au` | Queensland open data: Queensland tourism, parks and transport datasets, for Places to see and Activities; also history and curiosities for Place facts. | open | no | no |
@@ -1070,7 +1072,7 @@ docs/wiki/Place-Facts-Data.md).
 | `tb-chuuk` | `www.visit-chuuk.com` | Chuuk Lagoon wreck diving and island sights, for Places to see and Activities. | facts only | no | no |
 | `tb-cook-islands` | `cookislands.travel` | Official Cook Islands (Rarotonga, Aitutaki, outer islands) sights, events, stays, for Places to see, Activities, Events, Hotels and Travel tips. | facts only | no | no |
 | `tb-discoverkyrgyzstan` | `www.discoverkyrgyzstan.org` | Discover Kyrgyzstan: official visitor guide, for Places to see and Activities. | facts only | no | no |
-| `tb-guadeloupe` | `www.lesilesdeguadeloupe.com` | Îles de Guadeloupe (CTIG): official visitor guide, for Places to see, Activities and Events; also history and curiosities for Place facts. | facts only | no | no |
+| `tb-guadeloupe` | `www.lesilesdeguadeloupe.com` | Îles de Guadeloupe (CTIG): official visitor guide, for Places to see, Activities and Events. | facts only | no | no |
 | `tb-high-coast` | `www.highcoast.net` | High Coast World Heritage area trails and islands, for Places to see and Activities. | facts only | no | no |
 | `tb-himachal` | `himachaltourism.gov.in` | Himachal Tourism: official visitor guide, for Places to see and Activities. | facts only | no | no |
 | `tb-iles-de-la-madeleine` | `www.tourismeilesdelamadeleine.com`, `feeds.feedburner.com` | Tourisme Îles de la Madeleine, for Places to see, Activities and Events. | facts only | no | no |
@@ -1230,7 +1232,7 @@ docs/wiki/Place-Facts-Data.md).
 | `ecotourism-au-greentravelguide` | `greentravelguide.org`, `ecotourism.org.au` | Every ECO-certified operator, experience and destination in Australia (2,300+ operators), for Activities, Hotels and Places to see. | facts only | yes | no |
 | `ed-inyourpocket` | `www.inyourpocket.com` | In Your Pocket city guides: travel articles and guides, for Places to see, Events, Local transportation and Travel tips. | facts only | yes | no |
 | `egymonuments` | `egymonuments.gov.eg` | Official opening hours, tickets and descriptions of Egypt's monuments, museums and archaeological sites, for Places to see and Activities; also history and curiosities for Place facts. | facts only | yes | no |
-| `enwiki-dump` | `dumps.wikimedia.org` | Facts from English Wikipedia: places, airport destination tables, emergency numbers and plug and voltage types, for Places to see, Flights, the Emergency card and the Packing list; also history and curiosities for Place facts. | share-alike | yes | no |
+| `enwiki-dump` | `dumps.wikimedia.org` | Facts from English Wikipedia: places, airport destination tables, emergency numbers and plug and voltage types, for Places to see, Flights, the Emergency card and the Packing list. | share-alike | yes | no |
 | `ev-lcsd-hk` | `www.lcsd.gov.hk` | Leisure and Cultural Services Department (HK): Museums, performing arts venues, festivals and free events, for Events and Places to see. | facts only | yes | no |
 | `ev-setouchi-triennale` | `setouchi-artfest.jp` | Setouchi Triennale: art festival across Inland Sea islands, for Events and Places to see. | facts only | yes | no |
 | `ev-sharjahart` | `www.sharjahart.org` | Sharjah Art Foundation: travel articles and guides, for Events and Places to see. | facts only | yes | no |
@@ -1239,10 +1241,13 @@ docs/wiki/Place-Facts-Data.md).
 | `france-fr` | `www.france.fr` | Official French inspiration, itineraries and gastronomy pages, for the itinerary, Places to see and Activities. | facts only | yes | no |
 | `fsq-os-places` | `docs.foursquare.com` | Open points of interest (hotels, sights, restaurants) with names and coordinates, for Hotels and Places to see. | open | yes | yes |
 | `fx-64-parishes` | `64parishes.org` | 64 Parishes: history and curiosities of the places it covers, for Place facts and Places to see. | facts only | yes | no |
+| `fx-african-world-heritage` | `africanworldheritagesites.org` | African World Heritage Sites: per-site histories of every African World Heritage site, for Place facts and Places to see. | facts only | yes | no |
 | `fx-aramcoworld` | `www.aramcoworld.com` | AramcoWorld: history and culture of Arab/Islamic-world cities, for Place facts and Places to see. | facts only | yes | no |
 | `fx-archaeology-mag` | `archaeology.org` | Archaeology Magazine (AIA): discoveries at named sites, for Place facts and Places to see. | facts only | yes | no |
 | `fx-atlas-of-wonders` | `feeds.feedburner.com` | Atlas of Wonders: natural/man-made wonders (low priority), for Place facts and Places to see. | facts only | yes | no |
+| `fx-bibleplaces` | `www.bibleplaces.com`, `bibleplaces.com` | BiblePlaces.com: archaeological site histories in Israel, Palestine, Jordan and Egypt, for Place facts and Places to see. | facts only | yes | no |
 | `fx-connecticut-history` | `connecticuthistory.org` | ConnecticutHistory.org (CT Humanities): town pages and history articles, for Place facts and Places to see. | share-alike | yes | no |
+| `fx-discover-islamic-art` | `islamicart.museumwnf.org` | Discover Islamic Art (Museum With No Frontiers): monument records for Islamic heritage across MENA, for Place facts and Places to see. | facts only | yes | no |
 | `fx-enciclopedia-cat` | `www.enciclopedia.cat` | Enciclopèdia.cat (Gran Enciclopèdia Catalana): an entry for every Catalan municipality and many villages and hamlets (history, heritage, population), for Place facts and Places to see. | facts only | yes | no |
 | `fx-encyclopedia-virginia` | `encyclopediavirginia.org` | Encyclopedia Virginia: history and curiosities of the places it covers, for Place facts and Places to see. | facts only | yes | no |
 | `fx-erih` | `www.erih.net`, `erih.net` | European Route of Industrial Heritage: industrial heritage sites with history across Europe, for Place facts, Places to see and Activities. | facts only | yes | no |
@@ -1256,6 +1261,7 @@ docs/wiki/Place-Facts-Data.md).
 | `fx-historyextra` | `www.historyextra.com` | HistoryExtra (BBC History Magazine): UK/world place history explainers by named historians, for Place facts and Places to see. | facts only | yes | no |
 | `fx-historyhit` | `www.historyhit.com` | History Hit (places): historic site guides and '10 facts about' place pages, for Place facts and Places to see. | facts only | yes | no |
 | `fx-historylink` | `www.historylink.org` | HistoryLink.org (Washington State history): town essays, "This Day" items, for Place facts and Places to see. | facts only | yes | no |
+| `fx-sahapedia` | `www.sahapedia.org` | Sahapedia: heritage-walk and city-culture essays, for Place facts, Free walking tours and Places to see. | share-alike | yes | no |
 | `fx-sapiens` | `www.sapiens.org` | SAPIENS (anthropology magazine): cultural/archaeological history of places, for Place facts and Places to see. | open | yes | no |
 | `fx-statesymbolsusa` | `statesymbolsusa.org` | State Symbols USA: every official US state symbol with adoption year and statute, for Place facts and Places to see. | facts only | yes | no |
 | `fx-tara-rock-art` | `africanrockart.org` | TARA: Trust for African Rock Art: rock-art sites by country, for Place facts and Places to see. | facts only | yes | no |
@@ -1300,7 +1306,7 @@ docs/wiki/Place-Facts-Data.md).
 | `lonelyplanet-sitemaps` | `www.lonelyplanet.com` | Lonely Planet destination articles for Places to see and Travel tips (headline, link and a short excerpt only). | facts only | yes | no |
 | `mag-europeanbestdestinations` | `www.europeanbestdestinations.com` | European Best Destinations: travel articles and guides, for Places to see, Events and the itinerary. | facts only | yes | no |
 | `mag-hiddeneurope` | `www.hiddeneurope.eu` | hidden europe magazine: travel articles and guides, for Local transportation, Places to see and Travel tips; also history and curiosities for Place facts. | facts only | yes | no |
-| `mag-mexicodesconocido` | `www.mexicodesconocido.com.mx` | Mexican destinations, festivals and things to do (Spanish) from the travel magazine México Desconocido, for Places to see, Events and Activities (headline, link and a short excerpt only); also history and curiosities for Place facts. | facts only | yes | no |
+| `mag-mexicodesconocido` | `www.mexicodesconocido.com.mx` | Mexican destinations, festivals and things to do (Spanish) from the travel magazine México Desconocido, for Places to see, Events and Activities (headline, link and a short excerpt only). | facts only | yes | no |
 | `mag-theguideistanbul` | `www.theguideistanbul.com` | The Guide Istanbul: Istanbul city magazine, for Events and Places to see. | facts only | yes | no |
 | `mag-travelafrica` | `travelafricamag.com` | Travel Africa Magazine: travel articles and guides, for Places to see and Travel tips. | facts only | yes | no |
 | `mag-viagemeturismo` | `viagemeturismo.abril.com.br` | Viagem e Turismo (Abril): Brazil's main travel magazine (pt). The /ultimas-noticias/rss link on the home page answered 404, for Places to see, Travel tips and Events. | facts only | yes | no |
@@ -1309,16 +1315,16 @@ docs/wiki/Place-Facts-Data.md).
 | `mkt-tsukiji-outer` | `www.tsukiji.or.jp` | Tsukiji Outer Market (official): shops, hours, closed-day calendar, etiquette, for Places to see, Activities and Travel tips. | facts only | yes | no |
 | `mus-vatican` | `www.museivaticani.va` | Musei Vaticani: hours, closures, last-Sunday free entry, for Places to see and Travel tips. | facts only | yes | no |
 | `museum-solovki` | `solovky.ru`, `www.solovky.ru` | Solovetsky Museum-Reserve: visiting, transport, events, for Places to see, Events and Local transportation; also history and curiosities for Place facts. | facts only | yes | no |
-| `news-bbc` | `www.bbc.com` | BBC Travel travel-section articles (destination features, openings, travel disruptions) for Travel tips and Places to see (headline, link and a short excerpt only); also history and curiosities for Place facts. | facts only | yes | no |
+| `news-bbc` | `www.bbc.com` | BBC Travel travel-section articles (destination features, openings, travel disruptions) for Travel tips and Places to see (headline, link and a short excerpt only). | facts only | yes | no |
 | `news-cnbc` | `www.cnbc.com` | CNBC Travel travel-section articles (destination features, openings, travel disruptions) for Travel tips and Places to see (headline, link and a short excerpt only). | facts only | yes | no |
 | `news-cnn` | `rss.cnn.com` | CNN Travel travel-section articles (destination features, openings, travel disruptions) for Travel tips and Places to see (headline, link and a short excerpt only). | facts only | yes | no |
 | `news-cntraveler` | `www.cntraveler.com` | Condé Nast Traveler (US) travel-section articles (destination features, openings, travel disruptions) for Travel tips and Places to see (headline, link and a short excerpt only). | facts only | yes | no |
 | `news-cntraveller` | `www.cntraveller.com` | Condé Nast Traveller (UK) travel-section articles (destination features, openings, travel disruptions) for Travel tips and Places to see (headline, link and a short excerpt only). | facts only | yes | no |
 | `news-euronews` | `www.euronews.com` | Euronews Travel travel-section articles (destination features, openings, travel disruptions) for Travel tips and Places to see (headline, link and a short excerpt only). | facts only | yes | no |
-| `news-guardian` | `www.theguardian.com` | The Guardian Travel travel-section articles (destination features, openings, travel disruptions) for Travel tips and Places to see (headline, link and a short excerpt only); also history and curiosities for Place facts. | facts only | yes | no |
+| `news-guardian` | `www.theguardian.com` | The Guardian Travel travel-section articles (destination features, openings, travel disruptions) for Travel tips and Places to see (headline, link and a short excerpt only). | facts only | yes | no |
 | `news-independent` | `www.independent.co.uk` | The Independent Travel travel-section articles (destination features, openings, travel disruptions) for Travel tips and Places to see (headline, link and a short excerpt only). | facts only | yes | no |
-| `news-nyt` | `rss.nytimes.com` | New York Times Travel travel-section articles (destination features, openings, travel disruptions) for Travel tips and Places to see (headline, link and a short excerpt only); also history and curiosities for Place facts. | facts only | yes | no |
-| `news-smithsonian` | `www.smithsonianmag.com` | Smithsonian Travel travel-section articles (destination features, openings, travel disruptions) for Travel tips and Places to see (headline, link and a short excerpt only); also history and curiosities for Place facts. | facts only | yes | no |
+| `news-nyt` | `rss.nytimes.com` | New York Times Travel travel-section articles (destination features, openings, travel disruptions) for Travel tips and Places to see (headline, link and a short excerpt only). | facts only | yes | no |
+| `news-smithsonian` | `www.smithsonianmag.com` | Smithsonian Travel travel-section articles (destination features, openings, travel disruptions) for Travel tips and Places to see (headline, link and a short excerpt only). | facts only | yes | no |
 | `news-telegraph` | `www.telegraph.co.uk` | The Telegraph Travel travel-section articles (destination features, openings, travel disruptions) for Travel tips and Places to see (headline, link and a short excerpt only). | facts only | yes | no |
 | `news-thenational-travel` | `www.thenationalnews.com` | The National (UAE): travel section: Travel news and guides from the UAE's national newspaper, for Travel tips and Places to see. | facts only | yes | no |
 | `news-thetravel` | `www.thetravel.com` | TheTravel travel-section articles (destination features, openings, travel disruptions) for Travel tips and Places to see (headline, link and a short excerpt only). | facts only | yes | no |
@@ -1352,14 +1358,14 @@ docs/wiki/Place-Facts-Data.md).
 | `od-dbpedia` | `dbpedia.org`, `databus.dbpedia.org` | DBpedia (SPARQL + Databus dumps): infobox nicknames, mottos and founding dates not yet in Wikidata; low priority (largely redundant with enwiki-dump), for Place facts and Places to see. | share-alike | yes | no |
 | `od-musei-italiani` | `www.museiitaliani.it` | Musei Italiani (MiC): state museums, hours, free Sundays, for Places to see and Events. | open | yes | no |
 | `od-syriaca` | `syriaca.org` | Syriaca.org Gazetteer: historical Syriac and Middle Eastern place gazetteer, for Place facts and Places to see. | open | yes | no |
-| `od-wien-ogd` | `data.wien.gv.at` | Vienna's sights and museums plus its public toilets and free Wi-Fi spots, for Places to see and Travel tips; also history and curiosities for Place facts. | open | yes | no |
+| `od-wien-ogd` | `data.wien.gv.at` | Vienna's sights and museums plus its public toilets and free Wi-Fi spots, for Places to see and Travel tips. | open | yes | no |
 | `od-wikidata-entitydata` | `www.wikidata.org` | Wikidata place items (CC0): founding dates, former names, nicknames, mottos, records, twin towns and heritage designations as typed statements, for Place facts and Places to see. | open | yes | no |
 | `official-inah` | `www.inah.gob.mx` | Mexico's national museums and archaeological sites with prices and opening days, for Places to see and Travel tips; also history and curiosities for Place facts. | facts only | yes | no |
 | `official-parismusees` | `www.parismusees.paris.fr` | The City of Paris's 14 museums, whose permanent collections are free, with exhibitions, for Places to see and Activities. | facts only | yes | no |
 | `official-prague-eu` | `prague.eu` | Official Prague visitor pass, free events and city information, for Activities, Events, Places to see and Local transportation. | facts only | yes | no |
 | `official-sectur-mx` | `www.gob.mx` | SECTUR (Mexico Tourism Secretariat): official visitor guide, for Places to see, Events and Travel tips. | facts only | yes | no |
 | `opentripmap` | `api.opentripmap.com` | Tourist attractions with names, categories and coordinates, for Places to see and Activities. | share-alike | yes | yes |
-| `osm-geofabrik` | `download.geofabrik.de` | OpenStreetMap hotels, sights and transit stops per region, for Hotels, Places to see and Local transportation; also history and curiosities for Place facts. | share-alike | yes | no |
+| `osm-geofabrik` | `download.geofabrik.de` | OpenStreetMap hotels, sights and transit stops per region, for Hotels, Places to see and Local transportation. | share-alike | yes | no |
 | `overpass` | `overpass-api.de` | Targeted OpenStreetMap lookups of hotels and sights around a destination, for Hotels and Places to see. | share-alike | yes | no |
 | `overture-places` | `docs.overturemaps.org` | Open points of interest (hotels, sights) with names and coordinates, for Hotels and Places to see. | open | yes | no |
 | `park-alberta` | `www.albertaparks.ca` | Alberta provincial parks (Kananaskis and others) with visitor information, for Places to see and Activities; also history and curiosities for Place facts. | facts only | yes | no |
@@ -1409,7 +1415,7 @@ docs/wiki/Place-Facts-Data.md).
 | `ref-sic-cultura-mx` | `sic.cultura.gob.mx` | Sistema de Información Cultural (Secretaría de Cultura): national directory of museums, archaeological zones, theatres and festivals, for Places to see and Events; also history and curiosities for Place facts. | facts only | yes | no |
 | `ref-structurae` | `structurae.net` | Structurae (international database of structures): records per structure (longest, tallest, oldest bridge, dam or tower) by town, for Place facts and Places to see. | facts only | yes | no |
 | `ref-swiss-villages` | `swissvillages.org` | Best Swiss Villages (swissvillages.org), for Places to see and Activities; also history and curiosities for Place facts. | facts only | yes | no |
-| `ref-waterfalls` | `www.worldwaterfalldatabase.com` | World Waterfall Database: waterfalls, access notes, for Places to see; also history and curiosities for Place facts. | facts only | yes | no |
+| `ref-waterfalls` | `www.worldwaterfalldatabase.com` | World Waterfall Database: waterfalls, access notes, for Places to see. | facts only | yes | no |
 | `ref-zambiatourism` | `www.zambiatourism.com` | Zambia Tourism (private portal): traveller information, for Places to see and Hotels; also history and curiosities for Place facts. | facts only | yes | no |
 | `rub-og-stub` | `www.spisrubogstub.dk` | Opening hours, menus and booking information for Rub & Stub, a social restaurant in Copenhagen, for Activities and Places to see. | facts only | yes | no |
 | `srilanka-travel` | `www.srilanka.travel` | Official Sri Lankan attractions and destinations, for Places to see; also history and curiosities for Place facts. | facts only | yes | no |
@@ -1541,7 +1547,7 @@ docs/wiki/Place-Facts-Data.md).
 | `tb-kamchatka` | `visitkamchatka.ru` | Kamchatka tourism portal, for Places to see and Activities. | facts only | yes | no |
 | `tb-karnataka` | `karnatakatourism.org` | Karnataka Tourism: Karnataka destinations (Hampi, Mysuru, Coorg), for Places to see and Activities; also history and curiosities for Place facts. | facts only | yes | no |
 | `tb-katara` | `www.katara.net` | Katara Cultural Village: Doha cultural events, for Events and Places to see. | facts only | yes | no |
-| `tb-kazakhstan` | `kazakhstan.travel` | Kazakh Tourism (kazakhstan.travel): Kazakhstan destinations, routes and events, for Places to see, Activities, Events and Travel tips; also history and curiosities for Place facts. | facts only | yes | no |
+| `tb-kazakhstan` | `kazakhstan.travel` | Kazakh Tourism (kazakhstan.travel): Kazakhstan destinations, routes and events, for Places to see, Activities, Events and Travel tips. | facts only | yes | no |
 | `tb-kentucky` | `www.kentuckytourism.com` | Official Kentucky events, the Bourbon Trail and state parks, for Events, Activities and Places to see. | facts only | yes | no |
 | `tb-kerala` | `www.keralatourism.org` | Kerala Tourism: Kerala destinations, festival and event calendar, houseboats, for Places to see, Events and Activities; also history and curiosities for Place facts. | facts only | yes | no |
 | `tb-kiribati` | `kiribatitourism.gov.ki` | Official Kiribati islands, sights, getting there and around; almost no other source covers the outer atolls, for Places to see, Activities, Local transportation and Travel tips. | facts only | yes | no |
@@ -1573,7 +1579,7 @@ docs/wiki/Place-Facts-Data.md).
 | `tb-mintoul-cm` | `mintoul.gov.cm` | Ministère du Tourisme et des Loisirs, Cameroun: official visitor guide, for Places to see, Travel tips and Visa; also history and curiosities for Place facts. | facts only | yes | no |
 | `tb-miyakojima` | `miyako-guide.net` | Miyakojima Tourism Association, for Places to see, Activities and Events. | facts only | yes | no |
 | `tb-mljet` | `www.mljet.hr` | TZO Mljet: island, national park, ferries, for Places to see and Activities. | facts only | yes | no |
-| `tb-moldova` | `moldova.travel` | Moldova Travel: Official Moldova destinations and things to do (FCDO and the US advise against travel to Transnistria only), for Places to see and Activities; also history and curiosities for Place facts. | facts only | yes | no |
+| `tb-moldova` | `moldova.travel` | Moldova Travel: Official Moldova destinations and things to do (FCDO and the US advise against travel to Transnistria only), for Places to see and Activities. | facts only | yes | no |
 | `tb-monaco` | `www.visitmonaco.com` | Visit Monaco: official visitor guide, for Activities, Events and Places to see. | facts only | yes | no |
 | `tb-montana` | `visitmt.com` | Official Montana events, things to do and Glacier/Yellowstone gateway towns, for Events, Activities and Places to see. | facts only | yes | no |
 | `tb-montenegro` | `www.montenegro.travel` | Montenegro Travel (National Tourism Organisation): official visitor guide, for Places to see and Activities. | facts only | yes | no |
@@ -1742,16 +1748,16 @@ docs/wiki/Place-Facts-Data.md).
 | `visitsweden` | `visitsweden.com` | Official Swedish destinations and trip ideas, for Places to see and the itinerary. | facts only | yes | no |
 | `wien-info` | `www.wien.info` | Vienna events, Heurigen wine taverns, coffee houses and suggested itineraries, for Events, Activities, the itinerary and Places to see. | facts only | yes | no |
 | `wikipedia-geosearch` | `en.wikipedia.org` | Wikipedia articles about sights near a destination (names, coordinates, summaries), for Places to see. | share-alike | yes | no |
-| `wikivoyage-dump` | `dumps.wikimedia.org` | Wikivoyage destination guides (sights, things to do, where to stay, getting around, SIM and tips) for those app sections; also history and curiosities for Place facts. | share-alike | yes | no |
+| `wikivoyage-dump` | `dumps.wikimedia.org` | Wikivoyage destination guides (sights, things to do, where to stay, getting around, SIM and tips) for those app sections. | share-alike | yes | no |
 | `wikivoyage-dump-bn` | `dumps.wikimedia.org` | Bengali Wikivoyage destination guides: destinations, sights and places to stay with coordinates, for Places to see and Hotels. | share-alike | yes | no |
 | `wikivoyage-dump-cs` | `dumps.wikimedia.org` | Czech Wikivoyage destination guides: destinations, sights and places to stay with coordinates, for Places to see and Hotels. | share-alike | yes | no |
-| `wikivoyage-dump-de` | `dumps.wikimedia.org` | German Wikivoyage destination guides: destinations, sights and places to stay with coordinates, for Places to see and Hotels; also history and curiosities for Place facts. | share-alike | yes | no |
+| `wikivoyage-dump-de` | `dumps.wikimedia.org` | German Wikivoyage destination guides: destinations, sights and places to stay with coordinates, for Places to see and Hotels. | share-alike | yes | no |
 | `wikivoyage-dump-el` | `dumps.wikimedia.org` | Greek Wikivoyage destination guides: destinations, sights and places to stay with coordinates, for Places to see and Hotels. | share-alike | yes | no |
-| `wikivoyage-dump-es` | `dumps.wikimedia.org` | Spanish Wikivoyage destination guides: destinations, sights and places to stay with coordinates, for Places to see and Hotels; also history and curiosities for Place facts. | share-alike | yes | no |
-| `wikivoyage-dump-fa` | `dumps.wikimedia.org` | Persian Wikivoyage destination guides: destinations, sights and places to stay with coordinates, for Places to see and Hotels; also history and curiosities for Place facts. | share-alike | yes | no |
+| `wikivoyage-dump-es` | `dumps.wikimedia.org` | Spanish Wikivoyage destination guides: destinations, sights and places to stay with coordinates, for Places to see and Hotels. | share-alike | yes | no |
+| `wikivoyage-dump-fa` | `dumps.wikimedia.org` | Persian Wikivoyage destination guides: destinations, sights and places to stay with coordinates, for Places to see and Hotels. | share-alike | yes | no |
 | `wikivoyage-dump-fi` | `dumps.wikimedia.org` | Finnish Wikivoyage destination guides: destinations, sights and places to stay with coordinates, for Places to see and Hotels. | share-alike | yes | no |
 | `wikivoyage-dump-fr` | `dumps.wikimedia.org` | French Wikivoyage destination guides: destinations, sights and places to stay with coordinates, for Places to see and Hotels. | share-alike | yes | no |
-| `wikivoyage-dump-he` | `dumps.wikimedia.org` | Hebrew Wikivoyage destination guides: destinations, sights and places to stay with coordinates, for Places to see and Hotels; also history and curiosities for Place facts. | share-alike | yes | no |
+| `wikivoyage-dump-he` | `dumps.wikimedia.org` | Hebrew Wikivoyage destination guides: destinations, sights and places to stay with coordinates, for Places to see and Hotels. | share-alike | yes | no |
 | `wikivoyage-dump-hi` | `dumps.wikimedia.org` | Hindi Wikivoyage destination guides: destinations, sights and places to stay with coordinates, for Places to see and Hotels. | share-alike | yes | no |
 | `wikivoyage-dump-id` | `dumps.wikimedia.org` | Indonesian Wikivoyage destination guides: destinations, sights and places to stay with coordinates, for Places to see and Hotels. | share-alike | yes | no |
 | `wikivoyage-dump-it` | `dumps.wikimedia.org` | Italian Wikivoyage destination guides: destinations, sights and places to stay with coordinates, for Places to see and Hotels. | share-alike | yes | no |
@@ -1759,14 +1765,14 @@ docs/wiki/Place-Facts-Data.md).
 | `wikivoyage-dump-nl` | `dumps.wikimedia.org` | Dutch Wikivoyage destination guides: destinations, sights and places to stay with coordinates, for Places to see and Hotels. | share-alike | yes | no |
 | `wikivoyage-dump-pl` | `dumps.wikimedia.org` | Polish Wikivoyage destination guides: destinations, sights and places to stay with coordinates, for Places to see and Hotels. | share-alike | yes | no |
 | `wikivoyage-dump-pt` | `dumps.wikimedia.org` | Portuguese Wikivoyage destination guides: destinations, sights and places to stay with coordinates, for Places to see and Hotels. | share-alike | yes | no |
-| `wikivoyage-dump-ru` | `dumps.wikimedia.org` | Russian Wikivoyage destination guides: destinations, sights and places to stay with coordinates, for Places to see and Hotels; also history and curiosities for Place facts. | share-alike | yes | no |
+| `wikivoyage-dump-ru` | `dumps.wikimedia.org` | Russian Wikivoyage destination guides: destinations, sights and places to stay with coordinates, for Places to see and Hotels. | share-alike | yes | no |
 | `wikivoyage-dump-sv` | `dumps.wikimedia.org` | Swedish Wikivoyage destination guides: destinations, sights and places to stay with coordinates, for Places to see and Hotels. | share-alike | yes | no |
 | `wikivoyage-dump-tr` | `dumps.wikimedia.org` | Turkish Wikivoyage destination guides: destinations, sights and places to stay with coordinates, for Places to see and Hotels. | share-alike | yes | no |
 | `wikivoyage-dump-uk` | `dumps.wikimedia.org` | Ukrainian Wikivoyage destination guides: destinations, sights and places to stay with coordinates, for Places to see and Hotels. | share-alike | yes | no |
 | `wikivoyage-dump-vi` | `dumps.wikimedia.org` | Vietnamese Wikivoyage destination guides: destinations, sights and places to stay with coordinates, for Places to see and Hotels. | share-alike | yes | no |
 | `wikivoyage-dump-zh` | `dumps.wikimedia.org` | Chinese Wikivoyage destination guides: destinations, sights and places to stay with coordinates, for Places to see and Hotels. | share-alike | yes | no |
 | `wine-portugal` | `www.winesofportugal.com` | Wines of Portugal (ViniPortugal): 14 wine regions, wine tourism, for Activities and Places to see. | facts only | yes | no |
-| `amusingplanet` | `feeds.feedburner.com` | Unusual places, natural wonders and hidden sights worldwide (headline, link and a short excerpt only), for Places to see; also history and curiosities for Place facts. | facts only | no | no |
+| `amusingplanet` | `feeds.feedburner.com` | Unusual places, natural wonders and hidden sights worldwide (headline, link and a short excerpt only), for Places to see. | facts only | no | no |
 | `api-europeana` | `api.europeana.eu` | Europeana Search and Record API: Museum and cultural-heritage records (50M items) with places and dates, for Places to see and Events; also history and curiosities for Place facts. | open | no | yes |
 | `api-tdx-taiwan` | `tdx.transportdata.tw` | Taiwan Transport Data eXchange (TDX): Taiwan rail, bus, metro timetables and tourism points of interest, for Local transportation, Places to see and Events. | facts only | no | yes |
 | `arch-digitalnz-mch` | `api.digitalnz.org` | DigitalNZ API, filtered to Manatū Taonga (Te Ara, NZHistory): Te Ara and NZHistory records (title, description, link). This is the only reachable route to MCH content, for Place facts and Places to see. | facts only | no | yes |
@@ -1781,10 +1787,10 @@ docs/wiki/Place-Facts-Data.md).
 | `city-turismo-cdmx` | `turismo.cdmx.gob.mx` | Turismo CDMX (Secretaría de Turismo): official visitor guide, for Places to see, Activities and Free walking tours. | facts only | no | no |
 | `city-visit-rio` | `visit.rio` | Visit Rio (Rio CVB): traveller information, for Places to see and Events. | facts only | no | no |
 | `colombia-travel` | `colombia.travel` | Official Colombian destinations and itineraries, for Places to see and the itinerary; also history and curiosities for Place facts. | facts only | no | no |
-| `culturetrip` | `theculturetrip.com` | Culture Trip destination guides (title and link only) for Places to see, Activities and Travel tips; every page times out for our bot, so off; also history and curiosities for Place facts. | facts only | no | no |
-| `datagovhk` | `data.gov.hk` | Official opening hours and admission of Hong Kong museums and attractions, plus cultural programmes and major events, for Places to see and Events; also history and curiosities for Place facts. | open | no | no |
+| `culturetrip` | `theculturetrip.com` | Culture Trip destination guides (title and link only) for Places to see, Activities and Travel tips; every page times out for our bot, so off. | facts only | no | no |
+| `datagovhk` | `data.gov.hk` | Official opening hours and admission of Hong Kong museums and attractions, plus cultural programmes and major events, for Places to see and Events. | open | no | no |
 | `datatourisme-fr` | `diffuseur.datatourisme.fr` | Every French tourist office's events, restaurants, sights and walking or driving tours in one national feed, for Events, Activities, Places to see and the itinerary. | open | no | yes |
-| `doc-nz-api` | `api.doc.govt.nz` | New Zealand track, hut and campsite records with current alerts, for Places to see, Activities and Travel tips; also history and curiosities for Place facts. | open | no | yes |
+| `doc-nz-api` | `api.doc.govt.nz` | New Zealand track, hut and campsite records with current alerts, for Places to see, Activities and Travel tips. | open | no | yes |
 | `ea-bathing-water-profiles` | `environment.data.gov.uk` | Water quality classification of designated bathing beaches in England, for Places to see, Activities and Travel tips. | open | no | no |
 | `earthcheck` | `earthcheck.org` | EarthCheck-certified destinations and hotels, for Places to see and Hotels. | facts only | no | no |
 | `ev-nhb-sg` | `www.nhb.gov.sg` | National Heritage Board Singapore: National museums, heritage trails and festivals, for Places to see, Events and Free walking tours. | facts only | no | no |
@@ -1810,7 +1816,7 @@ docs/wiki/Place-Facts-Data.md).
 | `korea-tourapi` | `apis.data.go.kr` | National Korean festivals, restaurants, sights and official travel courses, for Events, Activities, Places to see and the itinerary. | facts only | no | yes |
 | `mag-polarjournal` | `polarjournal.net` | Polar Journal: polar tourism and expedition news, for Travel tips and Places to see. | facts only | no | no |
 | `mavi-bayrak-tr` | `www.mavibayrak.org.tr` | About 580 Blue Flag beaches in Türkiye, for Places to see. | facts only | no | no |
-| `messynessychic` | `www.messynessychic.com` | Off-the-beaten-path curiosities and hidden places worldwide (headline, link and a short excerpt only), for Places to see; also history and curiosities for Place facts. | facts only | no | no |
+| `messynessychic` | `www.messynessychic.com` | Off-the-beaten-path curiosities and hidden places worldwide (headline, link and a short excerpt only), for Places to see. | facts only | no | no |
 | `museum-kizhi` | `www.kizhi.karelia.ru` | Kizhi island wooden churches, opening times and boat access, for Places to see and Events; also history and curiosities for Place facts. | facts only | no | no |
 | `myswitzerland-open-data` | `opendata.myswitzerland.io` | Swiss sights, experiences and tours as structured data, for Places to see, Activities and the itinerary. | facts only | no | yes |
 | `news-atlasobscura` | `www.atlasobscura.com` | Atlas Obscura stories about unusual sights and hidden places, for Places to see (headline, link and a short excerpt only). | facts only | no | no |
@@ -1855,9 +1861,9 @@ docs/wiki/Place-Facts-Data.md).
 | `od-openskimap` | `tiles.openskimap.org` | OpenSkiMap: Ski resorts worldwide with run and lift counts, for Activities and Places to see. | share-alike | no | no |
 | `od-ottawa` | `open.ottawa.ca` | City of Ottawa points of interest from its open-data hub, for Places to see. | open | no | no |
 | `od-podatki-gov-si` | `podatki.gov.si` | OPSI (Slovenia open data): government open-data datasets (tourism, events, transport), for Events, Places to see and Local transportation. | open | no | no |
-| `od-ramsar-rsis` | `rsis.ramsar.org` | Wetlands of international importance (Ramsar sites) with locations, for remote nature spots in Places to see; also history and curiosities for Place facts. | facts only | no | no |
+| `od-ramsar-rsis` | `rsis.ramsar.org` | Wetlands of international importance (Ramsar sites) with locations, for remote nature spots in Places to see. | facts only | no | no |
 | `od-uk-bathing-water` | `environment.data.gov.uk` | Environment Agency Bathing Water Quality: Water quality and pollution-risk forecasts for 400+ England bathing waters, for Places to see, Activities and Weather. | open | no | no |
-| `od-wdpa` | `www.protectedplanet.net` | WDPA protected areas, for Places to see; also history and curiosities for Place facts. | facts only | no | no |
+| `od-wdpa` | `www.protectedplanet.net` | WDPA protected areas, for Places to see. | facts only | no | no |
 | `park-gbrmpa` | `www.gbrmpa.gov.au` | Great Barrier Reef Marine Park Authority: reef visiting rules, zoning, for Places to see, Activities and Travel tips. | facts only | no | no |
 | `park-sinac-cr` | `www.sinac.go.cr` | SINAC Costa Rica (protected areas): official visitor guide, for Places to see and Travel tips. | facts only | no | no |
 | `park-usfs` | `www.fs.usda.gov` | National forest recreation, passes and know-before-you-go advice, for Activities, Places to see and Travel tips. | open | no | no |
@@ -1876,7 +1882,7 @@ docs/wiki/Place-Facts-Data.md).
 | `tb-chuuk` | `www.visit-chuuk.com` | Chuuk Lagoon wreck diving and island sights, for Places to see and Activities. | facts only | no | no |
 | `tb-cook-islands` | `cookislands.travel` | Official Cook Islands (Rarotonga, Aitutaki, outer islands) sights, events, stays, for Places to see, Activities, Events, Hotels and Travel tips. | facts only | no | no |
 | `tb-discoverkyrgyzstan` | `www.discoverkyrgyzstan.org` | Discover Kyrgyzstan: official visitor guide, for Places to see and Activities. | facts only | no | no |
-| `tb-guadeloupe` | `www.lesilesdeguadeloupe.com` | Îles de Guadeloupe (CTIG): official visitor guide, for Places to see, Activities and Events; also history and curiosities for Place facts. | facts only | no | no |
+| `tb-guadeloupe` | `www.lesilesdeguadeloupe.com` | Îles de Guadeloupe (CTIG): official visitor guide, for Places to see, Activities and Events. | facts only | no | no |
 | `tb-hanoi-tourism` | `hanoitourism.vn` | Hanoi Tourism: official visitor guide, for Places to see and Events; also history and curiosities for Place facts. | facts only | no | no |
 | `tb-high-coast` | `www.highcoast.net` | High Coast World Heritage area trails and islands, for Places to see and Activities. | facts only | no | no |
 | `tb-himachal` | `himachaltourism.gov.in` | Himachal Tourism: official visitor guide, for Places to see and Activities. | facts only | no | no |
@@ -1950,6 +1956,7 @@ docs/wiki/Place-Facts-Data.md).
 | `fx-bowery-boys` | `www.boweryboyshistory.com` | The Bowery Boys: NYC neighbourhood history, for Place facts and Free walking tours. | facts only | yes | no |
 | `fx-hunter-living-histories` | `hunterlivinghistories.com` | Hunter Living Histories (Univ. of Newcastle): Newcastle and Hunter Valley place histories, for Place facts and Free walking tours. | facts only | yes | no |
 | `fx-lookup-london` | `lookup.london` | Look Up London: weekly London hidden-history posts by a Blue Badge guide, for Place facts and Free walking tours. | facts only | yes | no |
+| `fx-sahapedia` | `www.sahapedia.org` | Sahapedia: heritage-walk and city-culture essays, for Place facts, Free walking tours and Places to see. | share-alike | yes | no |
 | `guruwalk` | `www.guruwalk.com` | Free tip-based walking tours by city with times and meeting points, for the Free walking tours section. | facts only | yes | no |
 | `her-keys-to-the-past` | `keystothepast.info` | Keys to the Past (Durham and Northumberland HER): archaeology and history of every parish in the two counties, for Place facts, Places to see and Free walking tours. | facts only | yes | no |
 | `her-opendomesday` | `opendomesday.org` | Open Domesday (every place in Domesday Book, 1086): what each English village was in 1086 (households, ploughs, mills, value, lords), for Place facts, Places to see and Free walking tours. | share-alike | yes | no |
@@ -1974,7 +1981,7 @@ docs/wiki/Place-Facts-Data.md).
 | `tb-tirol` | `www.tirol.at` | Tirol Werbung: official visitor guide, for Activities, Free walking tours, Events and Weather. | facts only | yes | no |
 | `tb-visittrentino` | `www.visittrentino.info` | Visit Trentino: official visitor guide, for Activities, Free walking tours and Places to see. | facts only | yes | no |
 | `walking-strawberrytours` | `strawberrytours.com` | Free tip-based walking tours in about 100 cities, for the Free walking tours section. | facts only | yes | no |
-| `wikivoyage-dump` | `dumps.wikimedia.org` | Wikivoyage destination guides (sights, things to do, where to stay, getting around, SIM and tips) for those app sections; also history and curiosities for Place facts. | share-alike | yes | no |
+| `wikivoyage-dump` | `dumps.wikimedia.org` | Wikivoyage destination guides (sights, things to do, where to stay, getting around, SIM and tips) for those app sections. | share-alike | yes | no |
 | `arch-layers-of-london` | `www.layersoflondon.org` | Layers of London (Institute of Historical Research): geolocated London history records, for Place facts and Free walking tours. | facts only | no | no |
 | `city-bordeaux` | `www.bordeaux-tourisme.com` | Bordeaux Tourisme: official visitor guide, for Activities, Places to see, Events and Free walking tours. | facts only | no | no |
 | `city-turismo-cdmx` | `turismo.cdmx.gob.mx` | Turismo CDMX (Secretaría de Turismo): official visitor guide, for Places to see, Activities and Free walking tours. | facts only | no | no |
@@ -2111,7 +2118,7 @@ docs/wiki/Place-Facts-Data.md).
 | `liveriga` | `www.liveriga.com` | Riga's official tourism portal: sights, things to do, events and visitor advice, for Places to see, Activities, Events and Travel tips. | facts only | yes | no |
 | `mag-europeanbestdestinations` | `www.europeanbestdestinations.com` | European Best Destinations: travel articles and guides, for Places to see, Events and the itinerary. | facts only | yes | no |
 | `mag-hongkongcheapo` | `hongkongcheapo.com` | Hong Kong Cheapo: Budget Hong Kong guides and events (same publisher as Tokyo Cheapo), for Activities, Events and Travel tips. | facts only | yes | no |
-| `mag-mexicodesconocido` | `www.mexicodesconocido.com.mx` | Mexican destinations, festivals and things to do (Spanish) from the travel magazine México Desconocido, for Places to see, Events and Activities (headline, link and a short excerpt only); also history and curiosities for Place facts. | facts only | yes | no |
+| `mag-mexicodesconocido` | `www.mexicodesconocido.com.mx` | Mexican destinations, festivals and things to do (Spanish) from the travel magazine México Desconocido, for Places to see, Events and Activities (headline, link and a short excerpt only). | facts only | yes | no |
 | `mag-theguideistanbul` | `www.theguideistanbul.com` | The Guide Istanbul: Istanbul city magazine, for Events and Places to see. | facts only | yes | no |
 | `mag-viagemeturismo` | `viagemeturismo.abril.com.br` | Viagem e Turismo (Abril): Brazil's main travel magazine (pt). The /ultimas-noticias/rss link on the home page answered 404, for Places to see, Travel tips and Events. | facts only | yes | no |
 | `melbourne-whatson` | `whatson.melbourne.vic.gov.au` | Melbourne events plus the city's restaurant and bar listings, for Events and Activities. | facts only | yes | no |
@@ -2231,7 +2238,7 @@ docs/wiki/Place-Facts-Data.md).
 | `tb-kalymnos` | `www.visitkalymnos.gr` | Visit Kalymnos (climbing, sponge diving), for Places to see, Activities and Events. | facts only | yes | no |
 | `tb-kansas` | `www.travelks.com` | Official Kansas events and things to do, for Events and Activities. | facts only | yes | no |
 | `tb-katara` | `www.katara.net` | Katara Cultural Village: Doha cultural events, for Events and Places to see. | facts only | yes | no |
-| `tb-kazakhstan` | `kazakhstan.travel` | Kazakh Tourism (kazakhstan.travel): Kazakhstan destinations, routes and events, for Places to see, Activities, Events and Travel tips; also history and curiosities for Place facts. | facts only | yes | no |
+| `tb-kazakhstan` | `kazakhstan.travel` | Kazakh Tourism (kazakhstan.travel): Kazakhstan destinations, routes and events, for Places to see, Activities, Events and Travel tips. | facts only | yes | no |
 | `tb-kentucky` | `www.kentuckytourism.com` | Official Kentucky events, the Bourbon Trail and state parks, for Events, Activities and Places to see. | facts only | yes | no |
 | `tb-kerala` | `www.keralatourism.org` | Kerala Tourism: Kerala destinations, festival and event calendar, houseboats, for Places to see, Events and Activities; also history and curiosities for Place facts. | facts only | yes | no |
 | `tb-korcula` | `visitkorcula.eu` | Korčula Tourist Board official site, for Places to see, Activities and Events. | facts only | yes | no |
@@ -2335,7 +2342,7 @@ docs/wiki/Place-Facts-Data.md).
 | `tb-tobago` | `visittobago.gov.tt` | Visit Tobago (Tobago Tourism Agency): official visitor guide, for Places to see and Events. | facts only | yes | no |
 | `tb-tohoku` | `www.tohokukanko.jp` | Tohoku Tourism Promotion Organization, for Places to see, Activities, Events and the itinerary. | facts only | yes | no |
 | `tb-tourism-cambodia` | `tourismcambodia.org` | Tourism Cambodia portal: Province and attraction guides, Cambodia travel tips, for Places to see, Travel tips and Events; also history and curiosities for Place facts. | facts only | yes | no |
-| `tb-tourism-malaysia-corp` | `www.tourism.gov.my` | Tourism Malaysia (corporate site): Tourism Malaysia campaigns, events and media releases, for Events and Travel tips; also history and curiosities for Place facts. | facts only | yes | no |
+| `tb-tourism-malaysia-corp` | `www.tourism.gov.my` | Tourism Malaysia (corporate site): Tourism Malaysia campaigns, events and media releases, for Events and Travel tips. | facts only | yes | no |
 | `tb-travelpalestine` | `www.travelpalestine.ps` | Palestine Ministry of Tourism & Antiquities: Travel Palestine: Bethlehem, Jericho, Hebron, for Places to see, Activities and Events; also history and curiosities for Place facts. | facts only | yes | no |
 | `tb-trinbago` | `visittrinbago.tt` | Visit Trinidad & Tobago (Tourism Trinidad): official visitor guide, for Places to see and Events. | facts only | yes | no |
 | `tb-turismo-uy` | `www.gub.uy` | Ministerio de Turismo (gub.uy): notices, season info, statistics, for Events and Travel tips. | facts only | yes | no |
@@ -2416,7 +2423,7 @@ docs/wiki/Place-Facts-Data.md).
 | `city-salzburg` | `salzburg.info` | Tourismus Salzburg: official visitor guide, for Activities, Events and Places to see. | facts only | no | no |
 | `city-visit-rio` | `visit.rio` | Visit Rio (Rio CVB): traveller information, for Places to see and Events. | facts only | no | no |
 | `city-winnipeg` | `www.tourismwinnipeg.com` | Winnipeg festivals, events and things to do, for Events and Activities. | facts only | no | no |
-| `datagovhk` | `data.gov.hk` | Official opening hours and admission of Hong Kong museums and attractions, plus cultural programmes and major events, for Places to see and Events; also history and curiosities for Place facts. | open | no | no |
+| `datagovhk` | `data.gov.hk` | Official opening hours and admission of Hong Kong museums and attractions, plus cultural programmes and major events, for Places to see and Events. | open | no | no |
 | `datatourisme-fr` | `diffuseur.datatourisme.fr` | Every French tourist office's events, restaurants, sights and walking or driving tours in one national feed, for Events, Activities, Places to see and the itinerary. | open | no | yes |
 | `edinburgh-festivals-api` | `api.edinburghfestivalcity.com` | Listings for the Edinburgh festivals (dates, venues, tickets), for the Events section. | API terms | no | yes |
 | `ev-cartelera-cdmx` | `cartelera.cdmx.gob.mx` | Cartelera CDMX (city culture listings): official visitor guide, for Events. | facts only | no | no |
@@ -2434,7 +2441,7 @@ docs/wiki/Place-Facts-Data.md).
 | `nager-date` | `date.nager.at` | Public holidays per country (closures and crowds) for Events and the itinerary; robots.txt disallows us, so off. | API terms | no | no |
 | `news-capetownetc` | `www.capetownetc.com` | Cape Town Etc: travel articles and guides, for Events and Travel tips. | facts only | no | no |
 | `news-whatson-ae` | `whatson.ae` | What's On (UAE): Dubai/Abu Dhabi openings and events, for Events, Places to see and Travel tips. | facts only | no | no |
-| `nps-data-api` | `developer.nps.gov` | US national park things to do, events and tours as structured data, for Activities, Events and the itinerary; also history and curiosities for Place facts. | facts only | no | yes |
+| `nps-data-api` | `developer.nps.gov` | US national park things to do, events and tours as structured data, for Activities, Events and the itinerary. | facts only | no | yes |
 | `od-andmed-eesti` | `andmed.eesti.ee` | Estonian open data portal: government open-data datasets (tourism, events, transport), for Events, Places to see and Local transportation. | open | no | no |
 | `od-avoindata-fi` | `www.avoindata.fi` | avoindata.fi: government open-data datasets (tourism, events, transport), for Events, Places to see and Local transportation. | open | no | no |
 | `od-catalogo-uy` | `catalogodatos.gub.uy` | Catálogo Nacional de Datos Abiertos (AGESIC, CKAN): tourism datasets, for Places to see and Events. | open | no | no |
@@ -2468,7 +2475,7 @@ docs/wiki/Place-Facts-Data.md).
 | `tat-data-api` | `tatdataapi.io` | Thai events, attractions and activities as structured data, for Events, Places to see and Activities. | facts only | no | yes |
 | `tb-brunei` | `www.bruneitourism.com` | Brunei Tourism: Official Brunei attractions and practical info, for Places to see, Travel tips and Events; also history and curiosities for Place facts. | facts only | no | no |
 | `tb-cook-islands` | `cookislands.travel` | Official Cook Islands (Rarotonga, Aitutaki, outer islands) sights, events, stays, for Places to see, Activities, Events, Hotels and Travel tips. | facts only | no | no |
-| `tb-guadeloupe` | `www.lesilesdeguadeloupe.com` | Îles de Guadeloupe (CTIG): official visitor guide, for Places to see, Activities and Events; also history and curiosities for Place facts. | facts only | no | no |
+| `tb-guadeloupe` | `www.lesilesdeguadeloupe.com` | Îles de Guadeloupe (CTIG): official visitor guide, for Places to see, Activities and Events. | facts only | no | no |
 | `tb-hanoi-tourism` | `hanoitourism.vn` | Hanoi Tourism: official visitor guide, for Places to see and Events; also history and curiosities for Place facts. | facts only | no | no |
 | `tb-iles-de-la-madeleine` | `www.tourismeilesdelamadeleine.com`, `feeds.feedburner.com` | Tourisme Îles de la Madeleine, for Places to see, Activities and Events. | facts only | no | no |
 | `tb-jeju` | `www.visitjeju.net` | Visit Jeju (incl. Udo, Marado), for Places to see, Activities and Events. | facts only | no | no |
@@ -2498,7 +2505,7 @@ docs/wiki/Place-Facts-Data.md).
 | `tb-wesgro` | `www.wesgro.co.za` | Wesgro (Cape Town and Western Cape tourism): official visitor guide, for Places to see, Activities and Events. | facts only | no | no |
 | `timeout-blog-rss` | `www.timeout.com` | Time Out city articles (what's on, things to do, new openings) for Events and Activities. | facts only | no | no |
 | `timeout-news-sitemap` | `www.timeout.com` | Time Out city news pages (events, openings, things to do) for Events and Activities. | facts only | no | no |
-| `toronto-events` | `ckan0.cf.opendata.inter.prod-toronto.ca` | Festivals and events listed by the City of Toronto, for the Events section; also history and curiosities for Place facts. | open | no | no |
+| `toronto-events` | `ckan0.cf.opendata.inter.prod-toronto.ca` | Festivals and events listed by the City of Toronto, for the Events section. | open | no | no |
 | `visit-finland-datahub` | `datahub.visitfinland.com` | Finnish tourism products, sights and opening hours, for Places to see, Activities and Events. | API terms | no | yes |
 | `visitrwanda` | `visitrwanda.com` | Official Rwandan itineraries, events and destinations, for the itinerary, Events and Places to see. | facts only | no | no |
 
@@ -2637,7 +2644,7 @@ docs/wiki/Place-Facts-Data.md).
 | `blog-instinctvoyageur` | `feeds.feedburner.com` | French tips on travel money, insurance, SIM cards and budget travel from Instinct Voyageur, for Travel tips, Forex and SIM cards (headline, link and a short excerpt only). | facts only | yes | no |
 | `blog-tokyocheapo` | `tokyocheapo.com` | Free and cheap Tokyo (events, transit passes, SIM cards) from Tokyo Cheapo, for Activities, Events, Local transportation, SIM cards and Travel tips (headline, link and a short excerpt only). | facts only | yes | no |
 | `esimdb` | `esimdb.com` | eSIM plans and prices per country compared across providers, for the SIM cards section. | facts only | yes | no |
-| `wikivoyage-dump` | `dumps.wikimedia.org` | Wikivoyage destination guides (sights, things to do, where to stay, getting around, SIM and tips) for those app sections; also history and curiosities for Place facts. | share-alike | yes | no |
+| `wikivoyage-dump` | `dumps.wikimedia.org` | Wikivoyage destination guides (sights, things to do, where to stay, getting around, SIM and tips) for those app sections. | share-alike | yes | no |
 | `airalo-partner` | `partners-doc.airalo.com` | eSIM data plans and prices per country for the SIM cards section; needs partner approval, so off. | API terms | no | yes |
 | `seoul-wifi` | `data.seoul.go.kr` | Free public Wi-Fi locations across Seoul, for SIM cards and Travel tips. | open | no | yes |
 
@@ -2803,18 +2810,18 @@ docs/wiki/Place-Facts-Data.md).
 | `mag-viagemeturismo` | `viagemeturismo.abril.com.br` | Viagem e Turismo (Abril): Brazil's main travel magazine (pt). The /ultimas-noticias/rss link on the home page answered 404, for Places to see, Travel tips and Events. | facts only | yes | no |
 | `mkt-tsukiji-outer` | `www.tsukiji.or.jp` | Tsukiji Outer Market (official): shops, hours, closed-day calendar, etiquette, for Places to see, Activities and Travel tips. | facts only | yes | no |
 | `mus-vatican` | `www.museivaticani.va` | Musei Vaticani: hours, closures, last-Sunday free entry, for Places to see and Travel tips. | facts only | yes | no |
-| `news-bbc` | `www.bbc.com` | BBC Travel travel-section articles (destination features, openings, travel disruptions) for Travel tips and Places to see (headline, link and a short excerpt only); also history and curiosities for Place facts. | facts only | yes | no |
+| `news-bbc` | `www.bbc.com` | BBC Travel travel-section articles (destination features, openings, travel disruptions) for Travel tips and Places to see (headline, link and a short excerpt only). | facts only | yes | no |
 | `news-cnbc` | `www.cnbc.com` | CNBC Travel travel-section articles (destination features, openings, travel disruptions) for Travel tips and Places to see (headline, link and a short excerpt only). | facts only | yes | no |
 | `news-cnn` | `rss.cnn.com` | CNN Travel travel-section articles (destination features, openings, travel disruptions) for Travel tips and Places to see (headline, link and a short excerpt only). | facts only | yes | no |
 | `news-cntraveler` | `www.cntraveler.com` | Condé Nast Traveler (US) travel-section articles (destination features, openings, travel disruptions) for Travel tips and Places to see (headline, link and a short excerpt only). | facts only | yes | no |
 | `news-cntraveller` | `www.cntraveller.com` | Condé Nast Traveller (UK) travel-section articles (destination features, openings, travel disruptions) for Travel tips and Places to see (headline, link and a short excerpt only). | facts only | yes | no |
 | `news-euronews` | `www.euronews.com` | Euronews Travel travel-section articles (destination features, openings, travel disruptions) for Travel tips and Places to see (headline, link and a short excerpt only). | facts only | yes | no |
-| `news-guardian` | `www.theguardian.com` | The Guardian Travel travel-section articles (destination features, openings, travel disruptions) for Travel tips and Places to see (headline, link and a short excerpt only); also history and curiosities for Place facts. | facts only | yes | no |
+| `news-guardian` | `www.theguardian.com` | The Guardian Travel travel-section articles (destination features, openings, travel disruptions) for Travel tips and Places to see (headline, link and a short excerpt only). | facts only | yes | no |
 | `news-independent` | `www.independent.co.uk` | The Independent Travel travel-section articles (destination features, openings, travel disruptions) for Travel tips and Places to see (headline, link and a short excerpt only). | facts only | yes | no |
-| `news-nyt` | `rss.nytimes.com` | New York Times Travel travel-section articles (destination features, openings, travel disruptions) for Travel tips and Places to see (headline, link and a short excerpt only); also history and curiosities for Place facts. | facts only | yes | no |
+| `news-nyt` | `rss.nytimes.com` | New York Times Travel travel-section articles (destination features, openings, travel disruptions) for Travel tips and Places to see (headline, link and a short excerpt only). | facts only | yes | no |
 | `news-simpleflying` | `simpleflying.com` | Simple Flying aviation news (new routes, airline and airport changes) for Flights and Travel tips (headline, link and a short excerpt only). | facts only | yes | no |
 | `news-skift` | `skift.com` | Skift travel news (airline, route, airport and travel-rule changes) for Flights and Travel tips (headline, link and a short excerpt only). | facts only | yes | no |
-| `news-smithsonian` | `www.smithsonianmag.com` | Smithsonian Travel travel-section articles (destination features, openings, travel disruptions) for Travel tips and Places to see (headline, link and a short excerpt only); also history and curiosities for Place facts. | facts only | yes | no |
+| `news-smithsonian` | `www.smithsonianmag.com` | Smithsonian Travel travel-section articles (destination features, openings, travel disruptions) for Travel tips and Places to see (headline, link and a short excerpt only). | facts only | yes | no |
 | `news-telegraph` | `www.telegraph.co.uk` | The Telegraph Travel travel-section articles (destination features, openings, travel disruptions) for Travel tips and Places to see (headline, link and a short excerpt only). | facts only | yes | no |
 | `news-thenational-travel` | `www.thenationalnews.com` | The National (UAE): travel section: Travel news and guides from the UAE's national newspaper, for Travel tips and Places to see. | facts only | yes | no |
 | `news-thetravel` | `www.thetravel.com` | TheTravel travel-section articles (destination features, openings, travel disruptions) for Travel tips and Places to see (headline, link and a short excerpt only). | facts only | yes | no |
@@ -2835,7 +2842,7 @@ docs/wiki/Place-Facts-Data.md).
 | `od-owid-co2-data` | `raw.githubusercontent.com` | OWID CO2 and greenhouse gas emissions dataset: Per-country CO2/GHG per capita and consumption-based emissions for every country. Destination context and a fallback for Africa and the Gulf. Yearly, for the trip Carbon footprint and Travel tips. | open | yes | no |
 | `od-owid-food-ghg` | `ourworldindata.org` | Our World in Data: environmental impacts of food (Poore & Nemecek 2018): kg CO2e per kg / per 1000 kcal for ~40 food products and the supply-chain split (farm, land use, transport, retail): the core per-meal factor table, for the trip Carbon footprint, Travel tips and the Itinerary. | open | yes | no |
 | `od-rivm-food-lca` | `www.rivm.nl` | RIVM Database milieubelasting voedingsmiddelen (Dutch food LCA database): Official Dutch government LCA of ~250 foods as eaten (kg CO2e per kg, plus land/water), consumer-side incl. cooking: a second national food factor set, for the trip Carbon footprint and Travel tips. | open | yes | no |
-| `od-wien-ogd` | `data.wien.gv.at` | Vienna's sights and museums plus its public toilets and free Wi-Fi spots, for Places to see and Travel tips; also history and curiosities for Place facts. | open | yes | no |
+| `od-wien-ogd` | `data.wien.gv.at` | Vienna's sights and museums plus its public toilets and free Wi-Fi spots, for Places to see and Travel tips. | open | yes | no |
 | `od-zuerich-ogd` | `www.ogd.stadt-zuerich.ch` | Zürich's public toilets (Züri WC) with hours, remarks and wheelchair access, for Travel tips. | open | yes | no |
 | `official-cfpb-money` | `www.consumerfinance.gov` | Official US guidance on international money-transfer and exchange fees and card fees abroad, for Forex and Travel tips. | open | yes | no |
 | `official-citizensadvice-holidays` | `www.citizensadvice.org.uk` | UK consumer rights for cancelled or delayed flights and holidays, for Travel tips and Flights. | facts only | yes | no |
@@ -2904,7 +2911,7 @@ docs/wiki/Place-Facts-Data.md).
 | `tb-gibraltar` | `www.visitgibraltar.gi` | Visit Gibraltar: official visitor guide, for Places to see, Activities and Travel tips. | facts only | yes | no |
 | `tb-greenland` | `visitgreenland.com` | Official Greenland destinations, things to do, how to get around and practical facts, for Activities, Places to see, Local transportation and Travel tips. | facts only | yes | no |
 | `tb-heritageireland` | `heritageireland.ie` | Heritage Ireland (OPW): OPW state heritage sites, opening times, free days, for Places to see and Travel tips; also history and curiosities for Place facts. | facts only | yes | no |
-| `tb-kazakhstan` | `kazakhstan.travel` | Kazakh Tourism (kazakhstan.travel): Kazakhstan destinations, routes and events, for Places to see, Activities, Events and Travel tips; also history and curiosities for Place facts. | facts only | yes | no |
+| `tb-kazakhstan` | `kazakhstan.travel` | Kazakh Tourism (kazakhstan.travel): Kazakhstan destinations, routes and events, for Places to see, Activities, Events and Travel tips. | facts only | yes | no |
 | `tb-kiribati` | `kiribatitourism.gov.ki` | Official Kiribati islands, sights, getting there and around; almost no other source covers the outer atolls, for Places to see, Activities, Local transportation and Travel tips. | facts only | yes | no |
 | `tb-ktb-kenya` | `ktb.go.ke` | Kenya Tourism Board (corporate): KTB news (consumer site magicalkenya is denied), for Events and Travel tips. | facts only | yes | no |
 | `tb-macao-tourism` | `www.macaotourism.gov.mo` | Macao Government Tourism Office: official visitor guide, for Places to see, Events and Travel tips. | facts only | yes | no |
@@ -2930,7 +2937,7 @@ docs/wiki/Place-Facts-Data.md).
 | `tb-tourism-cambodia` | `tourismcambodia.org` | Tourism Cambodia portal: Province and attraction guides, Cambodia travel tips, for Places to see, Travel tips and Events; also history and curiosities for Place facts. | facts only | yes | no |
 | `tb-tourism-gov-za` | `www.tourism.gov.za` | Department of Tourism, South Africa: national tourism notices and travel advisories, for Travel tips and Visa. | facts only | yes | no |
 | `tb-tourism-govmu` | `tourism.govmu.org` | Ministry of Tourism, Mauritius: official notices and regulations, for Travel tips and Visa. | facts only | yes | no |
-| `tb-tourism-malaysia-corp` | `www.tourism.gov.my` | Tourism Malaysia (corporate site): Tourism Malaysia campaigns, events and media releases, for Events and Travel tips; also history and curiosities for Place facts. | facts only | yes | no |
+| `tb-tourism-malaysia-corp` | `www.tourism.gov.my` | Tourism Malaysia (corporate site): Tourism Malaysia campaigns, events and media releases, for Events and Travel tips. | facts only | yes | no |
 | `tb-turismo-uy` | `www.gub.uy` | Ministerio de Turismo (gub.uy): notices, season info, statistics, for Events and Travel tips. | facts only | yes | no |
 | `tb-utb-uganda` | `utb.go.ug` | Uganda Tourism Board: official UTB site (visituganda.com is robots Disallow: /), for Places to see, Events and Travel tips. | facts only | yes | no |
 | `tb-uttarakhand` | `uttarakhandtourism.gov.in` | Uttarakhand Tourism: Himalayan treks, Char Dham, permits and travel info, for Places to see, Activities and Travel tips. | facts only | yes | no |
@@ -2950,7 +2957,7 @@ docs/wiki/Place-Facts-Data.md).
 | `visa-maldives-immigration` | `immigration.gov.mv` | Maldives Immigration: Free 30-day tourist visa, IMUGA traveller declaration, for Visa and Travel tips. | facts only | yes | no |
 | `visa-migracion-colombia` | `www.migracioncolombia.gov.co` | Migración Colombia: official entry, visa and immigration rules, for Visa and Travel tips. | facts only | yes | no |
 | `visa-nia-tw` | `www.immigration.gov.tw` | National Immigration Agency Taiwan (English): Entry rules, online arrival card, e-Gate for visitors, for Visa and Travel tips. | facts only | yes | no |
-| `wikivoyage-dump` | `dumps.wikimedia.org` | Wikivoyage destination guides (sights, things to do, where to stay, getting around, SIM and tips) for those app sections; also history and curiosities for Place facts. | share-alike | yes | no |
+| `wikivoyage-dump` | `dumps.wikimedia.org` | Wikivoyage destination guides (sights, things to do, where to stay, getting around, SIM and tips) for those app sections. | share-alike | yes | no |
 | `worldbank-wdi-bulk` | `databank.worldbank.org` | Price level ratio and purchasing-power parity for every country, for Travel tips cost guidance and itinerary budgets. | open | yes | no |
 | `wx-nea-sg` | `www.nea.gov.sg` | National Environment Agency Singapore: Weather, haze/dengue advisories and hawker centre info, for Weather and Travel tips. | facts only | yes | no |
 | `wx-nhc` | `www.nhc.noaa.gov` | NOAA National Hurricane Center: tropical-cyclone advisories for the Caribbean and Mexico, for Weather, Travel tips and the Emergency card. | open | yes | no |
@@ -2972,8 +2979,8 @@ docs/wiki/Place-Facts-Data.md).
 | `carbon-energy-charts` | `api.energy-charts.info`, `www.energy-charts.info` | Energy-Charts API (Fraunhofer ISE): No-key European mix and green-power signal, for the trip Carbon footprint, Hotels and Travel tips. | facts only | no | no |
 | `carbon-watttime` | `api.watttime.org`, `docs.watttime.org` | WattTime API: Marginal intensity for timing tips, for the trip Carbon footprint and Travel tips. | API terms | no | yes |
 | `city-dresden` | `www.dresden.de` | Landeshauptstadt Dresden (tourism pages): official visitor guide, for Places to see, Events and Travel tips. | facts only | no | no |
-| `culturetrip` | `theculturetrip.com` | Culture Trip destination guides (title and link only) for Places to see, Activities and Travel tips; every page times out for our bot, so off; also history and curiosities for Place facts. | facts only | no | no |
-| `doc-nz-api` | `api.doc.govt.nz` | New Zealand track, hut and campsite records with current alerts, for Places to see, Activities and Travel tips; also history and curiosities for Place facts. | open | no | yes |
+| `culturetrip` | `theculturetrip.com` | Culture Trip destination guides (title and link only) for Places to see, Activities and Travel tips; every page times out for our bot, so off. | facts only | no | no |
+| `doc-nz-api` | `api.doc.govt.nz` | New Zealand track, hut and campsite records with current alerts, for Places to see, Activities and Travel tips. | open | no | yes |
 | `dubai-customs-passengers` | `www.dubaicustoms.gov.ae` | UAE duty-free allowances and banned items (medicines, e-cigarettes), for Travel tips and Packing. | facts only | no | no |
 | `ea-bathing-water-profiles` | `environment.data.gov.uk` | Water quality classification of designated bathing beaches in England, for Places to see, Activities and Travel tips. | open | no | no |
 | `ecobalyse` | `ecobalyse.beta.gouv.fr`, `github.com`, `raw.githubusercontent.com` | Ecobalyse (French state environmental cost calculator: food and textiles): Public API and open-source method for the footprint of food products and clothing (souvenir/textile shopping), built on Agribalyse, for the trip Carbon footprint, Travel tips and the Packing list. | open | no | no |
@@ -3046,7 +3053,7 @@ docs/wiki/Place-Facts-Data.md).
 | `canada-travel-json` | `data.international.gc.ca` | Official Canadian travel advice per country (entry rules, safety level, emergency contacts) for Visa and the Emergency card. | open | yes | no |
 | `city-zagreb` | `www.infozagreb.hr` | Zagreb Tourist Board: official visitor guide, for Activities, Events, Local transportation, Travel tips and the Emergency card. | facts only | yes | no |
 | `dirco-sa` | `dirco.gov.za` | Official contacts of South African missions abroad and foreign missions in South Africa, plus consular advice, for the Emergency card and Visa. | facts only | yes | no |
-| `enwiki-dump` | `dumps.wikimedia.org` | Facts from English Wikipedia: places, airport destination tables, emergency numbers and plug and voltage types, for Places to see, Flights, the Emergency card and the Packing list; also history and curiosities for Place facts. | share-alike | yes | no |
+| `enwiki-dump` | `dumps.wikimedia.org` | Facts from English Wikipedia: places, airport destination tables, emergency numbers and plug and voltage types, for Places to see, Flights, the Emergency card and the Packing list. | share-alike | yes | no |
 | `fcdo-content-api` | `www.gov.uk` | Official UK travel advice per country (entry rules, safety, local laws, emergency numbers) for Visa, Emergency card and Travel tips. | open | yes | no |
 | `gov-svalbard` | `www.sysselmesteren.no` | Governor of Svalbard: visitor rules, polar bear safety, notification duty, news, for Travel tips, the Emergency card and Activities. | facts only | yes | no |
 | `gov-westerncape` | `www.westerncape.gov.za` | Western Cape Government: province service and safety info (Wesgro is OWNER-DECISION), for Travel tips, the Emergency card and Events. | facts only | yes | no |
@@ -3152,7 +3159,7 @@ docs/wiki/Place-Facts-Data.md).
 | `official-prague-eu` | `prague.eu` | Official Prague visitor pass, free events and city information, for Activities, Events, Places to see and Local transportation. | facts only | yes | no |
 | `official-romapass` | `www.romapass.it` | The official Rome city card (Roma Capitale) with free museum entries and public transport, for Activities and Local transportation. | facts only | yes | no |
 | `opentransportdata-swiss` | `data.opentransportdata.swiss` | The national Swiss timetable (SBB, PostBus, city transit, boats and cable cars) for Local transportation. | API terms | yes | no |
-| `osm-geofabrik` | `download.geofabrik.de` | OpenStreetMap hotels, sights and transit stops per region, for Hotels, Places to see and Local transportation; also history and curiosities for Place facts. | share-alike | yes | no |
+| `osm-geofabrik` | `download.geofabrik.de` | OpenStreetMap hotels, sights and transit stops per region, for Hotels, Places to see and Local transportation. | share-alike | yes | no |
 | `ovapi-gtfs-nl` | `gtfs.ovapi.nl` | All Dutch train, bus, tram and metro timetables for Local transportation. | open | yes | no |
 | `prague-pid-gtfs` | `data.pid.cz` | Prague and Central Bohemia metro, tram, bus, rail and ferry lines and stations, for Local transportation. | open | yes | no |
 | `ref-afdc-ev-emissions` | `afdc.energy.gov` | DOE Alternative Fuels Data Center (EV emissions, data downloads): EV vs ICE emissions by US state grid mix; charging-station dumps, for the trip Carbon footprint and Local transportation. | open | yes | no |
@@ -3337,7 +3344,7 @@ docs/wiki/Place-Facts-Data.md).
 | `transitland` | `transit.land` | Public-transit operators and their routes and stops by city, for Local transportation. | API terms | yes | yes |
 | `translink-seq-gtfs` | `gtfsrt.api.translink.com.au` | Brisbane, Gold Coast and Sunshine Coast buses, trains, ferries and trams, for Local transportation. | open | yes | no |
 | `vic-gtfs` | `opendata.transport.vic.gov.au` | Melbourne and Victoria train, tram and bus timetables for Local transportation. | open | yes | no |
-| `wikivoyage-dump` | `dumps.wikimedia.org` | Wikivoyage destination guides (sights, things to do, where to stay, getting around, SIM and tips) for those app sections; also history and curiosities for Place facts. | share-alike | yes | no |
+| `wikivoyage-dump` | `dumps.wikimedia.org` | Wikivoyage destination guides (sights, things to do, where to stay, getting around, SIM and tips) for those app sections. | share-alike | yes | no |
 | `api-metlink-nz` | `opendata.metlink.org.nz` | Metlink Open Data (Wellington): Wellington public transport timetables (GTFS and real-time), for Local transportation. | facts only | no | yes |
 | `api-nrel-afdc` | `developer.nrel.gov` | NREL Developer API (AFDC stations, vehicle data): EV charging stations and alt-fuel vehicle data as JSON, for the trip Carbon footprint and Local transportation. | API terms | no | yes |
 | `api-tdx-taiwan` | `tdx.transportdata.tw` | Taiwan Transport Data eXchange (TDX): Taiwan rail, bus, metro timetables and tourism points of interest, for Local transportation, Places to see and Events. | facts only | no | yes |
@@ -3484,7 +3491,7 @@ docs/wiki/Place-Facts-Data.md).
 | `cfia-travellers` | `inspection.canada.ca` | Which food, plants and animals travellers may bring into Canada, for Travel tips and Packing. | facts only | yes | no |
 | `customs-sag-cl` | `www.sag.gob.cl` | SAG Chile (agricultural/livestock service: traveller declaration): Chile's strict food, plant and animal import rules for travellers (SAG declaration), for Travel tips, the Packing list and Visa. | share-alike | yes | no |
 | `customs-sars` | `www.sars.gov.za` | SARS Customs: traveller allowances: Official South African duty-free allowances and declarations, for Travel tips and the Packing list. | facts only | yes | no |
-| `enwiki-dump` | `dumps.wikimedia.org` | Facts from English Wikipedia: places, airport destination tables, emergency numbers and plug and voltage types, for Places to see, Flights, the Emergency card and the Packing list; also history and curiosities for Place facts. | share-alike | yes | no |
+| `enwiki-dump` | `dumps.wikimedia.org` | Facts from English Wikipedia: places, airport destination tables, emergency numbers and plug and voltage types, for Places to see, Flights, the Emergency card and the Packing list. | share-alike | yes | no |
 | `eu-food-pets-travel` | `food.ec.europa.eu` | The EU pet passport, rabies and microchip rules and the ban on meat and dairy in luggage from outside the EU, for Travel tips and Packing. | open | yes | no |
 | `eu-youreurope-travel` | `europa.eu` | EU duty-free allowances for alcohol, tobacco and cash, and the rules for food, pets and luggage when entering the EU, for Travel tips and Packing. | open | yes | no |
 | `gov-afcd-hk-pets` | `www.afcd.gov.hk` | Hong Kong AFCD: bringing pets in: dog and cat import rules for Hong Kong, for Travel tips and the Packing list. | facts only | yes | no |
@@ -3504,7 +3511,7 @@ docs/wiki/Place-Facts-Data.md).
 | `revenue-ie-travellers` | `www.revenue.ie` | Ireland's duty-free allowances and customs rules for travellers arriving from outside and within the EU, for Travel tips and Packing. | open | yes | no |
 | `sg-customs-travellers` | `www.customs.gov.sg` | Singapore's GST relief, duty-free concession, no duty-free cigarettes and prohibited goods (chewing gum, e-cigarettes), for Travel tips and Packing. | facts only | yes | no |
 | `tb-lapland` | `lapland.fi` | Visit Lapland (House of Lapland): official visitor guide, for Activities, Weather and the Packing list. | facts only | yes | no |
-| `wikivoyage-dump` | `dumps.wikimedia.org` | Wikivoyage destination guides (sights, things to do, where to stay, getting around, SIM and tips) for those app sections; also history and curiosities for Place facts. | share-alike | yes | no |
+| `wikivoyage-dump` | `dumps.wikimedia.org` | Wikivoyage destination guides (sights, things to do, where to stay, getting around, SIM and tips) for those app sections. | share-alike | yes | no |
 | `aphis-pet-travel` | `www.aphis.usda.gov` | Rules for taking pets out of or into the US, by destination country, for Travel tips and Packing. | open | no | no |
 | `blog-outsideonline` | `www.outsideonline.com` | Adventure-travel and outdoor trip articles, for Activities, Packing list and Travel tips. | facts only | no | no |
 | `dubai-customs-passengers` | `www.dubaicustoms.gov.ae` | UAE duty-free allowances and banned items (medicines, e-cigarettes), for Travel tips and Packing. | facts only | no | no |
@@ -3585,6 +3592,43 @@ docs/wiki/Place-Facts-Data.md).
 | `visitscotland` | `www.visitscotland.com` | Official Scottish road trips, itineraries, events and food trails, for the itinerary, Activities, Events and Places to see. | facts only | yes | no |
 | `visitsweden` | `visitsweden.com` | Official Swedish destinations and trip ideas, for Places to see and the itinerary. | facts only | yes | no |
 | `wien-info` | `www.wien.info` | Vienna events, Heurigen wine taverns, coffee houses and suggested itineraries, for Events, Activities, the itinerary and Places to see. | facts only | yes | no |
+| `wiki-facts-ar` | `ar.wikipedia.org` | ar Wikipedia hook pages (Did you know, On this day, unusual articles): short sourced hooks that name places, for Place facts and Itinerary. | share-alike | yes | no |
+| `wiki-facts-bg` | `bg.wikipedia.org` | bg Wikipedia hook pages (Did you know, On this day, unusual articles): short sourced hooks that name places, for Place facts and Itinerary. | share-alike | yes | no |
+| `wiki-facts-bn` | `bn.wikipedia.org` | bn Wikipedia hook pages (Did you know, On this day, unusual articles): short sourced hooks that name places, for Place facts and Itinerary. | share-alike | yes | no |
+| `wiki-facts-ca` | `ca.wikipedia.org` | ca Wikipedia hook pages (Did you know, On this day, unusual articles): short sourced hooks that name places, for Place facts and Itinerary. | share-alike | yes | no |
+| `wiki-facts-cs` | `cs.wikipedia.org` | cs Wikipedia hook pages (Did you know, On this day, unusual articles): short sourced hooks that name places, for Place facts and Itinerary. | share-alike | yes | no |
+| `wiki-facts-da` | `da.wikipedia.org` | da Wikipedia hook pages (Did you know, On this day, unusual articles): short sourced hooks that name places, for Place facts and Itinerary. | share-alike | yes | no |
+| `wiki-facts-de` | `de.wikipedia.org` | de Wikipedia hook pages (Did you know, On this day, unusual articles): short sourced hooks that name places, for Place facts and Itinerary. | share-alike | yes | no |
+| `wiki-facts-es` | `es.wikipedia.org` | es Wikipedia hook pages (Did you know, On this day, unusual articles): short sourced hooks that name places, for Place facts and Itinerary. | share-alike | yes | no |
+| `wiki-facts-et` | `et.wikipedia.org` | et Wikipedia hook pages (Did you know, On this day, unusual articles): short sourced hooks that name places, for Place facts and Itinerary. | share-alike | yes | no |
+| `wiki-facts-fa` | `fa.wikipedia.org` | fa Wikipedia hook pages (Did you know, On this day, unusual articles): short sourced hooks that name places, for Place facts and Itinerary. | share-alike | yes | no |
+| `wiki-facts-fi` | `fi.wikipedia.org` | fi Wikipedia hook pages (Did you know, On this day, unusual articles): short sourced hooks that name places, for Place facts and Itinerary. | share-alike | yes | no |
+| `wiki-facts-fr` | `fr.wikipedia.org` | fr Wikipedia hook pages (Did you know, On this day, unusual articles): short sourced hooks that name places, for Place facts and Itinerary. | share-alike | yes | no |
+| `wiki-facts-he` | `he.wikipedia.org` | he Wikipedia hook pages (Did you know, On this day, unusual articles): short sourced hooks that name places, for Place facts and Itinerary. | share-alike | yes | no |
+| `wiki-facts-hi` | `hi.wikipedia.org` | hi Wikipedia hook pages (Did you know, On this day, unusual articles): short sourced hooks that name places, for Place facts and Itinerary. | share-alike | yes | no |
+| `wiki-facts-hu` | `hu.wikipedia.org` | hu Wikipedia hook pages (Did you know, On this day, unusual articles): short sourced hooks that name places, for Place facts and Itinerary. | share-alike | yes | no |
+| `wiki-facts-id` | `id.wikipedia.org` | id Wikipedia hook pages (Did you know, On this day, unusual articles): short sourced hooks that name places, for Place facts and Itinerary. | share-alike | yes | no |
+| `wiki-facts-it` | `it.wikipedia.org` | it Wikipedia hook pages (Did you know, On this day, unusual articles): short sourced hooks that name places, for Place facts and Itinerary. | share-alike | yes | no |
+| `wiki-facts-ja` | `ja.wikipedia.org` | ja Wikipedia hook pages (Did you know, On this day, unusual articles): short sourced hooks that name places, for Place facts and Itinerary. | share-alike | yes | no |
+| `wiki-facts-ko` | `ko.wikipedia.org` | ko Wikipedia hook pages (Did you know, On this day, unusual articles): short sourced hooks that name places, for Place facts and Itinerary. | share-alike | yes | no |
+| `wiki-facts-ms` | `ms.wikipedia.org` | ms Wikipedia hook pages (Did you know, On this day, unusual articles): short sourced hooks that name places, for Place facts and Itinerary. | share-alike | yes | no |
+| `wiki-facts-nb` | `no.wikipedia.org` | no Wikipedia hook pages (Did you know, On this day, unusual articles): short sourced hooks that name places, for Place facts and Itinerary. | share-alike | yes | no |
+| `wiki-facts-nl` | `nl.wikipedia.org` | nl Wikipedia hook pages (Did you know, On this day, unusual articles): short sourced hooks that name places, for Place facts and Itinerary. | share-alike | yes | no |
+| `wiki-facts-pl` | `pl.wikipedia.org` | pl Wikipedia hook pages (Did you know, On this day, unusual articles): short sourced hooks that name places, for Place facts and Itinerary. | share-alike | yes | no |
+| `wiki-facts-pt` | `pt.wikipedia.org` | pt Wikipedia hook pages (Did you know, On this day, unusual articles): short sourced hooks that name places, for Place facts and Itinerary. | share-alike | yes | no |
+| `wiki-facts-ro` | `ro.wikipedia.org` | ro Wikipedia hook pages (Did you know, On this day, unusual articles): short sourced hooks that name places, for Place facts and Itinerary. | share-alike | yes | no |
+| `wiki-facts-ru` | `ru.wikipedia.org` | ru Wikipedia hook pages (Did you know, On this day, unusual articles): short sourced hooks that name places, for Place facts and Itinerary. | share-alike | yes | no |
+| `wiki-facts-simple` | `simple.wikipedia.org` | simple Wikipedia hook pages (Did you know, On this day, unusual articles): short sourced hooks that name places, for Place facts and Itinerary. | share-alike | yes | no |
+| `wiki-facts-sk` | `sk.wikipedia.org` | sk Wikipedia hook pages (Did you know, On this day, unusual articles): short sourced hooks that name places, for Place facts and Itinerary. | share-alike | yes | no |
+| `wiki-facts-sl` | `sl.wikipedia.org` | sl Wikipedia hook pages (Did you know, On this day, unusual articles): short sourced hooks that name places, for Place facts and Itinerary. | share-alike | yes | no |
+| `wiki-facts-sr` | `sr.wikipedia.org` | sr Wikipedia hook pages (Did you know, On this day, unusual articles): short sourced hooks that name places, for Place facts and Itinerary. | share-alike | yes | no |
+| `wiki-facts-sv` | `sv.wikipedia.org` | sv Wikipedia hook pages (Did you know, On this day, unusual articles): short sourced hooks that name places, for Place facts and Itinerary. | share-alike | yes | no |
+| `wiki-facts-ta` | `ta.wikipedia.org` | ta Wikipedia hook pages (Did you know, On this day, unusual articles): short sourced hooks that name places, for Place facts and Itinerary. | share-alike | yes | no |
+| `wiki-facts-th` | `th.wikipedia.org` | th Wikipedia hook pages (Did you know, On this day, unusual articles): short sourced hooks that name places, for Place facts and Itinerary. | share-alike | yes | no |
+| `wiki-facts-tr` | `tr.wikipedia.org` | tr Wikipedia hook pages (Did you know, On this day, unusual articles): short sourced hooks that name places, for Place facts and Itinerary. | share-alike | yes | no |
+| `wiki-facts-uk` | `uk.wikipedia.org` | uk Wikipedia hook pages (Did you know, On this day, unusual articles): short sourced hooks that name places, for Place facts and Itinerary. | share-alike | yes | no |
+| `wiki-facts-vi` | `vi.wikipedia.org` | vi Wikipedia hook pages (Did you know, On this day, unusual articles): short sourced hooks that name places, for Place facts and Itinerary. | share-alike | yes | no |
+| `wiki-facts-zh` | `zh.wikipedia.org` | zh Wikipedia hook pages (Did you know, On this day, unusual articles): short sourced hooks that name places, for Place facts and Itinerary. | share-alike | yes | no |
 | `wine-routes-spain` | `wineroutesofspain.com` | Rutas del Vino de España (ACEVIN official): 37 certified wine routes, wineries, events, for Activities, Events and the itinerary. | facts only | yes | no |
 | `wine-wosa` | `www.wosa.co.za` | Wines of South Africa (WOSA): Cape winelands routes, for Activities and the itinerary. | facts only | yes | no |
 | `worldbank-wdi-bulk` | `databank.worldbank.org` | Price level ratio and purchasing-power parity for every country, for Travel tips cost guidance and itinerary budgets. | open | yes | no |
@@ -3596,48 +3640,11 @@ docs/wiki/Place-Facts-Data.md).
 | `korea-tourapi` | `apis.data.go.kr` | National Korean festivals, restaurants, sights and official travel courses, for Events, Activities, Places to see and the itinerary. | facts only | no | yes |
 | `myswitzerland-open-data` | `opendata.myswitzerland.io` | Swiss sights, experiences and tours as structured data, for Places to see, Activities and the itinerary. | facts only | no | yes |
 | `nager-date` | `date.nager.at` | Public holidays per country (closures and crowds) for Events and the itinerary; robots.txt disallows us, so off. | API terms | no | no |
-| `nps-data-api` | `developer.nps.gov` | US national park things to do, events and tours as structured data, for Activities, Events and the itinerary; also history and curiosities for Place facts. | facts only | no | yes |
+| `nps-data-api` | `developer.nps.gov` | US national park things to do, events and tours as structured data, for Activities, Events and the itinerary. | facts only | no | yes |
 | `od-iana-tzdb` | `data.iana.org` | IANA Time Zone Database: Local time and daylight-saving rules at the destination, for Flights, the itinerary and Travel tips. | open | no | no |
 | `ontd-night-trains` | `back-on-track-eu.github.io` | All of about 205 regular European sleeper-train lines (operators, stops, days, classes), the flight-free option for an itinerary leg in Local transportation. | share-alike | no | no |
 | `sg-hawker-centres` | `api-production.data.gov.sg` | Singapore's cheap-food hawker centres with locations and cleaning-closure dates, for Places to see, Travel tips and the itinerary. | open | no | no |
 | `visitrwanda` | `visitrwanda.com` | Official Rwandan itineraries, events and destinations, for the itinerary, Events and Places to see. | facts only | no | no |
-| `wiki-facts-ar` | `ar.wikipedia.org` | ar Wikipedia hook pages (Did you know, On this day, unusual articles): short sourced hooks that name places, for Place facts and Itinerary. | share-alike | no | no |
-| `wiki-facts-bg` | `bg.wikipedia.org` | bg Wikipedia hook pages (Did you know, On this day, unusual articles): short sourced hooks that name places, for Place facts and Itinerary. | share-alike | no | no |
-| `wiki-facts-bn` | `bn.wikipedia.org` | bn Wikipedia hook pages (Did you know, On this day, unusual articles): short sourced hooks that name places, for Place facts and Itinerary. | share-alike | no | no |
-| `wiki-facts-ca` | `ca.wikipedia.org` | ca Wikipedia hook pages (Did you know, On this day, unusual articles): short sourced hooks that name places, for Place facts and Itinerary. | share-alike | no | no |
-| `wiki-facts-cs` | `cs.wikipedia.org` | cs Wikipedia hook pages (Did you know, On this day, unusual articles): short sourced hooks that name places, for Place facts and Itinerary. | share-alike | no | no |
-| `wiki-facts-da` | `da.wikipedia.org` | da Wikipedia hook pages (Did you know, On this day, unusual articles): short sourced hooks that name places, for Place facts and Itinerary. | share-alike | no | no |
-| `wiki-facts-de` | `de.wikipedia.org` | de Wikipedia hook pages (Did you know, On this day, unusual articles): short sourced hooks that name places, for Place facts and Itinerary. | share-alike | no | no |
-| `wiki-facts-es` | `es.wikipedia.org` | es Wikipedia hook pages (Did you know, On this day, unusual articles): short sourced hooks that name places, for Place facts and Itinerary. | share-alike | no | no |
-| `wiki-facts-et` | `et.wikipedia.org` | et Wikipedia hook pages (Did you know, On this day, unusual articles): short sourced hooks that name places, for Place facts and Itinerary. | share-alike | no | no |
-| `wiki-facts-fa` | `fa.wikipedia.org` | fa Wikipedia hook pages (Did you know, On this day, unusual articles): short sourced hooks that name places, for Place facts and Itinerary. | share-alike | no | no |
-| `wiki-facts-fi` | `fi.wikipedia.org` | fi Wikipedia hook pages (Did you know, On this day, unusual articles): short sourced hooks that name places, for Place facts and Itinerary. | share-alike | no | no |
-| `wiki-facts-fr` | `fr.wikipedia.org` | fr Wikipedia hook pages (Did you know, On this day, unusual articles): short sourced hooks that name places, for Place facts and Itinerary. | share-alike | no | no |
-| `wiki-facts-he` | `he.wikipedia.org` | he Wikipedia hook pages (Did you know, On this day, unusual articles): short sourced hooks that name places, for Place facts and Itinerary. | share-alike | no | no |
-| `wiki-facts-hi` | `hi.wikipedia.org` | hi Wikipedia hook pages (Did you know, On this day, unusual articles): short sourced hooks that name places, for Place facts and Itinerary. | share-alike | no | no |
-| `wiki-facts-hu` | `hu.wikipedia.org` | hu Wikipedia hook pages (Did you know, On this day, unusual articles): short sourced hooks that name places, for Place facts and Itinerary. | share-alike | no | no |
-| `wiki-facts-id` | `id.wikipedia.org` | id Wikipedia hook pages (Did you know, On this day, unusual articles): short sourced hooks that name places, for Place facts and Itinerary. | share-alike | no | no |
-| `wiki-facts-it` | `it.wikipedia.org` | it Wikipedia hook pages (Did you know, On this day, unusual articles): short sourced hooks that name places, for Place facts and Itinerary. | share-alike | no | no |
-| `wiki-facts-ja` | `ja.wikipedia.org` | ja Wikipedia hook pages (Did you know, On this day, unusual articles): short sourced hooks that name places, for Place facts and Itinerary. | share-alike | no | no |
-| `wiki-facts-ko` | `ko.wikipedia.org` | ko Wikipedia hook pages (Did you know, On this day, unusual articles): short sourced hooks that name places, for Place facts and Itinerary. | share-alike | no | no |
-| `wiki-facts-ms` | `ms.wikipedia.org` | ms Wikipedia hook pages (Did you know, On this day, unusual articles): short sourced hooks that name places, for Place facts and Itinerary. | share-alike | no | no |
-| `wiki-facts-nb` | `no.wikipedia.org` | no Wikipedia hook pages (Did you know, On this day, unusual articles): short sourced hooks that name places, for Place facts and Itinerary. | share-alike | no | no |
-| `wiki-facts-nl` | `nl.wikipedia.org` | nl Wikipedia hook pages (Did you know, On this day, unusual articles): short sourced hooks that name places, for Place facts and Itinerary. | share-alike | no | no |
-| `wiki-facts-pl` | `pl.wikipedia.org` | pl Wikipedia hook pages (Did you know, On this day, unusual articles): short sourced hooks that name places, for Place facts and Itinerary. | share-alike | no | no |
-| `wiki-facts-pt` | `pt.wikipedia.org` | pt Wikipedia hook pages (Did you know, On this day, unusual articles): short sourced hooks that name places, for Place facts and Itinerary. | share-alike | no | no |
-| `wiki-facts-ro` | `ro.wikipedia.org` | ro Wikipedia hook pages (Did you know, On this day, unusual articles): short sourced hooks that name places, for Place facts and Itinerary. | share-alike | no | no |
-| `wiki-facts-ru` | `ru.wikipedia.org` | ru Wikipedia hook pages (Did you know, On this day, unusual articles): short sourced hooks that name places, for Place facts and Itinerary. | share-alike | no | no |
-| `wiki-facts-simple` | `simple.wikipedia.org` | simple Wikipedia hook pages (Did you know, On this day, unusual articles): short sourced hooks that name places, for Place facts and Itinerary. | share-alike | no | no |
-| `wiki-facts-sk` | `sk.wikipedia.org` | sk Wikipedia hook pages (Did you know, On this day, unusual articles): short sourced hooks that name places, for Place facts and Itinerary. | share-alike | no | no |
-| `wiki-facts-sl` | `sl.wikipedia.org` | sl Wikipedia hook pages (Did you know, On this day, unusual articles): short sourced hooks that name places, for Place facts and Itinerary. | share-alike | no | no |
-| `wiki-facts-sr` | `sr.wikipedia.org` | sr Wikipedia hook pages (Did you know, On this day, unusual articles): short sourced hooks that name places, for Place facts and Itinerary. | share-alike | no | no |
-| `wiki-facts-sv` | `sv.wikipedia.org` | sv Wikipedia hook pages (Did you know, On this day, unusual articles): short sourced hooks that name places, for Place facts and Itinerary. | share-alike | no | no |
-| `wiki-facts-ta` | `ta.wikipedia.org` | ta Wikipedia hook pages (Did you know, On this day, unusual articles): short sourced hooks that name places, for Place facts and Itinerary. | share-alike | no | no |
-| `wiki-facts-th` | `th.wikipedia.org` | th Wikipedia hook pages (Did you know, On this day, unusual articles): short sourced hooks that name places, for Place facts and Itinerary. | share-alike | no | no |
-| `wiki-facts-tr` | `tr.wikipedia.org` | tr Wikipedia hook pages (Did you know, On this day, unusual articles): short sourced hooks that name places, for Place facts and Itinerary. | share-alike | no | no |
-| `wiki-facts-uk` | `uk.wikipedia.org` | uk Wikipedia hook pages (Did you know, On this day, unusual articles): short sourced hooks that name places, for Place facts and Itinerary. | share-alike | no | no |
-| `wiki-facts-vi` | `vi.wikipedia.org` | vi Wikipedia hook pages (Did you know, On this day, unusual articles): short sourced hooks that name places, for Place facts and Itinerary. | share-alike | no | no |
-| `wiki-facts-zh` | `zh.wikipedia.org` | zh Wikipedia hook pages (Did you know, On this day, unusual articles): short sourced hooks that name places, for Place facts and Itinerary. | share-alike | no | no |
 
 ## Carbon footprint
 
@@ -3963,7 +3970,7 @@ docs/wiki/Place-Facts-Data.md).
 | `arch-akofena` | `www.revue-akofena.com` | Akofena (Ivorian journal, CRAC-INSAAC): occasional West African toponymy and local history (low yield), for Place facts. | open | yes | no |
 | `arch-aodl` | `aodl.org` | African Online Digital Library (MSU): curated West African heritage collections and exhibits, for Place facts. | facts only | yes | no |
 | `arch-auckland-museum` | `www.aucklandmuseum.com` | Auckland War Memorial Museum stories: Auckland and NZ history stories, for Place facts. | facts only | yes | no |
-| `arch-bibalex` | `www.bibalex.org` | Bibliotheca Alexandrina: Page)/`, for Place facts. | facts only | yes | no |
+| `arch-bibalex` | `www.bibalex.org` | Bibliotheca Alexandrina: Alexandria and Egypt heritage projects (Memory of Modern Egypt lives on a subdomain, not vetted), for Place facts. | facts only | yes | no |
 | `arch-canterbury-museum` | `www.canterburymuseum.com` | Canterbury Museum (explore): Canterbury and Antarctic history stories, for Place facts. | open | yes | no |
 | `arch-codesria` | `codesria.org` | CODESRIA: Afrika Zamani and African history publications (low direct yield), for Place facts. | facts only | yes | no |
 | `arch-dloc` | `dloc.com` | Digital Library of the Caribbean (dLOC): Caribbean island and town history items (descriptions only), for Place facts. | facts only | yes | no |
@@ -3972,7 +3979,7 @@ docs/wiki/Place-Facts-Data.md).
 | `arch-hypotheses` | `hypotheses.org` | Hypotheses (OpenEdition academic blogs): research notes on African and Middle Eastern places, for Place facts. | facts only | yes | no |
 | `arch-jps` | `thepolynesiansociety.org` | Journal of the Polynesian Society (Waka Kuaka): peer-reviewed Pacific history and place studies; use open-access articles only, for Place facts. | facts only | yes | no |
 | `arch-lwl-westfalen-regional` | `www.lwl.org` | Westfalen regional (LWL): Westphalian towns, regions and history, for Place facts and Places to see. | facts only | yes | no |
-| `arch-mandela-foundation` | `www.nelsonmandela.org` | Nelson Mandela Foundation: content)/`, for Place facts. | facts only | yes | no |
+| `arch-mandela-foundation` | `www.nelsonmandela.org` | Nelson Mandela Foundation: Mandela-linked places (Qunu, Mvezo, Houghton), for Place facts. | facts only | yes | no |
 | `arch-oapen` | `library.oapen.org` | OAPEN Library: open-licensed monographs on African and Middle Eastern history, for Place facts. | open | yes | no |
 | `arch-openedition-books` | `books.openedition.org` | OpenEdition Books (IRD, IFRA, IFPO, CEMCA presses): monographs on Levant, Maghreb and African towns, for Place facts. | facts only | yes | no |
 | `arch-openedition-journals` | `journals.openedition.org` | OpenEdition Journals (Cahiers d'études africaines, Afriques, Journal des africanistes, Re…: peer-reviewed place histories for cities and villages across Africa and the Arab world, for Place facts. | facts only | yes | no |
@@ -3992,15 +3999,14 @@ docs/wiki/Place-Facts-Data.md).
 | `city-yerevan` | `www.yerevan.am` | Yerevan Municipality: city notices (transport changes, events), for Events and Local transportation; also history and curiosities for Place facts. | facts only | yes | no |
 | `doc-nz-parks` | `www.doc.govt.nz` | Official New Zealand tracks, huts, campsites, Great Walks and the outdoor care code, for Places to see, Activities, Travel tips and the itinerary; also history and curiosities for Place facts. | open | yes | no |
 | `egymonuments` | `egymonuments.gov.eg` | Official opening hours, tickets and descriptions of Egypt's monuments, museums and archaeological sites, for Places to see and Activities; also history and curiosities for Place facts. | facts only | yes | no |
-| `enwiki-dump` | `dumps.wikimedia.org` | Facts from English Wikipedia: places, airport destination tables, emergency numbers and plug and voltage types, for Places to see, Flights, the Emergency card and the Packing list; also history and curiosities for Place facts. | share-alike | yes | no |
 | `fx-64-parishes` | `64parishes.org` | 64 Parishes: history and curiosities of the places it covers, for Place facts and Places to see. | facts only | yes | no |
 | `fx-abandonedspaces` | `www.abandonedspaces.com` | Abandoned Spaces: history of abandoned towns, ghost towns, for Place facts. | facts only | yes | no |
-| `fx-african-world-heritage` | `africanworldheritagesites.org` | African World Heritage Sites: natural-places, for Place facts. | facts only | yes | no |
+| `fx-african-world-heritage` | `africanworldheritagesites.org` | African World Heritage Sites: per-site histories of every African World Heritage site, for Place facts and Places to see. | facts only | yes | no |
 | `fx-alondoninheritance` | `alondoninheritance.com` | A London Inheritance: London street-by-street history, for Place facts and Free walking tours. | facts only | yes | no |
 | `fx-aramcoworld` | `www.aramcoworld.com` | AramcoWorld: history and culture of Arab/Islamic-world cities, for Place facts and Places to see. | facts only | yes | no |
 | `fx-archaeology-mag` | `archaeology.org` | Archaeology Magazine (AIA): discoveries at named sites, for Place facts and Places to see. | facts only | yes | no |
 | `fx-atlas-of-wonders` | `feeds.feedburner.com` | Atlas of Wonders: natural/man-made wonders (low priority), for Place facts and Places to see. | facts only | yes | no |
-| `fx-bibleplaces` | `www.bibleplaces.com`, `bibleplaces.com` | BiblePlaces.com: product, for Place facts. | facts only | yes | no |
+| `fx-bibleplaces` | `www.bibleplaces.com`, `bibleplaces.com` | BiblePlaces.com: archaeological site histories in Israel, Palestine, Jordan and Egypt, for Place facts and Places to see. | facts only | yes | no |
 | `fx-bowery-boys` | `www.boweryboyshistory.com` | The Bowery Boys: NYC neighbourhood history, for Place facts and Free walking tours. | facts only | yes | no |
 | `fx-burkina24-culture` | `burkina24.com` | Burkina24 (culture): Burkinabè heritage news, for Place facts. | facts only | yes | no |
 | `fx-cervantes-historia` | `www.cervantesvirtual.com` | Biblioteca Virtual Miguel de Cervantes (history portals): country and city history portals for Spanish America (low priority, mostly literature), for Place facts. | facts only | yes | no |
@@ -4009,9 +4015,9 @@ docs/wiki/Place-Facts-Data.md).
 | `fx-conversation-africa` | `theconversation.com` | The Conversation Africa: academic explainers on African and Middle Eastern places, for Place facts. | facts only | yes | no |
 | `fx-craterre` | `craterre.org` | CRAterre (earthen architecture): earthen heritage sites such as the Djenné mosque and Sahel towns (low yield), for Place facts. | facts only | yes | no |
 | `fx-damninteresting` | `www.damninteresting.com` | Damn Interesting: obscure true stories, many about places, for Place facts. | facts only | yes | no |
-| `fx-discover-islamic-art` | `islamicart.museumwnf.org` | Discover Islamic Art (Museum With No Frontiers): monuments)`, for Place facts. | facts only | yes | no |
+| `fx-discover-islamic-art` | `islamicart.museumwnf.org` | Discover Islamic Art (Museum With No Frontiers): monument records for Islamic heritage across MENA, for Place facts and Places to see. | facts only | yes | no |
 | `fx-enciclopedia-cat` | `www.enciclopedia.cat` | Enciclopèdia.cat (Gran Enciclopèdia Catalana): an entry for every Catalan municipality and many villages and hamlets (history, heritage, population), for Place facts and Places to see. | facts only | yes | no |
-| `fx-encyclopaedia-africana` | `encyclopaediaafricana.com` | Encyclopaedia Africana Project: heroes-and-heroines, for Place facts. | facts only | yes | no |
+| `fx-encyclopaedia-africana` | `encyclopaediaafricana.com` | Encyclopaedia Africana Project: entries on African homelands, kingdoms and heroes, for Place facts. | facts only | yes | no |
 | `fx-encyclopedia-virginia` | `encyclopediavirginia.org` | Encyclopedia Virginia: history and curiosities of the places it covers, for Place facts and Places to see. | facts only | yes | no |
 | `fx-erih` | `www.erih.net`, `erih.net` | European Route of Industrial Heritage: industrial heritage sites with history across Europe, for Place facts, Places to see and Activities. | facts only | yes | no |
 | `fx-europanostra` | `www.europanostra.org` | Europa Nostra: European Heritage Awards and "7 Most Endangered" site write-ups, for Place facts and Places to see. | facts only | yes | no |
@@ -4039,11 +4045,11 @@ docs/wiki/Place-Facts-Data.md).
 | `fx-qantara` | `www.qantara-med.org` | Qantara: Mediterranean heritage (Institut du monde arabe): monuments and objects of the Mediterranean, Maghreb and Levant, for Place facts. | facts only | yes | no |
 | `fx-radiookapi-identite` | `www.radiookapi.net` | Radio Okapi: Identité culturelle: DRC cultural identity and local history programmes per province, for Place facts. | facts only | yes | no |
 | `fx-rarehistoricalphotos` | `rarehistoricalphotos.com` | Rare Historical Photos: historical context of places in old photos (low priority), for Place facts. | facts only | yes | no |
-| `fx-sahapedia` | `www.sahapedia.org` | Sahapedia: search)`, for Place facts. | open | yes | no |
+| `fx-sahapedia` | `www.sahapedia.org` | Sahapedia: heritage-walk and city-culture essays, for Place facts, Free walking tours and Places to see. | share-alike | yes | no |
 | `fx-sapiens` | `www.sapiens.org` | SAPIENS (anthropology magazine): cultural/archaeological history of places, for Place facts and Places to see. | open | yes | no |
 | `fx-seaarch` | `www.southeastasianarchaeology.com` | SEAArch: Southeast Asian Archaeology: new finds and dated discoveries across SEA (links to the original reports), for Place facts. | facts only | yes | no |
 | `fx-seasite-niu` | `seasite.niu.edu` | SEAsite (Northern Illinois University): culture and history pages for Laos, Cambodia, Myanmar (static, rarely updated), for Place facts. | facts only | yes | no |
-| `fx-siam-society` | `thesiamsociety.org` | The Siam Society (Journal of the Siam Society): publications)`, for Place facts. | facts only | yes | no |
+| `fx-siam-society` | `thesiamsociety.org` | The Siam Society (Journal of the Siam Society): Thai local history (peer-reviewed), for Place facts. | facts only | yes | no |
 | `fx-spitalfieldslife` | `spitalfieldslife.com` | Spitalfields Life: East London street and building history, for Place facts. | facts only | yes | no |
 | `fx-statesymbolsusa` | `statesymbolsusa.org` | State Symbols USA: every official US state symbol with adoption year and statute, for Place facts and Places to see. | facts only | yes | no |
 | `fx-statoids` | `www.statoids.com` | Statoids (administrative divisions of countries): largest, smallest and oldest provinces and counties, odd boundaries, name changes, for Place facts. | facts only | yes | no |
@@ -4067,8 +4073,8 @@ docs/wiki/Place-Facts-Data.md).
 | `gov-sabanew-yemen` | `www.sabanew.net` | Saba Net (sabanew.net): Yemeni heritage news (thin; politically contested agency), for Place facts. | facts only | yes | no |
 | `gov-ungegn` | `unstats.un.org` | UN Group of Experts on Geographical Names: official country and capital names, exonyms. Low volume, for Place facts. | facts only | yes | no |
 | `her-alecso` | `www.alecso.org` | ALECSO (Arab League Educational, Cultural and Scientific Organization): Arab heritage lists and culture news (low yield), for Place facts. | facts only | yes | no |
-| `her-apartheid-museum` | `www.apartheidmuseum.org` | Apartheid Museum: about, for Place facts. | facts only | yes | no |
-| `her-awhf` | `awhf.net` | African World Heritage Fund: wp-)`, for Place facts. | facts only | yes | no |
+| `her-apartheid-museum` | `www.apartheidmuseum.org` | Apartheid Museum: history and curiosities of the places it covers, for Place facts and Activities. | facts only | yes | no |
+| `her-awhf` | `awhf.net` | African World Heritage Fund: pan-African World Heritage site facts, for Place facts. | facts only | yes | no |
 | `her-cadw` | `cadw.gov.wales` | Cadw (Welsh Government historic environment): 130+ castles, abbeys, opening times, events, for Places to see and Events; also history and curiosities for Place facts. | facts only | yes | no |
 | `her-cornwall-heritage-trust` | `www.cornwallheritagetrust.org` | Cornwall Heritage Trust: the trust's Cornish monument sites, for Place facts and Places to see. | facts only | yes | no |
 | `her-keys-to-the-past` | `keystothepast.info` | Keys to the Past (Durham and Northumberland HER): archaeology and history of every parish in the two counties, for Place facts, Places to see and Free walking tours. | facts only | yes | no |
@@ -4081,12 +4087,7 @@ docs/wiki/Place-Facts-Data.md).
 | `her-zamani` | `zamaniproject.org` | Zamani Project (University of Cape Town): pages on documented heritage sites across Africa and the Middle East (Lalibela, Gondar, Kilwa, Petra…), for Place facts and Places to see. | facts only | yes | no |
 | `incredibleindia` | `www.incredibleindia.gov.in` | Official Indian destinations, attractions, festivals and itineraries, for Places to see, the itinerary and Events; also history and curiosities for Place facts. | facts only | yes | no |
 | `mag-hiddeneurope` | `www.hiddeneurope.eu` | hidden europe magazine: travel articles and guides, for Local transportation, Places to see and Travel tips; also history and curiosities for Place facts. | facts only | yes | no |
-| `mag-mexicodesconocido` | `www.mexicodesconocido.com.mx` | Mexican destinations, festivals and things to do (Spanish) from the travel magazine México Desconocido, for Places to see, Events and Activities (headline, link and a short excerpt only); also history and curiosities for Place facts. | facts only | yes | no |
 | `museum-solovki` | `solovky.ru`, `www.solovky.ru` | Solovetsky Museum-Reserve: visiting, transport, events, for Places to see, Events and Local transportation; also history and curiosities for Place facts. | facts only | yes | no |
-| `news-bbc` | `www.bbc.com` | BBC Travel travel-section articles (destination features, openings, travel disruptions) for Travel tips and Places to see (headline, link and a short excerpt only); also history and curiosities for Place facts. | facts only | yes | no |
-| `news-guardian` | `www.theguardian.com` | The Guardian Travel travel-section articles (destination features, openings, travel disruptions) for Travel tips and Places to see (headline, link and a short excerpt only); also history and curiosities for Place facts. | facts only | yes | no |
-| `news-nyt` | `rss.nytimes.com` | New York Times Travel travel-section articles (destination features, openings, travel disruptions) for Travel tips and Places to see (headline, link and a short excerpt only); also history and curiosities for Place facts. | facts only | yes | no |
-| `news-smithsonian` | `www.smithsonianmag.com` | Smithsonian Travel travel-section articles (destination features, openings, travel disruptions) for Travel tips and Places to see (headline, link and a short excerpt only); also history and curiosities for Place facts. | facts only | yes | no |
 | `nps-site` | `www.nps.gov` | Official things to do, tours, trails and ranger events for more than 400 US national parks, for Places to see, Activities, the itinerary and Events; also history and curiosities for Place facts. | open | yes | no |
 | `nsw-national-parks` | `www.nationalparks.nsw.gov.au` | Every New South Wales national park, walking track and campground or cabin, for Places to see, Activities and Hotels; also history and curiosities for Place facts. | open | yes | no |
 | `od-dbpedia` | `dbpedia.org`, `databus.dbpedia.org` | DBpedia (SPARQL + Databus dumps): infobox nicknames, mottos and founding dates not yet in Wikidata; low priority (largely redundant with enwiki-dump), for Place facts and Places to see. | share-alike | yes | no |
@@ -4095,11 +4096,9 @@ docs/wiki/Place-Facts-Data.md).
 | `od-syriaca` | `syriaca.org` | Syriaca.org Gazetteer: historical Syriac and Middle Eastern place gazetteer, for Place facts and Places to see. | open | yes | no |
 | `od-toponimia-galicia` | `toponimia.xunta.gal` | Toponimia de Galicia (Xunta: Proxecto Toponimia): official names of every Galician parish and lugar (hamlet), plus name-origin articles, for Place facts. | open | yes | no |
 | `od-undata-profiles` | `data.un.org` | UNdata country profiles: area, population, capital, economy facts per country, for Place facts. | open | yes | no |
-| `od-wien-ogd` | `data.wien.gv.at` | Vienna's sights and museums plus its public toilets and free Wi-Fi spots, for Places to see and Travel tips; also history and curiosities for Place facts. | open | yes | no |
 | `od-wikidata-entitydata` | `www.wikidata.org` | Wikidata place items (CC0): founding dates, former names, nicknames, mottos, records, twin towns and heritage designations as typed statements, for Place facts and Places to see. | open | yes | no |
 | `od-wmo-extremes` | `wmo.int` | WMO World Weather and Climate Extremes Archive: world, hemispheric and regional records with site, coordinates and date (e.g. Kebili 55.0 °C), for Place facts and Weather. | facts only | yes | no |
 | `official-inah` | `www.inah.gob.mx` | Mexico's national museums and archaeological sites with prices and opening days, for Places to see and Travel tips; also history and curiosities for Place facts. | facts only | yes | no |
-| `osm-geofabrik` | `download.geofabrik.de` | OpenStreetMap hotels, sights and transit stops per region, for Hotels, Places to see and Local transportation; also history and curiosities for Place facts. | share-alike | yes | no |
 | `park-alberta` | `www.albertaparks.ca` | Alberta provincial parks (Kananaskis and others) with visitor information, for Places to see and Activities; also history and curiosities for Place facts. | facts only | yes | no |
 | `park-parks-canada` | `parks.canada.ca` | Canada's national parks and historic sites (conditions, fees, closures), for Places to see, Activities and Travel tips; also history and curiosities for Place facts. | facts only | yes | no |
 | `park-pn-ar` | `www.argentina.gob.ar` | Parques Nacionales Argentina (argentina.gob.ar): Iguazú, Los Glaciares, Nahuel Huapi: fees, rules, closures, for Places to see and Travel tips; also history and curiosities for Place facts. | open | yes | no |
@@ -4124,7 +4123,6 @@ docs/wiki/Place-Facts-Data.md).
 | `ref-sic-cultura-mx` | `sic.cultura.gob.mx` | Sistema de Información Cultural (Secretaría de Cultura): national directory of museums, archaeological zones, theatres and festivals, for Places to see and Events; also history and curiosities for Place facts. | facts only | yes | no |
 | `ref-structurae` | `structurae.net` | Structurae (international database of structures): records per structure (longest, tallest, oldest bridge, dam or tower) by town, for Place facts and Places to see. | facts only | yes | no |
 | `ref-swiss-villages` | `swissvillages.org` | Best Swiss Villages (swissvillages.org), for Places to see and Activities; also history and curiosities for Place facts. | facts only | yes | no |
-| `ref-waterfalls` | `www.worldwaterfalldatabase.com` | World Waterfall Database: waterfalls, access notes, for Places to see; also history and curiosities for Place facts. | facts only | yes | no |
 | `ref-zambiatourism` | `www.zambiatourism.com` | Zambia Tourism (private portal): traveller information, for Places to see and Hotels; also history and curiosities for Place facts. | facts only | yes | no |
 | `srilanka-travel` | `www.srilanka.travel` | Official Sri Lankan attractions and destinations, for Places to see; also history and curiosities for Place facts. | facts only | yes | no |
 | `tb-armenia-travel` | `armenia.travel` | Tourism Committee of Armenia: official Armenia board, for Places to see, Events and Travel tips; also history and curiosities for Place facts. | facts only | yes | no |
@@ -4148,7 +4146,6 @@ docs/wiki/Place-Facts-Data.md).
 | `tb-itraveljerusalem` | `www.itraveljerusalem.com` | iTravelJerusalem (Jerusalem Development Authority): official Jerusalem city guide (goisrael info site is 403), for Places to see, Events and Free walking tours; also history and curiosities for Place facts. | facts only | yes | no |
 | `tb-japan-beautiful-villages` | `japan-utsukushii-mura.com` | The Most Beautiful Villages in Japan association (japan-utsukushii-mura.com), for Places to see and Activities; also history and curiosities for Place facts. | facts only | yes | no |
 | `tb-karnataka` | `karnatakatourism.org` | Karnataka Tourism: Karnataka destinations (Hampi, Mysuru, Coorg), for Places to see and Activities; also history and curiosities for Place facts. | facts only | yes | no |
-| `tb-kazakhstan` | `kazakhstan.travel` | Kazakh Tourism (kazakhstan.travel): Kazakhstan destinations, routes and events, for Places to see, Activities, Events and Travel tips; also history and curiosities for Place facts. | facts only | yes | no |
 | `tb-kerala` | `www.keralatourism.org` | Kerala Tourism: Kerala destinations, festival and event calendar, houseboats, for Places to see, Events and Activities; also history and curiosities for Place facts. | facts only | yes | no |
 | `tb-langkawi` | `naturallylangkawi.my` | Langkawi Development Authority tourism, for Places to see, Activities and Events; also history and curiosities for Place facts. | facts only | yes | no |
 | `tb-madagascar` | `madagascar-tourisme.com` | Office National du Tourisme de Madagascar: official national guide (FR/EN), for Places to see, Activities, Visa and Travel tips; also history and curiosities for Place facts. | facts only | yes | no |
@@ -4156,7 +4153,6 @@ docs/wiki/Place-Facts-Data.md).
 | `tb-martinique` | `www.martinique.org` | Martinique (Comité Martiniquais du Tourisme): official visitor guide, for Places to see, Events and Activities; also history and curiosities for Place facts. | facts only | yes | no |
 | `tb-mato-grosso-do-sul` | `www.turismo.ms.gov.br` | Fundtur MS: Pantanal, Bonito, events, for Places to see, Activities and Events; also history and curiosities for Place facts. | facts only | yes | no |
 | `tb-mintoul-cm` | `mintoul.gov.cm` | Ministère du Tourisme et des Loisirs, Cameroun: official visitor guide, for Places to see, Travel tips and Visa; also history and curiosities for Place facts. | facts only | yes | no |
-| `tb-moldova` | `moldova.travel` | Moldova Travel: Official Moldova destinations and things to do (FCDO and the US advise against travel to Transnistria only), for Places to see and Activities; also history and curiosities for Place facts. | facts only | yes | no |
 | `tb-mypenang` | `mypenang.gov.my` | Penang Global Tourism (mypenang): Penang heritage, food and events, for Places to see and Events; also history and curiosities for Place facts. | facts only | yes | no |
 | `tb-nepal-ntb` | `ntb.gov.np` | Nepal Tourism Board: Trekking permits (TIMS), destinations and events; replaces denied welcomenepal.com, for Places to see, Activities, Events and Travel tips; also history and curiosities for Place facts. | facts only | yes | no |
 | `tb-new-caledonia` | `www.newcaledonia.travel` | New Caledonia Tourism: New Caledonia destinations and events, for Places to see, Activities and Events; also history and curiosities for Place facts. | facts only | yes | no |
@@ -4172,7 +4168,6 @@ docs/wiki/Place-Facts-Data.md).
 | `tb-solomons` | `www.visitsolomons.com.sb` | Tourism Solomons: Solomon Islands destinations and practical info, for Places to see, Activities and Travel tips; also history and curiosities for Place facts. | facts only | yes | no |
 | `tb-taiwan-tourism` | `eng.taiwan.net.tw` | Taiwan Tourism Administration (English): National tourism board: attractions, festivals, itineraries, for Places to see, Events, Activities and Travel tips; also history and curiosities for Place facts. | facts only | yes | no |
 | `tb-tourism-cambodia` | `tourismcambodia.org` | Tourism Cambodia portal: Province and attraction guides, Cambodia travel tips, for Places to see, Travel tips and Events; also history and curiosities for Place facts. | facts only | yes | no |
-| `tb-tourism-malaysia-corp` | `www.tourism.gov.my` | Tourism Malaysia (corporate site): Tourism Malaysia campaigns, events and media releases, for Events and Travel tips; also history and curiosities for Place facts. | facts only | yes | no |
 | `tb-tourismpanama` | `www.tourismpanama.com` | Visit Panamá (PROMTUR): official visitor guide, for Places to see, Visa and Activities; also history and curiosities for Place facts. | facts only | yes | no |
 | `tb-travelpalestine` | `www.travelpalestine.ps` | Palestine Ministry of Tourism & Antiquities: Travel Palestine: Bethlehem, Jericho, Hebron, for Places to see, Activities and Events; also history and curiosities for Place facts. | facts only | yes | no |
 | `tb-uruguaynatural` | `uruguaynatural.com` | Uruguay Natural (Ministerio de Turismo): official destinations, for Places to see and Events; also history and curiosities for Place facts. | facts only | yes | no |
@@ -4190,13 +4185,43 @@ docs/wiki/Place-Facts-Data.md).
 | `visitmaldives` | `visitmaldives.com` | Official Maldives islands, resorts areas and sights, for Places to see; also history and curiosities for Place facts. | facts only | yes | no |
 | `visitqatar` | `visitqatar.com` | Qatar's official events calendar, things to do and itineraries, for Events, Activities and the itinerary; also history and curiosities for Place facts. | facts only | yes | no |
 | `visitsaudi` | `www.visitsaudi.com` | Official Saudi destinations, events and things to do, for Events and Places to see; also history and curiosities for Place facts. | facts only | yes | no |
-| `wikivoyage-dump` | `dumps.wikimedia.org` | Wikivoyage destination guides (sights, things to do, where to stay, getting around, SIM and tips) for those app sections; also history and curiosities for Place facts. | share-alike | yes | no |
-| `wikivoyage-dump-de` | `dumps.wikimedia.org` | German Wikivoyage destination guides: destinations, sights and places to stay with coordinates, for Places to see and Hotels; also history and curiosities for Place facts. | share-alike | yes | no |
-| `wikivoyage-dump-es` | `dumps.wikimedia.org` | Spanish Wikivoyage destination guides: destinations, sights and places to stay with coordinates, for Places to see and Hotels; also history and curiosities for Place facts. | share-alike | yes | no |
-| `wikivoyage-dump-fa` | `dumps.wikimedia.org` | Persian Wikivoyage destination guides: destinations, sights and places to stay with coordinates, for Places to see and Hotels; also history and curiosities for Place facts. | share-alike | yes | no |
-| `wikivoyage-dump-he` | `dumps.wikimedia.org` | Hebrew Wikivoyage destination guides: destinations, sights and places to stay with coordinates, for Places to see and Hotels; also history and curiosities for Place facts. | share-alike | yes | no |
-| `wikivoyage-dump-ru` | `dumps.wikimedia.org` | Russian Wikivoyage destination guides: destinations, sights and places to stay with coordinates, for Places to see and Hotels; also history and curiosities for Place facts. | share-alike | yes | no |
-| `amusingplanet` | `feeds.feedburner.com` | Unusual places, natural wonders and hidden sights worldwide (headline, link and a short excerpt only), for Places to see; also history and curiosities for Place facts. | facts only | no | no |
+| `wiki-facts-ar` | `ar.wikipedia.org` | ar Wikipedia hook pages (Did you know, On this day, unusual articles): short sourced hooks that name places, for Place facts and Itinerary. | share-alike | yes | no |
+| `wiki-facts-bg` | `bg.wikipedia.org` | bg Wikipedia hook pages (Did you know, On this day, unusual articles): short sourced hooks that name places, for Place facts and Itinerary. | share-alike | yes | no |
+| `wiki-facts-bn` | `bn.wikipedia.org` | bn Wikipedia hook pages (Did you know, On this day, unusual articles): short sourced hooks that name places, for Place facts and Itinerary. | share-alike | yes | no |
+| `wiki-facts-ca` | `ca.wikipedia.org` | ca Wikipedia hook pages (Did you know, On this day, unusual articles): short sourced hooks that name places, for Place facts and Itinerary. | share-alike | yes | no |
+| `wiki-facts-cs` | `cs.wikipedia.org` | cs Wikipedia hook pages (Did you know, On this day, unusual articles): short sourced hooks that name places, for Place facts and Itinerary. | share-alike | yes | no |
+| `wiki-facts-da` | `da.wikipedia.org` | da Wikipedia hook pages (Did you know, On this day, unusual articles): short sourced hooks that name places, for Place facts and Itinerary. | share-alike | yes | no |
+| `wiki-facts-de` | `de.wikipedia.org` | de Wikipedia hook pages (Did you know, On this day, unusual articles): short sourced hooks that name places, for Place facts and Itinerary. | share-alike | yes | no |
+| `wiki-facts-es` | `es.wikipedia.org` | es Wikipedia hook pages (Did you know, On this day, unusual articles): short sourced hooks that name places, for Place facts and Itinerary. | share-alike | yes | no |
+| `wiki-facts-et` | `et.wikipedia.org` | et Wikipedia hook pages (Did you know, On this day, unusual articles): short sourced hooks that name places, for Place facts and Itinerary. | share-alike | yes | no |
+| `wiki-facts-fa` | `fa.wikipedia.org` | fa Wikipedia hook pages (Did you know, On this day, unusual articles): short sourced hooks that name places, for Place facts and Itinerary. | share-alike | yes | no |
+| `wiki-facts-fi` | `fi.wikipedia.org` | fi Wikipedia hook pages (Did you know, On this day, unusual articles): short sourced hooks that name places, for Place facts and Itinerary. | share-alike | yes | no |
+| `wiki-facts-fr` | `fr.wikipedia.org` | fr Wikipedia hook pages (Did you know, On this day, unusual articles): short sourced hooks that name places, for Place facts and Itinerary. | share-alike | yes | no |
+| `wiki-facts-he` | `he.wikipedia.org` | he Wikipedia hook pages (Did you know, On this day, unusual articles): short sourced hooks that name places, for Place facts and Itinerary. | share-alike | yes | no |
+| `wiki-facts-hi` | `hi.wikipedia.org` | hi Wikipedia hook pages (Did you know, On this day, unusual articles): short sourced hooks that name places, for Place facts and Itinerary. | share-alike | yes | no |
+| `wiki-facts-hu` | `hu.wikipedia.org` | hu Wikipedia hook pages (Did you know, On this day, unusual articles): short sourced hooks that name places, for Place facts and Itinerary. | share-alike | yes | no |
+| `wiki-facts-id` | `id.wikipedia.org` | id Wikipedia hook pages (Did you know, On this day, unusual articles): short sourced hooks that name places, for Place facts and Itinerary. | share-alike | yes | no |
+| `wiki-facts-it` | `it.wikipedia.org` | it Wikipedia hook pages (Did you know, On this day, unusual articles): short sourced hooks that name places, for Place facts and Itinerary. | share-alike | yes | no |
+| `wiki-facts-ja` | `ja.wikipedia.org` | ja Wikipedia hook pages (Did you know, On this day, unusual articles): short sourced hooks that name places, for Place facts and Itinerary. | share-alike | yes | no |
+| `wiki-facts-ko` | `ko.wikipedia.org` | ko Wikipedia hook pages (Did you know, On this day, unusual articles): short sourced hooks that name places, for Place facts and Itinerary. | share-alike | yes | no |
+| `wiki-facts-ms` | `ms.wikipedia.org` | ms Wikipedia hook pages (Did you know, On this day, unusual articles): short sourced hooks that name places, for Place facts and Itinerary. | share-alike | yes | no |
+| `wiki-facts-nb` | `no.wikipedia.org` | no Wikipedia hook pages (Did you know, On this day, unusual articles): short sourced hooks that name places, for Place facts and Itinerary. | share-alike | yes | no |
+| `wiki-facts-nl` | `nl.wikipedia.org` | nl Wikipedia hook pages (Did you know, On this day, unusual articles): short sourced hooks that name places, for Place facts and Itinerary. | share-alike | yes | no |
+| `wiki-facts-pl` | `pl.wikipedia.org` | pl Wikipedia hook pages (Did you know, On this day, unusual articles): short sourced hooks that name places, for Place facts and Itinerary. | share-alike | yes | no |
+| `wiki-facts-pt` | `pt.wikipedia.org` | pt Wikipedia hook pages (Did you know, On this day, unusual articles): short sourced hooks that name places, for Place facts and Itinerary. | share-alike | yes | no |
+| `wiki-facts-ro` | `ro.wikipedia.org` | ro Wikipedia hook pages (Did you know, On this day, unusual articles): short sourced hooks that name places, for Place facts and Itinerary. | share-alike | yes | no |
+| `wiki-facts-ru` | `ru.wikipedia.org` | ru Wikipedia hook pages (Did you know, On this day, unusual articles): short sourced hooks that name places, for Place facts and Itinerary. | share-alike | yes | no |
+| `wiki-facts-simple` | `simple.wikipedia.org` | simple Wikipedia hook pages (Did you know, On this day, unusual articles): short sourced hooks that name places, for Place facts and Itinerary. | share-alike | yes | no |
+| `wiki-facts-sk` | `sk.wikipedia.org` | sk Wikipedia hook pages (Did you know, On this day, unusual articles): short sourced hooks that name places, for Place facts and Itinerary. | share-alike | yes | no |
+| `wiki-facts-sl` | `sl.wikipedia.org` | sl Wikipedia hook pages (Did you know, On this day, unusual articles): short sourced hooks that name places, for Place facts and Itinerary. | share-alike | yes | no |
+| `wiki-facts-sr` | `sr.wikipedia.org` | sr Wikipedia hook pages (Did you know, On this day, unusual articles): short sourced hooks that name places, for Place facts and Itinerary. | share-alike | yes | no |
+| `wiki-facts-sv` | `sv.wikipedia.org` | sv Wikipedia hook pages (Did you know, On this day, unusual articles): short sourced hooks that name places, for Place facts and Itinerary. | share-alike | yes | no |
+| `wiki-facts-ta` | `ta.wikipedia.org` | ta Wikipedia hook pages (Did you know, On this day, unusual articles): short sourced hooks that name places, for Place facts and Itinerary. | share-alike | yes | no |
+| `wiki-facts-th` | `th.wikipedia.org` | th Wikipedia hook pages (Did you know, On this day, unusual articles): short sourced hooks that name places, for Place facts and Itinerary. | share-alike | yes | no |
+| `wiki-facts-tr` | `tr.wikipedia.org` | tr Wikipedia hook pages (Did you know, On this day, unusual articles): short sourced hooks that name places, for Place facts and Itinerary. | share-alike | yes | no |
+| `wiki-facts-uk` | `uk.wikipedia.org` | uk Wikipedia hook pages (Did you know, On this day, unusual articles): short sourced hooks that name places, for Place facts and Itinerary. | share-alike | yes | no |
+| `wiki-facts-vi` | `vi.wikipedia.org` | vi Wikipedia hook pages (Did you know, On this day, unusual articles): short sourced hooks that name places, for Place facts and Itinerary. | share-alike | yes | no |
+| `wiki-facts-zh` | `zh.wikipedia.org` | zh Wikipedia hook pages (Did you know, On this day, unusual articles): short sourced hooks that name places, for Place facts and Itinerary. | share-alike | yes | no |
 | `api-europeana` | `api.europeana.eu` | Europeana Search and Record API: Museum and cultural-heritage records (50M items) with places and dates, for Places to see and Events; also history and curiosities for Place facts. | open | no | yes |
 | `arch-digitalnz-mch` | `api.digitalnz.org` | DigitalNZ API, filtered to Manatū Taonga (Te Ara, NZHistory): Te Ara and NZHistory records (title, description, link). This is the only reachable route to MCH content, for Place facts and Places to see. | facts only | no | yes |
 | `arch-hal-africa` | `api.archives-ouvertes.fr` | HAL open archive (incl. DUMAS theses): theses and articles on African town histories, for Place facts. | facts only | no | no |
@@ -4206,9 +4231,6 @@ docs/wiki/Place-Facts-Data.md).
 | `arch-wellcome-api` | `api.wellcomecollection.org` | Wellcome Collection Catalogue API: medical and social history tied to places (lower yield), for Place facts. | open | no | no |
 | `arch-whg` | `whgazetteer.org` | World Historical Gazetteer: historical names and attestations of places worldwide, for Place facts and Places to see. | open | no | no |
 | `colombia-travel` | `colombia.travel` | Official Colombian destinations and itineraries, for Places to see and the itinerary; also history and curiosities for Place facts. | facts only | no | no |
-| `culturetrip` | `theculturetrip.com` | Culture Trip destination guides (title and link only) for Places to see, Activities and Travel tips; every page times out for our bot, so off; also history and curiosities for Place facts. | facts only | no | no |
-| `datagovhk` | `data.gov.hk` | Official opening hours and admission of Hong Kong museums and attractions, plus cultural programmes and major events, for Places to see and Events; also history and curiosities for Place facts. | open | no | no |
-| `doc-nz-api` | `api.doc.govt.nz` | New Zealand track, hut and campsite records with current alerts, for Places to see, Activities and Travel tips; also history and curiosities for Place facts. | open | no | yes |
 | `ev-roots-sg` | `www.roots.gov.sg` | Roots.sg (National Heritage Board): Heritage sites, trails and monuments of Singapore, for Places to see and Free walking tours; also history and curiosities for Place facts. | facts only | no | no |
 | `fx-api-geonames-org` | `api.geonames.org` | GeoNames web services: /` and www `Disallow: /dump/`; api host gave no response in research. The app already ships GeoNames-derived data offline (backend/app/db/data), for Place facts. | facts only | no | yes |
 | `fx-atlantides-org` | `atlantides.org` | Pleiades gazetteer of ancient places: history and curiosities of the places it covers, for Place facts. | facts only | no | no |
@@ -4236,9 +4258,7 @@ docs/wiki/Place-Facts-Data.md).
 | `gov-tourism-mm` | `tourism.gov.mm` | Myanmar Ministry of Hotels and Tourism: official visitor guide, for Places to see and Travel tips; also history and curiosities for Place facts. | facts only | no | no |
 | `her-hmdb-tidytuesday` | `raw.githubusercontent.com` | HMDB USA index snapshot (TidyTuesday 2023-07-04): marker titles, coordinates and HMDb links (a 2023 snapshot), for Place facts and Places to see. | facts only | no | no |
 | `her-uk-london-remembers` | `www.londonremembers.com` | London Remembers: every London plaque and memorial, with researched subjects, for Place facts, Places to see and Free walking tours. | facts only | no | no |
-| `messynessychic` | `www.messynessychic.com` | Off-the-beaten-path curiosities and hidden places worldwide (headline, link and a short excerpt only), for Places to see; also history and curiosities for Place facts. | facts only | no | no |
 | `museum-kizhi` | `www.kizhi.karelia.ru` | Kizhi island wooden churches, opening times and boat access, for Places to see and Events; also history and curiosities for Place facts. | facts only | no | no |
-| `nps-data-api` | `developer.nps.gov` | US national park things to do, events and tours as structured data, for Activities, Events and the itinerary; also history and curiosities for Place facts. | facts only | no | yes |
 | `od-althurayya` | `althurayya.github.io` | al-Ṯurayyā gazetteer (early Islamic world): history and curiosities of the places it covers, for Place facts. | facts only | no | no |
 | `od-dane-gov-pl` | `dane.gov.pl` | dane.gov.pl (Polish open data): government open-data datasets (tourism, events, transport), for Places to see and Events; also history and curiosities for Place facts. | open | no | no |
 | `od-data-gov-sg` | `data.gov.sg` | data.gov.sg: Singapore attractions, parks, museums and hawker centre datasets, for Places to see and Activities; also history and curiosities for Place facts. | open | no | no |
@@ -4251,18 +4271,15 @@ docs/wiki/Place-Facts-Data.md).
 | `od-gnis-history` | `prd-tnm.s3.amazonaws.com` | USGS GNIS Feature Description/History: official name origin and history for US places and features (History field up to 3,000 chars), for Place facts and Places to see. | open | no | no |
 | `od-grottocenter` | `api.grottocenter.org` | Grottocenter (open cave database, CC BY-SA): longest and deepest caves per country (UIS-type records), for Place facts. | share-alike | no | no |
 | `od-nl-rijksmonumenten` | `linkeddata.cultureelerfgoed.nl` | Rijksmonumentenregister (RCE): About 63,000 Dutch national monuments with locations, for Places to see; also history and curiosities for Place facts. | open | no | no |
-| `od-ramsar-rsis` | `rsis.ramsar.org` | Wetlands of international importance (Ramsar sites) with locations, for remote nature spots in Places to see; also history and curiosities for Place facts. | facts only | no | no |
 | `od-slavevoyages` | `slavevoyages.org` | SlaveVoyages (Emory): history and curiosities of the places it covers, for Place facts. | facts only | no | no |
 | `od-topostext` | `topostext.org` | ToposText: history and curiosities of the places it covers, for Place facts. | facts only | no | no |
 | `od-uk-openplaques-dmn` | `datamillnorth.org` | Public-domain mirror of Open Plaques (dataset https://datamillnorth.org/dataset/open-plaq…: //datamillnorth.org/dataset/open-plaques-2rxxd). openplaques.org itself has robots `Disallow: /` for every bot, so the owner should decide whether a third-party mirror is acceptable. Data Mill North blocks AI bots in ro…, for Place facts. | facts only | no | no |
-| `od-wdpa` | `www.protectedplanet.net` | WDPA protected areas, for Places to see; also history and curiosities for Place facts. | facts only | no | no |
 | `ref-european-geoparks` | `www.europeangeoparks.org` | Every European UNESCO geopark with its landscapes and visitor centres, for Places to see and Activities; also history and curiosities for Place facts. | facts only | no | no |
 | `ref-kehilalinks` | `kehilalinks.jewishgen.org` | JewishGen KehilaLinks (town pages): history of thousands of towns and shtetls in Central and Eastern Europe, for Place facts. | facts only | no | no |
 | `ref-odysseus-culture-gr` | `odysseus.culture.gr` | Odysseus (Greek Ministry of Culture monuments and museums): official visitor guide, for Places to see; also history and curiosities for Place facts. | facts only | no | no |
 | `ref-un-tourism-villages` | `www.unwto.org` | UN Tourism Best Tourism Villages (untourism.int), for Places to see; also history and curiosities for Place facts. | facts only | no | no |
 | `tb-angkor-enterprise` | `www.angkorenterprise.gov.kh` | Angkor Enterprise (Angkor pass): Angkor pass prices, validity, opening hours and ticket rules, for Activities and Travel tips; also history and curiosities for Place facts. | facts only | no | no |
 | `tb-brunei` | `www.bruneitourism.com` | Brunei Tourism: Official Brunei attractions and practical info, for Places to see, Travel tips and Events; also history and curiosities for Place facts. | facts only | no | no |
-| `tb-guadeloupe` | `www.lesilesdeguadeloupe.com` | Îles de Guadeloupe (CTIG): official visitor guide, for Places to see, Activities and Events; also history and curiosities for Place facts. | facts only | no | no |
 | `tb-hanoi-tourism` | `hanoitourism.vn` | Hanoi Tourism: official visitor guide, for Places to see and Events; also history and curiosities for Place facts. | facts only | no | no |
 | `tb-ktb-turkey` | `www.ktb.gov.tr` | Ministry of Culture and Tourism, Türkiye: official notices, museum and site regulations, for Places to see, Travel tips and Events; also history and curiosities for Place facts. | facts only | no | no |
 | `tb-kyoto-travel` | `en.kyoto.travel` | Kyoto City Tourism (en.kyoto.travel): official visitor guide, for Places to see and Events; also history and curiosities for Place facts. | facts only | no | no |
@@ -4275,7 +4292,6 @@ docs/wiki/Place-Facts-Data.md).
 | `tb-visitjogja` | `visitjogja.jogjaprov.go.id` | Visit Jogja: official visitor guide, for Places to see and Events; also history and curiosities for Place facts. | facts only | no | no |
 | `tb-visitkl` | `www.visitkl.gov.my` | Visit Kuala Lumpur: official visitor guide, for Places to see and Events; also history and curiosities for Place facts. | facts only | no | no |
 | `tb-vnat` | `vietnamtourism.gov.vn` | Vietnam National Authority of Tourism: Official Vietnam tourism information, for Places to see and Travel tips; also history and curiosities for Place facts. | facts only | no | no |
-| `toronto-events` | `ckan0.cf.opendata.inter.prod-toronto.ca` | Festivals and events listed by the City of Toronto, for the Events section; also history and curiosities for Place facts. | open | no | no |
 | `wiki-dump-af` | `dumps.wikimedia.org` | Afrikaans Wikipedia dump: SA and Namibian towns, for Place facts. | share-alike | no | no |
 | `wiki-dump-am` | `dumps.wikimedia.org` | Amharic Wikipedia dump: Ethiopian towns, for Place facts. | share-alike | no | no |
 | `wiki-dump-ar` | `dumps.wikimedia.org` | Arabic Wikipedia dump: local-language history sections for Arab places, for Place facts and Places to see. | share-alike | no | no |
@@ -4318,43 +4334,6 @@ docs/wiki/Place-Facts-Data.md).
 | `wiki-dump-uk` | `dumps.wikimedia.org` | uk Wikipedia dump: history, name-origin and record facts in place articles, for Place facts. | share-alike | no | no |
 | `wiki-dump-yo` | `dumps.wikimedia.org` | Yoruba Wikipedia dump: Yoruba towns and kingdoms, for Place facts. | share-alike | no | no |
 | `wiki-dump-zu` | `dumps.wikimedia.org` | Zulu Wikipedia dump: KwaZulu-Natal places, for Place facts. | share-alike | no | no |
-| `wiki-facts-ar` | `ar.wikipedia.org` | ar Wikipedia hook pages (Did you know, On this day, unusual articles): short sourced hooks that name places, for Place facts and Itinerary. | share-alike | no | no |
-| `wiki-facts-bg` | `bg.wikipedia.org` | bg Wikipedia hook pages (Did you know, On this day, unusual articles): short sourced hooks that name places, for Place facts and Itinerary. | share-alike | no | no |
-| `wiki-facts-bn` | `bn.wikipedia.org` | bn Wikipedia hook pages (Did you know, On this day, unusual articles): short sourced hooks that name places, for Place facts and Itinerary. | share-alike | no | no |
-| `wiki-facts-ca` | `ca.wikipedia.org` | ca Wikipedia hook pages (Did you know, On this day, unusual articles): short sourced hooks that name places, for Place facts and Itinerary. | share-alike | no | no |
-| `wiki-facts-cs` | `cs.wikipedia.org` | cs Wikipedia hook pages (Did you know, On this day, unusual articles): short sourced hooks that name places, for Place facts and Itinerary. | share-alike | no | no |
-| `wiki-facts-da` | `da.wikipedia.org` | da Wikipedia hook pages (Did you know, On this day, unusual articles): short sourced hooks that name places, for Place facts and Itinerary. | share-alike | no | no |
-| `wiki-facts-de` | `de.wikipedia.org` | de Wikipedia hook pages (Did you know, On this day, unusual articles): short sourced hooks that name places, for Place facts and Itinerary. | share-alike | no | no |
-| `wiki-facts-es` | `es.wikipedia.org` | es Wikipedia hook pages (Did you know, On this day, unusual articles): short sourced hooks that name places, for Place facts and Itinerary. | share-alike | no | no |
-| `wiki-facts-et` | `et.wikipedia.org` | et Wikipedia hook pages (Did you know, On this day, unusual articles): short sourced hooks that name places, for Place facts and Itinerary. | share-alike | no | no |
-| `wiki-facts-fa` | `fa.wikipedia.org` | fa Wikipedia hook pages (Did you know, On this day, unusual articles): short sourced hooks that name places, for Place facts and Itinerary. | share-alike | no | no |
-| `wiki-facts-fi` | `fi.wikipedia.org` | fi Wikipedia hook pages (Did you know, On this day, unusual articles): short sourced hooks that name places, for Place facts and Itinerary. | share-alike | no | no |
-| `wiki-facts-fr` | `fr.wikipedia.org` | fr Wikipedia hook pages (Did you know, On this day, unusual articles): short sourced hooks that name places, for Place facts and Itinerary. | share-alike | no | no |
-| `wiki-facts-he` | `he.wikipedia.org` | he Wikipedia hook pages (Did you know, On this day, unusual articles): short sourced hooks that name places, for Place facts and Itinerary. | share-alike | no | no |
-| `wiki-facts-hi` | `hi.wikipedia.org` | hi Wikipedia hook pages (Did you know, On this day, unusual articles): short sourced hooks that name places, for Place facts and Itinerary. | share-alike | no | no |
-| `wiki-facts-hu` | `hu.wikipedia.org` | hu Wikipedia hook pages (Did you know, On this day, unusual articles): short sourced hooks that name places, for Place facts and Itinerary. | share-alike | no | no |
-| `wiki-facts-id` | `id.wikipedia.org` | id Wikipedia hook pages (Did you know, On this day, unusual articles): short sourced hooks that name places, for Place facts and Itinerary. | share-alike | no | no |
-| `wiki-facts-it` | `it.wikipedia.org` | it Wikipedia hook pages (Did you know, On this day, unusual articles): short sourced hooks that name places, for Place facts and Itinerary. | share-alike | no | no |
-| `wiki-facts-ja` | `ja.wikipedia.org` | ja Wikipedia hook pages (Did you know, On this day, unusual articles): short sourced hooks that name places, for Place facts and Itinerary. | share-alike | no | no |
-| `wiki-facts-ko` | `ko.wikipedia.org` | ko Wikipedia hook pages (Did you know, On this day, unusual articles): short sourced hooks that name places, for Place facts and Itinerary. | share-alike | no | no |
-| `wiki-facts-ms` | `ms.wikipedia.org` | ms Wikipedia hook pages (Did you know, On this day, unusual articles): short sourced hooks that name places, for Place facts and Itinerary. | share-alike | no | no |
-| `wiki-facts-nb` | `no.wikipedia.org` | no Wikipedia hook pages (Did you know, On this day, unusual articles): short sourced hooks that name places, for Place facts and Itinerary. | share-alike | no | no |
-| `wiki-facts-nl` | `nl.wikipedia.org` | nl Wikipedia hook pages (Did you know, On this day, unusual articles): short sourced hooks that name places, for Place facts and Itinerary. | share-alike | no | no |
-| `wiki-facts-pl` | `pl.wikipedia.org` | pl Wikipedia hook pages (Did you know, On this day, unusual articles): short sourced hooks that name places, for Place facts and Itinerary. | share-alike | no | no |
-| `wiki-facts-pt` | `pt.wikipedia.org` | pt Wikipedia hook pages (Did you know, On this day, unusual articles): short sourced hooks that name places, for Place facts and Itinerary. | share-alike | no | no |
-| `wiki-facts-ro` | `ro.wikipedia.org` | ro Wikipedia hook pages (Did you know, On this day, unusual articles): short sourced hooks that name places, for Place facts and Itinerary. | share-alike | no | no |
-| `wiki-facts-ru` | `ru.wikipedia.org` | ru Wikipedia hook pages (Did you know, On this day, unusual articles): short sourced hooks that name places, for Place facts and Itinerary. | share-alike | no | no |
-| `wiki-facts-simple` | `simple.wikipedia.org` | simple Wikipedia hook pages (Did you know, On this day, unusual articles): short sourced hooks that name places, for Place facts and Itinerary. | share-alike | no | no |
-| `wiki-facts-sk` | `sk.wikipedia.org` | sk Wikipedia hook pages (Did you know, On this day, unusual articles): short sourced hooks that name places, for Place facts and Itinerary. | share-alike | no | no |
-| `wiki-facts-sl` | `sl.wikipedia.org` | sl Wikipedia hook pages (Did you know, On this day, unusual articles): short sourced hooks that name places, for Place facts and Itinerary. | share-alike | no | no |
-| `wiki-facts-sr` | `sr.wikipedia.org` | sr Wikipedia hook pages (Did you know, On this day, unusual articles): short sourced hooks that name places, for Place facts and Itinerary. | share-alike | no | no |
-| `wiki-facts-sv` | `sv.wikipedia.org` | sv Wikipedia hook pages (Did you know, On this day, unusual articles): short sourced hooks that name places, for Place facts and Itinerary. | share-alike | no | no |
-| `wiki-facts-ta` | `ta.wikipedia.org` | ta Wikipedia hook pages (Did you know, On this day, unusual articles): short sourced hooks that name places, for Place facts and Itinerary. | share-alike | no | no |
-| `wiki-facts-th` | `th.wikipedia.org` | th Wikipedia hook pages (Did you know, On this day, unusual articles): short sourced hooks that name places, for Place facts and Itinerary. | share-alike | no | no |
-| `wiki-facts-tr` | `tr.wikipedia.org` | tr Wikipedia hook pages (Did you know, On this day, unusual articles): short sourced hooks that name places, for Place facts and Itinerary. | share-alike | no | no |
-| `wiki-facts-uk` | `uk.wikipedia.org` | uk Wikipedia hook pages (Did you know, On this day, unusual articles): short sourced hooks that name places, for Place facts and Itinerary. | share-alike | no | no |
-| `wiki-facts-vi` | `vi.wikipedia.org` | vi Wikipedia hook pages (Did you know, On this day, unusual articles): short sourced hooks that name places, for Place facts and Itinerary. | share-alike | no | no |
-| `wiki-facts-zh` | `zh.wikipedia.org` | zh Wikipedia hook pages (Did you know, On this day, unusual articles): short sourced hooks that name places, for Place facts and Itinerary. | share-alike | no | no |
 | `wikidata-dump` | `dumps.wikimedia.org` | Facts about places and sights from Wikidata for Places to see; the full dump is too large, so off; also history and curiosities for Place facts. | open | no | no |
 | `wikisource-dump-en` | `dumps.wikimedia.org` | English Wikisource dump (EB1911, gazetteers): dated public-domain descriptions ("in 1911 X was…") for historical facts; join via Wikidata P1343, for Place facts and Places to see. | share-alike | no | no |
 | `wp-zh-dyk` | `dumps.wikimedia.org` | zh.wikipedia "你知道吗" (新条目推荐): 15+ years of "did you know" hooks, for Place facts. | share-alike | no | no |
@@ -4406,7 +4385,7 @@ source's notes say where to sign up and what it costs.
 | `delfi-opendata-oepnv` | `www.opendata-oepnv.de` | getting_around | needs an account: owner must register at https://www.opendata-oepnv.de/ (free); the crawler never logs in, so a token-based download route (and its key placement in gtfs_static) is needed |
 | `delhi-otd` | `otd.delhi.gov.in` | getting_around | needs an API key: owner must register a key at https://otd.delhi.gov.in/ (free; sent as the key query parameter); the seed is the download page, the zip URL is to be confirmed after registration |
 | `digitransit` | `api.digitransit.fi` | getting_around | needs an API key: owner must register a key at https://portal-api.digitransit.fi/ (free; sent as the digitransit-subscription-key header) |
-| `doc-nz-api` | `api.doc.govt.nz` | places, activities, tips, facts | needs an API key: owner must register a key at https://api.doc.govt.nz/ (free); adapter pending: DOC API reader \| Place facts (research 2026-11-20): historic places on conservation land (history text per site) |
+| `doc-nz-api` | `api.doc.govt.nz` | places, activities, tips | needs an API key: owner must register a key at https://api.doc.govt.nz/ (free); adapter pending: DOC API reader \| Place facts (research 2026-11-20): historic places on conservation land (history text per site) \| Place facts: not wired yet (no LLM kinds on non-share-alike text and no adapter that emits place_fact), so no `facts` section or place_fact kind; the note above is what to extract once a reader exists. |
 | `duffel` | `api.duffel.com` | flights | Live fares are a non-goal; they stay on SerpAPI in the app (spec §2). |
 | `edinburgh-festivals-api` | `api.edinburghfestivalcity.com` | events | needs an API key: owner must register a key at https://api.edinburghfestivalcity.com/ (free); adapter pending: listings API reader |
 | `failte-ireland-od` | `failteireland.developer.azure-api.net` | places, activities | needs an API key: owner must register a key at https://failteireland.developer.azure-api.net/ (free tier, rate-limited; Open Data Plus subscription key); robots.txt of data.failteireland.ie timed out: re-check; adapter pending |
@@ -4422,7 +4401,7 @@ source's notes say where to sign up and what it costs.
 | `lta-datamall` | `datamall2.mytransport.sg` | getting_around | needs an API key: owner must register a key at https://datamall.lta.gov.sg/content/datamall/en/request-for-api.html (free); adapter pending: DataMall paged JSON reader |
 | `mobility-database-api` | `api.mobilitydatabase.org` | getting_around | robots.txt of api.mobilitydatabase.org is unreadable: it answers 302 to a Google IAP login page (checked 2026-11-16), so no robots.txt grants VoyagerBot access, and the published API terms do not say automated access by third-party crawlers is allowed. When in doubt, don't crawl. Re-enable only with a readable robots.txt that allows us. |
 | `myswitzerland-open-data` | `opendata.myswitzerland.io` | places, activities, itinerary | robots.txt of opendata.myswitzerland.io answers 403 to VoyagerBot (research 2026-11-17): do-not-crawl origin; licence version unknown; needs an API key (x-api-key) |
-| `nps-data-api` | `developer.nps.gov` | activities, events, itinerary, facts | robots.txt of developer.nps.gov answers 403 to VoyagerBot (research 2026-11-17): do-not-crawl origin; needs an API key (free, https://www.nps.gov/subjects/developer/get-started.htm); the public-domain nps.gov site is nps-site \| Place facts (research 2026-11-20): park "history and culture" pages, "Things To Know", NRHP and National Historic Landmark descriptions; the API `parks` description fields / NRHP data downloads (https://home.nps.gov/subjects/nationalregister/data-downloads.htm) and NHL pages / park superlatives (deepest lake: Crater Lake; longest cave: Mammoth Cave) |
+| `nps-data-api` | `developer.nps.gov` | activities, events, itinerary | robots.txt of developer.nps.gov answers 403 to VoyagerBot (research 2026-11-17): do-not-crawl origin; needs an API key (free, https://www.nps.gov/subjects/developer/get-started.htm); the public-domain nps.gov site is nps-site \| Place facts (research 2026-11-20): park "history and culture" pages, "Things To Know", NRHP and National Historic Landmark descriptions; the API `parks` description fields / NRHP data downloads (https://home.nps.gov/subjects/nationalregister/data-downloads.htm) and NHL pages / park superlatives (deepest lake: Crater Lake; longest cave: Mammoth Cave) \| Place facts: not wired yet (no LLM kinds on non-share-alike text and no adapter that emits place_fact), so no `facts` section or place_fact kind; the note above is what to extract once a reader exists. |
 | `od-data-gov-gr` | `data.gov.gr` | places, getting_around | needs an API key: owner must request a free token at https://data.gov.gr/token/; adapter pending: choose tourism datasets + dataset reader (crawling the portal's HTML is not useful) |
 | `odpt-japan` | `api.odpt.org` | getting_around | needs an API key: owner must register a key at https://developer.odpt.org/ (free, registration with approval; per-operator licences, some limited); adapter pending: ODPT API reader |
 | `openagenda-api` | `api.openagenda.com` | events | needs an API key: owner must register a key at https://developers.openagenda.com/ (free); terms not yet confirmed: OpenAgenda CGU not found; robots.txt redirects off-host; adapter pending |

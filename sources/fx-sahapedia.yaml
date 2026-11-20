@@ -3,9 +3,9 @@
 id: fx-sahapedia
 name: Sahapedia
 category: facts
-source_class: editorial
+source_class: reference
 licence:
-  class: open
+  class: share_alike
   spdx: null
   attribution: Sahapedia
   url: null
@@ -21,8 +21,7 @@ max_depth: 1
 kinds:
 - place_fact
 - article
-llm_kinds:
-- place_fact
+llm_kinds: []
 render: never
 cadence: monthly
 min_delay_s: 5
@@ -33,10 +32,15 @@ needs_key: false
 key_secret: null
 max_retention_days: null
 display_requirements: null
-notes: 'Research 2026-11-20 (place facts corpus; Global / multi-country; verdict ADD): search)`, for Place
-  facts. robots.txt: facts_only (CC BY-NC-SA 4.0). Terms: reference. Sourced: Drupal default (core assets)
-  allowed. Open licence (Open data licence (see notes)).'
+notes: 'Research 2026-11-20 (place facts corpus; Global / multi-country; verdict ADD): heritage-walk and
+  city-culture essays, for Place facts, Free walking tours and Places to see. robots.txt: Drupal default
+  (core assets) allowed. Terms: §16: "Spiders, bots, and scripts… must obey all reasonable restrictions
+  on mass downloading" (bots permitted politely); content CC BY-NC-SA 4.0. Sourced: yes. Share-alike:
+  kept apart, never merged into our own wording and never sent to a model (no LLM kinds).'
 relevance:
   sections:
   - facts
-  why: 'Sahapedia: search)`, for Place facts.'
+  - walking_tours
+  - places
+  why: 'Sahapedia: heritage-walk and city-culture essays, for Place facts, Free walking tours and Places
+    to see.'

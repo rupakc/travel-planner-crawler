@@ -3,7 +3,7 @@
 id: fx-discover-islamic-art
 name: Discover Islamic Art (Museum With No Frontiers)
 category: facts
-source_class: editorial
+source_class: reference
 licence:
   class: facts_only
   spdx: null
@@ -15,9 +15,10 @@ seeds:
 sitemaps: []
 feeds: []
 adapter: null
-include: []
+include:
+- ^https?://islamicart\.museumwnf\.org/(database_item|monuments)
 exclude: []
-max_depth: 1
+max_depth: 2
 kinds:
 - place_fact
 - article
@@ -33,11 +34,13 @@ needs_key: false
 key_secret: null
 max_retention_days: null
 display_requirements: null
-notes: 'Research 2026-11-20 (place facts corpus; Global / multi-country; verdict ADD): monuments)`, for
-  Place facts. robots.txt: reference (museum consortium). Terms: robots 404 (allowed). Sourced: legal
-  notice is a JS SPA, so terms not found. Copyright reserved, no bot, scraping, TDM or AI ban quoted;
-  owner accepted for non-commercial use 2026-11-18. Facts only.'
+notes: 'Research 2026-11-20 (place facts corpus; Global / multi-country; verdict ADD): monument records
+  for Islamic heritage across MENA, for Place facts and Places to see. robots.txt: robots 404 (allowed).
+  Terms: legal notice is a JS SPA, so terms not found. Sourced: yes. Terms not read or not found; owner
+  accepted for non-commercial use 2026-11-18. Facts only.'
 relevance:
   sections:
   - facts
-  why: 'Discover Islamic Art (Museum With No Frontiers): monuments)`, for Place facts.'
+  - places
+  why: 'Discover Islamic Art (Museum With No Frontiers): monument records for Islamic heritage across
+    MENA, for Place facts and Places to see.'

@@ -37,7 +37,8 @@ max_retention_days: null
 display_requirements: null
 notes: 'Research 2026-11-20 (place facts corpus; Global / multi-country; verdict ADD): Afrika Zamani and
   African history publications (low direct yield), for Place facts. robots.txt: 200. Terms: terms not
-  found. Sourced: yes. Terms not found; owner accepted for non-commercial use 2026-11-18. Facts only.'
+  found. Sourced: yes. Terms not read or not found; owner accepted for non-commercial use 2026-11-18.
+  Facts only.'
 relevance:
   sections:
   - facts

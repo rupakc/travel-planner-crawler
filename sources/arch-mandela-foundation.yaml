@@ -3,7 +3,7 @@
 id: arch-mandela-foundation
 name: Nelson Mandela Foundation
 category: facts
-source_class: reference
+source_class: official
 licence:
   class: facts_only
   spdx: null
@@ -15,7 +15,8 @@ seeds:
 sitemaps: []
 feeds: []
 adapter: null
-include: []
+include:
+- ^https?://www\.nelsonmandela\.org/(news|content)/
 exclude: []
 max_depth: 1
 kinds:
@@ -32,12 +33,12 @@ needs_key: false
 key_secret: null
 max_retention_days: null
 display_requirements: null
-notes: 'Research 2026-11-20 (place facts corpus; Global / multi-country; verdict ADD): content)/`, for
-  Place facts. robots.txt: official (archive). Terms: /craft/ only; AI-block (ClaudeBot, GPTBot, CCBot,
-  Google-Extended…). Sourced: Website Policy PDF has no crawler clause. Copyright reserved, no bot, scraping,
-  TDM or AI ban quoted; owner accepted for non-commercial use 2026-11-18. Facts only. AI-reserved robots.txt
-  (or Content-Signal): title and link only, no LLM kinds.'
+notes: 'Research 2026-11-20 (place facts corpus; Global / multi-country; verdict ADD): Mandela-linked
+  places (Qunu, Mvezo, Houghton), for Place facts. robots.txt: /craft/ only; AI-block (ClaudeBot, GPTBot,
+  CCBot, Google-Extended…). Terms: Website Policy PDF has no crawler clause. Sourced: partly. Copyright
+  reserved, no bot, scraping, TDM or AI ban quoted; owner accepted for non-commercial use 2026-11-18.
+  Facts only. AI-reserved robots.txt (or Content-Signal): title and link only, no LLM kinds.'
 relevance:
   sections:
   - facts
-  why: 'Nelson Mandela Foundation: content)/`, for Place facts.'
+  why: 'Nelson Mandela Foundation: Mandela-linked places (Qunu, Mvezo, Houghton), for Place facts.'

@@ -3,7 +3,7 @@
 id: fx-siam-society
 name: The Siam Society (Journal of the Siam Society)
 category: facts
-source_class: editorial
+source_class: reference
 licence:
   class: facts_only
   spdx: null
@@ -15,7 +15,9 @@ sitemaps:
 - https://thesiamsociety.org/index.php/sitemap.xml
 feeds: []
 adapter: null
-include: []
+include:
+- ^https?://thesiamsociety\.org/(en/)?(jss|journal|publications)
+- ^https?://thesiamsociety\.org/[^?#]*sitemap
 exclude: []
 max_depth: 1
 kinds:
@@ -33,11 +35,12 @@ needs_key: false
 key_secret: null
 max_retention_days: null
 display_requirements: null
-notes: 'Research 2026-11-20 (place facts corpus; Global / multi-country; verdict ADD): publications)`,
-  for Place facts. robots.txt: facts_only. Terms: reference. Sourced: `Allow: /`, Crawl-delay 3. Copyright
-  reserved, no bot, scraping, TDM or AI ban quoted; owner accepted for non-commercial use 2026-11-18.
-  Facts only.'
+notes: 'Research 2026-11-20 (place facts corpus; Global / multi-country; verdict ADD): Thai local history
+  (peer-reviewed), for Place facts. robots.txt: `Allow: /`, Crawl-delay 3. Terms: terms not found. Sourced:
+  yes. Terms not read or not found; owner accepted for non-commercial use 2026-11-18. Facts only. Crawl-delay
+  5 honoured as min_delay_s.'
 relevance:
   sections:
   - facts
-  why: 'The Siam Society (Journal of the Siam Society): publications)`, for Place facts.'
+  why: 'The Siam Society (Journal of the Siam Society): Thai local history (peer-reviewed), for Place
+    facts.'

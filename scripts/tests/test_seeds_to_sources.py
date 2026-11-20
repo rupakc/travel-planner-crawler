@@ -1383,8 +1383,7 @@ def test_open_data_readers_2026_11_18(generated):
     for sid, (adapter, kinds, licence) in OPEN_DATA_READERS.items():
         spec = generated[sid]
         assert spec["enabled"] is True and spec["adapter"] == adapter, sid
-        assert spec["kinds"] == kinds + (["place_fact"] if sid in s2s.FACTS_REUSE else []), sid
-        assert spec["llm_kinds"] == [], sid
+        assert spec["kinds"] == kinds and spec["llm_kinds"] == [], sid
         assert spec["source_class"] == "official", sid
         assert spec["licence"]["class"] == licence and spec["licence"]["attribution"], sid
         assert spec["daily_budget"] <= 200 and spec["min_delay_s"] >= 5, sid
@@ -1560,8 +1559,7 @@ def test_wikivoyage_editions_2026_11_18(generated):
             f"https://dumps.wikimedia.org/{code}wikivoyage/latest/{code}wikivoyage-latest-pages-articles.xml.bz2"
         ], sid
         assert spec["cadence"] == "monthly" and spec["method"] == "dump", sid
-        assert spec["kinds"] == ["place", "attraction", "hotel"] + (["place_fact"] if sid in s2s.FACTS_REUSE else [])
-        assert spec["llm_kinds"] == [], sid
+        assert spec["kinds"] == ["place", "attraction", "hotel"] and spec["llm_kinds"] == [], sid
         assert sid in _ramp("ramp-3.txt") and sid not in _ramp("ramp-2.txt"), sid
 
 
@@ -1949,7 +1947,11 @@ FACTS_OFF_PREFIXES = ("enable after a check from the crawler VM", "adapter pendi
 FACTS_HOOK_OFF = "hook adapter removed (share-alike text); needs an own-words extractor"
 FACTS_DENIED = ["https://www.treccani.it/enciclopedia/", "https://kotobank.jp/", "https://www.geograph.org.uk/",
                 "https://www.waymarking.com/", "https://www.canadiana.ca/", "https://uzbekistan.travel/en/",
-                "https://www.wa.gov.au/organisation", "https://www.meteoswiss.admin.ch/"]
+                "https://www.wa.gov.au/organisation", "https://www.meteoswiss.admin.ch/",
+                # Review 2026-11-20: SKIP rows with a terms ban, and Peepul Tree's other domain.
+                "https://www.livehistoryindia.com/", "https://www.aljazeera.net/encyclopedia/",
+                "https://www.nyasatimes.com/", "https://icesco.org/", "https://www.atheer.om/history/",
+                "https://www.assamtourismonline.com/"]
 FACTS_STAY_ALLOWED = ["https://catalogue.data.wa.gov.au/", "https://www.admin.ch/", "https://www.geonames.org/"]
 
 
@@ -2033,15 +2035,91 @@ def test_place_facts_structured_readers_2026_11_20(generated):
 
 def test_place_facts_existing_sources_and_denylist_2026_11_20(generated):
     assert len(s2s.FACTS_REUSE) >= 150
+    wired = 0
     for sid in s2s.FACTS_REUSE:
         spec = generated[sid]
-        assert spec["relevance"]["sections"][-1] == "facts" or "facts" in spec["relevance"]["sections"], sid
-        assert "place_fact" in spec["kinds"] and spec["source_class"] in ("official", "reference", "editorial"), sid
-        if spec["licence"]["class"] == "share_alike":
-            assert "place_fact" not in spec["llm_kinds"], sid
         assert "Place facts (research 2026-11-20)" in spec["notes"], sid
+        # `facts` and place_fact only where something produces one: an adapter that emits
+        # place_fact, or LLM kinds on non-share-alike text (review 2026-11-20).
+        reader = spec["adapter"] in s2s.FACTS_ADAPTER_IDS
+        llm = bool(set(spec["llm_kinds"]) - {"place_fact"}) and spec["licence"]["class"] != "share_alike"
+        if reader or llm:
+            wired += 1
+            assert "facts" in spec["relevance"]["sections"] and "place_fact" in spec["kinds"], sid
+            assert spec["source_class"] in ("official", "reference", "editorial"), sid
+            assert ("place_fact" in spec["llm_kinds"]) is (not reader), sid
+        else:
+            assert "facts" not in spec["relevance"]["sections"], sid
+            assert "place_fact" not in spec["kinds"] + spec["llm_kinds"], sid
+            assert "Place facts: not wired yet" in spec["notes"], sid
+    assert wired == 137, wired
+    # Clipped at a clause boundary, never mid-word.
+    for sid, what in s2s.FACTS_REUSE.items():
+        assert len(what) <= 400 and not what.endswith(("`Wikipe", "qualifi")), sid
+        assert what not in ("also in brief: -", "-"), sid
     assert generated["tb-uzbekistan"]["enabled"] is False
     for url in FACTS_DENIED:
         assert s2s.denied(url, DENYLIST) is not None, url
     for url in FACTS_STAY_ALLOWED:
         assert s2s.denied(url, DENYLIST) is None, url
+
+
+# Review of the place-facts PRs (2026-11-20): research rows parsed with their columns intact,
+# unverified robots.txt answers kept off, Crawl-delays carried, denylisted publishers kept out.
+FACTS_UNVERIFIED_ROBOTS = re.compile(r"no response|timed? ?out|timeout|unreachable|tls handshake|handshake failed",
+                                     re.I)
+# Rows whose include regex held `|` inside backticks (the naive cell split lost it).
+FACTS_INCLUDE_CARRIED = {
+    "arch-adeac": "(top|texthtml|catalog)", "arch-nysl": None, "fx-palace-museum": None,
+    "gov-in-kachchh": None, "gov-in-madurai": None, "gov-rcu-alula": None, "gov-oman-mht": None,
+    "her-in-intach": None, "her-my-pht": None, "her-nysm": None, "od-digital-giza": None,
+    "tb-brand-south-africa": None, "fx-historic-hawaii": None, "her-ogebc": None,
+}
+# Crawl-delays the shifted rows had lost.
+FACTS_DELAYS = {"arch-adeac": 10, "arch-awm": 10, "arch-sudan-memory": 10, "fx-victorian-places": 10,
+                "gov-nvculture": 10, "her-jp-bunka-online": 10}
+FACTS_RESEARCH_OFF = ["arch-chicago-encyclopedia", "arch-digitalnc", "arch-disa", "arch-heritage-nl",
+                      "arch-mass-moments", "arch-naa", "arch-vision-of-britain", "fx-norfolk-churches",
+                      "arch-anzac-portal", "fx-adelaidia", "arch-vch-gloucestershire", "fx-suffolk-churches"]
+
+
+def test_place_facts_research_rows_parsed_whole_2026_11_20(generated):
+    facts = set(s2s.FACTS_IDS)
+    for sid in s2s.FACTS_IDS:
+        spec = generated[sid]
+        notes = " ".join(spec["notes"].split())
+        # A cell from another column (licence, class) never lands in the robots or terms text.
+        assert not re.search(r"robots\.txt: (facts_only|open|share_alike|official|reference|editorial)\b", notes), sid
+        assert not re.search(r"Terms: (official|reference|editorial|facts_only|open|share_alike)\.", notes), sid
+        assert not re.search(r"\)/?`", spec["relevance"]["why"]), sid  # no regex tail from the include cell
+        m = re.search(r"robots\.txt: (.*?)\. Terms: ", notes)
+        if spec["enabled"] and not spec["adapter"]:
+            assert not (m and FACTS_UNVERIFIED_ROBOTS.search(m.group(1))), sid
+            # The copyright boilerplate is only said when the terms were read.
+            t = re.search(r"Terms: (.*?)\. (Sourced|Copyright|Terms|Share|Open)", notes)
+            if t and re.search(r"not read|not found|unreachable", t.group(1)):
+                assert "Copyright reserved, no bot" not in notes, sid
+        d = re.search(r"Crawl-delay (\d+) honoured as min_delay_s", notes)
+        if d:
+            assert spec["min_delay_s"] == int(d.group(1)), sid
+        if sid.startswith(("gov-in-dist-", "gov-bd-dist-", "gov-bd-upz-")):
+            assert spec["daily_budget"] == 20, sid  # shared national hosting
+    for sid, part in FACTS_INCLUDE_CARRIED.items():
+        if sid in facts:
+            inc = generated[sid]["include"]
+            assert inc and (part is None or any(part in r for r in inc)), sid
+    for sid, d in FACTS_DELAYS.items():
+        if sid in facts:
+            assert generated[sid]["min_delay_s"] == d, sid
+    for sid in FACTS_RESEARCH_OFF:
+        if sid in facts:
+            assert generated[sid]["enabled"] is False, sid
+            assert generated[sid]["notes"].split("Disabled: ", 1)[1].startswith(
+                "enable after a check from the crawler VM"), sid
+    # Peepul Tree's terms ban robots on peepultree.world; its other domain is denylisted and not added.
+    assert "fx-livehistoryindia" not in facts
+    for sid in s2s.FACTS_IDS:
+        spec = generated[sid]
+        if spec["enabled"]:
+            for u in spec["seeds"] + spec["sitemaps"] + spec["feeds"]:
+                assert s2s.denied(u, DENYLIST) is None, (sid, u)

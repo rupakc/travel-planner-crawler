@@ -36,10 +36,11 @@ display_requirements: null
 notes: 'Research 2026-11-20 (place facts corpus; Global / multi-country; verdict OWNER-DECISION): "nor
   may you undertake any activity such as computer programs that automatically download or export JSTOR
   Daily content and that may interfere with, disrupt or otherwise burden" the servers; a polite feed reader
-  arguabl…, for Place facts and Travel tips. Terms: terms not found. Terms not found; owner accepted for
-  non-commercial use 2026-11-18. Facts only. notes: robots allowed; feed /feed/ likely. Seed: the host
-  root (the research row names no URL). | Disabled: owner decision: JSTOR Daily: robots allowed, but it
-  belongs to a paywalled publisher and its terms are unclear. Decide whether editorial articles are acceptable.'
+  arguabl…, for Place facts and Travel tips. Terms: terms not found. Terms not read or not found; owner
+  accepted for non-commercial use 2026-11-18. Facts only. notes: robots allowed; feed /feed/ likely. Seed:
+  the host root (the research row names no URL). | Disabled: owner decision: JSTOR Daily: robots allowed,
+  but it belongs to a paywalled publisher and its terms are unclear. Decide whether editorial articles
+  are acceptable.'
 relevance:
   sections:
   - facts
