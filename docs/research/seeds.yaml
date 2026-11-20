@@ -40953,3 +40953,3046 @@ seeds:
     notes: 'Research 2026-11-20 (place facts corpus; North America; verdict ADD): town-by-town Vermont histories, for Place
       facts. robots.txt: robots 404 (allowed). Terms: terms not found. Sourced: yes. Terms not read or not found; owner accepted
       for non-commercial use 2026-11-18. Facts only.'
+  - id: city-bobo-dioulasso
+    category: facts
+    name: Commune de Bobo-Dioulasso
+    url: https://mairie-bobo.bf/historique/
+    method: html
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Africa; verdict ADD): founding of Kibidoué (c. 1050), the 1904 naming and
+      the coat of arms, for Place facts and Places to see. robots.txt: 200; only WP admin dirs disallowed. Terms: terms not
+      found. Sourced: partly. Terms not read or not found; owner accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: city-niamey
+    category: facts
+    name: Ville de Niamey (municipal portal)
+    url: https://villedeniamey.ne/ville/presentation/
+    method: html
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Africa; verdict ADD): city presentation and history (centenary colloquium),
+      for Place facts and Places to see. robots.txt: 200 CS. Terms: terms not found. Sourced: partly. Terms not read or not
+      found; owner accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: city-yaounde
+    category: facts
+    name: Communauté Urbaine de Yaoundé
+    url: https://yaounde.cm/sitemap.xml
+    method: sitemap
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Africa; verdict ADD): city-council pages on the city and its districts,
+      for Place facts and Places to see. robots.txt: 200, Allow: /. Terms: terms not found. Sourced: no. Terms not read or not
+      found; owner accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: city-libreville
+    category: facts
+    name: Mairie de Libreville
+    url: https://libreville.ga/wp-sitemap.xml
+    method: sitemap
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Africa; verdict ADD): official history of Libreville, for Place facts.
+      robots.txt: 200. Terms: terms not found. Sourced: partly. Terms not read or not found; owner accepted for non-commercial
+      use 2026-11-18. Facts only.'
+  - id: city-antananarivo
+    category: facts
+    name: Commune Urbaine d'Antananarivo
+    url: https://site.cua.mg/sitemap.xml
+    method: sitemap
+    license: Copyright; no automated-access clause
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Africa; verdict ADD): the capital''s commune and its arrondissements, for
+      Place facts and Places to see. robots.txt: 200, Allow: /. Terms: "Tous droits réservés" (legal notice). Sourced: no. Copyright
+      reserved, no bot, scraping, TDM or AI ban quoted; owner accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: city-mbabane
+    category: facts
+    name: Municipal Council of Mbabane
+    url: https://www.mbabane.org.sz/wp-sitemap.xml
+    method: sitemap
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Africa; verdict ADD): capital of Eswatini, council pages (thin on history),
+      for Place facts and Events. robots.txt: 200. Terms: terms not found. Sourced: no. Terms not read or not found; owner accepted
+      for non-commercial use 2026-11-18. Facts only.'
+  - id: gov-luanda
+    category: facts
+    name: Governo Provincial de Luanda
+    url: https://luanda.gov.ao/
+    method: html
+    license: Copyright; no automated-access clause
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Africa; verdict ADD): Luanda municipalities and heritage news, for Place
+      facts and Places to see. robots.txt: 200, empty Disallow. Terms: governo.gov.ao/termos: "reprodução total ou parcial sem
+      fins lucrativos .. desde que citada a fonte". Sourced: no. Copyright reserved, no bot, scraping, TDM or AI ban quoted;
+      owner accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: gov-ci-culture
+    category: facts
+    name: Ministère de la Culture et de la Francophonie (Côte d'Ivoire)
+    url: https://www.culture.gouv.ci/accueil
+    method: html
+    license: Open data licence (see notes)
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Africa; verdict ADD): heritage news (Grand-Bassam, Kong, classified sites),
+      for Place facts and Places to see. robots.txt: 200, "User-agent: *" only. Terms: "les contenus de ce site sont proposés
+      sous licence ouverte .. reproduire, copier, modifier, extraire". Sourced: partly. Open licence (Open data licence (see
+      notes)).'
+  - id: gov-ga-culture
+    category: facts
+    name: Ministère de la Culture du Gabon
+    url: https://culture.gouv.ga/wp-sitemap.xml
+    method: sitemap
+    license: Copyright; no automated-access clause
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Africa; verdict ADD): heritage and culture news, for Place facts. robots.txt:
+      200. Terms: "tous les droits de propriété .. toute reproduction" reserved. Sourced: no. Copyright reserved, no bot, scraping,
+      TDM or AI ban quoted; owner accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: her-cndrs-comores
+    category: facts
+    name: 'CNDRS: Centre National de Documentation et de Recherche Scientifique (Comoros, incl. National Museum)'
+    url: https://cndrs.km/feed/
+    method: rss
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Africa; verdict ADD): Centre National de Documentation et de Recherche
+      Scientifique (Comoros, incl. Nati…: history of the sultanates, the medinas'' UNESCO bid, "historiquement parlant" items,
+      for Place facts and Places to see. robots.txt: 200. Terms: terms not found. Sourced: yes. Terms not read or not found;
+      owner accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: her-imnc-drc
+    category: facts
+    name: 'IMNC: Institut des Musées Nationaux du Congo (Musée National de Kinshasa)'
+    url: https://imnc.cd/sitemap.xml
+    method: sitemap
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Africa; verdict ADD): Institut des Musées Nationaux du Congo (Musée National
+      de Kinshasa): DRC national museums and collections, for Place facts, Places to see and Activities. robots.txt: 200, Allow:
+      /; Crawl-delay 1 (Google/Bing only). Terms: terms not found; homepage is JS-light (5 KB), so check what the sitemap lists.
+      Sourced: unknown. Terms not read or not found; owner accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: her-nhf-mauritius
+    category: facts
+    name: National Heritage Fund (Mauritius)
+    url: https://nhf.govmu.org/nhf/?feed=rss2
+    method: rss
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Africa; verdict ADD): Mauritius national heritage sites, for Place facts
+      and Places to see. robots.txt: robots path returns an HTML soft page (treated as no robots, so allowed). Terms: terms
+      not found. Sourced: yes. Terms not read or not found; owner accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: arch-mauritius-archives
+    category: facts
+    name: National Archives Department (Mauritius)
+    url: https://nationalarchives.govmu.org/nationalarchives/?feed=rss2
+    method: rss
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Africa; verdict ADD): Mauritian historical notes and exhibitions, for Place
+      facts. robots.txt: soft-404 HTML robots (allowed). Terms: terms not found. Sourced: yes. Terms not read or not found;
+      owner accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: her-morija-museum
+    category: facts
+    name: Morija Museum & Archives (Lesotho)
+    url: https://www.morijamuseum.org/sitemap.xml
+    method: sitemap
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Africa; verdict ADD): Lesotho''s oldest museum, Morija history and dinosaur
+      footprints, for Place facts, Places to see and Activities. robots.txt: 200, Allow: /; PetalBot blocked. Terms: terms not
+      found. Sourced: yes. Terms not read or not found; owner accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: arch-ahm-maputo
+    category: facts
+    name: Arquivo Histórico de Moçambique
+    url: https://ahm.uem.mz/?feed=rss2
+    method: rss
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Africa; verdict ADD): Mozambique and Maputo history notes and exhibitions,
+      for Place facts. robots.txt: soft-404 HTML robots (allowed). Terms: terms not found. Sourced: yes. Terms not read or not
+      found; owner accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: her-uem-museums
+    category: facts
+    name: 'Universidade Eduardo Mondlane: Museu de História Natural and Museu Nacional da Moeda (Casa Amarela)'
+    url: https://uem.mz/wp-sitemap.xml
+    method: sitemap
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Africa; verdict ADD): Museu de História Natural and Museu Nacional da Moeda
+      (Cas…: Casa Amarela (the oldest surviving building in Maputo) and museum facts, for Place facts and Activities. robots.txt:
+      200. Terms: terms not found. Sourced: partly. Terms not read or not found; owner accepted for non-commercial use 2026-11-18.
+      Facts only.'
+  - id: fx-casamemoire
+    category: facts
+    name: Casamémoire (Casablanca 20th-century heritage NGO)
+    url: https://www.casamemoire.org/wp-sitemap.xml
+    method: sitemap
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Africa; verdict ADD): Casablanca history and Art Deco buildings, for Place
+      facts, Free walking tours and Places to see. robots.txt: 200. Terms: terms not found. Sourced: yes. Terms not read or
+      not found; owner accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: fx-mozambique-history-net
+    category: facts
+    name: Mozambique History Net (Colin Darch)
+    url: https://www.mozambiquehistory.net/
+    method: html
+    license: Copyright; no automated-access clause
+    cadence: quarterly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Africa; verdict ADD): city histories (Beira etc.), documents, bibliography,
+      for Place facts. robots.txt: 200; disallows /colin.darch.info/. Terms: disclaimer.php: no bans. Sourced: yes. Copyright
+      reserved, no bot, scraping, TDM or AI ban quoted; owner accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: fx-delagoa-bay-world
+    category: facts
+    name: The Delagoa Bay World (blog on Lourenço Marques/Maputo history)
+    url: https://delagoabayworld.wordpress.com/feed/
+    method: rss
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Africa; verdict ADD): Maputo streets, buildings and founders (e.g. the
+      founder of Nampula), for Place facts and Free walking tours. robots.txt: WordPress.com standard. Terms: terms not found
+      (WP.com). Sourced: yes (archival photos and documents). Terms not read or not found; owner accepted for non-commercial
+      use 2026-11-18. Facts only.'
+  - id: fx-egyptsites
+    category: facts
+    name: Egyptian Monuments (egyptsites)
+    url: https://egyptsites.wordpress.com/site-map/
+    method: html
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Africa; verdict ADD): entries per site across the Nile Valley and Delta,
+      with bibliographies, for Place facts and Places to see. robots.txt: WordPress.com standard. Terms: terms not found. Sourced:
+      yes. Terms not read or not found; owner accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: fx-madain-project
+    category: facts
+    name: Madain Project
+    url: https://www.madainproject.com/sitemap.xml
+    method: sitemap
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Africa; verdict ADD): Middle East and North Africa sites (Levant, Arabia,
+      Egypt) with citations, for Place facts and Places to see. robots.txt: 200, Allow: /; training-bot blocks commented out.
+      Terms: ai_policy page is JS (unread); terms not found. Sourced: yes. Terms not read or not found; owner accepted for non-commercial
+      use 2026-11-18. Facts only.'
+  - id: gov-yemen-nic
+    category: facts
+    name: National Information Center (Yemen)
+    url: https://www.yemen-nic.info/yemen/history/
+    method: html
+    license: Copyright; personal/non-commercial terms (owner accepted)
+    cadence: quarterly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Middle East; verdict ADD): Yemen history and governorate and site profiles
+      (Arabic), for Place facts and Places to see. robots.txt: 200; /bitrix, /admin, /upload disallowed. Terms: site_use.php:
+      for "الأغراض الشخصية والبحثية .. يجب ألا تكون لأغراض تجارية", with attribution (personal/non-commercial terms, which the
+      owner accepted). Sourced: partly. Terms restrict to personal/non-commercial use; owner accepted for non-commercial use
+      2026-11-18. Facts only.'
+  - id: gov-baghdad
+    category: facts
+    name: Baghdad Governorate
+    url: https://www.baghdad.gov.iq/feed/index.rss
+    method: rss
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Middle East; verdict ADD): districts and municipal heritage news (thin),
+      for Place facts. robots.txt: 200 CS. Terms: terms not found. Sourced: no. Terms not read or not found; owner accepted
+      for non-commercial use 2026-11-18. Facts only.'
+  - id: her-cultnat
+    category: facts
+    name: 'CULTNAT: Center for Documentation of Cultural and Natural Heritage (Bibliotheca Alexandrina)'
+    url: https://www.cultnat.org/CultureProgram.aspx
+    method: html
+    license: Copyright; no automated-access clause
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Africa; verdict ADD): Center for Documentation of Cultural and Natural
+      Heritage (Bibliotheca Alexandri…: Egyptian heritage documentation news (Arabic); eternalegypt.org redirects here, for
+      Place facts. robots.txt: 404 (allowed). Terms: only Privacy.aspx found. Sourced: partly. Copyright reserved, no bot, scraping,
+      TDM or AI ban quoted; owner accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: fx-zamane
+    category: facts
+    name: Zamane (Moroccan history magazine)
+    url: https://zamane.ma/feed/
+    method: rss
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Africa; verdict ADD): "Le saviez-vous", true/false and word-origin items
+      on Moroccan places (strong fit for fun and little-known facts), for Place facts. robots.txt: 200, empty Disallow. Terms:
+      terms not found; the print magazine is sold, but the web items are free. Sourced: partly. Terms not read or not found;
+      owner accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: fx-senegal-online
+    category: facts
+    name: Sénégal Online (guide since 1996)
+    url: https://www.senegal-online.com/sitemap_index.xml
+    method: sitemap
+    license: Copyright; no automated-access clause
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Africa; verdict ADD): town and village pages and Senegal history, for Place
+      facts, Places to see and Travel tips. robots.txt: 200. Terms: "Tous les droits de reproduction sont réservés". Sourced:
+      no. Copyright reserved, no bot, scraping, TDM or AI ban quoted; owner accepted for non-commercial use 2026-11-18. Facts
+      only.'
+  - id: fx-mauritius-times
+    category: facts
+    name: Mauritius Times (history features)
+    url: https://www.mauritiustimes.com/mt/feed/
+    method: rss
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Africa; verdict ADD): Mauritian history features, for Place facts. robots.txt:
+      404 (allowed). Terms: terms not found. Sourced: partly. Terms not read or not found; owner accepted for non-commercial
+      use 2026-11-18. Facts only.'
+  - id: fx-lebanon-untravelled
+    category: facts
+    name: Lebanon Untravelled
+    url: https://lebanonuntravelled.com/feed/
+    method: rss
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Middle East; verdict ADD): Lebanese villages, museums and sites, for Place
+      facts, Places to see and Activities. robots.txt: 200; Crawl-Delay 20. Terms: terms not found. Sourced: partly. Terms not
+      read or not found; owner accepted for non-commercial use 2026-11-18. Facts only. Crawl-delay 20 honoured as min_delay_s.'
+  - id: fx-discover-lebanon
+    category: facts
+    name: DiscoverLebanon.com
+    url: https://www.discoverlebanon.com/
+    method: html
+    license: Copyright; no automated-access clause
+    cadence: yearly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Middle East; verdict ADD): town and site pages (stale; © 1997–2020), for
+      Place facts and Places to see. robots.txt: 200 (Mediapartners rule only). Terms: "copyright © .. All Rights Reserved".
+      Sourced: no. Copyright reserved, no bot, scraping, TDM or AI ban quoted; owner accepted for non-commercial use 2026-11-18.
+      Facts only.'
+  - id: fx-yemen-times-archive
+    category: facts
+    name: Yemen Times archive
+    url: https://yementimes.com/wp-sitemap.xml
+    method: sitemap
+    license: Copyright; terms not found
+    cadence: yearly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Middle East; verdict ADD): Yemeni cities and heritage features (archived),
+      for Place facts. robots.txt: 200. Terms: terms not found. Sourced: partly. Terms not read or not found; owner accepted
+      for non-commercial use 2026-11-18. Facts only.'
+  - id: fx-libya-observer
+    category: facts
+    name: The Libya Observer (culture)
+    url: https://libyaobserver.ly/culture
+    method: html
+    license: Copyright; no automated-access clause
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Africa; verdict ADD): Libyan heritage news (Sabratha, Cyrene, UNESCO bids),
+      for Place facts. robots.txt: 200 CS. Terms: "No part .. may be reproduced .. except brief quotations" (copyright only).
+      Sourced: partly. Copyright reserved, no bot, scraping, TDM or AI ban quoted; owner accepted for non-commercial use 2026-11-18.
+      Facts only.'
+  - id: fx-lefaso
+    category: facts
+    name: leFaso.net
+    url: https://lefaso.net/spip.php?page=backend
+    method: rss
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Africa; verdict ADD): Burkina Faso places, history and heritage features
+      (e.g. "Bobo-Dioulasso, la maison des Bobo-Dioula"), for Place facts. robots.txt: 200, Allow: /. Terms: terms not found.
+      Sourced: partly. Terms not read or not found; owner accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: fx-gabonreview-culture
+    category: facts
+    name: Gabonreview (culture)
+    url: https://www.gabonreview.com/feed
+    method: rss
+    license: Copyright; no automated-access clause
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Africa; verdict ADD): Gabon heritage and culture, for Place facts. robots.txt:
+      200. Terms: "All rights reserved". Sourced: no. Copyright reserved, no bot, scraping, TDM or AI ban quoted; owner accepted
+      for non-commercial use 2026-11-18. Facts only.'
+  - id: fx-adiac-congo
+    category: facts
+    name: Adiac (Agence d'Information d'Afrique Centrale), art and culture
+    url: https://www.adiac-congo.com/rubrique/art-culture-media
+    method: html
+    license: Copyright; personal/non-commercial terms (owner accepted)
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Africa; verdict ADD): Congo-Brazzaville and Congo Basin places (e.g. "Brazzaville,
+      la belle aux mille visages"), for Place facts. robots.txt: 200; Crawl-delay 10. Terms: "usage personnel et non commercial"
+      (personal/non-commercial terms, which the owner accepted). Sourced: no. Terms restrict to personal/non-commercial use;
+      owner accepted for non-commercial use 2026-11-18. Facts only. Crawl-delay 10 honoured as min_delay_s.'
+  - id: fx-tchadinfos-histoire
+    category: facts
+    name: Tchadinfos (histoire)
+    url: https://tchadinfos.com/feed/
+    method: rss
+    license: Copyright; no automated-access clause
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Africa; verdict ADD): Chad history pieces (a rare source for Chad), for
+      Place facts. robots.txt: 200 CS. Terms: CGU: "Toute reproduction ou utilisation non autorisée est interdite" (copyright).
+      Sourced: partly. Copyright reserved, no bot, scraping, TDM or AI ban quoted; owner accepted for non-commercial use 2026-11-18.
+      Facts only.'
+  - id: fx-sahelien
+    category: facts
+    name: Sahelien.com (culture)
+    url: https://sahelien.com/sitemap_index.xml
+    method: sitemap
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Africa; verdict ADD): Mali, Niger and Burkina culture and heritage, for
+      Place facts. robots.txt: 200. Terms: terms not found. Sourced: no. Terms not read or not found; owner accepted for non-commercial
+      use 2026-11-18. Facts only.'
+  - id: fx-lexpress-mg
+    category: facts
+    name: L'Express de Madagascar (culture)
+    url: https://www.lexpress.mg/sitemap.xml
+    method: sitemap
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Africa; verdict ADD): Malagasy heritage (rova, towns), for Place facts.
+      robots.txt: 200; /search disallowed (so use the feed). Terms: terms not found. Sourced: no. Terms not read or not found;
+      owner accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: fx-newsmada-culture
+    category: facts
+    name: Newsmada (culture)
+    url: https://newsmada.com/feed/
+    method: rss
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Africa; verdict ADD): Madagascar culture and heritage, for Place facts.
+      robots.txt: robots 301 (http). Terms: terms not found. Sourced: no. Terms not read or not found; owner accepted for non-commercial
+      use 2026-11-18. Facts only.'
+  - id: fx-madagascar-tribune
+    category: facts
+    name: Madagascar-Tribune
+    url: https://www.madagascar-tribune.com/spip.php?page=backend
+    method: rss
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Africa; verdict ADD): Madagascar history columns, for Place facts. robots.txt:
+      200, Allow: / (SPIP). Terms: terms not found. Sourced: partly. Terms not read or not found; owner accepted for non-commercial
+      use 2026-11-18. Facts only.'
+  - id: fx-alwatwan
+    category: facts
+    name: Al-watwan (Comoros daily), culture
+    url: https://www.alwatwan.net/culture/
+    method: html
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Africa; verdict ADD): Comorian medinas and heritage, for Place facts. robots.txt:
+      200; crawl-delay 10. Terms: terms not found. Sourced: no. Terms not read or not found; owner accepted for non-commercial
+      use 2026-11-18. Facts only. Crawl-delay 10 honoured as min_delay_s.'
+  - id: fx-nation-sc
+    category: facts
+    name: Seychelles Nation
+    url: https://www.nation.sc/
+    method: html
+    license: Copyright; no automated-access clause
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Africa; verdict ADD): Seychelles heritage features (thin), for Place facts.
+      robots.txt: 404 (allowed). Terms: only a privacy policy. Sourced: no. Copyright reserved, no bot, scraping, TDM or AI
+      ban quoted; owner accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: fx-mmegi
+    category: facts
+    name: Mmegi (Botswana)
+    url: https://www.mmegi.bw/rss
+    method: rss
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Africa; verdict ADD): Botswana heritage features, for Place facts. robots.txt:
+      200; /page/, /search, *.pdf disallowed. Terms: terms not found. Sourced: no. Terms not read or not found; owner accepted
+      for non-commercial use 2026-11-18. Facts only.'
+  - id: fx-mwnation
+    category: facts
+    name: The Nation (Malawi)
+    url: https://mwnation.com/feed/
+    method: rss
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Africa; verdict ADD): Malawi heritage features (thin), for Place facts.
+      robots.txt: 200. Terms: terms not found. Sourced: no. Terms not read or not found; owner accepted for non-commercial use
+      2026-11-18. Facts only.'
+  - id: fx-times-eswatini
+    category: facts
+    name: Times of Eswatini
+    url: https://times.co.sz/feed/
+    method: rss
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Africa; verdict ADD): Eswatini heritage and culture (thin), for Place facts.
+      robots.txt: 200. Terms: terms not found. Sourced: no. Terms not read or not found; owner accepted for non-commercial use
+      2026-11-18. Facts only.'
+  - id: fx-lesotho-times
+    category: facts
+    name: Lesotho Times
+    url: https://lestimes.com/?feed=rss2
+    method: rss
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Africa; verdict ADD): Lesotho features (thin), for Place facts. robots.txt:
+      404 (allowed). Terms: terms not found. Sourced: no. Terms not read or not found; owner accepted for non-commercial use
+      2026-11-18. Facts only.'
+  - id: fx-le360-culture
+    category: facts
+    name: Le360 (culture)
+    url: https://fr.le360.ma/arc/outboundfeeds/sitemap-index/
+    method: sitemap
+    license: Copyright; no automated-access clause
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Africa; verdict ADD): Moroccan heritage (medinas, kasbahs), for Place facts.
+      robots.txt: 200; /recherche disallowed. Terms: mentions légales: unauthorised reproduction banned, quotation allowed (copyright).
+      Sourced: no. Copyright reserved, no bot, scraping, TDM or AI ban quoted; owner accepted for non-commercial use 2026-11-18.
+      Facts only.'
+  - id: fx-leaders-tn
+    category: facts
+    name: Leaders (Tunisia)
+    url: https://www.leaders.com.tn/sitemap
+    method: sitemap
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Africa; verdict ADD): Tunisian town features (e.g. "Hammam-Lif, une ville.."),
+      for Place facts. robots.txt: 200; /search disallowed. Terms: terms not found. Sourced: partly. Terms not read or not found;
+      owner accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: fx-lapresse-tn
+    category: facts
+    name: La Presse de Tunisie (culture)
+    url: https://www.lapresse.tn/sitemap_index.xml
+    method: sitemap
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Africa; verdict ADD): Tunisian heritage, for Place facts. robots.txt: 200.
+      Terms: terms not found. Sourced: no. Terms not read or not found; owner accepted for non-commercial use 2026-11-18. Facts
+      only.'
+  - id: fx-webdo-tn
+    category: facts
+    name: Webdo (culture)
+    url: https://www.webdo.tn/fr/feed/
+    method: rss
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Africa; verdict ADD): Tunisian culture and heritage, for Place facts. robots.txt:
+      200. Terms: terms not found. Sourced: no. Terms not read or not found; owner accepted for non-commercial use 2026-11-18.
+      Facts only.'
+  - id: fx-aps-dz
+    category: facts
+    name: 'APS: Algérie Presse Service'
+    url: https://www.aps.dz/sitemap.xml
+    method: sitemap
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Africa; verdict ADD): Algérie Presse Service: Algerian heritage items and
+      infographics, for Place facts. robots.txt: 200, Allow: /. Terms: terms not found. Sourced: partly. Terms not read or not
+      found; owner accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: fx-cridem
+    category: facts
+    name: Cridem (Mauritania)
+    url: http://www.cridem.org/rss/actualites.xml
+    method: rss
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Africa; verdict ADD): Mauritania (Chinguetti, Ouadane) heritage news, for
+      Place facts. robots.txt: 200; /doc/, /tpl/ disallowed. Terms: C_Conditions.php timed out (unread). Sourced: no. Terms
+      not read or not found; owner accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: fx-opais-ao
+    category: facts
+    name: O País (Angola), cultura
+    url: https://www.opais.ao/feed/
+    method: rss
+    license: Copyright; no automated-access clause
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Africa; verdict ADD): Angola heritage (classified monuments, INPC news),
+      for Place facts. robots.txt: 404 (allowed). Terms: "É proibida a reprodução .. sem autorização" (copyright). Sourced:
+      partly. Copyright reserved, no bot, scraping, TDM or AI ban quoted; owner accepted for non-commercial use 2026-11-18.
+      Facts only.'
+  - id: fx-rna-ao
+    category: facts
+    name: Rádio Nacional de Angola
+    url: https://rna.ao/
+    method: html
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Africa; verdict ADD): heritage counts and designations (e.g. 340 classified
+      monuments, 2026), for Place facts. robots.txt: 404 (allowed). Terms: terms not found. Sourced: partly. Terms not read
+      or not found; owner accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: fx-tribuna-angola
+    category: facts
+    name: Tribuna de Angola
+    url: https://tribunadeangola.org/?feed=rss2
+    method: rss
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Africa; verdict ADD): Angolan intangible and classified heritage, for Place
+      facts. robots.txt: 404 (allowed). Terms: terms not found. Sourced: no. Terms not read or not found; owner accepted for
+      non-commercial use 2026-11-18. Facts only.'
+  - id: gov-sana-culture
+    category: facts
+    name: 'SANA: Syrian Arab News Agency (culture and arts)'
+    url: https://sana.sy/feed/
+    method: rss
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Middle East; verdict ADD): Syrian Arab News Agency (culture and arts):
+      Syrian heritage sites news, for Place facts. robots.txt: 200 (Rank Math). Terms: terms not found. Sourced: no. Terms not
+      read or not found; owner accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: gov-nna-lebanon
+    category: facts
+    name: National News Agency (Lebanon)
+    url: https://nna-leb.gov.lb/sitemap.xml
+    method: sitemap
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Middle East; verdict ADD): Lebanese heritage news, for Place facts. robots.txt:
+      200, Allow: /; /api/ disallowed. Terms: terms page is JS-rendered (unread). Sourced: no. Terms not read or not found;
+      owner accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: gov-petra-jordan
+    category: facts
+    name: 'Petra: Jordan News Agency (arts and culture)'
+    url: https://petra.gov.jo/ar/news/search/category/arts-culture
+    method: html
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Middle East; verdict ADD): Jordan News Agency (arts and culture): Jordan
+      heritage news, for Place facts. robots.txt: 200 CS. Terms: terms page JS-rendered (unread). Sourced: no. Terms not read
+      or not found; owner accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: gov-lana-libya
+    category: facts
+    name: 'LANA: Libyan News Agency'
+    url: https://lana.gov.ly/
+    method: html
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Africa; verdict ADD): Libyan News Agency: Libyan heritage news (thin),
+      for Place facts. robots.txt: 404 (allowed). Terms: terms not found. Sourced: no. Terms not read or not found; owner accepted
+      for non-commercial use 2026-11-18. Facts only.'
+  - id: gov-tap-tunisia
+    category: facts
+    name: 'TAP: Tunis Afrique Presse (culture portal)'
+    url: https://www.tap.info.tn/ar/%D9%88%D9%8A%D8%A8-%D8%B3%D9%8A%D8%AA-%D8%AB%D9%82%D8%A7%D9%81%D8%A9-%D9%88-%D8%A3%D8%AA%D8%B5%D8%A7%D9%84-Portal-Culture
+    method: html
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Africa; verdict ADD): Tunis Afrique Presse (culture portal): Tunisian heritage
+      news, for Place facts. robots.txt: 200; Crawl-delay 60. Terms: terms not found. Sourced: no. Terms not read or not found;
+      owner accepted for non-commercial use 2026-11-18. Facts only. Crawl-delay 60 honoured as min_delay_s.'
+  - id: fx-omandaily
+    category: facts
+    name: Oman Daily
+    url: https://www.omandaily.om/
+    method: html
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Middle East; verdict ADD): Omani heritage (thin), for Place facts. robots.txt:
+      200; disallows *.php, /archive/, /article.php*: article paths may be blocked, so check first. Terms: terms not found.
+      Sourced: no. Terms not read or not found; owner accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: arch-ajol
+    category: facts
+    name: African Journals Online
+    url: https://www.ajol.info/public/sitemaps/sitemap_index.xml
+    method: sitemap
+    license: Copyright; no automated-access clause
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Africa; verdict ADD): African-published history journals (e.g. Afrika Zamani,
+      Ghana/Nigeria/Malawi history), for Place facts. robots.txt: 200; Amazonbot and DataForSeo blocked. Terms: "Re-use .. not
+      .. permitted unless the journal''s .. license explicitly permits it" (copyright, not a bot ban). Sourced: yes. Copyright
+      reserved, no bot, scraping, TDM or AI ban quoted; owner accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: arch-scielo-za
+    category: facts
+    name: SciELO South Africa
+    url: https://www.scielo.org.za/
+    method: html
+    license: Open data licence (see notes)
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Africa; verdict ADD): open southern African history journals (e.g. Historia,
+      New Contree, Southern African Humanities), for Place facts. robots.txt: 200; HTTrack and MegaIndex blocked. Terms: terms
+      not fetched. Sourced: yes. Open licence (Open data licence (see notes)).'
+  - id: arch-imist-revues
+    category: facts
+    name: 'IMIST: Portail des Revues Scientifiques Marocaines'
+    url: https://revues.imist.ma/index.php/index/fr_CA
+    method: html
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Africa; verdict ADD): Portail des Revues Scientifiques Marocaines: Moroccan
+      heritage and geography journals (his-heritage lives on journals.imist.ma, so vet that host separately), for Place facts.
+      robots.txt: 200 (OJS standard). Terms: terms not found. Sourced: yes. Terms not read or not found; owner accepted for
+      non-commercial use 2026-11-18. Facts only.'
+  - id: her-cnrpah
+    category: facts
+    name: 'CNRPAH: Centre National de Recherches Préhistoriques, Anthropologiques et Historiques (Algeria)'
+    url: https://www.cnrpah.org/index.php/fr/
+    method: html
+    license: Copyright; terms not found
+    cadence: quarterly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Africa; verdict ADD): Centre National de Recherches Préhistoriques, Anthropologiques
+      et Historiques (Al…: Algerian prehistory and anthropology (Tassili, ksour), for Place facts. robots.txt: 200 (Joomla standard).
+      Terms: terms not found. Sourced: yes. Terms not read or not found; owner accepted for non-commercial use 2026-11-18. Facts
+      only.'
+  - id: her-apsad
+    category: facts
+    name: 'APSAD: Association pour la Protection des Sites et Anciennes Demeures (Lebanon)'
+    url: https://www.apsad.org/
+    method: html
+    license: Copyright; terms not found
+    cadence: quarterly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Middle East; verdict ADD): Association pour la Protection des Sites et
+      Anciennes Demeures (Lebanon): Beirut historic houses and sites, for Place facts. robots.txt: 200, Allow: / (Wix). Terms:
+      terms not found. Sourced: partly. Terms not read or not found; owner accepted for non-commercial use 2026-11-18. Facts
+      only.'
+  - id: fx-univ-lome-ville
+    category: facts
+    name: 'Université de Lomé: "Découvrir la ville de Lomé"'
+    url: https://univ-lome.tg/decouvrir-la-ville-de-lome/
+    method: html
+    license: Copyright; terms not found
+    cadence: yearly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Africa; verdict ADD): "Découvrir la ville de Lomé": a Lomé city profile
+      (single page; a Togo gap filler), for Place facts. robots.txt: 200. Terms: terms not found. Sourced: no. Terms not read
+      or not found; owner accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: gov-inep-bissau
+    category: facts
+    name: 'INEP: Instituto Nacional de Estudos e Pesquisa (Guinea-Bissau)'
+    url: http://www.inep-bissau.org/
+    method: html
+    license: Copyright; personal/non-commercial terms (owner accepted)
+    cadence: yearly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Africa; verdict ADD): Instituto Nacional de Estudos e Pesquisa (Guinea-Bissau):
+      Guinea-Bissau studies (thin site, but the only official lead for Bissau), for Place facts. robots.txt: 200. Terms: "reproduzido
+      .. para uso pessoal e nunca comercial" (personal/non-commercial terms, which the owner accepted). Sourced: partly. Terms
+      restrict to personal/non-commercial use; owner accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: gov-ine-mozambique
+    category: facts
+    name: INE Moçambique (Censo 2017 and district profiles)
+    url: https://www.ine.gov.mz/
+    method: html
+    license: Copyright; terms not found
+    cadence: yearly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Africa; verdict NEEDS-ADAPTER): population records per district and city,
+      for Place facts. robots.txt: 200, empty Disallow. Terms: terms not found. Sourced: yes. Terms not read or not found; owner
+      accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: gov-ine-angola
+    category: facts
+    name: INE Angola
+    url: https://www.ine.gov.ao/
+    method: html
+    license: Copyright; terms not found
+    cadence: yearly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Africa; verdict NEEDS-ADAPTER): province and municipality population, for
+      Place facts. robots.txt: 404 (allowed). Terms: terms not found. Sourced: yes. Terms not read or not found; owner accepted
+      for non-commercial use 2026-11-18. Facts only.'
+  - id: gov-instat-madagascar
+    category: facts
+    name: INSTAT Madagascar
+    url: https://instat.mg/sitemap.xml
+    method: sitemap
+    license: Copyright; terms not found
+    cadence: yearly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Africa; verdict NEEDS-ADAPTER): region and commune figures, for Place facts.
+      robots.txt: 200; Crawl-delay 3. Terms: terms not found. Sourced: yes. Terms not read or not found; owner accepted for
+      non-commercial use 2026-11-18. Facts only. Crawl-delay 5 honoured as min_delay_s.'
+  - id: gov-ine-saotome
+    category: facts
+    name: INE São Tomé e Príncipe
+    url: https://www.ine.st/
+    method: html
+    license: Copyright; terms not found
+    cadence: yearly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Africa; verdict NEEDS-ADAPTER): district population, for Place facts. robots.txt:
+      200 (Joomla). Terms: terms not found. Sourced: yes. Terms not read or not found; owner accepted for non-commercial use
+      2026-11-18. Facts only.'
+  - id: fx-jornal-de-angola
+    category: facts
+    name: Jornal de Angola (cultura)
+    url: https://www.jornaldeangola.ao/
+    method: html
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Africa; verdict NEEDS-ADAPTER): Angolan heritage, for Place facts. robots.txt:
+      robots returns the SPA HTML (no robots, so allowed). Terms: terms not found. Sourced: no. Terms not read or not found;
+      owner accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: city-muscat
+    category: facts
+    name: Muscat Municipality
+    url: https://www.mm.gov.om/
+    method: html
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Middle East; verdict NEEDS-ADAPTER): Muscat history page (municipal history
+      target), for Place facts. robots.txt: 200; /manageadmin/ disallowed. Terms: terms not found. Sourced: no. Terms not read
+      or not found; owner accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: city-tripoli-ly
+    category: facts
+    name: Tripoli municipality (Libya)
+    url: https://tripoli.gov.ly/
+    method: html
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Africa; verdict NEEDS-ADAPTER): Tripoli city info, for Place facts. robots.txt:
+      robots path returns HTML (allowed). Terms: terms not found. Sourced: no. Terms not read or not found; owner accepted for
+      non-commercial use 2026-11-18. Facts only.'
+  - id: arch-saho
+    category: facts
+    name: South African History Online
+    url: https://sahistory.org.za/sitemap.xml
+    method: sitemap
+    license: CC BY-NC-SA (owner accepted, kept separate)
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Africa; verdict ADD): "Places" entries for SA towns, plus "This day in
+      history", for Place facts, Places to see and Events. robots.txt: Crawl-delay 1; AI-bot blocks (anthropic-ai, ClaudeBot,
+      CCBot). Terms: "Content licensed CC BY-NC-SA 4.0"; the site advertises Open data, llm.txt and a Citations API. Sourced:
+      yes. Share-alike: kept apart, never merged into our own wording and never sent to a model (no LLM kinds). AI-reserved
+      robots.txt (or Content-Signal): title and link only, no LLM kinds. Crawl-delay 5 honoured as min_delay_s.'
+  - id: fx-heritage-portal
+    category: facts
+    name: The Heritage Portal
+    url: https://www.theheritageportal.co.za/sitemap.xml
+    method: sitemap
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Africa; verdict ADD): articles by SA heritage practitioners on buildings,
+      towns and suburbs, for Place facts, Places to see and Free walking tours. robots.txt: Drupal defaults (/search/, /admin/)
+      only. Terms: terms not found (/terms-and-conditions 404). Sourced: partly (named authors, many with references). Terms
+      not read or not found; owner accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: her-artefacts
+    category: facts
+    name: 'Artefacts: SA built environment encyclopedia'
+    url: https://www.artefacts.co.za/
+    method: html
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Africa; verdict ADD): SA built environment encyclopedia: building-by-building
+      history of SA towns with architect, date and references, for Place facts and Places to see. robots.txt: disallows /Admin/,
+      /images, /documents; blocks Baiduspider only. Terms: terms not found. Sourced: yes (bibliography per entry). Terms not
+      read or not found; owner accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: gov-za-aboutsa
+    category: facts
+    name: 'South African Government: About SA (Yearbook)'
+    url: https://www.gov.za/about-sa
+    method: html
+    license: Copyright; personal/non-commercial terms (owner accepted)
+    cadence: yearly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Africa; verdict ADD): About SA (Yearbook): provinces, history, symbols,
+      for Place facts. robots.txt: allow all. Terms: "only for non-commercial informational or reference purposes" -> owner
+      accepted. Sourced: yes. Terms restrict to personal/non-commercial use; owner accepted for non-commercial use 2026-11-18.
+      Facts only. also in brief: africa-middle-east, heritage-registers.'
+  - id: her-robben-island
+    category: facts
+    name: Robben Island Museum
+    url: https://www.robben-island.org.za/sitemap_index.xml
+    method: sitemap
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Africa; verdict ADD): UNESCO site history, prison and island facts, for
+      Place facts and Activities. robots.txt: no disallows. Terms: terms not found (POPI policy only). Sourced: partly. Terms
+      not read or not found; owner accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: her-freedom-park
+    category: facts
+    name: Freedom Park (Pretoria)
+    url: https://www.freedompark.co.za/wp-sitemap.xml
+    method: sitemap
+    license: Copyright; no automated-access clause
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Africa; verdict ADD): national heritage site, memorial facts, for Place
+      facts, Activities and Events. robots.txt: /wp-admin/ only. Terms: /terms-and-conditions has no crawler or AI clause. Sourced:
+      no. Copyright reserved, no bot, scraping, TDM or AI ban quoted; owner accepted for non-commercial use 2026-11-18. Facts
+      only.'
+  - id: her-district-six
+    category: facts
+    name: District Six Museum
+    url: https://www.districtsix.co.za/wp-sitemap.xml
+    method: sitemap
+    license: Copyright; no automated-access clause
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Africa; verdict ADD): Cape Town forced-removals history, for Place facts
+      and Free walking tours. robots.txt: /wp-admin/ only. Terms: images reproduced only with permission; no crawler clause.
+      Sourced: partly. Copyright reserved, no bot, scraping, TDM or AI ban quoted; owner accepted for non-commercial use 2026-11-18.
+      Facts only.'
+  - id: her-joburg-heritage
+    category: facts
+    name: Johannesburg Heritage Foundation
+    url: https://joburgheritage.org.za/wp-sitemap.xml
+    method: sitemap
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Africa; verdict ADD): Johannesburg suburb and building histories; runs
+      heritage tours, for Place facts and Free walking tours. robots.txt: WooCommerce paths only. Terms: terms not found. Sourced:
+      partly. Terms not read or not found; owner accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: her-iziko
+    category: facts
+    name: Iziko Museums of South Africa
+    url: https://www.iziko.org.za/feed/
+    method: rss
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Africa; verdict ADD): Castle of Good Hope, Bo-Kaap Museum, SA Museum history,
+      for Place facts and Activities. robots.txt: no disallows. Terms: terms not found (privacy only). Sourced: partly. Terms
+      not read or not found; owner accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: her-maropeng
+    category: facts
+    name: 'Maropeng: Cradle of Humankind'
+    url: https://www.maropeng.co.za/sitemap.xml
+    method: sitemap
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Africa; verdict ADD): Cradle of Humankind: fossil-hominid World Heritage
+      facts, for Place facts and Activities. robots.txt: no disallows. Terms: terms not found. Sourced: partly. Terms not read
+      or not found; owner accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: her-ditsong
+    category: facts
+    name: DITSONG Museums of SA
+    url: https://ditsong.org.za/en
+    method: html
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Africa; verdict ADD): 8 national museums, Kruger House, Pioneer Museum
+      and others, for Place facts and Activities. robots.txt: robots 404 on both www and apex (allowed). Terms: terms not found.
+      Sourced: no. Terms not read or not found; owner accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: tb-brand-south-africa
+    category: facts
+    name: Brand South Africa
+    url: https://www.brandsouthafrica.com/
+    method: html
+    license: Copyright; personal/non-commercial terms (owner accepted)
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Africa; verdict ADD): "fast facts", national symbols, firsts, for Place
+      facts. robots.txt: AI-block; no other disallows. Terms: "personal, non-commercial and informational purposes only… permission
+      to copy and distribute… provided that the source… is acknowledged" (owner accepted). Sourced: no. Terms restrict to personal/non-commercial
+      use; owner accepted for non-commercial use 2026-11-18. Facts only. AI-reserved robots.txt (or Content-Signal): title and
+      link only, no LLM kinds.'
+  - id: od-pleiades
+    category: facts
+    name: Pleiades ancient places gazetteer
+    url: https://github.com/isawnyu/pleiades.datasets
+    method: html
+    license: CC BY 3.0
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Africa; verdict ADD): ancient names, founding periods, coordinates for
+      Egypt, the Levant, North Africa and Persia, for Place facts and Places to see. robots.txt: site robots: Crawl-delay 3
+      and AI-block (ClaudeBot etc.), so use the GitHub dump only (github.com already vetted). Terms: CC BY on site. Sourced:
+      yes. Open licence (CC BY 3.0). AI-reserved robots.txt (or Content-Signal): title and link only, no LLM kinds. Crawl-delay
+      5 honoured as min_delay_s.'
+  - id: fx-iranchamber
+    category: facts
+    name: Iran Chamber Society
+    url: https://www.iranchamber.com/sitemap.xml
+    method: sitemap
+    license: Copyright; personal/non-commercial terms (owner accepted)
+    cadence: quarterly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Middle East; verdict ADD): Iranian city and monument histories, for Place
+      facts and Places to see. robots.txt: cgi/admin only. Terms: "downloaded or used solely for personal, non-commercial purposes"
+      (owner accepted). Sourced: partly. Terms restrict to personal/non-commercial use; owner accepted for non-commercial use
+      2026-11-18. Facts only.'
+  - id: her-cgie
+    category: facts
+    name: Center for the Great Islamic Encyclopedia
+    url: http://www.cgie.org.ir/fa/rss/weblog
+    method: rss
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Middle East; verdict ADD): scholarly Persian encyclopedia of Iranian and
+      Islamic places, for Place facts. robots.txt: /admin/, /api/; Crawl-delay 10. Terms: terms not found. Sourced: yes. Terms
+      not read or not found; owner accepted for non-commercial use 2026-11-18. Facts only. Crawl-delay 10 honoured as min_delay_s.'
+  - id: fx-arab-ency
+    category: facts
+    name: Arab Encyclopedia (Syria)
+    url: https://arab-ency.com.sy/
+    method: html
+    license: Copyright; no automated-access clause
+    cadence: quarterly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Middle East; verdict ADD): Arabic entries on Levantine cities and sites,
+      for Place facts. robots.txt: AI-block. Terms: copyright-only notice ("حقوق الطبع والنشر محفوظة"). Sourced: yes. Copyright
+      reserved, no bot, scraping, TDM or AI ban quoted; owner accepted for non-commercial use 2026-11-18. Facts only. AI-reserved
+      robots.txt (or Content-Signal): title and link only, no LLM kinds.'
+  - id: her-sa-heritage
+    category: facts
+    name: Saudi Heritage Commission records
+    url: https://heritage.moc.gov.sa/en/Cultural-Heritage
+    method: html
+    license: Copyright; personal/non-commercial terms (owner accepted)
+    cadence: quarterly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Middle East; verdict ADD): National Register of Architectural Heritage
+      and archaeological sites, for Place facts and Places to see. robots.txt: 404 = allowed. Terms: "available for your personal
+      use" → owner accepted. Sourced: yes. Terms restrict to personal/non-commercial use; owner accepted for non-commercial
+      use 2026-11-18. Facts only.'
+  - id: fx-saudipedia
+    category: facts
+    name: Saudipedia (Ministry of Media)
+    url: https://saudipedia.com/en/sitemap.xml
+    method: sitemap
+    license: Copyright; no automated-access clause
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Middle East; verdict ADD): official encyclopedia of Saudi cities, villages
+      and sites, for Place facts and Places to see. robots.txt: /api/, captcha paths. Terms: quoting allowed "للأغراض العلمية
+      والبحثية ونشر الوعي… بشرط الإحالة" (with attribution); no crawler clause. Sourced: partly. Copyright reserved, no bot,
+      scraping, TDM or AI ban quoted; owner accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: gov-rcu-alula
+    category: facts
+    name: Royal Commission for AlUla
+    url: https://www.rcu.gov.sa/sitemap.xml
+    method: sitemap
+    license: Copyright; no automated-access clause
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Middle East; verdict ADD): Hegra, Dadan, oasis history, for Place facts
+      and Activities. robots.txt: /admin/, /login/ only. Terms: /disclaimers has no crawler clause. Sourced: partly. Copyright
+      reserved, no bot, scraping, TDM or AI ban quoted; owner accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: gov-oman-mht
+    category: facts
+    name: Oman Ministry of Heritage and Tourism
+    url: https://mht.gov.om/en/sitemap.xml
+    method: sitemap
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Middle East; verdict ADD): forts, aflaj, frankincense sites, for Place
+      facts. robots.txt: no disallows. Terms: terms not found. Sourced: no. Terms not read or not found; owner accepted for
+      non-commercial use 2026-11-18. Facts only.'
+  - id: fx-origins-of-doha
+    category: facts
+    name: Origins of Doha and Qatar (UCL project)
+    url: https://originsofdoha.wordpress.com/sitemap.xml
+    method: sitemap
+    license: Copyright; terms not found
+    cadence: quarterly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Middle East; verdict ADD): archaeology and oral history of Doha and Qatari
+      towns, for Place facts. robots.txt: WordPress.com defaults. Terms: terms not found. Sourced: yes. Terms not read or not
+      found; owner accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: her-riwaq
+    category: facts
+    name: 'RIWAQ: Centre for Architectural Conservation (Palestine)'
+    url: https://www.riwaq.org/
+    method: html
+    license: Copyright; terms not found
+    cadence: quarterly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Middle East; verdict ADD): Centre for Architectural Conservation (Palestine):
+      registry of historic buildings, historic centres, for Place facts and Free walking tours. robots.txt: no robots file (HTML
+      returned), so allowed. Terms: terms not found. Sourced: yes. Terms not read or not found; owner accepted for non-commercial
+      use 2026-11-18. Facts only.'
+  - id: gov-mjcs-maroc
+    category: facts
+    name: 'Morocco Ministry of Culture: national heritage'
+    url: https://mjcs.gov.ma/sitemap_index.xml
+    method: sitemap
+    license: Copyright; no automated-access clause
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Africa; verdict ADD): national heritage: classified monuments, medinas,
+      for Place facts. robots.txt: `/?p=*` only. Terms: "Toute utilisation à des fins commerciales, reproduction ou modification…
+      " prohibited; copyright-only. Sourced: no. Copyright reserved, no bot, scraping, TDM or AI ban quoted; owner accepted
+      for non-commercial use 2026-11-18. Facts only.'
+  - id: her-fnm-maroc
+    category: facts
+    name: Fondation Nationale des Musées (Morocco)
+    url: https://www.fnm.ma/
+    method: html
+    license: Copyright; personal/non-commercial terms (owner accepted)
+    cadence: quarterly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Africa; verdict ADD): national museums and their buildings, for Place facts
+      and Activities. robots.txt: robots 404. Terms: "interdite… sauf pour un usage strictement personnel, privé et non commercial"
+      (owner accepted). Sourced: no. Terms restrict to personal/non-commercial use; owner accepted for non-commercial use 2026-11-18.
+      Facts only.'
+  - id: her-inp-tunisie
+    category: facts
+    name: Institut National du Patrimoine (Tunisia)
+    url: https://www.inp2020.tn/en/feed/
+    method: rss
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Africa; verdict ADD): Tunisian sites and monuments sheets, for Place facts.
+      robots.txt: no disallows. Terms: terms not found. Sourced: partly. Terms not read or not found; owner accepted for non-commercial
+      use 2026-11-18. Facts only.'
+  - id: her-ogebc
+    category: facts
+    name: 'OGEBC: protected cultural property (Algeria)'
+    url: https://ogebc.dz/sitemap_index.xml
+    method: sitemap
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Africa; verdict ADD): protected cultural property (Algeria): Tipaza, Djemila,
+      Timgad site sheets, for Place facts and Activities. robots.txt: no disallows. Terms: terms not found. Sourced: no. Terms
+      not read or not found; owner accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: her-ke-nmk
+    category: facts
+    name: National Museums of Kenya
+    url: https://museums.or.ke/wp-sitemap.xml
+    method: sitemap
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Africa; verdict ADD): gazetted sites and monuments in Kenya, for Place
+      facts, Places to see and Activities. robots.txt: allowed. Terms: terms not found. Sourced: partly. Terms not read or not
+      found; owner accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: her-gmmb
+    category: facts
+    name: Ghana Museums and Monuments Board
+    url: https://gmmb.gov.gh/wp-sitemap.xml
+    method: sitemap
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Africa; verdict ADD): Cape Coast, Elmina and other forts, national museum,
+      for Place facts and Activities. robots.txt: /wp-admin/ only. Terms: terms not found. Sourced: partly. Terms not read or
+      not found; owner accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: her-ncmm-nigeria
+    category: facts
+    name: National Commission for Museums and Monuments (Nigeria)
+    url: https://museum.ng/sitemap_index.xml
+    method: sitemap
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Africa; verdict ADD): the official list of 65 national monuments, for Place
+      facts. robots.txt: no disallows. Terms: terms not found (privacy only). Sourced: no. Terms not read or not found; owner
+      accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: her-na-nhc
+    category: facts
+    name: National Heritage Council of Namibia
+    url: https://nhc-nam.org/portfolio-sitemap.xml
+    method: sitemap
+    license: Copyright; terms not found
+    cadence: quarterly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Africa; verdict ADD): proclaimed national heritage sites, for Place facts
+      and Places to see. robots.txt: allowed. Terms: terms not found. Sourced: partly. Terms not read or not found; owner accepted
+      for non-commercial use 2026-11-18. Facts only.'
+  - id: od-atlas-namibia
+    category: facts
+    name: Atlas of Namibia
+    url: https://atlasofnamibia.online/
+    method: html
+    license: CC BY 4.0
+    cadence: yearly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Africa; verdict ADD): national heritage sites, geography records, for Place
+      facts and Places to see. robots.txt: Drupal defaults. Terms: CC BY 4.0 linked in footer. Sourced: yes. Open licence (CC
+      BY 4.0).'
+  - id: her-kgm
+    category: facts
+    name: Kigali Genocide Memorial
+    url: https://kgm.rw/sitemap_index.xml
+    method: sitemap
+    license: Copyright; no automated-access clause
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Africa; verdict ADD): history and curiosities of the places it covers,
+      for Place facts and Activities. robots.txt: no disallows. Terms: /terms-and-conditions has no crawler clause. Sourced:
+      partly. Copyright reserved, no bot, scraping, TDM or AI ban quoted; owner accepted for non-commercial use 2026-11-18.
+      Facts only.'
+  - id: her-rwanda-heritage
+    category: facts
+    name: Rwanda Cultural Heritage Academy
+    url: https://www.rwandaheritage.gov.rw/
+    method: html
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Africa; verdict ADD): 8 national museums, classified heritage sites, for
+      Place facts and Activities. robots.txt: TYPO3 internals; blocks CCBot and 12 scrapers by name (not ClaudeBot, not VoyagerBot).
+      Terms: terms not found. Sourced: no. Terms not read or not found; owner accepted for non-commercial use 2026-11-18. Facts
+      only. AI-reserved robots.txt (or Content-Signal): title and link only, no LLM kinds.'
+  - id: her-uganda-museums
+    category: facts
+    name: Uganda Department of Museums and Monuments
+    url: https://museums.tourism.go.ug/sitemap_index.xml
+    method: sitemap
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Africa; verdict ADD): national cultural sites, Kasubi tombs, for Place
+      facts. robots.txt: WooCommerce paths only. Terms: terms not found (privacy only). Sourced: no. Terms not read or not found;
+      owner accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: her-aapravasi
+    category: facts
+    name: Aapravasi Ghat Trust Fund (Mauritius)
+    url: https://aapravasi.govmu.org/aapravasi/?feed=rss2
+    method: rss
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Africa; verdict ADD): indentured-labour World Heritage site, for Place
+      facts. robots.txt: no robots file (HTML returned), so allowed. Terms: terms not found. Sourced: partly. Terms not read
+      or not found; owner accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: arch-sudan-memory
+    category: facts
+    name: Sudan Memory
+    url: https://www.sudanmemory.org/
+    method: html
+    license: Copyright; personal/non-commercial terms (owner accepted)
+    cadence: quarterly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Africa; verdict ADD): digitised Sudanese heritage (Suakin, Meroe, Sennar),
+      for Place facts. robots.txt: viewer PDF, search and OAI disallowed; Crawl-delay 10. Terms: "personal, educational and
+      non-commercial access… not to be reused without permission" (non-commercial; owner accepted). Sourced: yes. Terms restrict
+      to personal/non-commercial use; owner accepted for non-commercial use 2026-11-18. Facts only. Crawl-delay 10 honoured
+      as min_delay_s.'
+  - id: fx-chalo-chatu
+    category: facts
+    name: 'Chalo Chatu: Zambia online encyclopedia'
+    url: https://www.chalochatu.org/sitemap/sitemap-index-chalochatu.xml
+    method: sitemap
+    license: CC BY-SA 4.0
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Africa; verdict ADD): Zambia online encyclopedia: Zambian towns, chiefdoms,
+      monuments, for Place facts. robots.txt: AI-block; /index.php? and Special: disallowed. Terms: General disclaimer: "limited
+      license under Creative Commons Attribution-ShareAlike (CC BY-SA) and GFDL". Sourced: partly. Share-alike: kept apart,
+      never merged into our own wording and never sent to a model (no LLM kinds). AI-reserved robots.txt (or Content-Signal):
+      title and link only, no LLM kinds.'
+  - id: wiki-dump-arz
+    category: facts
+    name: Egyptian Arabic Wikipedia dump
+    url: https://dumps.wikimedia.org/arzwiki/latest/
+    method: dump
+    license: CC BY-SA 4.0
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Africa; verdict ADD): Egyptian villages and towns (large bot-made stub
+      share, so filter on length and refs), for Place facts. robots.txt: as above. Terms: as above. Sourced: partly. Share-alike:
+      kept apart, never merged into our own wording and never sent to a model (no LLM kinds).'
+  - id: her-sahris
+    category: facts
+    name: 'SAHRIS: SA Heritage Resources Information System'
+    url: https://sahris.sahra.org.za/
+    method: html
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Africa; verdict ADD): SA Heritage Resources Information System: best SA
+      heritage register, for Place facts. Terms: terms not found. Terms not read or not found; owner accepted for non-commercial
+      use 2026-11-18. Facts only. curl result: timeout (28). Seed: the host root (the research row names no URL).'
+  - id: her-amafa
+    category: facts
+    name: Amafa aKwaZulu-Natali
+    url: https://amafa.org.za/
+    method: html
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Africa; verdict ADD): KZN provincial heritage authority, for Place facts.
+      Terms: terms not found. Terms not read or not found; owner accepted for non-commercial use 2026-11-18. Facts only. curl
+      result: DNS (6). Seed: the host root (the research row names no URL).'
+  - id: arch-nlsa
+    category: facts
+    name: National Library of South Africa
+    url: https://nlsa.ac.za/
+    method: html
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Africa; verdict ADD): local history collections, for Place facts. Terms:
+      terms not found. Terms not read or not found; owner accepted for non-commercial use 2026-11-18. Facts only. curl result:
+      timeout. Seed: the host root (the research row names no URL).'
+  - id: arch-disa
+    category: facts
+    name: Digital Innovation South Africa (UKZN)
+    url: https://disa.ukzn.ac.za/
+    method: html
+    license: Copyright; terms not found
+    cadence: yearly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Africa; verdict ADD): liberation-struggle history tied to SA places (low
+      priority), for Place facts. robots.txt: robots: no response (timeout) → allowed. Terms: terms not found (unreachable).
+      Sourced: yes. Terms not read or not found; owner accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: arch-wits-historical-papers
+    category: facts
+    name: Wits Historical Papers
+    url: https://historicalpapers.wits.ac.za/
+    method: html
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Africa; verdict ADD): archive inventories by place, for Place facts. Terms:
+      terms not found. Terms not read or not found; owner accepted for non-commercial use 2026-11-18. Facts only. curl result:
+      DNS. Seed: the host root (the research row names no URL).'
+  - id: her-jordan-doa
+    category: facts
+    name: Jordan Department of Antiquities
+    url: https://doa.gov.jo/
+    method: html
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Middle East; verdict ADD): 15,000+ registered sites; Databases section,
+      for Place facts. Terms: terms not found. Terms not read or not found; owner accepted for non-commercial use 2026-11-18.
+      Facts only. curl result: timeout. Seed: the host root (the research row names no URL).'
+  - id: od-mega-jordan
+    category: facts
+    name: MEGA-Jordan geodatabase
+    url: https://megajordan.org/
+    method: html
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Middle East; verdict ADD): national archaeological GIS, for Place facts.
+      Terms: terms not found. Terms not read or not found; owner accepted for non-commercial use 2026-11-18. Facts only. curl
+      result: connect (7). Seed: the host root (the research row names no URL).'
+  - id: her-petra
+    category: facts
+    name: Petra Development and Tourism Region Authority
+    url: https://visitpetra.jo/
+    method: html
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Middle East; verdict ADD): Petra facts, for Place facts. Terms: terms not
+      found. Terms not read or not found; owner accepted for non-commercial use 2026-11-18. Facts only. curl result: timeout.
+      Seed: the host root (the research row names no URL).'
+  - id: her-bahrain-baca
+    category: facts
+    name: Bahrain Authority for Culture and Antiquities
+    url: https://culture.gov.bh/
+    method: html
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Middle East; verdict ADD): Bahrain forts, Dilmun burial mounds, for Place
+      facts. Terms: terms not found. Terms not read or not found; owner accepted for non-commercial use 2026-11-18. Facts only.
+      curl result: timeout. Seed: the host root (the research row names no URL).'
+  - id: arch-darah
+    category: facts
+    name: King Abdulaziz Foundation (Darah)
+    url: https://darah.org.sa/
+    method: html
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Middle East; verdict ADD): Saudi historical archive, for Place facts. Terms:
+      terms not found. Terms not read or not found; owner accepted for non-commercial use 2026-11-18. Facts only. curl result:
+      DNS. Seed: the host root (the research row names no URL).'
+  - id: her-idpc-maroc
+    category: facts
+    name: Inventaire et Documentation du Patrimoine Culturel (Morocco)
+    url: https://idpc.ma/
+    method: html
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Africa; verdict ADD): national heritage inventory by region, for Place
+      facts. Terms: terms not found. Terms not read or not found; owner accepted for non-commercial use 2026-11-18. Facts only.
+      curl result: DNS. Seed: the host root (the research row names no URL).'
+  - id: her-inp-rnrt
+    category: facts
+    name: INP Tunisia (old host)
+    url: https://inp.rnrt.tn/
+    method: html
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Africa; verdict ADD): protected monuments list, for Place facts. Terms:
+      terms not found. Terms not read or not found; owner accepted for non-commercial use 2026-11-18. Facts only. curl result:
+      timeout. Seed: the host root (the research row names no URL).'
+  - id: gov-dz-culture
+    category: facts
+    name: 'Algeria Ministry of Culture: LBCP lists'
+    url: https://m-culture.gov.dz/
+    method: html
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Africa; verdict ADD): LBCP lists: per-wilaya protected cultural property
+      PDFs (would need a PDF adapter), for Place facts. Terms: terms not found. Terms not read or not found; owner accepted
+      for non-commercial use 2026-11-18. Facts only. curl result: timeout. Seed: the host root (the research row names no URL).'
+  - id: her-ethiopia-eha
+    category: facts
+    name: Ethiopian Heritage Authority
+    url: https://ehap.insa.gov.et/
+    method: html
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Africa; verdict ADD): official site identity unconfirmed, for Place facts.
+      Terms: terms not found. Terms not read or not found; owner accepted for non-commercial use 2026-11-18. Facts only. curl
+      result: connect (7). Seed: the host root (the research row names no URL).'
+  - id: gov-iran-mcth
+    category: facts
+    name: Iran Ministry of Cultural Heritage
+    url: https://mcth.ir/
+    method: html
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Middle East; verdict ADD): national heritage register (may be geo-blocked),
+      for Place facts. Terms: terms not found. Terms not read or not found; owner accepted for non-commercial use 2026-11-18.
+      Facts only. curl result: timeout. Seed: the host root (the research row names no URL).'
+  - id: city-joburg
+    category: facts
+    name: City of Johannesburg
+    url: https://joburg.org.za/
+    method: html
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Africa; verdict ADD): city history pages, for Place facts. Terms: terms
+      not found. Terms not read or not found; owner accepted for non-commercial use 2026-11-18. Facts only. curl result: robots
+      404, homepage timeout. Seed: the host root (the research row names no URL).'
+  - id: arch-agda
+    category: facts
+    name: Arabian Gulf Digital Archive
+    url: https://agda.ae/
+    method: html
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Middle East; verdict NEEDS-ADAPTER): history and curiosities of the places
+      it covers, for Place facts. Terms: terms not found. Terms not read or not found; owner accepted for non-commercial use
+      2026-11-18. Facts only. format: JS SPA (1.4 KB shell) backed by a JSON API ; note: robots allows everything; UAE–UK archive,
+      free to view and use. Seed: the host root (the research row names no URL).'
+  - id: arch-na-ae
+    category: facts
+    name: National Library and Archives UAE
+    url: https://na.ae/
+    method: html
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Africa; verdict NEEDS-ADAPTER): history and curiosities of the places it
+      covers, for Place facts. Terms: terms not found. Terms not read or not found; owner accepted for non-commercial use 2026-11-18.
+      Facts only. format: JS SPA (no anchors in HTML) ; note: robots 404. Seed: the host root (the research row names no URL).'
+  - id: her-iaa
+    category: facts
+    name: Israel Antiquities Authority (and its National Archaeological Database)
+    url: https://iaa.org.il/
+    method: html
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Middle East; verdict NEEDS-ADAPTER): history and curiosities of the places
+      it covers, for Place facts. Terms: terms not found. Terms not read or not found; owner accepted for non-commercial use
+      2026-11-18. Facts only. format: JS SPA; the database is a map-driven web app ; note: no robots file (HTML returned), so
+      allowed; terms not found. Seed: the host root (the research row names no URL).'
+  - id: her-stcda
+    category: facts
+    name: Stone Town Conservation and Development Authority (Zanzibar)
+    url: https://stcda.go.tz/
+    method: html
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Africa; verdict NEEDS-ADAPTER): history and curiosities of the places it
+      covers, for Place facts. Terms: terms not found. Terms not read or not found; owner accepted for non-commercial use 2026-11-18.
+      Facts only. format: React SPA ; note: robots allows everything. Seed: the host root (the research row names no URL).'
+  - id: her-constitution-hill
+    category: facts
+    name: Constitution Hill
+    url: https://constitutionhill.org.za/
+    method: html
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Africa; verdict NEEDS-ADAPTER): history and curiosities of the places it
+      covers, for Place facts. Terms: terms not found. Terms not read or not found; owner accepted for non-commercial use 2026-11-18.
+      Facts only. format: JS-rendered (2 anchors in HTML) ; note: robots /craft/ only; render needed. Seed: the host root (the
+      research row names no URL).'
+  - id: fx-au-senegal
+    category: facts
+    name: Au Sénégal (monuments historiques et sites classés)
+    url: https://www.au-senegal.com/sitemap.xml
+    method: sitemap
+    license: Copyright; no automated-access clause
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Oceania; verdict ADD): the classified-monument list by region (Gorée, Saint-Louis,
+      Ngor, Joal Senghor house) and town histories, for Place facts, Places to see and Activities. robots.txt: 200; Crawl-delay
+      1; only /ecrire/, /prive/ and the API are disallowed. Terms: "la reproduction de tout ou partie du contenu de ce site
+      est autorisée sous réserve de l''ajout" (credit + link). Sourced: partly (it cites the arrêtés). Copyright reserved, no
+      bot, scraping, TDM or AI ban quoted; owner accepted for non-commercial use 2026-11-18. Facts only. Crawl-delay 5 honoured
+      as min_delay_s.'
+  - id: her-ipc-cabo-verde
+    category: facts
+    name: Instituto do Património Cultural (Cabo Verde)
+    url: https://ipc.cv/en/monumento-e-sitio/
+    method: html
+    license: Copyright; terms not found
+    cadence: quarterly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Africa; verdict ADD): the official Cabo Verde monuments, sites and intangible
+      heritage (Cidade Velha, Tarrafal camp), for Place facts and Places to see. robots.txt: 200; only /wp-admin/ disallowed
+      (the wp-sitemap answered with 0 URLs). Terms: terms not found. Round-1 search saw casino spam on one page (/projectos-e-relatorios/),
+      so exclude /ipc/. Sourced: yes. Terms not read or not found; owner accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: tb-benin-official
+    category: facts
+    name: Trip to Benin (official Benin tourism portal)
+    url: https://benin.bj/sitemap.xml
+    method: sitemap
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Africa; verdict ADD): Ouidah, Abomey, Ganvié and the Route des Esclaves
+      history, for Place facts, Places to see and Activities. robots.txt: 200; only WordPress paths, /feed/ and /search/ disallowed.
+      Terms: terms not found (privacy policy only). Sourced: partly. Terms not read or not found; owner accepted for non-commercial
+      use 2026-11-18. Facts only.'
+  - id: her-patrimoine-benin
+    category: facts
+    name: Portail du patrimoine culturel du Bénin
+    url: https://www.patrimoine.bj/
+    method: html
+    license: Copyright; no automated-access clause
+    cadence: quarterly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Africa; verdict ADD): the national pre-inventory of heritage properties
+      (Fort Portugais, Gèlèdè, Bourian), for Place facts and Places to see. robots.txt: 200; `Disallow:` empty. Terms: "Conditions
+      d''utilisation": a view-only licence that forbids transferring or mirroring the materials on another server (no robot
+      ban). We store facts plus a link only. Sourced: yes. Copyright reserved, no bot, scraping, TDM or AI ban quoted; owner
+      accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: gov-anpt-benin
+    category: facts
+    name: 'ANPT: Agence Nationale de Promotion des Patrimoines (Bénin)'
+    url: https://www.anpt.bj/projets/
+    method: html
+    license: Copyright; no automated-access clause
+    cadence: quarterly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Africa; verdict ADD): Agence Nationale de Promotion des Patrimoines (Bénin):
+      official heritage-site projects with site history (Abomey palaces, Ouidah forts, Door of No Return), for Place facts and
+      Places to see. robots.txt: 404 (allowed). Terms: mentions légales: "Toute reproduction, distribution, modification … partielle"
+      is forbidden, which only reserves copyright. Sourced: partly. Copyright reserved, no bot, scraping, TDM or AI ban quoted;
+      owner accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: gov-culture-senegal
+    category: facts
+    name: Secrétariat d'État à la Culture et au Patrimoine historique (Sénégal)
+    url: https://www.culture.gouv.sn/wp-sitemap.xml
+    method: sitemap
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Africa; verdict ADD): heritage classifications and the Direction du Patrimoine
+      Culturel''s news by site, for Place facts and Events. robots.txt: 200; only /wp-admin/ disallowed. Terms: terms not found.
+      Sourced: yes. Terms not read or not found; owner accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: arch-ifan-senegal
+    category: facts
+    name: IFAN Cheikh Anta Diop (Institut fondamental d'Afrique noire)
+    url: https://ifan.ucad.sn/
+    method: html
+    license: Copyright; terms not found
+    cadence: quarterly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Africa; verdict ADD): Musée Théodore Monod (Dakar), the historical museum
+      at Gorée and the Saint-Louis museums, for Place facts and Activities. robots.txt: 200, allows everything. Terms: terms
+      not found. Sourced: yes. Terms not read or not found; owner accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: arch-tombouctou-manuscripts
+    category: facts
+    name: Tombouctou Manuscripts Project (University of Cape Town)
+    url: https://www.tombouctoumanuscripts.org/sitemap.xml
+    method: sitemap
+    license: Copyright; terms not found
+    cadence: yearly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Africa; verdict ADD): Timbuktu''s libraries, scholarly families and manuscript
+      history, for Place facts. robots.txt: 200 (empty file). Terms: terms not found. Sourced: yes. Terms not read or not found;
+      owner accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: gov-shabait-eritrea
+    category: facts
+    name: Eritrea Ministry of Information (shabait.com)
+    url: https://shabait.com/wp-sitemap.xml
+    method: sitemap
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Africa; verdict ADD): Asmara, Massawa, Adulis and Qohaito history features
+      from the only official Eritrean source, for Place facts and Places to see. robots.txt: 200; only /wp-admin/ disallowed.
+      Terms: terms not found. Sourced: partly (state media). Terms not read or not found; owner accepted for non-commercial
+      use 2026-11-18. Facts only.'
+  - id: fx-sadamire
+    category: facts
+    name: 'Sada Mire: Somali heritage (archaeologist''s site)'
+    url: https://www.sadamire.com/wp-sitemap.xml
+    method: sitemap
+    license: Copyright; terms not found
+    cadence: quarterly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Africa; verdict ADD): Somali heritage (archaeologist''s site): Mogadishu
+      and Somaliland archaeology, sacred sites and rock art, for Place facts. robots.txt: 200; only /wp-admin/ disallowed. Terms:
+      terms not found. Sourced: yes. Terms not read or not found; owner accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: fx-somali-architecture
+    category: facts
+    name: Somali Architecture (heritage building records)
+    url: https://www.somaliarchitecture.com/
+    method: html
+    license: Copyright; terms not found
+    cadence: quarterly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Africa; verdict ADD): histories of historic Somali buildings (Mogadishu
+      lighthouse, Hamar Weyne, Zeila), for Place facts and Places to see. robots.txt: 200 (empty file). Terms: terms not found.
+      Sourced: partly. Terms not read or not found; owner accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: tb-visitdjibouti
+    category: facts
+    name: Agence Nationale du Tourisme de Djibouti
+    url: https://guide.visitdjibouti.dj/sitemap.xml
+    method: sitemap
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Africa; verdict ADD): official Djibouti sites (Lac Assal, Tadjourah, Balho
+      rock art), for Place facts, Places to see and Activities. robots.txt: 200; only /wp-admin/ disallowed. Terms: terms not
+      found. Sourced: partly. Terms not read or not found; owner accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: fx-dawan-africa
+    category: facts
+    name: 'Dawan Africa: Africa Heritage Files'
+    url: https://www.dawan.africa/news-sitemap.xml
+    method: sitemap
+    license: Copyright; no automated-access clause
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Africa; verdict ADD): Africa Heritage Files: a numbered series on African
+      heritage sites (Asmara, Lamu, Great Zimbabwe), for Place facts and Places to see. robots.txt: 200; Crawl-delay 1; /api/auth,
+      /_next, /admin disallowed. Terms: /terms: no robot or AI clause found. Sourced: partly. Copyright reserved, no bot, scraping,
+      TDM or AI ban quoted; owner accepted for non-commercial use 2026-11-18. Facts only. Crawl-delay 5 honoured as min_delay_s.'
+  - id: city-nairobi
+    category: facts
+    name: Nairobi City County
+    url: https://nairobi.go.ke/sitemap.xml
+    method: sitemap
+    license: Copyright; no automated-access clause
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Africa; verdict ADD): official city history (founded 1899 as a railway
+      depot), for Place facts. robots.txt: 200; only /wp-admin/ disallowed. Terms: nairobi-city-county-policies: no robot ban.
+      Sourced: partly. Copyright reserved, no bot, scraping, TDM or AI ban quoted; owner accepted for non-commercial use 2026-11-18.
+      Facts only.'
+  - id: her-sbah-iraq
+    category: facts
+    name: State Board of Antiquities and Heritage (Iraq)
+    url: https://sbah.gov.iq/wp-sitemap.xml
+    method: sitemap
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Middle East; verdict ADD): excavations, museums and site news (Babylon,
+      Ur, Hatra), for Place facts, Places to see and Activities. robots.txt: 200; only /wp-admin/ disallowed. Terms: terms not
+      found. Sourced: yes. Terms not read or not found; owner accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: her-dgam-syria
+    category: facts
+    name: Directorate-General of Antiquities and Museums (Syria)
+    url: https://dgam.gov.sy/?feed=rss2
+    method: rss
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Middle East; verdict ADD): official site and museum pages (Palmyra, Bosra,
+      Krak des Chevaliers, the ISESCO listings), for Place facts and Places to see. robots.txt: 404 (allowed). Terms: terms
+      not found. Sourced: yes. Terms not read or not found; owner accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: fx-iraq-heritage
+    category: facts
+    name: Iraq Heritage (NGO)
+    url: https://www.iraqheritage.org/articles.php
+    method: html
+    license: Copyright; terms not found
+    cadence: quarterly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Middle East; verdict ADD): Iraqi site and city heritage articles, for Place
+      facts. robots.txt: 404 (allowed). Terms: terms not found (lawsandpolicies.php holds the antiquities laws, not site terms).
+      Sourced: partly. Terms not read or not found; owner accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: fx-discover-syria
+    category: facts
+    name: Discover Syria (اكتشف سورية)
+    url: https://www.discover-syria.com/
+    method: html
+    license: Copyright; terms not found
+    cadence: quarterly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Middle East; verdict ADD): Arabic encyclopedia-style pages on Syrian towns,
+      sites and institutions, for Place facts and Places to see. robots.txt: 200; blocks ClaudeBot, Bytespider and many SEO
+      and AI bots by name, not `*` (→ title + link only). Terms: terms not found. Sourced: partly. Terms not read or not found;
+      owner accepted for non-commercial use 2026-11-18. Facts only. AI-reserved robots.txt (or Content-Signal): title and link
+      only, no LLM kinds.'
+  - id: tb-visitpalestine
+    category: facts
+    name: Visit Palestine
+    url: https://visitpalestine.ps/sitemap.xml
+    method: sitemap
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Middle East; verdict ADD): town and site histories (Jericho, Hebron, Sebastia,
+      Bethlehem), for Place facts, Places to see and Free walking tours. robots.txt: 200; only /wp-admin/ disallowed. Terms:
+      terms not found. Sourced: partly. Terms not read or not found; owner accepted for non-commercial use 2026-11-18. Facts
+      only.'
+  - id: fx-chtn-miras-aria
+    category: facts
+    name: 'Miras Aria (CHTN): Iranian heritage news agency'
+    url: https://www.chtn.ir/sitemap/all/sitemap.xml
+    method: sitemap
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Middle East; verdict ADD): Iranian heritage news agency: each new national-heritage
+      registration and its site facts, by province, for Place facts and Places to see. robots.txt: 200; /print/ and /search
+      disallowed. Terms: terms not found. Sourced: partly. Terms not read or not found; owner accepted for non-commercial use
+      2026-11-18. Facts only.'
+  - id: her-rch-islamic-encyclopedia
+    category: facts
+    name: Encyclopaedia of the World of Islam (Islamic Encyclopedia Foundation)
+    url: https://rch.ac.ir/sitemap.xml
+    method: sitemap
+    license: Copyright; terms not found
+    cadence: quarterly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Middle East; verdict ADD): scholarly Persian entries on Iranian and Islamic-world
+      cities (Zanjan, Balkh). Not the same as cgie.org.ir, for Place facts. robots.txt: 200; only /Images/ disallowed. Terms:
+      terms not found. Sourced: yes. Terms not read or not found; owner accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: gov-rcrc-riyadh
+    category: facts
+    name: Royal Commission for Riyadh City
+    url: https://www.rcrc.gov.sa/sitemap.xml
+    method: sitemap
+    license: Copyright; no automated-access clause
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Middle East; verdict ADD): official history of Riyadh and Diriyah (At-Turaif),
+      for Place facts. robots.txt: 200; only /wp-admin/ disallowed. Terms: terms-of-use-ar: no robot or AI clause found. Sourced:
+      partly. Copyright reserved, no bot, scraping, TDM or AI ban quoted; owner accepted for non-commercial use 2026-11-18.
+      Facts only.'
+  - id: her-msheireb-museums
+    category: facts
+    name: Msheireb Museums (Doha)
+    url: https://msheirebmuseums.com/wp-sitemap.xml
+    method: sitemap
+    license: Copyright; terms not found
+    cadence: quarterly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Middle East; verdict ADD): the four heritage houses and Doha''s old-town
+      history (Bin Jelmood, Radwani 1920s), for Place facts and Activities. robots.txt: 200; only /wp-admin/ disallowed. Terms:
+      terms not found. Sourced: yes. Terms not read or not found; owner accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: tb-visitoman
+    category: facts
+    name: Visit Oman (NTO portal)
+    url: https://visitoman.om/
+    method: html
+    license: Copyright; no automated-access clause
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Middle East; verdict ADD): forts, souqs and town history, for Place facts
+      and Places to see. robots.txt: the robots URL returns HTML (no robots file, so allowed). Terms: "You may not republish,
+      reproduce … any material … without … written permission", which only reserves copyright. Sourced: partly. Copyright reserved,
+      no bot, scraping, TDM or AI ban quoted; owner accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: fx-eamena
+    category: facts
+    name: 'EAMENA: Endangered Archaeology in the Middle East and North Africa (Oxford)'
+    url: https://eamena.org/sitemap.xml
+    method: sitemap
+    license: Copyright; terms not found
+    cadence: quarterly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Middle East; verdict ADD): Endangered Archaeology in the Middle East and
+      North Africa (Oxford): archaeological-site records and country panels (Palestine, Libya, Iraq), for Place facts and Places
+      to see. robots.txt: 200, allows everything. Terms: the terms link (www.ox.ac.uk/legal) answered 403, so terms are unverified
+      (owner rule: terms not found → ADD). Sourced: yes. Terms not read or not found; owner accepted for non-commercial use
+      2026-11-18. Facts only.'
+  - id: od-palopenmaps
+    category: facts
+    name: Palestine Open Maps
+    url: https://palopenmaps.org/
+    method: html
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Middle East; verdict NEEDS-ADAPTER): history and curiosities of the places
+      it covers, for Place facts. Terms: terms not found. Terms not read or not found; owner accepted for non-commercial use
+      2026-11-18. Facts only. format: React SPA (915 KB shell) with open-source data on GitHub (GeoJSON or CSV of 2,000+ historical
+      localities, British Mandate map sheets) ; note: robots 200 allows everything. Open-source project (Visualizing Palestine).
+      Use the GitHub data release throug…. Seed: the host root (the research row names no URL).'
+  - id: city-lagos
+    category: facts
+    name: 'Lagos State Government: About Lagos'
+    url: https://lagosstate.gov.ng/
+    method: html
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Africa; verdict NEEDS-ADAPTER): About Lagos: history and curiosities of
+      the places it covers, for Place facts. Terms: terms not found. Terms not read or not found; owner accepted for non-commercial
+      use 2026-11-18. Facts only. format: JS-rendered SPA (2.5 KB shell, 0 anchors) ; note: robots allows everything. City history
+      would need a render step. Seed: the host root (the research row names no URL).'
+  - id: od-plands-villages
+    category: facts
+    name: 'Palestine Land Society: Database for Palestinian Villages in 2000 Years'
+    url: https://www.plands.org/
+    method: html
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Middle East; verdict OWNER-DECISION): Database for Palestinian Villages
+      in 2000 Years: history and curiosities of the places it covers, for Place facts. Terms: terms not found. Terms not read
+      or not found; owner accepted for non-commercial use 2026-11-18. Facts only. issue: The sitemap (609 URLs, en/ar) and robots
+      are open, but village data packages need a data-request form (Village Database Information Guide). Decide whether to request
+      access or index only the public village pages. Seed: the host root (the research row names no URL).'
+  - id: arch-sc-encyclopedia
+    category: facts
+    name: South Carolina Encyclopedia (USC)
+    url: https://www.scencyclopedia.org/sce/
+    method: html
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Africa; verdict ADD): SC places and history, for Place facts and Places
+      to see. robots.txt: AI-bot blocks (ClaudeBot, CCBot, claude-web). Terms: terms not found. Sourced: yes. Terms not read
+      or not found; owner accepted for non-commercial use 2026-11-18. Facts only. AI-reserved robots.txt (or Content-Signal):
+      title and link only, no LLM kinds.'
+  - id: fx-guampedia
+    category: facts
+    name: Guampedia
+    url: https://www.guampedia.com/sitemap.xml
+    method: sitemap
+    license: Copyright; personal/non-commercial terms (owner accepted)
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Oceania; verdict ADD): Guam villages; Micronesia and Pacific entries, for
+      Place facts and Places to see. robots.txt: Crawl-delay 10, WordPress defaults. Terms: "use… for noncommercial educational
+      purposes does not require express permission" (owner accepted). Sourced: yes. Terms restrict to personal/non-commercial
+      use; owner accepted for non-commercial use 2026-11-18. Facts only. Crawl-delay 10 honoured as min_delay_s.'
+  - id: gov-sd-history
+    category: facts
+    name: South Dakota State Historical Society markers
+    url: https://history.sd.gov/preservation/historicalmarkers.aspx
+    method: html
+    license: Copyright; no automated-access clause
+    cadence: yearly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Africa; verdict ADD): ~1,500 state markers, for Place facts and Places
+      to see. robots.txt: robots 404 = allowed. Terms: sd.gov disclaimer: no bot ban (round 1). Sourced: yes. Copyright reserved,
+      no bot, scraping, TDM or AI ban quoted; owner accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: arch-territory-stories
+    category: facts
+    name: Territory Stories (Library & Archives NT)
+    url: http://territorystories.nt.gov.au/sitemap.xml
+    method: sitemap
+    license: Copyright; no automated-access clause
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Oceania; verdict ADD): NT local-history items, place reports and heritage
+      records, for Place facts. robots.txt: 200; document files disallowed. Terms: copyright on nt.gov.au/page/copyright-disclaimer-and-privacy
+      (not fetched; other host). Sourced: yes. Copyright reserved, no bot, scraping, TDM or AI ban quoted; owner accepted for
+      non-commercial use 2026-11-18. Facts only. Data files not seeded (no reader yet): https://territorystories.nt.gov.au/sitemap.txt.gz.'
+  - id: fx-qhatlas
+    category: facts
+    name: Queensland Historical Atlas
+    url: https://www.qhatlas.com.au/
+    method: html
+    license: Copyright; terms not found
+    cadence: yearly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Oceania; verdict ADD): scholarly essays and entries on Queensland places
+      and landscapes (UQ), for Place facts and Places to see. robots.txt: 200; Crawl-delay 10. Terms: terms not found. Sourced:
+      yes. Terms not read or not found; owner accepted for non-commercial use 2026-11-18. Facts only. Crawl-delay 10 honoured
+      as min_delay_s.'
+  - id: gov-kingston-local-history
+    category: facts
+    name: Kingston Local History (City of Kingston, VIC)
+    url: https://localhistory.kingston.vic.gov.au/articles
+    method: html
+    license: Copyright; no automated-access clause
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Oceania; verdict ADD): suburb and street histories for an LGA, for Place
+      facts. robots.txt: 200; Drupal defaults. Terms: "No part may be reproduced … without permission" (reproduction only).
+      Sourced: yes. Copyright reserved, no bot, scraping, TDM or AI ban quoted; owner accepted for non-commercial use 2026-11-18.
+      Facts only.'
+  - id: fx-stkilda-history
+    category: facts
+    name: St Kilda Historical Society
+    url: https://stkildahistory.org.au/our-collection
+    method: html
+    license: Copyright; terms not found
+    cadence: quarterly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Oceania; verdict ADD): St Kilda place and building histories, for Place
+      facts and Free walking tours. robots.txt: 200 (Joomla defaults). Terms: terms not found. Sourced: yes. Terms not read
+      or not found; owner accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: arch-tepapa-places
+    category: facts
+    name: Te Papa Collections Online (place and topic pages)
+    url: https://collections.tepapa.govt.nz/topic/1702
+    method: html
+    license: Copyright; personal/non-commercial terms (owner accepted)
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Oceania; verdict ADD): NZ place records linked to collection items (an
+      API with a key also exists: api.tepapa.govt.nz), for Place facts. robots.txt: 200; /public/ disallowed. Terms: tepapa.govt.nz
+      copyright and terms: reproduction "other than personal use" needs permission; images partly CC BY-NC-ND. Personal/non-commercial
+      terms, owner accepted. Sourced: partly. Terms restrict to personal/non-commercial use; owner accepted for non-commercial
+      use 2026-11-18. Facts only.'
+  - id: arch-waikato-museum
+    category: facts
+    name: Te Whare Taonga o Waikato (Waikato Museum)
+    url: https://tewharetaonga.nz/sitemap.xml
+    method: sitemap
+    license: Copyright; personal/non-commercial terms (owner accepted)
+    cadence: quarterly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Oceania; verdict ADD): Waikato and Hamilton history (low volume), for Place
+      facts. robots.txt: 200 (redirect from waikatomuseum.co.nz). Terms: reproduction "for any purpose other than personal use"
+      needs permission (personal use, owner accepted). Sourced: partly. Terms restrict to personal/non-commercial use; owner
+      accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: arch-marlborough-museum
+    category: facts
+    name: Marlborough Museum and Provincial Archives
+    url: https://marlboroughmuseum.org.nz/sitemap.xml
+    method: sitemap
+    license: Copyright; no automated-access clause
+    cadence: yearly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Oceania; verdict ADD): Blenheim ("Beavertown"), Wairau Bar and heritage
+      sites, for Place facts. robots.txt: 200; allow all. Terms: legal page: font licences only, no ban. Sourced: partly. Copyright
+      reserved, no bot, scraping, TDM or AI ban quoted; owner accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: arch-whanganui-museum
+    category: facts
+    name: Whanganui Regional Museum
+    url: https://wrm.org.nz/sitemap_index.xml
+    method: sitemap
+    license: Copyright; personal/non-commercial terms (owner accepted)
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Oceania; verdict ADD): Whanganui region history, for Place facts. robots.txt:
+      200; allow all. Terms: "for user''s personal and lawful use only, excluding … any other commercial use" (owner accepted).
+      Sourced: partly. Terms restrict to personal/non-commercial use; owner accepted for non-commercial use 2026-11-18. Facts
+      only.'
+  - id: her-au-nsw-shi
+    category: facts
+    name: NSW State Heritage Inventory
+    url: https://hms.heritage.nsw.gov.au/App/Item/SearchHeritageItems
+    method: html
+    license: CC BY 4.0
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Oceania; verdict ADD): history and curiosities of the places it covers,
+      for Place facts, Places to see and Free walking tours. robots.txt: DNS no response (reach-unverified). Terms: not read.
+      Sourced: yes. Open licence (CC BY 4.0).'
+  - id: her-au-vic-vhd
+    category: facts
+    name: Victorian Heritage Database
+    url: https://vhd.heritagecouncil.vic.gov.au/
+    method: html
+    license: Copyright; terms not found
+    cadence: quarterly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Oceania; verdict ADD): statements of significance and histories for Victorian
+      places, for Place facts, Places to see and Free walking tours. robots.txt: allowed; blocks GPTBot/ClaudeBot/CCBot/Google-Extended/Perplexity
+      → title+link only. Terms: terms page renders only through JS; terms not found. Sourced: yes. Terms not read or not found;
+      owner accepted for non-commercial use 2026-11-18. Facts only. AI-reserved robots.txt (or Content-Signal): title and link
+      only, no LLM kinds.'
+  - id: her-au-qhr
+    category: facts
+    name: Queensland Heritage Register (Arches)
+    url: https://qhr.detsi.qld.gov.au/
+    method: html
+    license: CC BY 4.0
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Oceania; verdict ADD): history and curiosities of the places it covers,
+      for Place facts and Places to see. robots.txt: apps.des robots: ClaudeBot, GPTBot, Bytespider Disallow: /; qhr host robots
+      404. Terms: Copyright link not fetched. Sourced: yes. Open licence (CC BY 4.0). AI-reserved robots.txt (or Content-Signal):
+      title and link only, no LLM kinds.'
+  - id: her-au-wa-inherit
+    category: facts
+    name: inHerit (Heritage Council WA)
+    url: https://inherit.dplh.wa.gov.au/Public/
+    method: html
+    license: Copyright; terms not found
+    cadence: quarterly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Oceania; verdict ADD): histories of State Register places in WA, for Place
+      facts and Places to see. robots.txt: 404 = allowed. Terms: terms not found. Sourced: yes. Terms not read or not found;
+      owner accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: her-au-tas
+    category: facts
+    name: Tasmanian Heritage Register
+    url: https://heritage.tas.gov.au/sitemap.xml
+    method: sitemap
+    license: Copyright; terms not found
+    cadence: quarterly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Oceania; verdict ADD): Tasmanian heritage register places, for Place facts
+      and Places to see. robots.txt: allowed. Terms: terms not read (tas.gov.au disclaimer host 403). Sourced: yes. Terms not
+      read or not found; owner accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: her-au-sa
+    category: facts
+    name: SA Heritage (DEW)
+    url: https://www.environment.sa.gov.au/sitemaps-1-section-pages-1-sitemap.xml
+    method: sitemap
+    license: Copyright; terms not found
+    cadence: quarterly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Oceania; verdict ADD): SA heritage places, for Place facts and Places to
+      see. robots.txt: allowed. Terms: terms not found. Sourced: yes. Terms not read or not found; owner accepted for non-commercial
+      use 2026-11-18. Facts only.'
+  - id: fx-monument-australia
+    category: facts
+    name: Monument Australia
+    url: https://monumentaustralia.org.au/
+    method: html
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Oceania; verdict ADD): inscriptions and history of each memorial, for Place
+      facts and Free walking tours. robots.txt: DNS no response (reach-unverified). Terms: not read. Sourced: yes (inscriptions
+      + sources). Terms not read or not found; owner accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: arch-dictionary-sydney
+    category: facts
+    name: Dictionary of Sydney (archived 2021)
+    url: https://dictionaryofsydney.org/
+    method: html
+    license: CC BY-SA 4.0
+    cadence: yearly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Oceania; verdict ADD): suburb and street histories, for Place facts, Places
+      to see and Free walking tours. robots.txt: allow all. Terms: "authors also agree to license their work under CC-BY-SA";
+      other use beyond personal needs permission. Sourced: yes. Share-alike: kept apart, never merged into our own wording and
+      never sent to a model (no LLM kinds). also in brief: asia-oceania, editorial-curiosities, libraries-archives, open-knowledge.'
+  - id: her-au-national-trust
+    category: facts
+    name: National Trust of Australia
+    url: https://www.nationaltrust.org.au/sitemap_index.xml
+    method: sitemap
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Oceania; verdict ADD): history and curiosities of the places it covers,
+      for Place facts and Activities. robots.txt: `Disallow:` empty. Terms: disclaimer only (terms not found). Sourced: partial.
+      Terms not read or not found; owner accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: arch-sl-nsw
+    category: facts
+    name: State Library of NSW
+    url: https://www.sl.nsw.gov.au/sitemap.xml
+    method: sitemap
+    license: CC BY 4.0
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Africa; verdict ADD): history and curiosities of the places it covers,
+      for Place facts. robots.txt: `*` allowed; large AI-bot list Disallow: / → title+link only. Terms: "this content is licensed
+      under the Creative Commons Attribution 4.0 license". Sourced: yes. Open licence (CC BY 4.0). AI-reserved robots.txt (or
+      Content-Signal): title and link only, no LLM kinds.'
+  - id: arch-queensland-places
+    category: facts
+    name: Queensland Places (UQ Centre for the Government of Queensland)
+    url: https://queenslandplaces.com.au/
+    method: html
+    license: Copyright; terms not found
+    cadence: yearly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Oceania; verdict ADD): short histories of every Queensland town and shire,
+      for Place facts and Places to see. robots.txt: Crawl-delay 10. Terms: terms not found. Sourced: yes. Terms not read or
+      not found; owner accepted for non-commercial use 2026-11-18. Facts only. Crawl-delay 10 honoured as min_delay_s.'
+  - id: fx-victorian-places
+    category: facts
+    name: Victorian Places
+    url: https://www.victorianplaces.com.au/
+    method: html
+    license: Copyright; no automated-access clause
+    cadence: yearly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Oceania; verdict ADD): every Victorian town, for Place facts. robots.txt:
+      Crawl-delay 10, Drupal defaults. Terms: "© Victorian Places, 2015. All rights reserved". Sourced: yes. Copyright reserved,
+      no bot, scraping, TDM or AI ban quoted; owner accepted for non-commercial use 2026-11-18. Facts only. Crawl-delay 10 honoured
+      as min_delay_s.'
+  - id: fx-adelaidia
+    category: facts
+    name: Adelaidia (History Trust of SA)
+    url: https://adelaidia.history.sa.gov.au/
+    method: html
+    license: Copyright; terms not found
+    cadence: yearly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Oceania; verdict ADD): history and curiosities of the places it covers,
+      for Place facts and Free walking tours. robots.txt: TLS handshake failed from the research client (old LibreSSL); reach-unverified.
+      Terms: not read. Sourced: yes. Terms not read or not found; owner accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: arch-anzac-portal
+    category: facts
+    name: Anzac Portal (DVA)
+    url: https://anzacportal.dva.gov.au/
+    method: html
+    license: Copyright; terms not found
+    cadence: yearly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Oceania; verdict ADD): places of commemoration, for Place facts. robots.txt:
+      no response (reach-unverified). Terms: not read. Sourced: yes. Terms not read or not found; owner accepted for non-commercial
+      use 2026-11-18. Facts only.'
+  - id: arch-awm
+    category: facts
+    name: Australian War Memorial
+    url: https://www.awm.gov.au/
+    method: html
+    license: Copyright; personal/non-commercial terms (owner accepted)
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Oceania; verdict ADD): history and curiosities of the places it covers,
+      for Place facts. robots.txt: Crawl-delay 10, Drupal defaults. Terms: "text content… CC BY-NC 3.0 AU" (non-commercial;
+      owner accepted). Sourced: yes. Terms restrict to personal/non-commercial use; owner accepted for non-commercial use 2026-11-18.
+      Facts only. Crawl-delay 10 honoured as min_delay_s.'
+  - id: fx-australiangeographic
+    category: facts
+    name: Australian Geographic
+    url: https://www.australiangeographic.com.au/feed/
+    method: rss
+    license: Copyright; personal/non-commercial terms (owner accepted)
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Oceania; verdict ADD): Australian places, history, records, for Place facts
+      and Places to see. robots.txt: AI-bot blocks (all major) -> title+link only. Terms: "solely for your personal, non-commercial
+      purposes"; owner accepted. Sourced: yes. Terms restrict to personal/non-commercial use; owner accepted for non-commercial
+      use 2026-11-18. Facts only. AI-reserved robots.txt (or Content-Signal): title and link only, no LLM kinds.'
+  - id: od-au-ga-landforms
+    category: facts
+    name: 'Geoscience Australia: national location facts'
+    url: https://www.ga.gov.au/scientific-topics/national-location-information
+    method: html
+    license: CC BY 4.0
+    cadence: yearly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Oceania; verdict ADD): national location facts: highest mountains, longest
+      rivers, largest lakes, extremities (records), for Place facts. robots.txt: Disallow only design/education paths. Terms:
+      "All material on this website is licensed under the Creative Commons Attribution 4.0 International Licence". Sourced:
+      yes. Open licence (CC BY 4.0).'
+  - id: arch-kura-auckland
+    category: facts
+    name: Kura Heritage Collections (Auckland Libraries)
+    url: https://kura.aucklandlibraries.govt.nz/
+    method: html
+    license: Copyright; terms not found
+    cadence: quarterly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Oceania; verdict ADD): history and curiosities of the places it covers,
+      for Place facts. robots.txt: search paths disallowed. Terms: terms not found. Sourced: partial. Terms not read or not
+      found; owner accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: her-nz-heritage-list
+    category: facts
+    name: Heritage New Zealand List
+    url: https://www.heritage.org.nz/list-search
+    method: html
+    license: Copyright; terms not found
+    cadence: quarterly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Oceania; verdict ADD): List entries with long, referenced historical narratives,
+      for Place facts, Places to see and Free walking tours. robots.txt: robots.txt serves an HTML page (no file) = allowed.
+      Terms: terms not found. Sourced: yes. Terms not read or not found; owner accepted for non-commercial use 2026-11-18. Facts
+      only.'
+  - id: od-nz-gazetteer
+    category: facts
+    name: NZ Gazetteer (LINZ)
+    url: https://gazetteer.linz.govt.nz/
+    method: html
+    license: CC BY 4.0
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Oceania; verdict ADD): "history/origin/meaning" field for official place
+      names (Māori meanings, naming stories), for Place facts. robots.txt: robots: comment only, no rules. Terms: terms not
+      found on host. Sourced: yes. Open licence (CC BY 4.0).'
+  - id: fx-fiji-museum
+    category: facts
+    name: Fiji Museum
+    url: https://fijimuseum.org.fj/wp-sitemap.xml
+    method: sitemap
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Oceania; verdict ADD): history and curiosities of the places it covers,
+      for Place facts. robots.txt: WordPress defaults. Terms: "©2022 Fiji Museum. All Rights Reserved." (terms not found). Sourced:
+      partial. Terms not read or not found; owner accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: od-au-placenames
+    category: facts
+    name: Composite Gazetteer of Australia (Elvis Place Names, ICSM)
+    url: https://placenames.fsdf.org.au/
+    method: html
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Oceania; verdict NEEDS-ADAPTER): history and curiosities of the places
+      it covers, for Place facts. Terms: terms not found. Terms not read or not found; owner accepted for non-commercial use
+      2026-11-18. Facts only. format: Angular SPA backed by a WFS/REST service (wfs_geojson once the endpoint is found) ; notes:
+      CC BY 4.0 per ICSM (unconfirmed). Gives names only; the place-name origin stories are on state boards (GNB NSW on nsw.gov.au).
+      Seed: the host root (the research row names no URL).'
+  - id: arch-nc-digital-collections
+    category: facts
+    name: North Carolina Digital Collections (State Archives + State Library)
+    url: https://digital.ncdcr.gov/sitemap.xml
+    method: sitemap
+    license: Copyright; terms not found
+    cadence: quarterly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Oceania; verdict ADD): NC local-history items. This is the open route next
+      to the blocked NCpedia, although it holds archive items rather than NCpedia articles, for Place facts and Places to see.
+      robots.txt: robots allow (Disallow /login, /cms/*). Terms: terms not found. Sourced: yes. Terms not read or not found;
+      owner accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: gov-nc-highway-markers
+    category: facts
+    name: NC Highway Historical Marker Program
+    url: https://www.dncr.nc.gov/guide-north-carolina-highway-historical-markers-2023/download
+    method: html
+    license: Copyright; terms not found
+    cadence: yearly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Oceania; verdict NEEDS-ADAPTER): 1,600+ markers with text, for Place facts
+      and Places to see. robots.txt: dncr.nc.gov robots allow; nc.maps.arcgis.com allow; www.ncmarkers.com and opendurham.nc.gov
+      did not respond (= allowed, unreachable). Terms: terms not found. Sourced: yes. Terms not read or not found; owner accepted
+      for non-commercial use 2026-11-18. Facts only.'
+  - id: fx-egyptian-streets
+    category: facts
+    name: Egyptian Streets
+    url: https://egyptianstreets.com/feed/
+    method: rss
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Africa; verdict ADD): Egyptian heritage/city history features (filter:
+      also news), for Place facts. robots.txt: allowed. Terms: terms not found. Sourced: partial. Terms not read or not found;
+      owner accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: her-hpip
+    category: facts
+    name: HPIP Heritage of Portuguese Influence
+    url: https://hpip.org/pt
+    method: html
+    license: Copyright; terms not found
+    cadence: quarterly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Africa; verdict ADD): thousands of sourced site entries (forts, churches,
+      towns) in Angola, Mozambique, Guinea-Bissau, São Tomé, Timor-Leste and more, for Place facts, Places to see and Free walking
+      tours. robots.txt: no robots.txt (HTML soft-200) = allowed. Terms: terms not found. Sourced: yes (bibliography per entry).
+      Terms not read or not found; owner accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: fx-tahiti-heritage
+    category: facts
+    name: Tahiti Heritage (encyclopédie du patrimoine polynésien)
+    url: http://www.tahitiheritage.pf/sitemap_index.xml
+    method: sitemap
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Oceania; verdict ADD): historical, archaeological and ''insolite'' sites
+      across French Polynesia, for Place facts, Places to see and Activities. robots.txt: allowed, no Crawl-delay, no AI blocks.
+      Terms: terms not found. Sourced: partly. Terms not read or not found; owner accepted for non-commercial use 2026-11-18.
+      Facts only.'
+  - id: gov-pw-states
+    category: facts
+    name: 'Palau National Government: About Palau + 16 states'
+    url: https://www.palaugov.pw/about-palau/
+    method: html
+    license: Copyright; terms not found
+    cadence: quarterly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Oceania; verdict ADD): About Palau + 16 states: per-state pages (Aimeliik,
+      Angaur, Hatohobei..), flag, anthem, constitution, for Place facts and Places to see. robots.txt: allowed (/wp-admin/ only).
+      Terms: terms not found. Sourced: no. Terms not read or not found; owner accepted for non-commercial use 2026-11-18. Facts
+      only.'
+  - id: gov-ao-angola
+    category: facts
+    name: 'Portal Oficial do Governo de Angola: ''Angola'' section'
+    url: https://governo.gov.ao/angola/dados-sobre-o-pa%C3%ADs
+    method: html
+    license: Copyright; no automated-access clause
+    cadence: quarterly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Africa; verdict ADD): ''Angola'' section: official country data, geography,
+      flora and fauna of Angola, for Place facts. robots.txt: robots.txt empty (200, 0 bytes) = allowed. Terms: "É autorizada
+      a reprodução total ou parcial sem fins lucrativos do conteúdo deste sítio, desde que citada a fonte". Sourced: no. Copyright
+      reserved, no bot, scraping, TDM or AI ban quoted; owner accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: gov-fm-states
+    category: facts
+    name: 'FSM National Government: state pages'
+    url: https://gov.fm/wp-sitemap.xml
+    method: sitemap
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Oceania; verdict ADD): state pages: Chuuk, Kosrae, Pohnpei, Yap (fsmgov.org
+      redirects here), for Place facts and Places to see. robots.txt: allowed (/wp-admin/ only). Terms: terms not found. Sourced:
+      no. Terms not read or not found; owner accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: her-dzanga-sangha
+    category: facts
+    name: Dzanga-Sangha Protected Areas
+    url: https://dzanga-sangha.org/sitemap_index.xml
+    method: sitemap
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Africa; verdict ADD): Central African Republic rainforest, Dzanga Bai elephants,
+      BaAka people (a ''facts-infos'' page exists), for Place facts and Activities. robots.txt: allowed. Terms: terms not found
+      (imprint + privacy only; the ''CC BY 4.0'' on the page refers to fonts). Sourced: partly. Terms not read or not found;
+      owner accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: her-wcs-congo
+    category: facts
+    name: WCS Congo (Nouabalé-Ndoki, Conkouati...)
+    url: https://congo.wcs.org/Wild-Places
+    method: html
+    license: Copyright; terms not found
+    cadence: quarterly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Africa; verdict ADD): protected areas of the Republic of Congo, for Place
+      facts. robots.txt: allowed; Crawl-delay 10; Amazonbot/Bytespider blocked. Terms: terms not found (www.wcs.org/terms-of-use
+      is disallowed by wcs.org robots.txt, so not read). Sourced: partly. Terms not read or not found; owner accepted for non-commercial
+      use 2026-11-18. Facts only. Crawl-delay 10 honoured as min_delay_s.'
+  - id: arch-na-curacao
+    category: facts
+    name: Nationaal Archief Curaçao
+    url: https://nationaalarchief.cw/sitemap_index.xml
+    method: sitemap
+    license: Copyright; personal/non-commercial terms (owner accepted)
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Africa; verdict ADD): subject pages on Curaçao history (Willemstad, plantations,
+      slavery, Tula revolt), for Place facts. robots.txt: allowed (/wp-json/ disallowed). Terms: disclaimer read: digitised
+      archives for non-commercial purposes, not under CC; terms restrict to personal/non-commercial use; owner accepted. Sourced:
+      yes. Terms restrict to personal/non-commercial use; owner accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: arch-na-suriname
+    category: facts
+    name: Nationaal Archief Suriname
+    url: https://nationaalarchief.sr/onderzoeken
+    method: html
+    license: Copyright; terms not found
+    cadence: quarterly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Africa; verdict ADD): Surinamese history (contract labour from India, China
+      and Java; plantations), for Place facts. robots.txt: allowed (Joomla defaults). Terms: terms not found (only reading-room
+      rules). Sourced: yes. Terms not read or not found; owner accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: her-livingstone-museum
+    category: facts
+    name: Livingstone Museum (Zambia)
+    url: https://livingstonemuseum.org/wp-sitemap.xml
+    method: sitemap
+    license: Copyright; terms not found
+    cadence: quarterly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Africa; verdict ADD): Zambia''s oldest and largest museum; history of Livingstone
+      town and the Victoria Falls region, for Place facts. robots.txt: allowed (/wp-admin/). Terms: terms not found. Sourced:
+      partly. Terms not read or not found; owner accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: arch-society-of-malawi
+    category: facts
+    name: Society of Malawi (historical and scientific)
+    url: https://societyofmalawi.org/sitemap.xml
+    method: sitemap
+    license: Copyright; terms not found
+    cadence: quarterly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Africa; verdict ADD): Malawi history (Blantyre, Zomba, lake steamers),
+      from the Society of Malawi Journal, for Place facts. robots.txt: allowed. Terms: terms not found. Sourced: yes. Terms
+      not read or not found; owner accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: her-museums-namibia
+    category: facts
+    name: Museums Association of Namibia
+    url: https://www.museums.com.na/museums/overview
+    method: html
+    license: Copyright; terms not found
+    cadence: quarterly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Africa; verdict ADD): museums and their town histories (Swakopmund, Lüderitz,
+      Tsumeb, Outjo), for Place facts and Activities. robots.txt: allowed (Joomla defaults). Terms: terms not found. Sourced:
+      partly. Terms not read or not found; owner accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: od-ispf-fiche-geo
+    category: facts
+    name: 'ISPF (Institut de la statistique de la Polynésie française): geo fact sheets'
+    url: https://www.ispf.pf/sitemap-index.xml
+    method: sitemap
+    license: Copyright; terms not found
+    cadence: yearly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Oceania; verdict ADD): geo fact sheets: population and area per archipelago,
+      island and commune of French Polynesia, for Place facts. robots.txt: allowed (/rte/ disallowed). Terms: terms not found.
+      Sourced: yes. Terms not read or not found; owner accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: od-isee-nc
+    category: facts
+    name: 'ISEE Nouvelle-Calédonie: key figures and census'
+    url: https://isee.nc/chiffre-cles
+    method: html
+    license: Copyright; no automated-access clause
+    cadence: yearly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Oceania; verdict ADD): key figures and census: population by province and
+      commune, key figures for New Caledonia, for Place facts. robots.txt: allowed (Drupal defaults). Terms: mentions légales
+      read: copyright and reproduction reserved; no robot, TDM or AI clauses. Sourced: yes. Copyright reserved, no bot, scraping,
+      TDM or AI ban quoted; owner accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: her-centre-tjibaou
+    category: facts
+    name: Centre culturel Tjibaou (ADCK)
+    url: https://centretjibaou.nc/histoire
+    method: html
+    license: Copyright; no automated-access clause
+    cadence: quarterly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Oceania; verdict ADD): Kanak culture and the Renzo Piano building (adck.nc
+      redirects here), for Place facts. robots.txt: allowed (Drupal defaults). Terms: mentions légales read (short): no robot,
+      TDM or AI clauses. Sourced: no. Copyright reserved, no bot, scraping, TDM or AI ban quoted; owner accepted for non-commercial
+      use 2026-11-18. Facts only.'
+  - id: her-musee-nc
+    category: facts
+    name: Musée de la Nouvelle-Calédonie
+    url: https://museenouvellecaledonie.gouv.nc/le-musee/presentation-du-musee
+    method: html
+    license: Copyright; no automated-access clause
+    cadence: quarterly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Oceania; verdict ADD): Kanak and Oceanian heritage, history of New Caledonia,
+      for Place facts. robots.txt: allowed for VoyagerBot; Cloudflare-managed AI-bot block → title+link only. Terms: mentions
+      légales read: electronic reproduction forbidden without permission; no robot, TDM or AI clauses. Sourced: partly. Copyright
+      reserved, no bot, scraping, TDM or AI ban quoted; owner accepted for non-commercial use 2026-11-18. Facts only. AI-reserved
+      robots.txt (or Content-Signal): title and link only, no LLM kinds.'
+  - id: her-musee-tahiti
+    category: facts
+    name: Te Fare Iamanaha – Musée de Tahiti et des îles
+    url: https://www.museetahiti.pf/sitemap_index.xml
+    method: sitemap
+    license: Copyright; personal/non-commercial terms (owner accepted)
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Oceania; verdict ADD): Polynesian history and objects, for Place facts.
+      robots.txt: allowed (WooCommerce paths only). Terms: "Vous pouvez utiliser le Site uniquement à des fins personnelles
+      et non commerciales"; owner accepted. Sourced: partly. Terms restrict to personal/non-commercial use; owner accepted for
+      non-commercial use 2026-11-18. Facts only.'
+  - id: od-sbs-samoa-census
+    category: facts
+    name: 'Samoa Bureau of Statistics: census'
+    url: https://www.sbs.gov.ws/wp-sitemap.xml
+    method: sitemap
+    license: Copyright; terms not found
+    cadence: yearly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Oceania; verdict ADD): census: population of Samoa by island, district
+      and village (2026 census under way; many PDFs), for Place facts. robots.txt: allowed (/wp-admin/). Terms: terms not found.
+      Sourced: yes. Terms not read or not found; owner accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: arch-pambu
+    category: facts
+    name: Pacific Manuscripts Bureau (ANU)
+    url: https://asiapacific.anu.edu.au/pambu
+    method: html
+    license: Copyright; terms not found
+    cadence: quarterly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Oceania; verdict ADD): catalogue histories of Pacific missions, plantations
+      and islands (low yield, metadata-heavy), for Place facts. robots.txt: allowed (Drupal defaults). Terms: terms not found
+      on the PAMBU pages. Sourced: yes. Terms not read or not found; owner accepted for non-commercial use 2026-11-18. Facts
+      only.'
+  - id: gov-gq-press
+    category: facts
+    name: 'Guinea Ecuatorial Press (official government site): culture'
+    url: https://www.guineaecuatorialpress.com/categorias/Cultura
+    method: html
+    license: Copyright; personal/non-commercial terms (owner accepted)
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Africa; verdict ADD): culture: culture and heritage items for Equatorial
+      Guinea (low yield; the only reachable official source found), for Place facts. robots.txt: allowed (empty Disallow). Terms:
+      "Queda prohibida su reproducción .. salvo para uso personal"; owner accepted. Sourced: no. Terms restrict to personal/non-commercial
+      use; owner accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: fx-catalog-paradisec-org-au
+    category: facts
+    name: PARADISEC catalogue (also mirrors PAMBU film)
+    url: https://catalog.paradisec.org.au/
+    method: html
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Oceania; verdict NEEDS-ADAPTER): history and curiosities of the places
+      it covers, for Place facts. Terms: terms not found. Terms not read or not found; owner accepted for non-commercial use
+      2026-11-18. Facts only. format / note: JS SPA (''Oni''); OAI-PMH or API adapter needed; low facts relevance (linguistic
+      archive). Seed: the host root (the research row names no URL).'
+  - id: her-eg-atharlina
+    category: facts
+    name: Athar Lina (Megawra-BEC heritage initiative) (en/ar / Cairo al-Khalifa)
+    url: https://atharlina.com/
+    method: html
+    license: Copyright; terms not found
+    cadence: yearly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Africa; verdict ADD): history of the al-Khalifa monuments in Historic Cairo,
+      for Place facts and Free walking tours. robots.txt: allow. Terms: /about read: no terms; terms not found. Sourced: yes.
+      Terms not read or not found; owner accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: her-ng-ncmm
+    category: facts
+    name: National Commission for Museums and Monuments (Nigeria)
+    url: https://ncmm.gov.ng/wp-sitemap.xml
+    method: sitemap
+    license: Copyright; terms not found
+    cadence: quarterly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Africa; verdict ADD): national monuments and museums, for Place facts,
+      Places to see and Activities. robots.txt: allowed. Terms: terms not found. Sourced: partly. Terms not read or not found;
+      owner accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: her-au-brisbane
+    category: facts
+    name: Brisbane Heritage Register
+    url: https://heritage.brisbane.qld.gov.au/
+    method: html
+    license: Copyright; personal/non-commercial terms (owner accepted)
+    cadence: quarterly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Oceania; verdict ADD): citations for Brisbane heritage places, for Place
+      facts, Places to see and Free walking tours. robots.txt: allowed. Terms: "personal … licence … for non-commercial purposes"
+      → owner accepted. Sourced: yes. Terms restrict to personal/non-commercial use; owner accepted for non-commercial use 2026-11-18.
+      Facts only.'
+  - id: od-au-wa-state-register
+    category: facts
+    name: Heritage Council WA State Register (GeoJSON/GPKG) is under a custom "active acceptance" DPLH licence and some resources
+      need a login
+    url: https://catalogue.data.wa.gov.au/
+    method: html
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Oceania; verdict OWNER-DECISION): Heritage Council WA State Register (GeoJSON/GPKG)
+      is under a custom "active acceptance" DPLH licence and some resources need a login, for Place facts. Terms: terms not
+      found. Terms not read or not found; owner accepted for non-commercial use 2026-11-18. Facts only. Seed: the host root
+      (the research row names no URL).'
+  - id: arch-naa
+    category: facts
+    name: National Archives of Australia
+    url: https://www.naa.gov.au/explore-collection
+    method: html
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Oceania; verdict ADD): archive stories about Australian places and events,
+      for Place facts. robots.txt: robots: no response (HTTP/2 error and timeout) → allowed. Terms: terms not found (unreachable;
+      re-check). Sourced: yes. Terms not read or not found; owner accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: gov-au-abs
+    category: facts
+    name: Australian Bureau of Statistics (Snapshot of Australia, region summaries)
+    url: https://www.abs.gov.au/sitemap.xml
+    method: sitemap
+    license: CC BY 4.0
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Oceania; verdict ADD): population/record facts by state and town, for Place
+      facts. robots.txt: allow all. Terms: "provided under a Creative Commons Attribution 4.0 International licence". Sourced:
+      yes. Open licence (CC BY 4.0). also in brief: -.'
+  - id: gov-nsw-gnb
+    category: facts
+    name: NSW Geographical Names Board pages
+    url: https://www.nsw.gov.au/departments-and-agencies/geographical-names-board
+    method: html
+    license: CC BY 4.0
+    cadence: quarterly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Oceania; verdict ADD): naming stories, dual names, for Place facts. robots.txt:
+      allowed (Drupal paths disallowed). gnb.nsw.gov.au redirects here. Terms: "All material on this website is licensed under
+      the Creative Commons Attribution 4.0 licence". Sourced: yes. Open licence (CC BY 4.0).'
+  - id: gov-vic-emblems
+    category: facts
+    name: Victoria Government (emblems, about Victoria)
+    url: https://www.vic.gov.au/sitemap.xml
+    method: sitemap
+    license: CC BY 4.0
+    cadence: yearly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Oceania; verdict ADD): history and curiosities of the places it covers,
+      for Place facts. robots.txt: Crawl-delay 2. Terms: "provided under a CC BY 4.0 licence". Sourced: yes. Open licence (CC
+      BY 4.0). Crawl-delay 5 honoured as min_delay_s. also in brief: asia-oceania, heritage-registers.'
+  - id: gov-sa-symbols
+    category: facts
+    name: SA.GOV.AU (South Australia emblems)
+    url: https://www.sa.gov.au/
+    method: html
+    license: Copyright; terms not found
+    cadence: yearly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Middle East; verdict ADD): history and curiosities of the places it covers,
+      for Place facts. robots.txt: Crawl-delay 10. Terms: terms not found. Sourced: yes. Terms not read or not found; owner
+      accepted for non-commercial use 2026-11-18. Facts only. Crawl-delay 10 honoured as min_delay_s. also in brief: asia-oceania,
+      heritage-registers.'
+  - id: gov-om-info
+    category: facts
+    name: Oman Ministry of Information portal
+    url: https://omaninfo.om/sitemap.xml
+    method: sitemap
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Middle East; verdict ADD): governorates, history, for Place facts. robots.txt:
+      allow all. Terms: terms not found. Sourced: no. Terms not read or not found; owner accepted for non-commercial use 2026-11-18.
+      Facts only. also in brief: -.'
+  - id: gov-ma-portal
+    category: facts
+    name: Portail national du Maroc
+    url: https://www.maroc.ma/
+    method: html
+    license: Copyright; terms not found
+    cadence: yearly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Africa; verdict ADD): history and curiosities of the places it covers,
+      for Place facts. robots.txt: allow all. Terms: terms not found. Sourced: no. Terms not read or not found; owner accepted
+      for non-commercial use 2026-11-18. Facts only. also in brief: -.'
+  - id: gov-rw-portal
+    category: facts
+    name: Government of Rwanda portal
+    url: https://www.gov.rw/
+    method: html
+    license: Copyright; terms not found
+    cadence: yearly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Africa; verdict ADD): history and curiosities of the places it covers,
+      for Place facts. robots.txt: CCBot blocked only. Terms: terms not found. Sourced: no. Terms not read or not found; owner
+      accepted for non-commercial use 2026-11-18. Facts only. AI-reserved robots.txt (or Content-Signal): title and link only,
+      no LLM kinds. also in brief: africa-middle-east.'
+  - id: gov-mu-portal
+    category: facts
+    name: Republic of Mauritius portal
+    url: https://govmu.org/EN/Pages/default.aspx
+    method: html
+    license: Copyright; no automated-access clause
+    cadence: yearly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Africa; verdict ADD): about Mauritius, for Place facts. robots.txt: robots
+      404 = allowed. Terms: copyright page: no bot ban. Sourced: no. Copyright reserved, no bot, scraping, TDM or AI ban quoted;
+      owner accepted for non-commercial use 2026-11-18. Facts only. also in brief: africa-middle-east.'
+  - id: gov-eg-sis
+    category: facts
+    name: Egypt State Information Service
+    url: https://sis.gov.eg/
+    method: html
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Africa; verdict ADD): governorates, history, for Place facts. robots.txt:
+      allow all. Terms: terms not found. Sourced: no. Terms not read or not found; owner accepted for non-commercial use 2026-11-18.
+      Facts only. also in brief: -.'
+  - id: gov-gh-portal
+    category: facts
+    name: Ghana.GOV portal
+    url: https://www.ghana.gov.gh/
+    method: html
+    license: Copyright; terms not found
+    cadence: yearly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Africa; verdict ADD): history and curiosities of the places it covers,
+      for Place facts. robots.txt: allow all. Terms: terms page fetched, no clauses found -> terms not found. Sourced: no. Terms
+      not read or not found; owner accepted for non-commercial use 2026-11-18. Facts only. also in brief: -.'
+  - id: od-nsw-gnr
+    category: facts
+    name: NSW Geographical Names Register (with MEANING/ORIGIN/HISTORY)
+    url: https://data.nsw.gov.au/data/dataset/geographical-name-register-of-nsw
+    method: html
+    license: CC BY 3.0
+    cadence: yearly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Oceania; verdict ADD): official meaning, origin and history of 80k+ NSW
+      names, many Aboriginal-language origins, for Place facts and Places to see. robots.txt: 200 (`Allow: /`, Content-Signal
+      ai-train=no); www.gnb.nsw.gov.au redirects. Terms: CC BY 3.0 AU per data.gov.au record; CSV metadata dated 2015, so check
+      freshness; sourced: yes (GNB). Open licence (CC BY 3.0). AI-reserved robots.txt (or Content-Signal): title and link only,
+      no LLM kinds.'
+  - id: fx-data-linz-govt-nz
+    category: facts
+    name: 'LINZ Data Service: NZ Gazetteer place names'
+    url: https://data.linz.govt.nz/
+    method: html
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: true
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Oceania; verdict API-OR-KEY): NZ Gazetteer place names: Official history/origin/meaning
+      field for NZ names (incl. 7,000+ entries from Reed''s Place Names), CC BY 4.0; WFS fits `wfs_geojson` once keyed. gazetteer.linz.govt.nz
+      is a JS app (robots comment-only); LINZ''s ArcGIS la…, for Place facts. Terms: terms not found. Terms not read or not
+      found; owner accepted for non-commercial use 2026-11-18. Facts only. key / sign-up: https://data.linz.govt.nz/accounts/register/
+      ; free?: yes. Seed: the host root (the research row names no URL).'
+  - id: fx-spatial-gis-information-qld-gov-au
+    category: facts
+    name: Queensland place names (origin + history)
+    url: https://spatial-gis.information.qld.gov.au/
+    method: html
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Oceania; verdict NEEDS-ADAPTER): history and curiosities of the places
+      it covers, for Place facts. Terms: terms not found. Terms not read or not found; owner accepted for non-commercial use
+      2026-11-18. Facts only. format: ArcGIS REST MapServer query (`f=geojson` may fit `wfs_geojson`) ; notes: Layers `Location/QldPlaceNames/MapServer`;
+      the data.qld.gov.au CSV has no origin/history columns and data.qld robots disallows `/api/`; robots on spatial-gis is
+      `*` with only a S…. Seed: the host root (the research row names no URL).'
+  - id: gov-niwa-extremes
+    category: facts
+    name: NIWA New Zealand climate extremes
+    url: https://niwa.co.nz/climate-and-weather/climate-extremes
+    method: html
+    license: Copyright; terms not found
+    cadence: yearly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Oceania; verdict ADD): NZ records by place, for Place facts and Weather.
+      robots.txt: allowed (Drupal default). Terms: terms not found (not fetched). Sourced: yes. Terms not read or not found;
+      owner accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: gov-landgate-wa-names
+    category: facts
+    name: Landgate WA place names (history of country town and suburb names)
+    url: https://www.landgate.wa.gov.au/location-data-and-services/place-names-and-addressing/
+    method: html
+    license: Copyright; terms not found
+    cadence: yearly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Oceania; verdict ADD): origins of WA town names, Aboriginal naming, for
+      Place facts. robots.txt: allowed (CMS paths disallowed). Terms: terms not found. Sourced: yes. Terms not read or not found;
+      owner accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: fx-placenames-australia
+    category: facts
+    name: Placenames Australia / ANPS (newsletter, publications)
+    url: https://anps.org.au/wp-sitemap.xml
+    method: sitemap
+    license: Copyright; terms not found
+    cadence: quarterly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Oceania; verdict ADD): researched origin stories of Australian names ("stories,
+      meanings and history" of 280k+ names), for Place facts. robots.txt: WP default on both hosts. Terms: terms not found.
+      Sourced: yes. Terms not read or not found; owner accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: od-tas-placenames
+    category: facts
+    name: Placenames Tasmania
+    url: https://www.placenames.tas.gov.au/
+    method: html
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Oceania; verdict NEEDS-ADAPTER): name history notes, for Place facts. robots.txt:
+      robots 404 (JSON). Terms: terms not found. Terms not read or not found; owner accepted for non-commercial use 2026-11-18.
+      Facts only. format / endpoint: SPA backed by a JSON API. Seed: the host root (the research row names no URL).'
+  - id: gov-nz-linz-nzgb
+    category: facts
+    name: LINZ / New Zealand Geographic Board
+    url: https://www.linz.govt.nz/sitemap.xml
+    method: sitemap
+    license: CC BY 4.0
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Oceania; verdict ADD): dual Māori/English names, Treaty-settlement names,
+      name origins (gazetteer.linz.govt.nz is already in research; this is the www host), for Place facts. robots.txt: 200;
+      Drupal core paths disallowed. Terms: /copyright: "licensed under the Creative Commons Attribution 4.0 International licence".
+      Sourced: yes. Open licence (CC BY 4.0).'
+  - id: gov-nz-geonet
+    category: facts
+    name: GeoNet (Earth Sciences New Zealand)
+    url: https://www.geonet.org.nz/sitemap.xml
+    method: sitemap
+    license: CC BY 3.0
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Oceania; verdict ADD): NZ volcano profiles, historic quakes per town, for
+      Place facts. robots.txt: 200; disallow /news/, /p/, /app, /response/. Terms: "licensed under a Creative Commons Attribution
+      3.0 New Zealand License". Sourced: yes. Open licence (CC BY 3.0).'
+  - id: gov-gh-districts
+    category: facts
+    name: Ghana Districts (district profiles, MLGRD)
+    url: https://www.ghanadistricts.com/
+    method: html
+    license: Copyright; no automated-access clause
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Africa; verdict NEEDS-ADAPTER): history and curiosities of the places it
+      covers, for Place facts. robots.txt: robots 404. Terms: district history and towns; the only African village-level official
+      candidate found this round. Copyright reserved, no bot, scraping, TDM or AI ban quoted; owner accepted for non-commercial
+      use 2026-11-18. Facts only. data route: https://www.ghanadistricts.com/ ; format: JS-rendered ASP.NET (DevExpress); no
+      HTML content without JS. Seed: the host root (the research row names no URL).'

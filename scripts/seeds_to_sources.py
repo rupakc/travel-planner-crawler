@@ -33096,6 +33096,2148 @@ _facts(
 )
 
 
+# Place facts corpus, Africa, the Middle East and Oceania (research vetted 2026-11-20).
+_facts(
+    'city-bobo-dioulasso',
+    ['facts', 'places'],
+    'Commune de Bobo-Dioulasso: founding of Kibidoué (c. 1050), the 1904 naming and the coat of arms, for Place facts and Places to see.',
+    cls='official',
+    seeds=['https://mairie-bobo.bf/historique/'],
+    feeds=['https://mairie-bobo.bf/feed/'],
+    include=['^https?://mairie-bobo\\.bf/(historique|armoiries|anciens-maires|espace-culturel)/'],
+)
+_facts(
+    'city-niamey',
+    ['facts', 'places'],
+    'Ville de Niamey (municipal portal): city presentation and history (centenary colloquium), for Place facts and Places to see.',
+    cls='official',
+    seeds=['https://villedeniamey.ne/ville/presentation/', 'https://villedeniamey.ne/colloque-centenaire/'],
+    include=['^https?://villedeniamey\\.ne/ville/'],
+)
+_facts(
+    'city-yaounde',
+    ['facts', 'places'],
+    'Communauté Urbaine de Yaoundé: city-council pages on the city and its districts, for Place facts and Places to see.',
+    cls='official',
+    sitemaps=['https://yaounde.cm/sitemap.xml'],
+    feeds=['https://yaounde.cm/feed/'],
+    include=['^https?://yaounde\\.cm/\\?page_id='],
+)
+_facts(
+    'city-libreville',
+    ['facts'],
+    'Mairie de Libreville: official history of Libreville, for Place facts.',
+    cls='official',
+    seeds=['https://libreville.ga/municipalite/historique/'],
+    sitemaps=['https://libreville.ga/wp-sitemap.xml'],
+    feeds=['https://libreville.ga/feed/'],
+    include=['^https?://libreville\\.ga/municipalite/'],
+)
+_facts(
+    'city-antananarivo',
+    ['facts', 'places'],
+    "Commune Urbaine d'Antananarivo: the capital's commune and its arrondissements, for Place facts and Places to see.",
+    cls='official',
+    seeds=['https://cua.mg/la-cua/projets'],
+    sitemaps=['https://site.cua.mg/sitemap.xml'],
+    include=['^https?://cua\\.mg/(la-cua|arrondissements)/', '^https?://site\\.cua\\.mg/(la-cua|arrondissements)/'],
+)
+_facts(
+    'city-mbabane',
+    ['facts', 'events'],
+    'Municipal Council of Mbabane: capital of Eswatini, council pages (thin on history), for Place facts and Events.',
+    cls='official',
+    sitemaps=['https://www.mbabane.org.sz/wp-sitemap.xml'],
+    feeds=['https://www.mbabane.org.sz/feed/'],
+    include=['^https?://www\\.mbabane\\.org\\.sz/'],
+)
+_facts(
+    'gov-luanda',
+    ['facts', 'places'],
+    'Governo Provincial de Luanda: Luanda municipalities and heritage news, for Place facts and Places to see.',
+    cls='official',
+    seeds=['https://luanda.gov.ao/'],
+    include=['^https?://luanda\\.gov\\.ao/web/'],
+)
+_facts(
+    'gov-ci-culture',
+    ['facts', 'places'],
+    "Ministère de la Culture et de la Francophonie (Côte d'Ivoire): heritage news (Grand-Bassam, Kong, classified sites), for Place facts and Places to see.",
+    cls='official',
+    depth=2,
+    seeds=['https://www.culture.gouv.ci/accueil'],
+    include=['^https?://www\\.culture\\.gouv\\.ci/(ministere|actualites|patrimoine)'],
+)
+_facts(
+    'gov-ga-culture',
+    ['facts'],
+    'Ministère de la Culture du Gabon: heritage and culture news, for Place facts.',
+    cls='official',
+    sitemaps=['https://culture.gouv.ga/wp-sitemap.xml'],
+    feeds=['https://culture.gouv.ga/feed/'],
+    include=['^https?://culture\\.gouv\\.ga/(category/actualites|presentation)'],
+)
+_facts(
+    'her-cndrs-comores',
+    ['facts', 'places'],
+    'CNDRS: Centre National de Documentation et de Recherche Scientifique (Comoros, incl. Nati…: history of the sultanates, the medinas\' UNESCO bid, "historiquement parlant" items, for Place facts and Places to see.',
+    cls='official',
+    depth=2,
+    seeds=['https://cndrs.km/cat%C3%A9gorie/histoire/', 'https://cndrs.km/cat%C3%A9gorie/sultanats/'],
+    feeds=['https://cndrs.km/feed/'],
+    include=['^https?://cndrs\\.km/(cat%C3%A9gorie/(histoire|sultanats)|actualite|musee-national)'],
+)
+_facts(
+    'her-imnc-drc',
+    ['facts', 'places', 'activities'],
+    'IMNC: Institut des Musées Nationaux du Congo (Musée National de Kinshasa): DRC national museums and collections, for Place facts, Places to see and Activities.',
+    cls='official',
+    sitemaps=['https://imnc.cd/sitemap.xml'],
+    include=['^https?://imnc\\.cd/'],
+)
+_facts(
+    'her-nhf-mauritius',
+    ['facts', 'places'],
+    'National Heritage Fund (Mauritius): Mauritius national heritage sites, for Place facts and Places to see.',
+    cls='official',
+    depth=2,
+    seeds=['https://nhf.govmu.org/nhf/?page_id=720'],
+    feeds=['https://nhf.govmu.org/nhf/?feed=rss2'],
+    include=['^https?://nhf\\.govmu\\.org/nhf/\\?page_id='],
+)
+_facts(
+    'arch-mauritius-archives',
+    ['facts'],
+    'National Archives Department (Mauritius): Mauritian historical notes and exhibitions, for Place facts.',
+    cls='official',
+    feeds=['https://nationalarchives.govmu.org/nationalarchives/?feed=rss2'],
+    include=['^https?://nationalarchives\\.govmu\\.org/nationalarchives/\\?page_id='],
+)
+_facts(
+    'her-morija-museum',
+    ['facts', 'places', 'activities'],
+    "Morija Museum & Archives (Lesotho): Lesotho's oldest museum, Morija history and dinosaur footprints, for Place facts, Places to see and Activities.",
+    cls='official',
+    seeds=['https://www.morijamuseum.org/museum-history'],
+    sitemaps=['https://www.morijamuseum.org/sitemap.xml'],
+    include=['^https?://www\\.morijamuseum\\.org/(museum-history|collection|projects)'],
+)
+_facts(
+    'arch-ahm-maputo',
+    ['facts'],
+    'Arquivo Histórico de Moçambique: Mozambique and Maputo history notes and exhibitions, for Place facts.',
+    cls='official',
+    seeds=['https://ahm.uem.mz/?page_id=83'],
+    feeds=['https://ahm.uem.mz/?feed=rss2'],
+    include=['^https?://ahm\\.uem\\.mz/\\?(page_id|p)='],
+)
+_facts(
+    'her-uem-museums',
+    ['facts', 'activities'],
+    'Universidade Eduardo Mondlane: Museu de História Natural and Museu Nacional da Moeda (Cas…: Casa Amarela (the oldest surviving building in Maputo) and museum facts, for Place facts and Activities.',
+    cls='official',
+    seeds=['https://uem.mz/museu-nacional-da-moeda-casa-amarela/'],
+    sitemaps=['https://uem.mz/wp-sitemap.xml'],
+    include=['^https?://uem\\.mz/(museu-|historial)'],
+)
+_facts(
+    'fx-casamemoire',
+    ['facts', 'walking_tours', 'places'],
+    'Casamémoire (Casablanca 20th-century heritage NGO): Casablanca history and Art Deco buildings, for Place facts, Free walking tours and Places to see.',
+    cls='editorial',
+    depth=2,
+    sitemaps=['https://www.casamemoire.org/wp-sitemap.xml'],
+    feeds=['https://www.casamemoire.org/feed/'],
+    include=['^https?://www\\.casamemoire\\.org/(histoire-de-casablanca|patrimoine-architectural-du-20e-siecle|visites-guidees)'],
+)
+_facts(
+    'fx-mozambique-history-net',
+    ['facts'],
+    'Mozambique History Net (Colin Darch): city histories (Beira etc.), documents, bibliography, for Place facts.',
+    cls='reference',
+    depth=2,
+    seeds=['https://www.mozambiquehistory.net/', 'https://www.mozambiquehistory.net/beira_cidade.php'],
+    include=['^https?://www\\.mozambiquehistory\\.net/[a-z_]+\\.php$'],
+)
+_facts(
+    'fx-delagoa-bay-world',
+    ['facts', 'walking_tours'],
+    'The Delagoa Bay World (blog on Lourenço Marques/Maputo history): Maputo streets, buildings and founders (e.g. the founder of Nampula), for Place facts and Free walking tours.',
+    cls='editorial',
+    feeds=['https://delagoabayworld.wordpress.com/feed/'],
+    include=['^https?://delagoabayworld\\.wordpress\\.com/(category/historia|20)'],
+)
+_facts(
+    'fx-egyptsites',
+    ['facts', 'places'],
+    'Egyptian Monuments (egyptsites): entries per site across the Nile Valley and Delta, with bibliographies, for Place facts and Places to see.',
+    cls='editorial',
+    depth=2,
+    seeds=['https://egyptsites.wordpress.com/site-map/'],
+    feeds=['https://egyptsites.wordpress.com/feed/'],
+    include=['^https?://egyptsites\\.wordpress\\.com/20\\d\\d/'],
+)
+_facts(
+    'fx-madain-project',
+    ['facts', 'places'],
+    'Madain Project: Middle East and North Africa sites (Levant, Arabia, Egypt) with citations, for Place facts and Places to see.',
+    cls='reference',
+    sitemaps=['https://www.madainproject.com/sitemap.xml'],
+    include=['^https?://www\\.madainproject\\.com/[a-z0-9_]+$'],
+)
+_facts(
+    'gov-yemen-nic',
+    ['facts', 'places'],
+    'National Information Center (Yemen): Yemen history and governorate and site profiles (Arabic), for Place facts and Places to see.',
+    cls='official',
+    depth=2,
+    seeds=['https://www.yemen-nic.info/yemen/history/', 'https://www.yemen-nic.info/yemeni_sites.php'],
+    include=['^https?://www\\.yemen-nic\\.info/(yemen/history|yemeni_sites|sectors/culture)'],
+)
+_facts(
+    'gov-baghdad',
+    ['facts'],
+    'Baghdad Governorate: districts and municipal heritage news (thin), for Place facts.',
+    cls='official',
+    feeds=['https://www.baghdad.gov.iq/feed/index.rss'],
+    include=['^https?://www\\.baghdad\\.gov\\.iq/news-districts-and-counties/'],
+)
+_facts(
+    'her-cultnat',
+    ['facts'],
+    'CULTNAT: Center for Documentation of Cultural and Natural Heritage (Bibliotheca Alexandri…: Egyptian heritage documentation news (Arabic); eternalegypt.org redirects here, for Place facts.',
+    cls='official',
+    seeds=['https://www.cultnat.org/CultureProgram.aspx'],
+    include=['^https?://www\\.cultnat\\.org/(NewsDetails|CultureProgramDetailes)'],
+)
+_facts(
+    'fx-zamane',
+    ['facts'],
+    'Zamane (Moroccan history magazine): "Le saviez-vous", true/false and word-origin items on Moroccan places (strong fit for fun and little-known facts), for Place facts.',
+    cls='editorial',
+    seeds=['https://zamane.ma/category/le-saviez-vous-buzz-de-lhistoire22/', 'https://zamane.ma/category/un-mot-une-histoire-2/'],
+    feeds=['https://zamane.ma/feed/'],
+    include=['^https?://zamane\\.ma/category/(le-saviez-vous|vrai-faux|un-mot-une-histoire|buzz-de-lhistoire)'],
+)
+_facts(
+    'fx-senegal-online',
+    ['facts', 'places', 'tips'],
+    'Sénégal Online (guide since 1996): town and village pages and Senegal history, for Place facts, Places to see and Travel tips.',
+    cls='editorial',
+    depth=2,
+    seeds=['https://www.senegal-online.com/tourisme_au_senegal/villes-et-villages-du-senegal/'],
+    sitemaps=['https://www.senegal-online.com/sitemap_index.xml'],
+    include=['^https?://www\\.senegal-online\\.com/(histoire|tourisme_au_senegal/villes-et-villages-du-senegal|culture-au-senegal)'],
+)
+_facts(
+    'fx-mauritius-times',
+    ['facts'],
+    'Mauritius Times (history features): Mauritian history features, for Place facts.',
+    cls='editorial',
+    seeds=['https://www.mauritiustimes.com/mt/category/features/history/'],
+    feeds=['https://www.mauritiustimes.com/mt/feed/'],
+    include=['^https?://www\\.mauritiustimes\\.com/mt/category/features/history/'],
+)
+_facts(
+    'fx-lebanon-untravelled',
+    ['facts', 'places', 'activities'],
+    'Lebanon Untravelled: Lebanese villages, museums and sites, for Place facts, Places to see and Activities.',
+    cls='editorial',
+    delay=20,
+    feeds=['https://lebanonuntravelled.com/feed/'],
+    include=['^https?://lebanonuntravelled\\.com/[a-z0-9-]+/$'],
+)
+_facts(
+    'fx-discover-lebanon',
+    ['facts', 'places'],
+    'DiscoverLebanon.com: town and site pages (stale; © 1997–2020), for Place facts and Places to see.',
+    cls='editorial',
+    depth=2,
+    seeds=['https://www.discoverlebanon.com/'],
+    include=['^https?://www\\.discoverlebanon\\.com/en/(tours|panoramic_views|lebanon_regions)'],
+)
+_facts(
+    'fx-yemen-times-archive',
+    ['facts'],
+    'Yemen Times archive: Yemeni cities and heritage features (archived), for Place facts.',
+    cls='editorial',
+    seeds=['https://yementimes.com/category/culture-featured/'],
+    sitemaps=['https://yementimes.com/wp-sitemap.xml'],
+    include=['^https?://yementimes\\.com/category/culture-featured/'],
+)
+_facts(
+    'fx-libya-observer',
+    ['facts'],
+    'The Libya Observer (culture): Libyan heritage news (Sabratha, Cyrene, UNESCO bids), for Place facts.',
+    cls='editorial',
+    seeds=['https://libyaobserver.ly/culture'],
+    include=['^https?://libyaobserver\\.ly/culture/'],
+)
+_facts(
+    'fx-lefaso',
+    ['facts'],
+    'leFaso.net: Burkina Faso places, history and heritage features (e.g. "Bobo-Dioulasso, la maison des Bobo-Dioula"), for Place facts.',
+    cls='editorial',
+    seeds=['https://lefaso.net/spip.php?rubrique18'],
+    feeds=['https://lefaso.net/spip.php?page=backend'],
+    include=['^https?://lefaso\\.net/spip\\.php\\?(article|rubrique18)'],
+)
+_facts(
+    'fx-gabonreview-culture',
+    ['facts'],
+    'Gabonreview (culture): Gabon heritage and culture, for Place facts.',
+    cls='editorial',
+    seeds=['https://www.gabonreview.com/category/culture/'],
+    feeds=['https://www.gabonreview.com/feed'],
+    include=['^https?://www\\.gabonreview\\.com/category/culture/'],
+)
+_facts(
+    'fx-adiac-congo',
+    ['facts'],
+    'Adiac (Agence d\'Information d\'Afrique Centrale), art and culture: Congo-Brazzaville and Congo Basin places (e.g. "Brazzaville, la belle aux mille visages"), for Place facts.',
+    cls='editorial',
+    delay=10,
+    seeds=['https://www.adiac-congo.com/rubrique/art-culture-media'],
+    include=['^https?://www\\.adiac-congo\\.com/(rubrique/art-culture-media|content/)'],
+)
+_facts(
+    'fx-tchadinfos-histoire',
+    ['facts'],
+    'Tchadinfos (histoire): Chad history pieces (a rare source for Chad), for Place facts.',
+    cls='editorial',
+    seeds=['https://tchadinfos.com/societe/histoire/'],
+    feeds=['https://tchadinfos.com/feed/'],
+    include=['^https?://tchadinfos\\.com/societe/histoire/'],
+)
+_facts(
+    'fx-sahelien',
+    ['facts'],
+    'Sahelien.com (culture): Mali, Niger and Burkina culture and heritage, for Place facts.',
+    cls='editorial',
+    seeds=['https://sahelien.com/category/culture/'],
+    sitemaps=['https://sahelien.com/sitemap_index.xml'],
+    include=['^https?://sahelien\\.com/category/culture/'],
+)
+_facts(
+    'fx-lexpress-mg',
+    ['facts'],
+    "L'Express de Madagascar (culture): Malagasy heritage (rova, towns), for Place facts.",
+    cls='editorial',
+    sitemaps=['https://www.lexpress.mg/sitemap.xml'],
+    feeds=['https://www.lexpress.mg/feeds/posts/default?alt=rss'],
+    include=['^https?://www\\.lexpress\\.mg/search/label/Culture|^/\\d{4}/\\d\\d/'],
+)
+_facts(
+    'fx-newsmada-culture',
+    ['facts'],
+    'Newsmada (culture): Madagascar culture and heritage, for Place facts.',
+    cls='editorial',
+    seeds=['https://newsmada.com/category/les-nouvelles/culture/'],
+    feeds=['https://newsmada.com/feed/'],
+    include=['^https?://newsmada\\.com/category/les-nouvelles/culture/'],
+)
+_facts(
+    'fx-madagascar-tribune',
+    ['facts'],
+    'Madagascar-Tribune: Madagascar history columns, for Place facts.',
+    cls='editorial',
+    feeds=['https://www.madagascar-tribune.com/spip.php?page=backend'],
+    include=['^https?://www\\.madagascar-tribune\\.com/[A-Za-z0-9-]+\\.html$'],
+)
+_facts(
+    'fx-alwatwan',
+    ['facts'],
+    'Al-watwan (Comoros daily), culture: Comorian medinas and heritage, for Place facts.',
+    cls='editorial',
+    delay=10,
+    seeds=['https://www.alwatwan.net/culture/'],
+    include=['^https?://www\\.alwatwan\\.net/culture/'],
+)
+_facts(
+    'fx-nation-sc',
+    ['facts'],
+    'Seychelles Nation: Seychelles heritage features (thin), for Place facts.',
+    cls='editorial',
+    seeds=['https://www.nation.sc/'],
+    include=['^https?://www\\.nation\\.sc/articles/'],
+)
+_facts(
+    'fx-mmegi',
+    ['facts'],
+    'Mmegi (Botswana): Botswana heritage features, for Place facts.',
+    cls='editorial',
+    feeds=['https://www.mmegi.bw/rss'],
+    include=['^https?://www\\.mmegi\\.bw/(arts-culture|lifestyle)/'],
+)
+_facts(
+    'fx-mwnation',
+    ['facts'],
+    'The Nation (Malawi): Malawi heritage features (thin), for Place facts.',
+    cls='editorial',
+    feeds=['https://mwnation.com/feed/'],
+    include=['^https?://mwnation\\.com/[a-z0-9-]+/$'],
+)
+_facts(
+    'fx-times-eswatini',
+    ['facts'],
+    'Times of Eswatini: Eswatini heritage and culture (thin), for Place facts.',
+    cls='editorial',
+    feeds=['https://times.co.sz/feed/'],
+    include=['^https?://times\\.co\\.sz/\\d+/'],
+)
+_facts(
+    'fx-lesotho-times',
+    ['facts'],
+    'Lesotho Times: Lesotho features (thin), for Place facts.',
+    cls='editorial',
+    feeds=['https://lestimes.com/?feed=rss2'],
+    include=['^https?://lestimes\\.com/'],
+)
+_facts(
+    'fx-le360-culture',
+    ['facts'],
+    'Le360 (culture): Moroccan heritage (medinas, kasbahs), for Place facts.',
+    cls='editorial',
+    sitemaps=['https://fr.le360.ma/arc/outboundfeeds/sitemap-index/'],
+    include=['^https?://fr\\.le360\\.ma/culture/'],
+)
+_facts(
+    'fx-leaders-tn',
+    ['facts'],
+    'Leaders (Tunisia): Tunisian town features (e.g. "Hammam-Lif, une ville..."), for Place facts.',
+    cls='editorial',
+    sitemaps=['https://www.leaders.com.tn/sitemap'],
+    include=['^https?://www\\.leaders\\.com\\.tn/article/'],
+)
+_facts(
+    'fx-lapresse-tn',
+    ['facts'],
+    'La Presse de Tunisie (culture): Tunisian heritage, for Place facts.',
+    cls='editorial',
+    sitemaps=['https://www.lapresse.tn/sitemap_index.xml'],
+    feeds=['https://www.lapresse.tn/feed/'],
+    include=['^https?://www\\.lapresse\\.tn/category/culture/'],
+)
+_facts(
+    'fx-webdo-tn',
+    ['facts'],
+    'Webdo (culture): Tunisian culture and heritage, for Place facts.',
+    cls='editorial',
+    feeds=['https://www.webdo.tn/fr/feed/'],
+    include=['^https?://www\\.webdo\\.tn/fr/actualite/culture/'],
+)
+_facts(
+    'fx-aps-dz',
+    ['facts'],
+    'APS: Algérie Presse Service: Algerian heritage items and infographics, for Place facts.',
+    cls='official',
+    sitemaps=['https://www.aps.dz/sitemap.xml'],
+    include=['^https?://www\\.aps\\.dz/(culture|infographie)/'],
+)
+_facts(
+    'fx-cridem',
+    ['facts'],
+    'Cridem (Mauritania): Mauritania (Chinguetti, Ouadane) heritage news, for Place facts.',
+    cls='editorial',
+    feeds=['http://www.cridem.org/rss/actualites.xml'],
+    include=['^https?://www\\.cridem\\.org/C_Info\\.php\\?article='],
+)
+_facts(
+    'fx-opais-ao',
+    ['facts'],
+    'O País (Angola), cultura: Angola heritage (classified monuments, INPC news), for Place facts.',
+    cls='editorial',
+    feeds=['https://www.opais.ao/feed/'],
+    include=['^https?://www\\.opais\\.ao/cultura/'],
+)
+_facts(
+    'fx-rna-ao',
+    ['facts'],
+    'Rádio Nacional de Angola: heritage counts and designations (e.g. 340 classified monuments, 2026), for Place facts.',
+    cls='official',
+    seeds=['https://rna.ao/'],
+    include=['^https?://rna\\.ao/rna\\.ao/20\\d\\d/'],
+)
+_facts(
+    'fx-tribuna-angola',
+    ['facts'],
+    'Tribuna de Angola: Angolan intangible and classified heritage, for Place facts.',
+    cls='editorial',
+    feeds=['https://tribunadeangola.org/?feed=rss2'],
+    include=['^https?://tribunadeangola\\.org/\\?p='],
+)
+_facts(
+    'gov-sana-culture',
+    ['facts'],
+    'SANA: Syrian Arab News Agency (culture and arts): Syrian heritage sites news, for Place facts.',
+    cls='official',
+    seeds=['https://sana.sy/culture-and-arts/'],
+    feeds=['https://sana.sy/feed/'],
+    include=['^https?://sana\\.sy/culture-and-arts/'],
+)
+_facts(
+    'gov-nna-lebanon',
+    ['facts'],
+    'National News Agency (Lebanon): Lebanese heritage news, for Place facts.',
+    cls='official',
+    sitemaps=['https://nna-leb.gov.lb/sitemap.xml'],
+    include=['^https?://nna-leb\\.gov\\.lb/(ar|en|fr)/culture'],
+)
+_facts(
+    'gov-petra-jordan',
+    ['facts'],
+    'Petra: Jordan News Agency (arts and culture): Jordan heritage news, for Place facts.',
+    cls='official',
+    seeds=['https://petra.gov.jo/ar/news/search/category/arts-culture'],
+    include=['^https?://petra\\.gov\\.jo/ar/news/'],
+)
+_facts(
+    'gov-lana-libya',
+    ['facts'],
+    'LANA: Libyan News Agency: Libyan heritage news (thin), for Place facts.',
+    cls='official',
+    seeds=['https://lana.gov.ly/'],
+    include=['^https?://lana\\.gov\\.ly/'],
+)
+_facts(
+    'gov-tap-tunisia',
+    ['facts'],
+    'TAP: Tunis Afrique Presse (culture portal): Tunisian heritage news, for Place facts.',
+    cls='official',
+    delay=60,
+    seeds=['https://www.tap.info.tn/ar/%D9%88%D9%8A%D8%A8-%D8%B3%D9%8A%D8%AA-%D8%AB%D9%82%D8%A7%D9%81%D8%A9-%D9%88-%D8%A3%D8%AA%D8%B5%D8%A7%D9%84-Portal-Culture'],
+    include=['^https?://www\\.tap\\.info\\.tn/ar/.*Portal-Culture'],
+)
+_facts(
+    'fx-omandaily',
+    ['facts'],
+    'Oman Daily: Omani heritage (thin), for Place facts.',
+    cls='editorial',
+    seeds=['https://www.omandaily.om/'],
+    include=['^https?://www\\.omandaily\\.om/((?:ثقافة|%D8%AB%D9%82%D8%A7%D9%81%D8%A9)|culture)'],
+)
+_facts(
+    'arch-ajol',
+    ['facts'],
+    'African Journals Online: African-published history journals (e.g. Afrika Zamani, Ghana/Nigeria/Malawi history), for Place facts.',
+    cls='reference',
+    depth=2,
+    seeds=['https://www.ajol.info/index.php/ajol/browseBy/category-history'],
+    sitemaps=['https://www.ajol.info/public/sitemaps/sitemap_index.xml'],
+    include=['^https?://www\\.ajol\\.info/index\\.php/[a-z]+/article/view/'],
+)
+_facts(
+    'arch-scielo-za',
+    ['facts'],
+    'SciELO South Africa: open southern African history journals (e.g. Historia, New Contree, Southern African Humanities), for Place facts.',
+    cls='reference',
+    depth=2,
+    seeds=['https://www.scielo.org.za/'],
+    include=['^https?://www\\.scielo\\.org\\.za/scielo\\.php\\?script=sci_(serial|arttext)'],
+)
+_facts(
+    'arch-imist-revues',
+    ['facts'],
+    'IMIST: Portail des Revues Scientifiques Marocaines: Moroccan heritage and geography journals (his-heritage lives on journals.imist.ma, so vet that host separately), for Place facts.',
+    cls='reference',
+    depth=2,
+    seeds=['https://revues.imist.ma/index.php/index/fr_CA'],
+    include=['^https?://revues\\.imist\\.ma/index\\.php/[A-Za-z]+/article/view/'],
+)
+_facts(
+    'her-cnrpah',
+    ['facts'],
+    'CNRPAH: Centre National de Recherches Préhistoriques, Anthropologiques et Historiques (Al…: Algerian prehistory and anthropology (Tassili, ksour), for Place facts.',
+    cls='official',
+    depth=2,
+    seeds=['https://www.cnrpah.org/index.php/fr/'],
+    include=['^https?://www\\.cnrpah\\.org/index\\.php/(fr|ar)/'],
+)
+_facts(
+    'her-apsad',
+    ['facts'],
+    'APSAD: Association pour la Protection des Sites et Anciennes Demeures (Lebanon): Beirut historic houses and sites, for Place facts.',
+    cls='editorial',
+    seeds=['https://www.apsad.org/'],
+    include=['^https?://www\\.apsad\\.org/'],
+)
+_facts(
+    'fx-univ-lome-ville',
+    ['facts'],
+    'Université de Lomé: "Découvrir la ville de Lomé": a Lomé city profile (single page; a Togo gap filler), for Place facts.',
+    cls='official',
+    depth=0,
+    seeds=['https://univ-lome.tg/decouvrir-la-ville-de-lome/'],
+    include=['^https?://univ-lome\\.tg/decouvrir-la-ville-de-lome/'],
+)
+_facts(
+    'gov-inep-bissau',
+    ['facts'],
+    'INEP: Instituto Nacional de Estudos e Pesquisa (Guinea-Bissau): Guinea-Bissau studies (thin site, but the only official lead for Bissau), for Place facts.',
+    cls='official',
+    seeds=['http://www.inep-bissau.org/'],
+    include=['^https?://www\\.inep-bissau\\.org/'],
+)
+_facts(
+    'gov-ine-mozambique',
+    ['facts'],
+    'INE Moçambique (Censo 2017 and district profiles): population records per district and city, for Place facts.',
+    cls='official',
+    off='adapter pending: pdf',
+    seeds=['https://www.ine.gov.mz/'],
+    include=['^https?://www\\.ine\\.gov\\.mz/.*(?:document_library)'],
+)
+_facts(
+    'gov-ine-angola',
+    ['facts'],
+    'INE Angola: province and municipality population, for Place facts.',
+    cls='official',
+    off='adapter pending: pdf',
+    seeds=['https://www.ine.gov.ao/'],
+)
+_facts(
+    'gov-instat-madagascar',
+    ['facts'],
+    'INSTAT Madagascar: region and commune figures, for Place facts.',
+    cls='official',
+    off='adapter pending: pdf/xlsx',
+    delay=5,
+    sitemaps=['https://instat.mg/sitemap.xml'],
+    include=['^https?://instat\\.mg/statistiques/'],
+)
+_facts(
+    'gov-ine-saotome',
+    ['facts'],
+    'INE São Tomé e Príncipe: district population, for Place facts.',
+    cls='official',
+    off='adapter pending: pdf',
+    seeds=['https://www.ine.st/'],
+)
+_facts(
+    'fx-jornal-de-angola',
+    ['facts'],
+    'Jornal de Angola (cultura): Angolan heritage, for Place facts.',
+    cls='editorial',
+    off='adapter pending: js',
+    seeds=['https://www.jornaldeangola.ao/'],
+)
+_facts(
+    'city-muscat',
+    ['facts'],
+    'Muscat Municipality: Muscat history page (municipal history target), for Place facts.',
+    cls='official',
+    off='adapter pending: js',
+    seeds=['https://www.mm.gov.om/'],
+)
+_facts(
+    'city-tripoli-ly',
+    ['facts'],
+    'Tripoli municipality (Libya): Tripoli city info, for Place facts.',
+    cls='official',
+    off='adapter pending: js',
+    seeds=['https://tripoli.gov.ly/'],
+)
+_facts(
+    'arch-saho',
+    ['facts', 'places', 'events'],
+    'South African History Online: "Places" entries for SA towns, plus "This day in history", for Place facts, Places to see and Events.',
+    cls='reference',
+    llm=False,
+    delay=5,
+    sitemaps=['https://sahistory.org.za/sitemap.xml'],
+    include=['^https?://sahistory\\.org\\.za/place/'],
+)
+_facts(
+    'fx-heritage-portal',
+    ['facts', 'places', 'walking_tours'],
+    'The Heritage Portal: articles by SA heritage practitioners on buildings, towns and suburbs, for Place facts, Places to see and Free walking tours.',
+    cls='editorial',
+    sitemaps=['https://www.theheritageportal.co.za/sitemap.xml'],
+    include=['^https?://www\\.theheritageportal\\.co\\.za/article/'],
+)
+_facts(
+    'her-artefacts',
+    ['facts', 'places'],
+    'Artefacts: SA built environment encyclopedia: building-by-building history of SA towns with architect, date and references, for Place facts and Places to see.',
+    cls='reference',
+    depth=2,
+    seeds=['https://www.artefacts.co.za/'],
+    include=['^https?://www\\.artefacts\\.co\\.za/main/Buildings/'],
+)
+_facts(
+    'gov-za-aboutsa',
+    ['facts'],
+    'South African Government: About SA (Yearbook): provinces, history, symbols, for Place facts.',
+    cls='official',
+    depth=2,
+    seeds=['https://www.gov.za/about-sa'],
+    include=['^https?://www\\.gov\\.za/about-sa'],
+)
+_facts(
+    'her-robben-island',
+    ['facts', 'activities'],
+    'Robben Island Museum: UNESCO site history, prison and island facts, for Place facts and Activities.',
+    cls='official',
+    sitemaps=['https://www.robben-island.org.za/sitemap_index.xml'],
+    feeds=['https://www.robben-island.org.za/feed/'],
+    exclude=['^https?://www\\.robben-island\\.org\\.za/(?:wp-)'],
+)
+_facts(
+    'her-freedom-park',
+    ['facts', 'activities', 'events'],
+    'Freedom Park (Pretoria): national heritage site, memorial facts, for Place facts, Activities and Events.',
+    cls='official',
+    sitemaps=['https://www.freedompark.co.za/wp-sitemap.xml'],
+    feeds=['https://www.freedompark.co.za/feed/'],
+    exclude=['^https?://www\\.freedompark\\.co\\.za/(?:wp-)'],
+)
+_facts(
+    'her-district-six',
+    ['facts', 'walking_tours'],
+    'District Six Museum: Cape Town forced-removals history, for Place facts and Free walking tours.',
+    cls='official',
+    sitemaps=['https://www.districtsix.co.za/wp-sitemap.xml'],
+    feeds=['https://districtsix.co.za/feed/'],
+    exclude=['^https?://www\\.districtsix\\.co\\.za/(?:wp-)', '^https?://districtsix\\.co\\.za/(?:wp-)'],
+)
+_facts(
+    'her-joburg-heritage',
+    ['facts', 'walking_tours'],
+    'Johannesburg Heritage Foundation: Johannesburg suburb and building histories; runs heritage tours, for Place facts and Free walking tours.',
+    cls='community',
+    llm=False,
+    off='owner decision: community-written site; the place_fact kind takes official, reference and editorial sources only (kinds.toml). Allow community sources behind corroboration, or keep off?',
+    sitemaps=['https://joburgheritage.org.za/wp-sitemap.xml'],
+    feeds=['https://joburgheritage.org.za/feed/'],
+    exclude=['^https?://joburgheritage\\.org\\.za/(?:wp-|product|shop|cart)'],
+)
+_facts(
+    'her-iziko',
+    ['facts', 'activities'],
+    'Iziko Museums of South Africa: Castle of Good Hope, Bo-Kaap Museum, SA Museum history, for Place facts and Activities.',
+    cls='official',
+    seeds=['https://www.iziko.org.za/'],
+    feeds=['https://www.iziko.org.za/feed/'],
+    include=['^https?://www\\.iziko\\.org\\.za/(museums|static|news)/'],
+)
+_facts(
+    'her-maropeng',
+    ['facts', 'activities'],
+    'Maropeng: Cradle of Humankind: fossil-hominid World Heritage facts, for Place facts and Activities.',
+    cls='official',
+    sitemaps=['https://www.maropeng.co.za/sitemap.xml'],
+    include=['^https?://www\\.maropeng\\.co\\.za/content/'],
+)
+_facts(
+    'her-ditsong',
+    ['facts', 'activities'],
+    'DITSONG Museums of SA: 8 national museums, Kruger House, Pioneer Museum and others, for Place facts and Activities.',
+    cls='official',
+    depth=2,
+    seeds=['https://ditsong.org.za/en'],
+    include=['^https?://ditsong\\.org\\.za/en/'],
+)
+_facts(
+    'tb-brand-south-africa',
+    ['facts'],
+    'Brand South Africa: "fast facts", national symbols, firsts, for Place facts.',
+    cls='official',
+    llm=False,
+    seeds=['https://www.brandsouthafrica.com/'],
+    include=['^https?://www\\.brandsouthafrica\\.com/(tourism|people-culture|south-africa-fast-facts)'],
+)
+_facts(
+    'od-pleiades',
+    ['facts', 'places'],
+    'Pleiades ancient places gazetteer: ancient names, founding periods, coordinates for Egypt, the Levant, North Africa and Persia, for Place facts and Places to see.',
+    cls='reference',
+    llm=False,
+    off='adapter pending: a place_fact mapping for this dataset on the csv_filter reader',
+    depth=0,
+    delay=5,
+    seeds=['https://github.com/isawnyu/pleiades.datasets'],
+    include=['^https?://github\\.com/.*(?:n/a)'],
+)
+_facts(
+    'fx-iranchamber',
+    ['facts', 'places'],
+    'Iran Chamber Society: Iranian city and monument histories, for Place facts and Places to see.',
+    cls='editorial',
+    sitemaps=['https://www.iranchamber.com/sitemap.xml'],
+    include=['^https?://www\\.iranchamber\\.com/(history|cities|architecture)/'],
+)
+_facts(
+    'her-cgie',
+    ['facts'],
+    'Center for the Great Islamic Encyclopedia: scholarly Persian encyclopedia of Iranian and Islamic places, for Place facts.',
+    cls='reference',
+    delay=10,
+    seeds=['https://www.cgie.org.ir/'],
+    feeds=['http://www.cgie.org.ir/fa/rss/weblog'],
+    include=['^https?://www\\.cgie\\.org\\.ir/fa/article-\\d+'],
+)
+_facts(
+    'fx-arab-ency',
+    ['facts'],
+    'Arab Encyclopedia (Syria): Arabic entries on Levantine cities and sites, for Place facts.',
+    cls='official',
+    llm=False,
+    depth=2,
+    seeds=['https://arab-ency.com.sy/'],
+    include=['^https?://arab-ency\\.com\\.sy/ency/details/'],
+)
+_facts(
+    'her-sa-heritage',
+    ['facts', 'places'],
+    'Saudi Heritage Commission records: National Register of Architectural Heritage and archaeological sites, for Place facts and Places to see.',
+    cls='official',
+    depth=2,
+    seeds=['https://heritage.moc.gov.sa/en/Cultural-Heritage'],
+    include=['^https?://heritage\\.moc\\.gov\\.sa/en/'],
+)
+_facts(
+    'fx-saudipedia',
+    ['facts', 'places'],
+    'Saudipedia (Ministry of Media): official encyclopedia of Saudi cities, villages and sites, for Place facts and Places to see.',
+    cls='official',
+    seeds=['https://saudipedia.com/ar'],
+    sitemaps=['https://saudipedia.com/en/sitemap.xml'],
+    include=['^https?://saudipedia\\.com/en/article/'],
+)
+_facts(
+    'gov-rcu-alula',
+    ['facts', 'activities'],
+    'Royal Commission for AlUla: Hegra, Dadan, oasis history, for Place facts and Activities.',
+    cls='official',
+    sitemaps=['https://www.rcu.gov.sa/sitemap.xml'],
+    include=['^https?://www\\.rcu\\.gov\\.sa/(about-rcu/about-alula|en/heritage|alula-)'],
+)
+_facts(
+    'gov-oman-mht',
+    ['facts'],
+    'Oman Ministry of Heritage and Tourism: forts, aflaj, frankincense sites, for Place facts.',
+    cls='official',
+    sitemaps=['https://mht.gov.om/en/sitemap.xml'],
+    include=['^https?://mht\\.gov\\.om/en/(heritage|culture|about-oman)'],
+)
+_facts(
+    'fx-origins-of-doha',
+    ['facts'],
+    'Origins of Doha and Qatar (UCL project): archaeology and oral history of Doha and Qatari towns, for Place facts.',
+    cls='reference',
+    sitemaps=['https://originsofdoha.wordpress.com/sitemap.xml'],
+    feeds=['https://originsofdoha.wordpress.com/feed/'],
+    include=['^https?://originsofdoha\\.wordpress\\.com/\\d{4}/\\d{2}/'],
+)
+_facts(
+    'her-riwaq',
+    ['facts', 'walking_tours'],
+    'RIWAQ: Centre for Architectural Conservation (Palestine): registry of historic buildings, historic centres, for Place facts and Free walking tours.',
+    cls='community',
+    llm=False,
+    off='owner decision: community-written site; the place_fact kind takes official, reference and editorial sources only (kinds.toml). Allow community sources behind corroboration, or keep off?',
+    depth=2,
+    seeds=['https://www.riwaq.org/'],
+    include=['^https?://www\\.riwaq\\.org/(page|project|registry)/'],
+)
+_facts(
+    'gov-mjcs-maroc',
+    ['facts'],
+    'Morocco Ministry of Culture: national heritage: classified monuments, medinas, for Place facts.',
+    cls='official',
+    seeds=['https://mjcs.gov.ma/fr/departements/culture/patrimoine-materiel-national/'],
+    sitemaps=['https://mjcs.gov.ma/sitemap_index.xml'],
+    include=['^https?://mjcs\\.gov\\.ma/fr/departements/culture/patrimoine'],
+)
+_facts(
+    'her-fnm-maroc',
+    ['facts', 'activities'],
+    'Fondation Nationale des Musées (Morocco): national museums and their buildings, for Place facts and Activities.',
+    cls='official',
+    depth=2,
+    seeds=['https://www.fnm.ma/'],
+    include=['^https?://www\\.fnm\\.ma/(musees|museums)/'],
+)
+_facts(
+    'her-inp-tunisie',
+    ['facts'],
+    'Institut National du Patrimoine (Tunisia): Tunisian sites and monuments sheets, for Place facts.',
+    cls='official',
+    seeds=['https://www.inp2020.tn/en/category/_monuments_sites/'],
+    feeds=['https://www.inp2020.tn/en/feed/'],
+    include=['^https?://www\\.inp2020\\.tn/(en|fr|ar)/'],
+)
+_facts(
+    'her-ogebc',
+    ['facts', 'activities'],
+    'OGEBC: protected cultural property (Algeria): Tipaza, Djemila, Timgad site sheets, for Place facts and Activities.',
+    cls='official',
+    sitemaps=['https://ogebc.dz/sitemap_index.xml'],
+    feeds=['https://ogebc.dz/feed/'],
+    exclude=['^https?://ogebc\\.dz/(?:product|shop|cart)'],
+)
+_facts(
+    'her-ke-nmk',
+    ['facts', 'places', 'activities'],
+    'National Museums of Kenya: gazetted sites and monuments in Kenya, for Place facts, Places to see and Activities.',
+    cls='official',
+    sitemaps=['https://museums.or.ke/wp-sitemap.xml'],
+    include=['^https?://museums\\.or\\.ke/(sites|monuments|\\d{4})/'],
+)
+_facts(
+    'her-gmmb',
+    ['facts', 'activities'],
+    'Ghana Museums and Monuments Board: Cape Coast, Elmina and other forts, national museum, for Place facts and Activities.',
+    cls='official',
+    sitemaps=['https://gmmb.gov.gh/wp-sitemap.xml'],
+    feeds=['https://gmmb.gov.gh/feed/'],
+    exclude=['^https?://gmmb\\.gov\\.gh/(?:wp-)'],
+)
+_facts(
+    'her-ncmm-nigeria',
+    ['facts'],
+    'National Commission for Museums and Monuments (Nigeria): the official list of 65 national monuments, for Place facts.',
+    cls='official',
+    seeds=['https://museum.ng/national-monuments-in-nigeria/list-of-national-monuments'],
+    sitemaps=['https://museum.ng/sitemap_index.xml'],
+    include=['^https?://museum\\.ng/(national-monuments|museums)'],
+)
+_facts(
+    'her-na-nhc',
+    ['facts', 'places'],
+    'National Heritage Council of Namibia: proclaimed national heritage sites, for Place facts and Places to see.',
+    cls='official',
+    sitemaps=['https://nhc-nam.org/portfolio-sitemap.xml'],
+    include=['^https?://nhc-nam\\.org/portfolio/'],
+)
+_facts(
+    'od-atlas-namibia',
+    ['facts', 'places'],
+    'Atlas of Namibia: national heritage sites, geography records, for Place facts and Places to see.',
+    cls='reference',
+    depth=2,
+    seeds=['https://atlasofnamibia.online/'],
+    include=['^https?://atlasofnamibia\\.online/chapter-'],
+)
+_facts(
+    'her-kgm',
+    ['facts', 'activities'],
+    'Kigali Genocide Memorial: history and curiosities of the places it covers, for Place facts and Activities.',
+    cls='official',
+    sitemaps=['https://kgm.rw/sitemap_index.xml'],
+    feeds=['https://kgm.rw/feed/'],
+    exclude=['^https?://kgm\\.rw/(?:give_forms|wp-)'],
+)
+_facts(
+    'her-rwanda-heritage',
+    ['facts', 'activities'],
+    'Rwanda Cultural Heritage Academy: 8 national museums, classified heritage sites, for Place facts and Activities.',
+    cls='official',
+    llm=False,
+    depth=2,
+    seeds=['https://www.rwandaheritage.gov.rw/'],
+    include=['^https?://www\\.rwandaheritage\\.gov\\.rw/en/'],
+)
+_facts(
+    'her-uganda-museums',
+    ['facts'],
+    'Uganda Department of Museums and Monuments: national cultural sites, Kasubi tombs, for Place facts.',
+    cls='official',
+    sitemaps=['https://museums.tourism.go.ug/sitemap_index.xml'],
+    include=['^https?://museums\\.tourism\\.go\\.ug/(sites|\\?p=|national)'],
+)
+_facts(
+    'her-aapravasi',
+    ['facts'],
+    'Aapravasi Ghat Trust Fund (Mauritius): indentured-labour World Heritage site, for Place facts.',
+    cls='official',
+    feeds=['https://aapravasi.govmu.org/aapravasi/?feed=rss2'],
+    include=['^https?://aapravasi\\.govmu\\.org/aapravasi/'],
+)
+_facts(
+    'arch-sudan-memory',
+    ['facts'],
+    'Sudan Memory: digitised Sudanese heritage (Suakin, Meroe, Sennar), for Place facts.',
+    cls='reference',
+    depth=2,
+    delay=10,
+    seeds=['https://www.sudanmemory.org/'],
+    include=['^https?://www\\.sudanmemory\\.org/(cms|viewer/metadata)/'],
+)
+_facts(
+    'fx-chalo-chatu',
+    ['facts'],
+    'Chalo Chatu: Zambia online encyclopedia: Zambian towns, chiefdoms, monuments, for Place facts.',
+    cls='community',
+    llm=False,
+    off='owner decision: community-written site; the place_fact kind takes official, reference and editorial sources only (kinds.toml). Allow community sources behind corroboration, or keep off?',
+    sitemaps=['https://www.chalochatu.org/sitemap/sitemap-index-chalochatu.xml'],
+    include=['^https?://www\\.chalochatu\\.org/[^:]+$'],
+)
+_facts(
+    'wiki-dump-arz',
+    ['facts'],
+    'Egyptian Arabic Wikipedia dump: Egyptian villages and towns (large bot-made stub share, so filter on length and refs), for Place facts.',
+    cls='reference',
+    llm=False,
+    off='adapter pending: a rule-based place_fact reader for share-alike Wikipedia dumps (History/Etymology sections; CC BY-SA text is never sent to a model)',
+    depth=0,
+    seeds=['https://dumps.wikimedia.org/arzwiki/latest/'],
+)
+_facts(
+    'her-sahris',
+    ['facts'],
+    'SAHRIS: SA Heritage Resources Information System: best SA heritage register, for Place facts.',
+    cls='official',
+    off='enable after a check from the crawler VM: robots.txt gave no response from the research laptop (curl result: timeout (28)); terms and content not yet seen',
+    seeds=['https://sahris.sahra.org.za/'],
+)
+_facts(
+    'her-amafa',
+    ['facts'],
+    'Amafa aKwaZulu-Natali: KZN provincial heritage authority, for Place facts.',
+    cls='official',
+    off='enable after a check from the crawler VM: robots.txt gave no response from the research laptop (curl result: DNS (6)); terms and content not yet seen',
+    seeds=['https://amafa.org.za/'],
+)
+_facts(
+    'arch-nlsa',
+    ['facts'],
+    'National Library of South Africa: local history collections, for Place facts.',
+    cls='reference',
+    off='enable after a check from the crawler VM: robots.txt gave no response from the research laptop (curl result: timeout); terms and content not yet seen',
+    seeds=['https://nlsa.ac.za/'],
+)
+_facts(
+    'arch-disa',
+    ['facts'],
+    'Digital Innovation South Africa (UKZN): liberation-struggle history tied to SA places (low priority), for Place facts.',
+    cls='official',
+    off='enable after a check from the crawler VM: a robots.txt or page fetch failed or timed out from the research laptop (robots: no response (timeout) → allowed); read robots.txt, terms and content first',
+    seeds=['https://disa.ukzn.ac.za/'],
+    include=['^https?://disa\\.ukzn\\.ac\\.za/(collections|items)/'],
+)
+_facts(
+    'arch-wits-historical-papers',
+    ['facts'],
+    'Wits Historical Papers: archive inventories by place, for Place facts.',
+    cls='reference',
+    off='enable after a check from the crawler VM: robots.txt gave no response from the research laptop (curl result: DNS); terms and content not yet seen',
+    seeds=['https://historicalpapers.wits.ac.za/'],
+)
+_facts(
+    'her-jordan-doa',
+    ['facts'],
+    'Jordan Department of Antiquities: 15,000+ registered sites; Databases section, for Place facts.',
+    cls='official',
+    off='enable after a check from the crawler VM: robots.txt gave no response from the research laptop (curl result: timeout); terms and content not yet seen',
+    seeds=['https://doa.gov.jo/'],
+)
+_facts(
+    'od-mega-jordan',
+    ['facts'],
+    'MEGA-Jordan geodatabase: national archaeological GIS, for Place facts.',
+    cls='reference',
+    off='enable after a check from the crawler VM: robots.txt gave no response from the research laptop (curl result: connect (7)); terms and content not yet seen',
+    seeds=['https://megajordan.org/'],
+)
+_facts(
+    'her-petra',
+    ['facts'],
+    'Petra Development and Tourism Region Authority: Petra facts, for Place facts.',
+    cls='official',
+    off='enable after a check from the crawler VM: robots.txt gave no response from the research laptop (curl result: timeout); terms and content not yet seen',
+    seeds=['https://visitpetra.jo/'],
+)
+_facts(
+    'her-bahrain-baca',
+    ['facts'],
+    'Bahrain Authority for Culture and Antiquities: Bahrain forts, Dilmun burial mounds, for Place facts.',
+    cls='official',
+    off='enable after a check from the crawler VM: robots.txt gave no response from the research laptop (curl result: timeout); terms and content not yet seen',
+    seeds=['https://culture.gov.bh/'],
+)
+_facts(
+    'arch-darah',
+    ['facts'],
+    'King Abdulaziz Foundation (Darah): Saudi historical archive, for Place facts.',
+    cls='reference',
+    off='enable after a check from the crawler VM: robots.txt gave no response from the research laptop (curl result: DNS); terms and content not yet seen',
+    seeds=['https://darah.org.sa/'],
+)
+_facts(
+    'her-idpc-maroc',
+    ['facts'],
+    'Inventaire et Documentation du Patrimoine Culturel (Morocco): national heritage inventory by region, for Place facts.',
+    cls='official',
+    off='enable after a check from the crawler VM: robots.txt gave no response from the research laptop (curl result: DNS); terms and content not yet seen',
+    seeds=['https://idpc.ma/'],
+)
+_facts(
+    'her-inp-rnrt',
+    ['facts'],
+    'INP Tunisia (old host): protected monuments list, for Place facts.',
+    cls='official',
+    off='enable after a check from the crawler VM: robots.txt gave no response from the research laptop (curl result: timeout); terms and content not yet seen',
+    seeds=['https://inp.rnrt.tn/'],
+)
+_facts(
+    'gov-dz-culture',
+    ['facts'],
+    'Algeria Ministry of Culture: LBCP lists: per-wilaya protected cultural property PDFs (would need a PDF adapter), for Place facts.',
+    cls='official',
+    off='enable after a check from the crawler VM: robots.txt gave no response from the research laptop (curl result: timeout); terms and content not yet seen',
+    seeds=['https://m-culture.gov.dz/'],
+)
+_facts(
+    'her-ethiopia-eha',
+    ['facts'],
+    'Ethiopian Heritage Authority: official site identity unconfirmed, for Place facts.',
+    cls='official',
+    off='enable after a check from the crawler VM: robots.txt gave no response from the research laptop (curl result: connect (7)); terms and content not yet seen',
+    seeds=['https://ehap.insa.gov.et/'],
+)
+_facts(
+    'gov-iran-mcth',
+    ['facts'],
+    'Iran Ministry of Cultural Heritage: national heritage register (may be geo-blocked), for Place facts.',
+    cls='official',
+    off='enable after a check from the crawler VM: robots.txt gave no response from the research laptop (curl result: timeout); terms and content not yet seen',
+    seeds=['https://mcth.ir/'],
+)
+_facts(
+    'city-joburg',
+    ['facts'],
+    'City of Johannesburg: city history pages, for Place facts.',
+    cls='official',
+    off='enable after a check from the crawler VM: robots.txt gave no response from the research laptop (curl result: robots 404, homepage timeout); terms and content not yet seen',
+    seeds=['https://joburg.org.za/'],
+)
+_facts(
+    'arch-agda',
+    ['facts'],
+    'Arabian Gulf Digital Archive: history and curiosities of the places it covers, for Place facts.',
+    cls='reference',
+    off='adapter pending: JS SPA (1.4 KB shell) backed by a JSON API',
+    seeds=['https://agda.ae/'],
+)
+_facts(
+    'arch-na-ae',
+    ['facts'],
+    'National Library and Archives UAE: history and curiosities of the places it covers, for Place facts.',
+    cls='reference',
+    off='adapter pending: JS SPA (no anchors in HTML)',
+    seeds=['https://na.ae/'],
+)
+_facts(
+    'her-iaa',
+    ['facts'],
+    'Israel Antiquities Authority (and its National Archaeological Database): history and curiosities of the places it covers, for Place facts.',
+    cls='official',
+    off='adapter pending: JS SPA',
+    seeds=['https://iaa.org.il/'],
+)
+_facts(
+    'her-stcda',
+    ['facts'],
+    'Stone Town Conservation and Development Authority (Zanzibar): history and curiosities of the places it covers, for Place facts.',
+    cls='official',
+    off='adapter pending: React SPA',
+    seeds=['https://stcda.go.tz/'],
+)
+_facts(
+    'her-constitution-hill',
+    ['facts'],
+    'Constitution Hill: history and curiosities of the places it covers, for Place facts.',
+    cls='official',
+    off='adapter pending: JS-rendered (2 anchors in HTML)',
+    seeds=['https://constitutionhill.org.za/'],
+)
+_facts(
+    'fx-au-senegal',
+    ['facts', 'places', 'activities'],
+    'Au Sénégal (monuments historiques et sites classés): the classified-monument list by region (Gorée, Saint-Louis, Ngor, Joal Senghor house) and town histories, for Place facts, Places to see and Activities.',
+    cls='editorial',
+    delay=5,
+    seeds=['https://www.au-senegal.com/monuments-historiques-et-sites-classes-du-senegal'],
+    sitemaps=['https://www.au-senegal.com/sitemap.xml'],
+    include=['^https?://www\\.au-senegal\\.com/[a-z0-9-]+,\\d+\\.html'],
+)
+_facts(
+    'her-ipc-cabo-verde',
+    ['facts', 'places'],
+    'Instituto do Património Cultural (Cabo Verde): the official Cabo Verde monuments, sites and intangible heritage (Cidade Velha, Tarrafal camp), for Place facts and Places to see.',
+    cls='official',
+    depth=2,
+    seeds=['https://ipc.cv/en/monumento-e-sitio/', 'https://ipc.cv/en/patromonio-imaterial/'],
+    feeds=['https://ipc.cv/en/feed/'],
+    include=['^https?://ipc\\.cv/(en|cv)/(monumento-e-sitio|patromonio-imaterial|museus?)/'],
+)
+_facts(
+    'tb-benin-official',
+    ['facts', 'places', 'activities'],
+    'Trip to Benin (official Benin tourism portal): Ouidah, Abomey, Ganvié and the Route des Esclaves history, for Place facts, Places to see and Activities.',
+    cls='official',
+    sitemaps=['https://benin.bj/sitemap.xml'],
+    include=['^https?://benin\\.bj/(en/)?(afro-descendants|secteurs/tourisme|destinations?|sites?)'],
+)
+_facts(
+    'her-patrimoine-benin',
+    ['facts', 'places'],
+    'Portail du patrimoine culturel du Bénin: the national pre-inventory of heritage properties (Fort Portugais, Gèlèdè, Bourian), for Place facts and Places to see.',
+    cls='official',
+    depth=2,
+    seeds=['https://www.patrimoine.bj/', 'https://www.patrimoine.bj/article/pre-inventaire', 'https://www.patrimoine.bj/actualites'],
+    include=['^https?://www\\.patrimoine\\.bj/(article|patrimoine|site|bien)s?/'],
+)
+_facts(
+    'gov-anpt-benin',
+    ['facts', 'places'],
+    'ANPT: Agence Nationale de Promotion des Patrimoines (Bénin): official heritage-site projects with site history (Abomey palaces, Ouidah forts, Door of No Return), for Place facts and Places to see.',
+    cls='official',
+    depth=2,
+    seeds=['https://www.anpt.bj/projets/'],
+    include=['^https?://www\\.anpt\\.bj/(projet|projets|article|page)/'],
+)
+_facts(
+    'gov-culture-senegal',
+    ['facts', 'events'],
+    "Secrétariat d'État à la Culture et au Patrimoine historique (Sénégal): heritage classifications and the Direction du Patrimoine Culturel's news by site, for Place facts and Events.",
+    cls='official',
+    sitemaps=['https://www.culture.gouv.sn/wp-sitemap.xml'],
+    exclude=['^https?://www\\.culture\\.gouv\\.sn/(?:wp-|mec-events)'],
+)
+_facts(
+    'arch-ifan-senegal',
+    ['facts', 'activities'],
+    "IFAN Cheikh Anta Diop (Institut fondamental d'Afrique noire): Musée Théodore Monod (Dakar), the historical museum at Gorée and the Saint-Louis museums, for Place facts and Activities.",
+    cls='official',
+    depth=2,
+    seeds=['https://ifan.ucad.sn/'],
+    sitemaps=['https://ifan.ucad.sn/sitemap.xml'],
+    include=['^https?://ifan\\.ucad\\.sn/(musee|museums?|departement|actualites?)'],
+)
+_facts(
+    'arch-tombouctou-manuscripts',
+    ['facts'],
+    "Tombouctou Manuscripts Project (University of Cape Town): Timbuktu's libraries, scholarly families and manuscript history, for Place facts.",
+    cls='reference',
+    sitemaps=['https://www.tombouctoumanuscripts.org/sitemap.xml'],
+    include=['^https?://www\\.tombouctoumanuscripts\\.org/(fr/|ar/)?(libraries|manuscripts|history|about-timbuktu)'],
+)
+_facts(
+    'gov-shabait-eritrea',
+    ['facts', 'places'],
+    'Eritrea Ministry of Information (shabait.com): Asmara, Massawa, Adulis and Qohaito history features from the only official Eritrean source, for Place facts and Places to see.',
+    cls='official',
+    sitemaps=['https://shabait.com/wp-sitemap.xml'],
+    include=['^https?://shabait\\.com/\\d{4}/\\d{2}/\\d{2}/'],
+)
+_facts(
+    'fx-sadamire',
+    ['facts'],
+    "Sada Mire: Somali heritage (archaeologist's site): Mogadishu and Somaliland archaeology, sacred sites and rock art, for Place facts.",
+    cls='editorial',
+    sitemaps=['https://www.sadamire.com/wp-sitemap.xml'],
+    exclude=['^https?://www\\.sadamire\\.com/(?:wp-)'],
+)
+_facts(
+    'fx-somali-architecture',
+    ['facts', 'places'],
+    'Somali Architecture (heritage building records): histories of historic Somali buildings (Mogadishu lighthouse, Hamar Weyne, Zeila), for Place facts and Places to see.',
+    cls='editorial',
+    depth=2,
+    seeds=['https://www.somaliarchitecture.com/', 'https://www.somaliarchitecture.com/project/remains-of-mogadishu-lighthouse'],
+    include=['^https?://www\\.somaliarchitecture\\.com/project/'],
+)
+_facts(
+    'tb-visitdjibouti',
+    ['facts', 'places', 'activities'],
+    'Agence Nationale du Tourisme de Djibouti: official Djibouti sites (Lac Assal, Tadjourah, Balho rock art), for Place facts, Places to see and Activities.',
+    cls='official',
+    sitemaps=['https://guide.visitdjibouti.dj/sitemap.xml'],
+    include=['^https?://guide\\.visitdjibouti\\.dj/(decouvrir|histoire|sites?|lieux|places?)'],
+)
+_facts(
+    'fx-dawan-africa',
+    ['facts', 'places'],
+    'Dawan Africa: Africa Heritage Files: a numbered series on African heritage sites (Asmara, Lamu, Great Zimbabwe), for Place facts and Places to see.',
+    cls='editorial',
+    delay=5,
+    sitemaps=['https://www.dawan.africa/news-sitemap.xml'],
+    include=['^https?://www\\.dawan\\.africa/news/africa-heritage-files-'],
+)
+_facts(
+    'city-nairobi',
+    ['facts'],
+    'Nairobi City County: official city history (founded 1899 as a railway depot), for Place facts.',
+    cls='official',
+    sitemaps=['https://nairobi.go.ke/sitemap.xml'],
+    include=['^https?://nairobi\\.go\\.ke/(about|history|nairobi-history|tourism)'],
+)
+_facts(
+    'her-sbah-iraq',
+    ['facts', 'places', 'activities'],
+    'State Board of Antiquities and Heritage (Iraq): excavations, museums and site news (Babylon, Ur, Hatra), for Place facts, Places to see and Activities.',
+    cls='official',
+    sitemaps=['https://sbah.gov.iq/wp-sitemap.xml'],
+    feeds=['https://sbah.gov.iq/feed/'],
+    include=['^https?://sbah\\.gov\\.iq/(museums|sumer|\\d{4}/|[a-z-]+/$)'],
+)
+_facts(
+    'her-dgam-syria',
+    ['facts', 'places'],
+    'Directorate-General of Antiquities and Museums (Syria): official site and museum pages (Palmyra, Bosra, Krak des Chevaliers, the ISESCO listings), for Place facts and Places to see.',
+    cls='official',
+    seeds=['https://dgam.gov.sy/'],
+    feeds=['https://dgam.gov.sy/?feed=rss2'],
+    include=['^https?://dgam\\.gov\\.sy/\\?(p|page_id)=\\d+'],
+)
+_facts(
+    'fx-iraq-heritage',
+    ['facts'],
+    'Iraq Heritage (NGO): Iraqi site and city heritage articles, for Place facts.',
+    cls='editorial',
+    depth=2,
+    seeds=['https://www.iraqheritage.org/articles.php', 'https://www.iraqheritage.org/news.php'],
+    include=['^https?://www\\.iraqheritage\\.org/(articles|news|interviews)\\.php'],
+)
+_facts(
+    'fx-discover-syria',
+    ['facts', 'places'],
+    'Discover Syria (اكتشف سورية): Arabic encyclopedia-style pages on Syrian towns, sites and institutions, for Place facts and Places to see.',
+    cls='editorial',
+    llm=False,
+    depth=2,
+    seeds=['https://www.discover-syria.com/'],
+    include=['^https?://www\\.discover-syria\\.com/(bank|news|section)/\\d+'],
+)
+_facts(
+    'tb-visitpalestine',
+    ['facts', 'places', 'walking_tours'],
+    'Visit Palestine: town and site histories (Jericho, Hebron, Sebastia, Bethlehem), for Place facts, Places to see and Free walking tours.',
+    cls='editorial',
+    sitemaps=['https://visitpalestine.ps/sitemap.xml'],
+    exclude=['^https?://visitpalestine\\.ps/(?:wp-|shop)'],
+)
+_facts(
+    'fx-chtn-miras-aria',
+    ['facts', 'places'],
+    'Miras Aria (CHTN): Iranian heritage news agency: each new national-heritage registration and its site facts, by province, for Place facts and Places to see.',
+    cls='editorial',
+    sitemaps=['https://www.chtn.ir/sitemap/all/sitemap.xml'],
+    include=['^https?://www\\.chtn\\.ir/news/\\d+/'],
+)
+_facts(
+    'her-rch-islamic-encyclopedia',
+    ['facts'],
+    'Encyclopaedia of the World of Islam (Islamic Encyclopedia Foundation): scholarly Persian entries on Iranian and Islamic-world cities (Zanjan, Balkh). Not the same as cgie.org.ir, for Place facts.',
+    cls='reference',
+    sitemaps=['https://rch.ac.ir/sitemap.xml'],
+    include=['^https?://rch\\.ac\\.ir/article/Details/\\d+'],
+)
+_facts(
+    'gov-rcrc-riyadh',
+    ['facts'],
+    'Royal Commission for Riyadh City: official history of Riyadh and Diriyah (At-Turaif), for Place facts.',
+    cls='official',
+    sitemaps=['https://www.rcrc.gov.sa/sitemap.xml'],
+    include=['^https?://www\\.rcrc\\.gov\\.sa/(ar|en)/(about-riyadh|riyadh|projects?/(diriyah|historic))'],
+)
+_facts(
+    'her-msheireb-museums',
+    ['facts', 'activities'],
+    "Msheireb Museums (Doha): the four heritage houses and Doha's old-town history (Bin Jelmood, Radwani 1920s), for Place facts and Activities.",
+    cls='official',
+    sitemaps=['https://msheirebmuseums.com/wp-sitemap.xml'],
+    include=['^https?://msheirebmuseums\\.com/(en|ar)/(about|our-houses|[a-z-]+-house)/'],
+)
+_facts(
+    'tb-visitoman',
+    ['facts', 'places'],
+    'Visit Oman (NTO portal): forts, souqs and town history, for Place facts and Places to see.',
+    cls='official',
+    depth=2,
+    seeds=['https://visitoman.om/'],
+    include=['^https?://visitoman\\.om/(destinations?|attractions?|heritage|forts?)/'],
+)
+_facts(
+    'fx-eamena',
+    ['facts', 'places'],
+    'EAMENA: Endangered Archaeology in the Middle East and North Africa (Oxford): archaeological-site records and country panels (Palestine, Libya, Iraq), for Place facts and Places to see.',
+    cls='reference',
+    seeds=['https://eamena.org/'],
+    sitemaps=['https://eamena.org/sitemap.xml'],
+    exclude=['^https?://eamena\\.org/(?:sites/default/files/.*\\.pdf)'],
+)
+_facts(
+    'od-palopenmaps',
+    ['facts'],
+    'Palestine Open Maps: history and curiosities of the places it covers, for Place facts.',
+    cls='reference',
+    off='adapter pending: React SPA (915 KB shell) with open-source data on GitHub (GeoJSON or CSV of 2,000+ historical localities, British Mandate map sheets)',
+    seeds=['https://palopenmaps.org/'],
+)
+_facts(
+    'city-lagos',
+    ['facts'],
+    'Lagos State Government: About Lagos: history and curiosities of the places it covers, for Place facts.',
+    cls='official',
+    off='adapter pending: JS-rendered SPA (2.5 KB shell, 0 anchors)',
+    seeds=['https://lagosstate.gov.ng/'],
+)
+_facts(
+    'od-plands-villages',
+    ['facts'],
+    'Palestine Land Society: Database for Palestinian Villages in 2000 Years: history and curiosities of the places it covers, for Place facts.',
+    cls='reference',
+    off='owner decision: Palestinian village database: the public pages are crawlable, but the data packages need a request form. Request access, or index only the public pages?',
+    seeds=['https://www.plands.org/'],
+)
+_facts(
+    'arch-sc-encyclopedia',
+    ['facts', 'places'],
+    'South Carolina Encyclopedia (USC): SC places and history, for Place facts and Places to see.',
+    cls='reference',
+    llm=False,
+    depth=2,
+    seeds=['https://www.scencyclopedia.org/sce/'],
+    include=['^https?://www\\.scencyclopedia\\.org/sce/entries/'],
+)
+_facts(
+    'fx-guampedia',
+    ['facts', 'places'],
+    'Guampedia: Guam villages; Micronesia and Pacific entries, for Place facts and Places to see.',
+    cls='reference',
+    delay=10,
+    sitemaps=['https://www.guampedia.com/sitemap.xml'],
+    feeds=['https://www.guampedia.com/sitemap.rss'],
+    include=['^https?://www\\.guampedia\\.com/[a-z0-9-]+/$'],
+)
+_facts(
+    'gov-sd-history',
+    ['facts', 'places'],
+    'South Dakota State Historical Society markers: ~1,500 state markers, for Place facts and Places to see.',
+    cls='official',
+    depth=2,
+    seeds=['https://history.sd.gov/preservation/historicalmarkers.aspx', 'https://history.sd.gov/preservation/docs/MarkersMaster.pdf', 'https://history.sd.gov/preservation/markers.aspx'],
+    include=['^https?://history\\.sd\\.gov/(preservation|archives|museum)/'],
+)
+_facts(
+    'arch-territory-stories',
+    ['facts'],
+    'Territory Stories (Library & Archives NT): NT local-history items, place reports and heritage records, for Place facts.',
+    cls='official',
+    depth=0,
+    sitemaps=['http://territorystories.nt.gov.au/sitemap.xml'],
+)
+_facts(
+    'fx-qhatlas',
+    ['facts', 'places'],
+    'Queensland Historical Atlas: scholarly essays and entries on Queensland places and landscapes (UQ), for Place facts and Places to see.',
+    cls='reference',
+    depth=2,
+    delay=10,
+    seeds=['https://www.qhatlas.com.au/'],
+    include=['^https?://www\\.qhatlas\\.com\\.au/(content|essay)/'],
+)
+_facts(
+    'gov-kingston-local-history',
+    ['facts'],
+    'Kingston Local History (City of Kingston, VIC): suburb and street histories for an LGA, for Place facts.',
+    cls='official',
+    depth=2,
+    seeds=['https://localhistory.kingston.vic.gov.au/articles'],
+    include=['^https?://localhistory\\.kingston\\.vic\\.gov\\.au/(articles|htm/article)/?'],
+)
+_facts(
+    'fx-stkilda-history',
+    ['facts', 'walking_tours'],
+    'St Kilda Historical Society: St Kilda place and building histories, for Place facts and Free walking tours.',
+    cls='editorial',
+    depth=2,
+    seeds=['https://stkildahistory.org.au/our-collection', 'https://stkildahistory.org.au/publications'],
+    include=['^https?://stkildahistory\\.org\\.au/(our-collection|publications)/'],
+)
+_facts(
+    'arch-tepapa-places',
+    ['facts'],
+    'Te Papa Collections Online (place and topic pages): NZ place records linked to collection items (an API with a key also exists: api.tepapa.govt.nz), for Place facts.',
+    cls='official',
+    seeds=['https://collections.tepapa.govt.nz/topic/1702', 'https://collections.tepapa.govt.nz/place/2720046'],
+    include=['^https?://collections\\.tepapa\\.govt\\.nz/(place|topic)/'],
+)
+_facts(
+    'arch-waikato-museum',
+    ['facts'],
+    'Te Whare Taonga o Waikato (Waikato Museum): Waikato and Hamilton history (low volume), for Place facts.',
+    cls='official',
+    seeds=['https://tewharetaonga.nz/explore'],
+    sitemaps=['https://tewharetaonga.nz/sitemap.xml'],
+    include=['^https?://tewharetaonga\\.nz/explore/'],
+)
+_facts(
+    'arch-marlborough-museum',
+    ['facts'],
+    'Marlborough Museum and Provincial Archives: Blenheim ("Beavertown"), Wairau Bar and heritage sites, for Place facts.',
+    cls='community',
+    llm=False,
+    off='owner decision: community-written site; the place_fact kind takes official, reference and editorial sources only (kinds.toml). Allow community sources behind corroboration, or keep off?',
+    sitemaps=['https://marlboroughmuseum.org.nz/sitemap.xml'],
+    include=['^https?://marlboroughmuseum\\.org\\.nz/(beavertown|te-pokohiwi|cob-cottage[^/]*|[a-z-]+history[^/]*)'],
+)
+_facts(
+    'arch-whanganui-museum',
+    ['facts'],
+    'Whanganui Regional Museum: Whanganui region history, for Place facts.',
+    cls='official',
+    sitemaps=['https://wrm.org.nz/sitemap_index.xml'],
+    feeds=['https://wrm.org.nz/feed/'],
+    include=['^https?://wrm\\.org\\.nz/(collections|blog|stories)/'],
+)
+_facts(
+    'her-au-nsw-shi',
+    ['facts', 'places', 'walking_tours'],
+    'NSW State Heritage Inventory: history and curiosities of the places it covers, for Place facts, Places to see and Free walking tours.',
+    cls='official',
+    off='enable after a check from the crawler VM: a robots.txt or page fetch failed or timed out from the research laptop (DNS no response (reach-unverified)); read robots.txt, terms and content first',
+    depth=2,
+    seeds=['https://hms.heritage.nsw.gov.au/App/Item/SearchHeritageItems'],
+    include=['^https?://hms\\.heritage\\.nsw\\.gov\\.au/App/Item/ViewItem'],
+)
+_facts(
+    'her-au-vic-vhd',
+    ['facts', 'places', 'walking_tours'],
+    'Victorian Heritage Database: statements of significance and histories for Victorian places, for Place facts, Places to see and Free walking tours.',
+    cls='official',
+    llm=False,
+    depth=2,
+    seeds=['https://vhd.heritagecouncil.vic.gov.au/'],
+    include=['^https?://vhd\\.heritagecouncil\\.vic\\.gov\\.au/places/'],
+)
+_facts(
+    'her-au-qhr',
+    ['facts', 'places'],
+    'Queensland Heritage Register (Arches): history and curiosities of the places it covers, for Place facts and Places to see.',
+    cls='official',
+    llm=False,
+    depth=2,
+    seeds=['https://qhr.detsi.qld.gov.au/'],
+    include=['^https?://qhr\\.detsi\\.qld\\.gov\\.au/report/'],
+)
+_facts(
+    'her-au-wa-inherit',
+    ['facts', 'places'],
+    'inHerit (Heritage Council WA): histories of State Register places in WA, for Place facts and Places to see.',
+    cls='official',
+    depth=2,
+    seeds=['https://inherit.dplh.wa.gov.au/Public/'],
+    include=['^https?://inherit\\.dplh\\.wa\\.gov\\.au/Public/Inventory/'],
+)
+_facts(
+    'her-au-tas',
+    ['facts', 'places'],
+    'Tasmanian Heritage Register: Tasmanian heritage register places, for Place facts and Places to see.',
+    cls='official',
+    sitemaps=['https://heritage.tas.gov.au/sitemap.xml'],
+    include=['^https?://heritage\\.tas\\.gov\\.au/'],
+)
+_facts(
+    'her-au-sa',
+    ['facts', 'places'],
+    'SA Heritage (DEW): SA heritage places, for Place facts and Places to see.',
+    cls='official',
+    seeds=['https://www.environment.sa.gov.au/topics/heritage'],
+    sitemaps=['https://www.environment.sa.gov.au/sitemaps-1-section-pages-1-sitemap.xml'],
+    include=['^https?://www\\.environment\\.sa\\.gov\\.au/topics/heritage'],
+)
+_facts(
+    'fx-monument-australia',
+    ['facts', 'walking_tours'],
+    'Monument Australia: inscriptions and history of each memorial, for Place facts and Free walking tours.',
+    cls='community',
+    llm=False,
+    off='enable after a check from the crawler VM: a robots.txt or page fetch failed or timed out from the research laptop (DNS no response (reach-unverified)); read robots.txt, terms and content first',
+    depth=2,
+    seeds=['https://monumentaustralia.org.au/'],
+    include=['^https?://monumentaustralia\\.org\\.au/themes/'],
+)
+_facts(
+    'arch-dictionary-sydney',
+    ['facts', 'places', 'walking_tours'],
+    'Dictionary of Sydney (archived 2021): suburb and street histories, for Place facts, Places to see and Free walking tours.',
+    cls='reference',
+    llm=False,
+    depth=2,
+    seeds=['https://dictionaryofsydney.org/'],
+    include=['^https?://dictionaryofsydney\\.org/entry/'],
+)
+_facts(
+    'her-au-national-trust',
+    ['facts', 'activities'],
+    'National Trust of Australia: history and curiosities of the places it covers, for Place facts and Activities.',
+    cls='editorial',
+    sitemaps=['https://www.nationaltrust.org.au/sitemap_index.xml'],
+    include=['^https?://www\\.nationaltrust\\.org\\.au/places/'],
+)
+_facts(
+    'arch-sl-nsw',
+    ['facts'],
+    'State Library of NSW: history and curiosities of the places it covers, for Place facts.',
+    cls='official',
+    llm=False,
+    sitemaps=['https://www.sl.nsw.gov.au/sitemap.xml'],
+    include=['^https?://www\\.sl\\.nsw\\.gov\\.au/(stories|blogs)/'],
+)
+_facts(
+    'arch-queensland-places',
+    ['facts', 'places'],
+    'Queensland Places (UQ Centre for the Government of Queensland): short histories of every Queensland town and shire, for Place facts and Places to see.',
+    cls='reference',
+    depth=2,
+    delay=10,
+    seeds=['https://queenslandplaces.com.au/'],
+    include=['^https?://queenslandplaces\\.com\\.au/[a-z0-9-]+$'],
+)
+_facts(
+    'fx-victorian-places',
+    ['facts'],
+    'Victorian Places: every Victorian town, for Place facts.',
+    cls='reference',
+    depth=2,
+    delay=10,
+    seeds=['https://www.victorianplaces.com.au/'],
+    include=['^https?://www\\.victorianplaces\\.com\\.au/[a-z0-9-]+$'],
+    exclude=['^https?://www\\.victorianplaces\\.com\\.au/(?:search|user)'],
+)
+_facts(
+    'fx-adelaidia',
+    ['facts', 'walking_tours'],
+    'Adelaidia (History Trust of SA): history and curiosities of the places it covers, for Place facts and Free walking tours.',
+    cls='reference',
+    off='enable after a check from the crawler VM: robots.txt gave no response from the research laptop (TLS handshake failed from the research client (old LibreSSL); reach-unverified); terms and content not yet seen',
+    depth=2,
+    seeds=['https://adelaidia.history.sa.gov.au/'],
+    include=['^https?://adelaidia\\.history\\.sa\\.gov\\.au/(places|subjects|events)/'],
+)
+_facts(
+    'arch-anzac-portal',
+    ['facts'],
+    'Anzac Portal (DVA): places of commemoration, for Place facts.',
+    cls='official',
+    off='enable after a check from the crawler VM: robots.txt gave no response from the research laptop (no response (reach-unverified)); terms and content not yet seen',
+    depth=2,
+    seeds=['https://anzacportal.dva.gov.au/'],
+    include=['^https?://anzacportal\\.dva\\.gov\\.au/(history|wars-and-missions|places)/'],
+)
+_facts(
+    'arch-awm',
+    ['facts'],
+    'Australian War Memorial: history and curiosities of the places it covers, for Place facts.',
+    cls='official',
+    depth=2,
+    delay=10,
+    seeds=['https://www.awm.gov.au/'],
+    include=['^https?://www\\.awm\\.gov\\.au/(articles|collection/[A-Z0-9]+)'],
+)
+_facts(
+    'fx-australiangeographic',
+    ['facts', 'places'],
+    'Australian Geographic: Australian places, history, records, for Place facts and Places to see.',
+    cls='editorial',
+    llm=False,
+    feeds=['https://www.australiangeographic.com.au/feed/'],
+    include=['^https?://www\\.australiangeographic\\.com\\.au/topics/history-culture/|^/travel/'],
+)
+_facts(
+    'od-au-ga-landforms',
+    ['facts'],
+    'Geoscience Australia: national location facts: highest mountains, longest rivers, largest lakes, extremities (records), for Place facts.',
+    cls='official',
+    depth=2,
+    seeds=['https://www.ga.gov.au/scientific-topics/national-location-information'],
+    include=['^https?://www\\.ga\\.gov\\.au/scientific-topics/national-location-information/'],
+)
+_facts(
+    'arch-kura-auckland',
+    ['facts'],
+    'Kura Heritage Collections (Auckland Libraries): history and curiosities of the places it covers, for Place facts.',
+    cls='official',
+    seeds=['https://kura.aucklandlibraries.govt.nz/'],
+    include=['^https?://kura\\.aucklandlibraries\\.govt\\.nz/digital/collection/[a-z]+/id/'],
+)
+_facts(
+    'her-nz-heritage-list',
+    ['facts', 'places', 'walking_tours'],
+    'Heritage New Zealand List: List entries with long, referenced historical narratives, for Place facts, Places to see and Free walking tours.',
+    cls='official',
+    depth=2,
+    seeds=['https://www.heritage.org.nz/list-search'],
+    include=['^https?://www\\.heritage\\.org\\.nz/list-details/'],
+)
+_facts(
+    'od-nz-gazetteer',
+    ['facts'],
+    'NZ Gazetteer (LINZ): "history/origin/meaning" field for official place names (Māori meanings, naming stories), for Place facts.',
+    cls='official',
+    depth=2,
+    seeds=['https://gazetteer.linz.govt.nz/'],
+    include=['^https?://gazetteer\\.linz\\.govt\\.nz/place/\\d+'],
+)
+_facts(
+    'fx-fiji-museum',
+    ['facts'],
+    'Fiji Museum: history and curiosities of the places it covers, for Place facts.',
+    cls='official',
+    sitemaps=['https://fijimuseum.org.fj/wp-sitemap.xml'],
+    feeds=['https://fijimuseum.org.fj/feed/'],
+    include=['^https?://fijimuseum\\.org\\.fj/[a-z0-9-]+/$'],
+)
+_facts(
+    'od-au-placenames',
+    ['facts'],
+    'Composite Gazetteer of Australia (Elvis Place Names, ICSM): history and curiosities of the places it covers, for Place facts.',
+    cls='reference',
+    off='adapter pending: Angular SPA backed by a WFS/REST service (wfs_geojson once the endpoint is found)',
+    seeds=['https://placenames.fsdf.org.au/'],
+)
+_facts(
+    'arch-nc-digital-collections',
+    ['facts', 'places'],
+    'North Carolina Digital Collections (State Archives + State Library): NC local-history items. This is the open route next to the blocked NCpedia, although it holds archive items rather than NCpedia articles, for Place facts and Places to see.',
+    cls='official',
+    sitemaps=['https://digital.ncdcr.gov/sitemap.xml'],
+    include=['^https?://digital\\.ncdcr\\.gov/(Documents|documents)/'],
+)
+_facts(
+    'gov-nc-highway-markers',
+    ['facts', 'places'],
+    'NC Highway Historical Marker Program: 1,600+ markers with text, for Place facts and Places to see.',
+    cls='official',
+    off='adapter pending: PDF / ArcGIS REST',
+    depth=0,
+    seeds=['https://www.dncr.nc.gov/guide-north-carolina-highway-historical-markers-2023/download', 'http://gis.ncdcr.gov/nchhm/', 'https://nc.maps.arcgis.com/home/group.html?id=d56ec9c8aa77423b931f4d359f103ae6'],
+    include=['^https?://www\\.dncr\\.nc\\.gov/.*(?:n/a)', '^https?://gis\\.ncdcr\\.gov/.*(?:n/a)', '^https?://nc\\.maps\\.arcgis\\.com/.*(?:n/a)'],
+)
+_facts(
+    'fx-egyptian-streets',
+    ['facts'],
+    'Egyptian Streets: Egyptian heritage/city history features (filter: also news), for Place facts.',
+    cls='editorial',
+    feeds=['https://egyptianstreets.com/feed/'],
+)
+_facts(
+    'her-hpip',
+    ['facts', 'places', 'walking_tours'],
+    'HPIP Heritage of Portuguese Influence: thousands of sourced site entries (forts, churches, towns) in Angola, Mozambique, Guinea-Bissau, São Tomé, Timor-Leste and more, for Place facts, Places to see and Free walking tours.',
+    cls='reference',
+    depth=2,
+    seeds=['https://hpip.org/pt', 'https://hpip.org/en'],
+    include=['^https?://hpip\\.org/(pt|en)/heritage/details/\\d+'],
+)
+_facts(
+    'fx-tahiti-heritage',
+    ['facts', 'places', 'activities'],
+    "Tahiti Heritage (encyclopédie du patrimoine polynésien): historical, archaeological and 'insolite' sites across French Polynesia, for Place facts, Places to see and Activities.",
+    cls='community',
+    llm=False,
+    off='owner decision: community-written site; the place_fact kind takes official, reference and editorial sources only (kinds.toml). Allow community sources behind corroboration, or keep off?',
+    sitemaps=['http://www.tahitiheritage.pf/sitemap_index.xml'],
+    feeds=['https://www.tahitiheritage.pf/feed/'],
+    include=['^https?://www\\.tahitiheritage\\.pf/[a-z0-9-]+/?$'],
+)
+_facts(
+    'gov-pw-states',
+    ['facts', 'places'],
+    'Palau National Government: About Palau + 16 states: per-state pages (Aimeliik, Angaur, Hatohobei...), flag, anthem, constitution, for Place facts and Places to see.',
+    cls='official',
+    depth=2,
+    seeds=['https://www.palaugov.pw/about-palau/', 'https://www.palaugov.pw/states/'],
+    sitemaps=['https://www.palaugov.pw/wp-sitemap.xml'],
+    include=['^https?://www\\.palaugov\\.pw/(about-palau|states)/'],
+)
+_facts(
+    'gov-ao-angola',
+    ['facts'],
+    "Portal Oficial do Governo de Angola: 'Angola' section: official country data, geography, flora and fauna of Angola, for Place facts.",
+    cls='official',
+    seeds=['https://governo.gov.ao/angola/dados-sobre-o-pa%C3%ADs', 'https://governo.gov.ao/angola/coordenadas-geogr%C3%A1ficas', 'https://governo.gov.ao/angola/fauna', 'https://governo.gov.ao/angola/flora', 'https://governo.gov.ao/angola/clima'],
+    include=['^https?://governo\\.gov\\.ao/angola/'],
+)
+_facts(
+    'gov-fm-states',
+    ['facts', 'places'],
+    'FSM National Government: state pages: Chuuk, Kosrae, Pohnpei, Yap (fsmgov.org redirects here), for Place facts and Places to see.',
+    cls='official',
+    seeds=['https://gov.fm/'],
+    sitemaps=['https://gov.fm/wp-sitemap.xml'],
+    feeds=['https://gov.fm/feed/'],
+    include=['^https?://gov\\.fm/(chuuk-government|kosrae-government|pohnpei-government|yap-government)/'],
+)
+_facts(
+    'her-dzanga-sangha',
+    ['facts', 'activities'],
+    "Dzanga-Sangha Protected Areas: Central African Republic rainforest, Dzanga Bai elephants, BaAka people (a 'facts-infos' page exists), for Place facts and Activities.",
+    cls='official',
+    seeds=['https://dzanga-sangha.org/facts-infos/'],
+    sitemaps=['https://dzanga-sangha.org/sitemap_index.xml'],
+    include=['^https?://dzanga-sangha\\.org/(facts-infos|visit-dzanga-sangha|stories|news-stories|our-work)/'],
+)
+_facts(
+    'her-wcs-congo',
+    ['facts'],
+    'WCS Congo (Nouabalé-Ndoki, Conkouati...): protected areas of the Republic of Congo, for Place facts.',
+    cls='editorial',
+    depth=2,
+    delay=10,
+    seeds=['https://congo.wcs.org/Wild-Places', 'https://congo.wcs.org/Landscapes'],
+    include=['^https?://congo\\.wcs\\.org/(Wild-Places|Landscapes|Wildlife)/'],
+)
+_facts(
+    'arch-na-curacao',
+    ['facts'],
+    'Nationaal Archief Curaçao: subject pages on Curaçao history (Willemstad, plantations, slavery, Tula revolt), for Place facts.',
+    cls='official',
+    seeds=['https://nationaalarchief.cw/onderwerpen/'],
+    sitemaps=['https://nationaalarchief.cw/sitemap_index.xml'],
+    feeds=['https://nationaalarchief.cw/feed/'],
+    include=['^https?://nationaalarchief\\.cw/(onderwerpen|educatie|educaties|actueel)/'],
+)
+_facts(
+    'arch-na-suriname',
+    ['facts'],
+    'Nationaal Archief Suriname: Surinamese history (contract labour from India, China and Java; plantations), for Place facts.',
+    cls='official',
+    depth=2,
+    seeds=['https://nationaalarchief.sr/onderzoeken', 'https://nationaalarchief.sr/publiek', 'https://nationaalarchief.sr/educatie'],
+    include=['^https?://nationaalarchief\\.sr/(onderzoeken|publiek|educatie|actueel/nieuws)/'],
+)
+_facts(
+    'her-livingstone-museum',
+    ['facts'],
+    "Livingstone Museum (Zambia): Zambia's oldest and largest museum; history of Livingstone town and the Victoria Falls region, for Place facts.",
+    cls='official',
+    sitemaps=['https://livingstonemuseum.org/wp-sitemap.xml'],
+    feeds=['https://livingstonemuseum.org/feed/'],
+    include=['^https?://livingstonemuseum\\.org/(about-us|history-gallery|archaeology-gallery|ethnography-gallery|david-livingstone-gallery|natural-history-gallery|temporary-exhibits)/'],
+)
+_facts(
+    'arch-society-of-malawi',
+    ['facts'],
+    'Society of Malawi (historical and scientific): Malawi history (Blantyre, Zomba, lake steamers), from the Society of Malawi Journal, for Place facts.',
+    cls='reference',
+    sitemaps=['https://societyofmalawi.org/sitemap.xml'],
+)
+_facts(
+    'her-museums-namibia',
+    ['facts', 'activities'],
+    'Museums Association of Namibia: museums and their town histories (Swakopmund, Lüderitz, Tsumeb, Outjo), for Place facts and Activities.',
+    cls='official',
+    depth=2,
+    seeds=['https://www.museums.com.na/museums/overview', 'https://www.museums.com.na/museums/central', 'https://www.museums.com.na/museums/coast', 'https://www.museums.com.na/museums/north'],
+    include=['^https?://www\\.museums\\.com\\.na/(museums|entry)/'],
+)
+_facts(
+    'od-ispf-fiche-geo',
+    ['facts'],
+    'ISPF (Institut de la statistique de la Polynésie française): geo fact sheets: population and area per archipelago, island and commune of French Polynesia, for Place facts.',
+    cls='official',
+    seeds=['https://www.ispf.pf/fiche-geo/Polyn%C3%A9sie%20fran%C3%A7aise'],
+    sitemaps=['https://www.ispf.pf/sitemap-index.xml'],
+    include=['^https?://www\\.ispf\\.pf/fiche-geo/'],
+)
+_facts(
+    'od-isee-nc',
+    ['facts'],
+    'ISEE Nouvelle-Calédonie: key figures and census: population by province and commune, key figures for New Caledonia, for Place facts.',
+    cls='official',
+    depth=2,
+    seeds=['https://isee.nc/chiffre-cles', 'https://isee.nc/recensement'],
+    include=['^https?://isee\\.nc/(chiffre-cles|recensement)'],
+)
+_facts(
+    'her-centre-tjibaou',
+    ['facts'],
+    'Centre culturel Tjibaou (ADCK): Kanak culture and the Renzo Piano building (adck.nc redirects here), for Place facts.',
+    cls='official',
+    seeds=['https://centretjibaou.nc/histoire', 'https://centretjibaou.nc/english'],
+    include=['^https?://centretjibaou\\.nc/(histoire|english|en-continu)'],
+)
+_facts(
+    'her-musee-nc',
+    ['facts'],
+    'Musée de la Nouvelle-Calédonie: Kanak and Oceanian heritage, history of New Caledonia, for Place facts.',
+    cls='official',
+    llm=False,
+    depth=2,
+    seeds=['https://museenouvellecaledonie.gouv.nc/le-musee/presentation-du-musee', 'https://museenouvellecaledonie.gouv.nc/collections'],
+    include=['^https?://museenouvellecaledonie\\.gouv\\.nc/(collections|le-musee|expositions)'],
+)
+_facts(
+    'her-musee-tahiti',
+    ['facts'],
+    'Te Fare Iamanaha – Musée de Tahiti et des îles: Polynesian history and objects, for Place facts.',
+    cls='official',
+    sitemaps=['https://www.museetahiti.pf/sitemap_index.xml'],
+    feeds=['https://www.museetahiti.pf/feed/'],
+    include=['^https?://www\\.museetahiti\\.pf/(salle-permanente|le-musee-de-tahiti-et-des-iles|documents-pedagogiques|expositions-et-evenements-au-musee-de-tahiti-et-des-iles)/'],
+)
+_facts(
+    'od-sbs-samoa-census',
+    ['facts'],
+    'Samoa Bureau of Statistics: census: population of Samoa by island, district and village (2026 census under way; many PDFs), for Place facts.',
+    cls='official',
+    seeds=['https://www.sbs.gov.ws/census-division/'],
+    sitemaps=['https://www.sbs.gov.ws/wp-sitemap.xml'],
+    feeds=['https://www.sbs.gov.ws/feed/'],
+    include=['^https?://www\\.sbs\\.gov\\.ws/(census-division|samoa-census)'],
+)
+_facts(
+    'arch-pambu',
+    ['facts'],
+    'Pacific Manuscripts Bureau (ANU): catalogue histories of Pacific missions, plantations and islands (low yield, metadata-heavy), for Place facts.',
+    cls='reference',
+    depth=2,
+    seeds=['https://asiapacific.anu.edu.au/pambu', 'https://asiapacific.anu.edu.au/pambu/collections', 'https://asiapacific.anu.edu.au/pambu/catalogue'],
+    include=['^https?://asiapacific\\.anu\\.edu\\.au/pambu/'],
+)
+_facts(
+    'gov-gq-press',
+    ['facts'],
+    'Guinea Ecuatorial Press (official government site): culture: culture and heritage items for Equatorial Guinea (low yield; the only reachable official source found), for Place facts.',
+    cls='official',
+    depth=2,
+    seeds=['https://www.guineaecuatorialpress.com/categorias/Cultura'],
+    include=['^https?://www\\.guineaecuatorialpress\\.com/(categorias/Cultura|noticias)/'],
+)
+_facts(
+    'fx-catalog-paradisec-org-au',
+    ['facts'],
+    'PARADISEC catalogue (also mirrors PAMBU film): history and curiosities of the places it covers, for Place facts.',
+    cls='editorial',
+    off="adapter pending: format / note: JS SPA ('Oni'); OAI-PMH or API adapter needed; low facts relevance (linguistic archive)",
+    seeds=['https://catalog.paradisec.org.au/'],
+)
+_facts(
+    'her-eg-atharlina',
+    ['facts', 'walking_tours'],
+    'Athar Lina (Megawra-BEC heritage initiative) (en/ar / Cairo al-Khalifa): history of the al-Khalifa monuments in Historic Cairo, for Place facts and Free walking tours.',
+    cls='community',
+    llm=False,
+    off='owner decision: community-written site; the place_fact kind takes official, reference and editorial sources only (kinds.toml). Allow community sources behind corroboration, or keep off?',
+    seeds=['https://atharlina.com/'],
+    include=['^https?://atharlina\\.com/(projects|monuments|about)/'],
+)
+_facts(
+    'her-ng-ncmm',
+    ['facts', 'places', 'activities'],
+    'National Commission for Museums and Monuments (Nigeria): national monuments and museums, for Place facts, Places to see and Activities.',
+    cls='official',
+    sitemaps=['https://ncmm.gov.ng/wp-sitemap.xml'],
+    include=['^https?://ncmm\\.gov\\.ng/'],
+)
+_facts(
+    'her-au-brisbane',
+    ['facts', 'places', 'walking_tours'],
+    'Brisbane Heritage Register: citations for Brisbane heritage places, for Place facts, Places to see and Free walking tours.',
+    cls='official',
+    depth=2,
+    seeds=['https://heritage.brisbane.qld.gov.au/'],
+    include=['^https?://heritage\\.brisbane\\.qld\\.gov\\.au/heritage-places/'],
+)
+_facts(
+    'od-au-wa-state-register',
+    ['facts'],
+    'Heritage Council WA State Register (GeoJSON/GPKG) is under a custom "active acceptance" D…: Heritage Council WA State Register (GeoJSON/GPKG) is under a custom "active acceptance" DPLH licence and some resources need a login, for Place facts.',
+    cls='reference',
+    off='owner decision: WA State Heritage Register under a custom "active acceptance" licence, and some files need a login. Accept the licence?',
+    seeds=['https://catalogue.data.wa.gov.au/'],
+)
+_facts(
+    'arch-naa',
+    ['facts'],
+    'National Archives of Australia: archive stories about Australian places and events, for Place facts.',
+    cls='official',
+    off='enable after a check from the crawler VM: a robots.txt or page fetch failed or timed out from the research laptop (robots: no response (HTTP/2 error and timeout) → allowed); read robots.txt, terms and content first',
+    depth=2,
+    seeds=['https://www.naa.gov.au/explore-collection'],
+    include=['^https?://www\\.naa\\.gov\\.au/explore-collection/'],
+)
+_facts(
+    'gov-au-abs',
+    ['facts'],
+    'Australian Bureau of Statistics (Snapshot of Australia, region summaries): population/record facts by state and town, for Place facts.',
+    cls='official',
+    seeds=['https://www.abs.gov.au/'],
+    sitemaps=['https://www.abs.gov.au/sitemap.xml'],
+    include=['^https?://www\\.abs\\.gov\\.au/(statistics|census)/'],
+)
+_facts(
+    'gov-nsw-gnb',
+    ['facts'],
+    'NSW Geographical Names Board pages: naming stories, dual names, for Place facts.',
+    cls='official',
+    depth=2,
+    seeds=['https://www.nsw.gov.au/departments-and-agencies/geographical-names-board'],
+    include=['^https?://www\\.nsw\\.gov\\.au/departments-and-agencies/geographical-names-board'],
+)
+_facts(
+    'gov-vic-emblems',
+    ['facts'],
+    'Victoria Government (emblems, about Victoria): history and curiosities of the places it covers, for Place facts.',
+    cls='official',
+    delay=5,
+    sitemaps=['https://www.vic.gov.au/sitemap.xml'],
+    include=['^https?://www\\.vic\\.gov\\.au/.*(?:(emblems|about-victoria))'],
+)
+_facts(
+    'gov-sa-symbols',
+    ['facts'],
+    'SA.GOV.AU (South Australia emblems): history and curiosities of the places it covers, for Place facts.',
+    cls='official',
+    delay=10,
+    seeds=['https://www.sa.gov.au/'],
+    include=['^https?://www\\.sa\\.gov\\.au/.*(?:(emblems|about-sa))'],
+)
+_facts(
+    'gov-om-info',
+    ['facts'],
+    'Oman Ministry of Information portal: governorates, history, for Place facts.',
+    cls='official',
+    seeds=['https://www.omaninfo.om/'],
+    sitemaps=['https://omaninfo.om/sitemap.xml'],
+)
+_facts(
+    'gov-ma-portal',
+    ['facts'],
+    'Portail national du Maroc: history and curiosities of the places it covers, for Place facts.',
+    cls='official',
+    depth=2,
+    seeds=['https://www.maroc.ma/'],
+    include=['^https?://www\\.maroc\\.ma/.*(?:(histoire|regions))'],
+)
+_facts(
+    'gov-rw-portal',
+    ['facts'],
+    'Government of Rwanda portal: history and curiosities of the places it covers, for Place facts.',
+    cls='official',
+    llm=False,
+    seeds=['https://www.gov.rw/'],
+    include=['^https?://www\\.gov\\.rw/.*(?:(about|history))'],
+)
+_facts(
+    'gov-mu-portal',
+    ['facts'],
+    'Republic of Mauritius portal: about Mauritius, for Place facts.',
+    cls='official',
+    seeds=['https://govmu.org/EN/Pages/default.aspx'],
+    include=['^https?://govmu\\.org/EN/(Pages|infoservices)/'],
+)
+_facts(
+    'gov-eg-sis',
+    ['facts'],
+    'Egypt State Information Service: governorates, history, for Place facts.',
+    cls='official',
+    depth=2,
+    seeds=['https://sis.gov.eg/'],
+    include=['^https?://sis\\.gov\\.eg/(Story|section)/'],
+)
+_facts(
+    'gov-gh-portal',
+    ['facts'],
+    'Ghana.GOV portal: history and curiosities of the places it covers, for Place facts.',
+    cls='official',
+    seeds=['https://www.ghana.gov.gh/'],
+    include=['^https?://www\\.ghana\\.gov\\.gh/(about|regions)'],
+)
+_facts(
+    'od-nsw-gnr',
+    ['facts', 'places'],
+    'NSW Geographical Names Register (with MEANING/ORIGIN/HISTORY): official meaning, origin and history of 80k+ NSW names, many Aboriginal-language origins, for Place facts and Places to see.',
+    cls='official',
+    llm=False,
+    off='adapter pending: a place_fact mapping for this dataset on the csv_filter reader',
+    depth=0,
+    seeds=['https://data.nsw.gov.au/data/dataset/geographical-name-register-of-nsw'],
+    include=['^https?://data\\.nsw\\.gov\\.au/data/dataset/geographical-name-register-of-nsw'],
+)
+_facts(
+    'fx-data-linz-govt-nz',
+    ['facts'],
+    "LINZ Data Service: NZ Gazetteer place names: Official history/origin/meaning field for NZ names (incl. 7,000+ entries from Reed's Place Names), CC BY 4.0; WFS fits `wfs_geojson` once keyed. gazetteer.linz.govt.nz is a JS app (robots comment-only); LINZ's ArcGIS la…, for Place facts.",
+    cls='editorial',
+    off='needs owner key: LINZ Data Service (https://data.linz.govt.nz/accounts/register/; free)',
+    seeds=['https://data.linz.govt.nz/'],
+)
+_facts(
+    'fx-spatial-gis-information-qld-gov-au',
+    ['facts'],
+    'Queensland place names (origin + history): history and curiosities of the places it covers, for Place facts.',
+    cls='editorial',
+    off='adapter pending: ArcGIS REST MapServer query (`f=geojson` may fit `wfs_geojson`)',
+    seeds=['https://spatial-gis.information.qld.gov.au/'],
+)
+_facts(
+    'gov-niwa-extremes',
+    ['facts', 'weather'],
+    'NIWA New Zealand climate extremes: NZ records by place, for Place facts and Weather.',
+    cls='official',
+    seeds=['https://niwa.co.nz/climate-and-weather/climate-extremes'],
+    include=['^https?://niwa\\.co\\.nz/climate-and-weather/climate-extremes'],
+)
+_facts(
+    'gov-landgate-wa-names',
+    ['facts'],
+    'Landgate WA place names (history of country town and suburb names): origins of WA town names, Aboriginal naming, for Place facts.',
+    cls='official',
+    depth=2,
+    seeds=['https://www.landgate.wa.gov.au/location-data-and-services/place-names-and-addressing/'],
+    include=['^https?://www\\.landgate\\.wa\\.gov\\.au/location-data-and-services/place-names-and-addressing/'],
+)
+_facts(
+    'fx-placenames-australia',
+    ['facts'],
+    'Placenames Australia / ANPS (newsletter, publications): researched origin stories of Australian names ("stories, meanings and history" of 280k+ names), for Place facts.',
+    cls='reference',
+    depth=2,
+    seeds=['https://placenames.org.au/newsletter/', 'https://placenames.org.au/publications/'],
+    sitemaps=['https://anps.org.au/wp-sitemap.xml'],
+    include=['^https?://placenames\\.org\\.au/(newsletter|publications|anps)/', '^https?://anps\\.org\\.au/(newsletter|publications|anps)/'],
+)
+_facts(
+    'od-tas-placenames',
+    ['facts'],
+    'Placenames Tasmania: name history notes, for Place facts.',
+    cls='reference',
+    off='adapter pending: format / endpoint: SPA backed by a JSON API',
+    seeds=['https://www.placenames.tas.gov.au/'],
+)
+_facts(
+    'gov-nz-linz-nzgb',
+    ['facts'],
+    'LINZ / New Zealand Geographic Board: dual Māori/English names, Treaty-settlement names, name origins (gazetteer.linz.govt.nz is already in research; this is the www host), for Place facts.',
+    cls='official',
+    sitemaps=['https://www.linz.govt.nz/sitemap.xml'],
+    include=['^https?://www\\.linz\\.govt\\.nz/(our-work/new-zealand-geographic-board|guidance/place-naming)'],
+)
+_facts(
+    'gov-nz-geonet',
+    ['facts'],
+    'GeoNet (Earth Sciences New Zealand): NZ volcano profiles, historic quakes per town, for Place facts.',
+    cls='official',
+    sitemaps=['https://www.geonet.org.nz/sitemap.xml'],
+    include=['^https?://www\\.geonet\\.org\\.nz/(volcano|earthquake/(story|historic))'],
+)
+_facts(
+    'gov-gh-districts',
+    ['facts'],
+    'Ghana Districts (district profiles, MLGRD): history and curiosities of the places it covers, for Place facts.',
+    cls='official',
+    off='adapter pending: JS-rendered ASP.NET (DevExpress)',
+    seeds=['https://www.ghanadistricts.com/'],
+)
+
+
 METHODS = {"html", "rss", "sitemap", "api", "dump"}
 
 
