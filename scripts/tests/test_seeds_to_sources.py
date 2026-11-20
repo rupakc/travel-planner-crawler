@@ -1941,6 +1941,7 @@ FACTS_COUNTS = {
     "global": {"on": 117, "adapter pending": 62, "needs owner key": 4, "owner decision": 15,
                "hook adapter removed": 37},
     "europe": {"on": 395, "adapter pending": 57, "enable after a check from the crawler VM": 9, "needs owner key": 5, "owner decision": 36},
+    "asia": {"on": 416, "adapter pending": 24, "enable after a check from the crawler VM": 62, "needs owner key": 2, "owner decision": 1},
 }
 FACTS_OFF_PREFIXES = ("enable after a check from the crawler VM", "adapter pending", "needs owner key",
                       "owner decision", "seed unresolved", "hook adapter removed")
