@@ -21242,6 +21242,4649 @@ _facts(
 )
 
 
+# Place facts corpus, Europe, Russia, Turkey, Central Asia and the Caucasus (research vetted 2026-11-20).
+_facts(
+    'arch-manar-al-athar',
+    ['facts', 'places'],
+    'Manar al-Athar Digital Archive (University of Oxford): captions for sites in Libya, Lebanon, Syria, Jordan and Egypt, for Place facts and Places to see.',
+    cls='reference',
+    llm=False,
+    delay=10,
+    seeds=['https://manar.arch.ox.ac.uk/welcome.html'],
+    include=['^https?://manar\\.arch\\.ox\\.ac\\.uk/(en|ar)/'],
+)
+_facts(
+    'fx-rfi-afrique',
+    ['facts'],
+    'RFI (Afrique, culture, "Mémoire d\'un continent"): African history and place features, for Place facts.',
+    cls='editorial',
+    seeds=['https://www.rfi.fr/sitemaps/fr/index.xml'],
+    feeds=['https://www.rfi.fr/fr/rss'],
+    include=['^https?://www\\.rfi\\.fr/fr/(afrique|culture-m%C3%A9dias|podcasts/m%C3%A9moire-d-un-continent)'],
+)
+_facts(
+    'her-ees',
+    ['facts'],
+    'Egypt Exploration Society: Egyptian sites (Amarna, Oxyrhynchus), for Place facts.',
+    cls='reference',
+    seeds=['https://www.ees.ac.uk/'],
+    include=['^https?://www\\.ees\\.ac\\.uk/(our-work|news|whats-on)/'],
+)
+_facts(
+    'fx-ethiopian-treasures',
+    ['facts'],
+    'Ethiopian Treasures: Aksum, Lalibela, Gondar and Harar history, for Place facts.',
+    cls='editorial',
+    depth=2,
+    seeds=['https://www.ethiopiantreasures.co.uk/'],
+    include=['^https?://www\\.ethiopiantreasures\\.co\\.uk/pages/'],
+)
+_facts(
+    'fx-asc-leiden',
+    ['facts'],
+    'African Studies Centre Leiden: country portals: country dossiers with bibliographies, for Place facts.',
+    cls='reference',
+    depth=2,
+    seeds=['https://www.ascleiden.nl/'],
+    include=['^https?://www\\.ascleiden\\.nl/(content/webdossiers|countries)/'],
+)
+_facts(
+    'ref-topostext',
+    ['facts', 'places', 'activities'],
+    'ToposText (ancient places + texts): ancient sites in Greece and the Mediterranean with the ancient passages that mention them, for Place facts, Places to see and Activities.',
+    cls='editorial',
+    depth=2,
+    seeds=['https://topostext.org/', 'https://topostext.org/TT-downloads'],
+    include=['^https?://topostext\\.org/place/'],
+)
+_facts(
+    'fx-new-georgia-encyclopedia',
+    ['facts', 'places'],
+    'New Georgia Encyclopedia (Georgia Humanities/UGA Press): towns, counties, for Place facts and Places to see.',
+    cls='editorial',
+    sitemaps=['https://www.georgiaencyclopedia.org/sitemap_index.xml'],
+    include=['^https?://www\\.georgiaencyclopedia\\.org/articles/'],
+)
+_facts(
+    'gov-mt-history',
+    ['facts', 'places'],
+    'Montana Historical Society: signs/markers, state history, for Place facts and Places to see.',
+    cls='official',
+    depth=2,
+    seeds=['https://mhs.mt.gov/'],
+    include=['^https?://mhs\\.mt\\.gov/(education|Shpo)/'],
+)
+_facts(
+    'her-bucks-heritage-portal',
+    ['facts', 'places'],
+    "Buckinghamshire's Heritage Portal (HER): parish histories and monument records, for Place facts and Places to see.",
+    cls='official',
+    depth=2,
+    seeds=['https://heritageportal.buckinghamshire.gov.uk/theme-list/parishes'],
+    include=['^https?://heritageportal\\.buckinghamshire\\.gov\\.uk/(monument|theme|theme-list)/'],
+)
+_facts(
+    'her-herefordshire-through-time',
+    ['facts', 'places'],
+    'Herefordshire Through Time (HER): Herefordshire towns, villages and sites, for Place facts and Places to see.',
+    cls='official',
+    depth=2,
+    seeds=['https://htt.herefordshire.gov.uk/herefordshires-past/'],
+    include=['^https?://htt\\.herefordshire\\.gov\\.uk/herefordshires-past/'],
+)
+_facts(
+    'gov-devon-historic-environment',
+    ['facts'],
+    'Devon County Council Historic Environment: Devon archaeology and historic-landscape news and guides, for Place facts.',
+    cls='official',
+    depth=2,
+    seeds=['https://www.devon.gov.uk/historicenvironment/'],
+    feeds=['https://www.devon.gov.uk/historicenvironment/feed/'],
+    include=['^https?://www\\.devon\\.gov\\.uk/historicenvironment/'],
+)
+_facts(
+    'arch-royal-berkshire-archives',
+    ['facts', 'places'],
+    "Royal Berkshire Archives: Berkshire's Past: parish and place guides, for Place facts and Places to see.",
+    cls='official',
+    depth=2,
+    delay=30,
+    seeds=['https://www.royalberkshirearchives.org.uk/berkshires-past'],
+    include=['^https?://www\\.royalberkshirearchives\\.org\\.uk/berkshires-past/'],
+)
+_facts(
+    'arch-essex-record-office',
+    ['facts'],
+    'Essex Record Office: Essex place research guides and blog, for Place facts.',
+    cls='official',
+    sitemaps=['https://www.essexrecordoffice.co.uk/sitemap'],
+    include=['^https?://www\\.essexrecordoffice\\.co\\.uk/(research|resources)/'],
+)
+_facts(
+    'arch-leicestershire-record-office',
+    ['facts'],
+    'Record Office for Leicestershire, Leicester and Rutland: local-history resources and parish guides, for Place facts.',
+    cls='official',
+    sitemaps=['http://www.recordoffice.org.uk/sitemap_index.xml'],
+    include=['^https?://www\\.recordoffice\\.org\\.uk/(resources|news)/'],
+)
+_facts(
+    'her-sussex-past',
+    ['facts', 'places', 'activities'],
+    'Sussex Archaeological Society (Sussex Past): histories of Lewes Castle, Fishbourne and other sites, for Place facts, Places to see and Activities.',
+    cls='editorial',
+    llm=False,
+    depth=2,
+    seeds=['https://sussexpast.co.uk/our-historic-sites/'],
+    include=['^https?://sussexpast\\.co\\.uk/(our-historic-sites|research)/'],
+)
+_facts(
+    'gov-donegal-heritage',
+    ['facts'],
+    'Donegal County Council Culture Division: Heritage: heritage publications and place guides for Donegal, for Place facts.',
+    cls='official',
+    seeds=['https://www.donegalculture.ie/en/services/heritage', 'https://www.donegalculture.ie/sitemap-xml'],
+    include=['^https?://www\\.donegalculture\\.ie/en/services/heritage'],
+)
+_facts(
+    'gov-louth-heritage',
+    ['facts'],
+    'Louth County Council: Heritage: Louth heritage publications, for Place facts.',
+    cls='official',
+    depth=2,
+    seeds=['https://www.louthcoco.ie/en/services/heritage/'],
+    include=['^https?://www\\.louthcoco\\.ie/en/services/heritage/'],
+)
+_facts(
+    'gov-fingal-heritage',
+    ['facts', 'places'],
+    'Fingal County Council: Heritage: Fingal heritage publications and placenames, for Place facts and Places to see.',
+    cls='official',
+    depth=2,
+    seeds=['https://www.fingal.ie/heritage'],
+    include=['^https?://www\\.fingal\\.ie/heritage'],
+)
+_facts(
+    'gov-limerick-historical',
+    ['facts'],
+    'Limerick.ie: Historical Resources: Limerick city and county history resources (Limerick Archives), for Place facts.',
+    cls='official',
+    depth=2,
+    seeds=['https://www.limerick.ie/discover/explore/historical-resources'],
+    include=['^https?://www\\.limerick\\.ie/discover/explore/historical-resources'],
+)
+_facts(
+    'gov-kilkenny-heritage',
+    ['facts'],
+    'Kilkenny County Council: Heritage: Kilkenny heritage plan and publications, for Place facts.',
+    cls='official',
+    depth=2,
+    delay=10,
+    seeds=['https://www.kilkennycoco.ie/eng/services/heritage/'],
+    include=['^https?://www\\.kilkennycoco\\.ie/eng/services/heritage/'],
+)
+_facts(
+    'fx-apps-communities-ni-gov-uk',
+    ['facts'],
+    'apps.communities-ni.gov.uk: history and curiosities of the places it covers, for Place facts.',
+    cls='editorial',
+    off='adapter pending: format / why: ASP.NET search behind a disclaimer click-through (the home page redirects to Disclaimer.aspx). Robots 404…',
+    seeds=['https://apps.communities-ni.gov.uk/'],
+)
+_facts(
+    'her-norfolk-heritage-explorer',
+    ['facts', 'places'],
+    'Norfolk Heritage Explorer (Norfolk HER): one history summary for every Norfolk parish, plus monument records, for Place facts and Places to see.',
+    cls='official',
+    depth=2,
+    delay=6,
+    seeds=['https://www.heritage.norfolk.gov.uk/parishes'],
+    include=['^https?://www\\.heritage\\.norfolk\\.gov\\.uk/(parishes|parish-summary|record-details|thematic-articles)'],
+)
+_facts(
+    'her-suffolk-heritage-explorer',
+    ['facts', 'places'],
+    'Suffolk Heritage Explorer (Suffolk HER): monument and parish records, for Place facts and Places to see.',
+    cls='official',
+    depth=2,
+    delay=5,
+    seeds=['https://heritage.suffolk.gov.uk/'],
+    include=['^https?://heritage\\.suffolk\\.gov\\.uk/(monument|Monument|monuments)/'],
+)
+_facts(
+    'her-highland-her',
+    ['facts', 'places'],
+    'Highland Historic Environment Record: Highland designations and monuments, for Place facts and Places to see.',
+    cls='official',
+    delay=5,
+    seeds=['https://her.highland.gov.uk/api/sitemap/Designations/index', 'https://her.highland.gov.uk/api/sitemap/Designations/1/50000/'],
+    include=['^https?://her\\.highland\\.gov\\.uk/(designation|monument|Designation)/'],
+)
+_facts(
+    'her-somerset-her',
+    ['facts', 'places'],
+    'Somerset HER (South West Heritage Trust): Somerset town surveys (EUS) and HER records, for Place facts and Places to see.',
+    cls='official',
+    depth=2,
+    seeds=['https://www.somersetheritage.org.uk/', 'https://www.somersetheritage.org.uk/eus/', 'https://www.somersetheritage.org.uk/publications/'],
+    include=['^https?://www\\.somersetheritage\\.org\\.uk/(eus|publications|record)/'],
+)
+_facts(
+    'her-heneb-wales',
+    ['facts', 'places'],
+    'Heneb: Trust for Welsh Archaeology (incl. CPAT/GGAT archives): Welsh village and settlement histories, new finds, for Place facts and Places to see.',
+    cls='official',
+    depth=2,
+    seeds=['https://heneb.org.uk/', 'https://heneb.org.uk/archive/cpat/'],
+    include=['^https?://heneb\\.org\\.uk/(archive/(cpat|ggat)/|news/|[a-z0-9-]+/$)'],
+)
+_facts(
+    'her-historypoints',
+    ['facts', 'places', 'walking_tours'],
+    'HistoryPoints (Wales QR plaques): thousands of Welsh building and place-name notes, for Place facts, Places to see and Free walking tours.',
+    cls='editorial',
+    depth=2,
+    seeds=['https://historypoints.org/'],
+    include=['^https?://historypoints\\.org/index\\.php\\?page='],
+)
+_facts(
+    'her-british-listed-buildings',
+    ['facts', 'places'],
+    'British Listed Buildings: list-entry text for England, Scotland and Wales by parish, for Place facts and Places to see.',
+    cls='reference',
+    sitemaps=['https://britishlistedbuildings.co.uk/sitemap.xml'],
+)
+_facts(
+    'fx-cumbria-county-history',
+    ['facts', 'places'],
+    'Cumbria County History Trust: VCH-style township histories and a "100 interesting facts" page, for Place facts and Places to see.',
+    cls='reference',
+    depth=2,
+    seeds=['https://www.cumbriacountyhistory.org.uk/100-interesting-facts', 'https://www.cumbriacountyhistory.org.uk/about-county'],
+    include=['^https?://www\\.cumbriacountyhistory\\.org\\.uk/(100-interesting-facts|township|about-county|themes)/?'],
+)
+_facts(
+    'arch-vch-gloucestershire',
+    ['facts', 'places'],
+    'VCH Gloucestershire: Victoria County History parish drafts (Glos), for Place facts and Places to see.',
+    cls='reference',
+    off='enable after a check from the crawler VM: a robots.txt or page fetch failed or timed out from the research laptop (http robots 200 (https timed out); Crawl-delay 2); read robots.txt, terms and content first',
+    depth=2,
+    delay=5,
+    seeds=['http://vchglos.org.uk/volumes/', 'https://vchglos.org.uk/volumes-in-preparation/'],
+    include=['^https?://vchglos\\.org\\.uk/(volumes|volumes-in-preparation)/'],
+)
+_facts(
+    'fx-kent-archaeology',
+    ['facts', 'places'],
+    'Kent Archaeological Society (Archaeologia Cantiana): parish histories and papers about Kent places, for Place facts and Places to see.',
+    cls='editorial',
+    sitemaps=['https://www.kentarchaeology.org.uk/sitemap.xml'],
+    include=['^https?://www\\.kentarchaeology\\.org\\.uk/(journal|papers|magazine|research)/'],
+)
+_facts(
+    'fx-kent-opc',
+    ['facts', 'places'],
+    'Kent Online Parish Clerks: parish pages with history descriptions, for Place facts and Places to see.',
+    cls='community',
+    llm=False,
+    off='owner decision: community-written site; the place_fact kind takes official, reference and editorial sources only (kinds.toml). Allow community sources behind corroboration, or keep off?',
+    depth=2,
+    seeds=['https://kent-opc.org/', 'https://kent-opc.org/Parishes/'],
+    include=['^https?://kent-opc\\.org/Parishes/'],
+)
+_facts(
+    'fx-wiltshire-opc',
+    ['facts', 'places'],
+    'Wiltshire OPC: parish history pages for every Wiltshire parish, for Place facts and Places to see.',
+    cls='community',
+    llm=False,
+    off='owner decision: community-written site; the place_fact kind takes official, reference and editorial sources only (kinds.toml). Allow community sources behind corroboration, or keep off?',
+    depth=2,
+    seeds=['https://www.wiltshire-opc.org.uk/'],
+    include=['^https?://www\\.wiltshire-opc\\.org\\.uk/(Items|category)/'],
+)
+_facts(
+    'fx-derbyshire-heritage',
+    ['facts', 'places'],
+    'Derbyshire Heritage: town and village histories, for Place facts and Places to see.',
+    cls='editorial',
+    depth=2,
+    seeds=['https://derbyshireheritage.co.uk/towns-and-villages/'],
+    include=['^https?://derbyshireheritage\\.co\\.uk/(towns-and-villages|historical|buildings|industrial)/'],
+)
+_facts(
+    'fx-devon-heritage',
+    ['facts', 'places'],
+    'Devon Heritage: Devon parish and town histories, for Place facts and Places to see.',
+    cls='community',
+    llm=False,
+    off='owner decision: community-written site; the place_fact kind takes official, reference and editorial sources only (kinds.toml). Allow community sources behind corroboration, or keep off?',
+    seeds=['https://www.devonheritage.org/index.htm'],
+)
+_facts(
+    'fx-sussex-parish-churches',
+    ['facts', 'places'],
+    'Sussex Parish Churches: a church and village history for each Sussex parish, for Place facts and Places to see.',
+    cls='editorial',
+    depth=2,
+    seeds=['https://sussexparishchurches.org/'],
+    sitemaps=['https://sussexparishchurches.org/wp-sitemap.xml'],
+    include=['^https?://sussexparishchurches\\.org/towns/'],
+)
+_facts(
+    'fx-suffolk-churches',
+    ['facts', 'places'],
+    'The Suffolk Churches Site (Simon Knott): a village and church essay for each of 600+ Suffolk churches, for Place facts and Places to see.',
+    cls='editorial',
+    off='enable after a check from the crawler VM: a robots.txt or page fetch failed or timed out from the research laptop (http robots 404, so allowed (https timed out)); read robots.txt, terms and content first',
+    depth=2,
+    seeds=['http://suffolkchurches.co.uk/churchlists.htm'],
+    include=['^https?://suffolkchurches\\.co\\.uk/.*(?:(host-scoped))'],
+)
+_facts(
+    'fx-norfolk-churches',
+    ['facts', 'places'],
+    'The Norfolk Churches Site: Norfolk village and church essays, for Place facts and Places to see.',
+    cls='editorial',
+    off='enable after a check from the crawler VM: a robots.txt or page fetch failed or timed out from the research laptop (NO RESPONSE (https + http, DNS resolves), so allowed (owner rule); check from the VM); read robots.txt, terms and content first',
+    depth=2,
+    seeds=['http://www.norfolkchurches.co.uk/'],
+    include=['^https?://www\\.norfolkchurches\\.co\\.uk/.*(?:(host-scoped))'],
+)
+_facts(
+    'fx-hertfordshire-genealogy',
+    ['facts', 'places'],
+    'Hertfordshire Genealogy (Herts places): town and village pages, for Place facts and Places to see.',
+    cls='community',
+    llm=False,
+    off='owner decision: community-written site; the place_fact kind takes official, reference and editorial sources only (kinds.toml). Allow community sources behind corroboration, or keep off?',
+    depth=2,
+    seeds=['http://hertfordshire-genealogy.co.uk/'],
+    include=['^https?://hertfordshire-genealogy\\.co\\.uk/data/'],
+)
+_facts(
+    'fx-our-nottinghamshire',
+    ['facts', 'places'],
+    'Our Nottinghamshire: community-written town and village histories, for Place facts and Places to see.',
+    cls='community',
+    llm=False,
+    off='enable after a check from the crawler VM: a robots.txt or page fetch failed or timed out from the research laptop (NO RESPONSE (DNS ok), so allowed; check from the VM); read robots.txt, terms and content first',
+    depth=2,
+    seeds=['https://www.ournottinghamshire.org.uk/'],
+    include=['^https?://www\\.ournottinghamshire\\.org\\.uk/.*(?:(host-scoped))'],
+)
+_facts(
+    'fx-survey-of-london',
+    ['facts', 'places', 'walking_tours'],
+    'Survey of London: Whitechapel (UCL): building-by-building history of Whitechapel, for Place facts, Places to see and Free walking tours.',
+    cls='reference',
+    depth=2,
+    seeds=['https://surveyoflondon.org/map/'],
+    include=['^https?://surveyoflondon\\.org/(map/feature|page)/'],
+)
+_facts(
+    'fx-britain-express',
+    ['facts', 'places', 'activities'],
+    'Britain Express: village, church and history pages for every county, for Place facts, Places to see and Activities.',
+    cls='editorial',
+    sitemaps=['https://www.britainexpress.com/sitemap-history.xml', 'https://www.britainexpress.com/sitemap-attractions.xml'],
+    include=['^https?://www\\.britainexpress\\.com/(History|counties|attractions|scotland|wales)/'],
+)
+_facts(
+    'fx-undiscovered-scotland',
+    ['facts', 'places'],
+    'Undiscovered Scotland: thousands of town and village pages, for Place facts and Places to see.',
+    cls='editorial',
+    sitemaps=['https://www.undiscoveredscotland.co.uk/sitemap.xml'],
+    include=['^https?://www\\.undiscoveredscotland\\.co\\.uk/[a-z0-9]+/'],
+    exclude=['^https?://www\\.undiscoveredscotland\\.co\\.uk/(?:us)'],
+)
+_facts(
+    'fx-electric-scotland',
+    ['facts', 'places'],
+    'Electric Scotland: parish and town histories (many public-domain book reprints), for Place facts and Places to see.',
+    cls='editorial',
+    sitemaps=['http://www.electricscotland.com/sitemap_index.xml'],
+    include=['^https?://www\\.electricscotland\\.com/history/'],
+)
+_facts(
+    'fx-glasgow-story',
+    ['facts', 'places'],
+    'TheGlasgowStory: Glasgow districts and place names, for Place facts and Places to see.',
+    cls='reference',
+    depth=2,
+    seeds=['https://theglasgowstory.com/', 'https://theglasgowstory.com/glasgow-placenames'],
+    include=['^https?://theglasgowstory\\.com/(story|glasgow-placenames|glasgow-personalities)/?'],
+)
+_facts(
+    'fx-orkneyjar',
+    ['facts', 'places'],
+    'Orkneyjar: Orkney parish, folklore and place-name notes, for Place facts and Places to see.',
+    cls='editorial',
+    depth=2,
+    seeds=['https://orkneyjar.com/'],
+    include=['^https?://orkneyjar\\.com/(history|tradition|placenames|index\\.fld)/'],
+)
+_facts(
+    'fx-wikishire',
+    ['facts', 'places'],
+    'Wikishire (historic counties wiki): parish and village articles by historic county, for Place facts and Places to see.',
+    cls='community',
+    llm=False,
+    off='owner decision: community-written site; the place_fact kind takes official, reference and editorial sources only (kinds.toml). Allow community sources behind corroboration, or keep off?',
+    depth=2,
+    seeds=['https://wikishire.co.uk/wiki/Main_Page'],
+    include=['^https?://wikishire\\.co\\.uk/wiki/'],
+)
+_facts(
+    'arch-staffs-past-track',
+    ['facts', 'places'],
+    'Staffordshire Past Track: local images with captions, by place, for Place facts and Places to see.',
+    cls='official',
+    depth=2,
+    seeds=['https://www.search.staffspasttrack.org.uk/locationexplorer.aspx'],
+    include=['^https?://www\\.search\\.staffspasttrack\\.org\\.uk/(details|locationexplorer)\\.aspx'],
+)
+_facts(
+    'arch-cork-past-present',
+    ['facts', 'places'],
+    'Cork Past & Present (Cork City Libraries): Cork streets, districts and history texts, for Place facts and Places to see.',
+    cls='official',
+    depth=2,
+    seeds=['https://www.corkcitylibraries.ie/en/online/cork-past-and-present/'],
+    include=['^https?://www\\.corkcitylibraries\\.ie/en/online/cork-past-and-present/'],
+)
+_facts(
+    'her-excavations-ie',
+    ['facts', 'places'],
+    'Excavations.ie (Database of Irish Excavation Reports): 32k+ excavation summaries by townland and county, for Place facts and Places to see.',
+    cls='reference',
+    sitemaps=['https://excavations.ie/sitemap.xml'],
+)
+_facts(
+    'od-heritage-maps-ie',
+    ['facts', 'places'],
+    'Heritage Maps (Heritage Council): NIAH, SMR, graveyards, holy wells and similar layers for every county, for Place facts and Places to see.',
+    cls='official',
+    delay=60,
+    seeds=['https://www.heritagemaps.ie/datasets'],
+    sitemaps=['https://www.heritagemaps.ie/sitemap.xml'],
+    include=['^https?://www\\.heritagemaps\\.ie/(datasets|content)/'],
+)
+_facts(
+    'fx-archwilio-org-uk',
+    ['facts'],
+    'archwilio.org.uk: history and curiosities of the places it covers, for Place facts.',
+    cls='editorial',
+    off='owner decision: The Welsh HER records sit behind an "I accept the Conditions" click-through whose text we could not read. Accept unseen terms, or use heneb.org.uk instead?',
+    seeds=['https://archwilio.org.uk/'],
+)
+_facts(
+    'fx-stataccscot-ed-ac-uk',
+    ['facts'],
+    'stataccscot.ed.ac.uk: history and curiosities of the places it covers, for Place facts.',
+    cls='editorial',
+    off='adapter pending: robots 404 (allowed). The home page is a JS single-page app (/static/statacc/dist/), so it needs its JSON API or a rendered reader. High value: 1790s and 1830s…',
+    seeds=['https://stataccscot.ed.ac.uk/'],
+)
+_facts(
+    'fx-knowyourplace-org-uk',
+    ['facts'],
+    'www.knowyourplace.org.uk: history and curiosities of the places it covers, for Place facts.',
+    cls='editorial',
+    off='adapter pending: NO RESPONSE (DNS CNAME only). The site is a map app (layers via WMS/WFS), so it needs a wfs_geojson config once it is reachable',
+    seeds=['https://www.knowyourplace.org.uk/'],
+)
+_facts(
+    'gov-kz-ehistory',
+    ['facts'],
+    'e-history.kz (official history portal of Kazakhstan): history of Kazakh cities and regions, for Place facts.',
+    cls='official',
+    sitemaps=['https://e-history.kz/en/sitemap.xml'],
+    include=['^https?://e-history\\.kz/en/news/'],
+)
+_facts(
+    'fx-qazinform',
+    ['facts'],
+    'Kazinform (Kazakhstan news agency): history and curiosities of the places it covers, for Place facts.',
+    cls='editorial',
+    seeds=['https://qazinform.com/'],
+    include=['^https?://qazinform\\.com/news/'],
+)
+_facts(
+    'fx-uza',
+    ['facts'],
+    'UzA (Uzbekistan national news agency): history and curiosities of the places it covers, for Place facts.',
+    cls='editorial',
+    seeds=['https://uza.uz/en'],
+    include=['^https?://uza\\.uz/en/posts/'],
+)
+_facts(
+    'her-uk-nhle-opendata',
+    ['facts', 'places'],
+    'Historic England Open Data Hub (NHLE): listed buildings, scheduled monuments, parks, battlefields, wrecks in England, for Place facts and Places to see.',
+    cls='official',
+    off='adapter pending: a place_fact mapping for this dataset on the csv_filter reader',
+    delay=60,
+    seeds=['https://opendata-historicengland.hub.arcgis.com/content/767f279327a24845bf47dfe5eae9862b', 'https://opendata-historicengland.hub.arcgis.com/datasets'],
+    sitemaps=['https://opendata-historicengland.hub.arcgis.com/sitemap.xml'],
+    include=['^https?://opendata-historicengland\\.hub\\.arcgis\\.com/(datasets|content)/'],
+)
+_facts(
+    'her-scot-hes-designations',
+    ['facts', 'places'],
+    'HES Designations WFS (Listed Buildings, Scheduled Monuments, WHS, Battlefields, Gardens,…: every designated site in Scotland, with name, category and designation date. This is the open route around the blocked portal.historicenvironment.scot, for Place facts and Places to see.',
+    cls='official',
+    seeds=['https://inspire.hes.scot/arcgis/services/HES/HES_Designations/MapServer/WFSServer?request=GetCapabilities&service=WFS'],
+    include=['^https?://inspire\\.hes\\.scot/.*(?:WFSServer)'],
+)
+_facts(
+    'her-scot-canmore-points',
+    ['facts', 'places'],
+    'Canmore points (NRHE, ~320k sites): site name, type and period for every recorded site in Scotland, with links to trove.scot, for Place facts and Places to see.',
+    cls='official',
+    off='adapter pending: ArcGIS REST query (resultOffset paging)',
+    seeds=['https://inspire.hes.scot/arcgis/rest/services/CANMORE/Canmore_Points/MapServer'],
+    include=['^https?://inspire\\.hes\\.scot/CANMORE/'],
+)
+_facts(
+    'od-de-hh-denkmalliste',
+    ['facts', 'places', 'walking_tours'],
+    'Hamburg Denkmalliste (Denkmalschutzamt): every listed monument and plaque in Hamburg, for Place facts, Places to see and Free walking tours.',
+    cls='official',
+    delay=10,
+    seeds=['https://api.hamburg.de/datasets/v1/denkmalschutz/collections?f=json', 'https://suche.transparenz.hamburg.de/dataset/denkmalliste-hamburg1'],
+    include=['^https?://api\\.hamburg\\.de/denkmalschutz/collections/(gebaeude|ensembles|tafeln)/items', '^https?://suche\\.transparenz\\.hamburg\\.de/denkmalschutz/collections/(gebaeude|ensembles|tafeln)/items'],
+)
+_facts(
+    'her-ch-kgs',
+    ['facts', 'places'],
+    'KGS-Inventar (Swiss cultural property of national importance): Swiss A-objects (castles, churches, archives) with commune, for Place facts and Places to see.',
+    cls='official',
+    off='adapter pending: a place_fact mapping for this dataset on the csv_filter reader',
+    seeds=['https://data.geo.admin.ch/api/stac/v0.9/collections/ch.babs.kulturgueter', 'https://data.geo.admin.ch/api/stac/v0.9/collections/ch.babs.kulturgueter/items'],
+    include=['^https?://data\\.geo\\.admin\\.ch/collections/ch.babs.kulturgueter'],
+)
+_facts(
+    'arch-bnf-catalogue-sru',
+    ['facts'],
+    'BnF catalogue SRU (geographic authority records): history and curiosities of the places it covers, for Place facts.',
+    cls='official',
+    off='adapter pending: SRU XML',
+    depth=0,
+    delay=5,
+    seeds=['https://catalogue.bnf.fr/api/SRU?version=1.2&operation=searchRetrieve&query=aut.type%20any%20%22GEO%22'],
+    include=['^https?://catalogue\\.bnf\\.fr/api/SRU'],
+)
+_facts(
+    'od-uk-deep-epns',
+    ['facts'],
+    'DEEP / Survey of English Place-Names data (EPNS, CC BY-NC 4.0): origin of English place names, for Place facts.',
+    cls='reference',
+    off='owner decision: Survey of English Place-Names data (CC BY-NC 4.0); the Jisc download page is a 403. Ask KDL/EPNS for the MADS files.',
+    seeds=['https://deep.kdl.kcl.ac.uk/'],
+    include=['^https?://deep\\.kdl\\.kcl\\.ac\\.uk/.*(?:n/a)'],
+)
+_facts(
+    'od-uk-kepn',
+    ['facts'],
+    'Key to English Place-Names: history and curiosities of the places it covers, for Place facts.',
+    cls='reference',
+    off='owner decision: robots `Disallow: /`. The best source for English place-name origins: ask Nottingham INS to allow VoyagerBot or to license the data.',
+    seeds=['https://kepn.nottingham.ac.uk/'],
+    include=['^https?://kepn\\.nottingham\\.ac\\.uk/.*(?:n/a)'],
+)
+_facts(
+    'fx-historic-uk',
+    ['facts', 'places'],
+    'Historic UK: town/castle/village histories across Britain, for Place facts and Places to see.',
+    cls='editorial',
+    depth=2,
+    seeds=['https://www.historic-uk.com/HistoryMagazine/DestinationsUK/'],
+    include=['^https?://www\\.historic-uk\\.com/HistoryMagazine/DestinationsUK/|^/HistoryUK/'],
+)
+_facts(
+    'fx-ianvisits',
+    ['facts', 'places', 'events'],
+    'ianVisits (London): London little-known history, hidden sites, for Place facts, Places to see and Events.',
+    cls='editorial',
+    llm=False,
+    feeds=['https://www.ianvisits.co.uk/articles/feed/'],
+    include=['^https?://www\\.ianvisits\\.co\\.uk/articles/'],
+)
+_facts(
+    'fx-london-wanderer',
+    ['facts'],
+    'The London Wanderer: London curiosities category, for Place facts.',
+    cls='editorial',
+    feeds=['https://thelondonwanderer.co.uk/feed/'],
+)
+_facts(
+    'fx-heritage-calling',
+    ['facts', 'places'],
+    "Heritage Calling (Historic England blog): listed buildings and place history from England's heritage body, for Place facts and Places to see.",
+    cls='official',
+    feeds=['https://heritagecalling.com/feed/'],
+)
+_facts(
+    'fx-geo-de',
+    ['facts', 'places'],
+    'GEO (Germany): German-language place history and curiosities, for Place facts and Places to see.',
+    cls='editorial',
+    llm=False,
+    feeds=['https://www.geo.de/feed/rss/geo/'],
+    include=['^https?://www\\.geo\\.de/reisen/|^/wissen/geschichte/'],
+)
+_facts(
+    'fx-vanilla-magazine',
+    ['facts'],
+    'Vanilla Magazine (Storia): curiosità storiche about places (sourced long-form), for Place facts.',
+    cls='editorial',
+    seeds=['https://www.vanillamagazine.it/category/storia/'],
+    feeds=['https://www.vanillamagazine.it/feed/'],
+    include=['^https?://www\\.vanillamagazine\\.it/[a-z0-9-]+/$'],
+)
+_facts(
+    'fx-theirishstory',
+    ['facts'],
+    'The Irish Story: Irish history by place, for Place facts.',
+    cls='editorial',
+    feeds=['https://www.theirishstory.com/feed/'],
+)
+_facts(
+    'fx-infolites',
+    ['facts'],
+    'Infolites (France): French-language curiosities incl. unusual places, for Place facts.',
+    cls='editorial',
+    feeds=['https://www.infolites.fr/feed/'],
+)
+_facts(
+    'fx-inberlin',
+    ['facts'],
+    'Blog@inBerlin: Berlin curiosities, hidden places, for Place facts.',
+    cls='editorial',
+    feeds=['https://blog.inberlin.de/feed/'],
+)
+_facts(
+    'fx-france-pittoresque',
+    ['facts', 'places'],
+    'La France pittoresque: French towns, monuments, traditions and legends, for Place facts and Places to see.',
+    cls='editorial',
+    llm=False,
+    feeds=['https://www.france-pittoresque.com/spip.php?page=backend'],
+)
+_facts(
+    'fx-ciekawostki-historyczne',
+    ['facts'],
+    'Ciekawostki historyczne: Polish history curiosities (sourced magazine), for Place facts.',
+    cls='editorial',
+    seeds=['https://ciekawostkihistoryczne.pl/category/'],
+    sitemaps=['https://ciekawostkihistoryczne.pl/sitemap.xml'],
+    include=['^https?://ciekawostkihistoryczne\\.pl/20\\d\\d/\\d\\d/\\d\\d/'],
+)
+_facts(
+    'fx-radio-prague',
+    ['facts'],
+    'Radio Prague International: Czech towns, castles, history features (public broadcaster), for Place facts.',
+    cls='editorial',
+    delay=5,
+    seeds=['https://english.radio.cz/rcz-rss/en'],
+)
+_facts(
+    'fx-iceland-review',
+    ['facts', 'tips'],
+    'Iceland Review: Iceland history, place names, records, for Place facts and Travel tips.',
+    cls='editorial',
+    delay=10,
+    feeds=['https://www.icelandreview.com/feed/'],
+)
+_facts(
+    'fx-ukrainer',
+    ['facts', 'places'],
+    'Ukraїner: town/village stories from all regions of Ukraine, for Place facts and Places to see.',
+    cls='editorial',
+    sitemaps=['https://www.ukrainer.net/sitemap_index.xml'],
+)
+_facts(
+    'fx-ru-kola-encyclopedia',
+    ['facts', 'places'],
+    'Кольская энциклопедия (Правительство Мурманской области): 5-volume regional encyclopedia: every town, settlement and landmark of Murmansk oblast, for Place facts and Places to see.',
+    cls='official',
+    seeds=['https://ke-culture.gov-murman.ru/'],
+    sitemaps=['http://ke.culture.gov-murman.ru/sitemap.xml'],
+    include=['^https?://ke-culture\\.gov-murman\\.ru/(encyclopedia|article|materials)/?', '^https?://ke\\.culture\\.gov-murman\\.ru/(encyclopedia|article|materials)/?'],
+)
+_facts(
+    'fx-ru-histrf',
+    ['facts', 'places', 'itinerary'],
+    'История.РФ (Российское военно-историческое общество): federal history portal; regional history and "travel" sections about towns, for Place facts, Places to see and Itinerary.',
+    cls='official',
+    seeds=['https://history.ru/'],
+    sitemaps=['https://history.ru/storage/sitemap.xml'],
+    include=['^https?://history\\.ru/(articles|regions|travel)/'],
+)
+_facts(
+    'fx-ru-rgo',
+    ['facts', 'places'],
+    'Русское географическое общество: RGS articles on regions, expeditions and geographic records (highest, deepest, coldest), for Place facts and Places to see.',
+    cls='reference',
+    depth=2,
+    delay=10,
+    seeds=['https://rgo.ru/'],
+    include=['^https?://rgo\\.ru/(ru/)?(articles|activity/redaction/articles)/'],
+)
+_facts(
+    'fx-ru-arzamas',
+    ['facts'],
+    "Arzamas (журнал): scholar-written pieces on Russian cities' history and curiosities, for Place facts.",
+    cls='editorial',
+    delay=5,
+    seeds=['https://arzamas.academy/mag'],
+    sitemaps=['https://arzamas.academy/shared/sitemap.xml.gz'],
+    feeds=['https://arzamas.academy/feed_v1/mag.rss'],
+    include=['^https?://arzamas\\.academy/mag/\\d+'],
+)
+_facts(
+    'fx-ru-nkj',
+    ['facts'],
+    'Наука и жизнь: magazine (founded 1890) with "удивительные места" and regional-history articles, for Place facts.',
+    cls='editorial',
+    seeds=['https://www.nkj.ru/'],
+    sitemaps=['https://www.nkj.ru/sitemap.xml'],
+    feeds=['http://www.nkj.ru/rss/'],
+    include=['^https?://www\\.nkj\\.ru/archive/articles/\\d+/'],
+)
+_facts(
+    'fx-ru-vokrugsveta',
+    ['facts', 'places'],
+    'Вокруг света: oldest Russian popular-geography magazine (1861); place curiosities and records, for Place facts and Places to see.',
+    cls='editorial',
+    seeds=['https://www.vokrugsveta.ru/'],
+    feeds=['https://www.vokrugsveta.ru/rss-feeds/rss.xml'],
+    include=['^https?://www\\.vokrugsveta\\.ru/articles/'],
+)
+_facts(
+    'fx-ru-rodina',
+    ['facts'],
+    'Журнал «Родина» (Российская газета): peer-reviewed popular history magazine; local and regional history, for Place facts.',
+    cls='editorial',
+    llm=False,
+    depth=2,
+    seeds=['https://rodina-history.ru/'],
+    include=['^https?://rodina-history\\.ru/\\d{4}/\\d{2}/\\d{2}/'],
+)
+_facts(
+    'fx-ru-bashenc',
+    ['facts', 'places'],
+    'Башкирская энциклопедия (ГАУН РБ): 56k articles; every district, town and village of Bashkortostan, for Place facts and Places to see.',
+    cls='reference',
+    depth=2,
+    seeds=['https://bashenc.online/ru/'],
+    include=['^https?://bashenc\\.online/ru/articles/\\d+/'],
+)
+_facts(
+    'fx-ru-tatarica',
+    ['facts', 'places'],
+    'Tatarica: Татарская энциклопедия (АН РТ): Kazan, Tatarstan settlements, "vanished settlements" section, for Place facts and Places to see.',
+    cls='reference',
+    depth=2,
+    seeds=['https://tatarica.org/ru'],
+    include=['^https?://tatarica\\.org/ru/razdely/'],
+)
+_facts(
+    'fx-ru-chuvash-enc',
+    ['facts', 'places'],
+    'Чувашская энциклопедия: villages and towns of Chuvashia (regional government portal), for Place facts and Places to see.',
+    cls='official',
+    depth=2,
+    seeds=['https://enc.cap.ru/'],
+    include=['^https?://enc\\.cap\\.ru/\\?t=(publ|world)&lnk=\\d+'],
+)
+_facts(
+    'fx-ru-encspb',
+    ['facts', 'places', 'walking_tours'],
+    'Энциклопедия Санкт-Петербурга: streets, buildings, monuments, memorial plaques of St Petersburg, for Place facts, Places to see and Free walking tours.',
+    cls='reference',
+    depth=2,
+    seeds=['https://www.encspb.ru/object/2857435147?lc=ru'],
+    include=['^https?://www\\.encspb\\.ru/object/\\d+'],
+)
+_facts(
+    'fx-ru-pravenc',
+    ['facts', 'places'],
+    'Православная энциклопедия (ЦНЦ): scholarly articles on cities, monasteries and dioceses (history with bibliography), for Place facts and Places to see.',
+    cls='reference',
+    seeds=['https://www.pravenc.ru/'],
+    feeds=['http://www.pravenc.ru/encyclopedia.rss'],
+    include=['^https?://www\\.pravenc\\.ru/text/\\d+\\.html'],
+)
+_facts(
+    'fx-ru-drevo',
+    ['facts', 'places'],
+    'Древо: открытая православная энциклопедия: towns, churches and monasteries, for Place facts and Places to see.',
+    cls='community',
+    llm=False,
+    off='owner decision: community-written site; the place_fact kind takes official, reference and editorial sources only (kinds.toml). Allow community sources behind corroboration, or keep off?',
+    seeds=['https://drevo-info.ru/', 'https://drevo-info.ru/site/historyfeed', 'http://drevo-info.ru/download.html'],
+    sitemaps=['https://drevo-info.ru/sitemap.xml'],
+    include=['^https?://drevo-info\\.ru/articles/\\d+\\.html'],
+)
+_facts(
+    'fx-ru-sobory',
+    ['facts', 'places', 'walking_tours'],
+    'Народный каталог православной архитектуры: 50k+ churches with build dates and history, for Place facts, Places to see and Free walking tours.',
+    cls='community',
+    llm=False,
+    off='owner decision: community-written site; the place_fact kind takes official, reference and editorial sources only (kinds.toml). Allow community sources behind corroboration, or keep off?',
+    depth=2,
+    delay=5,
+    seeds=['https://sobory.ru/'],
+    sitemaps=['https://sobory.ru/_lib/sitemap_img/sitemap_pic.xml'],
+    include=['^https?://sobory\\.ru/article/\\?object=\\d+'],
+)
+_facts(
+    'arch-ru-prlib',
+    ['facts'],
+    'Президентская библиотека им. Б.Н. Ельцина: dated "this day in history" entries and regional-history collections, for Place facts.',
+    cls='official',
+    delay=5,
+    seeds=['https://www.prlib.ru/'],
+    sitemaps=['https://www.prlib.ru/sitemap.xml'],
+    include=['^https?://www\\.prlib\\.ru/(item|history)/\\d+'],
+)
+_facts(
+    'fx-ru-uralhist',
+    ['facts'],
+    "Уральский исторический вестник (ИИиА УрО РАН): peer-reviewed articles on Ural towns' history (low density, high credibility), for Place facts.",
+    cls='reference',
+    depth=2,
+    seeds=['https://uralhist.uran.ru/'],
+    include=['^https?://uralhist\\.uran\\.ru/(\\d+|archive)/'],
+)
+_facts(
+    'fx-ua-ieu',
+    ['facts', 'places'],
+    'Internet Encyclopedia of Ukraine (CIUS, Univ. of Alberta): English entries on every Ukrainian city, oblast and many villages, for Place facts and Places to see.',
+    cls='reference',
+    delay=5,
+    seeds=['https://www.encyclopediaofukraine.com/'],
+    sitemaps=['https://www.encyclopediaofukraine.com/ASiteMap1.xml'],
+    include=['^https?://www\\.encyclopediaofukraine\\.com/display\\.asp\\?linkpath='],
+)
+_facts(
+    'gov-ua-uinp',
+    ['facts'],
+    "Український інститут національної пам'яті: history articles and dated anniversaries; place renamings (decommunisation and toponymy), for Place facts.",
+    cls='official',
+    depth=2,
+    seeds=['https://uinp.gov.ua/informaciyni-materialy/statti'],
+    include=['^https?://uinp\\.gov\\.ua/informaciyni-materialy/'],
+)
+_facts(
+    'fx-ua-localhistory',
+    ['facts', 'places'],
+    'Локальна історія (журнал): local-history magazine; towns and villages of Ukraine, for Place facts and Places to see.',
+    cls='editorial',
+    depth=2,
+    seeds=['https://localhistory.org.ua/'],
+    include=['^https?://localhistory\\.org\\.ua/(texts|videos)/'],
+)
+_facts(
+    'fx-ua-istpravda',
+    ['facts'],
+    'Історична правда: popular history; includes an "ЕКСКУРСІЇ" section about historic places, for Place facts.',
+    cls='editorial',
+    depth=2,
+    seeds=['https://www.istpravda.com.ua/'],
+    include=['^https?://www\\.istpravda\\.com\\.ua/(articles|research|short)/'],
+)
+_facts(
+    'fx-ua-castles',
+    ['facts', 'places'],
+    'Замки і храми України: castles, churches and manors by oblast, with history, for Place facts and Places to see.',
+    cls='editorial',
+    depth=2,
+    seeds=['https://castles.com.ua/index.html'],
+    include=['^https?://castles\\.com\\.ua/[a-z0-9_-]+\\.html$'],
+)
+_facts(
+    'fx-ua-lia-lviv',
+    ['facts', 'places', 'walking_tours'],
+    'Львів Інтерактивний (Центр міської історії): peer-reviewed histories of Lviv buildings, streets and places, for Place facts, Places to see and Free walking tours.',
+    cls='reference',
+    seeds=['https://lia.lvivcenter.org/uk/'],
+    sitemaps=['https://lia.lvivcenter.org/sitemap.xml'],
+    include=['^https?://lia\\.lvivcenter\\.org/(uk|en)/(objects|places|streets|storymaps)/'],
+)
+_facts(
+    'fx-ua-lvivcenter',
+    ['facts'],
+    'Центр міської історії Центрально-Східної Європи: urban-history research on Ukrainian cities, for Place facts.',
+    cls='reference',
+    seeds=['https://www.lvivcenter.org/'],
+    sitemaps=['https://www.lvivcenter.org/sitemap.xml'],
+    include=['^https?://www\\.lvivcenter\\.org/(uk|en)?/?(research|projects)/'],
+)
+_facts(
+    'fx-ua-hmarochos',
+    ['facts', 'walking_tours'],
+    'Хмарочос: київський міський журнал: Kyiv buildings, street names and history, for Place facts and Free walking tours.',
+    cls='editorial',
+    seeds=['https://hmarochos.kiev.ua/'],
+    sitemaps=['https://hmarochos.kiev.ua/sitemap.xml'],
+    include=['^https?://hmarochos\\.kiev\\.ua/\\d{4}/\\d{2}/\\d{2}/'],
+)
+_facts(
+    'tb-ua-ukraine-ua',
+    ['facts', 'places'],
+    "Ukraine.ua (official website of Ukraine): official facts about Ukraine's regions and cities, for Place facts and Places to see.",
+    cls='official',
+    llm=False,
+    seeds=['https://ukraine.ua/'],
+    sitemaps=['https://ukraine.ua/sitemap_index.xml'],
+    feeds=['https://ukraine.ua/feed/'],
+    include=['^https?://ukraine\\.ua/(cities-and-regions|travel|invest|culture)/'],
+)
+_facts(
+    'arch-by-bis-nlb',
+    ['facts', 'places'],
+    'Беларусь у асобах і падзеях (Нацыянальная бібліятэка Беларусі): national-library encyclopedia: towns, monuments, dated events, for Place facts and Places to see.',
+    cls='official',
+    seeds=['https://bis.nlb.by/by'],
+    sitemaps=['https://bis.nlb.by/sitemap.xml'],
+    include=['^https?://bis\\.nlb\\.by/(by|ru)/(content|places)/'],
+)
+_facts(
+    'fx-by-belhistory',
+    ['facts'],
+    'Беларускі гістарычны партал: history of Belarusian towns, for Place facts.',
+    cls='editorial',
+    seeds=['https://belhistory.com/'],
+    sitemaps=['https://belhistory.com/sitemap_index.xml'],
+    include=['^https?://belhistory\\.com/(article|gorad|[a-z-]+/)\\S+'],
+)
+_facts(
+    'fx-radzima',
+    ['facts', 'places'],
+    'Radzima.org: notable places and monuments of Belarus, Lithuania and Podlasie: town and village histories and monuments, for Place facts and Places to see.',
+    cls='community',
+    llm=False,
+    off='owner decision: community-written site; the place_fact kind takes official, reference and editorial sources only (kinds.toml). Allow community sources behind corroboration, or keep off?',
+    depth=2,
+    seeds=['https://radzima.org/eng/', 'https://radzima.org/be/paviet/'],
+    include=['^https?://radzima\\.org/(be|eng)/(gorad|paviet|voblast|object)/'],
+)
+_facts(
+    'fx-by-globustut',
+    ['facts', 'places'],
+    'Глобус Беларуси: town-by-town sights and history of Belarus, for Place facts and Places to see.',
+    cls='editorial',
+    seeds=['https://globustut.by/', 'https://globustut.by/sitemap_https_gtb2.txt'],
+    include=['^https?://globustut\\.by/[a-z_]+/'],
+)
+_facts(
+    'tb-by-belarustourism',
+    ['facts', 'places', 'activities'],
+    'Национальное агентство по туризму Беларуси: official facts on regions and towns, for Place facts, Places to see and Activities.',
+    cls='official',
+    seeds=['https://belarustourism.by/'],
+    sitemaps=['https://belarustourism.by/sitemap.xml', 'https://belarustourism.by/en/sitemap.xml', 'https://belarustourism.by/be/sitemap.xml'],
+    include=['^https?://belarustourism\\.by/(en/)?(belarus|turistam|regions)/'],
+)
+_facts(
+    'ref-md-enciclopedia-asm',
+    ['facts', 'places'],
+    'Centrul de Cercetări Enciclopedice (Enciclopedia Moldovei): Moldovan encyclopedia (Academy of Sciences); localities and history, for Place facts and Places to see.',
+    cls='reference',
+    seeds=['https://enciclopedia.asm.md/'],
+    feeds=['https://enciclopedia.asm.md/?feed=rss2'],
+    include=['^https?://enciclopedia\\.asm\\.md/\\?p=\\d+'],
+)
+_facts(
+    'tb-md-turism-gov',
+    ['facts', 'places'],
+    'Moldova Turism (Agenția Turismului / Ministerul Culturii): official "Despre Moldova" and region pages, for Place facts and Places to see.',
+    cls='official',
+    seeds=['https://turism.gov.md/ro/despre-moldova/regiunile-moldovei/'],
+    sitemaps=['https://turism.gov.md/ro/sitemap.xml'],
+    include=['^https?://turism\\.gov\\.md/(ro|en|ru)/(despre-moldova|obiective|ce-sa-vizitezi)/'],
+)
+_facts(
+    'her-ge-nachp',
+    ['facts', 'places'],
+    'National Agency for Cultural Heritage Preservation of Georgia: official heritage sites and museum-reserves with history, for Place facts and Places to see.',
+    cls='official',
+    depth=2,
+    seeds=['https://www.heritagesites.ge/ka'],
+    include=['^https?://www\\.heritagesites\\.ge/(ka|en)/(sites|monuments|museums)/'],
+)
+_facts(
+    'fx-ge-georgianjournal',
+    ['facts'],
+    'Georgian Journal: English weekly, "Discover Georgia" history pieces, for Place facts.',
+    cls='editorial',
+    seeds=['https://georgianjournal.ge/'],
+    sitemaps=['https://georgianjournal.ge/sitemap.xml'],
+    include=['^https?://georgianjournal\\.ge/(discover-georgia|culture|history)/\\d+-'],
+)
+_facts(
+    'fx-ge-georgiaabout',
+    ['facts', 'places'],
+    'Georgia About: long-running blog with "About ..." posts on Georgian architecture, towns and traditions, for Place facts and Places to see.',
+    cls='editorial',
+    seeds=['https://georgiaabout.com/'],
+    sitemaps=['https://georgiaabout.com/sitemap.xml'],
+    feeds=['https://georgiaabout.com/feed/'],
+    include=['^https?://georgiaabout\\.com/\\d{4}/\\d{2}/\\d{2}/about-'],
+)
+_facts(
+    'her-ge-museum',
+    ['facts'],
+    'Georgian National Museum: museums and museum-reserves (Dmanisi, Vani, Uplistsikhe), for Place facts.',
+    cls='official',
+    depth=2,
+    seeds=['https://museum.ge/index.php?m=2'],
+    include=['^https?://museum\\.ge/index\\.php\\?(m|lang)='],
+)
+_facts(
+    'fx-am-armgeo',
+    ['facts', 'places', 'activities'],
+    'Armenian Geographic (ArmGeo): monuments, villages, mountains of Armenia with history, for Place facts, Places to see and Activities.',
+    cls='editorial',
+    seeds=['https://www.armgeo.am/'],
+    sitemaps=['https://www.armgeo.am/sitemap_index.xml'],
+    feeds=['https://www.armgeo.am/feed/'],
+    include=['^https?://www\\.armgeo\\.am/(en/|ru/)?[a-z0-9-]+/$'],
+)
+_facts(
+    'fx-am-evnreport',
+    ['facts'],
+    'EVN Report: long-form history and heritage pieces about Armenian places, for Place facts.',
+    cls='editorial',
+    depth=2,
+    seeds=['https://evnreport.com/'],
+    include=['^https?://evnreport\\.com/(arts-and-culture|raw-unfiltered|creative-armenia)/'],
+)
+_facts(
+    'fx-az-irs-heritage',
+    ['facts', 'places'],
+    'IRS Heritage (Nasledie) magazine: heritage magazine on Azerbaijani towns, monuments and crafts, for Place facts and Places to see.',
+    cls='editorial',
+    seeds=['https://irs-az.com/en'],
+    sitemaps=['https://irs-az.com/sitemap.xml'],
+    feeds=['https://irs-az.com/en/rss.xml'],
+    include=['^https?://irs-az\\.com/(en|ru)/article/\\d+'],
+)
+_facts(
+    'ref-tr-islam-ansiklopedisi',
+    ['facts', 'places'],
+    'TDV İslâm Ansiklopedisi: 44-volume scholarly encyclopedia with long articles on cities (İznik, Bursa, Konya, Semerkant, Buhara...) across Turkey, the Caucasus and Central Asia, for Place facts and Places to see.',
+    cls='reference',
+    depth=2,
+    seeds=['https://islamansiklopedisi.org.tr/'],
+    include=['^https?://islamansiklopedisi\\.org\\.tr/[a-z0-9-]+(--[a-z0-9-]+)?$'],
+)
+_facts(
+    'fx-tr-istanbultarihi',
+    ['facts', 'places', 'walking_tours'],
+    'Büyük İstanbul Tarihi (İBB + İSAM): 10-volume history of Istanbul by district and topic, for Place facts, Places to see and Free walking tours.',
+    cls='reference',
+    depth=2,
+    seeds=['https://istanbultarihi.ist/'],
+    include=['^https?://istanbultarihi\\.ist/\\d+-[a-z0-9-]+$'],
+)
+_facts(
+    'gov-tr-kulturportali',
+    ['facts', 'places'],
+    'Türkiye Kültür Portalı (Kültür ve Turizm Bakanlığı): official page per il with history, sights and the inventory of cultural assets, for Place facts and Places to see.',
+    cls='official',
+    llm=False,
+    depth=2,
+    seeds=['https://www.kulturportali.gov.tr/turkiye'],
+    include=['^https?://www\\.kulturportali\\.gov\\.tr/turkiye/[a-z]+/(genel|gezilecekyer|kulturenvanteri)/'],
+)
+_facts(
+    'fx-tr-derintarih',
+    ['facts'],
+    "Derin Tarih (dergi): popular-history magazine; Ottoman and Anatolian towns' curiosities, for Place facts.",
+    cls='editorial',
+    seeds=['https://www.derintarih.com/'],
+    sitemaps=['https://www.derintarih.com/wp-sitemap.xml'],
+    feeds=['https://www.derintarih.com/feed/'],
+    include=['^https?://www\\.derintarih\\.com/(makale|[a-z-]+)/[a-z0-9-]+/$'],
+)
+_facts(
+    'fx-tr-arkeofili',
+    ['facts', 'places'],
+    'Arkeofili: archaeology news on Turkish sites (oldest, first, largest finds), for Place facts and Places to see.',
+    cls='editorial',
+    seeds=['https://arkeofili.com/'],
+    sitemaps=['https://arkeofili.com/sitemap_index.xml'],
+    feeds=['https://arkeofili.com/feed/'],
+    include=['^https?://arkeofili\\.com/[a-z0-9-]+/$'],
+)
+_facts(
+    'fx-tr-turkisharchaeonews',
+    ['facts', 'places', 'activities'],
+    'Turkish Archaeological News: a gazetteer of ancient sites, monuments and museums in Turkey, for Place facts, Places to see and Activities.',
+    cls='editorial',
+    delay=10,
+    seeds=['https://www.turkisharchaeonews.net/'],
+    feeds=['https://www.turkisharchaeonews.net/rss.xml'],
+    include=['^https?://www\\.turkisharchaeonews\\.net/(object|site|article)/'],
+)
+_facts(
+    'gov-tr-muze',
+    ['facts', 'places'],
+    'Müzeler ve Ören Yerleri (muze.gov.tr, KTB): official museum and archaeological-site pages with history, for Place facts and Places to see.',
+    cls='official',
+    seeds=['https://muze.gov.tr/'],
+    sitemaps=['https://muze.gov.tr/sitemap.xml'],
+    include=['^https?://muze\\.gov\\.tr/muze-detay\\?(sectionId|DistId)='],
+)
+_facts(
+    'ref-tr-turizm-ansiklopedisi',
+    ['facts', 'places'],
+    'Türkiye Turizm Ansiklopedisi: entries on provinces, districts (Alanya, Dikili, Kilis...) and sights, for Place facts and Places to see.',
+    cls='reference',
+    depth=2,
+    seeds=['https://turkiyeturizmansiklopedisi.com/'],
+    include=['^https?://turkiyeturizmansiklopedisi\\.com/[a-z0-9-]+$'],
+)
+_facts(
+    'her-tr-unesco-milli-komisyon',
+    ['facts', 'places'],
+    'UNESCO Türkiye Millî Komisyonu: Turkish texts on World Heritage, tentative-list and intangible-heritage items, for Place facts and Places to see.',
+    cls='official',
+    depth=2,
+    seeds=['https://www.unesco.org.tr/'],
+    include=['^https?://www\\.unesco\\.org\\.tr/Pages/\\d+/\\d+/'],
+)
+_facts(
+    'ref-tr-nisanyan-yeradlari',
+    ['facts'],
+    'Nişanyan Yeradları: Inventory of Settlements in Turkey: former and historic names of 50k+ villages and towns, with sources (toponymy), for Place facts.',
+    cls='reference',
+    llm=False,
+    depth=2,
+    seeds=['https://www.nisanyanyeradlari.com/'],
+    include=['^https?://www\\.nisanyanyeradlari\\.com/(\\?y=|yer/)'],
+)
+_facts(
+    'fx-tr-tarihvakfi',
+    ['facts'],
+    'Tarih Vakfı (Toplumsal Tarih): local and urban history projects (e.g. neighbourhood histories), for Place facts.',
+    cls='reference',
+    seeds=['https://tarihvakfi.org.tr/'],
+    feeds=['https://tarihvakfi.org.tr/feed/'],
+    include=['^https?://tarihvakfi\\.org\\.tr/[a-z0-9-]+/$'],
+)
+_facts(
+    'fx-ca-voices',
+    ['facts'],
+    "Voices on Central Asia (GWU Central Asia Program): academic-editorial pieces on Central Asian cities' history and heritage, for Place facts.",
+    cls='editorial',
+    delay=30,
+    seeds=['https://voicesoncentralasia.org/'],
+    feeds=['https://voicesoncentralasia.org/feed/'],
+    include=['^https?://voicesoncentralasia\\.org/[a-z0-9-]+/$'],
+)
+_facts(
+    'od-tr-tuik',
+    ['facts'],
+    'TÜİK (Türkiye İstatistik Kurumu): population records (largest, smallest, fastest-growing districts and villages), for Place facts.',
+    cls='official',
+    off='adapter pending: needs adapter: JS data portal with XLS/CSV per bulletin (ADNKS population by il, ilçe, köy)',
+    seeds=['https://data.tuik.gov.tr/'],
+)
+_facts(
+    'od-tr-dergipark',
+    ['facts'],
+    'DergiPark (TÜBİTAK ULAKBİM): peer-reviewed local histories of Turkish towns and villages ("köy tarihi"), for Place facts.',
+    cls='reference',
+    off='adapter pending: needs adapter: OAI-PMH per journal; filter to local-history, city and "yerel tarih" journals',
+    seeds=['https://dergipark.org.tr/tr/'],
+)
+_facts(
+    'her-uz-madaniymeros',
+    ['facts', 'places'],
+    "O'zbekiston Madaniy Meros Agentligi: official heritage agency (register of monuments), for Place facts and Places to see.",
+    cls='official',
+    off='adapter pending: needs adapter: JS-rendered SPA (Vue); needs its JSON API',
+    seeds=['https://madaniymeros.uz/'],
+)
+_facts(
+    'gov-az-culture',
+    ['facts'],
+    'Azərbaycan Mədəniyyət Nazirliyi: heritage monuments of Azerbaijan, for Place facts.',
+    cls='official',
+    off='adapter pending: needs adapter: JS-rendered SPA (robots.txt returns the app shell)',
+    seeds=['https://culture.gov.az/'],
+)
+_facts(
+    'od-ru-mkrf-egrokn',
+    ['facts', 'places', 'walking_tours'],
+    'ЕГРОКН: Единый госреестр объектов культурного наследия (opendata.mkrf.ru): the official register of every protected monument in Russia, with build dates, for Place facts, Places to see and Free walking tours.',
+    cls='official',
+    off='adapter pending: needs adapter: open-data JSON/CSV dump (~140k heritage objects, with dates and addresses); unreachable from the research IP (timeout): verify from the VM',
+    seeds=['https://opendata.mkrf.ru/opendata/7705851331-egrkn'],
+)
+_facts(
+    'fx-ru-rbth',
+    ['facts'],
+    'Russia Beyond: many "facts about Russian cities" pieces, for Place facts.',
+    cls='editorial',
+    off='owner decision: Russia Beyond is a TV-Novosti (RT) project, and RT is under EU sanctions: a legal and credibility call.',
+    seeds=['https://www.rbth.com/'],
+    sitemaps=['https://www.rbth.com/sitemap.xml'],
+    feeds=['https://www.rbth.com/rss/googlenews.xml'],
+    include=['^https?://www\\.rbth\\.com/(travel|history|arts)/\\d+-'],
+)
+_facts(
+    'gov-tm-altyn-asyr',
+    ['facts'],
+    'Turkmenistan: Altyn Asyr (state information portal): about the only Turkmen-place source found; state-controlled, uncritical, for Place facts.',
+    cls='official',
+    off="owner decision: State-controlled news portal; credibility call (it would be Turkmenistan's only ADD).",
+    seeds=['https://www.turkmenistan.gov.tm/tk'],
+    sitemaps=['http://www.turkmenistan.gov.tm/sitemap.xml'],
+    include=['^https?://www\\.turkmenistan\\.gov\\.tm/(en|ru|tk)/post/\\d+'],
+)
+_facts(
+    'fx-esu-ukraine',
+    ['facts', 'places'],
+    'Енциклопедія Сучасної України: Ukrainian towns, villages (Academy of Sciences), for Place facts and Places to see.',
+    cls='reference',
+    off='owner decision: Terms ban placing materials in databases for redistribution. We store only our own one-sentence facts: is that acceptable?',
+    seeds=['https://esu.com.ua/today'],
+    sitemaps=['https://esu.com.ua/sitemap.xml'],
+    feeds=['https://esu.com.ua/rss'],
+    include=['^https?://esu\\.com\\.ua/article-\\d+$'],
+)
+_facts(
+    'her-bg-ninkn-lists',
+    ['facts'],
+    'НИНКН register list files: history and curiosities of the places it covers, for Place facts.',
+    cls='official',
+    off='adapter pending: format / why: The oblast lists are downloadable documents (/documents/download/N, PDF/DOC). The HTML row above only cov…',
+    seeds=['https://www.ninkn.bg/'],
+)
+_facts(
+    'arch-md-bnrm',
+    ['facts'],
+    'Biblioteca Națională a Republicii Moldova: national calendar of anniversaries, local-history bibliographies of Moldovan towns and villages, for Place facts.',
+    cls='official',
+    depth=2,
+    seeds=['https://www.bnrm.md/'],
+    feeds=['https://www.bnrm.md/?feed=rss2'],
+    include=['^https?://www\\.bnrm\\.md/(\\?p=|index\\.php)'],
+)
+_facts(
+    'her-ro-inp-cimec',
+    ['facts', 'places'],
+    'INP: Direcția Patrimoniului Digital (cIMeC): Romanian heritage databases hub (monuments, museums, archaeology; distinct from ran.cimec.ro, which is already covered), for Place facts and Places to see.',
+    cls='official',
+    depth=2,
+    seeds=['https://cimec.ro/baze-de-date/'],
+    sitemaps=['https://cimec.ro/sitemap_index.xml'],
+    feeds=['https://cimec.ro/feed/'],
+    include=['^https?://cimec\\.ro/(baze-de-date|patrimoniu-mobil|id-03-istorie|documentare-3d)/'],
+)
+_facts(
+    'fx-ro-bucurestii-vechi-si-noi',
+    ['facts', 'places', 'walking_tours'],
+    'București Vechi și Noi: volunteer-written histories of Bucharest streets, buildings, people, for Place facts, Places to see and Free walking tours.',
+    cls='editorial',
+    seeds=['https://bucurestiivechisinoi.ro/'],
+    sitemaps=['https://bucurestiivechisinoi.ro/sitemap_index.xml'],
+    feeds=['https://bucurestiivechisinoi.ro/feed/'],
+    include=['^https?://bucurestiivechisinoi\\.ro/20[0-9]{2}/[0-9]{2}/'],
+)
+_facts(
+    'arch-by-nlb',
+    ['facts'],
+    'Национальная библиотека Беларуси: local-history and anniversary pages on Belarusian towns (Belarus otherwise thin in corpus), for Place facts.',
+    cls='official',
+    depth=2,
+    seeds=['https://nlb.by/content/'],
+    sitemaps=['https://www.nlb.by/sitemap.xml'],
+    include=['^https?://nlb\\.by/content/', '^https?://www\\.nlb\\.by/content/'],
+)
+_facts(
+    'her-by-museum-by',
+    ['facts', 'places', 'activities'],
+    'Museum.by: museums of Belarus: catalogue of Belarusian museums by town with histories of the sites, for Place facts, Places to see and Activities.',
+    cls='reference',
+    depth=2,
+    delay=10,
+    seeds=['https://museum.by/catalog'],
+    include=['^https?://museum\\.by/(node|catalog|news)/'],
+)
+_facts(
+    'fx-by-slounik',
+    ['facts', 'places'],
+    'Slounik.org: Belarusian dictionaries and encyclopedias: digitised Belarusian encyclopedias with entries on towns, villages, castles, for Place facts and Places to see.',
+    cls='reference',
+    depth=2,
+    seeds=['https://slounik.org/'],
+    feeds=['https://slounik.org/news.rss'],
+    include=['^https?://slounik\\.org/[a-z0-9]+/[0-9]+\\.html$|^/biblio'],
+)
+_facts(
+    'her-xk-cultural-bridge-prizren',
+    ['facts', 'places'],
+    "Cultural Bridge Prizren: Kosovo's 2016 permanent-protection list, Prizren monuments, UNESCO sites, for Place facts and Places to see.",
+    cls='editorial',
+    depth=2,
+    seeds=['https://culturalbridgepz.org/'],
+    sitemaps=['https://culturalbridgepz.org/wp-sitemap.xml'],
+    feeds=['https://culturalbridgepz.org/feed/'],
+    include=['^https?://culturalbridgepz\\.org/(kulturel-miras[^/]*|directory|unesco-[^/]+|[a-z0-9-]+)/$'],
+)
+_facts(
+    'gov-al-berat',
+    ['facts', 'places'],
+    'Bashkia Berat: Berat UNESCO town, its heritage and history pages, for Place facts and Places to see.',
+    cls='official',
+    depth=2,
+    seeds=['https://bashkiaberat.gov.al/'],
+    sitemaps=['https://bashkiaberat.gov.al/sitemap.xml.gz'],
+    feeds=['https://bashkiaberat.gov.al/feed/'],
+    include=['^https?://bashkiaberat\\.gov\\.al/(trashegimia-2|bashkia-berat-2|category)/'],
+)
+_facts(
+    'gov-al-tirana',
+    ['facts', 'places', 'activities'],
+    'Bashkia Tiranë: Pikat e interesit: Tirana points of interest with short histories, for Place facts, Places to see and Activities.',
+    cls='official',
+    llm=False,
+    depth=2,
+    seeds=['https://tirana.al/pikat-e-interesit'],
+    sitemaps=['https://tirana.al/sitemap.xml'],
+    include=['^https?://tirana\\.al/(pikat-e-interesit|faqe)/'],
+)
+_facts(
+    'gov-cy-famagusta',
+    ['facts', 'places'],
+    'Famagusta Municipality (Ammochostos, in exile): history of Famagusta and Varosha (Cyprus beyond Nicosia), for Place facts and Places to see.',
+    cls='official',
+    depth=2,
+    seeds=['https://www.famagusta.org.cy/famagusta-our-story-our-history'],
+    sitemaps=['https://www.famagusta.org.cy/sitemap.xml'],
+    include=['^https?://www\\.famagusta\\.org\\.cy/(famagusta-our-story-our-history|about-us|news)/?'],
+)
+_facts(
+    'her-de-lsa-lda',
+    ['facts', 'places'],
+    'Landesamt für Denkmalpflege und Archäologie Sachsen-Anhalt: Saxony-Anhalt monuments, archaeology finds (Nebra), regional history, for Place facts and Places to see.',
+    cls='official',
+    depth=2,
+    seeds=['https://www.lda-lsa.de/landesgeschichte'],
+    include=['^https?://www\\.lda-lsa\\.de/(denkmalpflege|archaeologie|landesgeschichte|fachdienste-und-serviceangebote)/'],
+)
+_facts(
+    'her-de-lsa-kulturstiftung',
+    ['facts', 'places', 'activities'],
+    'Kulturstiftung Sachsen-Anhalt (castles, palaces, cathedrals): Saxony-Anhalt castles, palaces, cathedrals (Moritzburg, Falkenstein), for Place facts, Places to see and Activities.',
+    cls='official',
+    llm=False,
+    depth=2,
+    seeds=['https://www.kulturstiftung-st.de/burgen-schloesser-dome/'],
+    sitemaps=['https://www.kulturstiftung-st.de/sitemap.xml'],
+    include=['^https?://www\\.kulturstiftung-st\\.de/burgen-schloesser-dome/'],
+)
+_facts(
+    'her-de-gartenreich',
+    ['facts', 'places', 'activities'],
+    'Kulturstiftung Dessau-Wörlitz (Gartenreich): Dessau-Wörlitz Garden Realm palaces and gardens, for Place facts, Places to see and Activities.',
+    cls='official',
+    depth=2,
+    seeds=['https://gartenreich.de/de/schloesser-u-gaerten'],
+    include=['^https?://gartenreich\\.de/de/(schloesser-u-gaerten|uebersicht|ausstellungen)/'],
+)
+_facts(
+    'her-de-th-schloesser',
+    ['facts', 'places', 'activities'],
+    "Stiftung Thüringer Schlösser und Gärten: Thuringia's state-owned palaces (Heidecksburg, Friedenstein, Dornburg), for Place facts, Places to see and Activities.",
+    cls='official',
+    depth=2,
+    seeds=['https://www.thueringerschloesser.de/schloesser-und-gaerten/'],
+    sitemaps=['https://www.thueringerschloesser.de/wp-sitemap.xml'],
+    include=['^https?://www\\.thueringerschloesser\\.de/(schloesser-und-gaerten|themen)/'],
+)
+_facts(
+    'her-de-th-klassik-weimar',
+    ['facts', 'places', 'walking_tours'],
+    'Klassik Stiftung Weimar: Weimar Classicism and Bauhaus UNESCO sites, Goethe/Schiller houses, for Place facts, Places to see and Free walking tours.',
+    cls='official',
+    llm=False,
+    depth=2,
+    delay=10,
+    seeds=['https://www.klassik-stiftung.de/themen/'],
+    sitemaps=['https://www.klassik-stiftung.de/sitemap.xml'],
+    include=['^https?://www\\.klassik-stiftung\\.de/(themen|ihr-besuch|digital)/'],
+)
+_facts(
+    'her-de-th-wartburg',
+    ['facts', 'places'],
+    'Wartburg-Stiftung: Wartburg castle history (Luther, Saint Elisabeth, the Wartburg festival), for Place facts and Places to see.',
+    cls='official',
+    seeds=['https://www.wartburg.de/welterbe-wartburg'],
+    include=['^https?://www\\.wartburg\\.de/(welterbe-wartburg|dauerausstellung|bildung)/?'],
+)
+_facts(
+    'her-de-mv-schloesser',
+    ['facts', 'places', 'activities'],
+    'Staatliche Schlösser und Gärten Mecklenburg-Vorpommern: MV state palaces (Schwerin, Güstrow, Ludwigslust), for Place facts, Places to see and Activities.',
+    cls='official',
+    depth=2,
+    seeds=['https://mv-schloesser.de/de/location/'],
+    include=['^https?://mv-schloesser\\.de/de/(location|tour|sammlungen)/'],
+)
+_facts(
+    'fx-de-mv-gutshaeuser',
+    ['facts', 'places'],
+    'Gutshäuser und Schlösser in Mecklenburg-Vorpommern: about 2,000 manor houses of MV villages with owners and building history, for Place facts and Places to see.',
+    cls='editorial',
+    depth=2,
+    seeds=['https://gutshaeuser.de/de/'],
+    sitemaps=['https://gutshaeuser.de/de/sitemap.xml'],
+)
+_facts(
+    'her-de-nrw-lvr-denkmalpflege',
+    ['facts', 'places'],
+    'LVR-Amt für Denkmalpflege im Rheinland: Rhineland monuments, Denkmal des Monats (lvr.de main host is not in corpus), for Place facts and Places to see.',
+    cls='official',
+    depth=2,
+    seeds=['https://www.lvr.de/denkmalpflege/'],
+    include=['^https?://www\\.lvr\\.de/denkmalpflege/'],
+)
+_facts(
+    'her-de-nrw-lwl-industriekultur',
+    ['facts', 'places'],
+    'LWL-Museen für Industriekultur: eight Westphalian industrial sites (Zeche Zollern, Henrichshütte) and their history, for Place facts and Places to see.',
+    cls='official',
+    depth=2,
+    seeds=['https://www.lwl-industriekultur.de/de/wissenschaft/'],
+    sitemaps=['https://www.lwl-industriekultur.de/sitemap.xml'],
+    include=['^https?://www\\.lwl-industriekultur\\.de/de/(wissenschaft|unser-museum|sammlung)/'],
+)
+_facts(
+    'tb-de-nrw-route-industriekultur',
+    ['facts', 'places', 'walking_tours'],
+    "Route der Industriekultur (RVR): Ruhr anchor points, workers' settlements, viewpoints, for Place facts, Places to see and Free walking tours.",
+    cls='official',
+    depth=2,
+    seeds=['https://www.route-industriekultur.ruhr/ankerpunkte/'],
+    sitemaps=['https://www.route-industriekultur.ruhr/sitemap_index.xml'],
+    include=['^https?://www\\.route-industriekultur\\.ruhr/(ankerpunkte|siedlungen|panoramen|touren)/'],
+)
+_facts(
+    'arch-de-nrw-ruhrmuseum',
+    ['facts', 'places'],
+    'Ruhr Museum (Zollverein): Ruhr regional history, for Place facts and Places to see.',
+    cls='official',
+    depth=2,
+    seeds=['https://ruhrmuseum.de/museum'],
+    sitemaps=['https://ruhrmuseum.de/sitemap.xml?sitemap=pages&cHash=15f7c2c4381bd6e2c80dfd66ad280376'],
+    include=['^https?://ruhrmuseum\\.de/(museum|ausstellungen|detail-aktuelles)/?'],
+)
+_facts(
+    'her-de-sl-voelklinger-huette',
+    ['facts', 'places', 'activities'],
+    "Weltkulturerbe Völklinger Hütte: Saarland's UNESCO ironworks and its history, for Place facts, Places to see and Activities.",
+    cls='official',
+    depth=2,
+    seeds=['https://voelklinger-huette.org/de/weltkulturerbe/'],
+    sitemaps=['https://voelklinger-huette.org/sitemap.xml'],
+    include=['^https?://voelklinger-huette\\.org/de/(weltkulturerbe|ueber-uns)/'],
+)
+_facts(
+    'fx-de-sl-saar-nostalgie',
+    ['facts'],
+    'Saar-Nostalgie (Saarland 1945–1959): the Saar Protectorate era (own currency, stamps, anthem, Olympic team), for Place facts.',
+    cls='community',
+    llm=False,
+    off='owner decision: community-written site; the place_fact kind takes official, reference and editorial sources only (kinds.toml). Allow community sources behind corroboration, or keep off?',
+    depth=2,
+    seeds=['https://saar-nostalgie.de/'],
+    include=['^https?://saar-nostalgie\\.de/[A-Za-z0-9_-]+\\.htm'],
+)
+_facts(
+    'arch-fr-archives-alsace',
+    ['facts', 'places'],
+    "Archives d'Alsace (CeA: Bas-Rhin + Haut-Rhin): Alsace commune histories, archive features (archives67.alsace.eu 403 -> skipped), for Place facts and Places to see.",
+    cls='official',
+    depth=2,
+    seeds=['https://archives.alsace.eu/actualites/'],
+    include=['^https?://archives\\.alsace\\.eu/(actualites|votre-recherche/precisions-historiques|informations-pratiques)/'],
+)
+_facts(
+    'fx-fr-alsace-histoire',
+    ['facts', 'places'],
+    "Fédération des Sociétés d'Histoire et d'Archéologie d'Alsace: local societies of Alsatian towns and villages, Revue d'Alsace, for Place facts and Places to see.",
+    cls='editorial',
+    depth=2,
+    seeds=['https://www.alsace-histoire.org/societes_affiliees/'],
+    sitemaps=['https://www.alsace-histoire.org/sitemap_index.xml'],
+    feeds=['https://www.alsace-histoire.org/feed/'],
+    include=['^https?://www\\.alsace-histoire\\.org/(societes_affiliees|revue-dalsace|actualites-[a-z-]+)/'],
+)
+_facts(
+    'arch-fr-archives-calvados',
+    ['facts', 'places'],
+    'Archives du Calvados: Calvados commune history features and exhibitions, for Place facts and Places to see.',
+    cls='official',
+    depth=2,
+    seeds=['https://archives.calvados.fr/page/'],
+    sitemaps=['https://archives.calvados.fr/sitemap.xml'],
+    include=['^https?://archives\\.calvados\\.fr/page/'],
+)
+_facts(
+    'arch-fr-archives-marne',
+    ['facts', 'places'],
+    'Archives départementales de la Marne: Marne/Champagne commune and WWI history features, for Place facts and Places to see.',
+    cls='official',
+    depth=2,
+    seeds=['https://archives.marne.fr/page/'],
+    sitemaps=['https://archives.marne.fr/sitemap.xml'],
+    include=['^https?://archives\\.marne\\.fr/page/'],
+)
+_facts(
+    'arch-fr-archives-vosges',
+    ['facts', 'places'],
+    'Archives départementales des Vosges: Vosges commune history features, for Place facts and Places to see.',
+    cls='official',
+    depth=2,
+    seeds=['https://archives.vosges.fr/actualites/'],
+    include=['^https?://archives\\.vosges\\.fr/(actualites|preparer-ses-recherches|20[0-9]{2})/'],
+)
+_facts(
+    'arch-fr-normannia',
+    ['facts', 'places'],
+    'Normannia: patrimoine écrit de Normandie: Normandy written heritage, local-history exhibits (Omeka), for Place facts and Places to see.',
+    cls='official',
+    depth=2,
+    seeds=['https://www.normannia.info/exhibits'],
+    sitemaps=['https://www.normannia.info/sitemap.xml'],
+    include=['^https?://www\\.normannia\\.info/(exhibits|collections|ark-)'],
+)
+_facts(
+    'fx-fr-patrimoine-normand',
+    ['facts', 'places'],
+    'Patrimoine Normand (magazine): towns, châteaux, abbeys and history of Normandy (has a shop: product paths excluded), for Place facts and Places to see.',
+    cls='editorial',
+    depth=2,
+    seeds=['https://patrimoinenormand.com/articles/'],
+    sitemaps=['https://patrimoinenormand.com/sitemap.xml'],
+    feeds=['https://patrimoinenormand.com/feed'],
+    include=['^https?://patrimoinenormand\\.com/(articles|lieux|rubrique)/|\\.html$'],
+)
+_facts(
+    'her-it-veneto-irvv',
+    ['facts', 'places'],
+    'Istituto Regionale Ville Venete: catalogo: catalogue of the ~4,000 Venetian villas by comune, for Place facts and Places to see.',
+    cls='official',
+    depth=2,
+    seeds=['https://irvv.net/'],
+    include=['^https?://irvv\\.net/(km|ae[0-9]+)/'],
+)
+_facts(
+    'her-it-pi-venaria',
+    ['facts', 'places', 'activities'],
+    'La Venaria Reale (Residenze Reali Sabaude): Savoy royal residence history (Piemonte), for Place facts, Places to see and Activities.',
+    cls='official',
+    depth=2,
+    seeds=['https://lavenaria.it/esplora/'],
+    sitemaps=['https://lavenaria.it/sitemap.xml'],
+    include=['^https?://lavenaria\\.it/(it/)?(esplora|visita|aree-tematiche)/'],
+)
+_facts(
+    'tb-it-piemonte-italia',
+    ['facts', 'places', 'activities'],
+    'Piemonte Italia (Regione Piemonte): Piedmont towns, castles, Sacri Monti, UNESCO landscapes, for Place facts, Places to see and Activities.',
+    cls='official',
+    depth=2,
+    delay=10,
+    seeds=['https://piemonteitalia.eu/it/cultura'],
+    feeds=['https://piemonteitalia.eu/it/rss.xml'],
+    include=['^https?://piemonteitalia\\.eu/it/(cultura|natura|enogastronomia)/'],
+)
+_facts(
+    'her-it-cm-pompeii',
+    ['facts', 'places', 'activities'],
+    'Parco Archeologico di Pompei: Pompeii, Herculaneum region sites, domus histories, new-find press releases (Campania), for Place facts, Places to see and Activities.',
+    cls='official',
+    depth=2,
+    seeds=['https://pompeiisites.org/parco-archeologico-di-pompei/'],
+    sitemaps=['https://pompeiisites.org/sitemap_index.xml'],
+    include=['^https?://pompeiisites\\.org/(parco-archeologico-di-pompei|boscoreale|infodomus|comunicati)/'],
+)
+_facts(
+    'her-it-pu-cartapulia',
+    ['facts', 'places'],
+    "CartApulia: Carta dei Beni Culturali della Puglia: catalogue of Puglia's monuments, masserie, sites per comune, for Place facts and Places to see.",
+    cls='official',
+    depth=2,
+    seeds=['https://www.cartapulia.it/esplora-la-carta'],
+    include=['^https?://www\\.cartapulia\\.it/(-/|esplora-la-carta|il-catalogo)'],
+)
+_facts(
+    'fx-it-mondimedievali',
+    ['facts', 'places'],
+    "Mondi Medievali: castelli d'Italia: castles of every Italian region incl. Sicily, Campania, Puglia, for Place facts and Places to see.",
+    cls='editorial',
+    depth=2,
+    seeds=['https://www.mondimedievali.net/Castelli/'],
+    include=['^https?://www\\.mondimedievali\\.net/Castelli/'],
+)
+_facts(
+    'od-it-comuni-italiani',
+    ['facts'],
+    'Comuni-Italiani.it: per-comune data (altitude, area, patron saint and feast day, demonym), for Place facts.',
+    cls='reference',
+    depth=2,
+    seeds=['https://www.comuni-italiani.it/'],
+    include=['^https?://www\\.comuni-italiani\\.it/[0-9]{3}/[0-9]{3}/'],
+)
+_facts(
+    'fx-es-ga-consello-cultura',
+    ['facts', 'places'],
+    'Consello da Cultura Galega: Galician heritage, place and toponymy specials, document collections, for Place facts and Places to see.',
+    cls='official',
+    depth=2,
+    delay=10,
+    seeds=['https://consellodacultura.gal/fondos_documentais/'],
+    sitemaps=['https://consellodacultura.gal/sitemap.xml'],
+    include=['^https?://consellodacultura\\.gal/(fondos_documentais|publicacion\\.php|especial|paxina\\.php)'],
+)
+_facts(
+    'fx-es-ga-culturagalega',
+    ['facts', 'places'],
+    'culturagalega.gal (CCG news): Galician culture and heritage reports, for Place facts and Places to see.',
+    cls='official',
+    llm=False,
+    delay=10,
+    seeds=['https://culturagalega.gal/reportaxes.php', 'https://culturagalega.gal/novas.xml'],
+    include=['^https?://culturagalega\\.gal/(noticia|reportaxes)\\.php'],
+)
+_facts(
+    'fx-es-ga-galicia-encantada',
+    ['facts', 'places'],
+    'Galicia Encantada: legends and traditions tied to Galician parishes, castros, lakes, for Place facts and Places to see.',
+    cls='editorial',
+    depth=2,
+    seeds=['https://galiciaencantada.com/categorias.asp'],
+    feeds=['https://galiciaencantada.com/rss.asp'],
+    include=['^https?://galiciaencantada\\.com/(categoria|contenido|lenda)\\.asp'],
+)
+_facts(
+    'arch-fi-helsinki-city-museum',
+    ['facts', 'places', 'walking_tours'],
+    'Helsingin kaupunginmuseo (Helsinki City Museum): Helsinki district and building history, archaeology, for Place facts, Places to see and Free walking tours.',
+    cls='official',
+    depth=2,
+    seeds=['https://www.helsinginkaupunginmuseo.fi/'],
+    sitemaps=['http://www.helsinginkaupunginmuseo.fi/sitemap_index.xml'],
+    feeds=['https://www.helsinginkaupunginmuseo.fi/feed/'],
+    include=['^https?://www\\.helsinginkaupunginmuseo\\.fi/[a-z0-9-]+/$'],
+)
+_facts(
+    'arch-dk-cph-museum',
+    ['facts', 'places'],
+    'Københavns Museum: Copenhagen history, archaeology (Metro digs). Note: subdomain of kk.dk, which is in corpus; distinct site, for Place facts and Places to see.',
+    cls='official',
+    depth=2,
+    seeds=['https://cphmuseum.kk.dk/om-museet'],
+    sitemaps=['https://cphmuseum.kk.dk/sitemap.xml'],
+    include=['^https?://cphmuseum\\.kk\\.dk/(om-museet|det-sker|vi-tilbyder|en)/'],
+)
+_facts(
+    'fx-dk-inden-for-voldene',
+    ['facts', 'places', 'walking_tours'],
+    "Inden for Voldene (Copenhagen streets): history of every street and house inside Copenhagen's old ramparts, for Place facts, Places to see and Free walking tours.",
+    cls='editorial',
+    depth=2,
+    seeds=['https://www.indenforvoldene.dk/gader'],
+    sitemaps=['https://www.indenforvoldene.dk/wp-sitemap.xml'],
+    feeds=['https://www.indenforvoldene.dk/feed'],
+    include=['^https?://www\\.indenforvoldene\\.dk/(gader|diverse|[a-z0-9-]+)/'],
+)
+_facts(
+    'arch-dk-arkiv-dk',
+    ['facts', 'places'],
+    'arkiv.dk (Danish local archives): local-history records and stories from 600+ Danish local archives (towns and villages), for Place facts and Places to see.',
+    cls='official',
+    depth=2,
+    seeds=['https://arkiv.dk/historie'],
+    include=['^https?://arkiv\\.dk/(historie|vis|arkiver)/'],
+)
+_facts(
+    'arch-fo-tjodsavnid',
+    ['facts', 'places'],
+    'Tjóðsavnið (Faroe Islands National Museum): Faroese heritage articles, the object of the month, nature and village history (savn.fo is the same site), for Place facts and Places to see.',
+    cls='official',
+    depth=2,
+    seeds=['https://www.tjodsavnid.fo/greinir'],
+    sitemaps=['https://www.tjodsavnid.fo/sitemap.xml'],
+    include=['^https?://www\\.tjodsavnid\\.fo/(greinir|gripurin|mentan|nattura)/'],
+)
+_facts(
+    'fx-fo-snar',
+    ['facts', 'places'],
+    'Snar.fo (Faroese learning portal): Faroese history and place themes for schools, for Place facts and Places to see.',
+    cls='editorial',
+    depth=2,
+    seeds=['https://snar.fo/temasavn'],
+    include=['^https?://snar\\.fo/(temasavn|skjol)/'],
+)
+_facts(
+    'fx-se-samer',
+    ['facts', 'places'],
+    'Samer.se (Sámi information centre, Sametinget): Sápmi history, Sámi place names and siida areas, for Place facts and Places to see.',
+    cls='official',
+    depth=2,
+    seeds=['https://samer.se/historia'],
+    include=['^https?://samer\\.se/(historia|sapmi|samhalle|naringar|sprak|religion)/?'],
+)
+_facts(
+    'gov-se-sametinget',
+    ['facts'],
+    'Sametinget (Sweden): Sámi language and place-name work, culture, for Place facts.',
+    cls='official',
+    seeds=['https://sametinget.se/kultur'],
+    include=['^https?://sametinget\\.se/(kultur|sprak|rennaring)/?'],
+)
+_facts(
+    'gov-no-sametinget',
+    ['facts'],
+    'Sámediggi / Sametinget (Norway): Sámi place-name and language facts (low volume), for Place facts.',
+    cls='official',
+    seeds=['https://sametinget.no/sprak/'],
+    include=['^https?://sametinget\\.no/(sprak|om-sametinget)/'],
+)
+_facts(
+    'arch-fi-siida',
+    ['facts', 'places', 'activities'],
+    'Siida (Sámi Museum, Inari): Sámi culture and Inari region history, for Place facts, Places to see and Activities.',
+    cls='official',
+    depth=2,
+    seeds=['https://siida.fi/saamelaismuseo/'],
+    sitemaps=['https://siida.fi/wp-sitemap.xml'],
+    feeds=['https://siida.fi/feed/'],
+    include=['^https?://siida\\.fi/(saamelaismuseo|nayttelyt|en)/'],
+)
+_facts(
+    'arch-se-ajtte',
+    ['facts', 'places'],
+    'Ájtte: Swedish Mountain and Sámi Museum (Jokkmokk): Laponia and Sámi heritage, Jokkmokk history, for Place facts and Places to see.',
+    cls='official',
+    depth=2,
+    seeds=['https://www.ajtte.com/forskning/'],
+    sitemaps=['https://www.ajtte.com/wp-sitemap.xml'],
+    feeds=['https://www.ajtte.com/feed/'],
+    include=['^https?://www\\.ajtte\\.com/(forskning|forskningsnyheter|publikationer|aktuellt)/'],
+)
+_facts(
+    'arch-se-jamtli',
+    ['facts', 'places'],
+    'Jamtli (Jämtlands läns museum): Jämtland/Härjedalen places, cultural environments, for Place facts and Places to see.',
+    cls='official',
+    depth=2,
+    seeds=['https://www.jamtli.com/kulturmiljo/'],
+    sitemaps=['https://www.jamtli.com/sitemap_index.xml'],
+    include=['^https?://www\\.jamtli\\.com/(kulturmiljo|samlingar|se-gora)/'],
+)
+_facts(
+    'arch-se-kalmar-lansmuseum',
+    ['facts', 'places'],
+    'Kalmar läns museum: Kalmar county archaeology, buildings, the Kronan wreck, for Place facts and Places to see.',
+    cls='official',
+    depth=2,
+    seeds=['https://kalmarlansmuseum.se/arkeologi/'],
+    sitemaps=['https://kalmarlansmuseum.se/sitemap_index.xml'],
+    include=['^https?://kalmarlansmuseum\\.se/(arkeologi|byggnadsvard|utstallningar)/'],
+)
+_facts(
+    'arch-se-kulturarv-vastmanland',
+    ['facts', 'places'],
+    'Kulturarv Västmanland: Västmanland place and building database, for Place facts and Places to see.',
+    cls='official',
+    depth=2,
+    seeds=['https://kulturarvvastmanland.se/databas/'],
+    sitemaps=['https://kulturarvvastmanland.se/sitemap.xml'],
+    feeds=['https://kulturarvvastmanland.se/feed/'],
+    include=['^https?://kulturarvvastmanland\\.se/(databas|kulturmiljounderlag|bocker-om-vastmanland)/'],
+)
+_facts(
+    'arch-se-gavleborg',
+    ['facts', 'places'],
+    'Länsmuseet Gävleborg: Hälsingland farmhouses (UNESCO), Gävleborg places, for Place facts and Places to see.',
+    cls='official',
+    depth=2,
+    seeds=['https://lansmuseetgavleborg.se/kulturmiljo/'],
+    sitemaps=['https://lansmuseetgavleborg.se/sitemap.xml'],
+    feeds=['https://lansmuseetgavleborg.se/feed/'],
+    include=['^https?://lansmuseetgavleborg\\.se/(kulturmiljo|samlingar|se-gora)/'],
+)
+_facts(
+    'arch-se-sormland',
+    ['facts', 'places'],
+    'Sörmlands museum: Södermanland places and collections, for Place facts and Places to see.',
+    cls='official',
+    depth=2,
+    seeds=['https://sormlandsmuseum.se/utforska/'],
+    include=['^https?://sormlandsmuseum\\.se/(utforska|samlingar|content)/'],
+)
+_facts(
+    'arch-se-uppland',
+    ['facts', 'places'],
+    'Upplandsmuseet: Uppland, Gamla Uppsala royal mounds, for Place facts and Places to see.',
+    cls='official',
+    depth=2,
+    seeds=['https://www.upplandsmuseet.se/'],
+    include=['^https?://www\\.upplandsmuseet\\.se/(stiftelsen-upplandsmuseet|gamla-uppsala-museum|disagarden)/'],
+)
+_facts(
+    'arch-se-vastergotland',
+    ['facts', 'places'],
+    'Västergötlands museum: Västergötland cultural environments, for Place facts and Places to see.',
+    cls='official',
+    depth=2,
+    seeds=['https://vastergotlandsmuseum.se/kulturmiljo/'],
+    sitemaps=['https://vastergotlandsmuseum.se/sitemap.xml'],
+    feeds=['https://vastergotlandsmuseum.se/feed/'],
+    include=['^https?://vastergotlandsmuseum\\.se/(kulturmiljo|samlingar|om-museet)/'],
+)
+_facts(
+    'arch-se-vasterbotten',
+    ['facts', 'places'],
+    'Västerbottens museum: Västerbotten and Umeå history, Sámi and settler heritage, for Place facts and Places to see.',
+    cls='official',
+    depth=2,
+    seeds=['https://vbm.se/gammlia/'],
+    feeds=['https://vbm.se/feed/'],
+    include=['^https?://vbm\\.se/(gammlia|utstallningar|aktuellt|nyheter)/'],
+)
+_facts(
+    'arch-se-norrbotten',
+    ['facts', 'places'],
+    'Norrbottens museum: Norrbotten, Gammelstad church town, Torne valley, for Place facts and Places to see.',
+    cls='official',
+    depth=2,
+    seeds=['https://norrbottensmuseum.se/mer-fraan-museet/'],
+    sitemaps=['https://norrbottensmuseum.se/sitemap.xml'],
+    include=['^https?://norrbottensmuseum\\.se/(mer-fraan-museet|utstaellningar|nyhetsarkiv)/'],
+)
+_facts(
+    'arch-pl-muzeum-krakowa',
+    ['facts', 'places', 'walking_tours'],
+    'Muzeum Krakowa: Kraków history at its branches (Rynek Underground, Schindler factory, Town Hall Tower), for Place facts, Places to see and Free walking tours.',
+    cls='official',
+    depth=2,
+    seeds=['https://muzeumkrakowa.pl/oddzialy'],
+    include=['^https?://muzeumkrakowa\\.pl/(oddzialy|wystawy|en)/'],
+)
+_facts(
+    'arch-pl-muzeum-gdanska',
+    ['facts', 'places', 'walking_tours'],
+    'Muzeum Gdańska: Gdańsk history (Artus Court, Westerplatte, Main Town Hall), for Place facts, Places to see and Free walking tours.',
+    cls='official',
+    depth=2,
+    seeds=['https://muzeumgdansk.pl/odkryj-gdansk-przez-historie/'],
+    include=['^https?://muzeumgdansk\\.pl/(oddzialy-muzeum|odkryj-gdansk-przez-historie|publikacje|o-muzeum-gdanska)/'],
+)
+_facts(
+    'fx-pl-pomeranica',
+    ['facts', 'places'],
+    'Encyklopedia Pomorza Zachodniego (pomeranica.pl): Szczecin and West Pomeranian towns and villages (encyklopedia.szczecin.pl redirects here), for Place facts and Places to see.',
+    cls='reference',
+    depth=2,
+    seeds=['https://pomeranica.pl/wiki/Strona_g%C5%82%C3%B3wna'],
+    feeds=['https://pomeranica.pl/wiki/index.php?title=Specjalna:Ostatnie_zmiany&feed=atom'],
+    include=['^https?://pomeranica\\.pl/wiki/[^:]+$'],
+)
+_facts(
+    'fx-pl-fotopolska',
+    ['facts', 'places'],
+    'Fotopolska.eu: per-town and per-building history notes with old photos (Wrocław, Katowice: covers the Wrocław gap), for Place facts and Places to see.',
+    cls='community',
+    llm=False,
+    off='owner decision: community-written site; the place_fact kind takes official, reference and editorial sources only (kinds.toml). Allow community sources behind corroboration, or keep off?',
+    depth=2,
+    seeds=['https://fotopolska.eu/'],
+    include=['^https?://fotopolska\\.eu/(Polska|[A-Z][a-z]+)/'],
+)
+_facts(
+    'fx-cz-encyklopedie-praha2',
+    ['facts', 'places', 'walking_tours'],
+    'Encyklopedie Prahy 2: buildings, streets and people of Prague 2 (Vinohrady, Nusle, Vyšehrad), for Place facts, Places to see and Free walking tours.',
+    cls='official',
+    depth=2,
+    seeds=['https://encyklopedie.praha2.cz/'],
+    sitemaps=['https://encyklopedie.praha2.cz/sitemap.xml'],
+    include=['^https?://encyklopedie\\.praha2\\.cz/(budova|osobnost|udalost|misto|promeny-v-case|node)/'],
+)
+_facts(
+    'her-cz-npu',
+    ['facts', 'places', 'activities'],
+    'Národní památkový ústav: Czech state castles and chateaux, heritage news (catalogue pamatkovykatalog.cz already covered), for Place facts, Places to see and Activities.',
+    cls='official',
+    depth=2,
+    seeds=['https://npu.cz/cs/hrady-a-zamky'],
+    sitemaps=['https://npu.cz/sitemap.xml'],
+    include=['^https?://npu\\.cz/cs/(hrady-a-zamky|pamatkova-pece|novinky)/'],
+)
+_facts(
+    'fx-cz-drobne-pamatky',
+    ['facts', 'places'],
+    'Drobné památky: wayside crosses, chapels and small monuments of Czech villages with history, for Place facts and Places to see.',
+    cls='community',
+    llm=False,
+    off='owner decision: community-written site; the place_fact kind takes official, reference and editorial sources only (kinds.toml). Allow community sources behind corroboration, or keep off?',
+    depth=2,
+    seeds=['https://www.drobnepamatky.cz/druhy-pamatek'],
+    include=['^https?://www\\.drobnepamatky\\.cz/node/[0-9]+$'],
+)
+_facts(
+    'fx-cz-vets',
+    ['facts', 'places'],
+    'Spolek pro vojenská pietní místa: war memorials in every Czech/Slovak town and village with history, for Place facts and Places to see.',
+    cls='community',
+    llm=False,
+    off='owner decision: community-written site; the place_fact kind takes official, reference and editorial sources only (kinds.toml). Allow community sources behind corroboration, or keep off?',
+    depth=2,
+    seeds=['https://www.vets.cz/vpm/'],
+    feeds=['https://www.vets.cz/feed/'],
+    include=['^https?://www\\.vets\\.cz/vpm/[0-9]+-[a-z0-9-]+/$'],
+)
+_facts(
+    'fx-levantine-heritage',
+    ['facts', 'places'],
+    'Levantine Heritage Foundation: Levantine communities of Izmir, Istanbul, Cyprus and the east Mediterranean (low volume), for Place facts and Places to see.',
+    cls='editorial',
+    seeds=['https://levantineheritage.com/'],
+    include=['^https?://levantineheritage\\.com/[a-z0-9-]+\\.html?$|^/pdf/'],
+)
+_facts(
+    'arch-ro-biblioteca-arad',
+    ['facts'],
+    'Biblioteca Digitală Arad (Omeka S): history and curiosities of the places it covers, for Place facts.',
+    cls='reference',
+    off="adapter pending: format / why: Omeka S REST JSON (/api/items) plus PDF scans. Holds Coriolan Suciu's *Dicționar istoric al localităților…",
+    seeds=['https://digital.bibliotecaarad.ro/'],
+)
+_facts(
+    'arch-ro-bcu-cluj',
+    ['facts'],
+    'Biblioteca Digitală BCU Cluj (DSpace): history and curiosities of the places it covers, for Place facts.',
+    cls='reference',
+    off='adapter pending: format / why: DSpace OAI-PMH / RSS (/feed/rss_2.0/site) plus PDF scans. Holds Transylvanian locality dictionaries (1909…',
+    seeds=['https://dspace.bcucluj.ro/'],
+)
+_facts(
+    'arch-se-digitaltmuseum',
+    ['facts'],
+    "A huge Swedish/Norwegian museum object database (place-tagged). Per-object licences, many…: A huge Swedish/Norwegian museum object database (place-tagged). Per-object licences, many CC. The terms say that for BONO-licensed works 'use for developing artificial intelligence, such as through text and data mining'…, for Place facts.",
+    cls='reference',
+    off='owner decision: Terms require a BONO agreement for TDM/AI on BONO-licensed works only. ADD excluding BONO objects, or SKIP?',
+    seeds=['https://digitaltmuseum.se/'],
+)
+_facts(
+    'fx-proleksis-hr',
+    ['facts', 'places'],
+    'Proleksis enciklopedija (LZMK): short entries on Croatian and world towns, islands, regions, countries, for Place facts and Places to see.',
+    cls='reference',
+    depth=2,
+    seeds=['https://proleksis.lzmk.hr/drzave-svijeta/'],
+    feeds=['https://proleksis.lzmk.hr/feed/'],
+    include=['^https?://proleksis\\.lzmk\\.hr/[0-9]+/$|^/drzave-svijeta/'],
+)
+_facts(
+    'her-rs-beograd-nasledje',
+    ['facts', 'places', 'walking_tours'],
+    'Zavod za zaštitu spomenika kulture grada Beograda: Digitalni registar: Belgrade cultural-property register by municipality, with history of each building, for Place facts, Places to see and Free walking tours.',
+    cls='official',
+    depth=2,
+    seeds=['https://beogradskonasledje.rs/skpz-po-opstinama/'],
+    sitemaps=['https://beogradskonasledje.rs/sitemap_index.xml'],
+    feeds=['https://beogradskonasledje.rs/feed/'],
+    include=['^https?://beogradskonasledje\\.rs/(kd|skpz-po-opstinama|kulturna-dobra)/'],
+)
+_facts(
+    'her-rs-vojvodina-pzzzsk',
+    ['facts', 'places'],
+    'Pokrajinski zavod za zaštitu spomenika kulture (Vojvodina): Vojvodina monuments and conservation news (Petrovaradin, Novi Sad, Sremski Karlovci), for Place facts and Places to see.',
+    cls='official',
+    depth=2,
+    seeds=['https://pzzzsk.rs/'],
+    sitemaps=['https://pzzzsk.rs/wp-sitemap.xml'],
+    feeds=['https://pzzzsk.rs/feed/'],
+    include=['^https?://pzzzsk\\.rs/(sr-latn/)?(delatnosti|kulturna-dobra|[^/]+)/$'],
+)
+_facts(
+    'her-al-iktk',
+    ['facts', 'places'],
+    'Instituti Kombëtar i Trashëgimisë Kulturore (Albania): Albanian national cultural-heritage assets and monument decisions, for Place facts and Places to see.',
+    cls='official',
+    depth=2,
+    seeds=['https://iktk.gov.al/pasuri-kulturore/'],
+    sitemaps=['https://iktk.gov.al/wp-sitemap.xml'],
+    feeds=['https://iktk.gov.al/feed/'],
+    include=['^https?://iktk\\.gov\\.al/(pasuri-kulturore|publikime)/'],
+)
+_facts(
+    'her-ba-kons',
+    ['facts', 'places'],
+    'Komisija za očuvanje nacionalnih spomenika BiH: decisions designating national monuments of Bosnia and Herzegovina, each with a historical description, for Place facts and Places to see.',
+    cls='official',
+    depth=2,
+    seeds=['https://kons.gov.ba/'],
+    include=['^https?://kons\\.gov\\.ba/content/'],
+)
+_facts(
+    'arch-ba-muzej-sarajeva',
+    ['facts', 'places'],
+    'Muzej Sarajeva: history of Sarajevo and its branch sites (Svrzo house, Brusa bezistan, Despić house), for Place facts and Places to see.',
+    cls='official',
+    depth=2,
+    seeds=['https://www.muzejsarajeva.ba/depandansi/'],
+    feeds=['https://www.muzejsarajeva.ba/feed/'],
+    include=['^https?://www\\.muzejsarajeva\\.ba/(depandansi|Depandansi|o-muzeju|novosti|digitalni-fundus)/'],
+)
+_facts(
+    'her-chwb',
+    ['facts', 'places'],
+    'Cultural Heritage without Borders: restored monuments in Kosovo, Albania, BiH with short histories (low volume), for Place facts and Places to see.',
+    cls='editorial',
+    seeds=['https://chwb.org/'],
+    sitemaps=['https://chwb.org/wp-sitemap.xml'],
+    include=['^https?://chwb\\.org/(albania|kosovo|bih|[a-z]+)/'],
+)
+_facts(
+    'tb-bg-bts-100nto',
+    ['facts', 'places', 'activities'],
+    'Bulgarian Tourist Union (100 National Tourist Sites): the 100 National Tourist Sites of Bulgaria with short place histories, for Place facts, Places to see and Activities.',
+    cls='official',
+    depth=2,
+    delay=10,
+    seeds=['https://www.btsbg.org/nacionalni-dvizheniya'],
+    include=['^https?://www\\.btsbg\\.org/(nacionalni-dvizheniya|sites|istoriya-na-bts)/'],
+)
+_facts(
+    'arch-bg-sofia-history-museum',
+    ['facts', 'places'],
+    'Regional History Museum Sofia: history of Sofia and its museum sites (Pravets, Koprivshtitsa branches), for Place facts and Places to see.',
+    cls='official',
+    depth=2,
+    seeds=['https://sofiahistorymuseum.bg/bg/'],
+    include=['^https?://sofiahistorymuseum\\.bg/(bg|en)/'],
+)
+_facts(
+    'arch-ro-muzeul-bucurestiului',
+    ['facts', 'places'],
+    'Muzeul Municipiului București: Bucharest history, historic houses (Suțu Palace, Filipescu-Cesianu house), museum blog, for Place facts and Places to see.',
+    cls='official',
+    depth=2,
+    seeds=['https://muzeulbucurestiului.ro/muzee.html'],
+    feeds=['https://muzeulbucurestiului.ro/feed/'],
+    include=['^https?://muzeulbucurestiului\\.ro/(muzee|blog|colectii|en)'],
+)
+_facts(
+    'fx-kastra-greek-castles',
+    ['facts', 'places'],
+    'Kastra.eu: Greek Castles: every medieval and later castle, fort and tower in Greece with history and dates, for Place facts and Places to see.',
+    cls='editorial',
+    depth=2,
+    seeds=['https://www.kastra.eu/home__en.php', 'https://www.kastra.eu/site-map.xml'],
+    include=['^https?://www\\.kastra\\.eu/(castle|kastre|fndkof)[a-z]*\\.php'],
+)
+_facts(
+    'gov-cy-nicosia',
+    ['facts', 'places', 'walking_tours'],
+    'Nicosia Municipality: history of Nicosia, the walled city, monuments, for Place facts, Places to see and Free walking tours.',
+    cls='official',
+    depth=2,
+    seeds=['https://www.nicosia.org.cy/el-GR/home/'],
+    include=['^https?://www\\.nicosia\\.org\\.cy/(el-GR|en-GB)/(informations|discover|nicosia)/'],
+)
+_facts(
+    'her-mt-heritage-malta',
+    ['facts', 'places', 'activities'],
+    "Heritage Malta: Malta's state sites (Ħal Saflieni, Ġgantija, forts) with history, for Place facts, Places to see and Activities.",
+    cls='official',
+    llm=False,
+    depth=2,
+    seeds=['https://heritagemalta.mt/explore/'],
+    include=['^https?://heritagemalta\\.mt/explore/'],
+)
+_facts(
+    'arch-lu-citymuseum',
+    ['facts', 'places'],
+    'Lëtzebuerg City Museum: history of Luxembourg City, for Place facts and Places to see.',
+    cls='official',
+    llm=False,
+    depth=2,
+    seeds=['https://citymuseum.lu/le-musee/'],
+    sitemaps=['https://citymuseum.lu/sitemap.xml'],
+    feeds=['https://citymuseum.lu/feed/'],
+    include=['^https?://citymuseum\\.lu/(le-musee|expositions|exhibition|de|en)/'],
+)
+_facts(
+    'fx-lu-industrie',
+    ['facts', 'places'],
+    "industrie.lu: industrial history of Luxembourg: histories of Luxembourg towns' industries, hotels, cafés, railways, mines, for Place facts and Places to see.",
+    cls='editorial',
+    depth=2,
+    seeds=['https://industrie.lu/'],
+    include=['^https?://industrie\\.lu/[A-Za-z0-9_-]+\\.html$|^/index\\.php'],
+)
+_facts(
+    'gov-ad-cultura',
+    ['facts', 'places'],
+    "Govern d'Andorra: Cultura: Andorran heritage and Romanesque churches (low volume), for Place facts and Places to see.",
+    cls='official',
+    seeds=['https://www.govern.ad/ca/tematiques/cultura-i-esports'],
+    include=['^https?://www\\.govern\\.ad/ca/tematiques/cultura'],
+)
+_facts(
+    'gov-mc-palais',
+    ['facts', 'places'],
+    "Palais Princier de Monaco: history of the Prince's Palace and the Grimaldi dynasty, for Place facts and Places to see.",
+    cls='official',
+    depth=2,
+    seeds=['https://palais.mc/fr/'],
+    include=['^https?://palais\\.mc/(fr|en)/(le-palais|histoire|la-famille-princiere)'],
+)
+_facts(
+    'gov-mc-gouv',
+    ['facts', 'places'],
+    'Gouvernement Princier de Monaco: Monaco institutions, history, territory facts, for Place facts and Places to see.',
+    cls='official',
+    depth=2,
+    seeds=['https://www.gouv.mc/'],
+    feeds=['https://www.gouv.mc/rss/feed/portail-gouv-actualites-fr'],
+    include=['^https?://www\\.gouv\\.mc/(gouvernement-et-institutions|action-gouvernementale)/'],
+)
+_facts(
+    'her-sm-musei-di-stato',
+    ['facts', 'places'],
+    'Istituti Culturali della Repubblica di San Marino: the Three Towers, Palazzo Pubblico and state museums of San Marino, for Place facts and Places to see.',
+    cls='official',
+    seeds=['https://museidistato.sm/'],
+    include=['^https?://museidistato\\.sm/[A-Za-z]+\\.html$'],
+)
+_facts(
+    'gov-va-vaticanstate',
+    ['facts', 'places'],
+    'Stato della Città del Vaticano: Vatican City State facts, geography, history, monuments, for Place facts and Places to see.',
+    cls='official',
+    depth=2,
+    seeds=['https://vaticanstate.va/it/stato-e-governo/note-generali.html'],
+    include=['^https?://vaticanstate\\.va/(it|en)/(stato-e-governo|monumenti)'],
+)
+_facts(
+    'arch-li-landesmuseum',
+    ['facts', 'places'],
+    'Liechtensteinisches LandesMuseum: history of Liechtenstein, for Place facts and Places to see.',
+    cls='official',
+    depth=2,
+    seeds=['https://www.landesmuseum.li/en/'],
+    include=['^https?://www\\.landesmuseum\\.li/(de|en)/'],
+)
+_facts(
+    'arch-li-e-archiv',
+    ['facts'],
+    'Landesarchiv Liechtenstein e-archiv: timeline and source editions of Liechtenstein history (dated events per place), for Place facts.',
+    cls='official',
+    depth=2,
+    seeds=['https://e-archiv.li/zeitleiste.aspx'],
+    include=['^https?://e-archiv\\.li/(textDetail|editionAz|zeitleiste)\\.aspx'],
+)
+_facts(
+    'arch-is-borgarsogusafn',
+    ['facts', 'places', 'activities'],
+    'Borgarsögusafn Reykjavíkur (Reykjavík City Museum): Reykjavík history (Árbær, Viðey, Settlement exhibition, Maritime museum), for Place facts, Places to see and Activities.',
+    cls='official',
+    depth=2,
+    seeds=['https://borgarsogusafn.is/en'],
+    include=['^https?://borgarsogusafn\\.is/(en/)?(syningar|um-borgarsoegusafn|myndasafn)'],
+)
+_facts(
+    'arch-is-thjodminjasafn',
+    ['facts', 'places'],
+    "Þjóðminjasafn Íslands (National Museum of Iceland): Icelandic heritage, historic houses and turf churches in the museum's care, for Place facts and Places to see.",
+    cls='official',
+    depth=2,
+    seeds=['https://www.thjodminjasafn.is/minjar-og-saga'],
+    sitemaps=['https://www.thjodminjasafn.is/sitemap.xml'],
+    include=['^https?://www\\.thjodminjasafn\\.is/(minjar-og-saga|en/heritage|safneign-og-rannsoknir)/'],
+)
+_facts(
+    'fx-is-heimaslod',
+    ['facts', 'places'],
+    'Heimaslóð (Vestmannaeyjar heritage encyclopedia): Westman Islands history, houses, the 1973 eruption, place names, for Place facts and Places to see.',
+    cls='reference',
+    llm=False,
+    depth=2,
+    seeds=['https://heimaslod.is/index.php/Fors%C3%AD%C3%B0a'],
+    feeds=['https://heimaslod.is/index.php?title=Kerfiss%C3%AD%C3%B0a:N%C3%BDlegar_breytingar&feed=atom'],
+    include=['^https?://heimaslod\\.is/index\\.php/[^:]+$'],
+)
+_facts(
+    'fx-is-ferlir',
+    ['facts', 'places', 'walking_tours'],
+    'FERLIR: Reykjanesskaginn í máli og myndum: thousands of Reykjanes ruins, cairns, trails and place-name histories, for Place facts, Places to see and Free walking tours.',
+    cls='community',
+    llm=False,
+    off='owner decision: community-written site; the place_fact kind takes official, reference and editorial sources only (kinds.toml). Allow community sources behind corroboration, or keep off?',
+    depth=2,
+    seeds=['https://ferlir.is/'],
+    sitemaps=['https://ferlir.is/wp-sitemap.xml'],
+    feeds=['https://ferlir.is/feed/'],
+    include=['^https?://ferlir\\.is/[a-z0-9-]+/$'],
+)
+_facts(
+    'fx-pt-aprender-madeira',
+    ['facts', 'places'],
+    'Aprender Madeira (Madeira encyclopedia, APCA): Madeira and Porto Santo parishes, history, heritage, for Place facts and Places to see.',
+    cls='reference',
+    depth=2,
+    seeds=['https://aprenderamadeira.net/articles'],
+    include=['^https?://aprenderamadeira\\.net/article/'],
+)
+_facts(
+    'arch-pt-museu-de-lisboa',
+    ['facts', 'places'],
+    'Museu de Lisboa (EGEAC): Lisbon history across five sites (Palácio Pimenta, Teatro Romano, Santo António), for Place facts and Places to see.',
+    cls='official',
+    depth=2,
+    seeds=['https://museudelisboa.pt/'],
+    sitemaps=['https://cms.museudelisboa.pt/sitemap.xml'],
+    include=['^https?://museudelisboa\\.pt/(pt|en)/(nucleos|historias|exposicoes|colecao)', '^https?://cms\\.museudelisboa\\.pt/(pt|en)/(nucleos|historias|exposicoes|colecao)'],
+)
+_facts(
+    'fx-pt-restos-de-coleccao',
+    ['facts', 'places'],
+    'Restos de Colecção (blog): well-documented history of Lisbon and Portuguese shops, buildings, streets, for Place facts and Places to see.',
+    cls='editorial',
+    seeds=['https://restosdecoleccao.blogspot.com/'],
+    feeds=['https://restosdecoleccao.blogspot.com/feeds/posts/default'],
+    include=['^https?://restosdecoleccao\\.blogspot\\.com/20[0-9]{2}/[0-9]{2}/'],
+)
+_facts(
+    'arch-pt-porto-gisa',
+    ['facts'],
+    'Arquivo Municipal do Porto (GISA): catalogue descriptions of Porto streets, buildings and events (low fact density), for Place facts.',
+    cls='official',
+    depth=2,
+    seeds=['https://gisaweb.cm-porto.pt/subjects/'],
+    include=['^https?://gisaweb\\.cm-porto\\.pt/(subjects|units|creators)/'],
+)
+_facts(
+    'her-de-mv-kulturwerte',
+    ['facts', 'places'],
+    'Landesamt für Kultur und Denkmalpflege Mecklenburg-Vorpommern: MV monument news, denkmal des Monats, archaeology finds, for Place facts and Places to see.',
+    cls='official',
+    depth=2,
+    delay=5,
+    seeds=['https://www.kulturwerte-mv.de/Landesdenkmalpflege/'],
+    include=['^https?://www\\.kulturwerte-mv\\.de/(Landesdenkmalpflege|Landesarchaeologie|Landesarchiv)/'],
+)
+_facts(
+    'her-ebidat',
+    ['facts', 'places'],
+    'EBIDAT Burgendatenbank (Europäisches Burgeninstitut): 10,000+ castles in Germany and Europe with dates, owners, building history, for Place facts and Places to see.',
+    cls='reference',
+    depth=2,
+    seeds=['https://www.ebidat.de/ebidat.html'],
+    include=['^https?://www\\.ebidat\\.de/cgi-bin/ebidat\\.pl'],
+)
+_facts(
+    'fx-alleburgen',
+    ['facts', 'places'],
+    'AlleBurgen.de: 41,661 castles, palaces and ruins in Europe with history and maps, for Place facts and Places to see.',
+    cls='editorial',
+    llm=False,
+    depth=2,
+    seeds=['https://www.alleburgen.de/burgen-deutschland.php'],
+    include=['^https?://www\\.alleburgen\\.de/(burgen-[a-z]+|burg)\\.php|^/burgen/'],
+)
+_facts(
+    'fx-mdr-geschichte',
+    ['facts', 'places'],
+    'MDR Geschichte: history of towns and regions in Saxony, Saxony-Anhalt, Thuringia (fills the Thuringia/LSA gap), for Place facts and Places to see.',
+    cls='editorial',
+    llm=False,
+    depth=2,
+    seeds=['https://www.mdr.de/geschichte/index.html'],
+    sitemaps=['https://www.mdr.de/sitemap/index~sitemap.xml'],
+    include=['^https?://www\\.mdr\\.de/geschichte/'],
+)
+_facts(
+    'fx-ndr-geschichte',
+    ['facts', 'places'],
+    'NDR Geschichte: history of north German towns, MV and Hanseatic places, for Place facts and Places to see.',
+    cls='editorial',
+    llm=False,
+    depth=2,
+    seeds=['https://www.ndr.de/geschichte/index.html'],
+    sitemaps=['https://www.ndr.de/index~sitemap.xml'],
+    include=['^https?://www\\.ndr\\.de/geschichte/'],
+)
+_facts(
+    'her-fr-occitanie-patrimoines',
+    ['facts', 'places'],
+    'Patrimoines en Occitanie (Inventaire général): Occitanie heritage inventory, sites per département, for Place facts and Places to see.',
+    cls='official',
+    depth=2,
+    seeds=['https://patrimoines.laregion.fr/departements'],
+    sitemaps=['https://patrimoines.laregion.fr/sitemap'],
+    include=['^https?://patrimoines\\.laregion\\.fr/(sites|thematiques|departements|periodes)/'],
+)
+_facts(
+    'her-fr-bfc-patrimoine',
+    ['facts', 'places'],
+    'Portail patrimoine Bourgogne-Franche-Comté: inventory studies of towns and villages in Burgundy-Franche-Comté, for Place facts and Places to see.',
+    cls='official',
+    depth=2,
+    seeds=['https://patrimoine.bourgognefranchecomte.fr/etudes-d-inventaire'],
+    sitemaps=['https://patrimoine.bourgognefranchecomte.fr/sitemap'],
+    include=['^https?://patrimoine\\.bourgognefranchecomte\\.fr/(etudes-d-inventaire|node|page)/'],
+)
+_facts(
+    'her-fr-pdl-patrimoine',
+    ['facts', 'places', 'walking_tours'],
+    'Patrimoine des Pays de la Loire: Pays de la Loire inventory dossiers and heritage trails, for Place facts, Places to see and Free walking tours.',
+    cls='official',
+    depth=2,
+    delay=10,
+    seeds=['https://www.patrimoine.paysdelaloire.fr/connaitre/'],
+    sitemaps=['https://patrimoine.paysdelaloire.fr/sitemap.xml'],
+    feeds=['https://www.patrimoine.paysdelaloire.fr/feed/'],
+    include=['^https?://www\\.patrimoine\\.paysdelaloire\\.fr/(connaitre|parcours)/', '^https?://patrimoine\\.paysdelaloire\\.fr/(connaitre|parcours)/'],
+)
+_facts(
+    'her-it-er-pater',
+    ['facts', 'places'],
+    'Patrimonio culturale Emilia-Romagna (PatER): Emilia-Romagna architecture, landscapes, museums (successor of IBC), for Place facts and Places to see.',
+    cls='official',
+    depth=2,
+    seeds=['https://patrimonioculturale.regione.emilia-romagna.it/architettura'],
+    sitemaps=['https://patrimonioculturale.regione.emilia-romagna.it/sitemap-index.xml'],
+    include=['^https?://patrimonioculturale\\.regione\\.emilia-romagna\\.it/(architettura|natura-territorio-e-paesaggio|case-studi-persone-illustri|musei)/'],
+)
+_facts(
+    'arch-it-sardegna-digital-library',
+    ['facts', 'places'],
+    'Sardegna Digital Library: Sardinian towns, nuraghi, traditions (documents and texts), for Place facts and Places to see.',
+    cls='official',
+    depth=2,
+    seeds=['https://www.sardegnadigitallibrary.it/argomenti'],
+    include=['^https?://www\\.sardegnadigitallibrary\\.it/(detail|argomenti)/'],
+)
+_facts(
+    'fx-it-info-roma',
+    ['facts', 'places', 'walking_tours'],
+    "Info.roma.it: Enciclopedia su Roma: Rome monuments, streets, 'Roma sparita', daily almanac of Roman history, for Place facts, Places to see and Free walking tours.",
+    cls='editorial',
+    depth=2,
+    seeds=['https://www.info.roma.it/monumenti_di_roma.asp'],
+    feeds=['https://www.info.roma.it/rss_associazione.asp'],
+    include=['^https?://www\\.info\\.roma\\.it/(monumenti_dettaglio|strade_di_roma|roma_sparita|cronologia_almanacco)\\.asp'],
+)
+_facts(
+    'fx-it-icastelli',
+    ['facts', 'places'],
+    "icastelli.it: Castelli e Torri d'Italia: Italian castles and towers by region with history, for Place facts and Places to see.",
+    cls='editorial',
+    depth=2,
+    seeds=['https://www.icastelli.it/it'],
+    include=['^https?://www\\.icastelli\\.it/it/[a-z-]+/'],
+)
+_facts(
+    'her-it-fai-luoghi',
+    ['facts', 'places', 'activities'],
+    "FAI: Fondo per l'Ambiente Italiano, Luoghi: FAI properties and 'Luoghi del Cuore' with histories, for Place facts, Places to see and Activities.",
+    cls='editorial',
+    depth=2,
+    seeds=['https://fondoambiente.it/luoghi/'],
+    include=['^https?://fondoambiente\\.it/luoghi/'],
+)
+_facts(
+    'her-es-castillosnet',
+    ['facts', 'places'],
+    'CastillosNet (Castillos de España): every castle, tower and fortification in Spain with history, for Place facts and Places to see.',
+    cls='editorial',
+    depth=2,
+    delay=5,
+    seeds=['https://www.castillosnet.org/'],
+    sitemaps=['https://www.castillosnet.org/sitemaps/sitemap-index.xml'],
+    include=['^https?://www\\.castillosnet\\.org/index\\.php|^/castillos/'],
+)
+_facts(
+    'her-es-hispania-nostra-lista-roja',
+    ['facts', 'places'],
+    'Hispania Nostra: Lista Roja del Patrimonio: endangered monuments of Spain with history and status, for Place facts and Places to see.',
+    cls='editorial',
+    depth=2,
+    seeds=['https://www.hispanianostra.org/que-hacemos/'],
+    sitemaps=['https://www.hispanianostra.org/sitemap_index.xml'],
+    feeds=['https://www.hispanianostra.org/feed/'],
+    include=['^https?://www\\.hispanianostra\\.org/(lista-roja|que-hacemos|actualidad)/'],
+)
+_facts(
+    'fx-es-arteguias',
+    ['facts', 'places'],
+    'Arteguias: arte románico en España: Romanesque churches and monasteries by province with dates and history, for Place facts and Places to see.',
+    cls='editorial',
+    depth=2,
+    seeds=['https://arteguias.com/monumentos/'],
+    include=['^https?://arteguias\\.com/(monumentos|monasterio|cronicas)/'],
+)
+_facts(
+    'fx-es-regmurcia',
+    ['facts', 'places'],
+    'Región de Murcia Digital: Murcia municipalities, history, heritage (encyclopedic), for Place facts and Places to see.',
+    cls='reference',
+    depth=2,
+    seeds=['https://www.regmurcia.com/'],
+    include=['^https?://www\\.regmurcia\\.com/servlet/s\\.Sl\\?|^/portal3/'],
+)
+_facts(
+    'fx-no-oslo-byleksikon',
+    ['facts', 'places', 'walking_tours'],
+    'Oslo byleksikon: every Oslo street, building, district and place-name origin, for Place facts, Places to see and Free walking tours.',
+    cls='reference',
+    seeds=['https://oslobyleksikon.no/side/Forside'],
+    sitemaps=['https://oslobyleksikon.no/sitemap.xml'],
+    include=['^https?://oslobyleksikon\\.no/side/[^:]+$'],
+)
+_facts(
+    'arch-no-oslo-museum',
+    ['facts', 'places'],
+    'Oslo Museum: Oslo city history (Bymuseet), for Place facts and Places to see.',
+    cls='official',
+    depth=2,
+    seeds=['https://www.oslomuseum.no/'],
+    sitemaps=['https://www.oslomuseum.no/sitemap.xml'],
+    include=['^https?://www\\.oslomuseum\\.no/(utstillinger|artikler|om-oss)/'],
+)
+_facts(
+    'arch-dk-aarhusarkivet',
+    ['facts', 'places'],
+    'AarhusArkivet (Aarhus Stadsarkiv): Aarhus local history records, guides, place descriptions, for Place facts and Places to see.',
+    cls='official',
+    depth=2,
+    seeds=['https://www.aarhusarkivet.dk/guides'],
+    sitemaps=['https://www.aarhusarkivet.dk/sitemap.xml'],
+    include=['^https?://www\\.aarhusarkivet\\.dk/(guides|records|collections)/'],
+)
+_facts(
+    'her-dk-danmarks-kirker',
+    ['facts', 'places'],
+    'Danmarks Kirker (Nationalmuseet): scholarly descriptions of every Danish church (building history, fittings), for Place facts and Places to see.',
+    cls='official',
+    depth=2,
+    seeds=['https://danmarkskirker.natmus.dk/'],
+    include=['^https?://danmarkskirker\\.natmus\\.dk/[a-z0-9-]+/'],
+)
+_facts(
+    'arch-se-goteborgs-stadsmuseum',
+    ['facts', 'places', 'walking_tours'],
+    'Göteborgs stadsmuseum: Gothenburg heritage environments and city history stories, for Place facts, Places to see and Free walking tours.',
+    cls='official',
+    depth=2,
+    seeds=['https://goteborgsstadsmuseum.se/kulturmiljo/'],
+    sitemaps=['https://goteborgsstadsmuseum.se/sitemap.xml'],
+    include=['^https?://goteborgsstadsmuseum\\.se/(kulturmiljo|kunskapskallan|samlingar)/'],
+)
+_facts(
+    'her-se-sfv',
+    ['facts', 'places', 'activities'],
+    'Statens fastighetsverk: histories of Swedish royal palaces, castles, fortresses and state buildings, for Place facts, Places to see and Activities.',
+    cls='official',
+    depth=2,
+    seeds=['https://www.sfv.se/vara-fastigheter/'],
+    sitemaps=['https://sfv.se/sitemap.xml'],
+    include=['^https?://www\\.sfv\\.se/(vara-fastigheter|sevart|kulturvarden)/', '^https?://sfv\\.se/(vara-fastigheter|sevart|kulturvarden)/'],
+)
+_facts(
+    'arch-ro-dacoromanica',
+    ['facts'],
+    'DacoRomanica (BCU Iași / Biblioteca Academiei): history and curiosities of the places it covers, for Place facts.',
+    cls='reference',
+    off='adapter pending: format / note: home is a JS app (no HTML links); needs its JSON/IIIF API; robots 404',
+    seeds=['https://dacoromanica.ro/'],
+)
+_facts(
+    'arch-lu-eluxemburgensia',
+    ['facts'],
+    'eluxemburgensia (BnL digital library): history and curiosities of the places it covers, for Place facts.',
+    cls='reference',
+    off='adapter pending: format / note: Nuxt SPA, content via JSON API; robots returns HTML (allowed); copyright page is JS-rendered (not scanne…',
+    seeds=['https://eluxemburgensia.lu/'],
+)
+_facts(
+    'fx-es-dbe-rah',
+    ['facts'],
+    'DB~e / Historia Hispánica (Real Academia de la Historia): history and curiosities of the places it covers, for Place facts.',
+    cls='editorial',
+    off='adapter pending: format / note: Angular SPA (only CSS in HTML); JSON API needed; mostly biographies, low place-fact value',
+    seeds=['https://dbe.rah.es/'],
+)
+_facts(
+    'her-pt-culturanorte',
+    ['facts'],
+    'Direção Regional de Cultura do Norte (now CCDR-N cultura): history and curiosities of the places it covers, for Place facts.',
+    cls='official',
+    off='adapter pending: format / note: home renders no links (JS); robots allows us (blocks only arquivo-web-crawler)',
+    seeds=['https://culturanorte.gov.pt/'],
+)
+_facts(
+    'arch-se-digitala-stadsmuseet',
+    ['facts'],
+    'Digitala Stadsmuseet (Stockholm): history and curiosities of the places it covers, for Place facts.',
+    cls='reference',
+    off='adapter pending: format / note: JS app (empty HTML); robots 404; needs its search API',
+    seeds=['https://digitalastadsmuseet.stockholm.se/'],
+)
+_facts(
+    'arch-hls-switzerland',
+    ['facts', 'places', 'walking_tours'],
+    'Historical Dictionary of Switzerland (HLS/DHS/DSS): a scholarly article for every Swiss municipality, canton and region (history, firsts, notable events), for Place facts, Places to see and Free walking tours.',
+    cls='reference',
+    llm=False,
+    delay=20,
+    seeds=['https://hls-dhs-dss.ch/?xpage=sitemap', 'https://hls-dhs-dss.ch/de/'],
+    include=['^https?://hls-dhs-dss\\.ch/(de|fr|it)/articles/'],
+)
+_facts(
+    'fx-e-lir',
+    ['facts', 'places'],
+    'e-LIR Lexicon istoric retic (Romansh HLS): Romansh-language history of Graubünden villages, for Place facts and Places to see.',
+    cls='reference',
+    depth=2,
+    seeds=['https://www.e-lir.ch/'],
+    include=['^https?://www\\.e-lir\\.ch/index\\.php'],
+)
+_facts(
+    'arch-wien-geschichtewiki',
+    ['facts', 'places', 'walking_tours'],
+    'Wien Geschichte Wiki (Vienna City Archive + Wienbibliothek): 47k entries on Vienna streets, buildings, districts, for Place facts, Places to see and Free walking tours.',
+    cls='official',
+    sitemaps=['https://www.geschichtewiki.wien.gv.at/sitemap-index-WienGeschichteWiki.xml'],
+    include=['^https?://www\\.geschichtewiki\\.wien\\.gv\\.at/[^:]+$(mainnamespace)'],
+)
+_facts(
+    'fx-austria-forum',
+    ['facts', 'places'],
+    'Austria-Forum (AEIOU Österreich-Lexikon): Austrian towns, states, landmarks (TU Graz-hosted knowledge base), for Place facts and Places to see.',
+    cls='reference',
+    seeds=['https://austria-forum.org/af/AEIOU', 'https://austria-forum.org/sitemap/index_af.xml'],
+    feeds=['https://austria-forum.org/rss.rdf'],
+    include=['^https?://austria-forum\\.org/af/(AEIOU|Wissenssammlungen)/'],
+)
+_facts(
+    'fx-wienmuseum-magazin',
+    ['facts', 'walking_tours'],
+    'Wien Museum Magazin: curator-written stories about Vienna places and curiosities, for Place facts and Free walking tours.',
+    cls='editorial',
+    depth=2,
+    seeds=['https://magazin.wienmuseum.at/orte'],
+    include=['^https?://magazin\\.wienmuseum\\.at/(orte|themen|[a-z0-9-]+)$'],
+)
+_facts(
+    'fx-ooegeschichte',
+    ['facts', 'places'],
+    'Forum OÖ Geschichte (Land Oberösterreich): Upper Austrian regional history, small monuments, for Place facts and Places to see.',
+    cls='official',
+    depth=2,
+    seeds=['https://www.ooegeschichte.at/'],
+    include=['^https?://www\\.ooegeschichte\\.at/(epochen|themen|forschung/kleindenkmaeler|netzwerk/blog)/'],
+)
+_facts(
+    'arch-hlb-bavaria',
+    ['facts', 'places'],
+    'Historisches Lexikon Bayerns (BSB): Bavarian regions, towns and territories, for Place facts and Places to see.',
+    cls='reference',
+    llm=False,
+    depth=2,
+    seeds=['https://www.historisches-lexikon-bayerns.de/Lexikon/Hauptseite'],
+    include=['^https?://www\\.historisches-lexikon-bayerns\\.de/Lexikon/'],
+)
+_facts(
+    'arch-rheinische-geschichte',
+    ['facts', 'places'],
+    'Portal Rheinische Geschichte (LVR): Rhineland town and place histories, for Place facts and Places to see.',
+    cls='official',
+    depth=2,
+    seeds=['https://www.rheinische-geschichte.lvr.de/start'],
+    include=['^https?://www\\.rheinische-geschichte\\.lvr\\.de/Orte-und-Raeume/'],
+)
+_facts(
+    'her-kuladig',
+    ['facts', 'places', 'walking_tours'],
+    'KuLaDig Kultur.Landschaft.Digital (LVR et al.): geolocated heritage objects with history texts (Rhineland, Hesse, Saxony...), for Place facts, Places to see and Free walking tours.',
+    cls='official',
+    seeds=['https://www.kuladig.de/'],
+    sitemaps=['https://www.kuladig.de/sitemap.xml'],
+    include=['^https?://www\\.kuladig\\.de/Objektansicht/'],
+)
+_facts(
+    'fx-hov-sachsen',
+    ['facts'],
+    'Historisches Ortsverzeichnis von Sachsen (ISGV): first documented mention, population history, name history of ~6,000 Saxon places, for Place facts.',
+    cls='reference',
+    depth=2,
+    seeds=['https://hov.isgv.de/ortsliste'],
+    include=['^https?://hov\\.isgv\\.de/[A-Z(?:ÄÖÜ|%C3%84%C3%96%C3%9C)a-z(?:äöü|%C3%A4%C3%B6%C3%BC)0-9_%().-]+$'],
+)
+_facts(
+    'fx-darmstadt-stadtlexikon',
+    ['facts', 'walking_tours'],
+    'Stadtlexikon Darmstadt: Darmstadt streets, buildings, events, for Place facts and Free walking tours.',
+    cls='reference',
+    depth=2,
+    seeds=['https://www.darmstadt-stadtlexikon.de/stadtlexikon-darmstadt.html'],
+    include=['^https?://www\\.darmstadt-stadtlexikon\\.de/[a-z]/'],
+)
+_facts(
+    'fx-wiesbaden-stadtlexikon',
+    ['facts', 'walking_tours'],
+    'Stadtlexikon Wiesbaden (Stadtarchiv): Wiesbaden places, buildings, history, for Place facts and Free walking tours.',
+    cls='official',
+    seeds=['https://www.wiesbaden.de/stadtlexikon/'],
+    sitemaps=['https://www.wiesbaden.de/sitemap.xml'],
+    include=['^https?://www\\.wiesbaden\\.de/stadtlexikon/'],
+)
+_facts(
+    'fx-stadtgeschichte-coburg',
+    ['facts', 'walking_tours'],
+    'Stadtgeschichte Coburg ("Typisch Coburg", Wissenswertes und Kurioses): curiosities and history of Coburg, for Place facts and Free walking tours.',
+    cls='editorial',
+    seeds=['https://www.stadtgeschichte-coburg.de/blog/'],
+    feeds=['https://www.stadtgeschichte-coburg.de/feed/'],
+    include=['^https?://www\\.stadtgeschichte-coburg\\.de/blog/'],
+)
+_facts(
+    'fx-stadtwiki-dresden',
+    ['facts', 'places'],
+    'Stadtwiki Dresden: Dresden streets, buildings, curiosities, for Place facts and Places to see.',
+    cls='community',
+    llm=False,
+    off='owner decision: community-written site; the place_fact kind takes official, reference and editorial sources only (kinds.toml). Allow community sources behind corroboration, or keep off?',
+    depth=2,
+    seeds=['https://www.stadtwikidd.de/wiki/Stadtwiki:Willkommen'],
+    include=['^https?://www\\.stadtwikidd\\.de/wiki/[^:]+$'],
+)
+_facts(
+    'fx-planet-wissen',
+    ['facts'],
+    'Planet Wissen (WDR/SWR/BR-alpha): public-broadcaster explainers on cities, regions and countries, for Place facts.',
+    cls='editorial',
+    llm=False,
+    depth=2,
+    seeds=['https://www.planet-wissen.de/kultur/', 'https://www.planet-wissen.de/planetwissenindex100.feed'],
+    include=['^https?://www\\.planet-wissen\\.de/(kultur|geschichte|gesellschaft|natur)/'],
+)
+_facts(
+    'fx-augsburg-stadtlexikon',
+    ['facts'],
+    'Augsburger Stadtlexikon (Wißner): Augsburg places and history, for Place facts.',
+    cls='reference',
+    depth=2,
+    seeds=['https://www.wissner.com/stadtlexikon-augsburg/'],
+    include=['^https?://www\\.wissner\\.com/stadtlexikon-augsburg/'],
+)
+_facts(
+    'her-fr-pop',
+    ['facts', 'places'],
+    'POP – Plateforme ouverte du patrimoine: "historique" texts for Mérimée monuments and Palissy objects. Adds narrative to the existing od-fr-merimee, for Place facts and Places to see.',
+    cls='official',
+    depth=2,
+    seeds=['https://pop.culture.gouv.fr/'],
+    include=['^https?://pop\\.culture\\.gouv\\.fr/notice/(merimee|palissy)/'],
+)
+_facts(
+    'fx-pariszigzag',
+    ['facts', 'activities'],
+    'Paris ZigZag (Insolite & Secret): Paris curiosities, hidden history, little-known facts, for Place facts and Activities.',
+    cls='editorial',
+    seeds=['https://www.pariszigzag.fr/insolite'],
+    sitemaps=['https://www.pariszigzag.fr/sitemaps.xml'],
+    feeds=['https://www.pariszigzag.fr/accueil/feed/'],
+    include=['^https?://www\\.pariszigzag\\.fr/(insolite|paris-au-quotidien|france)/'],
+)
+_facts(
+    'fx-histoire-pour-tous',
+    ['facts'],
+    'Histoire pour tous: French history incl. city histories, for Place facts.',
+    cls='editorial',
+    seeds=['https://www.histoire-pour-tous.fr/histoire-de-france.html'],
+    sitemaps=['https://www.histoire-pour-tous.fr/sitemap_hpt/sitemap_google.xml'],
+    include=['^https?://www\\.histoire-pour-tous\\.fr/(histoire-de-france|dossiers|villes|civilisations)/'],
+)
+_facts(
+    'her-connaitre-wallonie',
+    ['facts'],
+    'Connaître la Wallonie (SPW): official Walloon history, symbols, heritage, for Place facts.',
+    cls='official',
+    depth=2,
+    seeds=['https://connaitrelawallonie.wallonie.be/histoire-et-symboles'],
+    include=['^https?://connaitrelawallonie\\.wallonie\\.be/(histoire-et-symboles|culture-et-patrimoine|geographie)/'],
+)
+_facts(
+    'her-be-wal-awap',
+    ['facts', 'places'],
+    'AWaP (Wallonia heritage agency): Walloon classified monuments and places to visit, for Place facts and Places to see.',
+    cls='official',
+    sitemaps=['https://agencewallonnedupatrimoine.be/locations-sitemap.xml'],
+    include=['^https?://agencewallonnedupatrimoine\\.be/(locations|patrimoine)/'],
+)
+_facts(
+    'her-be-bru-monument',
+    ['facts', 'places', 'walking_tours'],
+    'Inventaire du patrimoine architectural (Brussels): street-by-street building histories for Brussels, for Place facts, Places to see and Free walking tours.',
+    cls='official',
+    depth=2,
+    delay=5,
+    seeds=['https://monument.heritage.brussels/fr/'],
+    include=['^https?://monument\\.heritage\\.brussels/(fr|nl)/'],
+)
+_facts(
+    'her-be-vl-inventaris',
+    ['facts', 'places', 'walking_tours'],
+    'Inventaris Onroerend Erfgoed (Flanders): building histories for every Flemish town, for Place facts, Places to see and Free walking tours.',
+    cls='official',
+    llm=False,
+    sitemaps=['https://inventaris.onroerenderfgoed.be/sitemaps/erfgoedobjecten_sitemap_deel_1.xml'],
+    include=['^https?://inventaris\\.onroerenderfgoed\\.be/erfgoedobjecten/'],
+)
+_facts(
+    'fx-canon-van-nederland',
+    ['facts', 'places', 'walking_tours'],
+    'Canon van Nederland + local/regional canons: national canon + hundreds of town/province canons (50 "windows" each), for Place facts, Places to see and Free walking tours.',
+    cls='official',
+    seeds=['https://www.canonvannederland.nl/nl/'],
+    sitemaps=['https://www.canonvannederland.nl/sitemap.xml'],
+    feeds=['https://www.canonvannederland.nl/nl/feed/article'],
+    include=['^https?://www\\.canonvannederland\\.nl/nl/[a-z-]+(/[a-z0-9-]+)*$'],
+)
+_facts(
+    'arch-encyclopedie-zeeland',
+    ['facts', 'places'],
+    'Encyclopedie van Zeeland (Zeeuws Archief): every Zeeland village, polder and landmark, for Place facts and Places to see.',
+    cls='reference',
+    depth=2,
+    seeds=['https://www.encyclopedievanzeeland.nl/Hoofdpagina'],
+    include=['^https?://www\\.encyclopedievanzeeland\\.nl/[^:]+$'],
+)
+_facts(
+    'fx-bossche-encyclopedie',
+    ['facts', 'walking_tours'],
+    "Bossche Encyclopedie: 's-Hertogenbosch streets and buildings, for Place facts and Free walking tours.",
+    cls='community',
+    llm=False,
+    off='owner decision: community-written site; the place_fact kind takes official, reference and editorial sources only (kinds.toml). Allow community sources behind corroboration, or keep off?',
+    depth=2,
+    seeds=['https://www.bossche-encyclopedie.nl/'],
+    include=['^https?://www\\.bossche-encyclopedie\\.nl/(straten|overig|stegen)/'],
+)
+_facts(
+    'arch-lokalhistoriewiki-no',
+    ['facts', 'places', 'walking_tours'],
+    'Lokalhistoriewiki.no (Norsk lokalhistorisk institutt): local history of Norwegian municipalities, farms, villages and streets, for Place facts, Places to see and Free walking tours.',
+    cls='reference',
+    llm=False,
+    depth=2,
+    delay=10,
+    seeds=['https://lokalhistoriewiki.no/wiki/Lokalhistoriewiki:Hovedside'],
+    include=['^https?://lokalhistoriewiki\\.no/wiki/'],
+)
+_facts(
+    'arch-snl-no',
+    ['facts', 'places'],
+    'Store norske leksikon: Norwegian municipalities, towns and places, for Place facts and Places to see.',
+    cls='reference',
+    llm=False,
+    sitemaps=['https://snl.no/.sitemap/sitemap.xml'],
+    include=['^https?://snl\\.no/[^.][^/]*$'],
+)
+_facts(
+    'fx-norgeshistorie',
+    ['facts'],
+    'Norgeshistorie.no (UiO): Norwegian history by period and place, for Place facts.',
+    cls='reference',
+    depth=2,
+    seeds=['https://www.norgeshistorie.no/artikler/'],
+    include=['^https?://www\\.norgeshistorie\\.no/(artikler|kilder|[a-z-]+)/'],
+)
+_facts(
+    'arch-stockholmskallan',
+    ['facts', 'places'],
+    'Stockholmskallan (Stockholm City Archives sources): city-history items per district, for Place facts and Places to see.',
+    cls='official',
+    depth=2,
+    seeds=['https://stockholmskallan.stockholm.se/'],
+    include=['^https?://stockholmskallan\\.stockholm\\.se/post/'],
+)
+_facts(
+    'fx-uppslagsverket',
+    ['facts'],
+    'Uppslagsverket Finland: Swedish-speaking Finland towns, parishes, history, for Place facts.',
+    cls='reference',
+    depth=2,
+    seeds=['https://www.uppslagsverket.fi/sv/'],
+    include=['^https?://www\\.uppslagsverket\\.fi/sv/(sok/view|historia)'],
+)
+_facts(
+    'fx-visindavefur',
+    ['facts'],
+    'Vísindavefurinn (University of Iceland): expert answers on Icelandic places, names, curiosities, for Place facts.',
+    cls='reference',
+    seeds=['https://www.visindavefur.is/'],
+    sitemaps=['https://www.visindavefur.is/sitemap.xml'],
+    feeds=['https://www.visindavefur.is/visindavefur.rss'],
+    include=['^https?://www\\.visindavefur\\.is/svar\\.php\\?id=\\d+$'],
+)
+_facts(
+    'fx-enciklopedija-lv',
+    ['facts', 'places'],
+    'Nacionālā enciklopēdija (LNB): Latvian towns, regions, history (National Library), for Place facts and Places to see.',
+    cls='reference',
+    seeds=['https://enciklopedija.lv/'],
+    sitemaps=['https://enciklopedija.lv/sitemap.xml'],
+    include=['^https?://enciklopedija\\.lv/skirklis/\\d+'],
+)
+_facts(
+    'fx-vle-lt',
+    ['facts', 'places'],
+    'Visuotinė lietuvių enciklopedija: Lithuanian towns, villages and history, for Place facts and Places to see.',
+    cls='reference',
+    llm=False,
+    depth=2,
+    seeds=['https://www.vle.lt/'],
+    include=['^https?://www\\.vle\\.lt/straipsnis/'],
+)
+_facts(
+    'her-pl-zabytek',
+    ['facts', 'places', 'walking_tours'],
+    'Zabytek.pl (NID): Polish registered monuments, with history descriptions, for Place facts, Places to see and Free walking tours.',
+    cls='official',
+    depth=2,
+    seeds=['https://zabytek.pl/pl'],
+    include=['^https?://zabytek\\.pl/(pl|en)/obiekty/'],
+)
+_facts(
+    'fx-gedanopedia',
+    ['facts', 'walking_tours'],
+    'Gedanopedia (Encyklopedia Gdańska): Gdańsk streets, buildings, events, for Place facts and Free walking tours.',
+    cls='reference',
+    seeds=['https://gedanopedia.pl/hasla-a-z/'],
+    sitemaps=['https://gedanopedia.pl/wp-sitemap.xml'],
+    feeds=['https://www.gedanopedia.pl/feed/'],
+    include=['^https?://gedanopedia\\.pl/gdansk/\\?title=', '^https?://www\\.gedanopedia\\.pl/gdansk/\\?title='],
+)
+_facts(
+    'arch-cyryl-poznan',
+    ['facts'],
+    'Cyryl – Wirtualne Muzeum Historii Poznania: Poznań local history collections, for Place facts.',
+    cls='official',
+    seeds=['https://cyryl.poznan.pl/kolekcje-a-z/'],
+    sitemaps=['https://cyryl.poznan.pl/wp-sitemap.xml'],
+    include=['^https?://cyryl\\.poznan\\.pl/(kolekcja|obiekt)/'],
+)
+_facts(
+    'od-slownik-geograficzny',
+    ['facts'],
+    'Słownik geograficzny Królestwa Polskiego (1880–1902, ICM): 19th-c. gazetteer entries for every village in former Polish lands (PL/LT/BY/UA), for Place facts.',
+    cls='reference',
+    depth=2,
+    seeds=['http://dir.icm.edu.pl/pl/Slownik_geograficzny/'],
+    include=['^https?://dir\\.icm\\.edu\\.pl/pl/Slownik_geograficzny/'],
+)
+_facts(
+    'fx-encyklopedie-brna',
+    ['facts', 'walking_tours'],
+    'Internetová encyklopedie dějin Brna: Brno events, streets, buildings ("this day"), for Place facts and Free walking tours.',
+    cls='official',
+    depth=2,
+    seeds=['https://encyklopedie.brna.cz/home-mmb/'],
+    feeds=['https://encyklopedie.brna.cz/data/mmb/rss/'],
+    include=['^https?://encyklopedie\\.brna\\.cz/home-mmb/\\?acc=profil_(objektu|udalosti|ulice)'],
+)
+_facts(
+    'fx-encyklopedie-plzne',
+    ['facts', 'walking_tours'],
+    'Encyklopedie dějin města Plzně: Plzeň history, for Place facts and Free walking tours.',
+    cls='official',
+    depth=2,
+    seeds=['https://encyklopedie.plzen.eu/home-mup/'],
+    feeds=['https://encyklopedie.plzen.eu/data/mup/rss/'],
+    include=['^https?://encyklopedie\\.plzen\\.eu/home-mup/\\?acc=profil_'],
+)
+_facts(
+    'fx-encyklopedie-ostravy',
+    ['facts'],
+    'Encyklopedie dějin města Ostravy: Ostrava history, for Place facts.',
+    cls='official',
+    depth=2,
+    seeds=['https://encyklopedie.ostrava.cz/home-mmo/'],
+    feeds=['https://encyklopedie.ostrava.cz/data/mmo/rss/'],
+    include=['^https?://encyklopedie\\.ostrava\\.cz/home-mmo/\\?acc=profil_'],
+)
+_facts(
+    'fx-hrady-cz',
+    ['facts', 'places'],
+    'Hrady.cz: history of ~10k Czech/Slovak castles, chateaux, monuments, for Place facts and Places to see.',
+    cls='community',
+    llm=False,
+    off='owner decision: community-written site; the place_fact kind takes official, reference and editorial sources only (kinds.toml). Allow community sources behind corroboration, or keep off?',
+    depth=2,
+    seeds=['https://www.hrady.cz/', 'https://www.hrady.cz/feed_seznam_generator.php'],
+    include=['^https?://www\\.hrady\\.cz/[a-z0-9-]+(-[a-z0-9]+)*$'],
+)
+_facts(
+    'fx-beliana',
+    ['facts', 'places'],
+    'Encyclopaedia Beliana (SAV): Slovak towns, regions (Academy of Sciences), for Place facts and Places to see.',
+    cls='reference',
+    seeds=['https://beliana.sav.sk/abecedny-zoznam'],
+    sitemaps=['https://beliana.sav.sk/sitemap.xml'],
+    include=['^https?://beliana\\.sav\\.sk/heslo/'],
+)
+_facts(
+    'her-sk-pamiatky',
+    ['facts', 'places'],
+    'Pamiatkový úrad SR (registers + open data): Slovak national cultural monuments list, for Place facts and Places to see.',
+    cls='official',
+    depth=2,
+    seeds=['https://www.pamiatky.sk/online-sluzby/open-data'],
+    include=['^https?://www\\.pamiatky\\.sk/(online-sluzby|pamiatkovy-fond)/'],
+)
+_facts(
+    'gov-hungarikum',
+    ['facts'],
+    'Hungarikum / Magyar Értéktár (national values register): officially listed Hungarian national values by county/town, for Place facts.',
+    cls='official',
+    depth=2,
+    delay=10,
+    seeds=['https://www.hungarikum.hu/hu/szakkategoria'],
+    feeds=['https://www.hungarikum.hu/hu/rss.xml'],
+    include=['^https?://www\\.hungarikum\\.hu/(hu|en|de)/content/'],
+)
+_facts(
+    'fx-mult-kor',
+    ['facts'],
+    'Múlt-kor történelmi portál: Hungarian history and archaeology news, place curiosities, for Place facts.',
+    cls='editorial',
+    seeds=['https://mult-kor.hu/magazin'],
+    include=['^https?://mult-kor\\.hu/[a-z0-9-]+-\\d{8}$'],
+)
+_facts(
+    'her-hu-muemlekem',
+    ['facts', 'places'],
+    'Műemlékem.hu: Hungarian listed monuments with descriptions, for Place facts and Places to see.',
+    cls='reference',
+    depth=2,
+    seeds=['https://www.muemlekem.hu/'],
+    include=['^https?://www\\.muemlekem\\.hu/muemlek/'],
+)
+_facts(
+    'arch-kamra-si',
+    ['facts'],
+    'Kamra (Slovenian regional digital heritage): local-history stories per Slovenian region; "on this day", for Place facts.',
+    cls='official',
+    seeds=['https://www.kamra.si/digitalne-zbirke/'],
+    sitemaps=['https://www.kamra.si/wp-sitemap.xml'],
+    feeds=['https://www.kamra.si/feed/'],
+    include=['^https?://www\\.kamra\\.si/(digitalne-zbirke|novice|album-slovenije)/'],
+)
+_facts(
+    'fx-enciklopedija-hr',
+    ['facts', 'places'],
+    'Hrvatska enciklopedija (LZMK): Croatian towns, islands, regions, for Place facts and Places to see.',
+    cls='reference',
+    depth=2,
+    seeds=['https://www.enciklopedija.hr/'],
+    include=['^https?://www\\.enciklopedija\\.hr/clanak/'],
+)
+_facts(
+    'fx-istrapedia',
+    ['facts', 'places'],
+    'Istrapedia (Istrian encyclopedia): Istrian towns and villages, for Place facts and Places to see.',
+    cls='reference',
+    seeds=['https://www.istrapedia.hr/hr/natuknice/kategorije/'],
+    sitemaps=['https://www.istrapedia.hr/sitemap.xml'],
+    include=['^https?://www\\.istrapedia\\.hr/hr/natuknice/page/'],
+)
+_facts(
+    'her-heritage-gov-rs',
+    ['facts'],
+    'Republički zavod za zaštitu spomenika kulture (Serbia): Serbian immovable cultural property with history, for Place facts.',
+    cls='official',
+    depth=2,
+    seeds=['https://heritage.gov.rs/cirilica/index.php'],
+    include=['^https?://heritage\\.gov\\.rs/(cirilica|latinica|english)/[a-z_]+\\.php'],
+)
+_facts(
+    'fx-opoznai-bg',
+    ['facts', 'places'],
+    'Опознай.bg: Bulgarian sights and towns with history, for Place facts and Places to see.',
+    cls='community',
+    llm=False,
+    off='owner decision: community-written site; the place_fact kind takes official, reference and editorial sources only (kinds.toml). Allow community sources behind corroboration, or keep off?',
+    depth=2,
+    seeds=['https://opoznai.bg/istoricheski-zabelejitelnosti'],
+    include=['^https?://opoznai\\.bg/view/'],
+)
+_facts(
+    'fx-enciclopedia-romaniei',
+    ['facts', 'places'],
+    'Enciclopedia României: Romanian localities, history, for Place facts and Places to see.',
+    cls='reference',
+    depth=2,
+    seeds=['https://enciclopediaromaniei.ro/wiki/Enciclopedia_Rom%C3%A2niei'],
+    include=['^https?://enciclopediaromaniei\\.ro/wiki/[^:]+$'],
+)
+_facts(
+    'her-ran-cimec',
+    ['facts'],
+    'Repertoriul Arheologic Național (CIMEC): archaeological sites per Romanian locality, for Place facts.',
+    cls='official',
+    depth=2,
+    seeds=['https://ran.cimec.ro/'],
+    include=['^https?://ran\\.cimec\\.ro/sel\\.asp'],
+)
+_facts(
+    'her-it-lombardia-bbcc',
+    ['facts', 'places', 'walking_tours'],
+    'Lombardia Beni Culturali: Lombardy architecture catalogue with history notes, for Place facts, Places to see and Free walking tours.',
+    cls='official',
+    depth=2,
+    seeds=['https://www.lombardiabeniculturali.it/'],
+    include=['^https?://www\\.lombardiabeniculturali\\.it/(architetture|luoghi)/'],
+)
+_facts(
+    'fx-sardegna-cultura',
+    ['facts'],
+    'Sardegna Cultura (Regione Sardegna): Sardinian history (nuraghi to today), places, for Place facts.',
+    cls='official',
+    depth=2,
+    seeds=['https://www.sardegnacultura.it/categoria/storia'],
+    include=['^https?://www\\.sardegnacultura\\.it/(articolo|categoria)/'],
+)
+_facts(
+    'fx-storia-memoria-bologna',
+    ['facts', 'walking_tours'],
+    'Storia e Memoria di Bologna (Comune di Bologna): Bologna places, streets, events, for Place facts and Free walking tours.',
+    cls='official',
+    depth=2,
+    seeds=['https://www.storiaememoriadibologna.it/'],
+    include=['^https?://www\\.storiaememoriadibologna\\.it/archivio/(luoghi|eventi)/'],
+)
+_facts(
+    'fx-museotorino',
+    ['facts', 'walking_tours'],
+    'MuseoTorino: Turin places, buildings, curiosities (city museum), for Place facts and Free walking tours.',
+    cls='official',
+    depth=2,
+    seeds=['https://www.museotorino.it/site/catalog'],
+    include=['^https?://www\\.museotorino\\.it/view/s/'],
+)
+_facts(
+    'fx-sovraintendenza-roma',
+    ['facts', 'activities'],
+    "Sovrintendenza Capitolina (Roma): history of Rome's municipal monuments, for Place facts and Activities.",
+    cls='official',
+    depth=2,
+    delay=10,
+    seeds=['https://www.sovraintendenzaroma.it/i_luoghi'],
+    include=['^https?://www\\.sovraintendenzaroma\\.it/(i_luoghi|content)/'],
+)
+_facts(
+    'fx-storiadimilano',
+    ['facts'],
+    'Storia di Milano: Milan history, myths and legends, for Place facts.',
+    cls='editorial',
+    depth=2,
+    seeds=['https://www.storiadimilano.it/citta/la_citta.htm'],
+    include=['^https?://www\\.storiadimilano\\.it/(citta|Miti_e_leggende|Arte|Personaggi)/'],
+)
+_facts(
+    'fx-storienapoli',
+    ['facts', 'walking_tours'],
+    'Storie di Napoli: Naples history and curiosities, for Place facts and Free walking tours.',
+    cls='editorial',
+    seeds=['https://storienapoli.it/'],
+    feeds=['https://storienapoli.it/feed/'],
+    include=['^https?://storienapoli\\.it/20\\d\\d/\\d\\d/\\d\\d/'],
+)
+_facts(
+    'fx-toscana-ovunque-bella',
+    ['facts', 'places', 'itinerary'],
+    'Toscana Ovunque Bella: unusual stories for every Tuscan comune (one per municipality), for Place facts, Places to see and Itinerary.',
+    cls='editorial',
+    depth=2,
+    seeds=['https://www.toscanaovunquebella.it/it'],
+    include=['^https?://www\\.toscanaovunquebella\\.it/(it|en)/[a-z0-9-]+'],
+)
+_facts(
+    'arch-culturaitalia',
+    ['facts', 'places', 'itinerary'],
+    'CulturaItalia (Ministry of Culture portal): editorial pieces on Italian places and heritage itineraries, for Place facts, Places to see and Itinerary.',
+    cls='official',
+    llm=False,
+    delay=10,
+    sitemaps=['https://www.culturaitalia.it/sitemap_index.xml'],
+    include=['^https?://www\\.culturaitalia\\.it/(luoghi|percorsi|approfondimenti|news)/'],
+)
+_facts(
+    'her-es-iaph-guiadigital',
+    ['facts', 'places', 'walking_tours'],
+    'Guía Digital del Patrimonio Cultural de Andalucía (IAPH): Andalusian heritage objects with historical data, for Place facts, Places to see and Free walking tours.',
+    cls='official',
+    sitemaps=['https://guiadigital.iaph.es/sitemaps/sitemap.xml'],
+    include=['^https?://guiadigital\\.iaph\\.es/bien/inmueble/'],
+)
+_facts(
+    'her-patrimoni-gencat',
+    ['facts'],
+    'Patrimoni Cultural (Generalitat de Catalunya): Catalan monuments history, for Place facts.',
+    cls='official',
+    depth=2,
+    delay=10,
+    seeds=['https://patrimoni.gencat.cat/ca/'],
+    feeds=['https://patrimoni.gencat.cat/ca/rss.xml'],
+    include=['^https?://patrimoni\\.gencat\\.cat/(ca|es|en)/(coleccio|monuments|patrimoni)/'],
+)
+_facts(
+    'her-patrimonio-aragon',
+    ['facts', 'places'],
+    'Patrimonio Cultural de Aragón (Gobierno de Aragón): Aragonese heritage assets with history, for Place facts and Places to see.',
+    cls='official',
+    seeds=['https://patrimonioculturaldearagon.es/bienes-culturales/'],
+    feeds=['https://patrimonioculturaldearagon.es/feed/'],
+    include=['^https?://patrimonioculturaldearagon\\.es/bienes-culturales/'],
+)
+_facts(
+    'fx-patrimonio-galego',
+    ['facts', 'places'],
+    'Patrimonio Galego (catálogo social): Galician heritage catalogue (community, sourced), for Place facts and Places to see.',
+    cls='community',
+    llm=False,
+    off='owner decision: community-written site; the place_fact kind takes official, reference and editorial sources only (kinds.toml). Allow community sources behind corroboration, or keep off?',
+    depth=2,
+    seeds=['https://patrimoniogalego.net/'],
+    include=['^https?://patrimoniogalego\\.net/index\\.php/\\d+/'],
+)
+_facts(
+    'arch-pandektis',
+    ['facts'],
+    "Pandektis (EKT): Greek historic place names, monuments, travellers' accounts (EKT/NHRF), for Place facts.",
+    cls='reference',
+    depth=2,
+    seeds=['https://pandektis.ekt.gr/pandektis/'],
+    include=['^https?://pandektis\\.ekt\\.gr/pandektis/handle/'],
+)
+_facts(
+    'her-uk-wales-coflein',
+    ['facts', 'places'],
+    'Coflein (RCAHMW / NMRW): site descriptions for Wales (complements her-cadw), for Place facts and Places to see.',
+    cls='official',
+    llm=False,
+    sitemaps=['https://coflein.gov.uk/sitemap_index.xml'],
+    include=['^https?://coflein\\.gov\\.uk/en/site/'],
+)
+_facts(
+    'arch-gazetteer-scotland',
+    ['facts', 'places'],
+    'Gazetteer for Scotland: every Scottish town, parish and feature with history and trivia, for Place facts and Places to see.',
+    cls='reference',
+    llm=False,
+    depth=2,
+    seeds=['https://www.scottish-places.info/'],
+    include=['^https?://www\\.scottish-places\\.info/towns/'],
+)
+_facts(
+    'fx-logainm',
+    ['facts'],
+    'Logainm.ie (Placenames Database of Ireland): origin and meaning of Irish place names, for Place facts.',
+    cls='official',
+    llm=False,
+    depth=2,
+    seeds=['https://www.logainm.ie/en/', 'https://www.logainm.ie/en/inf/api'],
+    include=['^https?://www\\.logainm\\.ie/(en|ga)/\\d+$'],
+)
+_facts(
+    'arch-logainm-api',
+    ['facts'],
+    'Logainm API: structured place-name data, for Place facts.',
+    cls='official',
+    off='needs owner key: Logainm API (sign-up in the notes; free)',
+    seeds=['https://www.logainm.ie/'],
+)
+_facts(
+    'arch-ddb-api',
+    ['facts'],
+    'Deutsche Digitale Bibliothek API: local-history objects per German place, for Place facts.',
+    cls='official',
+    off='needs owner key: Deutsche Digitale Bibliothek API (https://www.deutsche-digitale-bibliothek.de/user/apikey; free)',
+    seeds=['https://api.deutsche-digitale-bibliothek.de/'],
+)
+_facts(
+    'arch-polona',
+    ['facts'],
+    'Polona (Biblioteka Narodowa): digitised local histories, for Place facts.',
+    cls='official',
+    off='adapter pending: format not recorded',
+    seeds=['https://polona.pl/'],
+)
+_facts(
+    'her-mantojums-lv',
+    ['facts'],
+    'Mantojums.lv (Latvian heritage): Latvian monuments, for Place facts.',
+    cls='official',
+    off='adapter pending: format not recorded',
+    seeds=['https://mantojums.lv/'],
+)
+_facts(
+    'fx-estonica',
+    ['facts'],
+    'Estonica (Eesti Instituut): Estonian history/culture encyclopedia, for Place facts.',
+    cls='reference',
+    off='adapter pending: format not recorded',
+    seeds=['https://www.estonica.org/'],
+)
+_facts(
+    'fx-notrehistoire',
+    ['facts'],
+    'notreHistoire.ch: community local-history of Romandy, for Place facts.',
+    cls='community',
+    llm=False,
+    off='adapter pending: format not recorded',
+    sitemaps=['https://notrehistoire.ch/sitemap.xml'],
+)
+_facts(
+    'od-kringla',
+    ['facts'],
+    'Kringla / K-samsök (Riksantikvarieämbetet): Swedish heritage objects per place, for Place facts.',
+    cls='official',
+    off='adapter pending: format not recorded',
+    seeds=['https://www.kringla.nu/'],
+)
+_facts(
+    'her-kyppi',
+    ['facts'],
+    'Kulttuuriympäristön palveluikkuna (Museovirasto): Finnish protected sites, for Place facts.',
+    cls='official',
+    off='adapter pending: format not recorded',
+    seeds=['https://www.kyppi.fi/'],
+)
+_facts(
+    'her-fi-kyppi',
+    ['facts', 'places'],
+    'Kulttuuriympäristön palveluikkuna: Finnish heritage register (monuments, protected buildings), for Place facts and Places to see.',
+    cls='official',
+    depth=2,
+    seeds=['https://www.kyppi.fi/palveluikkuna/portti/read/asp/default.aspx'],
+    include=['^https?://www\\.kyppi\\.fi/palveluikkuna/'],
+)
+_facts(
+    'fx-museum-digital',
+    ['facts'],
+    'museum-digital (DE): museum objects with place links, for Place facts.',
+    cls='reference',
+    off='adapter pending: format not recorded',
+    sitemaps=['https://nat.museum-digital.de/xml/sitemap'],
+)
+_facts(
+    'fx-historia-ro',
+    ['facts'],
+    'Historia.ro: Romanian history magazine, for Place facts.',
+    cls='editorial',
+    off='owner decision: Personal non-commercial use is OK, but linking needs prior written consent, and we always link. Ask, or SKIP.',
+    seeds=['https://historia.ro/', 'https://historia.ro/sitemap/index'],
+)
+_facts(
+    'her-cassini-ehess',
+    ['facts'],
+    "Des villages de Cassini aux communes d'aujourd'hui (EHESS): every French commune's history of names, mergers and population since the 18th century, for Place facts.",
+    cls='reference',
+    off='enable after a check from the crawler VM: robots.txt gave no response from the research laptop (timeout on https and http (round 1: unreachable too)); terms and content not yet seen',
+    depth=2,
+    seeds=['http://cassini.ehess.fr/cassini/fr/html/1_navigation.htm'],
+    include=['^https?://cassini\\.ehess\\.fr/cassini/fr/html/'],
+)
+_facts(
+    'arch-rmca-history',
+    ['facts'],
+    'Royal Museum for Central Africa (AfricaMuseum): history articles: researched history of DR Congo, Rwanda, Burundi and colonial-era places, for Place facts.',
+    cls='official',
+    depth=2,
+    seeds=['https://www.africamuseum.be/en/discover/history_articles', 'https://www.africamuseum.be/en/about_us/history_renovation'],
+    include=['^https?://www\\.africamuseum\\.be/en/discover/history_articles'],
+)
+_facts(
+    'her-saba-park',
+    ['facts', 'activities'],
+    'Saba Conservation Foundation (Saba parks): Mount Scenery (887 m) is the highest point in the Kingdom of the Netherlands, for Place facts and Activities.',
+    cls='official',
+    delay=60,
+    seeds=['https://sabapark.org/mount-scenery-national-park/', 'https://sabapark.org/saba-national-marine-park/', 'https://sabapark.org/saba-bank-national-park/'],
+    include=['^https?://sabapark\\.org/(mount-scenery-national-park|saba-national-marine-park|saba-bank-national-park|saba-conservation-foundation)/'],
+)
+_facts(
+    'her-atlas-mutual-heritage',
+    ['facts', 'places'],
+    'Atlas of Mutual Heritage: VOC/WIC-era forts, lodges and towns in Suriname, Guyana, the Caribbean, West Africa and Asia, for Place facts and Places to see.',
+    cls='reference',
+    sitemaps=['https://atlasmutualheritage.nl/sitemap_index.xml'],
+    feeds=['https://atlasmutualheritage.nl/feed/'],
+)
+_facts(
+    'fx-efeo',
+    ['facts'],
+    "École française d'Extrême-Orient: archaeological discoveries at Angkor, Luang Prabang and Bagan, for Place facts.",
+    cls='reference',
+    seeds=['https://www.efeo.fr/centres'],
+    feeds=['https://www.efeo.fr/feed/'],
+    include=['^https?://www\\.efeo\\.fr/(actualites|centres?)/'],
+)
+_facts(
+    'fx-dcbd-nl',
+    ['facts'],
+    'Dutch Caribbean Biodiversity Database: history and curiosities of the places it covers, for Place facts.',
+    cls='editorial',
+    off='adapter pending: format / note: React SPA; needs the JSON API behind it. Nature facts for the Caribbean Netherlands',
+    seeds=['https://dcbd.nl/'],
+)
+_facts(
+    'fx-es-alandalus-historia',
+    ['facts', 'places'],
+    'Al-Andalus y la Historia (es / Andalusia, Córdoba, Granada…): history of Andalusian towns and monuments by historians, for Place facts and Places to see.',
+    cls='editorial',
+    feeds=['https://www.alandalusylahistoria.com/?feed=rss2'],
+    include=['^https?://www\\.alandalusylahistoria\\.com/\\?p=|^/[0-9]{4}/'],
+)
+_facts(
+    'fx-es-aventura-historia',
+    ['facts'],
+    'La Aventura de la Historia (es / Spain, world): history magazine written by historians since 1998 (place history, curiosities), for Place facts.',
+    cls='editorial',
+    feeds=['https://www.laaventuradelahistoria.es/feed'],
+    include=['^https?://www\\.laaventuradelahistoria\\.es/[a-z0-9-]+$'],
+)
+_facts(
+    'fx-es-andalucia-en-la-historia',
+    ['facts'],
+    'Andalucía en la Historia (Centro de Estudios Andaluces, public foundation) (es / Andalusi…: popular history of Andalusian places, for Place facts.',
+    cls='official',
+    depth=2,
+    seeds=['https://www.centrodeestudiosandaluces.es/publicaciones/revista-andalucia-en-la-historia'],
+    include=['^https?://www\\.centrodeestudiosandaluces\\.es/publicaciones/'],
+)
+_facts(
+    'fx-de-damals',
+    ['facts'],
+    'DAMALS – Das Magazin für Geschichte (de): history features incl. places and towns, for Place facts.',
+    cls='editorial',
+    seeds=['https://damals.de/artikel/'],
+    sitemaps=['https://damals.de/sitemap-news.xml'],
+    include=['^https?://damals\\.de/artikel/'],
+)
+_facts(
+    'fx-de-monumente',
+    ['facts', 'places'],
+    'Monumente (magazine of the Deutsche Stiftung Denkmalschutz) (de / German towns and monume…: monument histories and curiosities per town, for Place facts and Places to see.',
+    cls='official',
+    seeds=['https://www.monumente-online.de/de/google-sitemap.php'],
+    include=['^https?://www\\.monumente-online\\.de/de/ausgaben/'],
+)
+_facts(
+    'fx-de-stadtgeschichte-muenchen',
+    ['facts', 'walking_tours'],
+    'Stadtgeschichte München (de / Munich streets, districts, chronicle): street-name origins, district history, for Place facts and Free walking tours.',
+    cls='community',
+    llm=False,
+    off='owner decision: community-written site; the place_fact kind takes official, reference and editorial sources only (kinds.toml). Allow community sources behind corroboration, or keep off?',
+    depth=2,
+    seeds=['https://stadtgeschichte-muenchen.de/'],
+    include=['^https?://stadtgeschichte-muenchen\\.de/(strassen|stadtteile|chronik|geschichte|denkmal)'],
+)
+_facts(
+    'fx-fr-herodote',
+    ['facts'],
+    'Herodote.net (fr): dated history pieces, many on French places, for Place facts.',
+    cls='editorial',
+    depth=2,
+    seeds=['https://www.herodote.net/'],
+    include=['^https?://www\\.herodote\\.net/[^/]+-[0-9]+\\.php$'],
+)
+_facts(
+    'fx-fr-unjourdeplusaparis',
+    ['facts', 'walking_tours'],
+    'Un Jour de Plus à Paris (fr/en / Paris insolite): little-known Paris spots (e.g. "the only Paris church without a bell tower"), for Place facts and Free walking tours.',
+    cls='editorial',
+    feeds=['https://www.unjourdeplusaparis.com/feed'],
+    include=['^https?://www\\.unjourdeplusaparis\\.com/(paris-insolite|[a-z-]+/)'],
+)
+_facts(
+    'her-fr-atlas-historique-paris',
+    ['facts'],
+    'Atlas historique de Paris (fr / Paris quarters): academic map-based history of each Paris quarter, for Place facts.',
+    cls='reference',
+    depth=2,
+    seeds=['https://www.paris-atlas-historique.fr/'],
+    include=['^https?://www\\.paris-atlas-historique\\.fr/[0-9]+\\.html|^/[a-z-]+$'],
+)
+_facts(
+    'fx-it-romaierioggi',
+    ['facts', 'walking_tours'],
+    'Roma Ieri Oggi (it / Rome streets then and now): dated historic photos with captions per piazza or street, for Place facts and Free walking tours.',
+    cls='community',
+    llm=False,
+    off='owner decision: community-written site; the place_fact kind takes official, reference and editorial sources only (kinds.toml). Allow community sources behind corroboration, or keep off?',
+    delay=10,
+    feeds=['https://romaierioggi.it/feed/'],
+    include=['^https?://romaierioggi\\.it/[0-9]{4}/|^/[a-z0-9-]+/$'],
+)
+_facts(
+    'fx-ru-diletant',
+    ['facts'],
+    'Дилетант (Diletant history magazine) (ru): history curiosities incl. Russian and world places, for Place facts.',
+    cls='editorial',
+    sitemaps=['https://diletant.media/sitemap.xml'],
+    include=['^https?://diletant\\.media/articles/'],
+)
+_facts(
+    'arch-ru-mosmuseum',
+    ['facts', 'places'],
+    'Музей Москвы (Museum of Moscow) (ru / Moscow): Moscow city history posts, for Place facts and Places to see.',
+    cls='official',
+    sitemaps=['https://mosmuseum.ru/sitemap-posts-post-1.xml', 'https://mosmuseum.ru/sitemap.xml'],
+    include=['^https?://mosmuseum\\.ru/[a-z0-9-]+/$'],
+)
+_facts(
+    'arch-ru-historyrussia',
+    ['facts'],
+    'Российское историческое общество (Russian Historical Society) (ru / Russian regions): regional anniversaries, historic town projects, for Place facts.',
+    cls='official',
+    depth=2,
+    seeds=['https://historyrussia.org/'],
+    include=['^https?://historyrussia\\.org/(sobytiya|proekty|izdaniya)/'],
+)
+_facts(
+    'fx-pt-rtp-ensina',
+    ['facts'],
+    'RTP Ensina (public broadcaster education) (pt / Portugal): short "sabia que" history and place items, for Place facts.',
+    cls='official',
+    depth=2,
+    seeds=['https://ensina.rtp.pt/'],
+    feeds=['https://ensina.rtp.pt/feed/'],
+    include=['^https?://ensina\\.rtp\\.pt/artigo/'],
+)
+_facts(
+    'arch-tr-iae',
+    ['facts'],
+    'İstanbul Araştırmaları Enstitüsü (Istanbul Research Institute) (tr/en / Istanbul): Istanbul history research and exhibitions, for Place facts.',
+    cls='official',
+    llm=False,
+    depth=2,
+    seeds=['https://www.iae.org.tr/'],
+    include=['^https?://www\\.iae\\.org\\.tr/(Icerik|Proje|Yayin)/'],
+)
+_facts(
+    'her-uk-camra-pub-interiors',
+    ['facts', 'places'],
+    'CAMRA Historic Pub Interiors / National Inventory (en / UK towns): oldest and unaltered pub interiors per town (record-type facts), for Place facts and Places to see.',
+    cls='community',
+    llm=False,
+    off='owner decision: community-written site; the place_fact kind takes official, reference and editorial sources only (kinds.toml). Allow community sources behind corroboration, or keep off?',
+    depth=2,
+    seeds=['https://camra.org.uk/heritage-pubs'],
+    include=['^https?://camra\\.org\\.uk/heritage-pubs'],
+)
+_facts(
+    'gov-at-bev-presse',
+    ['facts'],
+    'BEV (Austrian federal mapping agency) press archive (de / Austria): tripoints, geodetic control points, survey milestones, for Place facts.',
+    cls='official',
+    seeds=['https://www.bev.gv.at/Presse/Archiv/2024/Der-Tripelpunkt.html'],
+    sitemaps=['https://www.bev.gv.at/sitemap.xml'],
+    include=['^https?://www\\.bev\\.gv\\.at/Presse/(Aktuelles|Archiv)/'],
+)
+_facts(
+    'fx-fr-retronews',
+    ['facts'],
+    'RetroNews (BnF press archive editorial) (fr): dated "on this day" items from the old French press, by place, for Place facts.',
+    cls='official',
+    llm=False,
+    off='owner decision: CGU unreadable (JS); the archive is paywalled while the editorial articles are free; AI-bot blocks. Title + link only, or SKIP?',
+    sitemaps=['https://www.retronews.fr/sitemap.xml'],
+    include=['^https?://www\\.retronews\\.fr/(echo-de-presse|histoire)/'],
+)
+_facts(
+    'her-de-berlin-denkmaldb',
+    ['facts', 'places', 'walking_tours'],
+    'Denkmaldatenbank Berlin: every Berlin monument, with construction history and architects, for Place facts, Places to see and Free walking tours.',
+    cls='official',
+    depth=2,
+    seeds=['https://denkmaldatenbank.berlin.de/'],
+    include=['^https?://denkmaldatenbank\\.berlin\\.de/daobj'],
+)
+_facts(
+    'od-de-sh-denkmalliste',
+    ['facts', 'places'],
+    'Denkmalliste Schleswig-Holstein (Open-Data SH): statewide list of monuments (type, date, place), for Place facts and Places to see.',
+    cls='official',
+    off='adapter pending: a place_fact mapping for this dataset on the csv_filter reader',
+    delay=10,
+    seeds=['https://opendata.schleswig-holstein.de/dataset/geodaten-denkmalliste-sh-2025-04-07', 'https://opendata.schleswig-holstein.de/organization/landesamt-fur-denkmalpflege'],
+    include=['^https?://opendata\\.schleswig-holstein\\.de/dataset/'],
+)
+_facts(
+    'her-ie-niah',
+    ['facts', 'places', 'walking_tours'],
+    'National Inventory of Architectural Heritage: building appraisals for every Irish county, for Place facts, Places to see and Free walking tours.',
+    cls='official',
+    sitemaps=['https://www.buildingsofireland.ie/sitemap_index.xml'],
+    include=['^https?://www\\.buildingsofireland\\.ie/(buildings-search|building-of-the-month|highlights)/'],
+)
+_facts(
+    'od-ie-nms-smr',
+    ['facts', 'places'],
+    'National Monuments Service open data (SMR): Sites and Monuments Record, with more than 150k Irish archaeological sites, for Place facts and Places to see.',
+    cls='official',
+    off='adapter pending: a place_fact mapping for this dataset on the csv_filter reader',
+    seeds=['https://www.archaeology.ie/collections-and-publications/open-data/'],
+    sitemaps=['https://www.archaeology.ie/sitemap_index.xml'],
+    include=['^https?://www\\.archaeology\\.ie/collections-and-publications/'],
+)
+_facts(
+    'her-se-fornsok',
+    ['facts', 'places'],
+    'Fornsök (Swedish Heritage Board): ancient monuments and sites in Sweden, for Place facts and Places to see.',
+    cls='official',
+    depth=2,
+    seeds=['https://app.raa.se/open/fornsok/'],
+    include=['^https?://app\\.raa\\.se/open/fornsok/'],
+)
+_facts(
+    'her-no-kulturminnesok',
+    ['facts', 'places', 'walking_tours'],
+    'Kulturminnesøk (Riksantikvaren): Norwegian cultural monuments, with short histories, for Place facts, Places to see and Free walking tours.',
+    cls='official',
+    sitemaps=['https://www.kulturminnesok.no/wp-sitemap.xml'],
+    include=['^https?://www\\.kulturminnesok\\.no/kulturminne/'],
+)
+_facts(
+    'her-fi-rky',
+    ['facts', 'places', 'walking_tours'],
+    'RKY: nationally significant built cultural environments: about 1,300 Finnish environments, with history essays, for Place facts, Places to see and Free walking tours.',
+    cls='official',
+    depth=2,
+    seeds=['https://www.rky.fi/read/asp/r_default.aspx'],
+    include=['^https?://www\\.rky\\.fi/read/asp/r_kohde_det'],
+)
+_facts(
+    'her-at-bda',
+    ['facts', 'places'],
+    'Bundesdenkmalamt (Austria): Austrian monument list (per-Land PDFs) plus heritage stories, for Place facts and Places to see.',
+    cls='official',
+    depth=2,
+    seeds=['https://www.bda.gv.at/'],
+    include=['^https?://www\\.bda\\.gv\\.at/(denkmalverzeichnis|themen)/'],
+)
+_facts(
+    'her-es-cat-invarquit',
+    ['facts', 'places'],
+    'Inventari del Patrimoni Arquitectònic de Catalunya: Catalan architectural heritage records, for Place facts and Places to see.',
+    cls='official',
+    llm=False,
+    depth=2,
+    seeds=['https://invarquit.cultura.gencat.cat/'],
+    include=['^https?://invarquit\\.cultura\\.gencat\\.cat/(Cerca|card)/'],
+)
+_facts(
+    'her-de-bw-denkmalpflege',
+    ['facts', 'places'],
+    'Landesamt für Denkmalpflege Baden-Württemberg: Denkmal des Monats and monument histories, for Place facts and Places to see.',
+    cls='official',
+    depth=2,
+    seeds=['https://www.denkmalpflege-bw.de/'],
+    include=['^https?://www\\.denkmalpflege-bw\\.de/(denkmale|geschichte)/'],
+)
+_facts(
+    'her-de-sn-lfd',
+    ['facts', 'places'],
+    'Landesamt für Denkmalpflege Sachsen: Saxon monument features and the Denkmalliste, for Place facts and Places to see.',
+    cls='official',
+    depth=2,
+    seeds=['https://www.lfd.sachsen.de/'],
+    include=['^https?://www\\.lfd\\.sachsen\\.de/'],
+)
+_facts(
+    'her-de-bb-bldam',
+    ['facts', 'places'],
+    'BLDAM Brandenburg: Brandenburg Denkmalliste (per-Kreis PDFs) and features, for Place facts and Places to see.',
+    cls='official',
+    sitemaps=['https://bldam-brandenburg.de/wp-sitemap.xml'],
+    include=['^https?://bldam-brandenburg\\.de/(denkmalliste|denkmal-des-monats|\\d{4})/'],
+)
+_facts(
+    'her-de-he-denkxweb',
+    ['facts', 'places', 'walking_tours'],
+    'DenkXweb (Landesamt für Denkmalpflege Hessen): every Hessian monument, with a description, for Place facts, Places to see and Free walking tours.',
+    cls='official',
+    depth=2,
+    seeds=['https://denkxweb.denkmalpflege-hessen.de/'],
+    include=['^https?://denkxweb\\.denkmalpflege-hessen\\.de/\\d+/'],
+)
+_facts(
+    'her-de-rp-gdke',
+    ['facts', 'places'],
+    'GDKE Rheinland-Pfalz: Nachrichtliches Verzeichnis der Kulturdenkmäler (PDFs), for Place facts and Places to see.',
+    cls='official',
+    depth=2,
+    seeds=['https://gdke.rlp.de/'],
+    include=['^https?://gdke\\.rlp\\.de/(denkmalpflege|ueber-uns)/'],
+)
+_facts(
+    'od-de-hh-denkmalliste-2',
+    ['facts', 'places'],
+    'Hamburg Transparenzportal (Denkmalliste): Hamburg monument list, for Place facts and Places to see.',
+    cls='official',
+    off='adapter pending: a place_fact mapping for this dataset on the csv_filter reader',
+    seeds=['https://transparenz.hamburg.de/open-data-796518'],
+    sitemaps=['https://transparenz.hamburg.de/service-sitemap-transparenzportal-sitemap_index.xml'],
+    include=['^https?://transparenz\\.hamburg\\.de/'],
+)
+_facts(
+    'her-es-cyl-patrimonio',
+    ['facts', 'places'],
+    'Patrimonio Cultural de Castilla y León: BIC monuments in Castilla y León, for Place facts and Places to see.',
+    cls='official',
+    depth=2,
+    seeds=['https://patrimoniocultural.jcyl.es/'],
+    include=['^https?://patrimoniocultural\\.jcyl\\.es/web/jcyl/PatrimonioCultural/'],
+)
+_facts(
+    'her-lu-inpa',
+    ['facts', 'places'],
+    'INPA Luxembourg: national protected monuments, for Place facts and Places to see.',
+    cls='official',
+    depth=2,
+    seeds=['https://inpa.public.lu/'],
+    include=['^https?://inpa\\.public\\.lu/(fr|de)/'],
+)
+_facts(
+    'her-is-minjastofnun',
+    ['facts', 'places'],
+    'Minjastofnun Íslands: Icelandic protected sites and buildings, for Place facts and Places to see.',
+    cls='official',
+    depth=2,
+    delay=5,
+    seeds=['https://www.minjastofnun.is/'],
+    include=['^https?://www\\.minjastofnun\\.is/'],
+)
+_facts(
+    'her-si-rkd',
+    ['facts', 'places'],
+    'Register kulturne dediščine (Slovenia): more than 30k Slovenian heritage units, for Place facts and Places to see.',
+    cls='official',
+    depth=2,
+    seeds=['https://rkd.situla.org/'],
+    include=['^https?://rkd\\.situla\\.org/'],
+)
+_facts(
+    'her-ro-patrimoniu',
+    ['facts', 'places'],
+    'Institutul Național al Patrimoniului: Romanian LMI list of historic monuments, for Place facts and Places to see.',
+    cls='official',
+    depth=2,
+    seeds=['https://www.patrimoniu.ro/'],
+    include=['^https?://www\\.patrimoniu\\.ro/(ro|en)/(monumente|articles)/'],
+)
+_facts(
+    'her-dk-slks',
+    ['facts', 'places'],
+    'Slots- og Kulturstyrelsen: Danish listed buildings and ancient monuments, for Place facts and Places to see.',
+    cls='official',
+    depth=2,
+    seeds=['https://slks.dk/'],
+    include=['^https?://slks\\.dk/omraader/kulturarv/'],
+)
+_facts(
+    'her-gb-leeds-blue-plaques',
+    ['facts', 'places', 'walking_tours'],
+    'Leeds Civic Trust blue plaques: plaque texts for Leeds people and places, for Place facts, Places to see and Free walking tours.',
+    cls='editorial',
+    sitemaps=['https://leedscivictrust.org.uk/sitemaps.xml'],
+    include=['^https?://leedscivictrust\\.org\\.uk/blue-plaques/'],
+)
+_facts(
+    'her-uk-ni-ulster-history-circle',
+    ['facts', 'places', 'walking_tours'],
+    'Ulster History Circle blue plaques: blue plaques across Northern Ireland, for Place facts, Places to see and Free walking tours.',
+    cls='editorial',
+    sitemaps=['https://ulsterhistorycircle.org.uk/sitemap-1.xml'],
+    include=['^https?://ulsterhistorycircle\\.org\\.uk/(plaque|\\d{4})'],
+)
+_facts(
+    'gov-uk-cityoflondon',
+    ['facts', 'places', 'walking_tours'],
+    'City of London: History and heritage: Square Mile history, Guildhall, livery, for Place facts, Places to see and Free walking tours.',
+    cls='official',
+    llm=False,
+    depth=2,
+    seeds=['https://www.cityoflondon.gov.uk/things-to-do/history-and-heritage'],
+    include=['^https?://www\\.cityoflondon\\.gov\\.uk/things-to-do/history-and-heritage'],
+)
+_facts(
+    'city-dublin',
+    ['facts', 'places'],
+    'Dublin City Council (Library & Archive history pages): history and curiosities of the places it covers, for Place facts and Places to see.',
+    cls='official',
+    depth=2,
+    seeds=['https://www.dublincity.ie/'],
+    include=['^https?://www\\.dublincity\\.ie/(library|residential/arts-and-culture)'],
+)
+_facts(
+    'her-de-berlin-gedenktafeln',
+    ['facts', 'places', 'walking_tours'],
+    'Gedenktafeln in Berlin: more than 3k Berlin memorial plaques with background texts, for Place facts, Places to see and Free walking tours.',
+    cls='community',
+    llm=False,
+    off='owner decision: community-written site; the place_fact kind takes official, reference and editorial sources only (kinds.toml). Allow community sources behind corroboration, or keep off?',
+    depth=2,
+    seeds=['https://www.gedenktafeln-in-berlin.de/'],
+    include=['^https?://www\\.gedenktafeln-in-berlin\\.de/gedenktafeln/detail/'],
+)
+_facts(
+    'her-uk-ni-hed',
+    ['facts', 'places'],
+    'NI Historic Environment Division: NI listed buildings, scheduled monuments and state-care sites, for Place facts and Places to see.',
+    cls='official',
+    llm=False,
+    depth=2,
+    delay=5,
+    seeds=['https://www.communities-ni.gov.uk/topics/historic-environment'],
+    include=['^https?://www\\.communities-ni\\.gov\\.uk/(topics|articles)/.*historic'],
+)
+_facts(
+    'od-se-ksamsok',
+    ['facts'],
+    'K-samsök / SOCH (Sweden): history and curiosities of the places it covers, for Place facts.',
+    cls='reference',
+    off='adapter pending: REST API (RDF/XML)',
+    seeds=['https://www.kulturarvsdata.se/'],
+)
+_facts(
+    'her-hr-registar',
+    ['facts'],
+    'Registar kulturnih dobara (Croatia): history and curiosities of the places it covers, for Place facts.',
+    cls='official',
+    off='adapter pending: Angular SPA over a JSON API',
+    seeds=['https://registar.kulturnadobra.hr/'],
+)
+_facts(
+    'her-de-by-denkmalatlas',
+    ['facts'],
+    'Bayerischer Denkmal-Atlas (BLfD): history and curiosities of the places it covers, for Place facts.',
+    cls='official',
+    off='adapter pending: JS map viewer',
+    seeds=['https://geoportal.bayern.de/'],
+)
+_facts(
+    'her-de-ni-denkmalatlas',
+    ['facts'],
+    'Denkmalatlas Niedersachsen: history and curiosities of the places it covers, for Place facts.',
+    cls='official',
+    off='adapter pending: JS viewer with GeoJSON/CSV export',
+    seeds=['https://denkmalatlas.niedersachsen.de/'],
+)
+_facts(
+    'od-it-mic-lod',
+    ['facts'],
+    'MiC Linked Open Data (dati.beniculturali.it): history and curiosities of the places it covers, for Place facts.',
+    cls='reference',
+    off='adapter pending: SPARQL endpoint (CC BY)',
+    seeds=['https://dati.beniculturali.it/'],
+)
+_facts(
+    'her-it-vincoli',
+    ['facts'],
+    'Vincoli in Rete (MiC): history and curiosities of the places it covers, for Place facts.',
+    cls='official',
+    off='adapter pending: REST/WMS GIS service',
+    seeds=['https://vincoliinrete.beniculturali.it/'],
+)
+_facts(
+    'od-nl-amsterdam-monumenten',
+    ['facts'],
+    'Amsterdam monumenten map/data: history and curiosities of the places it covers, for Place facts.',
+    cls='reference',
+    off='adapter pending: map layer JSON/CSV export',
+    seeds=['https://maps.amsterdam.nl/', 'https://data.amsterdam.nl/'],
+)
+_facts(
+    'od-atlas-mutual-heritage',
+    ['facts'],
+    'JS search app (home has 28 links): history and curiosities of the places it covers, for Place facts.',
+    cls='reference',
+    off='adapter pending: JS search app (home has 28 links)',
+    seeds=['https://www.atlasofmutualheritage.nl/'],
+)
+_facts(
+    'arch-data-bnf',
+    ['facts', 'places'],
+    'data.bnf.fr (Bibliothèque nationale de France): BnF place authority records (notes, historical names, links to Gallica), for Place facts and Places to see.',
+    cls='official',
+    sitemaps=['https://data.bnf.fr/sitemap1.xml.gz'],
+    include=['^https?://data\\.bnf\\.fr/(fr|en)/[0-9]+/'],
+)
+_facts(
+    'arch-bavarikon',
+    ['facts', 'places'],
+    'bavarikon (Bavarian State Library, Bavarian cultural portal): "Orte" (places) section with place-linked heritage objects and exhibitions, for Place facts and Places to see.',
+    cls='official',
+    depth=2,
+    seeds=['https://www.bavarikon.de/de'],
+    include=['^https?://www\\.bavarikon\\.de/(de|en)/(orte|object)/'],
+)
+_facts(
+    'arch-internetculturale',
+    ['facts'],
+    'Internet Culturale (ICCU): virtual exhibitions on Italian cities and regions, for Place facts.',
+    cls='official',
+    llm=False,
+    depth=2,
+    seeds=['https://www.internetculturale.it/'],
+    include=['^https?://www\\.internetculturale\\.it/it/\\d+/(mostre|percorsi)/'],
+)
+_facts(
+    'arch-genuki',
+    ['facts', 'places'],
+    'GENUKI (UK & Ireland genealogy, per-parish pages): parish and town descriptions with historical notes and references, for Place facts and Places to see.',
+    cls='community',
+    llm=False,
+    off='owner decision: community-written site; the place_fact kind takes official, reference and editorial sources only (kinds.toml). Allow community sources behind corroboration, or keep off?',
+    depth=2,
+    delay=60,
+    seeds=['https://www.genuki.org.uk/big/'],
+    include=['^https?://www\\.genuki\\.org\\.uk/big/'],
+)
+_facts(
+    'arch-peoples-collection-wales',
+    ['facts', 'places'],
+    "People's Collection Wales: Welsh place stories and heritage items, for Place facts and Places to see.",
+    cls='official',
+    depth=2,
+    seeds=['https://www.peoplescollection.wales/'],
+    include=['^https?://www\\.peoplescollection\\.wales/(items|collections|stories)/'],
+)
+_facts(
+    'arch-vision-of-britain',
+    ['facts', 'places'],
+    'A Vision of Britain through Time (U Portsmouth): historic gazetteer descriptions (1830s–1890s) for every British town and parish, for Place facts and Places to see.',
+    cls='reference',
+    off='enable after a check from the crawler VM: a robots.txt or page fetch failed or timed out from the research laptop (robots: no response (timeout) → allowed); read robots.txt, terms and content first',
+    depth=2,
+    seeds=['https://www.visionofbritain.org.uk/'],
+    include=['^https?://www\\.visionofbritain\\.org\\.uk/place/'],
+)
+_facts(
+    'arch-duchas',
+    ['facts', 'places'],
+    'Dúchas.ie (National Folklore Collection, UCD): Schools\' Collection 1937–39, folklore and local lore per parish and townland: the strongest "little-known facts" source for Ireland, for Place facts and Places to see.',
+    cls='reference',
+    llm=False,
+    off='needs owner key: Dúchas.ie (National Folklore Collection, UCD) (https://docs.gaois.ie/en/data/duchas/v0.6/licence; free)',
+    delay=5,
+    seeds=['https://www.duchas.ie/'],
+)
+_facts(
+    'arch-dimu-api',
+    ['facts', 'places'],
+    'DigitaltMuseum / KulturNav API (KulturIT, Norway/Sweden): Nordic museum objects with places, for Place facts and Places to see.',
+    cls='reference',
+    llm=False,
+    off='needs owner key: DigitaltMuseum / KulturNav API (KulturIT, Norway/Sweden) (https://api.dimu.org/api/solr/select?api.key=…; free)',
+    delay=5,
+    seeds=['https://api.dimu.org/'],
+)
+_facts(
+    'arch-tna-discovery',
+    ['facts', 'places'],
+    'The National Archives (UK) Discovery API: catalogue descriptions tied to UK places, for Place facts and Places to see.',
+    cls='reference',
+    off='adapter pending: REST JSON/XML, no key: `https://discovery.nationalarchives.gov.uk/API/search/records?sps.searchQuery=…`',
+    seeds=['https://discovery.nationalarchives.gov.uk/'],
+)
+_facts(
+    'arch-onb-labs',
+    ['facts', 'places'],
+    'ÖNB Labs datasets (Austrian National Library): place-tagged historic postcards and travel literature for Austria, for Place facts and Places to see.',
+    cls='reference',
+    off='adapter pending: Dataset downloads (CSV/JSON/IIIF), e.g. historic postcards (Ansichtskarten) with place names',
+    seeds=['https://labs.onb.ac.at/'],
+)
+_facts(
+    'arch-topothek',
+    ['facts'],
+    'Topothek (local photo archives, AT/DE/CZ…): municipal historic photos with captions (low yield), for Place facts.',
+    cls='reference',
+    off='adapter pending: Per-municipality subdomains, JS app',
+    seeds=['https://topothek.at/'],
+)
+_facts(
+    'gov-de-archives',
+    ['facts', 'walking_tours'],
+    'Delaware Public Archives (Delaware facts & symbols, markers): markers + symbols, for Place facts and Free walking tours.',
+    cls='official',
+    depth=2,
+    seeds=['https://archives.delaware.gov/'],
+    include=['^https?://archives\\.delaware\\.gov/(delaware-facts|historical-markers|state-symbols)'],
+)
+_facts(
+    'gov-md-manual',
+    ['facts'],
+    'Maryland Manual: Maryland at a Glance: symbols, firsts, county origins, records, for Place facts.',
+    cls='official',
+    depth=2,
+    seeds=['https://msa.maryland.gov/msa/mdmanual/01glance/html/mdglance.html'],
+    include=['^https?://msa\\.maryland\\.gov/msa/mdmanual/01glance/'],
+)
+_facts(
+    'city-berlin-geschichte',
+    ['facts', 'places', 'walking_tours'],
+    'berlin.de: Geschichte Berlins: city and district history, for Place facts, Places to see and Free walking tours.',
+    cls='official',
+    depth=2,
+    seeds=['https://www.berlin.de/geschichte/'],
+    sitemaps=['https://www.berlin.de/sitemap-index.xml'],
+    include=['^https?://www\\.berlin\\.de/geschichte/'],
+)
+_facts(
+    'city-hamburg-geschichte',
+    ['facts', 'places'],
+    'hamburg.de (city history): history and curiosities of the places it covers, for Place facts and Places to see.',
+    cls='official',
+    sitemaps=['https://www.hamburg.de/service-sitemap-hamburg.de-sitemap_index.xml'],
+    include=['^https?://www\\.hamburg\\.de/.*(?:(geschichte|stadtgeschichte))'],
+)
+_facts(
+    'city-muenchen-geschichte',
+    ['facts', 'places'],
+    'stadt.muenchen.de (Stadtgeschichte): history and curiosities of the places it covers, for Place facts and Places to see.',
+    cls='official',
+    depth=2,
+    seeds=['https://stadt.muenchen.de/'],
+    include=['^https?://stadt\\.muenchen\\.de/.*(?:(stadtgeschichte|geschichte))'],
+)
+_facts(
+    'city-paris-histoire',
+    ['facts', 'places', 'walking_tours'],
+    'Paris.fr (histoire de Paris, arrondissements): history and curiosities of the places it covers, for Place facts, Places to see and Free walking tours.',
+    cls='official',
+    sitemaps=['https://www.paris.fr/sitemap.xml.gz'],
+    include=['^https?://www\\.paris\\.fr/pages/.*histoire'],
+)
+_facts(
+    'gov-de-tatsachen',
+    ['facts'],
+    'Tatsachen ueber Deutschland / Facts about Germany (Federal Foreign Office): country and Laender facts, for Place facts.',
+    cls='official',
+    depth=2,
+    seeds=['https://www.tatsachen-ueber-deutschland.de/en'],
+    include=['^https?://www\\.tatsachen-ueber-deutschland\\.de/en/'],
+)
+_facts(
+    'gov-de-deutschland',
+    ['facts', 'places', 'events'],
+    'deutschland.de (Federal Foreign Office): history and curiosities of the places it covers, for Place facts, Places to see and Events.',
+    cls='official',
+    depth=2,
+    seeds=['https://www.deutschland.de/en'],
+    include=['^https?://www\\.deutschland\\.de/en/topic/'],
+)
+_facts(
+    'gov-ch-aboutswitzerland',
+    ['facts'],
+    'About Switzerland (Presence Switzerland, FDFA): country, cantons, records, history, for Place facts.',
+    cls='official',
+    depth=2,
+    seeds=['https://www.aboutswitzerland.eda.admin.ch/en'],
+    sitemaps=['https://www.eda.admin.ch/sitemap.xml'],
+    include=['^https?://www\\.aboutswitzerland\\.eda\\.admin\\.ch/en/', '^https?://www\\.eda\\.admin\\.ch/en/'],
+)
+_facts(
+    'gov-se-sweden',
+    ['facts'],
+    'sweden.se (Swedish Institute): history and curiosities of the places it covers, for Place facts.',
+    cls='official',
+    sitemaps=['https://sweden.se/sitemap.xml'],
+    include=['^https?://sweden\\.se/(culture|life|nature)/'],
+)
+_facts(
+    'gov-fi-thisisfinland',
+    ['facts'],
+    'thisisFINLAND (Ministry for Foreign Affairs): "Finland in facts", curiosities, for Place facts.',
+    cls='official',
+    sitemaps=['https://finland.fi/sitemap_index.xml'],
+    include=['^https?://finland\\.fi/(life-society|arts-culture)/'],
+)
+_facts(
+    'gov-dk-denmark',
+    ['facts'],
+    'denmark.dk (Ministry of Foreign Affairs): history and curiosities of the places it covers, for Place facts.',
+    cls='official',
+    seeds=['https://denmark.dk/people-and-culture'],
+    sitemaps=['https://denmark.dk/sitemap.xml'],
+    include=['^https?://denmark\\.dk/(people-and-culture|society-and-business)'],
+)
+_facts(
+    'gov-ee-estonia',
+    ['facts'],
+    'estonia.ee (Brand Estonia): country curiosities, for Place facts.',
+    cls='official',
+    sitemaps=['https://estonia.ee/sitemap.xml'],
+)
+_facts(
+    'gov-lu-public',
+    ['facts'],
+    'luxembourg.public.lu (official presentation of Luxembourg): history and curiosities of the places it covers, for Place facts.',
+    cls='official',
+    depth=2,
+    seeds=['https://luxembourg.public.lu/en.html'],
+    include=['^https?://luxembourg\\.public\\.lu/en/(society-and-culture|investir|visiter)'],
+)
+_facts(
+    'gov-lv-latvia',
+    ['facts'],
+    'latvia.eu (Latvian Institute): history and curiosities of the places it covers, for Place facts.',
+    cls='official',
+    llm=False,
+    sitemaps=['https://www.latvia.eu/sitemap_index.xml'],
+)
+_facts(
+    'gov-si-slovenia',
+    ['facts'],
+    'slovenia.si (Government Communication Office): history and curiosities of the places it covers, for Place facts.',
+    cls='official',
+    depth=2,
+    seeds=['https://slovenia.si/'],
+    include=['^https?://slovenia\\.si/(this-is-slovenia|discover)'],
+)
+_facts(
+    'gov-be-belgium',
+    ['facts'],
+    'belgium.be: About Belgium: history, regions, symbols, for Place facts.',
+    cls='official',
+    depth=2,
+    seeds=['https://www.belgium.be/en/about_belgium'],
+    include=['^https?://www\\.belgium\\.be/en/about_belgium'],
+)
+_facts(
+    'gov-wales-com',
+    ['facts'],
+    'Wales.com: About Wales (Welsh Government): language, castles-per-capita style facts, for Place facts.',
+    cls='official',
+    seeds=['https://www.wales.com/about'],
+    sitemaps=['https://www.wales.com/sitemap.xml'],
+    include=['^https?://www\\.wales\\.com/about'],
+)
+_facts(
+    'gov-scotland-org',
+    ['facts'],
+    'Scotland.org: Scottish Facts (Scottish Government): "Scottish facts", inventions, symbols, for Place facts.',
+    cls='official',
+    seeds=['https://www.scotland.org/about-scotland'],
+    sitemaps=['https://www.scotland.org/sitemap.xml'],
+    include=['^https?://www\\.scotland\\.org/(about-scotland|features)'],
+)
+_facts(
+    'gov-es-ine-cifras',
+    ['facts'],
+    'INE Spain (Espana en cifras): history and curiosities of the places it covers, for Place facts.',
+    cls='official',
+    seeds=['https://www.ine.es/'],
+    include=['^https?://www\\.ine\\.es/(prodyser/espa_cifras|dyngs/Prensa)'],
+)
+_facts(
+    'gov-fr-insee',
+    ['facts'],
+    'INSEE (France, portrait de territoire): commune/region figures, for Place facts.',
+    cls='official',
+    sitemaps=['https://www.insee.fr/sitemap-index.xml'],
+    include=['^https?://www\\.insee\\.fr/fr/statistiques/'],
+)
+_facts(
+    'gov-no-ssb',
+    ['facts'],
+    'Statistics Norway (SSB): Kommunefakta per municipality, for Place facts.',
+    cls='official',
+    seeds=['https://www.ssb.no/'],
+    include=['^https?://www\\.ssb\\.no/(befolkning|kommunefakta)'],
+)
+_facts(
+    'gov-fi-statfi',
+    ['facts'],
+    'Statistics Finland: history and curiosities of the places it covers, for Place facts.',
+    cls='official',
+    seeds=['https://stat.fi/'],
+    include=['^https?://stat\\.fi/(en/)?(julkaisu|tilasto)'],
+)
+_facts(
+    'gov-ch-bfs',
+    ['facts'],
+    'Swiss Federal Statistical Office (BFS): commune portraits, for Place facts.',
+    cls='official',
+    seeds=['https://www.bfs.admin.ch/'],
+    sitemaps=['https://www.bfs.admin.ch/sitemap.xml'],
+    include=['^https?://www\\.bfs\\.admin\\.ch/(de|en)/home/statistiken/'],
+)
+_facts(
+    'gov-ee-stat',
+    ['facts'],
+    'Statistics Estonia: history and curiosities of the places it covers, for Place facts.',
+    cls='official',
+    seeds=['https://www.stat.ee/'],
+    include=['^https?://www\\.stat\\.ee/(en|et)/'],
+)
+_facts(
+    'gov-pl-stat',
+    ['facts'],
+    'Statistics Poland (GUS): history and curiosities of the places it covers, for Place facts.',
+    cls='official',
+    seeds=['https://stat.gov.pl/'],
+)
+_facts(
+    'fx-citypopulation',
+    ['facts'],
+    'City Population (Thomas Brinkhoff): populations, areas and largest cities per country and admin unit, for Place facts.',
+    cls='reference',
+    llm=False,
+    depth=2,
+    seeds=['https://www.citypopulation.de/'],
+    include=['^https?://www\\.citypopulation\\.de/en/'],
+)
+_facts(
+    'her-wales-historic-placenames',
+    ['facts'],
+    'List of Historic Place Names of Wales (RCAHMW): earliest recorded forms and dates of Welsh names, for Place facts.',
+    cls='official',
+    llm=False,
+    off='enable after a check from the crawler VM: a robots.txt or page fetch failed or timed out from the research laptop (`Allow: /` but Crawl-delay: 1000, Content-Signal `search=yes,ai-train=no,use=reference`,…); read robots.txt, terms and content first',
+    delay=1000,
+    seeds=['https://historicplacenames.rcahmw.gov.uk/', 'https://historicplacenames.rcahmw.gov.uk/blog/'],
+    include=['^https?://historicplacenames\\.rcahmw\\.gov\\.uk/(placenames|blog)/'],
+)
+_facts(
+    'fx-imperium-ahlfeldt-se',
+    ['facts'],
+    'Digital Atlas of the Roman Empire (DARE): history and curiosities of the places it covers, for Place facts.',
+    cls='editorial',
+    off='adapter pending: JS map app',
+    seeds=['https://imperium.ahlfeldt.se/'],
+)
+_facts(
+    'od-ortsnamen-ch',
+    ['facts'],
+    'ortsnamen.ch (Swiss place-name portal): etymology from most Swiss place-name books, for Place facts.',
+    cls='reference',
+    off='adapter pending: format / endpoint: SPA backed by a JSON API',
+    seeds=['https://ortsnamen.ch/'],
+)
+_facts(
+    'od-placenamesni',
+    ['facts'],
+    'Northern Ireland Place-Name Project: meanings of NI townlands and towns, for Place facts.',
+    cls='reference',
+    off='adapter pending: format / endpoint: ArcGIS Experience / FeatureServer',
+    seeds=['https://www.placenamesni.org/'],
+)
+_facts(
+    'gov-metoffice-uk-extremes',
+    ['facts', 'weather'],
+    'Met Office UK climate extremes + monthly records blog: UK and per-country records by station (e.g. 40.3 °C at Coningsby), for Place facts and Weather.',
+    cls='official',
+    seeds=['https://www.metoffice.gov.uk/research/climate/maps-and-data/uk-climate-extremes'],
+    sitemaps=['https://www.metoffice.gov.uk/sitemap.xml'],
+    include=['^https?://www\\.metoffice\\.gov\\.uk/research/climate/maps-and-data/uk-climate-extremes', '^https?://www\\.metoffice\\.gov\\.uk/blog/20[0-9]{2}/met-office-.*records'],
+)
+_facts(
+    'gov-aemet-extremos',
+    ['facts', 'weather'],
+    'AEMET Valores extremos absolutos: absolute records per Spanish station, for Place facts and Weather.',
+    cls='official',
+    seeds=['https://www.aemet.es/es/serviciosclimaticos/datosclimatologicos/efemerides_extremos'],
+    include=['^https?://www\\.aemet\\.es/es/serviciosclimaticos/datosclimatologicos/efemerides_extremos'],
+)
+_facts(
+    'gov-knmi-ranglijsten',
+    ['facts', 'weather'],
+    'KNMI Ranglijsten (Dutch weather record lists): hottest and coldest, heatwaves and cold numbers per year and station, for Place facts and Weather.',
+    cls='official',
+    seeds=['https://www.knmi.nl/nederland-nu/klimatologie/lijsten'],
+    include=['^https?://www\\.knmi\\.nl/nederland-nu/klimatologie/lijsten'],
+)
+_facts(
+    'her-lost-villages-hull',
+    ['facts', 'places'],
+    "Beresford's Lost Villages (Univ. of Hull): 2,263 deserted medieval villages and why they were deserted, for Place facts and Places to see.",
+    cls='reference',
+    llm=False,
+    depth=2,
+    seeds=['https://dmv.wordpress.hull.ac.uk/index.php/villages/', 'https://dmv.hull.ac.uk/'],
+    include=['^https?://dmv\\.wordpress\\.hull\\.ac\\.uk/index.php/villages/', '^https?://dmv\\.hull\\.ac\\.uk/index.php/villages/'],
+)
+_facts(
+    'fx-ainmean-aite',
+    ['facts', 'places'],
+    'Ainmean-Àite na h-Alba: Gaelic place-names of Scotland: Gaelic forms and meanings of Scottish settlement names, for Place facts and Places to see.',
+    cls='official',
+    depth=2,
+    seeds=['https://www.ainmean-aite.scot/placename-lists/', 'https://www.ainmean-aite.scot/research/'],
+    include=['^https?://www\\.ainmean-aite\\.scot/(placename-lists|research)/', '^https?://www\\.ainmean-aite\\.scot/[a-z0-9-]+/?$'],
+)
+_facts(
+    'fx-spns',
+    ['facts'],
+    'Scottish Place-Name Society: name-origin articles and Survey of Scottish Place-Names news, for Place facts.',
+    cls='editorial',
+    sitemaps=['https://spns.org.uk/wp-sitemap.xml'],
+    include=['^https?://spns\\.org\\.uk/[a-z0-9-]+/?$'],
+)
+_facts(
+    'fx-snsbi',
+    ['facts'],
+    'Society for Name Studies in Britain & Ireland ("Exploring names"): name-origin explainers for UK and Irish places, for Place facts.',
+    cls='editorial',
+    sitemaps=['https://www.snsbi.org.uk/sitemap_index.xml'],
+    include=['^https?://www\\.snsbi\\.org\\.uk/exploring-names/'],
+)
+_facts(
+    'gov-os-blog',
+    ['facts'],
+    'Ordnance Survey blog (centre of Great Britain, extremities, highest points): GB centre (7 km NW of Dunsop Bridge), map oddities and curious names, for Place facts.',
+    cls='official',
+    seeds=['https://www.ordnancesurvey.co.uk/blog/'],
+    sitemaps=['https://www.ordnancesurvey.co.uk/sitemap.xml'],
+    include=['^https?://www\\.ordnancesurvey\\.co\\.uk/(newsroom/)?blog/'],
+)
+_facts(
+    'fx-isof-ortnamn',
+    ['facts'],
+    'Isof: articles on Swedish place names: name endings, oldest names, origins of Swedish towns, for Place facts.',
+    cls='official',
+    depth=2,
+    seeds=['https://www.isof.se/namn/ortnamn/lar-dig-mer-om-ortnamn-i-sverige'],
+    sitemaps=['https://www.isof.se/sitemapindex.xml'],
+    include=['^https?://www\\.isof\\.se/namn/ortnamn/'],
+)
+_facts(
+    'arch-isof-ortnamnsregistret',
+    ['facts'],
+    'Isof Ortnamnsregistret (digitised place-name archive): historical attestations of Swedish names. The records are mostly scanned slips, so first check how much text each record holds, for Place facts.',
+    cls='official',
+    depth=0,
+    seeds=['https://ortnamnsregistret.isof.se/static/sitemap_1.txt'],
+)
+_facts(
+    'arch-ujc-profous',
+    ['facts'],
+    'Místní jména v Čechách (Profous; Czech Language Institute): origin, meaning and changes of more than 15,000 Bohemian town and village names, for Place facts.',
+    cls='reference',
+    depth=2,
+    seeds=['https://mjc.ujc.cas.cz/'],
+    include=['^https?://mjc\\.ujc\\.cas\\.cz/'],
+)
+_facts(
+    'fx-ku-place-name-meanings',
+    ['facts'],
+    'Univ. of Copenhagen Name Research: meanings of selected Danish place-names: endings (-lev, -by, -torp) and the meanings of well-known Danish towns, for Place facts.',
+    cls='reference',
+    seeds=['https://names.ku.dk/place-names/meaning/'],
+    include=['^https?://names\\.ku\\.dk/place-names/'],
+)
+_facts(
+    'od-latvia-vietvardi',
+    ['facts'],
+    'LĢIA Vietvārdu datubāze (Latvian place-names database): historical names and notes for Latvian places, for Place facts.',
+    cls='official',
+    depth=2,
+    seeds=['https://vietvardi.lgia.gov.lv/lv'],
+    include=['^https?://vietvardi\\.lgia\\.gov\\.lv/(lv|en)/'],
+)
+_facts(
+    'fx-kotus-names',
+    ['facts'],
+    'Kotus: Finnish name planning (nimistönhuolto): Finnish and Saami name origins and articles, for Place facts.',
+    cls='official',
+    llm=False,
+    depth=2,
+    seeds=['https://kotus.fi/nimistonhuolto/'],
+    sitemaps=['https://kotus.fi/sitemap.xml'],
+    include=['^https?://kotus\\.fi/nimistonhuolto/'],
+)
+_facts(
+    'od-dicotopo',
+    ['facts'],
+    'DicoTopo: Dictionnaire topographique de la France (CTHS/École des chartes): historical forms of French commune names, for Place facts.',
+    cls='reference',
+    off='adapter pending: format / endpoint: SPA backed by a JSON:API (code at github.com/chartes, dicotopo-api)',
+    seeds=['https://dicotopo.cths.fr/'],
+)
+_facts(
+    'od-benb',
+    ['facts'],
+    'Berner Namenbuch (BENB): etymology of Bern names, for Place facts.',
+    cls='reference',
+    off='adapter pending: format / endpoint: search web app (`/web/`)',
+    seeds=['https://ortsnamenbuch.unibe.ch/'],
+)
+_facts(
+    'od-danmarks-stednavne',
+    ['facts'],
+    'Danmarks Stednavne: about 200k Danish names with interpretations, for Place facts.',
+    cls='reference',
+    off='adapter pending: format / endpoint: SPA with a JSON backend (431-byte shell)',
+    seeds=['https://danmarksstednavne.navneforskning.ku.dk/'],
+)
+_facts(
+    'od-nimisampo',
+    ['facts'],
+    'NimiSampo (Finnish names archive as linked data): 2.7M Finnish name slips with notes, for Place facts.',
+    cls='reference',
+    off='adapter pending: format / endpoint: SPARQL endpoint (ldf.fi)',
+    seeds=['https://nimisampo.fi/'],
+)
+_facts(
+    'arch-eki-knr',
+    ['facts'],
+    'Eesti kohanimeraamat (EKI): etymology and history of Estonian settlement names, for Place facts.',
+    cls='reference',
+    off='adapter pending: format / endpoint: CGI query per headword (`/dict/knr/index.cgi?Q=`)',
+    seeds=['https://arhiiv.eki.ee/'],
+)
+_facts(
+    'od-wgms',
+    ['facts'],
+    'World Glacier Monitoring Service: glacier records per country (longest series, fastest loss, reference glaciers), for Place facts.',
+    cls='official',
+    seeds=['https://wgms.ch/data_exploration/'],
+    sitemaps=['https://wgms.ch/wp-sitemap.xml'],
+    feeds=['https://wgms.ch/feed/'],
+    include=['^https?://wgms\\.ch/(latest-glacier-mass-balance-data|data_exploration|products)'],
+)
+_facts(
+    'ref-ancient-tree-inventory',
+    ['facts', 'places'],
+    'Ancient Tree Inventory (Woodland Trust): notable and ancient trees by village or parish (girth, age class), for Place facts and Places to see.',
+    cls='community',
+    llm=False,
+    off='owner decision: community-written site; the place_fact kind takes official, reference and editorial sources only (kinds.toml). Allow community sources behind corroboration, or keep off?',
+    depth=2,
+    seeds=['https://ati.woodlandtrust.org.uk/'],
+    include=['^https?://ati\\.woodlandtrust\\.org\\.uk/(tree-search/tree|blog)/'],
+)
+_facts(
+    'ref-tree-register',
+    ['facts'],
+    'Tree Register of Britain and Ireland (champion trees): tallest and widest tree per species and county, for Place facts.',
+    cls='reference',
+    sitemaps=['https://www.treeregister.org/sitemap_index.xml'],
+)
+_facts(
+    'gov-es-atlas-nacional',
+    ['facts'],
+    "Atlas Nacional de España (IGN): Spain's extreme points, highest peaks and altitudes of provincial capitals, for Place facts.",
+    cls='official',
+    llm=False,
+    depth=2,
+    seeds=['https://atlasnacional.ign.es/wane/', 'https://www.ign.es/web/ign/portal/social-rss'],
+    include=['^https?://atlasnacional\\.ign\\.es/wane/', '^https?://www\\.ign\\.es/wane/'],
+)
+_facts(
+    'gov-ch-swisstopo',
+    ['facts'],
+    'swisstopo (Federal Office of Topography): geographic centre, extremes, landscape names, for Place facts.',
+    cls='official',
+    sitemaps=['https://www.swisstopo.admin.ch/sitemap.xml'],
+)
+_facts(
+    'gov-uk-bgs',
+    ['facts', 'places'],
+    'British Geological Survey: the largest UK earthquakes, geology of named landmarks, record rocks, for Place facts and Places to see.',
+    cls='official',
+    sitemaps=['https://www.bgs.ac.uk/sitemap_index.xml'],
+    feeds=['https://www.bgs.ac.uk/feed/'],
+    include=['^https?://www\\.bgs\\.ac\\.uk/(discovering-geology|news)/'],
+)
+_facts(
+    'od-cso-ie',
+    ['facts'],
+    'CSO Ireland PxStat: the smallest and largest towns and the fastest-growing places, for Place facts.',
+    cls='reference',
+    off='adapter pending: JSON-stat REST API (PxStat, no key)',
+    seeds=['https://www.cso.ie/'],
+)
+_facts(
+    'tb-petites-cites-caractere',
+    ['facts', 'places', 'walking_tours'],
+    'Petites Cités de Caractère de France: small historic towns and villages, history of each cité, for Place facts, Places to see and Free walking tours.',
+    cls='official',
+    seeds=['https://www.petitescitesdecaractere.com/cites/'],
+    sitemaps=['https://www.petitescitesdecaractere.com/sitemap.xml'],
+    feeds=['https://www.petitescitesdecaractere.com/sitemap.rss'],
+    include=['^https?://www\\.petitescitesdecaractere\\.com/cites/'],
+)
+_facts(
+    'tb-plus-beaux-detours',
+    ['facts', 'places'],
+    'Les Plus Beaux Détours de France: about 100 small towns, heritage and curiosities, for Place facts and Places to see.',
+    cls='official',
+    sitemaps=['https://www.plusbeauxdetours.com/sitemap_index.xml'],
+    include=['^https?://www\\.plusbeauxdetours\\.com/[a-z0-9-]+/$'],
+)
+_facts(
+    'tb-villages-etapes',
+    ['facts', 'places', 'tips'],
+    'Fédération Française des Villages Étapes: village-stops near motorways, short heritage notes per village, for Place facts, Places to see and Travel tips.',
+    cls='official',
+    seeds=['https://village-etape.fr/nos-village-etape/'],
+    sitemaps=['https://village-etape.fr/sitemaps.xml'],
+    include=['^https?://village-etape\\.fr/[a-z0-9-]+/$'],
+)
+_facts(
+    'tb-vpah-hauts-de-france',
+    ['facts', 'places', 'walking_tours'],
+    'Villes et Pays d\'art et d\'histoire Hauts-de-France: "curiosités" and town-heritage pages (Amiens, Beauvais, Cambrai, Chantilly…), for Place facts, Places to see and Free walking tours.',
+    cls='official',
+    llm=False,
+    depth=2,
+    seeds=['https://vpah-hauts-de-france.fr/territoires/', 'https://vpah-hauts-de-france.fr/les-curiosites/'],
+    include=['^https?://vpah-hauts-de-france\\.fr/(territoires|les-curiosites|les-incontournables)/'],
+)
+_facts(
+    'tb-aldeias-de-portugal',
+    ['facts', 'places', 'events'],
+    'Aldeias de Portugal (ATA: Associação do Turismo de Aldeia): classified villages of northern Portugal, history and traditional festivals, for Place facts, Places to see and Events.',
+    cls='official',
+    depth=2,
+    seeds=['https://www.aldeiasdeportugal.pt/aldeias/', 'https://www.aldeiasdeportugal.pt/aldeia/almofrela/'],
+    include=['^https?://www\\.aldeiasdeportugal\\.pt/aldeia/', '^https?://www\\.aldeiasdeportugal\\.pt/rota/patrimonio-e-historia/'],
+)
+_facts(
+    'tb-borghi-autentici',
+    ['facts', 'places'],
+    "Borghi Autentici d'Italia: about 250 member villages, each with history and local traditions (adds to the existing ref-borghi-italia), for Place facts and Places to see.",
+    cls='official',
+    depth=2,
+    delay=10,
+    seeds=['https://www.borghiautenticiditalia.it/borghi', 'https://www.borghiautenticiditalia.it/borgo/austis'],
+    feeds=['https://www.borghiautenticiditalia.it/rss.xml'],
+    include=['^https?://www\\.borghiautenticiditalia\\.it/borgo/'],
+)
+_facts(
+    'gov-lagis-hessen-ortslexikon',
+    ['facts', 'places'],
+    'LAGIS Hessen: Historisches Ortslexikon (Hessisches Institut für Landesgeschichte): more than 13,000 existing and deserted settlements in Hesse with first documented mention, lordship, church patron and population history, for Place facts and Places to see.',
+    cls='official',
+    llm=False,
+    off='enable after a check from the crawler VM: a robots.txt or page fetch failed or timed out from the research laptop (only named SEO/AI bots blocked (Grok, meta-externalagent, Semrush…); ClaudeBot/GPTBot lin…); read robots.txt, terms and content first',
+    sitemaps=['https://lagis.hessen.de/sitemaps/sitemap.xml', 'https://lagis.hessen.de/sitemaps/sitemap_historisches-ortslexikon_01.xml'],
+    include=['^https?://lagis\\.hessen\\.de/de/subjects/'],
+)
+_facts(
+    'arch-ostfriesland-orte',
+    ['facts'],
+    'Ostfriesische Landschaft: Historische Ortsdatenbank (places taxonomy): history of every East Frisian village (Ortschronisten articles, first mentions), for Place facts.',
+    cls='official',
+    sitemaps=['https://www.ostfriesischelandschaft.de/sitemap.xml'],
+    include=['^https?://www\\.ostfriesischelandschaft\\.de/orte/'],
+)
+_facts(
+    'fx-geschichte-sh',
+    ['facts'],
+    'Gesellschaft für Schleswig-Holsteinische Geschichte: "SH von A bis Z": lexicon of Schleswig-Holstein towns, villages and history, for Place facts.',
+    cls='editorial',
+    sitemaps=['https://geschichte-s-h.de/wp-sitemap.xml'],
+    feeds=['https://geschichte-s-h.de/feed/'],
+    include=['^https?://geschichte-s-h\\.de/sh-von-a-bis-z/', '^https?://geschichte-s-h\\.de/lexikon/'],
+)
+_facts(
+    'arch-gedaechtnis-noe',
+    ['facts', 'places'],
+    'Gedächtnis des Landes (Lower Austria chronicle database): places of Lower Austria with dated chronicle entries, for Place facts and Places to see.',
+    cls='official',
+    depth=2,
+    seeds=['https://www.gedaechtnisdeslandes.at/', 'https://www.gedaechtnisdeslandes.at/orte/ort/emmersdorf-an-der-donau/'],
+    include=['^https?://www\\.gedaechtnisdeslandes\\.at/orte/ort/', '^https?://www\\.gedaechtnisdeslandes\\.at/chronik/'],
+)
+_facts(
+    'fx-sagen-at',
+    ['facts'],
+    'SAGEN.at (folk-culture platform: legends by place): village legends and local lore for Austria, South Tyrol and the Alps (labelled as legend, not history), for Place facts.',
+    cls='editorial',
+    sitemaps=['https://www.sagen.at/sitemap.xml'],
+    include=['^https?://www\\.sagen\\.at/texte/sagen/', '^https?://www\\.sagen\\.at/doku/'],
+)
+_facts(
+    'fx-zanikle-obce',
+    ['facts'],
+    'Zaniklé obce (lost and destroyed villages of Czechia): about 300,000 records on vanished villages, farmsteads and churches (why and when each disappeared), for Place facts.',
+    cls='community',
+    llm=False,
+    off='owner decision: community-written site; the place_fact kind takes official, reference and editorial sources only (kinds.toml). Allow community sources behind corroboration, or keep off?',
+    depth=2,
+    delay=10,
+    seeds=['https://www.zanikleobce.cz/databaze/'],
+    include=['^https?://www\\.zanikleobce\\.cz/misto/', '^https?://www\\.zanikleobce\\.cz/clanek/'],
+)
+_facts(
+    'her-mois-ee',
+    ['facts', 'places'],
+    'Mois.ee: Estonian manors portal (Estonian Academy of Arts): history of every Estonian manor, the core of most Estonian villages, for Place facts and Places to see.',
+    cls='reference',
+    depth=2,
+    seeds=['https://www.mois.ee/moisad', 'https://www.mois.ee/kaart'],
+    include=['^https?://www\\.mois\\.ee/(moisad|[a-z]+/[a-z0-9-]+)'],
+)
+_facts(
+    'fx-kylat-pohjois-karjala',
+    ['facts', 'events'],
+    'Pohjois-Karjalan Kylät ry (North Karelia villages association): village profiles, "village of the year", local events, for Place facts and Events.',
+    cls='community',
+    llm=False,
+    off='owner decision: community-written site; the place_fact kind takes official, reference and editorial sources only (kinds.toml). Allow community sources behind corroboration, or keep off?',
+    seeds=['https://kylat.fi/kylat-pohjois-karjalassa'],
+    sitemaps=['https://kylat.fi/sitemap.xml'],
+    include=['^https?://kylat\\.fi/a/', '^https?://kylat\\.fi/kylat-pohjois-karjalassa'],
+)
+_facts(
+    'fx-repetti-toscana',
+    ['facts'],
+    'Dizionario geografico fisico storico della Toscana (Repetti, 1833–46; Regione Toscana): a 19th-century public-domain entry for every Tuscan village and parish, for Place facts.',
+    cls='official',
+    off='enable after a check from the crawler VM: robots.txt gave no response from the research laptop (timeout); terms and content not yet seen',
+    depth=2,
+    seeds=['http://www406.regione.toscana.it/repetti/'],
+    include=['^https?://www406\\.regione\\.toscana\\.it/repetti/'],
+)
+_facts(
+    'od-es-madoz-jcyl',
+    ['facts'],
+    'Diccionario Madoz (1845–50) at Biblioteca Digital de Castilla y León: history and curiosities of the places it covers, for Place facts.',
+    cls='reference',
+    llm=False,
+    off='adapter pending: PDF (scanned and OCRed)',
+    seeds=['https://bibliotecadigital.jcyl.es/'],
+)
+_facts(
+    'od-cz-historicky-lexikon',
+    ['facts'],
+    'Historický lexikon obcí ČR 1869–2011/2015 (ČSÚ): history and curiosities of the places it covers, for Place facts.',
+    cls='reference',
+    off='adapter pending: PDF/XLSX volumes: first written mention of every municipality, plus population 1869–2011',
+    seeds=['https://csu.gov.cz/'],
+)
+_facts(
+    'od-sk-lexikon-obci',
+    ['facts'],
+    'Štatistický lexikón obcí SR 2021 (Sčítanie 2021): history and curiosities of the places it covers, for Place facts.',
+    cls='reference',
+    off='adapter pending: XLSX + PDF',
+    seeds=['https://www.scitanie.sk/'],
+)
+_facts(
+    'od-sk-historicko-demograficky',
+    ['facts'],
+    'Historicko-demografický lexikón obcí Slovenska 1880–1910 (ŠÚ SR): history and curiosities of the places it covers, for Place facts.',
+    cls='reference',
+    llm=False,
+    off='adapter pending: PDF',
+    seeds=['https://slovak.statistics.sk/'],
+)
+_facts(
+    'od-it-situas',
+    ['facts'],
+    'ISTAT SITUAS (history of every comune: mergers, name changes since 1861): history and curiosities of the places it covers, for Place facts.',
+    cls='reference',
+    off='adapter pending: REST JSON',
+    seeds=['https://situas.istat.it/'],
+)
+_facts(
+    'od-es-cnig-nomenclator',
+    ['facts'],
+    'Nomenclátor Geográfico de Municipios y Entidades de Población (IGN/CNIG): history and curiosities of the places it covers, for Place facts.',
+    cls='reference',
+    off='adapter pending: ZIP/CSV behind a form POST (zip_stream + csv_filter once a direct URL is found)',
+    seeds=['https://centrodedescargas.cnig.es/'],
+)
+_facts(
+    'arch-nb-bygdeboker',
+    ['facts'],
+    'Nasjonalbiblioteket (digitised bygdebøker): history and curiosities of the places it covers, for Place facts.',
+    cls='reference',
+    off='needs owner key: Nasjonalbiblioteket (digitised bygdebøker) (https://api.nb.no/catalog/v1/items?q=bygdebok; free)',
+    delay=5,
+    seeds=['https://www.nb.no/'],
+)
+_facts(
+    'fx-onh-noord-holland',
+    ['facts'],
+    'Oneindig Noord-Holland (Noord-Hollands Archief and partners): "niet toegestaan om deze website of gedeelten daarvan te verveelvoudigen, op te slaan in een geautomatiseerd gegevensbestand… zonder… schriftelijke toestemming". This is standard Dutch copyright wording, but it names st…, for Place facts.',
+    cls='editorial',
+    off='owner decision: Dutch disclaimer forbids storing the content "in een geautomatiseerd gegevensbestand" without permission. Is that standard copyright wording or a TDM ban?',
+    sitemaps=['https://onh.nl/sitemap_index.xml'],
+)
+
+
 METHODS = {"html", "rss", "sitemap", "api", "dump"}
 
 

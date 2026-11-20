@@ -7,7 +7,7 @@
 Every website and dataset the crawler knows, grouped by the part of the Voyager app it
 feeds. A source that serves several parts is listed under each of them.
 
-**1968 sources, 1385 on, 583 off.**
+**2470 sources, 1780 on, 690 off.**
 
 - **What we take**: the traveller-facing data the source gives (its `relevance.why`).
 - **Licence**: *open* (free reuse with credit), *share-alike* (kept apart from other
@@ -191,6 +191,9 @@ docs/wiki/Place-Facts-Data.md).
 | Source | Website | What we take | Licence | On | Key |
 |---|---|---|---|---|---|
 | `ghcn` | `www.ncei.noaa.gov` | Long-term daily weather records and climate normals per station, for the Weather section's what-to-expect by month. | open | yes | no |
+| `gov-aemet-extremos` | `www.aemet.es` | AEMET Valores extremos absolutos: absolute records per Spanish station, for Place facts and Weather. | open | yes | no |
+| `gov-knmi-ranglijsten` | `www.knmi.nl` | KNMI Ranglijsten (Dutch weather record lists): hottest and coldest, heatwaves and cold numbers per year and station, for Place facts and Weather. | open | yes | no |
+| `gov-metoffice-uk-extremes` | `www.metoffice.gov.uk` | Met Office UK climate extremes + monthly records blog: UK and per-country records by station (e.g. 40.3 °C at Coningsby), for Place facts and Weather. | facts only | yes | no |
 | `jma-climate-normals` | `www.data.jma.go.jp` | Official monthly climate normals (temperature, rain, sunshine, snow) for Japan's main cities, for Weather and the packing list. | open | yes | no |
 | `met-norway` | `api.met.no` | Weather forecasts for any location worldwide, for the Weather section. | open | yes | no |
 | `nws` | `api.weather.gov` | US weather forecasts and alerts for the Weather section. | open | yes | no |
@@ -479,6 +482,8 @@ docs/wiki/Place-Facts-Data.md).
 | `act-geo-sustainable-golf` | `sustainable.golf` | GEO Foundation for Sustainable Golf: GEO Certified courses: Directory of GEO Certified golf courses and tournaments (OnCourse): a certified lower-impact golf option, for the trip Carbon footprint and Activities. | facts only | yes | no |
 | `alchemist` | `alchemist.dk` | Opening dates and booking information for Alchemist, a destination restaurant in Copenhagen, for Activities and Places to see. | facts only | yes | no |
 | `alpine-pearls` | `www.alpine-pearls.com` | More than 20 Alpine villages in five countries reachable and explorable without a car (rail and bus access, car-free stays), for Places to see, Local transportation, Activities and Hotels. | facts only | yes | no |
+| `arch-fi-siida` | `siida.fi` | Siida (Sámi Museum, Inari): Sámi culture and Inari region history, for Place facts, Places to see and Activities. | facts only | yes | no |
+| `arch-is-borgarsogusafn` | `borgarsogusafn.is` | Borgarsögusafn Reykjavíkur (Reykjavík City Museum): Reykjavík history (Árbær, Viðey, Settlement exhibition, Maritime museum), for Place facts, Places to see and Activities. | facts only | yes | no |
 | `argentina-travel` | `www.argentina.travel` | Official Argentine destinations, experiences and itineraries, for Places to see, Activities and the itinerary; also history and curiosities for Place facts. | facts only | yes | no |
 | `australia-com` | `www.australia.com` | Official Australian itineraries, places, food and wine and events, for the itinerary, Places to see, Activities and Events. | facts only | yes | no |
 | `beachawards-ie` | `beachawards.ie` | Irish Blue Flag and Green Coast beaches and marinas, for Places to see and Activities. | facts only | yes | no |
@@ -597,11 +602,17 @@ docs/wiki/Place-Facts-Data.md).
 | `food-tucson-gastronomy` | `tucson.cityofgastronomy.org` | Tucson City of Gastronomy (UNESCO Creative City official site): heritage dishes, food events, certified restaurants, for Activities and Events. | facts only | yes | no |
 | `france-fr` | `www.france.fr` | Official French inspiration, itineraries and gastronomy pages, for the itinerary, Places to see and Activities. | facts only | yes | no |
 | `fsa-food-hygiene` | `api.ratings.food.gov.uk` | Official food hygiene ratings of UK restaurants, cafes and takeaways (name, address, rating), for food in Activities. | open | yes | no |
+| `fx-am-armgeo` | `www.armgeo.am` | Armenian Geographic (ArmGeo): monuments, villages, mountains of Armenia with history, for Place facts, Places to see and Activities. | facts only | yes | no |
+| `fx-britain-express` | `www.britainexpress.com` | Britain Express: village, church and history pages for every county, for Place facts, Places to see and Activities. | facts only | yes | no |
 | `fx-erih` | `www.erih.net`, `erih.net` | European Route of Industrial Heritage: industrial heritage sites with history across Europe, for Place facts, Places to see and Activities. | facts only | yes | no |
+| `fx-pariszigzag` | `www.pariszigzag.fr` | Paris ZigZag (Insolite & Secret): Paris curiosities, hidden history, little-known facts, for Place facts and Activities. | facts only | yes | no |
+| `fx-sovraintendenza-roma` | `www.sovraintendenzaroma.it` | Sovrintendenza Capitolina (Roma): history of Rome's municipal monuments, for Place facts and Activities. | facts only | yes | no |
+| `fx-tr-turkisharchaeonews` | `www.turkisharchaeonews.net` | Turkish Archaeological News: a gazetteer of ancient sites, monuments and museums in Turkey, for Place facts, Places to see and Activities. | facts only | yes | no |
 | `galapagos-park` | `galapagos.gob.ec` | Official Galápagos visitor rules, entry fee and visitor sites, for Travel tips, Places to see and Activities. | facts only | yes | no |
 | `gaultmillau` | `www.gaultmillau.com` | Gault&Millau restaurant ratings (name, toque rating and city as facts), for Activities and Places to see. | facts only | yes | no |
 | `goodtravel-guide` | `goodtravel.guide` | A directory and guides of sustainable travel businesses (headline, link and a short excerpt only), for Travel tips, Hotels and Activities. | facts only | yes | no |
 | `gotokyo` | `www.gotokyo.org` | About 925 Tokyo spots, the event calendar and model courses, for Places to see, Events, Activities and the itinerary. | facts only | yes | no |
+| `gov-al-tirana` | `tirana.al` | Bashkia Tiranë: Pikat e interesit: Tirana points of interest with short histories, for Place facts, Places to see and Activities. | facts only | yes | no |
 | `gov-bonito` | `www.bonito.ms.gov.br` | Prefeitura de Bonito (MS): eco-tourism voucher rules, attractions, for Places to see and Activities; also history and curiosities for Place facts. | facts only | yes | no |
 | `gov-dasta` | `www.dasta.or.th` | DASTA Thailand: designated sustainable-tourism areas (Koh Chang, Nan, Loei, Sukhothai) and community tourism, for Places to see, Activities and Events. | facts only | yes | no |
 | `gov-kinmen` | `www.kinmen.gov.tw` | Kinmen County Government (tourism pages), for Places to see and Activities. | facts only | yes | no |
@@ -614,8 +625,22 @@ docs/wiki/Place-Facts-Data.md).
 | `guide-tioman` | `www.tioman.org` | Tioman Island info, for Places to see and Activities. | facts only | yes | no |
 | `hanen-ecotourism-norway` | `www.hanen.no` | Norway's ecotourism-certified rural stays, farm stays and experiences, for Hotels and Activities. | facts only | yes | no |
 | `her-apartheid-museum` | `www.apartheidmuseum.org` | Apartheid Museum: history and curiosities of the places it covers, for Place facts and Activities. | facts only | yes | no |
+| `her-by-museum-by` | `museum.by` | Museum.by: museums of Belarus: catalogue of Belarusian museums by town with histories of the sites, for Place facts, Places to see and Activities. | facts only | yes | no |
+| `her-cz-npu` | `npu.cz` | Národní památkový ústav: Czech state castles and chateaux, heritage news (catalogue pamatkovykatalog.cz already covered), for Place facts, Places to see and Activities. | facts only | yes | no |
+| `her-de-gartenreich` | `gartenreich.de` | Kulturstiftung Dessau-Wörlitz (Gartenreich): Dessau-Wörlitz Garden Realm palaces and gardens, for Place facts, Places to see and Activities. | facts only | yes | no |
+| `her-de-lsa-kulturstiftung` | `www.kulturstiftung-st.de` | Kulturstiftung Sachsen-Anhalt (castles, palaces, cathedrals): Saxony-Anhalt castles, palaces, cathedrals (Moritzburg, Falkenstein), for Place facts, Places to see and Activities. | facts only | yes | no |
+| `her-de-mv-schloesser` | `mv-schloesser.de` | Staatliche Schlösser und Gärten Mecklenburg-Vorpommern: MV state palaces (Schwerin, Güstrow, Ludwigslust), for Place facts, Places to see and Activities. | facts only | yes | no |
+| `her-de-sl-voelklinger-huette` | `voelklinger-huette.org` | Weltkulturerbe Völklinger Hütte: Saarland's UNESCO ironworks and its history, for Place facts, Places to see and Activities. | facts only | yes | no |
+| `her-de-th-schloesser` | `www.thueringerschloesser.de` | Stiftung Thüringer Schlösser und Gärten: Thuringia's state-owned palaces (Heidecksburg, Friedenstein, Dornburg), for Place facts, Places to see and Activities. | facts only | yes | no |
+| `her-it-cm-pompeii` | `pompeiisites.org` | Parco Archeologico di Pompei: Pompeii, Herculaneum region sites, domus histories, new-find press releases (Campania), for Place facts, Places to see and Activities. | facts only | yes | no |
+| `her-it-fai-luoghi` | `fondoambiente.it` | FAI: Fondo per l'Ambiente Italiano, Luoghi: FAI properties and 'Luoghi del Cuore' with histories, for Place facts, Places to see and Activities. | facts only | yes | no |
+| `her-it-pi-venaria` | `lavenaria.it` | La Venaria Reale (Residenze Reali Sabaude): Savoy royal residence history (Piemonte), for Place facts, Places to see and Activities. | facts only | yes | no |
+| `her-mt-heritage-malta` | `heritagemalta.mt` | Heritage Malta: Malta's state sites (Ħal Saflieni, Ġgantija, forts) with history, for Place facts, Places to see and Activities. | facts only | yes | no |
+| `her-saba-park` | `sabapark.org` | Saba Conservation Foundation (Saba parks): Mount Scenery (887 m) is the highest point in the Kingdom of the Netherlands, for Place facts and Activities. | facts only | yes | no |
+| `her-se-sfv` | `www.sfv.se`, `sfv.se` | Statens fastighetsverk: histories of Swedish royal palaces, castles, fortresses and state buildings, for Place facts, Places to see and Activities. | facts only | yes | no |
 | `her-statia-park` | `statiapark.org` | St. Eustatius National Parks (STENAPA): The Quill volcano, marine park (Sint Eustatius), for Place facts and Activities. | facts only | yes | no |
 | `her-stinapa-bonaire` | `stinapabonaire.org` | STINAPA Bonaire: Washington Slagbaai NP, Bonaire marine park (stinapa.org redirects here), for Place facts and Activities. | facts only | yes | no |
+| `her-sussex-past` | `sussexpast.co.uk` | Sussex Archaeological Society (Sussex Past): histories of Lewes Castle, Fishbourne and other sites, for Place facts, Places to see and Activities. | facts only | yes | no |
 | `her-virunga` | `virunga.org` | Virunga National Park: Africa's oldest national park (1925), mountain gorillas, Nyiragongo (DRC), for Place facts and Activities. | facts only | yes | no |
 | `iamsterdam` | `www.iamsterdam.com` | Amsterdam's official event agenda and restaurant and venue listings, for Events, Activities and Places to see. | facts only | yes | no |
 | `kws-parks` | `kws.go.ke` | Kenya's national parks and reserves with entry, opening times and activities, for Places to see and Activities. | facts only | yes | no |
@@ -706,6 +731,7 @@ docs/wiki/Place-Facts-Data.md).
 | `ref-showcaves` | `www.showcaves.com` | Show Caves of the World: opening times, access for caves worldwide, for Places to see and Activities; also history and curiosities for Place facts. | facts only | yes | no |
 | `ref-sti-calculator` | `sustainabletravel.org` | Sustainable Travel International: travel carbon calculator method notes: Documents factor sources (DESNZ flights/cars/fuel, great-circle distance, 72 km/h ground conversion, liveaboard benchmarks, hotels since 2025), for the trip Carbon footprint, Flights, Hotels and Activities. | facts only | yes | no |
 | `ref-swiss-villages` | `swissvillages.org` | Best Swiss Villages (swissvillages.org), for Places to see and Activities; also history and curiosities for Place facts. | facts only | yes | no |
+| `ref-topostext` | `topostext.org` | ToposText (ancient places + texts): ancient sites in Greece and the Mediterranean with the ancient passages that mention them, for Place facts, Places to see and Activities. | facts only | yes | no |
 | `ref-visitscotland-business-climate` | `support.visitscotland.org` | VisitScotland Business Support Hub: measure your climate impact: Calculator methodology and factor sources for tourism businesses; Scotland is a Glasgow Declaration co-founder, for the trip Carbon footprint, Hotels and Activities. | facts only | yes | no |
 | `rub-og-stub` | `www.spisrubogstub.dk` | Opening hours, menus and booking information for Rub & Stub, a social restaurant in Copenhagen, for Activities and Places to see. | facts only | yes | no |
 | `spain-info` | `www.spain.info` | Spain's official routes, gastronomy and event calendar, for the itinerary, Events and Activities. | facts only | yes | no |
@@ -734,11 +760,13 @@ docs/wiki/Place-Facts-Data.md).
 | `tb-bayern` | `erlebe.bayern` | Bayern Tourismus (erlebe.bayern): official visitor guide, for Activities, Places to see and Events. | facts only | yes | no |
 | `tb-bc` | `www.supernaturalbc.com` | Official British Columbia regions, experiences, road trips and practical tips, for Activities, Places to see and the itinerary. | facts only | yes | no |
 | `tb-belle-ile` | `www.belle-ile.com` | Belle-Île-en-Mer tourist office, for Places to see, Activities and Events. | facts only | yes | no |
+| `tb-bg-bts-100nto` | `www.btsbg.org` | Bulgarian Tourist Union (100 National Tourist Sites): the 100 National Tourist Sites of Bulgaria with short place histories, for Place facts, Places to see and Activities. | facts only | yes | no |
 | `tb-bonaire` | `bonaireisland.com` | Tourism Corporation Bonaire: official visitor guide, for Places to see, Activities and Events. | facts only | yes | no |
 | `tb-borkum` | `www.borkum.de` | Borkum island tourism, for Places to see, Activities and Events. | facts only | yes | no |
 | `tb-bornholm` | `www.bornholminfo.dk` | Destination Bornholm (redirects to bornholminfo.dk), for Places to see, Activities and Events. | facts only | yes | no |
 | `tb-brittany` | `www.brittanytourism.com` | Brittany Tourism: official visitor guide, for Activities, Places to see and Local transportation. | facts only | yes | no |
 | `tb-bulgaria` | `visitbulgaria.com` | Visit Bulgaria (Ministry of Tourism): official visitor guide, for Places to see and Activities. | facts only | yes | no |
+| `tb-by-belarustourism` | `belarustourism.by` | Национальное агентство по туризму Беларуси: official facts on regions and towns, for Place facts, Places to see and Activities. | facts only | yes | no |
 | `tb-canary` | `www.hellocanaryislands.com` | Hello Canary Islands: official visitor guide, for Activities, Places to see, Weather and Travel tips. | facts only | yes | no |
 | `tb-cape-verde` | `www.turismo.cv` | Turismo Cabo Verde (official), for Places to see and Activities. | facts only | yes | no |
 | `tb-caribe-mexicano` | `caribemexicano.travel` | Caribe Mexicano (Quintana Roo tourism board): official Cancún/Riviera Maya/Tulum/Cozumel destinations and experiences, for Places to see, Activities and the itinerary. | facts only | yes | no |
@@ -803,6 +831,7 @@ docs/wiki/Place-Facts-Data.md).
 | `tb-ishigaki` | `yaeyama.or.jp` | Ishigaki City Tourism Association (Yaeyama), for Places to see and Activities. | facts only | yes | no |
 | `tb-isles-of-scilly` | `www.visitislesofscilly.com` | Visit Isles of Scilly: off-islands, events, travel, for Places to see, Activities, Events and Local transportation. | facts only | yes | no |
 | `tb-istria` | `www.istra.hr` | Istria Tourist Board: official visitor guide, for Activities, Events and Places to see. | facts only | yes | no |
+| `tb-it-piemonte-italia` | `piemonteitalia.eu` | Piemonte Italia (Regione Piemonte): Piedmont towns, castles, Sacri Monti, UNESCO landscapes, for Place facts, Places to see and Activities. | facts only | yes | no |
 | `tb-japan-beautiful-villages` | `japan-utsukushii-mura.com` | The Most Beautiful Villages in Japan association (japan-utsukushii-mura.com), for Places to see and Activities; also history and curiosities for Place facts. | facts only | yes | no |
 | `tb-jersey` | `www.jersey.com` | Visit Jersey: sights, events, geopark, for Places to see, Activities and Events. | facts only | yes | no |
 | `tb-juist` | `www.juist.de` | Juist (car-free island) tourism, for Places to see, Activities and Events. | facts only | yes | no |
@@ -1114,10 +1143,65 @@ docs/wiki/Place-Facts-Data.md).
 | `alpine-pearls` | `www.alpine-pearls.com` | More than 20 Alpine villages in five countries reachable and explorable without a car (rail and bus access, car-free stays), for Places to see, Local transportation, Activities and Hotels. | facts only | yes | no |
 | `api-qlever-wikidata` | `qlever.dev` | QLever SPARQL over Wikidata (Univ. of Freiburg): robots-allowed replacement for WDQS; batch queries like "all cities with P138 named-after + P571", for Place facts and Places to see. | open | yes | no |
 | `api-wikimedia-pageviews` | `wikimedia.org` | Wikimedia Pageviews REST API: popularity signal to rank "popular facts" and pick which DYK/place facts to show first, for Place facts and Places to see. | open | yes | no |
+| `arch-ba-muzej-sarajeva` | `www.muzejsarajeva.ba` | Muzej Sarajeva: history of Sarajevo and its branch sites (Svrzo house, Brusa bezistan, Despić house), for Place facts and Places to see. | facts only | yes | no |
+| `arch-bavarikon` | `www.bavarikon.de` | bavarikon (Bavarian State Library, Bavarian cultural portal): "Orte" (places) section with place-linked heritage objects and exhibitions, for Place facts and Places to see. | facts only | yes | no |
+| `arch-bg-sofia-history-museum` | `sofiahistorymuseum.bg` | Regional History Museum Sofia: history of Sofia and its museum sites (Pravets, Koprivshtitsa branches), for Place facts and Places to see. | facts only | yes | no |
+| `arch-by-bis-nlb` | `bis.nlb.by` | Беларусь у асобах і падзеях (Нацыянальная бібліятэка Беларусі): national-library encyclopedia: towns, monuments, dated events, for Place facts and Places to see. | facts only | yes | no |
+| `arch-cork-past-present` | `www.corkcitylibraries.ie` | Cork Past & Present (Cork City Libraries): Cork streets, districts and history texts, for Place facts and Places to see. | facts only | yes | no |
+| `arch-culturaitalia` | `www.culturaitalia.it` | CulturaItalia (Ministry of Culture portal): editorial pieces on Italian places and heritage itineraries, for Place facts, Places to see and Itinerary. | facts only | yes | no |
+| `arch-data-bnf` | `data.bnf.fr` | data.bnf.fr (Bibliothèque nationale de France): BnF place authority records (notes, historical names, links to Gallica), for Place facts and Places to see. | open | yes | no |
+| `arch-de-nrw-ruhrmuseum` | `ruhrmuseum.de` | Ruhr Museum (Zollverein): Ruhr regional history, for Place facts and Places to see. | facts only | yes | no |
+| `arch-dk-aarhusarkivet` | `www.aarhusarkivet.dk` | AarhusArkivet (Aarhus Stadsarkiv): Aarhus local history records, guides, place descriptions, for Place facts and Places to see. | facts only | yes | no |
+| `arch-dk-arkiv-dk` | `arkiv.dk` | arkiv.dk (Danish local archives): local-history records and stories from 600+ Danish local archives (towns and villages), for Place facts and Places to see. | facts only | yes | no |
+| `arch-dk-cph-museum` | `cphmuseum.kk.dk` | Københavns Museum: Copenhagen history, archaeology (Metro digs). Note: subdomain of kk.dk, which is in corpus; distinct site, for Place facts and Places to see. | facts only | yes | no |
 | `arch-encyclopedia-detroit` | `www.detroithistorical.org` | Encyclopedia of Detroit (Detroit Historical Society): Detroit landmarks and neighbourhoods, for Place facts, Places to see and Free walking tours. | facts only | yes | no |
+| `arch-encyclopedie-zeeland` | `www.encyclopedievanzeeland.nl` | Encyclopedie van Zeeland (Zeeuws Archief): every Zeeland village, polder and landmark, for Place facts and Places to see. | facts only | yes | no |
+| `arch-fi-helsinki-city-museum` | `www.helsinginkaupunginmuseo.fi` | Helsingin kaupunginmuseo (Helsinki City Museum): Helsinki district and building history, archaeology, for Place facts, Places to see and Free walking tours. | facts only | yes | no |
+| `arch-fi-siida` | `siida.fi` | Siida (Sámi Museum, Inari): Sámi culture and Inari region history, for Place facts, Places to see and Activities. | facts only | yes | no |
+| `arch-fo-tjodsavnid` | `www.tjodsavnid.fo` | Tjóðsavnið (Faroe Islands National Museum): Faroese heritage articles, the object of the month, nature and village history (savn.fo is the same site), for Place facts and Places to see. | facts only | yes | no |
+| `arch-fr-archives-alsace` | `archives.alsace.eu` | Archives d'Alsace (CeA: Bas-Rhin + Haut-Rhin): Alsace commune histories, archive features (archives67.alsace.eu 403 -> skipped), for Place facts and Places to see. | facts only | yes | no |
+| `arch-fr-archives-calvados` | `archives.calvados.fr` | Archives du Calvados: Calvados commune history features and exhibitions, for Place facts and Places to see. | facts only | yes | no |
+| `arch-fr-archives-marne` | `archives.marne.fr` | Archives départementales de la Marne: Marne/Champagne commune and WWI history features, for Place facts and Places to see. | facts only | yes | no |
+| `arch-fr-archives-vosges` | `archives.vosges.fr` | Archives départementales des Vosges: Vosges commune history features, for Place facts and Places to see. | facts only | yes | no |
+| `arch-fr-normannia` | `www.normannia.info` | Normannia: patrimoine écrit de Normandie: Normandy written heritage, local-history exhibits (Omeka), for Place facts and Places to see. | facts only | yes | no |
+| `arch-gazetteer-scotland` | `www.scottish-places.info` | Gazetteer for Scotland: every Scottish town, parish and feature with history and trivia, for Place facts and Places to see. | facts only | yes | no |
+| `arch-gedaechtnis-noe` | `www.gedaechtnisdeslandes.at` | Gedächtnis des Landes (Lower Austria chronicle database): places of Lower Austria with dated chronicle entries, for Place facts and Places to see. | facts only | yes | no |
+| `arch-hlb-bavaria` | `www.historisches-lexikon-bayerns.de` | Historisches Lexikon Bayerns (BSB): Bavarian regions, towns and territories, for Place facts and Places to see. | share-alike | yes | no |
+| `arch-hls-switzerland` | `hls-dhs-dss.ch` | Historical Dictionary of Switzerland (HLS/DHS/DSS): a scholarly article for every Swiss municipality, canton and region (history, firsts, notable events), for Place facts, Places to see and Free walking tours. | share-alike | yes | no |
+| `arch-is-borgarsogusafn` | `borgarsogusafn.is` | Borgarsögusafn Reykjavíkur (Reykjavík City Museum): Reykjavík history (Árbær, Viðey, Settlement exhibition, Maritime museum), for Place facts, Places to see and Activities. | facts only | yes | no |
+| `arch-is-thjodminjasafn` | `www.thjodminjasafn.is` | Þjóðminjasafn Íslands (National Museum of Iceland): Icelandic heritage, historic houses and turf churches in the museum's care, for Place facts and Places to see. | facts only | yes | no |
+| `arch-it-sardegna-digital-library` | `www.sardegnadigitallibrary.it` | Sardegna Digital Library: Sardinian towns, nuraghi, traditions (documents and texts), for Place facts and Places to see. | facts only | yes | no |
+| `arch-li-landesmuseum` | `www.landesmuseum.li` | Liechtensteinisches LandesMuseum: history of Liechtenstein, for Place facts and Places to see. | facts only | yes | no |
+| `arch-lokalhistoriewiki-no` | `lokalhistoriewiki.no` | Lokalhistoriewiki.no (Norsk lokalhistorisk institutt): local history of Norwegian municipalities, farms, villages and streets, for Place facts, Places to see and Free walking tours. | share-alike | yes | no |
+| `arch-lu-citymuseum` | `citymuseum.lu` | Lëtzebuerg City Museum: history of Luxembourg City, for Place facts and Places to see. | share-alike | yes | no |
 | `arch-lwl-westfalen-regional` | `www.lwl.org` | Westfalen regional (LWL): Westphalian towns, regions and history, for Place facts and Places to see. | facts only | yes | no |
+| `arch-manar-al-athar` | `manar.arch.ox.ac.uk` | Manar al-Athar Digital Archive (University of Oxford): captions for sites in Libya, Lebanon, Syria, Jordan and Egypt, for Place facts and Places to see. | share-alike | yes | no |
+| `arch-no-oslo-museum` | `www.oslomuseum.no` | Oslo Museum: Oslo city history (Bymuseet), for Place facts and Places to see. | facts only | yes | no |
+| `arch-peoples-collection-wales` | `www.peoplescollection.wales` | People's Collection Wales: Welsh place stories and heritage items, for Place facts and Places to see. | facts only | yes | no |
+| `arch-pl-muzeum-gdanska` | `muzeumgdansk.pl` | Muzeum Gdańska: Gdańsk history (Artus Court, Westerplatte, Main Town Hall), for Place facts, Places to see and Free walking tours. | facts only | yes | no |
+| `arch-pl-muzeum-krakowa` | `muzeumkrakowa.pl` | Muzeum Krakowa: Kraków history at its branches (Rynek Underground, Schindler factory, Town Hall Tower), for Place facts, Places to see and Free walking tours. | facts only | yes | no |
+| `arch-pt-museu-de-lisboa` | `museudelisboa.pt`, `cms.museudelisboa.pt` | Museu de Lisboa (EGEAC): Lisbon history across five sites (Palácio Pimenta, Teatro Romano, Santo António), for Place facts and Places to see. | facts only | yes | no |
 | `arch-regionalgeschichte-net` | `www.regionalgeschichte.net` | regionalgeschichte.net (Institut für Geschichtliche Landeskunde, Mainz): village and town histories for Rhineland-Palatinate, for Place facts and Places to see. | facts only | yes | no |
+| `arch-rheinische-geschichte` | `www.rheinische-geschichte.lvr.de` | Portal Rheinische Geschichte (LVR): Rhineland town and place histories, for Place facts and Places to see. | facts only | yes | no |
+| `arch-ro-muzeul-bucurestiului` | `muzeulbucurestiului.ro` | Muzeul Municipiului București: Bucharest history, historic houses (Suțu Palace, Filipescu-Cesianu house), museum blog, for Place facts and Places to see. | facts only | yes | no |
+| `arch-royal-berkshire-archives` | `www.royalberkshirearchives.org.uk` | Royal Berkshire Archives: Berkshire's Past: parish and place guides, for Place facts and Places to see. | facts only | yes | no |
+| `arch-ru-mosmuseum` | `mosmuseum.ru` | Музей Москвы (Museum of Moscow) (ru / Moscow): Moscow city history posts, for Place facts and Places to see. | facts only | yes | no |
 | `arch-sachsen-digital` | `sachsen.digital` | sachsen.digital (SLUB Dresden): Saxon local history, town chronicles, historic maps, for Place facts and Places to see. | share-alike | yes | no |
+| `arch-se-ajtte` | `www.ajtte.com` | Ájtte: Swedish Mountain and Sámi Museum (Jokkmokk): Laponia and Sámi heritage, Jokkmokk history, for Place facts and Places to see. | facts only | yes | no |
+| `arch-se-gavleborg` | `lansmuseetgavleborg.se` | Länsmuseet Gävleborg: Hälsingland farmhouses (UNESCO), Gävleborg places, for Place facts and Places to see. | facts only | yes | no |
+| `arch-se-goteborgs-stadsmuseum` | `goteborgsstadsmuseum.se` | Göteborgs stadsmuseum: Gothenburg heritage environments and city history stories, for Place facts, Places to see and Free walking tours. | facts only | yes | no |
+| `arch-se-jamtli` | `www.jamtli.com` | Jamtli (Jämtlands läns museum): Jämtland/Härjedalen places, cultural environments, for Place facts and Places to see. | facts only | yes | no |
+| `arch-se-kalmar-lansmuseum` | `kalmarlansmuseum.se` | Kalmar läns museum: Kalmar county archaeology, buildings, the Kronan wreck, for Place facts and Places to see. | facts only | yes | no |
+| `arch-se-kulturarv-vastmanland` | `kulturarvvastmanland.se` | Kulturarv Västmanland: Västmanland place and building database, for Place facts and Places to see. | facts only | yes | no |
+| `arch-se-norrbotten` | `norrbottensmuseum.se` | Norrbottens museum: Norrbotten, Gammelstad church town, Torne valley, for Place facts and Places to see. | facts only | yes | no |
+| `arch-se-sormland` | `sormlandsmuseum.se` | Sörmlands museum: Södermanland places and collections, for Place facts and Places to see. | facts only | yes | no |
+| `arch-se-uppland` | `www.upplandsmuseet.se` | Upplandsmuseet: Uppland, Gamla Uppsala royal mounds, for Place facts and Places to see. | facts only | yes | no |
+| `arch-se-vasterbotten` | `vbm.se` | Västerbottens museum: Västerbotten and Umeå history, Sámi and settler heritage, for Place facts and Places to see. | facts only | yes | no |
+| `arch-se-vastergotland` | `vastergotlandsmuseum.se` | Västergötlands museum: Västergötland cultural environments, for Place facts and Places to see. | facts only | yes | no |
+| `arch-snl-no` | `snl.no` | Store norske leksikon: Norwegian municipalities, towns and places, for Place facts and Places to see. | share-alike | yes | no |
+| `arch-staffs-past-track` | `www.search.staffspasttrack.org.uk` | Staffordshire Past Track: local images with captions, by place, for Place facts and Places to see. | facts only | yes | no |
+| `arch-stockholmskallan` | `stockholmskallan.stockholm.se` | Stockholmskallan (Stockholm City Archives sources): city-history items per district, for Place facts and Places to see. | facts only | yes | no |
+| `arch-wien-geschichtewiki` | `www.geschichtewiki.wien.gv.at` | Wien Geschichte Wiki (Vienna City Archive + Wienbibliothek): 47k entries on Vienna streets, buildings, districts, for Place facts, Places to see and Free walking tours. | facts only | yes | no |
 | `argentina-travel` | `www.argentina.travel` | Official Argentine destinations, experiences and itineraries, for Places to see, Activities and the itinerary; also history and curiosities for Place facts. | facts only | yes | no |
 | `australia-com` | `www.australia.com` | Official Australian itineraries, places, food and wine and events, for the itinerary, Places to see, Activities and Events. | facts only | yes | no |
 | `bandeira-azul-pt` | `bandeiraazul.abaae.pt` | About 440 Blue Flag beaches and marinas in Portugal, for Places to see. | facts only | yes | no |
@@ -1194,19 +1278,24 @@ docs/wiki/Place-Facts-Data.md).
 | `city-ba-ciudad` | `buenosaires.gob.ar` | Buenos Aires Ciudad (agenda, culture): city agenda and cultural programme, for Events and Places to see; also history and curiosities for Place facts. | facts only | yes | no |
 | `city-barcelona` | `ajuntament.barcelona.cat` | Ajuntament de Barcelona (historia de la ciutat): history and curiosities of the places it covers, for Place facts and Places to see. | facts only | yes | no |
 | `city-belgrade` | `www.tob.rs` | Tourist Organisation of Belgrade: official visitor guide, for Activities, Events and Places to see. | facts only | yes | no |
+| `city-berlin-geschichte` | `www.berlin.de` | berlin.de: Geschichte Berlins: city and district history, for Place facts, Places to see and Free walking tours. | facts only | yes | no |
 | `city-boston` | `www.meetboston.com` | Boston events, things to do and neighbourhoods from the city's visitor bureau, for Events, Activities and Places to see. | facts only | yes | no |
 | `city-bratislava` | `www.visitbratislava.com` | Visit Bratislava: official visitor guide, for Events, Places to see and Travel tips. | facts only | yes | no |
+| `city-dublin` | `www.dublincity.ie` | Dublin City Council (Library & Archive history pages): history and curiosities of the places it covers, for Place facts and Places to see. | facts only | yes | no |
 | `city-edinburgh` | `edinburgh.org` | Forever Edinburgh: council-run city guide, for Activities, Places to see, Events and Travel tips. | facts only | yes | no |
 | `city-esmadrid` | `www.esmadrid.com` | esMADRID (Madrid tourism): official visitor guide, for Activities, Places to see and Events. | facts only | yes | no |
 | `city-florence` | `www.feelflorence.it` | Feel Florence: official visitor guide, for Activities, Places to see, Events and Travel tips. | facts only | yes | no |
 | `city-frankfurt` | `www.visitfrankfurt.travel` | Visit Frankfurt: official visitor guide, for Activities, Events and Places to see. | facts only | yes | no |
 | `city-goteborg` | `www.goteborg.com` | Göteborg & Co: official visitor guide, for Activities, Events and Places to see. | facts only | yes | no |
+| `city-hamburg-geschichte` | `www.hamburg.de` | hamburg.de (city history): history and curiosities of the places it covers, for Place facts and Places to see. | facts only | yes | no |
 | `city-krakow` | `www.krakow.travel` | Kraków Travel: official visitor guide, for Activities, Events and Places to see; also history and curiosities for Place facts. | facts only | yes | no |
 | `city-luzern` | `www.luzern.com` | Luzern Tourismus: official visitor guide, for Activities, Places to see and Events. | facts only | yes | no |
 | `city-marseille` | `www.marseille-tourisme.com` | Marseille Tourisme: official visitor guide, for Activities, Places to see and Events. | facts only | yes | no |
 | `city-medellin-travel` | `www.medellin.travel` | Medellín Travel (Bureau Medellín): official visitor guide, for Places to see, Activities and Events. | facts only | yes | no |
 | `city-miami` | `www.miamiandbeaches.com` | Miami and Miami Beach events, things to do and neighbourhoods, for Events, Activities and Places to see. | facts only | yes | no |
+| `city-muenchen-geschichte` | `stadt.muenchen.de` | stadt.muenchen.de (Stadtgeschichte): history and curiosities of the places it covers, for Place facts and Places to see. | facts only | yes | no |
 | `city-myhelsinki` | `www.myhelsinki.fi` | MyHelsinki: official visitor guide, for Activities, Places to see and Events. | facts only | yes | no |
+| `city-paris-histoire` | `www.paris.fr` | Paris.fr (histoire de Paris, arrondissements): history and curiosities of the places it covers, for Place facts, Places to see and Free walking tours. | facts only | yes | no |
 | `city-porto` | `www.visitporto.travel` | Visit Porto: official visitor guide, for Activities, Places to see and Events. | facts only | yes | no |
 | `city-rotterdam` | `www.rotterdam.info` | Rotterdam Info: official visitor guide, for Activities, Events and Places to see. | facts only | yes | no |
 | `city-sevilla` | `visitasevilla.es` | Visita Sevilla: official visitor guide, for Activities, Places to see and Events. | facts only | yes | no |
@@ -1241,61 +1330,243 @@ docs/wiki/Place-Facts-Data.md).
 | `fsq-os-places` | `docs.foursquare.com` | Open points of interest (hotels, sights, restaurants) with names and coordinates, for Hotels and Places to see. | open | yes | yes |
 | `fx-64-parishes` | `64parishes.org` | 64 Parishes: history and curiosities of the places it covers, for Place facts and Places to see. | facts only | yes | no |
 | `fx-african-world-heritage` | `africanworldheritagesites.org` | African World Heritage Sites: per-site histories of every African World Heritage site, for Place facts and Places to see. | facts only | yes | no |
+| `fx-ainmean-aite` | `www.ainmean-aite.scot` | Ainmean-Àite na h-Alba: Gaelic place-names of Scotland: Gaelic forms and meanings of Scottish settlement names, for Place facts and Places to see. | facts only | yes | no |
+| `fx-alleburgen` | `www.alleburgen.de` | AlleBurgen.de: 41,661 castles, palaces and ruins in Europe with history and maps, for Place facts and Places to see. | facts only | yes | no |
+| `fx-am-armgeo` | `www.armgeo.am` | Armenian Geographic (ArmGeo): monuments, villages, mountains of Armenia with history, for Place facts, Places to see and Activities. | facts only | yes | no |
 | `fx-aramcoworld` | `www.aramcoworld.com` | AramcoWorld: history and culture of Arab/Islamic-world cities, for Place facts and Places to see. | facts only | yes | no |
 | `fx-archaeology-mag` | `archaeology.org` | Archaeology Magazine (AIA): discoveries at named sites, for Place facts and Places to see. | facts only | yes | no |
 | `fx-atlas-of-wonders` | `feeds.feedburner.com` | Atlas of Wonders: natural/man-made wonders (low priority), for Place facts and Places to see. | facts only | yes | no |
+| `fx-austria-forum` | `austria-forum.org` | Austria-Forum (AEIOU Österreich-Lexikon): Austrian towns, states, landmarks (TU Graz-hosted knowledge base), for Place facts and Places to see. | facts only | yes | no |
+| `fx-az-irs-heritage` | `irs-az.com` | IRS Heritage (Nasledie) magazine: heritage magazine on Azerbaijani towns, monuments and crafts, for Place facts and Places to see. | facts only | yes | no |
+| `fx-beliana` | `beliana.sav.sk` | Encyclopaedia Beliana (SAV): Slovak towns, regions (Academy of Sciences), for Place facts and Places to see. | facts only | yes | no |
 | `fx-bibleplaces` | `www.bibleplaces.com`, `bibleplaces.com` | BiblePlaces.com: archaeological site histories in Israel, Palestine, Jordan and Egypt, for Place facts and Places to see. | facts only | yes | no |
+| `fx-britain-express` | `www.britainexpress.com` | Britain Express: village, church and history pages for every county, for Place facts, Places to see and Activities. | facts only | yes | no |
+| `fx-by-globustut` | `globustut.by` | Глобус Беларуси: town-by-town sights and history of Belarus, for Place facts and Places to see. | facts only | yes | no |
+| `fx-by-slounik` | `slounik.org` | Slounik.org: Belarusian dictionaries and encyclopedias: digitised Belarusian encyclopedias with entries on towns, villages, castles, for Place facts and Places to see. | facts only | yes | no |
+| `fx-canon-van-nederland` | `www.canonvannederland.nl` | Canon van Nederland + local/regional canons: national canon + hundreds of town/province canons (50 "windows" each), for Place facts, Places to see and Free walking tours. | facts only | yes | no |
 | `fx-connecticut-history` | `connecticuthistory.org` | ConnecticutHistory.org (CT Humanities): town pages and history articles, for Place facts and Places to see. | share-alike | yes | no |
+| `fx-cumbria-county-history` | `www.cumbriacountyhistory.org.uk` | Cumbria County History Trust: VCH-style township histories and a "100 interesting facts" page, for Place facts and Places to see. | facts only | yes | no |
+| `fx-cz-encyklopedie-praha2` | `encyklopedie.praha2.cz` | Encyklopedie Prahy 2: buildings, streets and people of Prague 2 (Vinohrady, Nusle, Vyšehrad), for Place facts, Places to see and Free walking tours. | facts only | yes | no |
+| `fx-de-monumente` | `www.monumente-online.de` | Monumente (magazine of the Deutsche Stiftung Denkmalschutz) (de / German towns and monume…: monument histories and curiosities per town, for Place facts and Places to see. | facts only | yes | no |
+| `fx-de-mv-gutshaeuser` | `gutshaeuser.de` | Gutshäuser und Schlösser in Mecklenburg-Vorpommern: about 2,000 manor houses of MV villages with owners and building history, for Place facts and Places to see. | facts only | yes | no |
+| `fx-derbyshire-heritage` | `derbyshireheritage.co.uk` | Derbyshire Heritage: town and village histories, for Place facts and Places to see. | facts only | yes | no |
 | `fx-discover-islamic-art` | `islamicart.museumwnf.org` | Discover Islamic Art (Museum With No Frontiers): monument records for Islamic heritage across MENA, for Place facts and Places to see. | facts only | yes | no |
+| `fx-dk-inden-for-voldene` | `www.indenforvoldene.dk` | Inden for Voldene (Copenhagen streets): history of every street and house inside Copenhagen's old ramparts, for Place facts, Places to see and Free walking tours. | facts only | yes | no |
+| `fx-e-lir` | `www.e-lir.ch` | e-LIR Lexicon istoric retic (Romansh HLS): Romansh-language history of Graubünden villages, for Place facts and Places to see. | facts only | yes | no |
+| `fx-electric-scotland` | `www.electricscotland.com` | Electric Scotland: parish and town histories (many public-domain book reprints), for Place facts and Places to see. | facts only | yes | no |
 | `fx-enciclopedia-cat` | `www.enciclopedia.cat` | Enciclopèdia.cat (Gran Enciclopèdia Catalana): an entry for every Catalan municipality and many villages and hamlets (history, heritage, population), for Place facts and Places to see. | facts only | yes | no |
+| `fx-enciclopedia-romaniei` | `enciclopediaromaniei.ro` | Enciclopedia României: Romanian localities, history, for Place facts and Places to see. | facts only | yes | no |
+| `fx-enciklopedija-hr` | `www.enciklopedija.hr` | Hrvatska enciklopedija (LZMK): Croatian towns, islands, regions, for Place facts and Places to see. | facts only | yes | no |
+| `fx-enciklopedija-lv` | `enciklopedija.lv` | Nacionālā enciklopēdija (LNB): Latvian towns, regions, history (National Library), for Place facts and Places to see. | facts only | yes | no |
 | `fx-encyclopedia-virginia` | `encyclopediavirginia.org` | Encyclopedia Virginia: history and curiosities of the places it covers, for Place facts and Places to see. | facts only | yes | no |
 | `fx-erih` | `www.erih.net`, `erih.net` | European Route of Industrial Heritage: industrial heritage sites with history across Europe, for Place facts, Places to see and Activities. | facts only | yes | no |
+| `fx-es-alandalus-historia` | `www.alandalusylahistoria.com` | Al-Andalus y la Historia (es / Andalusia, Córdoba, Granada…): history of Andalusian towns and monuments by historians, for Place facts and Places to see. | facts only | yes | no |
+| `fx-es-arteguias` | `arteguias.com` | Arteguias: arte románico en España: Romanesque churches and monasteries by province with dates and history, for Place facts and Places to see. | facts only | yes | no |
+| `fx-es-ga-consello-cultura` | `consellodacultura.gal` | Consello da Cultura Galega: Galician heritage, place and toponymy specials, document collections, for Place facts and Places to see. | facts only | yes | no |
+| `fx-es-ga-culturagalega` | `culturagalega.gal` | culturagalega.gal (CCG news): Galician culture and heritage reports, for Place facts and Places to see. | facts only | yes | no |
+| `fx-es-ga-galicia-encantada` | `galiciaencantada.com` | Galicia Encantada: legends and traditions tied to Galician parishes, castros, lakes, for Place facts and Places to see. | facts only | yes | no |
+| `fx-es-regmurcia` | `www.regmurcia.com` | Región de Murcia Digital: Murcia municipalities, history, heritage (encyclopedic), for Place facts and Places to see. | facts only | yes | no |
 | `fx-europanostra` | `www.europanostra.org` | Europa Nostra: European Heritage Awards and "7 Most Endangered" site write-ups, for Place facts and Places to see. | facts only | yes | no |
 | `fx-exploring-castles` | `www.exploring-castles.com` | Exploring Castles: castle histories, Europe, for Place facts and Places to see. | facts only | yes | no |
+| `fx-fo-snar` | `snar.fo` | Snar.fo (Faroese learning portal): Faroese history and place themes for schools, for Place facts and Places to see. | facts only | yes | no |
+| `fx-fr-alsace-histoire` | `www.alsace-histoire.org` | Fédération des Sociétés d'Histoire et d'Archéologie d'Alsace: local societies of Alsatian towns and villages, Revue d'Alsace, for Place facts and Places to see. | facts only | yes | no |
+| `fx-fr-patrimoine-normand` | `patrimoinenormand.com` | Patrimoine Normand (magazine): towns, châteaux, abbeys and history of Normandy (has a shop: product paths excluded), for Place facts and Places to see. | facts only | yes | no |
+| `fx-france-pittoresque` | `www.france-pittoresque.com` | La France pittoresque: French towns, monuments, traditions and legends, for Place facts and Places to see. | facts only | yes | no |
+| `fx-ge-georgiaabout` | `georgiaabout.com` | Georgia About: long-running blog with "About ..." posts on Georgian architecture, towns and traditions, for Place facts and Places to see. | facts only | yes | no |
+| `fx-geo-de` | `www.geo.de` | GEO (Germany): German-language place history and curiosities, for Place facts and Places to see. | facts only | yes | no |
+| `fx-glasgow-story` | `theglasgowstory.com` | TheGlasgowStory: Glasgow districts and place names, for Place facts and Places to see. | facts only | yes | no |
 | `fx-haiti-reference` | `www.haiti-reference.info` | Haïti Référence: long-running Haitian reference site (history, regions, notables, culture), for Place facts and Places to see. | facts only | yes | no |
 | `fx-hakai` | `hakaimagazine.com` | Hakai Magazine: coastal places, islands, ports, for Place facts and Places to see. | facts only | yes | no |
 | `fx-henokiens` | `www.henokiens.com` | Les Hénokiens (family companies 200+ years old): the oldest family companies by town (Hōshi Ryokan, 718; Beretta, 1526) with founding years, for Place facts and Places to see. | facts only | yes | no |
+| `fx-heritage-calling` | `heritagecalling.com` | Heritage Calling (Historic England blog): listed buildings and place history from England's heritage body, for Place facts and Places to see. | facts only | yes | no |
 | `fx-heritagedaily` | `www.heritagedaily.com` | HeritageDaily: archaeology news tied to sites, for Place facts and Places to see. | facts only | yes | no |
 | `fx-historia-nuevo-mundo` | `www.historiadelnuevomundo.com` | Historia del Nuevo Mundo: city and place histories across Hispanic America, for Place facts and Places to see. | facts only | yes | no |
+| `fx-historic-uk` | `www.historic-uk.com` | Historic UK: town/castle/village histories across Britain, for Place facts and Places to see. | facts only | yes | no |
 | `fx-historyextra` | `www.historyextra.com` | HistoryExtra (BBC History Magazine): UK/world place history explainers by named historians, for Place facts and Places to see. | facts only | yes | no |
 | `fx-historyhit` | `www.historyhit.com` | History Hit (places): historic site guides and '10 facts about' place pages, for Place facts and Places to see. | facts only | yes | no |
 | `fx-historylink` | `www.historylink.org` | HistoryLink.org (Washington State history): town essays, "This Day" items, for Place facts and Places to see. | facts only | yes | no |
+| `fx-ianvisits` | `www.ianvisits.co.uk` | ianVisits (London): London little-known history, hidden sites, for Place facts, Places to see and Events. | facts only | yes | no |
+| `fx-is-heimaslod` | `heimaslod.is` | Heimaslóð (Vestmannaeyjar heritage encyclopedia): Westman Islands history, houses, the 1973 eruption, place names, for Place facts and Places to see. | facts only | yes | no |
+| `fx-istrapedia` | `www.istrapedia.hr` | Istrapedia (Istrian encyclopedia): Istrian towns and villages, for Place facts and Places to see. | facts only | yes | no |
+| `fx-it-icastelli` | `www.icastelli.it` | icastelli.it: Castelli e Torri d'Italia: Italian castles and towers by region with history, for Place facts and Places to see. | facts only | yes | no |
+| `fx-it-info-roma` | `www.info.roma.it` | Info.roma.it: Enciclopedia su Roma: Rome monuments, streets, 'Roma sparita', daily almanac of Roman history, for Place facts, Places to see and Free walking tours. | facts only | yes | no |
+| `fx-it-mondimedievali` | `www.mondimedievali.net` | Mondi Medievali: castelli d'Italia: castles of every Italian region incl. Sicily, Campania, Puglia, for Place facts and Places to see. | facts only | yes | no |
+| `fx-kastra-greek-castles` | `www.kastra.eu` | Kastra.eu: Greek Castles: every medieval and later castle, fort and tower in Greece with history and dates, for Place facts and Places to see. | facts only | yes | no |
+| `fx-kent-archaeology` | `www.kentarchaeology.org.uk` | Kent Archaeological Society (Archaeologia Cantiana): parish histories and papers about Kent places, for Place facts and Places to see. | facts only | yes | no |
+| `fx-levantine-heritage` | `levantineheritage.com` | Levantine Heritage Foundation: Levantine communities of Izmir, Istanbul, Cyprus and the east Mediterranean (low volume), for Place facts and Places to see. | facts only | yes | no |
+| `fx-lu-industrie` | `industrie.lu` | industrie.lu: industrial history of Luxembourg: histories of Luxembourg towns' industries, hotels, cafés, railways, mines, for Place facts and Places to see. | facts only | yes | no |
+| `fx-mdr-geschichte` | `www.mdr.de` | MDR Geschichte: history of towns and regions in Saxony, Saxony-Anhalt, Thuringia (fills the Thuringia/LSA gap), for Place facts and Places to see. | facts only | yes | no |
+| `fx-ndr-geschichte` | `www.ndr.de` | NDR Geschichte: history of north German towns, MV and Hanseatic places, for Place facts and Places to see. | facts only | yes | no |
+| `fx-new-georgia-encyclopedia` | `www.georgiaencyclopedia.org` | New Georgia Encyclopedia (Georgia Humanities/UGA Press): towns, counties, for Place facts and Places to see. | facts only | yes | no |
+| `fx-no-oslo-byleksikon` | `oslobyleksikon.no` | Oslo byleksikon: every Oslo street, building, district and place-name origin, for Place facts, Places to see and Free walking tours. | facts only | yes | no |
+| `fx-ooegeschichte` | `www.ooegeschichte.at` | Forum OÖ Geschichte (Land Oberösterreich): Upper Austrian regional history, small monuments, for Place facts and Places to see. | facts only | yes | no |
+| `fx-orkneyjar` | `orkneyjar.com` | Orkneyjar: Orkney parish, folklore and place-name notes, for Place facts and Places to see. | facts only | yes | no |
+| `fx-pl-pomeranica` | `pomeranica.pl` | Encyklopedia Pomorza Zachodniego (pomeranica.pl): Szczecin and West Pomeranian towns and villages (encyklopedia.szczecin.pl redirects here), for Place facts and Places to see. | facts only | yes | no |
+| `fx-proleksis-hr` | `proleksis.lzmk.hr` | Proleksis enciklopedija (LZMK): short entries on Croatian and world towns, islands, regions, countries, for Place facts and Places to see. | facts only | yes | no |
+| `fx-pt-aprender-madeira` | `aprenderamadeira.net` | Aprender Madeira (Madeira encyclopedia, APCA): Madeira and Porto Santo parishes, history, heritage, for Place facts and Places to see. | facts only | yes | no |
+| `fx-pt-restos-de-coleccao` | `restosdecoleccao.blogspot.com` | Restos de Colecção (blog): well-documented history of Lisbon and Portuguese shops, buildings, streets, for Place facts and Places to see. | facts only | yes | no |
+| `fx-ro-bucurestii-vechi-si-noi` | `bucurestiivechisinoi.ro` | București Vechi și Noi: volunteer-written histories of Bucharest streets, buildings, people, for Place facts, Places to see and Free walking tours. | facts only | yes | no |
+| `fx-ru-bashenc` | `bashenc.online` | Башкирская энциклопедия (ГАУН РБ): 56k articles; every district, town and village of Bashkortostan, for Place facts and Places to see. | facts only | yes | no |
+| `fx-ru-chuvash-enc` | `enc.cap.ru` | Чувашская энциклопедия: villages and towns of Chuvashia (regional government portal), for Place facts and Places to see. | facts only | yes | no |
+| `fx-ru-encspb` | `www.encspb.ru` | Энциклопедия Санкт-Петербурга: streets, buildings, monuments, memorial plaques of St Petersburg, for Place facts, Places to see and Free walking tours. | facts only | yes | no |
+| `fx-ru-histrf` | `history.ru` | История.РФ (Российское военно-историческое общество): federal history portal; regional history and "travel" sections about towns, for Place facts, Places to see and Itinerary. | facts only | yes | no |
+| `fx-ru-kola-encyclopedia` | `ke-culture.gov-murman.ru`, `ke.culture.gov-murman.ru` | Кольская энциклопедия (Правительство Мурманской области): 5-volume regional encyclopedia: every town, settlement and landmark of Murmansk oblast, for Place facts and Places to see. | open | yes | no |
+| `fx-ru-pravenc` | `www.pravenc.ru` | Православная энциклопедия (ЦНЦ): scholarly articles on cities, monasteries and dioceses (history with bibliography), for Place facts and Places to see. | facts only | yes | no |
+| `fx-ru-rgo` | `rgo.ru` | Русское географическое общество: RGS articles on regions, expeditions and geographic records (highest, deepest, coldest), for Place facts and Places to see. | facts only | yes | no |
+| `fx-ru-tatarica` | `tatarica.org` | Tatarica: Татарская энциклопедия (АН РТ): Kazan, Tatarstan settlements, "vanished settlements" section, for Place facts and Places to see. | facts only | yes | no |
+| `fx-ru-vokrugsveta` | `www.vokrugsveta.ru` | Вокруг света: oldest Russian popular-geography magazine (1861); place curiosities and records, for Place facts and Places to see. | facts only | yes | no |
 | `fx-sahapedia` | `www.sahapedia.org` | Sahapedia: heritage-walk and city-culture essays, for Place facts, Free walking tours and Places to see. | share-alike | yes | no |
 | `fx-sapiens` | `www.sapiens.org` | SAPIENS (anthropology magazine): cultural/archaeological history of places, for Place facts and Places to see. | open | yes | no |
+| `fx-se-samer` | `samer.se` | Samer.se (Sámi information centre, Sametinget): Sápmi history, Sámi place names and siida areas, for Place facts and Places to see. | facts only | yes | no |
 | `fx-statesymbolsusa` | `statesymbolsusa.org` | State Symbols USA: every official US state symbol with adoption year and statute, for Place facts and Places to see. | facts only | yes | no |
+| `fx-survey-of-london` | `surveyoflondon.org` | Survey of London: Whitechapel (UCL): building-by-building history of Whitechapel, for Place facts, Places to see and Free walking tours. | facts only | yes | no |
+| `fx-sussex-parish-churches` | `sussexparishchurches.org` | Sussex Parish Churches: a church and village history for each Sussex parish, for Place facts and Places to see. | facts only | yes | no |
 | `fx-tara-rock-art` | `africanrockart.org` | TARA: Trust for African Rock Art: rock-art sites by country, for Place facts and Places to see. | facts only | yes | no |
+| `fx-toscana-ovunque-bella` | `www.toscanaovunquebella.it` | Toscana Ovunque Bella: unusual stories for every Tuscan comune (one per municipality), for Place facts, Places to see and Itinerary. | facts only | yes | no |
+| `fx-tr-arkeofili` | `arkeofili.com` | Arkeofili: archaeology news on Turkish sites (oldest, first, largest finds), for Place facts and Places to see. | facts only | yes | no |
+| `fx-tr-istanbultarihi` | `istanbultarihi.ist` | Büyük İstanbul Tarihi (İBB + İSAM): 10-volume history of Istanbul by district and topic, for Place facts, Places to see and Free walking tours. | facts only | yes | no |
+| `fx-tr-turkisharchaeonews` | `www.turkisharchaeonews.net` | Turkish Archaeological News: a gazetteer of ancient sites, monuments and museums in Turkey, for Place facts, Places to see and Activities. | facts only | yes | no |
+| `fx-ua-castles` | `castles.com.ua` | Замки і храми України: castles, churches and manors by oblast, with history, for Place facts and Places to see. | facts only | yes | no |
+| `fx-ua-ieu` | `www.encyclopediaofukraine.com` | Internet Encyclopedia of Ukraine (CIUS, Univ. of Alberta): English entries on every Ukrainian city, oblast and many villages, for Place facts and Places to see. | facts only | yes | no |
+| `fx-ua-lia-lviv` | `lia.lvivcenter.org` | Львів Інтерактивний (Центр міської історії): peer-reviewed histories of Lviv buildings, streets and places, for Place facts, Places to see and Free walking tours. | facts only | yes | no |
+| `fx-ua-localhistory` | `localhistory.org.ua` | Локальна історія (журнал): local-history magazine; towns and villages of Ukraine, for Place facts and Places to see. | facts only | yes | no |
+| `fx-ukrainer` | `www.ukrainer.net` | Ukraїner: town/village stories from all regions of Ukraine, for Place facts and Places to see. | facts only | yes | no |
+| `fx-undiscovered-scotland` | `www.undiscoveredscotland.co.uk` | Undiscovered Scotland: thousands of town and village pages, for Place facts and Places to see. | facts only | yes | no |
+| `fx-vle-lt` | `www.vle.lt` | Visuotinė lietuvių enciklopedija: Lithuanian towns, villages and history, for Place facts and Places to see. | facts only | yes | no |
 | `fx-wmf` | `www.wmf.org` | World Monuments Fund: World Monuments Watch site histories worldwide, for Place facts and Places to see. | facts only | yes | no |
 | `galapagos-park` | `galapagos.gob.ec` | Official Galápagos visitor rules, entry fee and visitor sites, for Travel tips, Places to see and Activities. | facts only | yes | no |
 | `gaultmillau` | `www.gaultmillau.com` | Gault&Millau restaurant ratings (name, toque rating and city as facts), for Activities and Places to see. | facts only | yes | no |
 | `gotokyo` | `www.gotokyo.org` | About 925 Tokyo spots, the event calendar and model courses, for Places to see, Events, Activities and the itinerary. | facts only | yes | no |
 | `goturkiye` | `goturkiye.com` | Official Turkish destinations, routes and events, for Places to see, the itinerary and Events; also history and curiosities for Place facts. | facts only | yes | no |
 | `gov-aad` | `www.antarctica.gov.au` | Australian Antarctic Program: visitor rules, Macquarie/Heard islands, for Travel tips and Places to see; also history and curiosities for Place facts. | facts only | yes | no |
+| `gov-ad-cultura` | `www.govern.ad` | Govern d'Andorra: Cultura: Andorran heritage and Romanesque churches (low volume), for Place facts and Places to see. | facts only | yes | no |
 | `gov-akdn-historic-cities` | `the.akdn` | Aga Khan Trust for Culture / Historic Cities Programme: restored sites such as Bagh-e Babur and Herat old city (Afghanistan), Djenné/Mopti/Timbuktu mosques (Mali), Bukhara, Zanzibar, for Place facts and Places to see. | facts only | yes | no |
+| `gov-al-berat` | `bashkiaberat.gov.al` | Bashkia Berat: Berat UNESCO town, its heritage and history pages, for Place facts and Places to see. | facts only | yes | no |
+| `gov-al-tirana` | `tirana.al` | Bashkia Tiranë: Pikat e interesit: Tirana points of interest with short histories, for Place facts, Places to see and Activities. | facts only | yes | no |
 | `gov-ascension` | `www.ascension.gov.ac` | Ascension Island Government: entry permits, travel and visitor information (only official source), for Visa, Local transportation, Travel tips and Places to see. | facts only | yes | no |
 | `gov-bat` | `www.britishantarcticterritory.org.uk` | British Antarctic Territory: visitor permits, Port Lockroy, news, for Travel tips, Visa and Places to see. | facts only | yes | no |
 | `gov-bonito` | `www.bonito.ms.gov.br` | Prefeitura de Bonito (MS): eco-tourism voucher rules, attractions, for Places to see and Activities; also history and curiosities for Place facts. | facts only | yes | no |
+| `gov-cy-famagusta` | `www.famagusta.org.cy` | Famagusta Municipality (Ammochostos, in exile): history of Famagusta and Varosha (Cyprus beyond Nicosia), for Place facts and Places to see. | facts only | yes | no |
+| `gov-cy-nicosia` | `www.nicosia.org.cy` | Nicosia Municipality: history of Nicosia, the walled city, monuments, for Place facts, Places to see and Free walking tours. | facts only | yes | no |
 | `gov-dasta` | `www.dasta.or.th` | DASTA Thailand: designated sustainable-tourism areas (Koh Chang, Nan, Loei, Sukhothai) and community tourism, for Places to see, Activities and Events. | facts only | yes | no |
+| `gov-de-deutschland` | `www.deutschland.de` | deutschland.de (Federal Foreign Office): history and curiosities of the places it covers, for Place facts, Places to see and Events. | facts only | yes | no |
 | `gov-esa-earth-from-space` | `www.esa.int` | ESA: Earth from Space: a weekly satellite image of a named place with an explanatory caption, for Place facts and Places to see. | facts only | yes | no |
+| `gov-fingal-heritage` | `www.fingal.ie` | Fingal County Council: Heritage: Fingal heritage publications and placenames, for Place facts and Places to see. | facts only | yes | no |
 | `gov-gilgit-baltistan` | `www.gilgitbaltistan.gov.pk` | Gilgit-Baltistan Government notices (NOC/permits), for Places to see and Travel tips; also history and curiosities for Place facts. | facts only | yes | no |
 | `gov-kinmen` | `www.kinmen.gov.tw` | Kinmen County Government (tourism pages), for Places to see and Activities. | facts only | yes | no |
 | `gov-leh` | `leh.nic.in` | District Leh (Ladakh): tourism, permits, notices, for Places to see, Visa and Travel tips; also history and curiosities for Place facts. | facts only | yes | no |
 | `gov-lord-howe-board` | `www.lhib.nsw.gov.au` | Lord Howe Island Board: visitor cap, biosecurity, walks, for Travel tips, Local transportation and Places to see. | facts only | yes | no |
+| `gov-mc-gouv` | `www.gouv.mc` | Gouvernement Princier de Monaco: Monaco institutions, history, territory facts, for Place facts and Places to see. | facts only | yes | no |
+| `gov-mc-palais` | `palais.mc` | Palais Princier de Monaco: history of the Prince's Palace and the Grimaldi dynasty, for Place facts and Places to see. | facts only | yes | no |
+| `gov-mt-history` | `mhs.mt.gov` | Montana Historical Society: signs/markers, state history, for Place facts and Places to see. | facts only | yes | no |
 | `gov-noronha` | `www.noronha.pe.gov.br` | Fernando de Noronha administration: TPA fee, visitor rules, for Places to see, Travel tips and Visa. | facts only | yes | no |
 | `gov-south-georgia` | `gov.gs` | South Georgia & South Sandwich Is: visitor permits, landing rules, for Visa, Travel tips and Places to see. | facts only | yes | no |
 | `gov-taaf` | `taaf.fr` | TAAF: Kerguelen, Crozet, Scattered Islands; Marion Dufresne passenger voyages, for Places to see, Local transportation and Travel tips. | facts only | yes | no |
 | `gov-terschelling` | `www.terschelling.nl` | Gemeente Terschelling (municipality) visitor info, for Places to see, Activities and Events. | facts only | yes | no |
 | `gov-torres-strait` | `www.tsra.gov.au` | Torres Strait Regional Authority: island visit protocols/permits, for Places to see and Travel tips. | open | yes | no |
+| `gov-tr-kulturportali` | `www.kulturportali.gov.tr` | Türkiye Kültür Portalı (Kültür ve Turizm Bakanlığı): official page per il with history, sights and the inventory of cultural assets, for Place facts and Places to see. | facts only | yes | no |
+| `gov-tr-muze` | `muze.gov.tr` | Müzeler ve Ören Yerleri (muze.gov.tr, KTB): official museum and archaeological-site pages with history, for Place facts and Places to see. | facts only | yes | no |
+| `gov-uk-bgs` | `www.bgs.ac.uk` | British Geological Survey: the largest UK earthquakes, geology of named landmarks, record rocks, for Place facts and Places to see. | facts only | yes | no |
+| `gov-uk-cityoflondon` | `www.cityoflondon.gov.uk` | City of London: History and heritage: Square Mile history, Guildhall, livery, for Place facts, Places to see and Free walking tours. | facts only | yes | no |
 | `gov-usgs-volcanoes` | `www.usgs.gov` | USGS Volcano Hazards Program: alerts/status for US volcanoes (Alaska, Hawaii, Marianas), for Travel tips and Places to see. | open | yes | no |
+| `gov-va-vaticanstate` | `vaticanstate.va` | Stato della Città del Vaticano: Vatican City State facts, geography, history, monuments, for Place facts and Places to see. | facts only | yes | no |
 | `green-pearls` | `www.greenpearls.com` | Curated sustainable hotels, restaurants and destinations, for Hotels and Places to see. | facts only | yes | no |
 | `green-tourism-members` | `www.green-tourism.com` | About 2,300 Gold, Silver and Bronze certified B&Bs, hotels, campsites and attractions with address and tier, for Hotels, Activities and Places to see. | facts only | yes | no |
 | `guide-capeverdeislands` | `www.capeverdeislands.org` | Cape Verde Islands travel info (private), for Places to see and Activities. | facts only | yes | no |
 | `guide-dark-tourism` | `www.dark-tourism.com` | Dark-Tourism.com: remote/unusual sites worldwide incl. advisory countries, for Places to see and Travel tips. | facts only | yes | no |
 | `guide-tioman` | `www.tioman.org` | Tioman Island info, for Places to see and Activities. | facts only | yes | no |
+| `her-al-iktk` | `iktk.gov.al` | Instituti Kombëtar i Trashëgimisë Kulturore (Albania): Albanian national cultural-heritage assets and monument decisions, for Place facts and Places to see. | facts only | yes | no |
+| `her-at-bda` | `www.bda.gv.at` | Bundesdenkmalamt (Austria): Austrian monument list (per-Land PDFs) plus heritage stories, for Place facts and Places to see. | facts only | yes | no |
+| `her-atlas-mutual-heritage` | `atlasmutualheritage.nl` | Atlas of Mutual Heritage: VOC/WIC-era forts, lodges and towns in Suriname, Guyana, the Caribbean, West Africa and Asia, for Place facts and Places to see. | facts only | yes | no |
+| `her-ba-kons` | `kons.gov.ba` | Komisija za očuvanje nacionalnih spomenika BiH: decisions designating national monuments of Bosnia and Herzegovina, each with a historical description, for Place facts and Places to see. | facts only | yes | no |
+| `her-be-bru-monument` | `monument.heritage.brussels` | Inventaire du patrimoine architectural (Brussels): street-by-street building histories for Brussels, for Place facts, Places to see and Free walking tours. | facts only | yes | no |
+| `her-be-vl-inventaris` | `inventaris.onroerenderfgoed.be` | Inventaris Onroerend Erfgoed (Flanders): building histories for every Flemish town, for Place facts, Places to see and Free walking tours. | facts only | yes | no |
+| `her-be-wal-awap` | `agencewallonnedupatrimoine.be` | AWaP (Wallonia heritage agency): Walloon classified monuments and places to visit, for Place facts and Places to see. | facts only | yes | no |
+| `her-british-listed-buildings` | `britishlistedbuildings.co.uk` | British Listed Buildings: list-entry text for England, Scotland and Wales by parish, for Place facts and Places to see. | facts only | yes | no |
+| `her-bucks-heritage-portal` | `heritageportal.buckinghamshire.gov.uk` | Buckinghamshire's Heritage Portal (HER): parish histories and monument records, for Place facts and Places to see. | facts only | yes | no |
+| `her-by-museum-by` | `museum.by` | Museum.by: museums of Belarus: catalogue of Belarusian museums by town with histories of the sites, for Place facts, Places to see and Activities. | facts only | yes | no |
 | `her-cadw` | `cadw.gov.wales` | Cadw (Welsh Government historic environment): 130+ castles, abbeys, opening times, events, for Places to see and Events; also history and curiosities for Place facts. | facts only | yes | no |
+| `her-chwb` | `chwb.org` | Cultural Heritage without Borders: restored monuments in Kosovo, Albania, BiH with short histories (low volume), for Place facts and Places to see. | facts only | yes | no |
 | `her-cornwall-heritage-trust` | `www.cornwallheritagetrust.org` | Cornwall Heritage Trust: the trust's Cornish monument sites, for Place facts and Places to see. | facts only | yes | no |
+| `her-cz-npu` | `npu.cz` | Národní památkový ústav: Czech state castles and chateaux, heritage news (catalogue pamatkovykatalog.cz already covered), for Place facts, Places to see and Activities. | facts only | yes | no |
+| `her-de-bb-bldam` | `bldam-brandenburg.de` | BLDAM Brandenburg: Brandenburg Denkmalliste (per-Kreis PDFs) and features, for Place facts and Places to see. | facts only | yes | no |
+| `her-de-berlin-denkmaldb` | `denkmaldatenbank.berlin.de` | Denkmaldatenbank Berlin: every Berlin monument, with construction history and architects, for Place facts, Places to see and Free walking tours. | facts only | yes | no |
+| `her-de-bw-denkmalpflege` | `www.denkmalpflege-bw.de` | Landesamt für Denkmalpflege Baden-Württemberg: Denkmal des Monats and monument histories, for Place facts and Places to see. | facts only | yes | no |
+| `her-de-gartenreich` | `gartenreich.de` | Kulturstiftung Dessau-Wörlitz (Gartenreich): Dessau-Wörlitz Garden Realm palaces and gardens, for Place facts, Places to see and Activities. | facts only | yes | no |
+| `her-de-he-denkxweb` | `denkxweb.denkmalpflege-hessen.de` | DenkXweb (Landesamt für Denkmalpflege Hessen): every Hessian monument, with a description, for Place facts, Places to see and Free walking tours. | facts only | yes | no |
+| `her-de-lsa-kulturstiftung` | `www.kulturstiftung-st.de` | Kulturstiftung Sachsen-Anhalt (castles, palaces, cathedrals): Saxony-Anhalt castles, palaces, cathedrals (Moritzburg, Falkenstein), for Place facts, Places to see and Activities. | facts only | yes | no |
+| `her-de-lsa-lda` | `www.lda-lsa.de` | Landesamt für Denkmalpflege und Archäologie Sachsen-Anhalt: Saxony-Anhalt monuments, archaeology finds (Nebra), regional history, for Place facts and Places to see. | facts only | yes | no |
+| `her-de-mv-kulturwerte` | `www.kulturwerte-mv.de` | Landesamt für Kultur und Denkmalpflege Mecklenburg-Vorpommern: MV monument news, denkmal des Monats, archaeology finds, for Place facts and Places to see. | facts only | yes | no |
+| `her-de-mv-schloesser` | `mv-schloesser.de` | Staatliche Schlösser und Gärten Mecklenburg-Vorpommern: MV state palaces (Schwerin, Güstrow, Ludwigslust), for Place facts, Places to see and Activities. | facts only | yes | no |
+| `her-de-nrw-lvr-denkmalpflege` | `www.lvr.de` | LVR-Amt für Denkmalpflege im Rheinland: Rhineland monuments, Denkmal des Monats (lvr.de main host is not in corpus), for Place facts and Places to see. | facts only | yes | no |
+| `her-de-nrw-lwl-industriekultur` | `www.lwl-industriekultur.de` | LWL-Museen für Industriekultur: eight Westphalian industrial sites (Zeche Zollern, Henrichshütte) and their history, for Place facts and Places to see. | facts only | yes | no |
+| `her-de-rp-gdke` | `gdke.rlp.de` | GDKE Rheinland-Pfalz: Nachrichtliches Verzeichnis der Kulturdenkmäler (PDFs), for Place facts and Places to see. | facts only | yes | no |
+| `her-de-sl-voelklinger-huette` | `voelklinger-huette.org` | Weltkulturerbe Völklinger Hütte: Saarland's UNESCO ironworks and its history, for Place facts, Places to see and Activities. | facts only | yes | no |
+| `her-de-sn-lfd` | `www.lfd.sachsen.de` | Landesamt für Denkmalpflege Sachsen: Saxon monument features and the Denkmalliste, for Place facts and Places to see. | facts only | yes | no |
+| `her-de-th-klassik-weimar` | `www.klassik-stiftung.de` | Klassik Stiftung Weimar: Weimar Classicism and Bauhaus UNESCO sites, Goethe/Schiller houses, for Place facts, Places to see and Free walking tours. | facts only | yes | no |
+| `her-de-th-schloesser` | `www.thueringerschloesser.de` | Stiftung Thüringer Schlösser und Gärten: Thuringia's state-owned palaces (Heidecksburg, Friedenstein, Dornburg), for Place facts, Places to see and Activities. | facts only | yes | no |
+| `her-de-th-wartburg` | `www.wartburg.de` | Wartburg-Stiftung: Wartburg castle history (Luther, Saint Elisabeth, the Wartburg festival), for Place facts and Places to see. | facts only | yes | no |
+| `her-dk-danmarks-kirker` | `danmarkskirker.natmus.dk` | Danmarks Kirker (Nationalmuseet): scholarly descriptions of every Danish church (building history, fittings), for Place facts and Places to see. | facts only | yes | no |
+| `her-dk-slks` | `slks.dk` | Slots- og Kulturstyrelsen: Danish listed buildings and ancient monuments, for Place facts and Places to see. | facts only | yes | no |
+| `her-ebidat` | `www.ebidat.de` | EBIDAT Burgendatenbank (Europäisches Burgeninstitut): 10,000+ castles in Germany and Europe with dates, owners, building history, for Place facts and Places to see. | facts only | yes | no |
+| `her-es-castillosnet` | `www.castillosnet.org` | CastillosNet (Castillos de España): every castle, tower and fortification in Spain with history, for Place facts and Places to see. | facts only | yes | no |
+| `her-es-cat-invarquit` | `invarquit.cultura.gencat.cat` | Inventari del Patrimoni Arquitectònic de Catalunya: Catalan architectural heritage records, for Place facts and Places to see. | facts only | yes | no |
+| `her-es-cyl-patrimonio` | `patrimoniocultural.jcyl.es` | Patrimonio Cultural de Castilla y León: BIC monuments in Castilla y León, for Place facts and Places to see. | facts only | yes | no |
+| `her-es-hispania-nostra-lista-roja` | `www.hispanianostra.org` | Hispania Nostra: Lista Roja del Patrimonio: endangered monuments of Spain with history and status, for Place facts and Places to see. | facts only | yes | no |
+| `her-es-iaph-guiadigital` | `guiadigital.iaph.es` | Guía Digital del Patrimonio Cultural de Andalucía (IAPH): Andalusian heritage objects with historical data, for Place facts, Places to see and Free walking tours. | open | yes | no |
+| `her-excavations-ie` | `excavations.ie` | Excavations.ie (Database of Irish Excavation Reports): 32k+ excavation summaries by townland and county, for Place facts and Places to see. | facts only | yes | no |
+| `her-fi-kyppi` | `www.kyppi.fi` | Kulttuuriympäristön palveluikkuna: Finnish heritage register (monuments, protected buildings), for Place facts and Places to see. | facts only | yes | no |
+| `her-fi-rky` | `www.rky.fi` | RKY: nationally significant built cultural environments: about 1,300 Finnish environments, with history essays, for Place facts, Places to see and Free walking tours. | facts only | yes | no |
+| `her-fr-bfc-patrimoine` | `patrimoine.bourgognefranchecomte.fr` | Portail patrimoine Bourgogne-Franche-Comté: inventory studies of towns and villages in Burgundy-Franche-Comté, for Place facts and Places to see. | facts only | yes | no |
+| `her-fr-occitanie-patrimoines` | `patrimoines.laregion.fr` | Patrimoines en Occitanie (Inventaire général): Occitanie heritage inventory, sites per département, for Place facts and Places to see. | facts only | yes | no |
+| `her-fr-pdl-patrimoine` | `www.patrimoine.paysdelaloire.fr`, `patrimoine.paysdelaloire.fr` | Patrimoine des Pays de la Loire: Pays de la Loire inventory dossiers and heritage trails, for Place facts, Places to see and Free walking tours. | facts only | yes | no |
+| `her-fr-pop` | `pop.culture.gouv.fr` | POP – Plateforme ouverte du patrimoine: "historique" texts for Mérimée monuments and Palissy objects. Adds narrative to the existing od-fr-merimee, for Place facts and Places to see. | open | yes | no |
+| `her-gb-leeds-blue-plaques` | `leedscivictrust.org.uk` | Leeds Civic Trust blue plaques: plaque texts for Leeds people and places, for Place facts, Places to see and Free walking tours. | facts only | yes | no |
+| `her-ge-nachp` | `www.heritagesites.ge` | National Agency for Cultural Heritage Preservation of Georgia: official heritage sites and museum-reserves with history, for Place facts and Places to see. | facts only | yes | no |
+| `her-heneb-wales` | `heneb.org.uk` | Heneb: Trust for Welsh Archaeology (incl. CPAT/GGAT archives): Welsh village and settlement histories, new finds, for Place facts and Places to see. | open | yes | no |
+| `her-herefordshire-through-time` | `htt.herefordshire.gov.uk` | Herefordshire Through Time (HER): Herefordshire towns, villages and sites, for Place facts and Places to see. | facts only | yes | no |
+| `her-highland-her` | `her.highland.gov.uk` | Highland Historic Environment Record: Highland designations and monuments, for Place facts and Places to see. | facts only | yes | no |
+| `her-historypoints` | `historypoints.org` | HistoryPoints (Wales QR plaques): thousands of Welsh building and place-name notes, for Place facts, Places to see and Free walking tours. | facts only | yes | no |
+| `her-hu-muemlekem` | `www.muemlekem.hu` | Műemlékem.hu: Hungarian listed monuments with descriptions, for Place facts and Places to see. | facts only | yes | no |
+| `her-ie-niah` | `www.buildingsofireland.ie` | National Inventory of Architectural Heritage: building appraisals for every Irish county, for Place facts, Places to see and Free walking tours. | facts only | yes | no |
+| `her-is-minjastofnun` | `www.minjastofnun.is` | Minjastofnun Íslands: Icelandic protected sites and buildings, for Place facts and Places to see. | facts only | yes | no |
+| `her-it-cm-pompeii` | `pompeiisites.org` | Parco Archeologico di Pompei: Pompeii, Herculaneum region sites, domus histories, new-find press releases (Campania), for Place facts, Places to see and Activities. | facts only | yes | no |
+| `her-it-er-pater` | `patrimonioculturale.regione.emilia-romagna.it` | Patrimonio culturale Emilia-Romagna (PatER): Emilia-Romagna architecture, landscapes, museums (successor of IBC), for Place facts and Places to see. | facts only | yes | no |
+| `her-it-fai-luoghi` | `fondoambiente.it` | FAI: Fondo per l'Ambiente Italiano, Luoghi: FAI properties and 'Luoghi del Cuore' with histories, for Place facts, Places to see and Activities. | facts only | yes | no |
+| `her-it-lombardia-bbcc` | `www.lombardiabeniculturali.it` | Lombardia Beni Culturali: Lombardy architecture catalogue with history notes, for Place facts, Places to see and Free walking tours. | facts only | yes | no |
+| `her-it-pi-venaria` | `lavenaria.it` | La Venaria Reale (Residenze Reali Sabaude): Savoy royal residence history (Piemonte), for Place facts, Places to see and Activities. | facts only | yes | no |
+| `her-it-pu-cartapulia` | `www.cartapulia.it` | CartApulia: Carta dei Beni Culturali della Puglia: catalogue of Puglia's monuments, masserie, sites per comune, for Place facts and Places to see. | facts only | yes | no |
+| `her-it-veneto-irvv` | `irvv.net` | Istituto Regionale Ville Venete: catalogo: catalogue of the ~4,000 Venetian villas by comune, for Place facts and Places to see. | facts only | yes | no |
 | `her-keys-to-the-past` | `keystothepast.info` | Keys to the Past (Durham and Northumberland HER): archaeology and history of every parish in the two counties, for Place facts, Places to see and Free walking tours. | facts only | yes | no |
+| `her-kuladig` | `www.kuladig.de` | KuLaDig Kultur.Landschaft.Digital (LVR et al.): geolocated heritage objects with history texts (Rhineland, Hesse, Saxony...), for Place facts, Places to see and Free walking tours. | facts only | yes | no |
+| `her-lost-villages-hull` | `dmv.wordpress.hull.ac.uk`, `dmv.hull.ac.uk` | Beresford's Lost Villages (Univ. of Hull): 2,263 deserted medieval villages and why they were deserted, for Place facts and Places to see. | share-alike | yes | no |
+| `her-lu-inpa` | `inpa.public.lu` | INPA Luxembourg: national protected monuments, for Place facts and Places to see. | facts only | yes | no |
+| `her-mois-ee` | `www.mois.ee` | Mois.ee: Estonian manors portal (Estonian Academy of Arts): history of every Estonian manor, the core of most Estonian villages, for Place facts and Places to see. | open | yes | no |
+| `her-mt-heritage-malta` | `heritagemalta.mt` | Heritage Malta: Malta's state sites (Ħal Saflieni, Ġgantija, forts) with history, for Place facts, Places to see and Activities. | facts only | yes | no |
+| `her-no-kulturminnesok` | `www.kulturminnesok.no` | Kulturminnesøk (Riksantikvaren): Norwegian cultural monuments, with short histories, for Place facts, Places to see and Free walking tours. | facts only | yes | no |
+| `her-norfolk-heritage-explorer` | `www.heritage.norfolk.gov.uk` | Norfolk Heritage Explorer (Norfolk HER): one history summary for every Norfolk parish, plus monument records, for Place facts and Places to see. | facts only | yes | no |
 | `her-opendomesday` | `opendomesday.org` | Open Domesday (every place in Domesday Book, 1086): what each English village was in 1086 (households, ploughs, mills, value, lords), for Place facts, Places to see and Free walking tours. | share-alike | yes | no |
 | `her-owhc-cities` | `www.ovpm.org` | Organization of World Heritage Cities: about 300 member cities with their World Heritage inscription and history (not a UNESCO host, so the unesco.org denial does not apply), for Place facts and Places to see. | facts only | yes | no |
+| `her-patrimonio-aragon` | `patrimonioculturaldearagon.es` | Patrimonio Cultural de Aragón (Gobierno de Aragón): Aragonese heritage assets with history, for Place facts and Places to see. | facts only | yes | no |
+| `her-pl-zabytek` | `zabytek.pl` | Zabytek.pl (NID): Polish registered monuments, with history descriptions, for Place facts, Places to see and Free walking tours. | facts only | yes | no |
+| `her-ro-inp-cimec` | `cimec.ro` | INP: Direcția Patrimoniului Digital (cIMeC): Romanian heritage databases hub (monuments, museums, archaeology; distinct from ran.cimec.ro, which is already covered), for Place facts and Places to see. | facts only | yes | no |
+| `her-ro-patrimoniu` | `www.patrimoniu.ro` | Institutul Național al Patrimoniului: Romanian LMI list of historic monuments, for Place facts and Places to see. | facts only | yes | no |
+| `her-rs-beograd-nasledje` | `beogradskonasledje.rs` | Zavod za zaštitu spomenika kulture grada Beograda: Digitalni registar: Belgrade cultural-property register by municipality, with history of each building, for Place facts, Places to see and Free walking tours. | facts only | yes | no |
+| `her-rs-vojvodina-pzzzsk` | `pzzzsk.rs` | Pokrajinski zavod za zaštitu spomenika kulture (Vojvodina): Vojvodina monuments and conservation news (Petrovaradin, Novi Sad, Sremski Karlovci), for Place facts and Places to see. | facts only | yes | no |
+| `her-scot-hes-designations` | `inspire.hes.scot` | HES Designations WFS (Listed Buildings, Scheduled Monuments, WHS, Battlefields, Gardens,…: every designated site in Scotland, with name, category and designation date. This is the open route around the blocked portal.historicenvironment.scot, for Place facts and Places to see. | open | yes | no |
+| `her-se-fornsok` | `app.raa.se` | Fornsök (Swedish Heritage Board): ancient monuments and sites in Sweden, for Place facts and Places to see. | open | yes | no |
+| `her-se-sfv` | `www.sfv.se`, `sfv.se` | Statens fastighetsverk: histories of Swedish royal palaces, castles, fortresses and state buildings, for Place facts, Places to see and Activities. | facts only | yes | no |
+| `her-si-rkd` | `rkd.situla.org` | Register kulturne dediščine (Slovenia): more than 30k Slovenian heritage units, for Place facts and Places to see. | facts only | yes | no |
+| `her-sk-pamiatky` | `www.pamiatky.sk` | Pamiatkový úrad SR (registers + open data): Slovak national cultural monuments list, for Place facts and Places to see. | open | yes | no |
+| `her-sm-musei-di-stato` | `museidistato.sm` | Istituti Culturali della Repubblica di San Marino: the Three Towers, Palazzo Pubblico and state museums of San Marino, for Place facts and Places to see. | facts only | yes | no |
+| `her-somerset-her` | `www.somersetheritage.org.uk` | Somerset HER (South West Heritage Trust): Somerset town surveys (EUS) and HER records, for Place facts and Places to see. | facts only | yes | no |
+| `her-suffolk-heritage-explorer` | `heritage.suffolk.gov.uk` | Suffolk Heritage Explorer (Suffolk HER): monument and parish records, for Place facts and Places to see. | facts only | yes | no |
+| `her-sussex-past` | `sussexpast.co.uk` | Sussex Archaeological Society (Sussex Past): histories of Lewes Castle, Fishbourne and other sites, for Place facts, Places to see and Activities. | facts only | yes | no |
+| `her-tr-unesco-milli-komisyon` | `www.unesco.org.tr` | UNESCO Türkiye Millî Komisyonu: Turkish texts on World Heritage, tentative-list and intangible-heritage items, for Place facts and Places to see. | facts only | yes | no |
+| `her-uk-ni-hed` | `www.communities-ni.gov.uk` | NI Historic Environment Division: NI listed buildings, scheduled monuments and state-care sites, for Place facts and Places to see. | facts only | yes | no |
+| `her-uk-ni-ulster-history-circle` | `ulsterhistorycircle.org.uk` | Ulster History Circle blue plaques: blue plaques across Northern Ireland, for Place facts, Places to see and Free walking tours. | facts only | yes | no |
+| `her-uk-wales-coflein` | `coflein.gov.uk` | Coflein (RCAHMW / NMRW): site descriptions for Wales (complements her-cadw), for Place facts and Places to see. | open | yes | no |
+| `her-xk-cultural-bridge-prizren` | `culturalbridgepz.org` | Cultural Bridge Prizren: Kosovo's 2016 permanent-protection list, Prizren monuments, UNESCO sites, for Place facts and Places to see. | facts only | yes | no |
 | `her-zamani` | `zamaniproject.org` | Zamani Project (University of Cape Town): pages on documented heritage sites across Africa and the Middle East (Lalibela, Gondar, Kilwa, Petra…), for Place facts and Places to see. | facts only | yes | no |
 | `holland-com` | `www.holland.com` | Official Dutch destinations and sights, for Places to see. | facts only | yes | no |
 | `iamsterdam` | `www.iamsterdam.com` | Amsterdam's official event agenda and restaurant and venue listings, for Events, Activities and Places to see. | facts only | yes | no |
@@ -1355,6 +1626,8 @@ docs/wiki/Place-Facts-Data.md).
 | `nsw-national-parks` | `www.nationalparks.nsw.gov.au` | Every New South Wales national park, walking track and campground or cabin, for Places to see, Activities and Hotels; also history and curiosities for Place facts. | open | yes | no |
 | `nyctourism` | `www.nyctourism.com` | Official NYC event listings, restaurant guides and itineraries, for Events, Activities, the itinerary and Places to see. | facts only | yes | no |
 | `od-dbpedia` | `dbpedia.org`, `databus.dbpedia.org` | DBpedia (SPARQL + Databus dumps): infobox nicknames, mottos and founding dates not yet in Wikidata; low priority (largely redundant with enwiki-dump), for Place facts and Places to see. | share-alike | yes | no |
+| `od-de-hh-denkmalliste` | `api.hamburg.de`, `suche.transparenz.hamburg.de` | Hamburg Denkmalliste (Denkmalschutzamt): every listed monument and plaque in Hamburg, for Place facts, Places to see and Free walking tours. | open | yes | no |
+| `od-heritage-maps-ie` | `www.heritagemaps.ie` | Heritage Maps (Heritage Council): NIAH, SMR, graveyards, holy wells and similar layers for every county, for Place facts and Places to see. | open | yes | no |
 | `od-musei-italiani` | `www.museiitaliani.it` | Musei Italiani (MiC): state museums, hours, free Sundays, for Places to see and Events. | open | yes | no |
 | `od-syriaca` | `syriaca.org` | Syriaca.org Gazetteer: historical Syriac and Middle Eastern place gazetteer, for Place facts and Places to see. | open | yes | no |
 | `od-wien-ogd` | `data.wien.gv.at` | Vienna's sights and museums plus its public toilets and free Wi-Fi spots, for Places to see and Travel tips. | open | yes | no |
@@ -1402,6 +1675,7 @@ docs/wiki/Place-Facts-Data.md).
 | `ref-japan-guide` | `www.japan-guide.com` | japan-guide.com: travel articles and guides, for Places to see, Activities and Travel tips; also history and curiosities for Place facts. | facts only | yes | no |
 | `ref-japan-onsen-assoc` | `www.spa.or.jp` | Japan Spa Association: onsen, hot-spring etiquette, news, for Places to see and Activities. | facts only | yes | no |
 | `ref-machupicchu` | `www.machupicchu.gob.pe` | Machu Picchu official (Ministerio de Cultura, Cusco): circuits, rules, capacity, for Places to see, Travel tips and the itinerary; also history and curiosities for Place facts. | facts only | yes | no |
+| `ref-md-enciclopedia-asm` | `enciclopedia.asm.md` | Centrul de Cercetări Enciclopedice (Enciclopedia Moldovei): Moldovan encyclopedia (Academy of Sciences); localities and history, for Place facts and Places to see. | facts only | yes | no |
 | `ref-nlb` | `www.nlb.org.uk` | Northern Lighthouse Board: lighthouses, visitor info, for Places to see. | facts only | yes | no |
 | `ref-norwegian-lighthouses` | `fyr.no` | Norsk Fyrforening: Norwegian lighthouses, lighthouse stays, for Places to see and Hotels. | facts only | yes | no |
 | `ref-ntnc` | `www.ntnc.org.np` | NTNC: Annapurna, Manaslu, Gaurishankar conservation areas (ACAP permit), for Activities, Places to see and Travel tips. | facts only | yes | no |
@@ -1414,6 +1688,9 @@ docs/wiki/Place-Facts-Data.md).
 | `ref-sic-cultura-mx` | `sic.cultura.gob.mx` | Sistema de Información Cultural (Secretaría de Cultura): national directory of museums, archaeological zones, theatres and festivals, for Places to see and Events; also history and curiosities for Place facts. | facts only | yes | no |
 | `ref-structurae` | `structurae.net` | Structurae (international database of structures): records per structure (longest, tallest, oldest bridge, dam or tower) by town, for Place facts and Places to see. | facts only | yes | no |
 | `ref-swiss-villages` | `swissvillages.org` | Best Swiss Villages (swissvillages.org), for Places to see and Activities; also history and curiosities for Place facts. | facts only | yes | no |
+| `ref-topostext` | `topostext.org` | ToposText (ancient places + texts): ancient sites in Greece and the Mediterranean with the ancient passages that mention them, for Place facts, Places to see and Activities. | facts only | yes | no |
+| `ref-tr-islam-ansiklopedisi` | `islamansiklopedisi.org.tr` | TDV İslâm Ansiklopedisi: 44-volume scholarly encyclopedia with long articles on cities (İznik, Bursa, Konya, Semerkant, Buhara...) across Turkey, the Caucasus and Central Asia, for Place facts and Places to see. | facts only | yes | no |
+| `ref-tr-turizm-ansiklopedisi` | `turkiyeturizmansiklopedisi.com` | Türkiye Turizm Ansiklopedisi: entries on provinces, districts (Alanya, Dikili, Kilis...) and sights, for Place facts and Places to see. | facts only | yes | no |
 | `ref-waterfalls` | `www.worldwaterfalldatabase.com` | World Waterfall Database: waterfalls, access notes, for Places to see. | facts only | yes | no |
 | `ref-zambiatourism` | `www.zambiatourism.com` | Zambia Tourism (private portal): traveller information, for Places to see and Hotels; also history and curiosities for Place facts. | facts only | yes | no |
 | `rub-og-stub` | `www.spisrubogstub.dk` | Opening hours, menus and booking information for Rub & Stub, a social restaurant in Copenhagen, for Activities and Places to see. | facts only | yes | no |
@@ -1425,6 +1702,7 @@ docs/wiki/Place-Facts-Data.md).
 | `tb-aland` | `visitaland.com` | Visit Åland: archipelago, ferries, events, for Places to see, Activities, Events and Local transportation. | facts only | yes | no |
 | `tb-albania` | `albania.al` | Albania National Agency of Tourism: official visitor guide, for Places to see and Activities. | facts only | yes | no |
 | `tb-alberta` | `www.travelalberta.com` | Official Alberta destinations and things to do (Banff, Jasper), for Activities and Places to see. | facts only | yes | no |
+| `tb-aldeias-de-portugal` | `www.aldeiasdeportugal.pt` | Aldeias de Portugal (ATA: Associação do Turismo de Aldeia): classified villages of northern Portugal, history and traditional festivals, for Place facts, Places to see and Events. | facts only | yes | no |
 | `tb-alderney` | `www.visitalderney.com` | Visit Alderney: sights, events, getting there, for Places to see, Activities, Events and Local transportation. | facts only | yes | no |
 | `tb-algarve` | `www.visitalgarve.pt` | Visit Algarve: official visitor guide, for Activities, Places to see and Events. | facts only | yes | no |
 | `tb-alsace` | `www.visit.alsace` | Visit Alsace: official visitor guide, for Activities, Events and Places to see. | facts only | yes | no |
@@ -1453,13 +1731,16 @@ docs/wiki/Place-Facts-Data.md).
 | `tb-bc` | `www.supernaturalbc.com` | Official British Columbia regions, experiences, road trips and practical tips, for Activities, Places to see and the itinerary. | facts only | yes | no |
 | `tb-belle-ile` | `www.belle-ile.com` | Belle-Île-en-Mer tourist office, for Places to see, Activities and Events. | facts only | yes | no |
 | `tb-benintourisme` | `benintourisme.bj` | Bénin Tourisme: official Benin guide (FR/EN), for Places to see, Events, Visa and Travel tips. | facts only | yes | no |
+| `tb-bg-bts-100nto` | `www.btsbg.org` | Bulgarian Tourist Union (100 National Tourist Sites): the 100 National Tourist Sites of Bulgaria with short place histories, for Place facts, Places to see and Activities. | facts only | yes | no |
 | `tb-bhutan` | `bhutan.travel` | Department of Tourism Bhutan (bhutan.travel): Sustainable Development Fee, visa process, festivals (tshechus), destinations, for Visa, Travel tips, Places to see and Events. | facts only | yes | no |
 | `tb-bonaire` | `bonaireisland.com` | Tourism Corporation Bonaire: official visitor guide, for Places to see, Activities and Events. | facts only | yes | no |
+| `tb-borghi-autentici` | `www.borghiautenticiditalia.it` | Borghi Autentici d'Italia: about 250 member villages, each with history and local traditions (adds to the existing ref-borghi-italia), for Place facts and Places to see. | facts only | yes | no |
 | `tb-borkum` | `www.borkum.de` | Borkum island tourism, for Places to see, Activities and Events. | facts only | yes | no |
 | `tb-bornholm` | `www.bornholminfo.dk` | Destination Bornholm (redirects to bornholminfo.dk), for Places to see, Activities and Events. | facts only | yes | no |
 | `tb-brittany` | `www.brittanytourism.com` | Brittany Tourism: official visitor guide, for Activities, Places to see and Local transportation. | facts only | yes | no |
 | `tb-btea-bahrain` | `www.btea.bh` | Bahrain Tourism & Exhibitions Authority: official Bahrain board (bahrain.bh is robots Disallow: /), for Places to see and Events; also history and curiosities for Place facts. | facts only | yes | no |
 | `tb-bulgaria` | `visitbulgaria.com` | Visit Bulgaria (Ministry of Tourism): official visitor guide, for Places to see and Activities. | facts only | yes | no |
+| `tb-by-belarustourism` | `belarustourism.by` | Национальное агентство по туризму Беларуси: official facts on regions and towns, for Place facts, Places to see and Activities. | facts only | yes | no |
 | `tb-canary` | `www.hellocanaryislands.com` | Hello Canary Islands: official visitor guide, for Activities, Places to see, Weather and Travel tips. | facts only | yes | no |
 | `tb-cape-verde` | `www.turismo.cv` | Turismo Cabo Verde (official), for Places to see and Activities. | facts only | yes | no |
 | `tb-caribe-mexicano` | `caribemexicano.travel` | Caribe Mexicano (Quintana Roo tourism board): official Cancún/Riviera Maya/Tulum/Cozumel destinations and experiences, for Places to see, Activities and the itinerary. | facts only | yes | no |
@@ -1476,6 +1757,7 @@ docs/wiki/Place-Facts-Data.md).
 | `tb-cyprus` | `www.visitcyprus.com` | Visit Cyprus (Deputy Ministry of Tourism): official visitor guide, for Places to see, Events and Travel tips. | facts only | yes | no |
 | `tb-czechia` | `www.visitczechia.com` | Visit Czechia (CzechTourism): official visitor guide, for Places to see, Activities and Events. | facts only | yes | no |
 | `tb-danang` | `danangfantasticity.com` | Da Nang Tourism (Da Nang Fantasticity): Official Da Nang/Hoi An area attractions and events, for Places to see, Events and Activities. | facts only | yes | no |
+| `tb-de-nrw-route-industriekultur` | `www.route-industriekultur.ruhr` | Route der Industriekultur (RVR): Ruhr anchor points, workers' settlements, viewpoints, for Place facts, Places to see and Free walking tours. | facts only | yes | no |
 | `tb-delaware` | `www.visitdelaware.com` | Official Delaware events, attractions and beaches, for Events, Activities and Places to see. | facts only | yes | no |
 | `tb-discovernorthernireland` | `discovernorthernireland.com` | Discover Northern Ireland: official visitor guide, for Activities, Places to see and Events. | facts only | yes | no |
 | `tb-discovertunisia` | `www.discovertunisia.com` | Office National du Tourisme Tunisien: official Tunisia guide (sitemap lastmod is old, 2016, so crawl HTML too), for Places to see, Events and Travel tips. | facts only | yes | no |
@@ -1538,6 +1820,7 @@ docs/wiki/Place-Facts-Data.md).
 | `tb-ishigaki` | `yaeyama.or.jp` | Ishigaki City Tourism Association (Yaeyama), for Places to see and Activities. | facts only | yes | no |
 | `tb-isles-of-scilly` | `www.visitislesofscilly.com` | Visit Isles of Scilly: off-islands, events, travel, for Places to see, Activities, Events and Local transportation. | facts only | yes | no |
 | `tb-istria` | `www.istra.hr` | Istria Tourist Board: official visitor guide, for Activities, Events and Places to see. | facts only | yes | no |
+| `tb-it-piemonte-italia` | `piemonteitalia.eu` | Piemonte Italia (Regione Piemonte): Piedmont towns, castles, Sacri Monti, UNESCO landscapes, for Place facts, Places to see and Activities. | facts only | yes | no |
 | `tb-itraveljerusalem` | `www.itraveljerusalem.com` | iTravelJerusalem (Jerusalem Development Authority): official Jerusalem city guide (goisrael info site is 403), for Places to see, Events and Free walking tours; also history and curiosities for Place facts. | facts only | yes | no |
 | `tb-japan-beautiful-villages` | `japan-utsukushii-mura.com` | The Most Beautiful Villages in Japan association (japan-utsukushii-mura.com), for Places to see and Activities; also history and curiosities for Place facts. | facts only | yes | no |
 | `tb-jersey` | `www.jersey.com` | Visit Jersey: sights, events, geopark, for Places to see, Activities and Events. | facts only | yes | no |
@@ -1573,6 +1856,7 @@ docs/wiki/Place-Facts-Data.md).
 | `tb-matsu` | `www.matsu-nsa.gov.tw` | Matsu National Scenic Area, for Places to see, Activities and Events. | facts only | yes | no |
 | `tb-mauritiusnow` | `www.mauritiusnow.com` | Mauritius Tourism Promotion Authority (consumer site): official Mauritius consumer guide, for Places to see, Activities, Events and Travel tips. | facts only | yes | no |
 | `tb-mayotte` | `www.mayotte-tourisme.com` | Mayotte tourism (AaDTM), for Places to see, Activities and Events. | facts only | yes | no |
+| `tb-md-turism-gov` | `turism.gov.md` | Moldova Turism (Agenția Turismului / Ministerul Culturii): official "Despre Moldova" and region pages, for Place facts and Places to see. | facts only | yes | no |
 | `tb-meghalaya` | `www.meghalayatourism.in` | Meghalaya Tourism: Meghalaya destinations and festival calendars, for Places to see, Events and Travel tips. | facts only | yes | no |
 | `tb-mendoza` | `mendoza.tur.ar` | Mendoza Turismo (EMETUR): wine routes, Aconcagua, for Places to see, Events and Activities. | facts only | yes | no |
 | `tb-mintoul-cm` | `mintoul.gov.cm` | Ministère du Tourisme et des Loisirs, Cameroun: official visitor guide, for Places to see, Travel tips and Visa; also history and curiosities for Place facts. | facts only | yes | no |
@@ -1618,7 +1902,9 @@ docs/wiki/Place-Facts-Data.md).
 | `tb-parjatan-bd` | `parjatan.gov.bd` | Bangladesh Parjatan Corporation: Official destinations and state-run tourist accommodation, for Places to see and Hotels; also history and curiosities for Place facts. | facts only | yes | no |
 | `tb-penghu` | `www.penghu-nsa.gov.tw` | Penghu National Scenic Area, for Places to see, Activities and Events. | facts only | yes | no |
 | `tb-pennsylvania` | `www.visitpa.com` | Official Pennsylvania events (America250 in 2026), trips and regions, for Events, Activities and Places to see. | facts only | yes | no |
+| `tb-petites-cites-caractere` | `www.petitescitesdecaractere.com` | Petites Cités de Caractère de France: small historic towns and villages, history of each cité, for Place facts, Places to see and Free walking tours. | facts only | yes | no |
 | `tb-pitcairn` | `www.visitpitcairn.pn` | Pitcairn Islands Tourism: visa/landing rules, supply-ship access, stays; the only official source, for Places to see, Local transportation, Visa and Travel tips. | facts only | yes | no |
+| `tb-plus-beaux-detours` | `www.plusbeauxdetours.com` | Les Plus Beaux Détours de France: about 100 small towns, heritage and curiosities, for Place facts and Places to see. | facts only | yes | no |
 | `tb-png` | `papuanewguinea.travel` | PNG Tourism Promotion Authority: PNG destinations, festivals (Goroka, Mt Hagen shows), itineraries, for Places to see, Events and the itinerary; also history and curiosities for Place facts. | facts only | yes | no |
 | `tb-pohnpei` | `www.visit-pohnpei.fm` | Pohnpei Visitors Bureau: Nan Madol, waterfalls, diving, for Places to see and Activities. | facts only | yes | no |
 | `tb-poland` | `www.poland.travel` | Poland Travel (POT): official visitor guide, for Places to see, Activities and Travel tips. | facts only | yes | no |
@@ -1675,6 +1961,7 @@ docs/wiki/Place-Facts-Data.md).
 | `tb-travelpalestine` | `www.travelpalestine.ps` | Palestine Ministry of Tourism & Antiquities: Travel Palestine: Bethlehem, Jericho, Hebron, for Places to see, Activities and Events; also history and curiosities for Place facts. | facts only | yes | no |
 | `tb-trinbago` | `visittrinbago.tt` | Visit Trinidad & Tobago (Tourism Trinidad): official visitor guide, for Places to see and Events. | facts only | yes | no |
 | `tb-tsushima` | `www.tsushima-net.org` | Tsushima tourism association, for Places to see and Activities. | facts only | yes | no |
+| `tb-ua-ukraine-ua` | `ukraine.ua` | Ukraine.ua (official website of Ukraine): official facts about Ukraine's regions and cities, for Place facts and Places to see. | facts only | yes | no |
 | `tb-unalaska` | `www.unalaska.org` | Unalaska/Dutch Harbor CVB (Aleutians), for Places to see and Activities. | facts only | yes | no |
 | `tb-uruguaynatural` | `uruguaynatural.com` | Uruguay Natural (Ministerio de Turismo): official destinations, for Places to see and Events; also history and curiosities for Place facts. | facts only | yes | no |
 | `tb-ushuaia` | `turismoushuaia.com` | Turismo Ushuaia (InFueTur): End-of-the-world excursions, for Places to see, Activities and Local transportation. | facts only | yes | no |
@@ -1686,6 +1973,7 @@ docs/wiki/Place-Facts-Data.md).
 | `tb-vanuatu` | `www.vanuatu.travel` | Vanuatu Tourism Office: Vanuatu islands, practical info, entry, for Places to see, Activities, Travel tips and Visa; also history and curiosities for Place facts. | facts only | yes | no |
 | `tb-veneto` | `www.veneto.eu` | Veneto Tourism: official visitor guide, for Activities, Places to see and Events. | facts only | yes | no |
 | `tb-vesteralen` | `visitvesteralen.com` | Visit Vesterålen, for Places to see, Activities and Events. | facts only | yes | no |
+| `tb-villages-etapes` | `village-etape.fr` | Fédération Française des Villages Étapes: village-stops near motorways, short heritage notes per village, for Place facts, Places to see and Travel tips. | facts only | yes | no |
 | `tb-visit-brisbane` | `visit.brisbane.qld.au` | Visit Brisbane (Brisbane Economic Development Agency): Brisbane events calendar and attractions, for Events, Places to see and Activities. | facts only | yes | no |
 | `tb-visit-hcmc` | `visithcmc.vn` | Ho Chi Minh City Department of Tourism (Visit HCMC): Official Saigon events and attractions, for Places to see and Events; also history and curiosities for Place facts. | facts only | yes | no |
 | `tb-visit-hokkaido` | `www.visit-hokkaido.jp` | Hokkaido Tourism Organization: Hokkaido spots, seasonal events (snow festivals, flowers) and access, for Places to see, Activities, Events and Weather. | facts only | yes | no |
@@ -1716,6 +2004,7 @@ docs/wiki/Place-Facts-Data.md).
 | `tb-visitthegambia` | `www.visitthegambia.gm` | Gambia Tourism Board: official Gambia guide, for Places to see, Activities and Travel tips. | facts only | yes | no |
 | `tb-visittrentino` | `www.visittrentino.info` | Visit Trentino: official visitor guide, for Activities, Free walking tours and Places to see. | facts only | yes | no |
 | `tb-visittuscany` | `www.visittuscany.com` | Visit Tuscany: official visitor guide, for Activities, Places to see, Events and the itinerary. | facts only | yes | no |
+| `tb-vpah-hauts-de-france` | `vpah-hauts-de-france.fr` | Villes et Pays d'art et d'histoire Hauts-de-France: "curiosités" and town-heritage pages (Amiens, Beauvais, Cambrai, Chantilly…), for Place facts, Places to see and Free walking tours. | share-alike | yes | no |
 | `tb-washington` | `stateofwatourism.com` | Official Washington State experiences, regions and road trips, for Activities, Places to see and the itinerary. | facts only | yes | no |
 | `tb-wellington` | `www.wellingtonnz.com`, `admin.wellingtonnz.com` | WellingtonNZ: Wellington events and attractions, for Events and Places to see. | facts only | yes | no |
 | `tb-western-australia` | `www.westernaustralia.com` | Tourism Western Australia: official visitor guide, for Places to see, Activities and Events. | facts only | yes | no |
@@ -1775,8 +2064,15 @@ docs/wiki/Place-Facts-Data.md).
 | `api-europeana` | `api.europeana.eu` | Europeana Search and Record API: Museum and cultural-heritage records (50M items) with places and dates, for Places to see and Events; also history and curiosities for Place facts. | open | no | yes |
 | `api-tdx-taiwan` | `tdx.transportdata.tw` | Taiwan Transport Data eXchange (TDX): Taiwan rail, bus, metro timetables and tourism points of interest, for Local transportation, Places to see and Events. | facts only | no | yes |
 | `arch-digitalnz-mch` | `api.digitalnz.org` | DigitalNZ API, filtered to Manatū Taonga (Te Ara, NZHistory): Te Ara and NZHistory records (title, description, link). This is the only reachable route to MCH content, for Place facts and Places to see. | facts only | no | yes |
+| `arch-dimu-api` | `api.dimu.org` | DigitaltMuseum / KulturNav API (KulturIT, Norway/Sweden): Nordic museum objects with places, for Place facts and Places to see. | facts only | no | yes |
+| `arch-duchas` | `www.duchas.ie` | Dúchas.ie (National Folklore Collection, UCD): Schools' Collection 1937–39, folklore and local lore per parish and townland: the strongest "little-known facts" source for Ireland, for Place facts and Places to see. | facts only | no | yes |
+| `arch-genuki` | `www.genuki.org.uk` | GENUKI (UK & Ireland genealogy, per-parish pages): parish and town descriptions with historical notes and references, for Place facts and Places to see. | facts only | no | no |
 | `arch-nypl-api` | `api.repo.nypl.org` | NYPL Digital Collections API: NYC neighbourhood photos and maps (e.g. Lionel Pincus map division), for Place facts and Places to see. | facts only | no | yes |
+| `arch-onb-labs` | `labs.onb.ac.at` | ÖNB Labs datasets (Austrian National Library): place-tagged historic postcards and travel literature for Austria, for Place facts and Places to see. | open | no | no |
 | `arch-pleiades` | `pleiades.stoa.org` | Pleiades gazetteer of ancient places: the ancient history of Mediterranean and Near-East places, for Place facts and Places to see. | open | no | no |
+| `arch-tna-discovery` | `discovery.nationalarchives.gov.uk` | The National Archives (UK) Discovery API: catalogue descriptions tied to UK places, for Place facts and Places to see. | open | no | no |
+| `arch-vch-gloucestershire` | `vchglos.org.uk` | VCH Gloucestershire: Victoria County History parish drafts (Glos), for Place facts and Places to see. | facts only | no | no |
+| `arch-vision-of-britain` | `www.visionofbritain.org.uk` | A Vision of Britain through Time (U Portsmouth): historic gazetteer descriptions (1830s–1890s) for every British town and parish, for Place facts and Places to see. | facts only | no | no |
 | `arch-whg` | `whgazetteer.org` | World Historical Gazetteer: historical names and attestations of places worldwide, for Place facts and Places to see. | open | no | no |
 | `blueflag-gr` | `www.blueflag.gr` | About 620 Blue Flag beaches in Greece, for Places to see. | facts only | no | no |
 | `city-bordeaux` | `www.bordeaux-tourisme.com` | Bordeaux Tourisme: official visitor guide, for Activities, Places to see, Events and Free walking tours. | facts only | no | no |
@@ -1796,9 +2092,30 @@ docs/wiki/Place-Facts-Data.md).
 | `ev-roots-sg` | `www.roots.gov.sg` | Roots.sg (National Heritage Board): Heritage sites, trails and monuments of Singapore, for Places to see and Free walking tours; also history and curiosities for Place facts. | facts only | no | no |
 | `failte-ireland-od` | `failteireland.developer.azure-api.net` | Every Fáilte Ireland-listed attraction and activity provider in Ireland, for Places to see and Activities. | open | no | yes |
 | `fx-barrys-borderpoints` | `barrysborderpoints.com` | Barry's Borderpoints (enclaves, tripoints, border oddities): documented tripoints and enclaves (Baarle, Llívia…), for Place facts and Places to see. | facts only | no | no |
+| `fx-cz-drobne-pamatky` | `www.drobnepamatky.cz` | Drobné památky: wayside crosses, chapels and small monuments of Czech villages with history, for Place facts and Places to see. | facts only | no | no |
+| `fx-cz-vets` | `www.vets.cz` | Spolek pro vojenská pietní místa: war memorials in every Czech/Slovak town and village with history, for Place facts and Places to see. | facts only | no | no |
+| `fx-devon-heritage` | `www.devonheritage.org` | Devon Heritage: Devon parish and town histories, for Place facts and Places to see. | facts only | no | no |
+| `fx-esu-ukraine` | `esu.com.ua` | Енциклопедія Сучасної України: Ukrainian towns, villages (Academy of Sciences), for Place facts and Places to see. | facts only | no | no |
+| `fx-hertfordshire-genealogy` | `hertfordshire-genealogy.co.uk` | Hertfordshire Genealogy (Herts places): town and village pages, for Place facts and Places to see. | facts only | no | no |
+| `fx-hrady-cz` | `www.hrady.cz` | Hrady.cz: history of ~10k Czech/Slovak castles, chateaux, monuments, for Place facts and Places to see. | facts only | no | no |
+| `fx-is-ferlir` | `ferlir.is` | FERLIR: Reykjanesskaginn í máli og myndum: thousands of Reykjanes ruins, cairns, trails and place-name histories, for Place facts, Places to see and Free walking tours. | facts only | no | no |
+| `fx-kent-opc` | `kent-opc.org` | Kent Online Parish Clerks: parish pages with history descriptions, for Place facts and Places to see. | facts only | no | no |
+| `fx-norfolk-churches` | `www.norfolkchurches.co.uk` | The Norfolk Churches Site: Norfolk village and church essays, for Place facts and Places to see. | facts only | no | no |
+| `fx-opoznai-bg` | `opoznai.bg` | Опознай.bg: Bulgarian sights and towns with history, for Place facts and Places to see. | facts only | no | no |
+| `fx-our-nottinghamshire` | `www.ournottinghamshire.org.uk` | Our Nottinghamshire: community-written town and village histories, for Place facts and Places to see. | facts only | no | no |
+| `fx-patrimonio-galego` | `patrimoniogalego.net` | Patrimonio Galego (catálogo social): Galician heritage catalogue (community, sourced), for Place facts and Places to see. | facts only | no | no |
+| `fx-pl-fotopolska` | `fotopolska.eu` | Fotopolska.eu: per-town and per-building history notes with old photos (Wrocław, Katowice: covers the Wrocław gap), for Place facts and Places to see. | facts only | no | no |
+| `fx-radzima` | `radzima.org` | Radzima.org: notable places and monuments of Belarus, Lithuania and Podlasie: town and village histories and monuments, for Place facts and Places to see. | facts only | no | no |
 | `fx-readtheplaque` | `readtheplaque.com` | Read The Plaque: transcribed historical-marker texts with location, worldwide (mostly US/UK), for Place facts, Places to see and Free walking tours. | open | no | no |
+| `fx-ru-drevo` | `drevo-info.ru` | Древо: открытая православная энциклопедия: towns, churches and monasteries, for Place facts and Places to see. | facts only | no | no |
+| `fx-ru-sobory` | `sobory.ru` | Народный каталог православной архитектуры: 50k+ churches with build dates and history, for Place facts, Places to see and Free walking tours. | facts only | no | no |
+| `fx-stadtwiki-dresden` | `www.stadtwikidd.de` | Stadtwiki Dresden: Dresden streets, buildings, curiosities, for Place facts and Places to see. | share-alike | no | no |
+| `fx-suffolk-churches` | `suffolkchurches.co.uk` | The Suffolk Churches Site (Simon Knott): a village and church essay for each of 600+ Suffolk churches, for Place facts and Places to see. | facts only | no | no |
+| `fx-wikishire` | `wikishire.co.uk` | Wikishire (historic counties wiki): parish and village articles by historic county, for Place facts and Places to see. | share-alike | no | no |
+| `fx-wiltshire-opc` | `www.wiltshire-opc.org.uk` | Wiltshire OPC: parish history pages for every Wiltshire parish, for Place facts and Places to see. | facts only | no | no |
 | `germany-kg` | `open-data-germany.org` | Events, sights and tours from German regional tourist boards, for Events, Places to see and Activities. | open | no | yes |
 | `gov-kemenparekraf` | `kemenparekraf.go.id` | Indonesia Ministry of Tourism: official visitor guide, for Places to see and Events; also history and curiosities for Place facts. | facts only | no | no |
+| `gov-lagis-hessen-ortslexikon` | `lagis.hessen.de` | LAGIS Hessen: Historisches Ortslexikon (Hessisches Institut für Landesgeschichte): more than 13,000 existing and deserted settlements in Hesse with first documented mention, lordship, church patron and population history, for Place facts and Places to see. | facts only | no | no |
 | `gov-mct-china` | `en.mct.gov.cn` | China Ministry of Culture and Tourism (English): official visitor guide, for Travel tips and Places to see; also history and curiosities for Place facts. | facts only | no | no |
 | `gov-mot-cambodia` | `www.tourism.gov.kh` | Cambodia Ministry of Tourism: Official Cambodia tourism notices, for Places to see and Travel tips; also history and curiosities for Place facts. | facts only | no | no |
 | `gov-symi` | `www.symi.gr` | Municipality of Symi, for Places to see and Activities. | facts only | no | no |
@@ -1810,8 +2127,14 @@ docs/wiki/Place-Facts-Data.md).
 | `guide-visitikaria` | `www.visitikaria.gr` | Visit Ikaria (private publisher), for Places to see, Activities and Events. | facts only | no | no |
 | `guide-visitkythera` | `www.visitkythera.gr` | Visit Kythera (Kappagram, private publisher), for Places to see, Activities and Events. | facts only | no | no |
 | `guide-wanderlush` | `wander-lush.org` | Wander-Lush: Caucasus, Balkans, Central Asia guides, for Places to see, the itinerary and Travel tips. | facts only | no | no |
+| `her-ch-kgs` | `data.geo.admin.ch` | KGS-Inventar (Swiss cultural property of national importance): Swiss A-objects (castles, churches, archives) with commune, for Place facts and Places to see. | facts only | no | no |
+| `her-de-berlin-gedenktafeln` | `www.gedenktafeln-in-berlin.de` | Gedenktafeln in Berlin: more than 3k Berlin memorial plaques with background texts, for Place facts, Places to see and Free walking tours. | facts only | no | no |
 | `her-hmdb-tidytuesday` | `raw.githubusercontent.com` | HMDB USA index snapshot (TidyTuesday 2023-07-04): marker titles, coordinates and HMDb links (a 2023 snapshot), for Place facts and Places to see. | facts only | no | no |
+| `her-scot-canmore-points` | `inspire.hes.scot` | Canmore points (NRHE, ~320k sites): site name, type and period for every recorded site in Scotland, with links to trove.scot, for Place facts and Places to see. | open | no | no |
+| `her-uk-camra-pub-interiors` | `camra.org.uk` | CAMRA Historic Pub Interiors / National Inventory (en / UK towns): oldest and unaltered pub interiors per town (record-type facts), for Place facts and Places to see. | facts only | no | no |
 | `her-uk-london-remembers` | `www.londonremembers.com` | London Remembers: every London plaque and memorial, with researched subjects, for Place facts, Places to see and Free walking tours. | facts only | no | no |
+| `her-uk-nhle-opendata` | `opendata-historicengland.hub.arcgis.com` | Historic England Open Data Hub (NHLE): listed buildings, scheduled monuments, parks, battlefields, wrecks in England, for Place facts and Places to see. | open | no | no |
+| `her-uz-madaniymeros` | `madaniymeros.uz` | O'zbekiston Madaniy Meros Agentligi: official heritage agency (register of monuments), for Place facts and Places to see. | facts only | no | no |
 | `korea-tourapi` | `apis.data.go.kr` | National Korean festivals, restaurants, sights and official travel courses, for Events, Activities, Places to see and the itinerary. | facts only | no | yes |
 | `mag-polarjournal` | `polarjournal.net` | Polar Journal: polar tourism and expedition news, for Travel tips and Places to see. | facts only | no | no |
 | `mavi-bayrak-tr` | `www.mavibayrak.org.tr` | About 580 Blue Flag beaches in Türkiye, for Places to see. | facts only | no | no |
@@ -1846,10 +2169,13 @@ docs/wiki/Place-Facts-Data.md).
 | `od-datos-gob-cl` | `datos.gob.cl` | datos.gob.cl (CKAN): tourism datasets (138 match "turismo"), for Places to see and Events. | open | no | no |
 | `od-datos-gob-es` | `datos.gob.es` | datos.gob.es: government open-data datasets (tourism, events, transport), for Events, Places to see and Local transportation. | open | no | no |
 | `od-datos-gov-co` | `www.datos.gov.co` | Portal de Datos Abiertos de Colombia (MinTIC, Socrata): registered tourism providers (RNT), attractions, events datasets, for Places to see, Events and Hotels; also history and curiosities for Place facts. | open | no | no |
+| `od-de-hh-denkmalliste-2` | `transparenz.hamburg.de` | Hamburg Transparenzportal (Denkmalliste): Hamburg monument list, for Place facts and Places to see. | open | no | no |
+| `od-de-sh-denkmalliste` | `opendata.schleswig-holstein.de` | Denkmalliste Schleswig-Holstein (Open-Data SH): statewide list of monuments (type, date, place), for Place facts and Places to see. | open | no | no |
 | `od-eea-bathing-water` | `www.eea.europa.eu` | EEA bathing water quality: Annual water-quality class of about 22,000 EU beaches and lakes, for Places to see and Activities. | open | no | no |
 | `od-epa-beacon` | `www.epa.gov` | US EPA BEACON beach advisories: US beach advisories and closures, for Places to see, Activities and Travel tips. | open | no | no |
 | `od-fr-merimee` | `data.culture.gouv.fr` | Mérimée (French protected monuments): About 45,000 protected historic monuments in France with locations, for Places to see; also history and curiosities for Place facts. | open | no | no |
 | `od-gnis-history` | `prd-tnm.s3.amazonaws.com` | USGS GNIS Feature Description/History: official name origin and history for US places and features (History field up to 3,000 chars), for Place facts and Places to see. | open | no | no |
+| `od-ie-nms-smr` | `www.archaeology.ie` | National Monuments Service open data (SMR): Sites and Monuments Record, with more than 150k Irish archaeological sites, for Place facts and Places to see. | open | no | no |
 | `od-imls-museums` | `www.imls.gov` | IMLS Museum Data Files: About 30,000 US museums with address and type (last release 2018), for Places to see. | open | no | no |
 | `od-izmir-acikveri` | `acikveri.bizizmir.com` | İzmir Metropolitan Open Data (CKAN): İzmir transit, POI and event datasets, for Local transportation, Places to see and Events. | open | no | no |
 | `od-mapping-museums-uk` | `museums.bbk.ac.uk` | Mapping Museums (Birkbeck): About 4,000 UK museums, open and closed, for Places to see. | open | no | no |
@@ -1861,12 +2187,14 @@ docs/wiki/Place-Facts-Data.md).
 | `od-ottawa` | `open.ottawa.ca` | City of Ottawa points of interest from its open-data hub, for Places to see. | open | no | no |
 | `od-podatki-gov-si` | `podatki.gov.si` | OPSI (Slovenia open data): government open-data datasets (tourism, events, transport), for Events, Places to see and Local transportation. | open | no | no |
 | `od-ramsar-rsis` | `rsis.ramsar.org` | Wetlands of international importance (Ramsar sites) with locations, for remote nature spots in Places to see. | facts only | no | no |
+| `od-ru-mkrf-egrokn` | `opendata.mkrf.ru` | ЕГРОКН: Единый госреестр объектов культурного наследия (opendata.mkrf.ru): the official register of every protected monument in Russia, with build dates, for Place facts, Places to see and Free walking tours. | open | no | no |
 | `od-uk-bathing-water` | `environment.data.gov.uk` | Environment Agency Bathing Water Quality: Water quality and pollution-risk forecasts for 400+ England bathing waters, for Places to see, Activities and Weather. | open | no | no |
 | `od-wdpa` | `www.protectedplanet.net` | WDPA protected areas, for Places to see. | facts only | no | no |
 | `park-gbrmpa` | `www.gbrmpa.gov.au` | Great Barrier Reef Marine Park Authority: reef visiting rules, zoning, for Places to see, Activities and Travel tips. | facts only | no | no |
 | `park-sinac-cr` | `www.sinac.go.cr` | SINAC Costa Rica (protected areas): official visitor guide, for Places to see and Travel tips. | facts only | no | no |
 | `park-usfs` | `www.fs.usda.gov` | National forest recreation, passes and know-before-you-go advice, for Activities, Places to see and Travel tips. | open | no | no |
 | `philippines-travel` | `philippines.travel` | Official Philippine destinations and activities, for Places to see and Activities. | facts only | no | no |
+| `ref-ancient-tree-inventory` | `ati.woodlandtrust.org.uk` | Ancient Tree Inventory (Woodland Trust): notable and ancient trees by village or parish (girth, age class), for Place facts and Places to see. | facts only | no | no |
 | `ref-european-geoparks` | `www.europeangeoparks.org` | Every European UNESCO geopark with its landscapes and visitor centres, for Places to see and Activities; also history and curiosities for Place facts. | facts only | no | no |
 | `ref-iaato` | `iaato.org` | IAATO: Antarctic visitor guidelines, site guidelines, statistics, for Travel tips, Places to see and Activities. | facts only | no | no |
 | `ref-museumsassociation` | `www.museumsassociation.org` | Museums Association: traveller information, for Places to see. | facts only | no | no |
@@ -1941,11 +2269,20 @@ docs/wiki/Place-Facts-Data.md).
 | Source | Website | What we take | Licence | On | Key |
 |---|---|---|---|---|---|
 | `arch-encyclopedia-detroit` | `www.detroithistorical.org` | Encyclopedia of Detroit (Detroit Historical Society): Detroit landmarks and neighbourhoods, for Place facts, Places to see and Free walking tours. | facts only | yes | no |
+| `arch-fi-helsinki-city-museum` | `www.helsinginkaupunginmuseo.fi` | Helsingin kaupunginmuseo (Helsinki City Museum): Helsinki district and building history, archaeology, for Place facts, Places to see and Free walking tours. | facts only | yes | no |
+| `arch-hls-switzerland` | `hls-dhs-dss.ch` | Historical Dictionary of Switzerland (HLS/DHS/DSS): a scholarly article for every Swiss municipality, canton and region (history, firsts, notable events), for Place facts, Places to see and Free walking tours. | share-alike | yes | no |
+| `arch-lokalhistoriewiki-no` | `lokalhistoriewiki.no` | Lokalhistoriewiki.no (Norsk lokalhistorisk institutt): local history of Norwegian municipalities, farms, villages and streets, for Place facts, Places to see and Free walking tours. | share-alike | yes | no |
+| `arch-pl-muzeum-gdanska` | `muzeumgdansk.pl` | Muzeum Gdańska: Gdańsk history (Artus Court, Westerplatte, Main Town Hall), for Place facts, Places to see and Free walking tours. | facts only | yes | no |
+| `arch-pl-muzeum-krakowa` | `muzeumkrakowa.pl` | Muzeum Krakowa: Kraków history at its branches (Rynek Underground, Schindler factory, Town Hall Tower), for Place facts, Places to see and Free walking tours. | facts only | yes | no |
 | `arch-saba-heritage` | `sabaheritagecenter.org` | Saba Heritage Center: history of Saba villages (The Bottom, Windwardside), for Place facts and Free walking tours. | facts only | yes | no |
+| `arch-se-goteborgs-stadsmuseum` | `goteborgsstadsmuseum.se` | Göteborgs stadsmuseum: Gothenburg heritage environments and city history stories, for Place facts, Places to see and Free walking tours. | facts only | yes | no |
+| `arch-wien-geschichtewiki` | `www.geschichtewiki.wien.gv.at` | Wien Geschichte Wiki (Vienna City Archive + Wienbibliothek): 47k entries on Vienna streets, buildings, districts, for Place facts, Places to see and Free walking tours. | facts only | yes | no |
 | `blog-hikinginjapan` | `hikinginjapan.com` | Hiking in Japan: rural trails, mountain huts, for Activities, Places to see and Walking tours. | facts only | yes | no |
 | `blog-stingynomads` | `stingynomads.com` | Stingy Nomads: Camino routes, hikes, for Activities, Walking tours and Places to see. | facts only | yes | no |
+| `city-berlin-geschichte` | `www.berlin.de` | berlin.de: Geschichte Berlins: city and district history, for Place facts, Places to see and Free walking tours. | facts only | yes | no |
 | `city-charleston` | `www.charlestoncvb.com` | Charleston events, things to do and historic-district walks, for Events, Activities and walking tours. | facts only | yes | no |
 | `city-cologne` | `www.cologne-tourism.com` | KölnTourismus: official visitor guide, for Activities, Events and Free walking tours. | facts only | yes | no |
+| `city-paris-histoire` | `www.paris.fr` | Paris.fr (histoire de Paris, arrondissements): history and curiosities of the places it covers, for Place facts, Places to see and Free walking tours. | facts only | yes | no |
 | `city-quebec` | `www.quebec-cite.com` | Québec City events, things to do and Old Québec walks, for Events, Activities and walking tours. | facts only | yes | no |
 | `city-sofia` | `www.visitsofia.bg` | Visit Sofia: official visitor guide, for Activities, Events and Free walking tours. | facts only | yes | no |
 | `city-washington-dc` | `washington.org` | Washington, DC events, free museums, monuments and neighbourhood guides, for Events, Activities, Places to see and walking tours. | facts only | yes | no |
@@ -1953,14 +2290,57 @@ docs/wiki/Place-Facts-Data.md).
 | `freewalkingtour-com` | `freewalkingtour.com` | Free tip-based walking tours by city with start times and meeting points, for the Free walking tours section. | facts only | yes | no |
 | `fx-alondoninheritance` | `alondoninheritance.com` | A London Inheritance: London street-by-street history, for Place facts and Free walking tours. | facts only | yes | no |
 | `fx-bowery-boys` | `www.boweryboyshistory.com` | The Bowery Boys: NYC neighbourhood history, for Place facts and Free walking tours. | facts only | yes | no |
+| `fx-canon-van-nederland` | `www.canonvannederland.nl` | Canon van Nederland + local/regional canons: national canon + hundreds of town/province canons (50 "windows" each), for Place facts, Places to see and Free walking tours. | facts only | yes | no |
+| `fx-cz-encyklopedie-praha2` | `encyklopedie.praha2.cz` | Encyklopedie Prahy 2: buildings, streets and people of Prague 2 (Vinohrady, Nusle, Vyšehrad), for Place facts, Places to see and Free walking tours. | facts only | yes | no |
+| `fx-darmstadt-stadtlexikon` | `www.darmstadt-stadtlexikon.de` | Stadtlexikon Darmstadt: Darmstadt streets, buildings, events, for Place facts and Free walking tours. | facts only | yes | no |
+| `fx-dk-inden-for-voldene` | `www.indenforvoldene.dk` | Inden for Voldene (Copenhagen streets): history of every street and house inside Copenhagen's old ramparts, for Place facts, Places to see and Free walking tours. | facts only | yes | no |
+| `fx-encyklopedie-brna` | `encyklopedie.brna.cz` | Internetová encyklopedie dějin Brna: Brno events, streets, buildings ("this day"), for Place facts and Free walking tours. | facts only | yes | no |
+| `fx-encyklopedie-plzne` | `encyklopedie.plzen.eu` | Encyklopedie dějin města Plzně: Plzeň history, for Place facts and Free walking tours. | facts only | yes | no |
+| `fx-fr-unjourdeplusaparis` | `www.unjourdeplusaparis.com` | Un Jour de Plus à Paris (fr/en / Paris insolite): little-known Paris spots (e.g. "the only Paris church without a bell tower"), for Place facts and Free walking tours. | facts only | yes | no |
+| `fx-gedanopedia` | `gedanopedia.pl`, `www.gedanopedia.pl` | Gedanopedia (Encyklopedia Gdańska): Gdańsk streets, buildings, events, for Place facts and Free walking tours. | facts only | yes | no |
 | `fx-hunter-living-histories` | `hunterlivinghistories.com` | Hunter Living Histories (Univ. of Newcastle): Newcastle and Hunter Valley place histories, for Place facts and Free walking tours. | facts only | yes | no |
+| `fx-it-info-roma` | `www.info.roma.it` | Info.roma.it: Enciclopedia su Roma: Rome monuments, streets, 'Roma sparita', daily almanac of Roman history, for Place facts, Places to see and Free walking tours. | facts only | yes | no |
 | `fx-lookup-london` | `lookup.london` | Look Up London: weekly London hidden-history posts by a Blue Badge guide, for Place facts and Free walking tours. | facts only | yes | no |
+| `fx-museotorino` | `www.museotorino.it` | MuseoTorino: Turin places, buildings, curiosities (city museum), for Place facts and Free walking tours. | facts only | yes | no |
+| `fx-no-oslo-byleksikon` | `oslobyleksikon.no` | Oslo byleksikon: every Oslo street, building, district and place-name origin, for Place facts, Places to see and Free walking tours. | facts only | yes | no |
+| `fx-ro-bucurestii-vechi-si-noi` | `bucurestiivechisinoi.ro` | București Vechi și Noi: volunteer-written histories of Bucharest streets, buildings, people, for Place facts, Places to see and Free walking tours. | facts only | yes | no |
+| `fx-ru-encspb` | `www.encspb.ru` | Энциклопедия Санкт-Петербурга: streets, buildings, monuments, memorial plaques of St Petersburg, for Place facts, Places to see and Free walking tours. | facts only | yes | no |
 | `fx-sahapedia` | `www.sahapedia.org` | Sahapedia: heritage-walk and city-culture essays, for Place facts, Free walking tours and Places to see. | share-alike | yes | no |
+| `fx-stadtgeschichte-coburg` | `www.stadtgeschichte-coburg.de` | Stadtgeschichte Coburg ("Typisch Coburg", Wissenswertes und Kurioses): curiosities and history of Coburg, for Place facts and Free walking tours. | facts only | yes | no |
+| `fx-storia-memoria-bologna` | `www.storiaememoriadibologna.it` | Storia e Memoria di Bologna (Comune di Bologna): Bologna places, streets, events, for Place facts and Free walking tours. | open | yes | no |
+| `fx-storienapoli` | `storienapoli.it` | Storie di Napoli: Naples history and curiosities, for Place facts and Free walking tours. | facts only | yes | no |
+| `fx-survey-of-london` | `surveyoflondon.org` | Survey of London: Whitechapel (UCL): building-by-building history of Whitechapel, for Place facts, Places to see and Free walking tours. | facts only | yes | no |
+| `fx-tr-istanbultarihi` | `istanbultarihi.ist` | Büyük İstanbul Tarihi (İBB + İSAM): 10-volume history of Istanbul by district and topic, for Place facts, Places to see and Free walking tours. | facts only | yes | no |
+| `fx-ua-hmarochos` | `hmarochos.kiev.ua` | Хмарочос: київський міський журнал: Kyiv buildings, street names and history, for Place facts and Free walking tours. | facts only | yes | no |
+| `fx-ua-lia-lviv` | `lia.lvivcenter.org` | Львів Інтерактивний (Центр міської історії): peer-reviewed histories of Lviv buildings, streets and places, for Place facts, Places to see and Free walking tours. | facts only | yes | no |
+| `fx-wienmuseum-magazin` | `magazin.wienmuseum.at` | Wien Museum Magazin: curator-written stories about Vienna places and curiosities, for Place facts and Free walking tours. | facts only | yes | no |
+| `fx-wiesbaden-stadtlexikon` | `www.wiesbaden.de` | Stadtlexikon Wiesbaden (Stadtarchiv): Wiesbaden places, buildings, history, for Place facts and Free walking tours. | facts only | yes | no |
+| `gov-cy-nicosia` | `www.nicosia.org.cy` | Nicosia Municipality: history of Nicosia, the walled city, monuments, for Place facts, Places to see and Free walking tours. | facts only | yes | no |
+| `gov-de-archives` | `archives.delaware.gov` | Delaware Public Archives (Delaware facts & symbols, markers): markers + symbols, for Place facts and Free walking tours. | facts only | yes | no |
+| `gov-uk-cityoflondon` | `www.cityoflondon.gov.uk` | City of London: History and heritage: Square Mile history, Guildhall, livery, for Place facts, Places to see and Free walking tours. | facts only | yes | no |
 | `guruwalk` | `www.guruwalk.com` | Free tip-based walking tours by city with times and meeting points, for the Free walking tours section. | facts only | yes | no |
+| `her-be-bru-monument` | `monument.heritage.brussels` | Inventaire du patrimoine architectural (Brussels): street-by-street building histories for Brussels, for Place facts, Places to see and Free walking tours. | facts only | yes | no |
+| `her-be-vl-inventaris` | `inventaris.onroerenderfgoed.be` | Inventaris Onroerend Erfgoed (Flanders): building histories for every Flemish town, for Place facts, Places to see and Free walking tours. | facts only | yes | no |
+| `her-de-berlin-denkmaldb` | `denkmaldatenbank.berlin.de` | Denkmaldatenbank Berlin: every Berlin monument, with construction history and architects, for Place facts, Places to see and Free walking tours. | facts only | yes | no |
+| `her-de-he-denkxweb` | `denkxweb.denkmalpflege-hessen.de` | DenkXweb (Landesamt für Denkmalpflege Hessen): every Hessian monument, with a description, for Place facts, Places to see and Free walking tours. | facts only | yes | no |
+| `her-de-th-klassik-weimar` | `www.klassik-stiftung.de` | Klassik Stiftung Weimar: Weimar Classicism and Bauhaus UNESCO sites, Goethe/Schiller houses, for Place facts, Places to see and Free walking tours. | facts only | yes | no |
+| `her-es-iaph-guiadigital` | `guiadigital.iaph.es` | Guía Digital del Patrimonio Cultural de Andalucía (IAPH): Andalusian heritage objects with historical data, for Place facts, Places to see and Free walking tours. | open | yes | no |
+| `her-fi-rky` | `www.rky.fi` | RKY: nationally significant built cultural environments: about 1,300 Finnish environments, with history essays, for Place facts, Places to see and Free walking tours. | facts only | yes | no |
+| `her-fr-pdl-patrimoine` | `www.patrimoine.paysdelaloire.fr`, `patrimoine.paysdelaloire.fr` | Patrimoine des Pays de la Loire: Pays de la Loire inventory dossiers and heritage trails, for Place facts, Places to see and Free walking tours. | facts only | yes | no |
+| `her-gb-leeds-blue-plaques` | `leedscivictrust.org.uk` | Leeds Civic Trust blue plaques: plaque texts for Leeds people and places, for Place facts, Places to see and Free walking tours. | facts only | yes | no |
+| `her-historypoints` | `historypoints.org` | HistoryPoints (Wales QR plaques): thousands of Welsh building and place-name notes, for Place facts, Places to see and Free walking tours. | facts only | yes | no |
+| `her-ie-niah` | `www.buildingsofireland.ie` | National Inventory of Architectural Heritage: building appraisals for every Irish county, for Place facts, Places to see and Free walking tours. | facts only | yes | no |
+| `her-it-lombardia-bbcc` | `www.lombardiabeniculturali.it` | Lombardia Beni Culturali: Lombardy architecture catalogue with history notes, for Place facts, Places to see and Free walking tours. | facts only | yes | no |
 | `her-keys-to-the-past` | `keystothepast.info` | Keys to the Past (Durham and Northumberland HER): archaeology and history of every parish in the two counties, for Place facts, Places to see and Free walking tours. | facts only | yes | no |
+| `her-kuladig` | `www.kuladig.de` | KuLaDig Kultur.Landschaft.Digital (LVR et al.): geolocated heritage objects with history texts (Rhineland, Hesse, Saxony...), for Place facts, Places to see and Free walking tours. | facts only | yes | no |
+| `her-no-kulturminnesok` | `www.kulturminnesok.no` | Kulturminnesøk (Riksantikvaren): Norwegian cultural monuments, with short histories, for Place facts, Places to see and Free walking tours. | facts only | yes | no |
 | `her-opendomesday` | `opendomesday.org` | Open Domesday (every place in Domesday Book, 1086): what each English village was in 1086 (households, ploughs, mills, value, lords), for Place facts, Places to see and Free walking tours. | share-alike | yes | no |
+| `her-pl-zabytek` | `zabytek.pl` | Zabytek.pl (NID): Polish registered monuments, with history descriptions, for Place facts, Places to see and Free walking tours. | facts only | yes | no |
+| `her-rs-beograd-nasledje` | `beogradskonasledje.rs` | Zavod za zaštitu spomenika kulture grada Beograda: Digitalni registar: Belgrade cultural-property register by municipality, with history of each building, for Place facts, Places to see and Free walking tours. | facts only | yes | no |
+| `her-uk-ni-ulster-history-circle` | `ulsterhistorycircle.org.uk` | Ulster History Circle blue plaques: blue plaques across Northern Ireland, for Place facts, Places to see and Free walking tours. | facts only | yes | no |
 | `neweuropetours` | `www.neweuropetours.eu` | SANDEMANs free and paid city walking tours with start times and meeting points, for the Free walking tours section. | facts only | yes | no |
 | `np-cairngorms` | `cairngorms.co.uk` | Cairngorms National Park: official visitor guide, for Activities, Free walking tours and Travel tips. | facts only | yes | no |
+| `od-de-hh-denkmalliste` | `api.hamburg.de`, `suche.transparenz.hamburg.de` | Hamburg Denkmalliste (Denkmalschutzamt): every listed monument and plaque in Hamburg, for Place facts, Places to see and Free walking tours. | open | yes | no |
 | `official-turismo-ba` | `turismo.buenosaires.gob.ar` | City-run free guided walks and free events in Buenos Aires, for Free walking tours, Events and Activities. | facts only | yes | no |
 | `ref-acir-compostelle` | `www.chemins-compostelle.com` | ACIR: French Ways of St James, stages, news, for Walking tours, the itinerary and Hotels. | facts only | yes | no |
 | `ref-aldeias-historicas` | `aldeiashistoricasdeportugal.com`, `www.aldeiashistoricasdeportugal.com` | Aldeias Históricas de Portugal: 12 villages, GR22 route, for Places to see, Activities and Walking tours; also history and curiosities for Place facts. | facts only | yes | no |
@@ -1968,6 +2348,7 @@ docs/wiki/Place-Facts-Data.md).
 | `ref-shikoku-henro` | `88shikokuhenro.jp` | Shikoku 88 Temple Pilgrimage Association, for Walking tours, the itinerary and Places to see. | facts only | yes | no |
 | `ref-st-olav-ways` | `www.pilegrimsleden.no` | St Olav Ways (National Pilgrim Centre): routes, stages, lodging, for Walking tours, the itinerary and Hotels. | facts only | yes | no |
 | `tb-crete` | `www.incrediblecrete.gr` | Incredible Crete (Region of Crete): official visitor guide, for Places to see, Activities and Free walking tours. | facts only | yes | no |
+| `tb-de-nrw-route-industriekultur` | `www.route-industriekultur.ruhr` | Route der Industriekultur (RVR): Ruhr anchor points, workers' settlements, viewpoints, for Place facts, Places to see and Free walking tours. | facts only | yes | no |
 | `tb-el-chalten` | `elchalten.tur.ar` | El Chaltén tourism: trekking, trail status, for Places to see, Activities and Walking tours. | facts only | yes | no |
 | `tb-galicia` | `www.turismo.gal` | Turismo de Galicia: official visitor guide, for Activities, Places to see, Events and Free walking tours. | open | yes | no |
 | `tb-graubuenden` | `www.graubuenden.ch` | Graubünden Ferien: official visitor guide, for Activities, Free walking tours and Places to see. | facts only | yes | no |
@@ -1975,10 +2356,12 @@ docs/wiki/Place-Facts-Data.md).
 | `tb-kumano` | `www.tb-kumano.jp` | Tanabe City Kumano Tourism Bureau: Kumano Kodo routes, lodging, walking tours, for Walking tours, Activities, Places to see and Hotels. | facts only | yes | no |
 | `tb-madeira` | `visitmadeira.com` | Visit Madeira: official visitor guide, for Activities, Free walking tours, Places to see and Events. | facts only | yes | no |
 | `tb-ouessant` | `www.ot-ouessant.fr` | Office de Tourisme d'Ouessant, for Places to see, Activities and Walking tours. | facts only | yes | no |
+| `tb-petites-cites-caractere` | `www.petitescitesdecaractere.com` | Petites Cités de Caractère de France: small historic towns and villages, history of each cité, for Place facts, Places to see and Free walking tours. | facts only | yes | no |
 | `tb-saba` | `www.sabatourism.com` | Saba Tourist Bureau: trails, diving, for Places to see, Activities and Walking tours. | facts only | yes | no |
 | `tb-schwarzwald` | `www.schwarzwald-tourismus.info` | Schwarzwald Tourismus: official visitor guide, for Activities, Free walking tours and Places to see. | facts only | yes | no |
 | `tb-tirol` | `www.tirol.at` | Tirol Werbung: official visitor guide, for Activities, Free walking tours, Events and Weather. | facts only | yes | no |
 | `tb-visittrentino` | `www.visittrentino.info` | Visit Trentino: official visitor guide, for Activities, Free walking tours and Places to see. | facts only | yes | no |
+| `tb-vpah-hauts-de-france` | `vpah-hauts-de-france.fr` | Villes et Pays d'art et d'histoire Hauts-de-France: "curiosités" and town-heritage pages (Amiens, Beauvais, Cambrai, Chantilly…), for Place facts, Places to see and Free walking tours. | share-alike | yes | no |
 | `walking-strawberrytours` | `strawberrytours.com` | Free tip-based walking tours in about 100 cities, for the Free walking tours section. | facts only | yes | no |
 | `wikivoyage-dump` | `dumps.wikimedia.org` | Wikivoyage destination guides (sights, things to do, where to stay, getting around, SIM and tips) for those app sections. | share-alike | yes | no |
 | `arch-layers-of-london` | `www.layersoflondon.org` | Layers of London (Institute of Historical Research): geolocated London history records, for Place facts and Free walking tours. | facts only | no | no |
@@ -1986,8 +2369,15 @@ docs/wiki/Place-Facts-Data.md).
 | `city-turismo-cdmx` | `turismo.cdmx.gob.mx` | Turismo CDMX (Secretaría de Turismo): official visitor guide, for Places to see, Activities and Free walking tours. | facts only | no | no |
 | `ev-nhb-sg` | `www.nhb.gov.sg` | National Heritage Board Singapore: National museums, heritage trails and festivals, for Places to see, Events and Free walking tours. | facts only | no | no |
 | `ev-roots-sg` | `www.roots.gov.sg` | Roots.sg (National Heritage Board): Heritage sites, trails and monuments of Singapore, for Places to see and Free walking tours; also history and curiosities for Place facts. | facts only | no | no |
+| `fx-bossche-encyclopedie` | `www.bossche-encyclopedie.nl` | Bossche Encyclopedie: 's-Hertogenbosch streets and buildings, for Place facts and Free walking tours. | facts only | no | no |
+| `fx-de-stadtgeschichte-muenchen` | `stadtgeschichte-muenchen.de` | Stadtgeschichte München (de / Munich streets, districts, chronicle): street-name origins, district history, for Place facts and Free walking tours. | facts only | no | no |
+| `fx-is-ferlir` | `ferlir.is` | FERLIR: Reykjanesskaginn í máli og myndum: thousands of Reykjanes ruins, cairns, trails and place-name histories, for Place facts, Places to see and Free walking tours. | facts only | no | no |
+| `fx-it-romaierioggi` | `romaierioggi.it` | Roma Ieri Oggi (it / Rome streets then and now): dated historic photos with captions per piazza or street, for Place facts and Free walking tours. | facts only | no | no |
 | `fx-readtheplaque` | `readtheplaque.com` | Read The Plaque: transcribed historical-marker texts with location, worldwide (mostly US/UK), for Place facts, Places to see and Free walking tours. | open | no | no |
+| `fx-ru-sobory` | `sobory.ru` | Народный каталог православной архитектуры: 50k+ churches with build dates and history, for Place facts, Places to see and Free walking tours. | facts only | no | no |
+| `her-de-berlin-gedenktafeln` | `www.gedenktafeln-in-berlin.de` | Gedenktafeln in Berlin: more than 3k Berlin memorial plaques with background texts, for Place facts, Places to see and Free walking tours. | facts only | no | no |
 | `her-uk-london-remembers` | `www.londonremembers.com` | London Remembers: every London plaque and memorial, with researched subjects, for Place facts, Places to see and Free walking tours. | facts only | no | no |
+| `od-ru-mkrf-egrokn` | `opendata.mkrf.ru` | ЕГРОКН: Единый госреестр объектов культурного наследия (opendata.mkrf.ru): the official register of every protected monument in Russia, with build dates, for Place facts, Places to see and Free walking tours. | open | no | no |
 | `walking-freetoursbyfoot` | `freetoursbyfoot.com` | Pay-what-you-wish walking tours in US and European cities plus free-things-to-do guides, for Free walking tours, Activities and Travel tips. | facts only | no | no |
 
 ## Events
@@ -2105,10 +2495,12 @@ docs/wiki/Place-Facts-Data.md).
 | `food-european-region-gastronomy` | `www.europeanregionofgastronomy.org` | European Region of Gastronomy (IGCAT): awarded gastronomy regions and their programmes, for Events and Activities. | facts only | yes | no |
 | `food-macao-gastronomy` | `www.gastronomy.gov.mo` | Macao Creative City of Gastronomy (MGTO): official visitor guide, for Activities and Events. | facts only | yes | no |
 | `food-tucson-gastronomy` | `tucson.cityofgastronomy.org` | Tucson City of Gastronomy (UNESCO Creative City official site): heritage dishes, food events, certified restaurants, for Activities and Events. | facts only | yes | no |
+| `fx-ianvisits` | `www.ianvisits.co.uk` | ianVisits (London): London little-known history, hidden sites, for Place facts, Places to see and Events. | facts only | yes | no |
 | `gotokyo` | `www.gotokyo.org` | About 925 Tokyo spots, the event calendar and model courses, for Places to see, Events, Activities and the itinerary. | facts only | yes | no |
 | `goturkiye` | `goturkiye.com` | Official Turkish destinations, routes and events, for Places to see, the itinerary and Events; also history and curiosities for Place facts. | facts only | yes | no |
 | `gov-beijing-en` | `english.beijing.gov.cn` | Beijing Municipal Government (English): Visitor services, visa-free transit, payment and transport guides, for Travel tips, Visa, Local transportation and Events; also history and curiosities for Place facts. | facts only | yes | no |
 | `gov-dasta` | `www.dasta.or.th` | DASTA Thailand: designated sustainable-tourism areas (Koh Chang, Nan, Loei, Sukhothai) and community tourism, for Places to see, Activities and Events. | facts only | yes | no |
+| `gov-de-deutschland` | `www.deutschland.de` | deutschland.de (Federal Foreign Office): history and curiosities of the places it covers, for Place facts, Places to see and Events. | facts only | yes | no |
 | `gov-terschelling` | `www.terschelling.nl` | Gemeente Terschelling (municipality) visitor info, for Places to see, Activities and Events. | facts only | yes | no |
 | `gov-westerncape` | `www.westerncape.gov.za` | Western Cape Government: province service and safety info (Wesgro is OWNER-DECISION), for Travel tips, the Emergency card and Events. | facts only | yes | no |
 | `her-cadw` | `cadw.gov.wales` | Cadw (Welsh Government historic environment): 130+ castles, abbeys, opening times, events, for Places to see and Events; also history and curiosities for Place facts. | facts only | yes | no |
@@ -2153,6 +2545,7 @@ docs/wiki/Place-Facts-Data.md).
 | `tb-aero` | `www.visitaeroe.dk` | Visit Ærø: island guide, events, for Places to see, Activities and Events. | facts only | yes | no |
 | `tb-alabama` | `alabama.travel` | Official Alabama attractions, state events and things to do, for Events, Activities and Places to see. | facts only | yes | no |
 | `tb-aland` | `visitaland.com` | Visit Åland: archipelago, ferries, events, for Places to see, Activities, Events and Local transportation. | facts only | yes | no |
+| `tb-aldeias-de-portugal` | `www.aldeiasdeportugal.pt` | Aldeias de Portugal (ATA: Associação do Turismo de Aldeia): classified villages of northern Portugal, history and traditional festivals, for Place facts, Places to see and Events. | facts only | yes | no |
 | `tb-alderney` | `www.visitalderney.com` | Visit Alderney: sights, events, getting there, for Places to see, Activities, Events and Local transportation. | facts only | yes | no |
 | `tb-algarve` | `www.visitalgarve.pt` | Visit Algarve: official visitor guide, for Activities, Places to see and Events. | facts only | yes | no |
 | `tb-alsace` | `www.visit.alsace` | Visit Alsace: official visitor guide, for Activities, Events and Places to see. | facts only | yes | no |
@@ -2427,6 +2820,7 @@ docs/wiki/Place-Facts-Data.md).
 | `edinburgh-festivals-api` | `api.edinburghfestivalcity.com` | Listings for the Edinburgh festivals (dates, venues, tickets), for the Events section. | API terms | no | yes |
 | `ev-cartelera-cdmx` | `cartelera.cdmx.gob.mx` | Cartelera CDMX (city culture listings): official visitor guide, for Events. | facts only | no | no |
 | `ev-nhb-sg` | `www.nhb.gov.sg` | National Heritage Board Singapore: National museums, heritage trails and festivals, for Places to see, Events and Free walking tours. | facts only | no | no |
+| `fx-kylat-pohjois-karjala` | `kylat.fi` | Pohjois-Karjalan Kylät ry (North Karelia villages association): village profiles, "village of the year", local events, for Place facts and Events. | facts only | no | no |
 | `germany-kg` | `open-data-germany.org` | Events, sights and tours from German regional tourist boards, for Events, Places to see and Activities. | open | no | yes |
 | `gov-kemenparekraf` | `kemenparekraf.go.id` | Indonesia Ministry of Tourism: official visitor guide, for Places to see and Events; also history and curiosities for Place facts. | facts only | no | no |
 | `guide-visitikaria` | `www.visitikaria.gr` | Visit Ikaria (private publisher), for Places to see, Activities and Events. | facts only | no | no |
@@ -2767,6 +3161,7 @@ docs/wiki/Place-Facts-Data.md).
 | `food-slowfood-foundation` | `www.fondazioneslowfood.com` | Slow Food Foundation for Biodiversity (Presidia, Ark of Taste): Presidia foods and producers worth seeking out, for Activities and Travel tips. | facts only | yes | no |
 | `food-wwf-planet-based-diets` | `planetbaseddiets.panda.org`, `wwfint.awsassets.panda.org` | WWF Planet-Based Diets: Country-level diet footprints and a published method, for 'eat local plant-based' tips per destination, for the trip Carbon footprint and Travel tips. | facts only | yes | no |
 | `food-zero-foodprint` | `zerofoodprint.org` | Zero Foodprint: member restaurants (regenerative agriculture): Directory of restaurants that fund farm carbon projects (a climate-positive dining option), plus annual impact reports, for the trip Carbon footprint and Travel tips. | facts only | yes | no |
+| `fx-iceland-review` | `www.icelandreview.com` | Iceland Review: Iceland history, place names, records, for Place facts and Travel tips. | facts only | yes | no |
 | `galapagos-park` | `galapagos.gob.ec` | Official Galápagos visitor rules, entry fee and visitor sites, for Travel tips, Places to see and Activities. | facts only | yes | no |
 | `goodtravel-guide` | `goodtravel.guide` | A directory and guides of sustainable travel businesses (headline, link and a short excerpt only), for Travel tips, Hotels and Activities. | facts only | yes | no |
 | `gov-aad` | `www.antarctica.gov.au` | Australian Antarctic Program: visitor rules, Macquarie/Heard islands, for Travel tips and Places to see; also history and curiosities for Place facts. | facts only | yes | no |
@@ -2941,6 +3336,7 @@ docs/wiki/Place-Facts-Data.md).
 | `tb-utb-uganda` | `utb.go.ug` | Uganda Tourism Board: official UTB site (visituganda.com is robots Disallow: /), for Places to see, Events and Travel tips. | facts only | yes | no |
 | `tb-uttarakhand` | `uttarakhandtourism.gov.in` | Uttarakhand Tourism: Himalayan treks, Char Dham, permits and travel info, for Places to see, Activities and Travel tips. | facts only | yes | no |
 | `tb-vanuatu` | `www.vanuatu.travel` | Vanuatu Tourism Office: Vanuatu islands, practical info, entry, for Places to see, Activities, Travel tips and Visa; also history and curiosities for Place facts. | facts only | yes | no |
+| `tb-villages-etapes` | `village-etape.fr` | Fédération Française des Villages Étapes: village-stops near motorways, short heritage notes per village, for Place facts, Places to see and Travel tips. | facts only | yes | no |
 | `tb-visit-nara` | `www.visitnara.jp` | Nara Visitors Bureau (Visit Nara): Nara temples, deer park, events and practical tips, for Places to see, Events and Travel tips; also history and curiosities for Place facts. | facts only | yes | no |
 | `tb-visitghana` | `visitghana.com` | Ghana Tourism Authority: official Ghana destinations and attractions, for Places to see, Activities, Events and Travel tips; also history and curiosities for Place facts. | facts only | yes | no |
 | `tb-visitkorea-en` | `english.visitkorea.or.kr` | Korea Tourism Organization (VisitKorea, English): National tourism board: regions, attractions, festivals and practical info, for Places to see, Activities, Events, Travel tips and Local transportation; also history and curiosities for Place facts. | facts only | yes | no |
@@ -3526,6 +3922,7 @@ docs/wiki/Place-Facts-Data.md).
 
 | Source | Website | What we take | Licence | On | Key |
 |---|---|---|---|---|---|
+| `arch-culturaitalia` | `www.culturaitalia.it` | CulturaItalia (Ministry of Culture portal): editorial pieces on Italian places and heritage itineraries, for Place facts, Places to see and Itinerary. | facts only | yes | no |
 | `argentina-travel` | `www.argentina.travel` | Official Argentine destinations, experiences and itineraries, for Places to see, Activities and the itinerary; also history and curiosities for Place facts. | facts only | yes | no |
 | `australia-com` | `www.australia.com` | Official Australian itineraries, places, food and wine and events, for the itinerary, Places to see, Activities and Events. | facts only | yes | no |
 | `blog-360meridianos` | `www.360meridianos.com` | South America backpacking cost guides (Portuguese) from 360meridianos, for Travel tips and the itinerary (headline, link and a short excerpt only). | facts only | yes | no |
@@ -3546,6 +3943,8 @@ docs/wiki/Place-Facts-Data.md).
 | `eurostat-prices` | `ec.europa.eu` | Official relative price levels for restaurants and hotels, food and transport per European country, for Travel tips cost guidance and itinerary budgets. | open | yes | no |
 | `experienceoman` | `experienceoman.om` | Official Omani destinations, things to do and itineraries, for Places to see, Activities and the itinerary. | facts only | yes | no |
 | `france-fr` | `www.france.fr` | Official French inspiration, itineraries and gastronomy pages, for the itinerary, Places to see and Activities. | facts only | yes | no |
+| `fx-ru-histrf` | `history.ru` | История.РФ (Российское военно-историческое общество): federal history portal; regional history and "travel" sections about towns, for Place facts, Places to see and Itinerary. | facts only | yes | no |
+| `fx-toscana-ovunque-bella` | `www.toscanaovunquebella.it` | Toscana Ovunque Bella: unusual stories for every Tuscan comune (one per municipality), for Place facts, Places to see and Itinerary. | facts only | yes | no |
 | `gotokyo` | `www.gotokyo.org` | About 925 Tokyo spots, the event calendar and model courses, for Places to see, Events, Activities and the itinerary. | facts only | yes | no |
 | `goturkiye` | `goturkiye.com` | Official Turkish destinations, routes and events, for Places to see, the itinerary and Events; also history and curiosities for Place facts. | facts only | yes | no |
 | `incredibleindia` | `www.incredibleindia.gov.in` | Official Indian destinations, attractions, festivals and itineraries, for Places to see, the itinerary and Events; also history and curiosities for Place facts. | facts only | yes | no |
@@ -3969,23 +4368,95 @@ docs/wiki/Place-Facts-Data.md).
 | `arch-akofena` | `www.revue-akofena.com` | Akofena (Ivorian journal, CRAC-INSAAC): occasional West African toponymy and local history (low yield), for Place facts. | open | yes | no |
 | `arch-aodl` | `aodl.org` | African Online Digital Library (MSU): curated West African heritage collections and exhibits, for Place facts. | facts only | yes | no |
 | `arch-auckland-museum` | `www.aucklandmuseum.com` | Auckland War Memorial Museum stories: Auckland and NZ history stories, for Place facts. | facts only | yes | no |
+| `arch-ba-muzej-sarajeva` | `www.muzejsarajeva.ba` | Muzej Sarajeva: history of Sarajevo and its branch sites (Svrzo house, Brusa bezistan, Despić house), for Place facts and Places to see. | facts only | yes | no |
+| `arch-bavarikon` | `www.bavarikon.de` | bavarikon (Bavarian State Library, Bavarian cultural portal): "Orte" (places) section with place-linked heritage objects and exhibitions, for Place facts and Places to see. | facts only | yes | no |
+| `arch-bg-sofia-history-museum` | `sofiahistorymuseum.bg` | Regional History Museum Sofia: history of Sofia and its museum sites (Pravets, Koprivshtitsa branches), for Place facts and Places to see. | facts only | yes | no |
 | `arch-bibalex` | `www.bibalex.org` | Bibliotheca Alexandrina: Alexandria and Egypt heritage projects (Memory of Modern Egypt lives on a subdomain, not vetted), for Place facts. | facts only | yes | no |
+| `arch-by-bis-nlb` | `bis.nlb.by` | Беларусь у асобах і падзеях (Нацыянальная бібліятэка Беларусі): national-library encyclopedia: towns, monuments, dated events, for Place facts and Places to see. | facts only | yes | no |
+| `arch-by-nlb` | `nlb.by`, `www.nlb.by` | Национальная библиотека Беларуси: local-history and anniversary pages on Belarusian towns (Belarus otherwise thin in corpus), for Place facts. | facts only | yes | no |
 | `arch-canterbury-museum` | `www.canterburymuseum.com` | Canterbury Museum (explore): Canterbury and Antarctic history stories, for Place facts. | open | yes | no |
 | `arch-codesria` | `codesria.org` | CODESRIA: Afrika Zamani and African history publications (low direct yield), for Place facts. | facts only | yes | no |
+| `arch-cork-past-present` | `www.corkcitylibraries.ie` | Cork Past & Present (Cork City Libraries): Cork streets, districts and history texts, for Place facts and Places to see. | facts only | yes | no |
+| `arch-culturaitalia` | `www.culturaitalia.it` | CulturaItalia (Ministry of Culture portal): editorial pieces on Italian places and heritage itineraries, for Place facts, Places to see and Itinerary. | facts only | yes | no |
+| `arch-cyryl-poznan` | `cyryl.poznan.pl` | Cyryl – Wirtualne Muzeum Historii Poznania: Poznań local history collections, for Place facts. | facts only | yes | no |
+| `arch-data-bnf` | `data.bnf.fr` | data.bnf.fr (Bibliothèque nationale de France): BnF place authority records (notes, historical names, links to Gallica), for Place facts and Places to see. | open | yes | no |
+| `arch-de-nrw-ruhrmuseum` | `ruhrmuseum.de` | Ruhr Museum (Zollverein): Ruhr regional history, for Place facts and Places to see. | facts only | yes | no |
+| `arch-dk-aarhusarkivet` | `www.aarhusarkivet.dk` | AarhusArkivet (Aarhus Stadsarkiv): Aarhus local history records, guides, place descriptions, for Place facts and Places to see. | facts only | yes | no |
+| `arch-dk-arkiv-dk` | `arkiv.dk` | arkiv.dk (Danish local archives): local-history records and stories from 600+ Danish local archives (towns and villages), for Place facts and Places to see. | facts only | yes | no |
+| `arch-dk-cph-museum` | `cphmuseum.kk.dk` | Københavns Museum: Copenhagen history, archaeology (Metro digs). Note: subdomain of kk.dk, which is in corpus; distinct site, for Place facts and Places to see. | facts only | yes | no |
 | `arch-dloc` | `dloc.com` | Digital Library of the Caribbean (dLOC): Caribbean island and town history items (descriptions only), for Place facts. | facts only | yes | no |
 | `arch-encyclopedia-detroit` | `www.detroithistorical.org` | Encyclopedia of Detroit (Detroit Historical Society): Detroit landmarks and neighbourhoods, for Place facts, Places to see and Free walking tours. | facts only | yes | no |
+| `arch-encyclopedie-zeeland` | `www.encyclopedievanzeeland.nl` | Encyclopedie van Zeeland (Zeeuws Archief): every Zeeland village, polder and landmark, for Place facts and Places to see. | facts only | yes | no |
+| `arch-essex-record-office` | `www.essexrecordoffice.co.uk` | Essex Record Office: Essex place research guides and blog, for Place facts. | facts only | yes | no |
 | `arch-euskaltzaindia-eoda` | `www.euskaltzaindia.eus` | Euskaltzaindia EODA (Basque onomastics, place names): official Basque names, historical attestations, etymology notes, for Place facts. | share-alike | yes | no |
+| `arch-fi-helsinki-city-museum` | `www.helsinginkaupunginmuseo.fi` | Helsingin kaupunginmuseo (Helsinki City Museum): Helsinki district and building history, archaeology, for Place facts, Places to see and Free walking tours. | facts only | yes | no |
+| `arch-fi-siida` | `siida.fi` | Siida (Sámi Museum, Inari): Sámi culture and Inari region history, for Place facts, Places to see and Activities. | facts only | yes | no |
+| `arch-fo-tjodsavnid` | `www.tjodsavnid.fo` | Tjóðsavnið (Faroe Islands National Museum): Faroese heritage articles, the object of the month, nature and village history (savn.fo is the same site), for Place facts and Places to see. | facts only | yes | no |
+| `arch-fr-archives-alsace` | `archives.alsace.eu` | Archives d'Alsace (CeA: Bas-Rhin + Haut-Rhin): Alsace commune histories, archive features (archives67.alsace.eu 403 -> skipped), for Place facts and Places to see. | facts only | yes | no |
+| `arch-fr-archives-calvados` | `archives.calvados.fr` | Archives du Calvados: Calvados commune history features and exhibitions, for Place facts and Places to see. | facts only | yes | no |
+| `arch-fr-archives-marne` | `archives.marne.fr` | Archives départementales de la Marne: Marne/Champagne commune and WWI history features, for Place facts and Places to see. | facts only | yes | no |
+| `arch-fr-archives-vosges` | `archives.vosges.fr` | Archives départementales des Vosges: Vosges commune history features, for Place facts and Places to see. | facts only | yes | no |
+| `arch-fr-normannia` | `www.normannia.info` | Normannia: patrimoine écrit de Normandie: Normandy written heritage, local-history exhibits (Omeka), for Place facts and Places to see. | facts only | yes | no |
+| `arch-gazetteer-scotland` | `www.scottish-places.info` | Gazetteer for Scotland: every Scottish town, parish and feature with history and trivia, for Place facts and Places to see. | facts only | yes | no |
+| `arch-gedaechtnis-noe` | `www.gedaechtnisdeslandes.at` | Gedächtnis des Landes (Lower Austria chronicle database): places of Lower Austria with dated chronicle entries, for Place facts and Places to see. | facts only | yes | no |
+| `arch-hlb-bavaria` | `www.historisches-lexikon-bayerns.de` | Historisches Lexikon Bayerns (BSB): Bavarian regions, towns and territories, for Place facts and Places to see. | share-alike | yes | no |
+| `arch-hls-switzerland` | `hls-dhs-dss.ch` | Historical Dictionary of Switzerland (HLS/DHS/DSS): a scholarly article for every Swiss municipality, canton and region (history, firsts, notable events), for Place facts, Places to see and Free walking tours. | share-alike | yes | no |
 | `arch-hypotheses` | `hypotheses.org` | Hypotheses (OpenEdition academic blogs): research notes on African and Middle Eastern places, for Place facts. | facts only | yes | no |
+| `arch-internetculturale` | `www.internetculturale.it` | Internet Culturale (ICCU): virtual exhibitions on Italian cities and regions, for Place facts. | share-alike | yes | no |
+| `arch-is-borgarsogusafn` | `borgarsogusafn.is` | Borgarsögusafn Reykjavíkur (Reykjavík City Museum): Reykjavík history (Árbær, Viðey, Settlement exhibition, Maritime museum), for Place facts, Places to see and Activities. | facts only | yes | no |
+| `arch-is-thjodminjasafn` | `www.thjodminjasafn.is` | Þjóðminjasafn Íslands (National Museum of Iceland): Icelandic heritage, historic houses and turf churches in the museum's care, for Place facts and Places to see. | facts only | yes | no |
+| `arch-isof-ortnamnsregistret` | `ortnamnsregistret.isof.se` | Isof Ortnamnsregistret (digitised place-name archive): historical attestations of Swedish names. The records are mostly scanned slips, so first check how much text each record holds, for Place facts. | facts only | yes | no |
+| `arch-it-sardegna-digital-library` | `www.sardegnadigitallibrary.it` | Sardegna Digital Library: Sardinian towns, nuraghi, traditions (documents and texts), for Place facts and Places to see. | facts only | yes | no |
 | `arch-jps` | `thepolynesiansociety.org` | Journal of the Polynesian Society (Waka Kuaka): peer-reviewed Pacific history and place studies; use open-access articles only, for Place facts. | facts only | yes | no |
+| `arch-kamra-si` | `www.kamra.si` | Kamra (Slovenian regional digital heritage): local-history stories per Slovenian region; "on this day", for Place facts. | facts only | yes | no |
+| `arch-leicestershire-record-office` | `www.recordoffice.org.uk` | Record Office for Leicestershire, Leicester and Rutland: local-history resources and parish guides, for Place facts. | facts only | yes | no |
+| `arch-li-e-archiv` | `e-archiv.li` | Landesarchiv Liechtenstein e-archiv: timeline and source editions of Liechtenstein history (dated events per place), for Place facts. | facts only | yes | no |
+| `arch-li-landesmuseum` | `www.landesmuseum.li` | Liechtensteinisches LandesMuseum: history of Liechtenstein, for Place facts and Places to see. | facts only | yes | no |
+| `arch-lokalhistoriewiki-no` | `lokalhistoriewiki.no` | Lokalhistoriewiki.no (Norsk lokalhistorisk institutt): local history of Norwegian municipalities, farms, villages and streets, for Place facts, Places to see and Free walking tours. | share-alike | yes | no |
+| `arch-lu-citymuseum` | `citymuseum.lu` | Lëtzebuerg City Museum: history of Luxembourg City, for Place facts and Places to see. | share-alike | yes | no |
 | `arch-lwl-westfalen-regional` | `www.lwl.org` | Westfalen regional (LWL): Westphalian towns, regions and history, for Place facts and Places to see. | facts only | yes | no |
+| `arch-manar-al-athar` | `manar.arch.ox.ac.uk` | Manar al-Athar Digital Archive (University of Oxford): captions for sites in Libya, Lebanon, Syria, Jordan and Egypt, for Place facts and Places to see. | share-alike | yes | no |
 | `arch-mandela-foundation` | `www.nelsonmandela.org` | Nelson Mandela Foundation: Mandela-linked places (Qunu, Mvezo, Houghton), for Place facts. | facts only | yes | no |
+| `arch-md-bnrm` | `www.bnrm.md` | Biblioteca Națională a Republicii Moldova: national calendar of anniversaries, local-history bibliographies of Moldovan towns and villages, for Place facts. | facts only | yes | no |
+| `arch-no-oslo-museum` | `www.oslomuseum.no` | Oslo Museum: Oslo city history (Bymuseet), for Place facts and Places to see. | facts only | yes | no |
 | `arch-oapen` | `library.oapen.org` | OAPEN Library: open-licensed monographs on African and Middle Eastern history, for Place facts. | open | yes | no |
 | `arch-openedition-books` | `books.openedition.org` | OpenEdition Books (IRD, IFRA, IFPO, CEMCA presses): monographs on Levant, Maghreb and African towns, for Place facts. | facts only | yes | no |
 | `arch-openedition-journals` | `journals.openedition.org` | OpenEdition Journals (Cahiers d'études africaines, Afriques, Journal des africanistes, Re…: peer-reviewed place histories for cities and villages across Africa and the Arab world, for Place facts. | facts only | yes | no |
+| `arch-ostfriesland-orte` | `www.ostfriesischelandschaft.de` | Ostfriesische Landschaft: Historische Ortsdatenbank (places taxonomy): history of every East Frisian village (Ortschronisten articles, first mentions), for Place facts. | facts only | yes | no |
+| `arch-pandektis` | `pandektis.ekt.gr` | Pandektis (EKT): Greek historic place names, monuments, travellers' accounts (EKT/NHRF), for Place facts. | facts only | yes | no |
+| `arch-peoples-collection-wales` | `www.peoplescollection.wales` | People's Collection Wales: Welsh place stories and heritage items, for Place facts and Places to see. | facts only | yes | no |
+| `arch-pl-muzeum-gdanska` | `muzeumgdansk.pl` | Muzeum Gdańska: Gdańsk history (Artus Court, Westerplatte, Main Town Hall), for Place facts, Places to see and Free walking tours. | facts only | yes | no |
+| `arch-pl-muzeum-krakowa` | `muzeumkrakowa.pl` | Muzeum Krakowa: Kraków history at its branches (Rynek Underground, Schindler factory, Town Hall Tower), for Place facts, Places to see and Free walking tours. | facts only | yes | no |
+| `arch-pt-museu-de-lisboa` | `museudelisboa.pt`, `cms.museudelisboa.pt` | Museu de Lisboa (EGEAC): Lisbon history across five sites (Palácio Pimenta, Teatro Romano, Santo António), for Place facts and Places to see. | facts only | yes | no |
+| `arch-pt-porto-gisa` | `gisaweb.cm-porto.pt` | Arquivo Municipal do Porto (GISA): catalogue descriptions of Porto streets, buildings and events (low fact density), for Place facts. | facts only | yes | no |
 | `arch-puke-ariki` | `pukeariki.com` | Puke Ariki (Taranaki museum and libraries): Taranaki stories and local history, for Place facts. | facts only | yes | no |
 | `arch-regionalgeschichte-net` | `www.regionalgeschichte.net` | regionalgeschichte.net (Institut für Geschichtliche Landeskunde, Mainz): village and town histories for Rhineland-Palatinate, for Place facts and Places to see. | facts only | yes | no |
+| `arch-rheinische-geschichte` | `www.rheinische-geschichte.lvr.de` | Portal Rheinische Geschichte (LVR): Rhineland town and place histories, for Place facts and Places to see. | facts only | yes | no |
+| `arch-rmca-history` | `www.africamuseum.be` | Royal Museum for Central Africa (AfricaMuseum): history articles: researched history of DR Congo, Rwanda, Burundi and colonial-era places, for Place facts. | facts only | yes | no |
+| `arch-ro-muzeul-bucurestiului` | `muzeulbucurestiului.ro` | Muzeul Municipiului București: Bucharest history, historic houses (Suțu Palace, Filipescu-Cesianu house), museum blog, for Place facts and Places to see. | facts only | yes | no |
+| `arch-royal-berkshire-archives` | `www.royalberkshirearchives.org.uk` | Royal Berkshire Archives: Berkshire's Past: parish and place guides, for Place facts and Places to see. | facts only | yes | no |
+| `arch-ru-historyrussia` | `historyrussia.org` | Российское историческое общество (Russian Historical Society) (ru / Russian regions): regional anniversaries, historic town projects, for Place facts. | facts only | yes | no |
+| `arch-ru-mosmuseum` | `mosmuseum.ru` | Музей Москвы (Museum of Moscow) (ru / Moscow): Moscow city history posts, for Place facts and Places to see. | facts only | yes | no |
+| `arch-ru-prlib` | `www.prlib.ru` | Президентская библиотека им. Б.Н. Ельцина: dated "this day in history" entries and regional-history collections, for Place facts. | facts only | yes | no |
 | `arch-saba-heritage` | `sabaheritagecenter.org` | Saba Heritage Center: history of Saba villages (The Bottom, Windwardside), for Place facts and Free walking tours. | facts only | yes | no |
 | `arch-sachsen-digital` | `sachsen.digital` | sachsen.digital (SLUB Dresden): Saxon local history, town chronicles, historic maps, for Place facts and Places to see. | share-alike | yes | no |
+| `arch-se-ajtte` | `www.ajtte.com` | Ájtte: Swedish Mountain and Sámi Museum (Jokkmokk): Laponia and Sámi heritage, Jokkmokk history, for Place facts and Places to see. | facts only | yes | no |
+| `arch-se-gavleborg` | `lansmuseetgavleborg.se` | Länsmuseet Gävleborg: Hälsingland farmhouses (UNESCO), Gävleborg places, for Place facts and Places to see. | facts only | yes | no |
+| `arch-se-goteborgs-stadsmuseum` | `goteborgsstadsmuseum.se` | Göteborgs stadsmuseum: Gothenburg heritage environments and city history stories, for Place facts, Places to see and Free walking tours. | facts only | yes | no |
+| `arch-se-jamtli` | `www.jamtli.com` | Jamtli (Jämtlands läns museum): Jämtland/Härjedalen places, cultural environments, for Place facts and Places to see. | facts only | yes | no |
+| `arch-se-kalmar-lansmuseum` | `kalmarlansmuseum.se` | Kalmar läns museum: Kalmar county archaeology, buildings, the Kronan wreck, for Place facts and Places to see. | facts only | yes | no |
+| `arch-se-kulturarv-vastmanland` | `kulturarvvastmanland.se` | Kulturarv Västmanland: Västmanland place and building database, for Place facts and Places to see. | facts only | yes | no |
+| `arch-se-norrbotten` | `norrbottensmuseum.se` | Norrbottens museum: Norrbotten, Gammelstad church town, Torne valley, for Place facts and Places to see. | facts only | yes | no |
+| `arch-se-sormland` | `sormlandsmuseum.se` | Sörmlands museum: Södermanland places and collections, for Place facts and Places to see. | facts only | yes | no |
+| `arch-se-uppland` | `www.upplandsmuseet.se` | Upplandsmuseet: Uppland, Gamla Uppsala royal mounds, for Place facts and Places to see. | facts only | yes | no |
+| `arch-se-vasterbotten` | `vbm.se` | Västerbottens museum: Västerbotten and Umeå history, Sámi and settler heritage, for Place facts and Places to see. | facts only | yes | no |
+| `arch-se-vastergotland` | `vastergotlandsmuseum.se` | Västergötlands museum: Västergötland cultural environments, for Place facts and Places to see. | facts only | yes | no |
+| `arch-snl-no` | `snl.no` | Store norske leksikon: Norwegian municipalities, towns and places, for Place facts and Places to see. | share-alike | yes | no |
+| `arch-staffs-past-track` | `www.search.staffspasttrack.org.uk` | Staffordshire Past Track: local images with captions, by place, for Place facts and Places to see. | facts only | yes | no |
+| `arch-stockholmskallan` | `stockholmskallan.stockholm.se` | Stockholmskallan (Stockholm City Archives sources): city-history items per district, for Place facts and Places to see. | facts only | yes | no |
+| `arch-tr-iae` | `www.iae.org.tr` | İstanbul Araştırmaları Enstitüsü (Istanbul Research Institute) (tr/en / Istanbul): Istanbul history research and exhibitions, for Place facts. | facts only | yes | no |
+| `arch-ujc-profous` | `mjc.ujc.cas.cz` | Místní jména v Čechách (Profous; Czech Language Institute): origin, meaning and changes of more than 15,000 Bohemian town and village names, for Place facts. | facts only | yes | no |
+| `arch-wien-geschichtewiki` | `www.geschichtewiki.wien.gv.at` | Wien Geschichte Wiki (Vienna City Archive + Wienbibliothek): 47k entries on Vienna streets, buildings, districts, for Place facts, Places to see and Free walking tours. | facts only | yes | no |
 | `argentina-travel` | `www.argentina.travel` | Official Argentine destinations, experiences and itineraries, for Places to see, Activities and the itinerary; also history and curiosities for Place facts. | facts only | yes | no |
 | `blog-atlasandboots` | `www.atlasandboots.com` | Hiking and outdoor adventure guides from Atlas & Boots, for Activities, Places to see and Travel tips (headline, link and a short excerpt only); also history and curiosities for Place facts. | facts only | yes | no |
 | `blog-kuriositas` | `www.kuriositas.com` | Kuriositas: unusual places worldwide (Blogger feed), for Places to see; also history and curiosities for Place facts. | facts only | yes | no |
@@ -3993,96 +4464,395 @@ docs/wiki/Place-Facts-Data.md).
 | `cbsa-travellers` | `www.cbsa-asfc.gc.ca` | Canada's personal exemptions, restricted goods and the CAD 10,000 cash reporting rule, for Travel tips and Packing; also history and curiosities for Place facts. | facts only | yes | no |
 | `city-ba-ciudad` | `buenosaires.gob.ar` | Buenos Aires Ciudad (agenda, culture): city agenda and cultural programme, for Events and Places to see; also history and curiosities for Place facts. | facts only | yes | no |
 | `city-barcelona` | `ajuntament.barcelona.cat` | Ajuntament de Barcelona (historia de la ciutat): history and curiosities of the places it covers, for Place facts and Places to see. | facts only | yes | no |
+| `city-berlin-geschichte` | `www.berlin.de` | berlin.de: Geschichte Berlins: city and district history, for Place facts, Places to see and Free walking tours. | facts only | yes | no |
+| `city-dublin` | `www.dublincity.ie` | Dublin City Council (Library & Archive history pages): history and curiosities of the places it covers, for Place facts and Places to see. | facts only | yes | no |
+| `city-hamburg-geschichte` | `www.hamburg.de` | hamburg.de (city history): history and curiosities of the places it covers, for Place facts and Places to see. | facts only | yes | no |
 | `city-krakow` | `www.krakow.travel` | Kraków Travel: official visitor guide, for Activities, Events and Places to see; also history and curiosities for Place facts. | facts only | yes | no |
 | `city-montreal` | `www.mtl.org` | Montréal events and things to do from the city's tourism bureau, for Events and Activities; also history and curiosities for Place facts. | facts only | yes | no |
+| `city-muenchen-geschichte` | `stadt.muenchen.de` | stadt.muenchen.de (Stadtgeschichte): history and curiosities of the places it covers, for Place facts and Places to see. | facts only | yes | no |
+| `city-paris-histoire` | `www.paris.fr` | Paris.fr (histoire de Paris, arrondissements): history and curiosities of the places it covers, for Place facts, Places to see and Free walking tours. | facts only | yes | no |
 | `city-yerevan` | `www.yerevan.am` | Yerevan Municipality: city notices (transport changes, events), for Events and Local transportation; also history and curiosities for Place facts. | facts only | yes | no |
 | `doc-nz-parks` | `www.doc.govt.nz` | Official New Zealand tracks, huts, campsites, Great Walks and the outdoor care code, for Places to see, Activities, Travel tips and the itinerary; also history and curiosities for Place facts. | open | yes | no |
 | `egymonuments` | `egymonuments.gov.eg` | Official opening hours, tickets and descriptions of Egypt's monuments, museums and archaeological sites, for Places to see and Activities; also history and curiosities for Place facts. | facts only | yes | no |
 | `fx-64-parishes` | `64parishes.org` | 64 Parishes: history and curiosities of the places it covers, for Place facts and Places to see. | facts only | yes | no |
 | `fx-abandonedspaces` | `www.abandonedspaces.com` | Abandoned Spaces: history of abandoned towns, ghost towns, for Place facts. | facts only | yes | no |
 | `fx-african-world-heritage` | `africanworldheritagesites.org` | African World Heritage Sites: per-site histories of every African World Heritage site, for Place facts and Places to see. | facts only | yes | no |
+| `fx-ainmean-aite` | `www.ainmean-aite.scot` | Ainmean-Àite na h-Alba: Gaelic place-names of Scotland: Gaelic forms and meanings of Scottish settlement names, for Place facts and Places to see. | facts only | yes | no |
+| `fx-alleburgen` | `www.alleburgen.de` | AlleBurgen.de: 41,661 castles, palaces and ruins in Europe with history and maps, for Place facts and Places to see. | facts only | yes | no |
 | `fx-alondoninheritance` | `alondoninheritance.com` | A London Inheritance: London street-by-street history, for Place facts and Free walking tours. | facts only | yes | no |
+| `fx-am-armgeo` | `www.armgeo.am` | Armenian Geographic (ArmGeo): monuments, villages, mountains of Armenia with history, for Place facts, Places to see and Activities. | facts only | yes | no |
+| `fx-am-evnreport` | `evnreport.com` | EVN Report: long-form history and heritage pieces about Armenian places, for Place facts. | facts only | yes | no |
 | `fx-aramcoworld` | `www.aramcoworld.com` | AramcoWorld: history and culture of Arab/Islamic-world cities, for Place facts and Places to see. | facts only | yes | no |
 | `fx-archaeology-mag` | `archaeology.org` | Archaeology Magazine (AIA): discoveries at named sites, for Place facts and Places to see. | facts only | yes | no |
+| `fx-asc-leiden` | `www.ascleiden.nl` | African Studies Centre Leiden: country portals: country dossiers with bibliographies, for Place facts. | facts only | yes | no |
 | `fx-atlas-of-wonders` | `feeds.feedburner.com` | Atlas of Wonders: natural/man-made wonders (low priority), for Place facts and Places to see. | facts only | yes | no |
+| `fx-augsburg-stadtlexikon` | `www.wissner.com` | Augsburger Stadtlexikon (Wißner): Augsburg places and history, for Place facts. | facts only | yes | no |
+| `fx-austria-forum` | `austria-forum.org` | Austria-Forum (AEIOU Österreich-Lexikon): Austrian towns, states, landmarks (TU Graz-hosted knowledge base), for Place facts and Places to see. | facts only | yes | no |
+| `fx-az-irs-heritage` | `irs-az.com` | IRS Heritage (Nasledie) magazine: heritage magazine on Azerbaijani towns, monuments and crafts, for Place facts and Places to see. | facts only | yes | no |
+| `fx-beliana` | `beliana.sav.sk` | Encyclopaedia Beliana (SAV): Slovak towns, regions (Academy of Sciences), for Place facts and Places to see. | facts only | yes | no |
 | `fx-bibleplaces` | `www.bibleplaces.com`, `bibleplaces.com` | BiblePlaces.com: archaeological site histories in Israel, Palestine, Jordan and Egypt, for Place facts and Places to see. | facts only | yes | no |
 | `fx-bowery-boys` | `www.boweryboyshistory.com` | The Bowery Boys: NYC neighbourhood history, for Place facts and Free walking tours. | facts only | yes | no |
+| `fx-britain-express` | `www.britainexpress.com` | Britain Express: village, church and history pages for every county, for Place facts, Places to see and Activities. | facts only | yes | no |
 | `fx-burkina24-culture` | `burkina24.com` | Burkina24 (culture): Burkinabè heritage news, for Place facts. | facts only | yes | no |
+| `fx-by-belhistory` | `belhistory.com` | Беларускі гістарычны партал: history of Belarusian towns, for Place facts. | facts only | yes | no |
+| `fx-by-globustut` | `globustut.by` | Глобус Беларуси: town-by-town sights and history of Belarus, for Place facts and Places to see. | facts only | yes | no |
+| `fx-by-slounik` | `slounik.org` | Slounik.org: Belarusian dictionaries and encyclopedias: digitised Belarusian encyclopedias with entries on towns, villages, castles, for Place facts and Places to see. | facts only | yes | no |
+| `fx-ca-voices` | `voicesoncentralasia.org` | Voices on Central Asia (GWU Central Asia Program): academic-editorial pieces on Central Asian cities' history and heritage, for Place facts. | facts only | yes | no |
+| `fx-canon-van-nederland` | `www.canonvannederland.nl` | Canon van Nederland + local/regional canons: national canon + hundreds of town/province canons (50 "windows" each), for Place facts, Places to see and Free walking tours. | facts only | yes | no |
 | `fx-cervantes-historia` | `www.cervantesvirtual.com` | Biblioteca Virtual Miguel de Cervantes (history portals): country and city history portals for Spanish America (low priority, mostly literature), for Place facts. | facts only | yes | no |
+| `fx-ciekawostki-historyczne` | `ciekawostkihistoryczne.pl` | Ciekawostki historyczne: Polish history curiosities (sourced magazine), for Place facts. | facts only | yes | no |
+| `fx-citypopulation` | `www.citypopulation.de` | City Population (Thomas Brinkhoff): populations, areas and largest cities per country and admin unit, for Place facts. | open | yes | no |
 | `fx-comeheretome` | `comeheretome.com` | Come Here To Me (Dublin): Dublin street/pub/building history, for Place facts. | facts only | yes | no |
 | `fx-connecticut-history` | `connecticuthistory.org` | ConnecticutHistory.org (CT Humanities): town pages and history articles, for Place facts and Places to see. | share-alike | yes | no |
 | `fx-conversation-africa` | `theconversation.com` | The Conversation Africa: academic explainers on African and Middle Eastern places, for Place facts. | facts only | yes | no |
 | `fx-craterre` | `craterre.org` | CRAterre (earthen architecture): earthen heritage sites such as the Djenné mosque and Sahel towns (low yield), for Place facts. | facts only | yes | no |
+| `fx-cumbria-county-history` | `www.cumbriacountyhistory.org.uk` | Cumbria County History Trust: VCH-style township histories and a "100 interesting facts" page, for Place facts and Places to see. | facts only | yes | no |
+| `fx-cz-encyklopedie-praha2` | `encyklopedie.praha2.cz` | Encyklopedie Prahy 2: buildings, streets and people of Prague 2 (Vinohrady, Nusle, Vyšehrad), for Place facts, Places to see and Free walking tours. | facts only | yes | no |
 | `fx-damninteresting` | `www.damninteresting.com` | Damn Interesting: obscure true stories, many about places, for Place facts. | facts only | yes | no |
+| `fx-darmstadt-stadtlexikon` | `www.darmstadt-stadtlexikon.de` | Stadtlexikon Darmstadt: Darmstadt streets, buildings, events, for Place facts and Free walking tours. | facts only | yes | no |
+| `fx-de-damals` | `damals.de` | DAMALS – Das Magazin für Geschichte (de): history features incl. places and towns, for Place facts. | facts only | yes | no |
+| `fx-de-monumente` | `www.monumente-online.de` | Monumente (magazine of the Deutsche Stiftung Denkmalschutz) (de / German towns and monume…: monument histories and curiosities per town, for Place facts and Places to see. | facts only | yes | no |
+| `fx-de-mv-gutshaeuser` | `gutshaeuser.de` | Gutshäuser und Schlösser in Mecklenburg-Vorpommern: about 2,000 manor houses of MV villages with owners and building history, for Place facts and Places to see. | facts only | yes | no |
+| `fx-derbyshire-heritage` | `derbyshireheritage.co.uk` | Derbyshire Heritage: town and village histories, for Place facts and Places to see. | facts only | yes | no |
 | `fx-discover-islamic-art` | `islamicart.museumwnf.org` | Discover Islamic Art (Museum With No Frontiers): monument records for Islamic heritage across MENA, for Place facts and Places to see. | facts only | yes | no |
+| `fx-dk-inden-for-voldene` | `www.indenforvoldene.dk` | Inden for Voldene (Copenhagen streets): history of every street and house inside Copenhagen's old ramparts, for Place facts, Places to see and Free walking tours. | facts only | yes | no |
+| `fx-e-lir` | `www.e-lir.ch` | e-LIR Lexicon istoric retic (Romansh HLS): Romansh-language history of Graubünden villages, for Place facts and Places to see. | facts only | yes | no |
+| `fx-efeo` | `www.efeo.fr` | École française d'Extrême-Orient: archaeological discoveries at Angkor, Luang Prabang and Bagan, for Place facts. | facts only | yes | no |
+| `fx-electric-scotland` | `www.electricscotland.com` | Electric Scotland: parish and town histories (many public-domain book reprints), for Place facts and Places to see. | facts only | yes | no |
 | `fx-enciclopedia-cat` | `www.enciclopedia.cat` | Enciclopèdia.cat (Gran Enciclopèdia Catalana): an entry for every Catalan municipality and many villages and hamlets (history, heritage, population), for Place facts and Places to see. | facts only | yes | no |
+| `fx-enciclopedia-romaniei` | `enciclopediaromaniei.ro` | Enciclopedia României: Romanian localities, history, for Place facts and Places to see. | facts only | yes | no |
+| `fx-enciklopedija-hr` | `www.enciklopedija.hr` | Hrvatska enciklopedija (LZMK): Croatian towns, islands, regions, for Place facts and Places to see. | facts only | yes | no |
+| `fx-enciklopedija-lv` | `enciklopedija.lv` | Nacionālā enciklopēdija (LNB): Latvian towns, regions, history (National Library), for Place facts and Places to see. | facts only | yes | no |
 | `fx-encyclopaedia-africana` | `encyclopaediaafricana.com` | Encyclopaedia Africana Project: entries on African homelands, kingdoms and heroes, for Place facts. | facts only | yes | no |
 | `fx-encyclopedia-virginia` | `encyclopediavirginia.org` | Encyclopedia Virginia: history and curiosities of the places it covers, for Place facts and Places to see. | facts only | yes | no |
+| `fx-encyklopedie-brna` | `encyklopedie.brna.cz` | Internetová encyklopedie dějin Brna: Brno events, streets, buildings ("this day"), for Place facts and Free walking tours. | facts only | yes | no |
+| `fx-encyklopedie-ostravy` | `encyklopedie.ostrava.cz` | Encyklopedie dějin města Ostravy: Ostrava history, for Place facts. | facts only | yes | no |
+| `fx-encyklopedie-plzne` | `encyklopedie.plzen.eu` | Encyklopedie dějin města Plzně: Plzeň history, for Place facts and Free walking tours. | facts only | yes | no |
 | `fx-erih` | `www.erih.net`, `erih.net` | European Route of Industrial Heritage: industrial heritage sites with history across Europe, for Place facts, Places to see and Activities. | facts only | yes | no |
+| `fx-es-alandalus-historia` | `www.alandalusylahistoria.com` | Al-Andalus y la Historia (es / Andalusia, Córdoba, Granada…): history of Andalusian towns and monuments by historians, for Place facts and Places to see. | facts only | yes | no |
+| `fx-es-andalucia-en-la-historia` | `www.centrodeestudiosandaluces.es` | Andalucía en la Historia (Centro de Estudios Andaluces, public foundation) (es / Andalusi…: popular history of Andalusian places, for Place facts. | facts only | yes | no |
+| `fx-es-arteguias` | `arteguias.com` | Arteguias: arte románico en España: Romanesque churches and monasteries by province with dates and history, for Place facts and Places to see. | facts only | yes | no |
+| `fx-es-aventura-historia` | `www.laaventuradelahistoria.es` | La Aventura de la Historia (es / Spain, world): history magazine written by historians since 1998 (place history, curiosities), for Place facts. | facts only | yes | no |
+| `fx-es-ga-consello-cultura` | `consellodacultura.gal` | Consello da Cultura Galega: Galician heritage, place and toponymy specials, document collections, for Place facts and Places to see. | facts only | yes | no |
+| `fx-es-ga-culturagalega` | `culturagalega.gal` | culturagalega.gal (CCG news): Galician culture and heritage reports, for Place facts and Places to see. | facts only | yes | no |
+| `fx-es-ga-galicia-encantada` | `galiciaencantada.com` | Galicia Encantada: legends and traditions tied to Galician parishes, castros, lakes, for Place facts and Places to see. | facts only | yes | no |
+| `fx-es-regmurcia` | `www.regmurcia.com` | Región de Murcia Digital: Murcia municipalities, history, heritage (encyclopedic), for Place facts and Places to see. | facts only | yes | no |
+| `fx-ethiopian-treasures` | `www.ethiopiantreasures.co.uk` | Ethiopian Treasures: Aksum, Lalibela, Gondar and Harar history, for Place facts. | facts only | yes | no |
 | `fx-europanostra` | `www.europanostra.org` | Europa Nostra: European Heritage Awards and "7 Most Endangered" site write-ups, for Place facts and Places to see. | facts only | yes | no |
 | `fx-exploring-castles` | `www.exploring-castles.com` | Exploring Castles: castle histories, Europe, for Place facts and Places to see. | facts only | yes | no |
 | `fx-factsanddetails` | `factsanddetails.com` | Facts and Details (Jeffrey Hays): deep, sourced pages on Kazakhstan, Kyrgyzstan, Tajikistan, Turkmenistan, Uzbekistan, Mongolia, Myanmar, Laos, Cambodia, Brunei, for Place facts. | facts only | yes | no |
+| `fx-fo-snar` | `snar.fo` | Snar.fo (Faroese learning portal): Faroese history and place themes for schools, for Place facts and Places to see. | facts only | yes | no |
+| `fx-fr-alsace-histoire` | `www.alsace-histoire.org` | Fédération des Sociétés d'Histoire et d'Archéologie d'Alsace: local societies of Alsatian towns and villages, Revue d'Alsace, for Place facts and Places to see. | facts only | yes | no |
+| `fx-fr-herodote` | `www.herodote.net` | Herodote.net (fr): dated history pieces, many on French places, for Place facts. | facts only | yes | no |
+| `fx-fr-patrimoine-normand` | `patrimoinenormand.com` | Patrimoine Normand (magazine): towns, châteaux, abbeys and history of Normandy (has a shop: product paths excluded), for Place facts and Places to see. | facts only | yes | no |
+| `fx-fr-unjourdeplusaparis` | `www.unjourdeplusaparis.com` | Un Jour de Plus à Paris (fr/en / Paris insolite): little-known Paris spots (e.g. "the only Paris church without a bell tower"), for Place facts and Free walking tours. | facts only | yes | no |
+| `fx-france-pittoresque` | `www.france-pittoresque.com` | La France pittoresque: French towns, monuments, traditions and legends, for Place facts and Places to see. | facts only | yes | no |
 | `fx-futilitycloset` | `feeds.feedburner.com` | Futility Closet: historical curiosities, many about specific towns and places, for Place facts. | facts only | yes | no |
+| `fx-ge-georgiaabout` | `georgiaabout.com` | Georgia About: long-running blog with "About ..." posts on Georgian architecture, towns and traditions, for Place facts and Places to see. | facts only | yes | no |
+| `fx-ge-georgianjournal` | `georgianjournal.ge` | Georgian Journal: English weekly, "Discover Georgia" history pieces, for Place facts. | facts only | yes | no |
+| `fx-gedanopedia` | `gedanopedia.pl`, `www.gedanopedia.pl` | Gedanopedia (Encyklopedia Gdańska): Gdańsk streets, buildings, events, for Place facts and Free walking tours. | facts only | yes | no |
+| `fx-geo-de` | `www.geo.de` | GEO (Germany): German-language place history and curiosities, for Place facts and Places to see. | facts only | yes | no |
 | `fx-geographyrealm` | `www.geographyrealm.com` | Geography Realm: geography facts about countries, borders, place names, for Place facts. | facts only | yes | no |
 | `fx-geology-com` | `geology.com` | Geology.com: records: geological superlatives with places (highest waterfall, deepest ocean point, biggest tsunami), for Place facts. | facts only | yes | no |
+| `fx-geschichte-sh` | `geschichte-s-h.de` | Gesellschaft für Schleswig-Holsteinische Geschichte: "SH von A bis Z": lexicon of Schleswig-Holstein towns, villages and history, for Place facts. | facts only | yes | no |
+| `fx-glasgow-story` | `theglasgowstory.com` | TheGlasgowStory: Glasgow districts and place names, for Place facts and Places to see. | facts only | yes | no |
 | `fx-guinness-records` | `www.guinnessworldrecords.com` | Guinness World Records (place records): highest/oldest/largest records tied to places (unbelievable/record facts), for Place facts. | facts only | yes | no |
 | `fx-haiti-reference` | `www.haiti-reference.info` | Haïti Référence: long-running Haitian reference site (history, regions, notables, culture), for Place facts and Places to see. | facts only | yes | no |
 | `fx-hakai` | `hakaimagazine.com` | Hakai Magazine: coastal places, islands, ports, for Place facts and Places to see. | facts only | yes | no |
 | `fx-henokiens` | `www.henokiens.com` | Les Hénokiens (family companies 200+ years old): the oldest family companies by town (Hōshi Ryokan, 718; Beretta, 1526) with founding years, for Place facts and Places to see. | facts only | yes | no |
+| `fx-heritage-calling` | `heritagecalling.com` | Heritage Calling (Historic England blog): listed buildings and place history from England's heritage body, for Place facts and Places to see. | facts only | yes | no |
 | `fx-heritagedaily` | `www.heritagedaily.com` | HeritageDaily: archaeology news tied to sites, for Place facts and Places to see. | facts only | yes | no |
 | `fx-hespress-histoire` | `www.hespress.com` | Hespress (histoire section): Moroccan history articles (Arabic), for Place facts. | facts only | yes | no |
+| `fx-histoire-pour-tous` | `www.histoire-pour-tous.fr` | Histoire pour tous: French history incl. city histories, for Place facts. | facts only | yes | no |
 | `fx-historia-nuevo-mundo` | `www.historiadelnuevomundo.com` | Historia del Nuevo Mundo: city and place histories across Hispanic America, for Place facts and Places to see. | facts only | yes | no |
+| `fx-historic-uk` | `www.historic-uk.com` | Historic UK: town/castle/village histories across Britain, for Place facts and Places to see. | facts only | yes | no |
 | `fx-historyextra` | `www.historyextra.com` | HistoryExtra (BBC History Magazine): UK/world place history explainers by named historians, for Place facts and Places to see. | facts only | yes | no |
 | `fx-historyhit` | `www.historyhit.com` | History Hit (places): historic site guides and '10 facts about' place pages, for Place facts and Places to see. | facts only | yes | no |
 | `fx-historylink` | `www.historylink.org` | HistoryLink.org (Washington State history): town essays, "This Day" items, for Place facts and Places to see. | facts only | yes | no |
 | `fx-historynet` | `historynet.com` | HistoryNet: battlefields, historic sites, US/world history, for Place facts. | facts only | yes | no |
+| `fx-hov-sachsen` | `hov.isgv.de` | Historisches Ortsverzeichnis von Sachsen (ISGV): first documented mention, population history, name history of ~6,000 Saxon places, for Place facts. | facts only | yes | no |
 | `fx-hunter-living-histories` | `hunterlivinghistories.com` | Hunter Living Histories (Univ. of Newcastle): Newcastle and Hunter Valley place histories, for Place facts and Free walking tours. | facts only | yes | no |
+| `fx-ianvisits` | `www.ianvisits.co.uk` | ianVisits (London): London little-known history, hidden sites, for Place facts, Places to see and Events. | facts only | yes | no |
+| `fx-iceland-review` | `www.icelandreview.com` | Iceland Review: Iceland history, place names, records, for Place facts and Travel tips. | facts only | yes | no |
+| `fx-inberlin` | `blog.inberlin.de` | Blog@inBerlin: Berlin curiosities, hidden places, for Place facts. | facts only | yes | no |
+| `fx-infolites` | `www.infolites.fr` | Infolites (France): French-language curiosities incl. unusual places, for Place facts. | facts only | yes | no |
+| `fx-is-heimaslod` | `heimaslod.is` | Heimaslóð (Vestmannaeyjar heritage encyclopedia): Westman Islands history, houses, the 1973 eruption, place names, for Place facts and Places to see. | facts only | yes | no |
+| `fx-isof-ortnamn` | `www.isof.se` | Isof: articles on Swedish place names: name endings, oldest names, origins of Swedish towns, for Place facts. | facts only | yes | no |
+| `fx-istrapedia` | `www.istrapedia.hr` | Istrapedia (Istrian encyclopedia): Istrian towns and villages, for Place facts and Places to see. | facts only | yes | no |
+| `fx-it-icastelli` | `www.icastelli.it` | icastelli.it: Castelli e Torri d'Italia: Italian castles and towers by region with history, for Place facts and Places to see. | facts only | yes | no |
+| `fx-it-info-roma` | `www.info.roma.it` | Info.roma.it: Enciclopedia su Roma: Rome monuments, streets, 'Roma sparita', daily almanac of Roman history, for Place facts, Places to see and Free walking tours. | facts only | yes | no |
+| `fx-it-mondimedievali` | `www.mondimedievali.net` | Mondi Medievali: castelli d'Italia: castles of every Italian region incl. Sicily, Campania, Puglia, for Place facts and Places to see. | facts only | yes | no |
 | `fx-kapitalis-culture` | `kapitalis.com` | Kapitalis (culture): Tunisian heritage, for Place facts. | facts only | yes | no |
+| `fx-kastra-greek-castles` | `www.kastra.eu` | Kastra.eu: Greek Castles: every medieval and later castle, fort and tower in Greece with history and dates, for Place facts and Places to see. | facts only | yes | no |
+| `fx-kent-archaeology` | `www.kentarchaeology.org.uk` | Kent Archaeological Society (Archaeologia Cantiana): parish histories and papers about Kent places, for Place facts and Places to see. | facts only | yes | no |
+| `fx-kotus-names` | `kotus.fi` | Kotus: Finnish name planning (nimistönhuolto): Finnish and Saami name origins and articles, for Place facts. | facts only | yes | no |
+| `fx-ku-place-name-meanings` | `names.ku.dk` | Univ. of Copenhagen Name Research: meanings of selected Danish place-names: endings (-lev, -by, -torp) and the meanings of well-known Danish towns, for Place facts. | facts only | yes | no |
+| `fx-levantine-heritage` | `levantineheritage.com` | Levantine Heritage Foundation: Levantine communities of Izmir, Istanbul, Cyprus and the east Mediterranean (low volume), for Place facts and Places to see. | facts only | yes | no |
+| `fx-logainm` | `www.logainm.ie` | Logainm.ie (Placenames Database of Ireland): origin and meaning of Irish place names, for Place facts. | facts only | yes | no |
+| `fx-london-wanderer` | `thelondonwanderer.co.uk` | The London Wanderer: London curiosities category, for Place facts. | facts only | yes | no |
 | `fx-lookup-london` | `lookup.london` | Look Up London: weekly London hidden-history posts by a Blue Badge guide, for Place facts and Free walking tours. | facts only | yes | no |
+| `fx-lu-industrie` | `industrie.lu` | industrie.lu: industrial history of Luxembourg: histories of Luxembourg towns' industries, hotels, cafés, railways, mines, for Place facts and Places to see. | facts only | yes | no |
+| `fx-mdr-geschichte` | `www.mdr.de` | MDR Geschichte: history of towns and regions in Saxony, Saxony-Anhalt, Thuringia (fills the Thuringia/LSA gap), for Place facts and Places to see. | facts only | yes | no |
+| `fx-mult-kor` | `mult-kor.hu` | Múlt-kor történelmi portál: Hungarian history and archaeology news, place curiosities, for Place facts. | facts only | yes | no |
+| `fx-museotorino` | `www.museotorino.it` | MuseoTorino: Turin places, buildings, curiosities (city museum), for Place facts and Free walking tours. | facts only | yes | no |
+| `fx-ndr-geschichte` | `www.ndr.de` | NDR Geschichte: history of north German towns, MV and Hanseatic places, for Place facts and Places to see. | facts only | yes | no |
+| `fx-new-georgia-encyclopedia` | `www.georgiaencyclopedia.org` | New Georgia Encyclopedia (Georgia Humanities/UGA Press): towns, counties, for Place facts and Places to see. | facts only | yes | no |
+| `fx-no-oslo-byleksikon` | `oslobyleksikon.no` | Oslo byleksikon: every Oslo street, building, district and place-name origin, for Place facts, Places to see and Free walking tours. | facts only | yes | no |
+| `fx-norgeshistorie` | `www.norgeshistorie.no` | Norgeshistorie.no (UiO): Norwegian history by period and place, for Place facts. | facts only | yes | no |
 | `fx-odditycentral` | `feeds.feedburner.com` | Oddity Central: unusual places/towns (filter: many items are about people), for Place facts. | facts only | yes | no |
+| `fx-ooegeschichte` | `www.ooegeschichte.at` | Forum OÖ Geschichte (Land Oberösterreich): Upper Austrian regional history, small monuments, for Place facts and Places to see. | facts only | yes | no |
+| `fx-orkneyjar` | `orkneyjar.com` | Orkneyjar: Orkney parish, folklore and place-name notes, for Place facts and Places to see. | facts only | yes | no |
+| `fx-pariszigzag` | `www.pariszigzag.fr` | Paris ZigZag (Insolite & Secret): Paris curiosities, hidden history, little-known facts, for Place facts and Activities. | facts only | yes | no |
 | `fx-peaklist` | `peaklist.org` | Peaklist.org (world prominence lists): highest and most prominent peaks per country and region, for Place facts. | facts only | yes | no |
+| `fx-pl-pomeranica` | `pomeranica.pl` | Encyklopedia Pomorza Zachodniego (pomeranica.pl): Szczecin and West Pomeranian towns and villages (encyklopedia.szczecin.pl redirects here), for Place facts and Places to see. | facts only | yes | no |
+| `fx-planet-wissen` | `www.planet-wissen.de` | Planet Wissen (WDR/SWR/BR-alpha): public-broadcaster explainers on cities, regions and countries, for Place facts. | facts only | yes | no |
+| `fx-proleksis-hr` | `proleksis.lzmk.hr` | Proleksis enciklopedija (LZMK): short entries on Croatian and world towns, islands, regions, countries, for Place facts and Places to see. | facts only | yes | no |
+| `fx-pt-aprender-madeira` | `aprenderamadeira.net` | Aprender Madeira (Madeira encyclopedia, APCA): Madeira and Porto Santo parishes, history, heritage, for Place facts and Places to see. | facts only | yes | no |
+| `fx-pt-restos-de-coleccao` | `restosdecoleccao.blogspot.com` | Restos de Colecção (blog): well-documented history of Lisbon and Portuguese shops, buildings, streets, for Place facts and Places to see. | facts only | yes | no |
+| `fx-pt-rtp-ensina` | `ensina.rtp.pt` | RTP Ensina (public broadcaster education) (pt / Portugal): short "sabia que" history and place items, for Place facts. | facts only | yes | no |
 | `fx-qantara` | `www.qantara-med.org` | Qantara: Mediterranean heritage (Institut du monde arabe): monuments and objects of the Mediterranean, Maghreb and Levant, for Place facts. | facts only | yes | no |
+| `fx-qazinform` | `qazinform.com` | Kazinform (Kazakhstan news agency): history and curiosities of the places it covers, for Place facts. | facts only | yes | no |
+| `fx-radio-prague` | `english.radio.cz` | Radio Prague International: Czech towns, castles, history features (public broadcaster), for Place facts. | facts only | yes | no |
 | `fx-radiookapi-identite` | `www.radiookapi.net` | Radio Okapi: Identité culturelle: DRC cultural identity and local history programmes per province, for Place facts. | facts only | yes | no |
 | `fx-rarehistoricalphotos` | `rarehistoricalphotos.com` | Rare Historical Photos: historical context of places in old photos (low priority), for Place facts. | facts only | yes | no |
+| `fx-rfi-afrique` | `www.rfi.fr` | RFI (Afrique, culture, "Mémoire d'un continent"): African history and place features, for Place facts. | facts only | yes | no |
+| `fx-ro-bucurestii-vechi-si-noi` | `bucurestiivechisinoi.ro` | București Vechi și Noi: volunteer-written histories of Bucharest streets, buildings, people, for Place facts, Places to see and Free walking tours. | facts only | yes | no |
+| `fx-ru-arzamas` | `arzamas.academy` | Arzamas (журнал): scholar-written pieces on Russian cities' history and curiosities, for Place facts. | facts only | yes | no |
+| `fx-ru-bashenc` | `bashenc.online` | Башкирская энциклопедия (ГАУН РБ): 56k articles; every district, town and village of Bashkortostan, for Place facts and Places to see. | facts only | yes | no |
+| `fx-ru-chuvash-enc` | `enc.cap.ru` | Чувашская энциклопедия: villages and towns of Chuvashia (regional government portal), for Place facts and Places to see. | facts only | yes | no |
+| `fx-ru-diletant` | `diletant.media` | Дилетант (Diletant history magazine) (ru): history curiosities incl. Russian and world places, for Place facts. | facts only | yes | no |
+| `fx-ru-encspb` | `www.encspb.ru` | Энциклопедия Санкт-Петербурга: streets, buildings, monuments, memorial plaques of St Petersburg, for Place facts, Places to see and Free walking tours. | facts only | yes | no |
+| `fx-ru-histrf` | `history.ru` | История.РФ (Российское военно-историческое общество): federal history portal; regional history and "travel" sections about towns, for Place facts, Places to see and Itinerary. | facts only | yes | no |
+| `fx-ru-kola-encyclopedia` | `ke-culture.gov-murman.ru`, `ke.culture.gov-murman.ru` | Кольская энциклопедия (Правительство Мурманской области): 5-volume regional encyclopedia: every town, settlement and landmark of Murmansk oblast, for Place facts and Places to see. | open | yes | no |
+| `fx-ru-nkj` | `www.nkj.ru` | Наука и жизнь: magazine (founded 1890) with "удивительные места" and regional-history articles, for Place facts. | facts only | yes | no |
+| `fx-ru-pravenc` | `www.pravenc.ru` | Православная энциклопедия (ЦНЦ): scholarly articles on cities, monasteries and dioceses (history with bibliography), for Place facts and Places to see. | facts only | yes | no |
+| `fx-ru-rgo` | `rgo.ru` | Русское географическое общество: RGS articles on regions, expeditions and geographic records (highest, deepest, coldest), for Place facts and Places to see. | facts only | yes | no |
+| `fx-ru-rodina` | `rodina-history.ru` | Журнал «Родина» (Российская газета): peer-reviewed popular history magazine; local and regional history, for Place facts. | facts only | yes | no |
+| `fx-ru-tatarica` | `tatarica.org` | Tatarica: Татарская энциклопедия (АН РТ): Kazan, Tatarstan settlements, "vanished settlements" section, for Place facts and Places to see. | facts only | yes | no |
+| `fx-ru-uralhist` | `uralhist.uran.ru` | Уральский исторический вестник (ИИиА УрО РАН): peer-reviewed articles on Ural towns' history (low density, high credibility), for Place facts. | facts only | yes | no |
+| `fx-ru-vokrugsveta` | `www.vokrugsveta.ru` | Вокруг света: oldest Russian popular-geography magazine (1861); place curiosities and records, for Place facts and Places to see. | facts only | yes | no |
+| `fx-sagen-at` | `www.sagen.at` | SAGEN.at (folk-culture platform: legends by place): village legends and local lore for Austria, South Tyrol and the Alps (labelled as legend, not history), for Place facts. | facts only | yes | no |
 | `fx-sahapedia` | `www.sahapedia.org` | Sahapedia: heritage-walk and city-culture essays, for Place facts, Free walking tours and Places to see. | share-alike | yes | no |
 | `fx-sapiens` | `www.sapiens.org` | SAPIENS (anthropology magazine): cultural/archaeological history of places, for Place facts and Places to see. | open | yes | no |
+| `fx-sardegna-cultura` | `www.sardegnacultura.it` | Sardegna Cultura (Regione Sardegna): Sardinian history (nuraghi to today), places, for Place facts. | facts only | yes | no |
+| `fx-se-samer` | `samer.se` | Samer.se (Sámi information centre, Sametinget): Sápmi history, Sámi place names and siida areas, for Place facts and Places to see. | facts only | yes | no |
 | `fx-seaarch` | `www.southeastasianarchaeology.com` | SEAArch: Southeast Asian Archaeology: new finds and dated discoveries across SEA (links to the original reports), for Place facts. | facts only | yes | no |
 | `fx-seasite-niu` | `seasite.niu.edu` | SEAsite (Northern Illinois University): culture and history pages for Laos, Cambodia, Myanmar (static, rarely updated), for Place facts. | facts only | yes | no |
 | `fx-siam-society` | `thesiamsociety.org` | The Siam Society (Journal of the Siam Society): Thai local history (peer-reviewed), for Place facts. | facts only | yes | no |
+| `fx-snsbi` | `www.snsbi.org.uk` | Society for Name Studies in Britain & Ireland ("Exploring names"): name-origin explainers for UK and Irish places, for Place facts. | facts only | yes | no |
+| `fx-sovraintendenza-roma` | `www.sovraintendenzaroma.it` | Sovrintendenza Capitolina (Roma): history of Rome's municipal monuments, for Place facts and Activities. | facts only | yes | no |
 | `fx-spitalfieldslife` | `spitalfieldslife.com` | Spitalfields Life: East London street and building history, for Place facts. | facts only | yes | no |
+| `fx-spns` | `spns.org.uk` | Scottish Place-Name Society: name-origin articles and Survey of Scottish Place-Names news, for Place facts. | facts only | yes | no |
+| `fx-stadtgeschichte-coburg` | `www.stadtgeschichte-coburg.de` | Stadtgeschichte Coburg ("Typisch Coburg", Wissenswertes und Kurioses): curiosities and history of Coburg, for Place facts and Free walking tours. | facts only | yes | no |
 | `fx-statesymbolsusa` | `statesymbolsusa.org` | State Symbols USA: every official US state symbol with adoption year and statute, for Place facts and Places to see. | facts only | yes | no |
 | `fx-statoids` | `www.statoids.com` | Statoids (administrative divisions of countries): largest, smallest and oldest provinces and counties, odd boundaries, name changes, for Place facts. | facts only | yes | no |
+| `fx-storia-memoria-bologna` | `www.storiaememoriadibologna.it` | Storia e Memoria di Bologna (Comune di Bologna): Bologna places, streets, events, for Place facts and Free walking tours. | open | yes | no |
+| `fx-storiadimilano` | `www.storiadimilano.it` | Storia di Milano: Milan history, myths and legends, for Place facts. | facts only | yes | no |
+| `fx-storienapoli` | `storienapoli.it` | Storie di Napoli: Naples history and curiosities, for Place facts and Free walking tours. | facts only | yes | no |
+| `fx-survey-of-london` | `surveyoflondon.org` | Survey of London: Whitechapel (UCL): building-by-building history of Whitechapel, for Place facts, Places to see and Free walking tours. | facts only | yes | no |
+| `fx-sussex-parish-churches` | `sussexparishchurches.org` | Sussex Parish Churches: a church and village history for each Sussex parish, for Place facts and Places to see. | facts only | yes | no |
 | `fx-tara-rock-art` | `africanrockart.org` | TARA: Trust for African Rock Art: rock-art sites by country, for Place facts and Places to see. | facts only | yes | no |
 | `fx-the-conversation` | `theconversation.com` | The Conversation (history, heritage): academic-written history of places; filter by topic, for Place facts. | open | yes | no |
+| `fx-theirishstory` | `www.theirishstory.com` | The Irish Story: Irish history by place, for Place facts. | facts only | yes | no |
 | `fx-thevintagenews` | `www.thevintagenews.com` | The Vintage News: historical stories, some about places, for Place facts. | facts only | yes | no |
 | `fx-todayifoundout` | `feeds.feedburner.com`, `www.todayifoundout.com` | Today I Found Out: origins of place names, landmarks, little-known history, for Place facts. | facts only | yes | no |
+| `fx-toscana-ovunque-bella` | `www.toscanaovunquebella.it` | Toscana Ovunque Bella: unusual stories for every Tuscan comune (one per municipality), for Place facts, Places to see and Itinerary. | facts only | yes | no |
+| `fx-tr-arkeofili` | `arkeofili.com` | Arkeofili: archaeology news on Turkish sites (oldest, first, largest finds), for Place facts and Places to see. | facts only | yes | no |
+| `fx-tr-derintarih` | `www.derintarih.com` | Derin Tarih (dergi): popular-history magazine; Ottoman and Anatolian towns' curiosities, for Place facts. | facts only | yes | no |
+| `fx-tr-istanbultarihi` | `istanbultarihi.ist` | Büyük İstanbul Tarihi (İBB + İSAM): 10-volume history of Istanbul by district and topic, for Place facts, Places to see and Free walking tours. | facts only | yes | no |
+| `fx-tr-tarihvakfi` | `tarihvakfi.org.tr` | Tarih Vakfı (Toplumsal Tarih): local and urban history projects (e.g. neighbourhood histories), for Place facts. | facts only | yes | no |
+| `fx-tr-turkisharchaeonews` | `www.turkisharchaeonews.net` | Turkish Archaeological News: a gazetteer of ancient sites, monuments and museums in Turkey, for Place facts, Places to see and Activities. | facts only | yes | no |
 | `fx-turkmenportal` | `turkmenportal.com` | Turkmenportal: articles: articles on Turkmen cities, history and sights (Merv, Nisa, Kunya-Urgench); verify each item, for Place facts. | facts only | yes | no |
 | `fx-turquoise-mountain` | `www.turquoisemountain.org` | Turquoise Mountain: Murad Khani old city (Kabul), Yangon heritage buildings, for Place facts. | facts only | yes | no |
+| `fx-ua-castles` | `castles.com.ua` | Замки і храми України: castles, churches and manors by oblast, with history, for Place facts and Places to see. | facts only | yes | no |
+| `fx-ua-hmarochos` | `hmarochos.kiev.ua` | Хмарочос: київський міський журнал: Kyiv buildings, street names and history, for Place facts and Free walking tours. | facts only | yes | no |
+| `fx-ua-ieu` | `www.encyclopediaofukraine.com` | Internet Encyclopedia of Ukraine (CIUS, Univ. of Alberta): English entries on every Ukrainian city, oblast and many villages, for Place facts and Places to see. | facts only | yes | no |
+| `fx-ua-istpravda` | `www.istpravda.com.ua` | Історична правда: popular history; includes an "ЕКСКУРСІЇ" section about historic places, for Place facts. | facts only | yes | no |
+| `fx-ua-lia-lviv` | `lia.lvivcenter.org` | Львів Інтерактивний (Центр міської історії): peer-reviewed histories of Lviv buildings, streets and places, for Place facts, Places to see and Free walking tours. | facts only | yes | no |
+| `fx-ua-localhistory` | `localhistory.org.ua` | Локальна історія (журнал): local-history magazine; towns and villages of Ukraine, for Place facts and Places to see. | facts only | yes | no |
+| `fx-ua-lvivcenter` | `www.lvivcenter.org` | Центр міської історії Центрально-Східної Європи: urban-history research on Ukrainian cities, for Place facts. | facts only | yes | no |
+| `fx-ukrainer` | `www.ukrainer.net` | Ukraїner: town/village stories from all regions of Ukraine, for Place facts and Places to see. | facts only | yes | no |
+| `fx-undiscovered-scotland` | `www.undiscoveredscotland.co.uk` | Undiscovered Scotland: thousands of town and village pages, for Place facts and Places to see. | facts only | yes | no |
+| `fx-uppslagsverket` | `www.uppslagsverket.fi` | Uppslagsverket Finland: Swedish-speaking Finland towns, parishes, history, for Place facts. | facts only | yes | no |
+| `fx-uza` | `uza.uz` | UzA (Uzbekistan national news agency): history and curiosities of the places it covers, for Place facts. | facts only | yes | no |
+| `fx-vanilla-magazine` | `www.vanillamagazine.it` | Vanilla Magazine (Storia): curiosità storiche about places (sourced long-form), for Place facts. | facts only | yes | no |
+| `fx-visindavefur` | `www.visindavefur.is` | Vísindavefurinn (University of Iceland): expert answers on Icelandic places, names, curiosities, for Place facts. | facts only | yes | no |
+| `fx-vle-lt` | `www.vle.lt` | Visuotinė lietuvių enciklopedija: Lithuanian towns, villages and history, for Place facts and Places to see. | facts only | yes | no |
+| `fx-wienmuseum-magazin` | `magazin.wienmuseum.at` | Wien Museum Magazin: curator-written stories about Vienna places and curiosities, for Place facts and Free walking tours. | facts only | yes | no |
+| `fx-wiesbaden-stadtlexikon` | `www.wiesbaden.de` | Stadtlexikon Wiesbaden (Stadtarchiv): Wiesbaden places, buildings, history, for Place facts and Free walking tours. | facts only | yes | no |
 | `fx-wmf` | `www.wmf.org` | World Monuments Fund: World Monuments Watch site histories worldwide, for Place facts and Places to see. | facts only | yes | no |
 | `goturkiye` | `goturkiye.com` | Official Turkish destinations, routes and events, for Places to see, the itinerary and Events; also history and curiosities for Place facts. | facts only | yes | no |
 | `gov-aad` | `www.antarctica.gov.au` | Australian Antarctic Program: visitor rules, Macquarie/Heard islands, for Travel tips and Places to see; also history and curiosities for Place facts. | facts only | yes | no |
+| `gov-ad-cultura` | `www.govern.ad` | Govern d'Andorra: Cultura: Andorran heritage and Romanesque churches (low volume), for Place facts and Places to see. | facts only | yes | no |
+| `gov-aemet-extremos` | `www.aemet.es` | AEMET Valores extremos absolutos: absolute records per Spanish station, for Place facts and Weather. | open | yes | no |
 | `gov-akdn-historic-cities` | `the.akdn` | Aga Khan Trust for Culture / Historic Cities Programme: restored sites such as Bagh-e Babur and Herat old city (Afghanistan), Djenné/Mopti/Timbuktu mosques (Mali), Bukhara, Zanzibar, for Place facts and Places to see. | facts only | yes | no |
+| `gov-al-berat` | `bashkiaberat.gov.al` | Bashkia Berat: Berat UNESCO town, its heritage and history pages, for Place facts and Places to see. | facts only | yes | no |
+| `gov-al-tirana` | `tirana.al` | Bashkia Tiranë: Pikat e interesit: Tirana points of interest with short histories, for Place facts, Places to see and Activities. | facts only | yes | no |
+| `gov-at-bev-presse` | `www.bev.gv.at` | BEV (Austrian federal mapping agency) press archive (de / Austria): tripoints, geodetic control points, survey milestones, for Place facts. | facts only | yes | no |
+| `gov-be-belgium` | `www.belgium.be` | belgium.be: About Belgium: history, regions, symbols, for Place facts. | facts only | yes | no |
 | `gov-beijing-en` | `english.beijing.gov.cn` | Beijing Municipal Government (English): Visitor services, visa-free transit, payment and transport guides, for Travel tips, Visa, Local transportation and Events; also history and curiosities for Place facts. | facts only | yes | no |
 | `gov-bonito` | `www.bonito.ms.gov.br` | Prefeitura de Bonito (MS): eco-tourism voucher rules, attractions, for Places to see and Activities; also history and curiosities for Place facts. | facts only | yes | no |
+| `gov-ch-aboutswitzerland` | `www.aboutswitzerland.eda.admin.ch`, `www.eda.admin.ch` | About Switzerland (Presence Switzerland, FDFA): country, cantons, records, history, for Place facts. | facts only | yes | no |
+| `gov-ch-bfs` | `www.bfs.admin.ch` | Swiss Federal Statistical Office (BFS): commune portraits, for Place facts. | open | yes | no |
+| `gov-ch-swisstopo` | `www.swisstopo.admin.ch` | swisstopo (Federal Office of Topography): geographic centre, extremes, landscape names, for Place facts. | open | yes | no |
+| `gov-cy-famagusta` | `www.famagusta.org.cy` | Famagusta Municipality (Ammochostos, in exile): history of Famagusta and Varosha (Cyprus beyond Nicosia), for Place facts and Places to see. | facts only | yes | no |
+| `gov-cy-nicosia` | `www.nicosia.org.cy` | Nicosia Municipality: history of Nicosia, the walled city, monuments, for Place facts, Places to see and Free walking tours. | facts only | yes | no |
+| `gov-de-archives` | `archives.delaware.gov` | Delaware Public Archives (Delaware facts & symbols, markers): markers + symbols, for Place facts and Free walking tours. | facts only | yes | no |
+| `gov-de-deutschland` | `www.deutschland.de` | deutschland.de (Federal Foreign Office): history and curiosities of the places it covers, for Place facts, Places to see and Events. | facts only | yes | no |
+| `gov-de-tatsachen` | `www.tatsachen-ueber-deutschland.de` | Tatsachen ueber Deutschland / Facts about Germany (Federal Foreign Office): country and Laender facts, for Place facts. | facts only | yes | no |
+| `gov-devon-historic-environment` | `www.devon.gov.uk` | Devon County Council Historic Environment: Devon archaeology and historic-landscape news and guides, for Place facts. | facts only | yes | no |
+| `gov-dk-denmark` | `denmark.dk` | denmark.dk (Ministry of Foreign Affairs): history and curiosities of the places it covers, for Place facts. | facts only | yes | no |
+| `gov-donegal-heritage` | `www.donegalculture.ie` | Donegal County Council Culture Division: Heritage: heritage publications and place guides for Donegal, for Place facts. | facts only | yes | no |
+| `gov-ee-estonia` | `estonia.ee` | estonia.ee (Brand Estonia): country curiosities, for Place facts. | facts only | yes | no |
+| `gov-ee-stat` | `www.stat.ee` | Statistics Estonia: history and curiosities of the places it covers, for Place facts. | facts only | yes | no |
+| `gov-es-atlas-nacional` | `atlasnacional.ign.es`, `www.ign.es` | Atlas Nacional de España (IGN): Spain's extreme points, highest peaks and altitudes of provincial capitals, for Place facts. | open | yes | no |
+| `gov-es-ine-cifras` | `www.ine.es` | INE Spain (Espana en cifras): history and curiosities of the places it covers, for Place facts. | open | yes | no |
 | `gov-esa-earth-from-space` | `www.esa.int` | ESA: Earth from Space: a weekly satellite image of a named place with an explanatory caption, for Place facts and Places to see. | facts only | yes | no |
 | `gov-eu-countries` | `european-union.europa.eu` | European Union: EU country profiles: capitals, languages, accession history per member state, for Place facts and Travel tips. | open | yes | no |
+| `gov-fi-statfi` | `stat.fi` | Statistics Finland: history and curiosities of the places it covers, for Place facts. | open | yes | no |
+| `gov-fi-thisisfinland` | `finland.fi` | thisisFINLAND (Ministry for Foreign Affairs): "Finland in facts", curiosities, for Place facts. | facts only | yes | no |
+| `gov-fingal-heritage` | `www.fingal.ie` | Fingal County Council: Heritage: Fingal heritage publications and placenames, for Place facts and Places to see. | facts only | yes | no |
+| `gov-fr-insee` | `www.insee.fr` | INSEE (France, portrait de territoire): commune/region figures, for Place facts. | open | yes | no |
 | `gov-gilgit-baltistan` | `www.gilgitbaltistan.gov.pk` | Gilgit-Baltistan Government notices (NOC/permits), for Places to see and Travel tips; also history and curiosities for Place facts. | facts only | yes | no |
+| `gov-hungarikum` | `www.hungarikum.hu` | Hungarikum / Magyar Értéktár (national values register): officially listed Hungarian national values by county/town, for Place facts. | facts only | yes | no |
+| `gov-kilkenny-heritage` | `www.kilkennycoco.ie` | Kilkenny County Council: Heritage: Kilkenny heritage plan and publications, for Place facts. | facts only | yes | no |
+| `gov-knmi-ranglijsten` | `www.knmi.nl` | KNMI Ranglijsten (Dutch weather record lists): hottest and coldest, heatwaves and cold numbers per year and station, for Place facts and Weather. | open | yes | no |
+| `gov-kz-ehistory` | `e-history.kz` | e-history.kz (official history portal of Kazakhstan): history of Kazakh cities and regions, for Place facts. | facts only | yes | no |
 | `gov-leh` | `leh.nic.in` | District Leh (Ladakh): tourism, permits, notices, for Places to see, Visa and Travel tips; also history and curiosities for Place facts. | facts only | yes | no |
+| `gov-limerick-historical` | `www.limerick.ie` | Limerick.ie: Historical Resources: Limerick city and county history resources (Limerick Archives), for Place facts. | facts only | yes | no |
+| `gov-louth-heritage` | `www.louthcoco.ie` | Louth County Council: Heritage: Louth heritage publications, for Place facts. | facts only | yes | no |
+| `gov-lu-public` | `luxembourg.public.lu` | luxembourg.public.lu (official presentation of Luxembourg): history and curiosities of the places it covers, for Place facts. | facts only | yes | no |
+| `gov-lv-latvia` | `www.latvia.eu` | latvia.eu (Latvian Institute): history and curiosities of the places it covers, for Place facts. | facts only | yes | no |
+| `gov-mc-gouv` | `www.gouv.mc` | Gouvernement Princier de Monaco: Monaco institutions, history, territory facts, for Place facts and Places to see. | facts only | yes | no |
+| `gov-mc-palais` | `palais.mc` | Palais Princier de Monaco: history of the Prince's Palace and the Grimaldi dynasty, for Place facts and Places to see. | facts only | yes | no |
+| `gov-md-manual` | `msa.maryland.gov` | Maryland Manual: Maryland at a Glance: symbols, firsts, county origins, records, for Place facts. | facts only | yes | no |
+| `gov-metoffice-uk-extremes` | `www.metoffice.gov.uk` | Met Office UK climate extremes + monthly records blog: UK and per-country records by station (e.g. 40.3 °C at Coningsby), for Place facts and Weather. | facts only | yes | no |
+| `gov-mt-history` | `mhs.mt.gov` | Montana Historical Society: signs/markers, state history, for Place facts and Places to see. | facts only | yes | no |
 | `gov-nepal-motca` | `www.tourism.gov.np` | Ministry of Culture, Tourism and Civil Aviation Nepal: Mountaineering royalties, tourism rules and notices, for Travel tips and Activities; also history and curiosities for Place facts. | facts only | yes | no |
+| `gov-no-sametinget` | `sametinget.no` | Sámediggi / Sametinget (Norway): Sámi place-name and language facts (low volume), for Place facts. | facts only | yes | no |
+| `gov-no-ssb` | `www.ssb.no` | Statistics Norway (SSB): Kommunefakta per municipality, for Place facts. | open | yes | no |
+| `gov-os-blog` | `www.ordnancesurvey.co.uk` | Ordnance Survey blog (centre of Great Britain, extremities, highest points): GB centre (7 km NW of Dunsop Bridge), map oddities and curious names, for Place facts. | facts only | yes | no |
+| `gov-pl-stat` | `stat.gov.pl` | Statistics Poland (GUS): history and curiosities of the places it covers, for Place facts. | open | yes | no |
 | `gov-sabanew-yemen` | `www.sabanew.net` | Saba Net (sabanew.net): Yemeni heritage news (thin; politically contested agency), for Place facts. | facts only | yes | no |
+| `gov-scotland-org` | `www.scotland.org` | Scotland.org: Scottish Facts (Scottish Government): "Scottish facts", inventions, symbols, for Place facts. | facts only | yes | no |
+| `gov-se-sametinget` | `sametinget.se` | Sametinget (Sweden): Sámi language and place-name work, culture, for Place facts. | facts only | yes | no |
+| `gov-se-sweden` | `sweden.se` | sweden.se (Swedish Institute): history and curiosities of the places it covers, for Place facts. | facts only | yes | no |
+| `gov-si-slovenia` | `slovenia.si` | slovenia.si (Government Communication Office): history and curiosities of the places it covers, for Place facts. | facts only | yes | no |
+| `gov-tr-kulturportali` | `www.kulturportali.gov.tr` | Türkiye Kültür Portalı (Kültür ve Turizm Bakanlığı): official page per il with history, sights and the inventory of cultural assets, for Place facts and Places to see. | facts only | yes | no |
+| `gov-tr-muze` | `muze.gov.tr` | Müzeler ve Ören Yerleri (muze.gov.tr, KTB): official museum and archaeological-site pages with history, for Place facts and Places to see. | facts only | yes | no |
+| `gov-ua-uinp` | `uinp.gov.ua` | Український інститут національної пам'яті: history articles and dated anniversaries; place renamings (decommunisation and toponymy), for Place facts. | open | yes | no |
+| `gov-uk-bgs` | `www.bgs.ac.uk` | British Geological Survey: the largest UK earthquakes, geology of named landmarks, record rocks, for Place facts and Places to see. | facts only | yes | no |
+| `gov-uk-cityoflondon` | `www.cityoflondon.gov.uk` | City of London: History and heritage: Square Mile history, Guildhall, livery, for Place facts, Places to see and Free walking tours. | facts only | yes | no |
 | `gov-ungegn` | `unstats.un.org` | UN Group of Experts on Geographical Names: official country and capital names, exonyms. Low volume, for Place facts. | facts only | yes | no |
+| `gov-va-vaticanstate` | `vaticanstate.va` | Stato della Città del Vaticano: Vatican City State facts, geography, history, monuments, for Place facts and Places to see. | facts only | yes | no |
+| `gov-wales-com` | `www.wales.com` | Wales.com: About Wales (Welsh Government): language, castles-per-capita style facts, for Place facts. | facts only | yes | no |
+| `her-al-iktk` | `iktk.gov.al` | Instituti Kombëtar i Trashëgimisë Kulturore (Albania): Albanian national cultural-heritage assets and monument decisions, for Place facts and Places to see. | facts only | yes | no |
 | `her-alecso` | `www.alecso.org` | ALECSO (Arab League Educational, Cultural and Scientific Organization): Arab heritage lists and culture news (low yield), for Place facts. | facts only | yes | no |
 | `her-apartheid-museum` | `www.apartheidmuseum.org` | Apartheid Museum: history and curiosities of the places it covers, for Place facts and Activities. | facts only | yes | no |
+| `her-at-bda` | `www.bda.gv.at` | Bundesdenkmalamt (Austria): Austrian monument list (per-Land PDFs) plus heritage stories, for Place facts and Places to see. | facts only | yes | no |
+| `her-atlas-mutual-heritage` | `atlasmutualheritage.nl` | Atlas of Mutual Heritage: VOC/WIC-era forts, lodges and towns in Suriname, Guyana, the Caribbean, West Africa and Asia, for Place facts and Places to see. | facts only | yes | no |
 | `her-awhf` | `awhf.net` | African World Heritage Fund: pan-African World Heritage site facts, for Place facts. | facts only | yes | no |
+| `her-ba-kons` | `kons.gov.ba` | Komisija za očuvanje nacionalnih spomenika BiH: decisions designating national monuments of Bosnia and Herzegovina, each with a historical description, for Place facts and Places to see. | facts only | yes | no |
+| `her-be-bru-monument` | `monument.heritage.brussels` | Inventaire du patrimoine architectural (Brussels): street-by-street building histories for Brussels, for Place facts, Places to see and Free walking tours. | facts only | yes | no |
+| `her-be-vl-inventaris` | `inventaris.onroerenderfgoed.be` | Inventaris Onroerend Erfgoed (Flanders): building histories for every Flemish town, for Place facts, Places to see and Free walking tours. | facts only | yes | no |
+| `her-be-wal-awap` | `agencewallonnedupatrimoine.be` | AWaP (Wallonia heritage agency): Walloon classified monuments and places to visit, for Place facts and Places to see. | facts only | yes | no |
+| `her-british-listed-buildings` | `britishlistedbuildings.co.uk` | British Listed Buildings: list-entry text for England, Scotland and Wales by parish, for Place facts and Places to see. | facts only | yes | no |
+| `her-bucks-heritage-portal` | `heritageportal.buckinghamshire.gov.uk` | Buckinghamshire's Heritage Portal (HER): parish histories and monument records, for Place facts and Places to see. | facts only | yes | no |
+| `her-by-museum-by` | `museum.by` | Museum.by: museums of Belarus: catalogue of Belarusian museums by town with histories of the sites, for Place facts, Places to see and Activities. | facts only | yes | no |
 | `her-cadw` | `cadw.gov.wales` | Cadw (Welsh Government historic environment): 130+ castles, abbeys, opening times, events, for Places to see and Events; also history and curiosities for Place facts. | facts only | yes | no |
+| `her-chwb` | `chwb.org` | Cultural Heritage without Borders: restored monuments in Kosovo, Albania, BiH with short histories (low volume), for Place facts and Places to see. | facts only | yes | no |
+| `her-connaitre-wallonie` | `connaitrelawallonie.wallonie.be` | Connaître la Wallonie (SPW): official Walloon history, symbols, heritage, for Place facts. | facts only | yes | no |
 | `her-cornwall-heritage-trust` | `www.cornwallheritagetrust.org` | Cornwall Heritage Trust: the trust's Cornish monument sites, for Place facts and Places to see. | facts only | yes | no |
+| `her-cz-npu` | `npu.cz` | Národní památkový ústav: Czech state castles and chateaux, heritage news (catalogue pamatkovykatalog.cz already covered), for Place facts, Places to see and Activities. | facts only | yes | no |
+| `her-de-bb-bldam` | `bldam-brandenburg.de` | BLDAM Brandenburg: Brandenburg Denkmalliste (per-Kreis PDFs) and features, for Place facts and Places to see. | facts only | yes | no |
+| `her-de-berlin-denkmaldb` | `denkmaldatenbank.berlin.de` | Denkmaldatenbank Berlin: every Berlin monument, with construction history and architects, for Place facts, Places to see and Free walking tours. | facts only | yes | no |
+| `her-de-bw-denkmalpflege` | `www.denkmalpflege-bw.de` | Landesamt für Denkmalpflege Baden-Württemberg: Denkmal des Monats and monument histories, for Place facts and Places to see. | facts only | yes | no |
+| `her-de-gartenreich` | `gartenreich.de` | Kulturstiftung Dessau-Wörlitz (Gartenreich): Dessau-Wörlitz Garden Realm palaces and gardens, for Place facts, Places to see and Activities. | facts only | yes | no |
+| `her-de-he-denkxweb` | `denkxweb.denkmalpflege-hessen.de` | DenkXweb (Landesamt für Denkmalpflege Hessen): every Hessian monument, with a description, for Place facts, Places to see and Free walking tours. | facts only | yes | no |
+| `her-de-lsa-kulturstiftung` | `www.kulturstiftung-st.de` | Kulturstiftung Sachsen-Anhalt (castles, palaces, cathedrals): Saxony-Anhalt castles, palaces, cathedrals (Moritzburg, Falkenstein), for Place facts, Places to see and Activities. | facts only | yes | no |
+| `her-de-lsa-lda` | `www.lda-lsa.de` | Landesamt für Denkmalpflege und Archäologie Sachsen-Anhalt: Saxony-Anhalt monuments, archaeology finds (Nebra), regional history, for Place facts and Places to see. | facts only | yes | no |
+| `her-de-mv-kulturwerte` | `www.kulturwerte-mv.de` | Landesamt für Kultur und Denkmalpflege Mecklenburg-Vorpommern: MV monument news, denkmal des Monats, archaeology finds, for Place facts and Places to see. | facts only | yes | no |
+| `her-de-mv-schloesser` | `mv-schloesser.de` | Staatliche Schlösser und Gärten Mecklenburg-Vorpommern: MV state palaces (Schwerin, Güstrow, Ludwigslust), for Place facts, Places to see and Activities. | facts only | yes | no |
+| `her-de-nrw-lvr-denkmalpflege` | `www.lvr.de` | LVR-Amt für Denkmalpflege im Rheinland: Rhineland monuments, Denkmal des Monats (lvr.de main host is not in corpus), for Place facts and Places to see. | facts only | yes | no |
+| `her-de-nrw-lwl-industriekultur` | `www.lwl-industriekultur.de` | LWL-Museen für Industriekultur: eight Westphalian industrial sites (Zeche Zollern, Henrichshütte) and their history, for Place facts and Places to see. | facts only | yes | no |
+| `her-de-rp-gdke` | `gdke.rlp.de` | GDKE Rheinland-Pfalz: Nachrichtliches Verzeichnis der Kulturdenkmäler (PDFs), for Place facts and Places to see. | facts only | yes | no |
+| `her-de-sl-voelklinger-huette` | `voelklinger-huette.org` | Weltkulturerbe Völklinger Hütte: Saarland's UNESCO ironworks and its history, for Place facts, Places to see and Activities. | facts only | yes | no |
+| `her-de-sn-lfd` | `www.lfd.sachsen.de` | Landesamt für Denkmalpflege Sachsen: Saxon monument features and the Denkmalliste, for Place facts and Places to see. | facts only | yes | no |
+| `her-de-th-klassik-weimar` | `www.klassik-stiftung.de` | Klassik Stiftung Weimar: Weimar Classicism and Bauhaus UNESCO sites, Goethe/Schiller houses, for Place facts, Places to see and Free walking tours. | facts only | yes | no |
+| `her-de-th-schloesser` | `www.thueringerschloesser.de` | Stiftung Thüringer Schlösser und Gärten: Thuringia's state-owned palaces (Heidecksburg, Friedenstein, Dornburg), for Place facts, Places to see and Activities. | facts only | yes | no |
+| `her-de-th-wartburg` | `www.wartburg.de` | Wartburg-Stiftung: Wartburg castle history (Luther, Saint Elisabeth, the Wartburg festival), for Place facts and Places to see. | facts only | yes | no |
+| `her-dk-danmarks-kirker` | `danmarkskirker.natmus.dk` | Danmarks Kirker (Nationalmuseet): scholarly descriptions of every Danish church (building history, fittings), for Place facts and Places to see. | facts only | yes | no |
+| `her-dk-slks` | `slks.dk` | Slots- og Kulturstyrelsen: Danish listed buildings and ancient monuments, for Place facts and Places to see. | facts only | yes | no |
+| `her-ebidat` | `www.ebidat.de` | EBIDAT Burgendatenbank (Europäisches Burgeninstitut): 10,000+ castles in Germany and Europe with dates, owners, building history, for Place facts and Places to see. | facts only | yes | no |
+| `her-ees` | `www.ees.ac.uk` | Egypt Exploration Society: Egyptian sites (Amarna, Oxyrhynchus), for Place facts. | facts only | yes | no |
+| `her-es-castillosnet` | `www.castillosnet.org` | CastillosNet (Castillos de España): every castle, tower and fortification in Spain with history, for Place facts and Places to see. | facts only | yes | no |
+| `her-es-cat-invarquit` | `invarquit.cultura.gencat.cat` | Inventari del Patrimoni Arquitectònic de Catalunya: Catalan architectural heritage records, for Place facts and Places to see. | facts only | yes | no |
+| `her-es-cyl-patrimonio` | `patrimoniocultural.jcyl.es` | Patrimonio Cultural de Castilla y León: BIC monuments in Castilla y León, for Place facts and Places to see. | facts only | yes | no |
+| `her-es-hispania-nostra-lista-roja` | `www.hispanianostra.org` | Hispania Nostra: Lista Roja del Patrimonio: endangered monuments of Spain with history and status, for Place facts and Places to see. | facts only | yes | no |
+| `her-es-iaph-guiadigital` | `guiadigital.iaph.es` | Guía Digital del Patrimonio Cultural de Andalucía (IAPH): Andalusian heritage objects with historical data, for Place facts, Places to see and Free walking tours. | open | yes | no |
+| `her-excavations-ie` | `excavations.ie` | Excavations.ie (Database of Irish Excavation Reports): 32k+ excavation summaries by townland and county, for Place facts and Places to see. | facts only | yes | no |
+| `her-fi-kyppi` | `www.kyppi.fi` | Kulttuuriympäristön palveluikkuna: Finnish heritage register (monuments, protected buildings), for Place facts and Places to see. | facts only | yes | no |
+| `her-fi-rky` | `www.rky.fi` | RKY: nationally significant built cultural environments: about 1,300 Finnish environments, with history essays, for Place facts, Places to see and Free walking tours. | facts only | yes | no |
+| `her-fr-atlas-historique-paris` | `www.paris-atlas-historique.fr` | Atlas historique de Paris (fr / Paris quarters): academic map-based history of each Paris quarter, for Place facts. | facts only | yes | no |
+| `her-fr-bfc-patrimoine` | `patrimoine.bourgognefranchecomte.fr` | Portail patrimoine Bourgogne-Franche-Comté: inventory studies of towns and villages in Burgundy-Franche-Comté, for Place facts and Places to see. | facts only | yes | no |
+| `her-fr-occitanie-patrimoines` | `patrimoines.laregion.fr` | Patrimoines en Occitanie (Inventaire général): Occitanie heritage inventory, sites per département, for Place facts and Places to see. | facts only | yes | no |
+| `her-fr-pdl-patrimoine` | `www.patrimoine.paysdelaloire.fr`, `patrimoine.paysdelaloire.fr` | Patrimoine des Pays de la Loire: Pays de la Loire inventory dossiers and heritage trails, for Place facts, Places to see and Free walking tours. | facts only | yes | no |
+| `her-fr-pop` | `pop.culture.gouv.fr` | POP – Plateforme ouverte du patrimoine: "historique" texts for Mérimée monuments and Palissy objects. Adds narrative to the existing od-fr-merimee, for Place facts and Places to see. | open | yes | no |
+| `her-gb-leeds-blue-plaques` | `leedscivictrust.org.uk` | Leeds Civic Trust blue plaques: plaque texts for Leeds people and places, for Place facts, Places to see and Free walking tours. | facts only | yes | no |
+| `her-ge-museum` | `museum.ge` | Georgian National Museum: museums and museum-reserves (Dmanisi, Vani, Uplistsikhe), for Place facts. | facts only | yes | no |
+| `her-ge-nachp` | `www.heritagesites.ge` | National Agency for Cultural Heritage Preservation of Georgia: official heritage sites and museum-reserves with history, for Place facts and Places to see. | facts only | yes | no |
+| `her-heneb-wales` | `heneb.org.uk` | Heneb: Trust for Welsh Archaeology (incl. CPAT/GGAT archives): Welsh village and settlement histories, new finds, for Place facts and Places to see. | open | yes | no |
+| `her-herefordshire-through-time` | `htt.herefordshire.gov.uk` | Herefordshire Through Time (HER): Herefordshire towns, villages and sites, for Place facts and Places to see. | facts only | yes | no |
+| `her-heritage-gov-rs` | `heritage.gov.rs` | Republički zavod za zaštitu spomenika kulture (Serbia): Serbian immovable cultural property with history, for Place facts. | facts only | yes | no |
+| `her-highland-her` | `her.highland.gov.uk` | Highland Historic Environment Record: Highland designations and monuments, for Place facts and Places to see. | facts only | yes | no |
+| `her-historypoints` | `historypoints.org` | HistoryPoints (Wales QR plaques): thousands of Welsh building and place-name notes, for Place facts, Places to see and Free walking tours. | facts only | yes | no |
+| `her-hu-muemlekem` | `www.muemlekem.hu` | Műemlékem.hu: Hungarian listed monuments with descriptions, for Place facts and Places to see. | facts only | yes | no |
+| `her-ie-niah` | `www.buildingsofireland.ie` | National Inventory of Architectural Heritage: building appraisals for every Irish county, for Place facts, Places to see and Free walking tours. | facts only | yes | no |
+| `her-is-minjastofnun` | `www.minjastofnun.is` | Minjastofnun Íslands: Icelandic protected sites and buildings, for Place facts and Places to see. | facts only | yes | no |
+| `her-it-cm-pompeii` | `pompeiisites.org` | Parco Archeologico di Pompei: Pompeii, Herculaneum region sites, domus histories, new-find press releases (Campania), for Place facts, Places to see and Activities. | facts only | yes | no |
+| `her-it-er-pater` | `patrimonioculturale.regione.emilia-romagna.it` | Patrimonio culturale Emilia-Romagna (PatER): Emilia-Romagna architecture, landscapes, museums (successor of IBC), for Place facts and Places to see. | facts only | yes | no |
+| `her-it-fai-luoghi` | `fondoambiente.it` | FAI: Fondo per l'Ambiente Italiano, Luoghi: FAI properties and 'Luoghi del Cuore' with histories, for Place facts, Places to see and Activities. | facts only | yes | no |
+| `her-it-lombardia-bbcc` | `www.lombardiabeniculturali.it` | Lombardia Beni Culturali: Lombardy architecture catalogue with history notes, for Place facts, Places to see and Free walking tours. | facts only | yes | no |
+| `her-it-pi-venaria` | `lavenaria.it` | La Venaria Reale (Residenze Reali Sabaude): Savoy royal residence history (Piemonte), for Place facts, Places to see and Activities. | facts only | yes | no |
+| `her-it-pu-cartapulia` | `www.cartapulia.it` | CartApulia: Carta dei Beni Culturali della Puglia: catalogue of Puglia's monuments, masserie, sites per comune, for Place facts and Places to see. | facts only | yes | no |
+| `her-it-veneto-irvv` | `irvv.net` | Istituto Regionale Ville Venete: catalogo: catalogue of the ~4,000 Venetian villas by comune, for Place facts and Places to see. | facts only | yes | no |
 | `her-keys-to-the-past` | `keystothepast.info` | Keys to the Past (Durham and Northumberland HER): archaeology and history of every parish in the two counties, for Place facts, Places to see and Free walking tours. | facts only | yes | no |
+| `her-kuladig` | `www.kuladig.de` | KuLaDig Kultur.Landschaft.Digital (LVR et al.): geolocated heritage objects with history texts (Rhineland, Hesse, Saxony...), for Place facts, Places to see and Free walking tours. | facts only | yes | no |
+| `her-lost-villages-hull` | `dmv.wordpress.hull.ac.uk`, `dmv.hull.ac.uk` | Beresford's Lost Villages (Univ. of Hull): 2,263 deserted medieval villages and why they were deserted, for Place facts and Places to see. | share-alike | yes | no |
+| `her-lu-inpa` | `inpa.public.lu` | INPA Luxembourg: national protected monuments, for Place facts and Places to see. | facts only | yes | no |
+| `her-mois-ee` | `www.mois.ee` | Mois.ee: Estonian manors portal (Estonian Academy of Arts): history of every Estonian manor, the core of most Estonian villages, for Place facts and Places to see. | open | yes | no |
+| `her-mt-heritage-malta` | `heritagemalta.mt` | Heritage Malta: Malta's state sites (Ħal Saflieni, Ġgantija, forts) with history, for Place facts, Places to see and Activities. | facts only | yes | no |
+| `her-no-kulturminnesok` | `www.kulturminnesok.no` | Kulturminnesøk (Riksantikvaren): Norwegian cultural monuments, with short histories, for Place facts, Places to see and Free walking tours. | facts only | yes | no |
+| `her-norfolk-heritage-explorer` | `www.heritage.norfolk.gov.uk` | Norfolk Heritage Explorer (Norfolk HER): one history summary for every Norfolk parish, plus monument records, for Place facts and Places to see. | facts only | yes | no |
 | `her-opendomesday` | `opendomesday.org` | Open Domesday (every place in Domesday Book, 1086): what each English village was in 1086 (households, ploughs, mills, value, lords), for Place facts, Places to see and Free walking tours. | share-alike | yes | no |
 | `her-owhc-cities` | `www.ovpm.org` | Organization of World Heritage Cities: about 300 member cities with their World Heritage inscription and history (not a UNESCO host, so the unesco.org denial does not apply), for Place facts and Places to see. | facts only | yes | no |
+| `her-patrimoni-gencat` | `patrimoni.gencat.cat` | Patrimoni Cultural (Generalitat de Catalunya): Catalan monuments history, for Place facts. | facts only | yes | no |
+| `her-patrimonio-aragon` | `patrimonioculturaldearagon.es` | Patrimonio Cultural de Aragón (Gobierno de Aragón): Aragonese heritage assets with history, for Place facts and Places to see. | facts only | yes | no |
+| `her-pl-zabytek` | `zabytek.pl` | Zabytek.pl (NID): Polish registered monuments, with history descriptions, for Place facts, Places to see and Free walking tours. | facts only | yes | no |
+| `her-ran-cimec` | `ran.cimec.ro` | Repertoriul Arheologic Național (CIMEC): archaeological sites per Romanian locality, for Place facts. | facts only | yes | no |
+| `her-ro-inp-cimec` | `cimec.ro` | INP: Direcția Patrimoniului Digital (cIMeC): Romanian heritage databases hub (monuments, museums, archaeology; distinct from ran.cimec.ro, which is already covered), for Place facts and Places to see. | facts only | yes | no |
+| `her-ro-patrimoniu` | `www.patrimoniu.ro` | Institutul Național al Patrimoniului: Romanian LMI list of historic monuments, for Place facts and Places to see. | facts only | yes | no |
+| `her-rs-beograd-nasledje` | `beogradskonasledje.rs` | Zavod za zaštitu spomenika kulture grada Beograda: Digitalni registar: Belgrade cultural-property register by municipality, with history of each building, for Place facts, Places to see and Free walking tours. | facts only | yes | no |
+| `her-rs-vojvodina-pzzzsk` | `pzzzsk.rs` | Pokrajinski zavod za zaštitu spomenika kulture (Vojvodina): Vojvodina monuments and conservation news (Petrovaradin, Novi Sad, Sremski Karlovci), for Place facts and Places to see. | facts only | yes | no |
+| `her-saba-park` | `sabapark.org` | Saba Conservation Foundation (Saba parks): Mount Scenery (887 m) is the highest point in the Kingdom of the Netherlands, for Place facts and Activities. | facts only | yes | no |
+| `her-scot-hes-designations` | `inspire.hes.scot` | HES Designations WFS (Listed Buildings, Scheduled Monuments, WHS, Battlefields, Gardens,…: every designated site in Scotland, with name, category and designation date. This is the open route around the blocked portal.historicenvironment.scot, for Place facts and Places to see. | open | yes | no |
+| `her-se-fornsok` | `app.raa.se` | Fornsök (Swedish Heritage Board): ancient monuments and sites in Sweden, for Place facts and Places to see. | open | yes | no |
+| `her-se-sfv` | `www.sfv.se`, `sfv.se` | Statens fastighetsverk: histories of Swedish royal palaces, castles, fortresses and state buildings, for Place facts, Places to see and Activities. | facts only | yes | no |
+| `her-si-rkd` | `rkd.situla.org` | Register kulturne dediščine (Slovenia): more than 30k Slovenian heritage units, for Place facts and Places to see. | facts only | yes | no |
+| `her-sk-pamiatky` | `www.pamiatky.sk` | Pamiatkový úrad SR (registers + open data): Slovak national cultural monuments list, for Place facts and Places to see. | open | yes | no |
+| `her-sm-musei-di-stato` | `museidistato.sm` | Istituti Culturali della Repubblica di San Marino: the Three Towers, Palazzo Pubblico and state museums of San Marino, for Place facts and Places to see. | facts only | yes | no |
+| `her-somerset-her` | `www.somersetheritage.org.uk` | Somerset HER (South West Heritage Trust): Somerset town surveys (EUS) and HER records, for Place facts and Places to see. | facts only | yes | no |
 | `her-statia-park` | `statiapark.org` | St. Eustatius National Parks (STENAPA): The Quill volcano, marine park (Sint Eustatius), for Place facts and Activities. | facts only | yes | no |
 | `her-stinapa-bonaire` | `stinapabonaire.org` | STINAPA Bonaire: Washington Slagbaai NP, Bonaire marine park (stinapa.org redirects here), for Place facts and Activities. | facts only | yes | no |
+| `her-suffolk-heritage-explorer` | `heritage.suffolk.gov.uk` | Suffolk Heritage Explorer (Suffolk HER): monument and parish records, for Place facts and Places to see. | facts only | yes | no |
+| `her-sussex-past` | `sussexpast.co.uk` | Sussex Archaeological Society (Sussex Past): histories of Lewes Castle, Fishbourne and other sites, for Place facts, Places to see and Activities. | facts only | yes | no |
 | `her-terramar-bonaire` | `terramarmuseum.org` | TERRAMAR Museum (Bonaire): archaeology and history of Bonaire and the ABC islands (terramarmuseum.com redirects here), for Place facts. | facts only | yes | no |
+| `her-tr-unesco-milli-komisyon` | `www.unesco.org.tr` | UNESCO Türkiye Millî Komisyonu: Turkish texts on World Heritage, tentative-list and intangible-heritage items, for Place facts and Places to see. | facts only | yes | no |
+| `her-uk-ni-hed` | `www.communities-ni.gov.uk` | NI Historic Environment Division: NI listed buildings, scheduled monuments and state-care sites, for Place facts and Places to see. | facts only | yes | no |
+| `her-uk-ni-ulster-history-circle` | `ulsterhistorycircle.org.uk` | Ulster History Circle blue plaques: blue plaques across Northern Ireland, for Place facts, Places to see and Free walking tours. | facts only | yes | no |
+| `her-uk-wales-coflein` | `coflein.gov.uk` | Coflein (RCAHMW / NMRW): site descriptions for Wales (complements her-cadw), for Place facts and Places to see. | open | yes | no |
 | `her-virunga` | `virunga.org` | Virunga National Park: Africa's oldest national park (1925), mountain gorillas, Nyiragongo (DRC), for Place facts and Activities. | facts only | yes | no |
+| `her-xk-cultural-bridge-prizren` | `culturalbridgepz.org` | Cultural Bridge Prizren: Kosovo's 2016 permanent-protection list, Prizren monuments, UNESCO sites, for Place facts and Places to see. | facts only | yes | no |
 | `her-zamani` | `zamaniproject.org` | Zamani Project (University of Cape Town): pages on documented heritage sites across Africa and the Middle East (Lalibela, Gondar, Kilwa, Petra…), for Place facts and Places to see. | facts only | yes | no |
 | `incredibleindia` | `www.incredibleindia.gov.in` | Official Indian destinations, attractions, festivals and itineraries, for Places to see, the itinerary and Events; also history and curiosities for Place facts. | facts only | yes | no |
 | `mag-hiddeneurope` | `www.hiddeneurope.eu` | hidden europe magazine: travel articles and guides, for Local transportation, Places to see and Travel tips; also history and curiosities for Place facts. | facts only | yes | no |
@@ -4090,11 +4860,17 @@ docs/wiki/Place-Facts-Data.md).
 | `nps-site` | `www.nps.gov` | Official things to do, tours, trails and ranger events for more than 400 US national parks, for Places to see, Activities, the itinerary and Events; also history and curiosities for Place facts. | open | yes | no |
 | `nsw-national-parks` | `www.nationalparks.nsw.gov.au` | Every New South Wales national park, walking track and campground or cabin, for Places to see, Activities and Hotels; also history and curiosities for Place facts. | open | yes | no |
 | `od-dbpedia` | `dbpedia.org`, `databus.dbpedia.org` | DBpedia (SPARQL + Databus dumps): infobox nicknames, mottos and founding dates not yet in Wikidata; low priority (largely redundant with enwiki-dump), for Place facts and Places to see. | share-alike | yes | no |
+| `od-de-hh-denkmalliste` | `api.hamburg.de`, `suche.transparenz.hamburg.de` | Hamburg Denkmalliste (Denkmalschutzamt): every listed monument and plaque in Hamburg, for Place facts, Places to see and Free walking tours. | open | yes | no |
 | `od-factbook-json` | `raw.githubusercontent.com` | CIA World Factbook final edition (2026-02-04) as JSON: highest and lowest points, area, World Heritage count, national symbols, former names and independence dates of every country, for Place facts. | open | yes | no |
+| `od-heritage-maps-ie` | `www.heritagemaps.ie` | Heritage Maps (Heritage Council): NIAH, SMR, graveyards, holy wells and similar layers for every county, for Place facts and Places to see. | open | yes | no |
+| `od-it-comuni-italiani` | `www.comuni-italiani.it` | Comuni-Italiani.it: per-comune data (altitude, area, patron saint and feast day, demonym), for Place facts. | facts only | yes | no |
+| `od-latvia-vietvardi` | `vietvardi.lgia.gov.lv` | LĢIA Vietvārdu datubāze (Latvian place-names database): historical names and notes for Latvian places, for Place facts. | facts only | yes | no |
+| `od-slownik-geograficzny` | `dir.icm.edu.pl` | Słownik geograficzny Królestwa Polskiego (1880–1902, ICM): 19th-c. gazetteer entries for every village in former Polish lands (PL/LT/BY/UA), for Place facts. | open | yes | no |
 | `od-spc-sdd-country` | `sdd.spc.int` | SPC Statistics for Development Division country pages: official key figures for 22 Pacific countries and territories (population, land area, EEZ), for Place facts. | facts only | yes | no |
 | `od-syriaca` | `syriaca.org` | Syriaca.org Gazetteer: historical Syriac and Middle Eastern place gazetteer, for Place facts and Places to see. | open | yes | no |
 | `od-toponimia-galicia` | `toponimia.xunta.gal` | Toponimia de Galicia (Xunta: Proxecto Toponimia): official names of every Galician parish and lugar (hamlet), plus name-origin articles, for Place facts. | open | yes | no |
 | `od-undata-profiles` | `data.un.org` | UNdata country profiles: area, population, capital, economy facts per country, for Place facts. | open | yes | no |
+| `od-wgms` | `wgms.ch` | World Glacier Monitoring Service: glacier records per country (longest series, fastest loss, reference glaciers), for Place facts. | open | yes | no |
 | `od-wikidata-entitydata` | `www.wikidata.org` | Wikidata place items (CC0): founding dates, former names, nicknames, mottos, records, twin towns and heritage designations as typed statements, for Place facts and Places to see. | open | yes | no |
 | `od-wmo-extremes` | `wmo.int` | WMO World Weather and Climate Extremes Archive: world, hemispheric and regional records with site, coordinates and date (e.g. Kebili 55.0 °C), for Place facts and Weather. | facts only | yes | no |
 | `official-inah` | `www.inah.gob.mx` | Mexico's national museums and archaeological sites with prices and opening days, for Places to see and Travel tips; also history and curiosities for Place facts. | facts only | yes | no |
@@ -4114,6 +4890,7 @@ docs/wiki/Place-Facts-Data.md).
 | `ref-highest-bridges` | `highestbridges.com` | HighestBridges.com: the highest bridges by country and region (height, year), for Place facts. | facts only | yes | no |
 | `ref-japan-guide` | `www.japan-guide.com` | japan-guide.com: travel articles and guides, for Places to see, Activities and Travel tips; also history and curiosities for Place facts. | facts only | yes | no |
 | `ref-machupicchu` | `www.machupicchu.gob.pe` | Machu Picchu official (Ministerio de Cultura, Cusco): circuits, rules, capacity, for Places to see, Travel tips and the itinerary; also history and curiosities for Place facts. | facts only | yes | no |
+| `ref-md-enciclopedia-asm` | `enciclopedia.asm.md` | Centrul de Cercetări Enciclopedice (Enciclopedia Moldovei): Moldovan encyclopedia (Academy of Sciences); localities and history, for Place facts and Places to see. | facts only | yes | no |
 | `ref-nsidc-glacier-facts` | `nsidc.org` | NSIDC: Glacier quick facts: largest, longest and fastest glaciers and where they are, for Place facts. | facts only | yes | no |
 | `ref-oldlist` | `www.rmtrr.org` | OldList: a database of old trees (Rocky Mountain Tree-Ring Research): the oldest dated trees per species and site (Methuselah, Old Tjikko), for Place facts. | facts only | yes | no |
 | `ref-peakvisor` | `peakvisor.com` | PeakVisor: the highest peak and prominence per region, park and country, for Place facts. | facts only | yes | no |
@@ -4122,15 +4899,25 @@ docs/wiki/Place-Facts-Data.md).
 | `ref-sic-cultura-mx` | `sic.cultura.gob.mx` | Sistema de Información Cultural (Secretaría de Cultura): national directory of museums, archaeological zones, theatres and festivals, for Places to see and Events; also history and curiosities for Place facts. | facts only | yes | no |
 | `ref-structurae` | `structurae.net` | Structurae (international database of structures): records per structure (longest, tallest, oldest bridge, dam or tower) by town, for Place facts and Places to see. | facts only | yes | no |
 | `ref-swiss-villages` | `swissvillages.org` | Best Swiss Villages (swissvillages.org), for Places to see and Activities; also history and curiosities for Place facts. | facts only | yes | no |
+| `ref-topostext` | `topostext.org` | ToposText (ancient places + texts): ancient sites in Greece and the Mediterranean with the ancient passages that mention them, for Place facts, Places to see and Activities. | facts only | yes | no |
+| `ref-tr-islam-ansiklopedisi` | `islamansiklopedisi.org.tr` | TDV İslâm Ansiklopedisi: 44-volume scholarly encyclopedia with long articles on cities (İznik, Bursa, Konya, Semerkant, Buhara...) across Turkey, the Caucasus and Central Asia, for Place facts and Places to see. | facts only | yes | no |
+| `ref-tr-nisanyan-yeradlari` | `www.nisanyanyeradlari.com` | Nişanyan Yeradları: Inventory of Settlements in Turkey: former and historic names of 50k+ villages and towns, with sources (toponymy), for Place facts. | facts only | yes | no |
+| `ref-tr-turizm-ansiklopedisi` | `turkiyeturizmansiklopedisi.com` | Türkiye Turizm Ansiklopedisi: entries on provinces, districts (Alanya, Dikili, Kilis...) and sights, for Place facts and Places to see. | facts only | yes | no |
+| `ref-tree-register` | `www.treeregister.org` | Tree Register of Britain and Ireland (champion trees): tallest and widest tree per species and county, for Place facts. | facts only | yes | no |
 | `ref-zambiatourism` | `www.zambiatourism.com` | Zambia Tourism (private portal): traveller information, for Places to see and Hotels; also history and curiosities for Place facts. | facts only | yes | no |
 | `srilanka-travel` | `www.srilanka.travel` | Official Sri Lankan attractions and destinations, for Places to see; also history and curiosities for Place facts. | facts only | yes | no |
+| `tb-aldeias-de-portugal` | `www.aldeiasdeportugal.pt` | Aldeias de Portugal (ATA: Associação do Turismo de Aldeia): classified villages of northern Portugal, history and traditional festivals, for Place facts, Places to see and Events. | facts only | yes | no |
 | `tb-armenia-travel` | `armenia.travel` | Tourism Committee of Armenia: official Armenia board, for Places to see, Events and Travel tips; also history and curiosities for Place facts. | facts only | yes | no |
 | `tb-bahamas` | `www.bahamas.com` | The Islands of The Bahamas (Ministry of Tourism): official visitor guide, for Places to see, Events and Local transportation; also history and curiosities for Place facts. | facts only | yes | no |
 | `tb-bali-disparda` | `disparda.baliprov.go.id` | Bali Provincial Tourism Office (Disparda Bali): Bali tourism rules (tourist levy), events and destination news (Indonesian), for Places to see, Events and Travel tips; also history and curiosities for Place facts. | facts only | yes | no |
 | `tb-bangladesh-tb` | `tourismboard.gov.bd` | Bangladesh Tourism Board: Bangladesh destinations and notices, for Places to see and Events; also history and curiosities for Place facts. | facts only | yes | no |
 | `tb-barbados` | `www.visitbarbados.org` | Visit Barbados (BTMI): official visitor guide, for Places to see, Events and Visa; also history and curiosities for Place facts. | facts only | yes | no |
+| `tb-bg-bts-100nto` | `www.btsbg.org` | Bulgarian Tourist Union (100 National Tourist Sites): the 100 National Tourist Sites of Bulgaria with short place histories, for Place facts, Places to see and Activities. | facts only | yes | no |
+| `tb-borghi-autentici` | `www.borghiautenticiditalia.it` | Borghi Autentici d'Italia: about 250 member villages, each with history and local traditions (adds to the existing ref-borghi-italia), for Place facts and Places to see. | facts only | yes | no |
 | `tb-btea-bahrain` | `www.btea.bh` | Bahrain Tourism & Exhibitions Authority: official Bahrain board (bahrain.bh is robots Disallow: /), for Places to see and Events; also history and curiosities for Place facts. | facts only | yes | no |
+| `tb-by-belarustourism` | `belarustourism.by` | Национальное агентство по туризму Беларуси: official facts on regions and towns, for Place facts, Places to see and Activities. | facts only | yes | no |
 | `tb-cuba` | `www.cuba.travel` | Cuba Travel (MINTUR): official visitor guide, for Places to see and Travel tips; also history and curiosities for Place facts. | facts only | yes | no |
+| `tb-de-nrw-route-industriekultur` | `www.route-industriekultur.ruhr` | Route der Industriekultur (RVR): Ruhr anchor points, workers' settlements, viewpoints, for Place facts, Places to see and Free walking tours. | facts only | yes | no |
 | `tb-ecuador` | `ecuador.travel` | Ecuador Travel (MINTUR): official visitor guide, for Places to see, Visa and Activities; also history and curiosities for Place facts. | facts only | yes | no |
 | `tb-elsalvador` | `elsalvador.travel` | El Salvador Travel (MITUR/CORSATUR): official news and destinations (last item 2026-10-14), for Places to see and Events; also history and curiosities for Place facts. | facts only | yes | no |
 | `tb-english-heritage` | `www.english-heritage.org.uk` | English Heritage: 400+ sites, opening times, events, for Places to see, Events and Activities; also history and curiosities for Place facts. | facts only | yes | no |
@@ -4142,6 +4929,7 @@ docs/wiki/Place-Facts-Data.md).
 | `tb-historicenvironment-scot` | `www.historicenvironment.scot` | Historic Environment Scotland: places to visit: official visitor guide, for Places to see and Events; also history and curiosities for Place facts. | facts only | yes | no |
 | `tb-hoi-an-heritage` | `www.hoianworldheritage.org.vn` | Hoi An Centre for Cultural Heritage Management: Hoi An old-town ticket rules, heritage sites, lantern festival news (mostly Vietnamese), for Places to see and Events; also history and curiosities for Place facts. | facts only | yes | no |
 | `tb-honduras` | `honduras.travel` | Honduras Travel (IHT): Roatán, Copán, for Places to see; also history and curiosities for Place facts. | facts only | yes | no |
+| `tb-it-piemonte-italia` | `piemonteitalia.eu` | Piemonte Italia (Regione Piemonte): Piedmont towns, castles, Sacri Monti, UNESCO landscapes, for Place facts, Places to see and Activities. | facts only | yes | no |
 | `tb-itraveljerusalem` | `www.itraveljerusalem.com` | iTravelJerusalem (Jerusalem Development Authority): official Jerusalem city guide (goisrael info site is 403), for Places to see, Events and Free walking tours; also history and curiosities for Place facts. | facts only | yes | no |
 | `tb-japan-beautiful-villages` | `japan-utsukushii-mura.com` | The Most Beautiful Villages in Japan association (japan-utsukushii-mura.com), for Places to see and Activities; also history and curiosities for Place facts. | facts only | yes | no |
 | `tb-karnataka` | `karnatakatourism.org` | Karnataka Tourism: Karnataka destinations (Hampi, Mysuru, Coorg), for Places to see and Activities; also history and curiosities for Place facts. | facts only | yes | no |
@@ -4151,6 +4939,7 @@ docs/wiki/Place-Facts-Data.md).
 | `tb-madhya-pradesh` | `www.mptourism.com` | Madhya Pradesh Tourism: MP destinations (Khajuraho, national parks), festivals, for Places to see and Events; also history and curiosities for Place facts. | facts only | yes | no |
 | `tb-martinique` | `www.martinique.org` | Martinique (Comité Martiniquais du Tourisme): official visitor guide, for Places to see, Events and Activities; also history and curiosities for Place facts. | facts only | yes | no |
 | `tb-mato-grosso-do-sul` | `www.turismo.ms.gov.br` | Fundtur MS: Pantanal, Bonito, events, for Places to see, Activities and Events; also history and curiosities for Place facts. | facts only | yes | no |
+| `tb-md-turism-gov` | `turism.gov.md` | Moldova Turism (Agenția Turismului / Ministerul Culturii): official "Despre Moldova" and region pages, for Place facts and Places to see. | facts only | yes | no |
 | `tb-mintoul-cm` | `mintoul.gov.cm` | Ministère du Tourisme et des Loisirs, Cameroun: official visitor guide, for Places to see, Travel tips and Visa; also history and curiosities for Place facts. | facts only | yes | no |
 | `tb-mypenang` | `mypenang.gov.my` | Penang Global Tourism (mypenang): Penang heritage, food and events, for Places to see and Events; also history and curiosities for Place facts. | facts only | yes | no |
 | `tb-nepal-ntb` | `ntb.gov.np` | Nepal Tourism Board: Trekking permits (TIMS), destinations and events; replaces denied welcomenepal.com, for Places to see, Activities, Events and Travel tips; also history and curiosities for Place facts. | facts only | yes | no |
@@ -4161,6 +4950,8 @@ docs/wiki/Place-Facts-Data.md).
 | `tb-odisha` | `odishatourism.gov.in` | Odisha Tourism: Odisha temples, beaches and festivals (Rath Yatra), for Places to see and Events; also history and curiosities for Place facts. | facts only | yes | no |
 | `tb-pakistan` | `tourism.gov.pk` | Pakistan Tourism (incl. Gilgit-Baltistan), for Places to see and Activities; also history and curiosities for Place facts. | facts only | yes | no |
 | `tb-parjatan-bd` | `parjatan.gov.bd` | Bangladesh Parjatan Corporation: Official destinations and state-run tourist accommodation, for Places to see and Hotels; also history and curiosities for Place facts. | facts only | yes | no |
+| `tb-petites-cites-caractere` | `www.petitescitesdecaractere.com` | Petites Cités de Caractère de France: small historic towns and villages, history of each cité, for Place facts, Places to see and Free walking tours. | facts only | yes | no |
+| `tb-plus-beaux-detours` | `www.plusbeauxdetours.com` | Les Plus Beaux Détours de France: about 100 small towns, heritage and curiosities, for Place facts and Places to see. | facts only | yes | no |
 | `tb-png` | `papuanewguinea.travel` | PNG Tourism Promotion Authority: PNG destinations, festivals (Goroka, Mt Hagen shows), itineraries, for Places to see, Events and the itinerary; also history and curiosities for Place facts. | facts only | yes | no |
 | `tb-qatarmuseums` | `qm.org.qa` | Qatar Museums: museum hours, exhibitions, public art, for Places to see and Events; also history and curiosities for Place facts. | facts only | yes | no |
 | `tb-sltda` | `www.sltda.gov.lk` | Sri Lanka Tourism Development Authority: official visitor guide, for Travel tips and Hotels; also history and curiosities for Place facts. | facts only | yes | no |
@@ -4169,14 +4960,17 @@ docs/wiki/Place-Facts-Data.md).
 | `tb-tourism-cambodia` | `tourismcambodia.org` | Tourism Cambodia portal: Province and attraction guides, Cambodia travel tips, for Places to see, Travel tips and Events; also history and curiosities for Place facts. | facts only | yes | no |
 | `tb-tourismpanama` | `www.tourismpanama.com` | Visit Panamá (PROMTUR): official visitor guide, for Places to see, Visa and Activities; also history and curiosities for Place facts. | facts only | yes | no |
 | `tb-travelpalestine` | `www.travelpalestine.ps` | Palestine Ministry of Tourism & Antiquities: Travel Palestine: Bethlehem, Jericho, Hebron, for Places to see, Activities and Events; also history and curiosities for Place facts. | facts only | yes | no |
+| `tb-ua-ukraine-ua` | `ukraine.ua` | Ukraine.ua (official website of Ukraine): official facts about Ukraine's regions and cities, for Place facts and Places to see. | facts only | yes | no |
 | `tb-uruguaynatural` | `uruguaynatural.com` | Uruguay Natural (Ministerio de Turismo): official destinations, for Places to see and Events; also history and curiosities for Place facts. | facts only | yes | no |
 | `tb-vanuatu` | `www.vanuatu.travel` | Vanuatu Tourism Office: Vanuatu islands, practical info, entry, for Places to see, Activities, Travel tips and Visa; also history and curiosities for Place facts. | facts only | yes | no |
+| `tb-villages-etapes` | `village-etape.fr` | Fédération Française des Villages Étapes: village-stops near motorways, short heritage notes per village, for Place facts, Places to see and Travel tips. | facts only | yes | no |
 | `tb-visit-hcmc` | `visithcmc.vn` | Ho Chi Minh City Department of Tourism (Visit HCMC): Official Saigon events and attractions, for Places to see and Events; also history and curiosities for Place facts. | facts only | yes | no |
 | `tb-visit-nara` | `www.visitnara.jp` | Nara Visitors Bureau (Visit Nara): Nara temples, deer park, events and practical tips, for Places to see, Events and Travel tips; also history and curiosities for Place facts. | facts only | yes | no |
 | `tb-visitghana` | `visitghana.com` | Ghana Tourism Authority: official Ghana destinations and attractions, for Places to see, Activities, Events and Travel tips; also history and curiosities for Place facts. | facts only | yes | no |
 | `tb-visitjamaica` | `www.visitjamaica.com` | Visit Jamaica (JTB): official visitor guide, for Places to see, Activities and Events; also history and curiosities for Place facts. | facts only | yes | no |
 | `tb-visitkorea-en` | `english.visitkorea.or.kr` | Korea Tourism Organization (VisitKorea, English): National tourism board: regions, attractions, festivals and practical info, for Places to see, Activities, Events, Travel tips and Local transportation; also history and curiosities for Place facts. | facts only | yes | no |
 | `tb-visitmalawi` | `visitmalawi.mw` | Visit Malawi (Malawi Tourism): Lake Malawi, parks, official destination guide, for Places to see and Activities; also history and curiosities for Place facts. | facts only | yes | no |
+| `tb-vpah-hauts-de-france` | `vpah-hauts-de-france.fr` | Villes et Pays d'art et d'histoire Hauts-de-France: "curiosités" and town-heritage pages (Amiens, Beauvais, Cambrai, Chantilly…), for Place facts, Places to see and Free walking tours. | share-alike | yes | no |
 | `tb-ytuqueplanes` | `www.ytuqueplanes.com` | ¿Y tú qué planes? (PromPerú domestic tourism): regional routes across all of Peru, for Places to see, Activities and the itinerary; also history and curiosities for Place facts. | facts only | yes | no |
 | `tb-zimbabwetourism` | `zimbabwetourism.net` | Zimbabwe Tourism Authority: Victoria Falls, Hwange and other official destination pages, for Places to see, Activities and Travel tips; also history and curiosities for Place facts. | facts only | yes | no |
 | `visitcostarica` | `www.visitcostarica.com` | Official Costa Rican itineraries and things to do, for the itinerary and Activities; also history and curiosities for Place facts. | facts only | yes | no |
@@ -4185,57 +4979,164 @@ docs/wiki/Place-Facts-Data.md).
 | `visitqatar` | `visitqatar.com` | Qatar's official events calendar, things to do and itineraries, for Events, Activities and the itinerary; also history and curiosities for Place facts. | facts only | yes | no |
 | `visitsaudi` | `www.visitsaudi.com` | Official Saudi destinations, events and things to do, for Events and Places to see; also history and curiosities for Place facts. | facts only | yes | no |
 | `api-europeana` | `api.europeana.eu` | Europeana Search and Record API: Museum and cultural-heritage records (50M items) with places and dates, for Places to see and Events; also history and curiosities for Place facts. | open | no | yes |
+| `arch-bnf-catalogue-sru` | `catalogue.bnf.fr` | BnF catalogue SRU (geographic authority records): history and curiosities of the places it covers, for Place facts. | open | no | no |
+| `arch-ddb-api` | `api.deutsche-digitale-bibliothek.de` | Deutsche Digitale Bibliothek API: local-history objects per German place, for Place facts. | facts only | no | yes |
 | `arch-digitalnz-mch` | `api.digitalnz.org` | DigitalNZ API, filtered to Manatū Taonga (Te Ara, NZHistory): Te Ara and NZHistory records (title, description, link). This is the only reachable route to MCH content, for Place facts and Places to see. | facts only | no | yes |
+| `arch-dimu-api` | `api.dimu.org` | DigitaltMuseum / KulturNav API (KulturIT, Norway/Sweden): Nordic museum objects with places, for Place facts and Places to see. | facts only | no | yes |
+| `arch-duchas` | `www.duchas.ie` | Dúchas.ie (National Folklore Collection, UCD): Schools' Collection 1937–39, folklore and local lore per parish and townland: the strongest "little-known facts" source for Ireland, for Place facts and Places to see. | facts only | no | yes |
+| `arch-eki-knr` | `arhiiv.eki.ee` | Eesti kohanimeraamat (EKI): etymology and history of Estonian settlement names, for Place facts. | facts only | no | no |
+| `arch-genuki` | `www.genuki.org.uk` | GENUKI (UK & Ireland genealogy, per-parish pages): parish and town descriptions with historical notes and references, for Place facts and Places to see. | facts only | no | no |
 | `arch-hal-africa` | `api.archives-ouvertes.fr` | HAL open archive (incl. DUMAS theses): theses and articles on African town histories, for Place facts. | facts only | no | no |
 | `arch-layers-of-london` | `www.layersoflondon.org` | Layers of London (Institute of Historical Research): geolocated London history records, for Place facts and Free walking tours. | facts only | no | no |
+| `arch-logainm-api` | `www.logainm.ie` | Logainm API: structured place-name data, for Place facts. | facts only | no | yes |
+| `arch-lu-eluxemburgensia` | `eluxemburgensia.lu` | eluxemburgensia (BnL digital library): history and curiosities of the places it covers, for Place facts. | facts only | no | no |
+| `arch-nb-bygdeboker` | `www.nb.no` | Nasjonalbiblioteket (digitised bygdebøker): history and curiosities of the places it covers, for Place facts. | facts only | no | yes |
 | `arch-nypl-api` | `api.repo.nypl.org` | NYPL Digital Collections API: NYC neighbourhood photos and maps (e.g. Lionel Pincus map division), for Place facts and Places to see. | facts only | no | yes |
+| `arch-onb-labs` | `labs.onb.ac.at` | ÖNB Labs datasets (Austrian National Library): place-tagged historic postcards and travel literature for Austria, for Place facts and Places to see. | open | no | no |
 | `arch-pleiades` | `pleiades.stoa.org` | Pleiades gazetteer of ancient places: the ancient history of Mediterranean and Near-East places, for Place facts and Places to see. | open | no | no |
+| `arch-polona` | `polona.pl` | Polona (Biblioteka Narodowa): digitised local histories, for Place facts. | facts only | no | no |
+| `arch-ro-bcu-cluj` | `dspace.bcucluj.ro` | Biblioteca Digitală BCU Cluj (DSpace): history and curiosities of the places it covers, for Place facts. | facts only | no | no |
+| `arch-ro-biblioteca-arad` | `digital.bibliotecaarad.ro` | Biblioteca Digitală Arad (Omeka S): history and curiosities of the places it covers, for Place facts. | facts only | no | no |
+| `arch-ro-dacoromanica` | `dacoromanica.ro` | DacoRomanica (BCU Iași / Biblioteca Academiei): history and curiosities of the places it covers, for Place facts. | facts only | no | no |
+| `arch-se-digitala-stadsmuseet` | `digitalastadsmuseet.stockholm.se` | Digitala Stadsmuseet (Stockholm): history and curiosities of the places it covers, for Place facts. | facts only | no | no |
+| `arch-se-digitaltmuseum` | `digitaltmuseum.se` | A huge Swedish/Norwegian museum object database (place-tagged). Per-object licences, many…: A huge Swedish/Norwegian museum object database (place-tagged). Per-object licences, many CC. The terms say that for BONO-licensed works 'use for developing artificial intelligence, such as through text and data mining'…, for Place facts. | facts only | no | no |
+| `arch-tna-discovery` | `discovery.nationalarchives.gov.uk` | The National Archives (UK) Discovery API: catalogue descriptions tied to UK places, for Place facts and Places to see. | open | no | no |
+| `arch-topothek` | `topothek.at` | Topothek (local photo archives, AT/DE/CZ…): municipal historic photos with captions (low yield), for Place facts. | facts only | no | no |
+| `arch-vch-gloucestershire` | `vchglos.org.uk` | VCH Gloucestershire: Victoria County History parish drafts (Glos), for Place facts and Places to see. | facts only | no | no |
+| `arch-vision-of-britain` | `www.visionofbritain.org.uk` | A Vision of Britain through Time (U Portsmouth): historic gazetteer descriptions (1830s–1890s) for every British town and parish, for Place facts and Places to see. | facts only | no | no |
 | `arch-wellcome-api` | `api.wellcomecollection.org` | Wellcome Collection Catalogue API: medical and social history tied to places (lower yield), for Place facts. | open | no | no |
 | `arch-whg` | `whgazetteer.org` | World Historical Gazetteer: historical names and attestations of places worldwide, for Place facts and Places to see. | open | no | no |
 | `colombia-travel` | `colombia.travel` | Official Colombian destinations and itineraries, for Places to see and the itinerary; also history and curiosities for Place facts. | facts only | no | no |
 | `ev-roots-sg` | `www.roots.gov.sg` | Roots.sg (National Heritage Board): Heritage sites, trails and monuments of Singapore, for Places to see and Free walking tours; also history and curiosities for Place facts. | facts only | no | no |
 | `fx-api-geonames-org` | `api.geonames.org` | GeoNames web services: /` and www `Disallow: /dump/`; api host gave no response in research. The app already ships GeoNames-derived data offline (backend/app/db/data), for Place facts. | facts only | no | yes |
+| `fx-apps-communities-ni-gov-uk` | `apps.communities-ni.gov.uk` | apps.communities-ni.gov.uk: history and curiosities of the places it covers, for Place facts. | facts only | no | no |
+| `fx-archwilio-org-uk` | `archwilio.org.uk` | archwilio.org.uk: history and curiosities of the places it covers, for Place facts. | facts only | no | no |
 | `fx-atlantides-org` | `atlantides.org` | Pleiades gazetteer of ancient places: history and curiosities of the places it covers, for Place facts. | facts only | no | no |
 | `fx-barrys-borderpoints` | `barrysborderpoints.com` | Barry's Borderpoints (enclaves, tripoints, border oddities): documented tripoints and enclaves (Baarle, Llívia…), for Place facts and Places to see. | facts only | no | no |
+| `fx-bossche-encyclopedie` | `www.bossche-encyclopedie.nl` | Bossche Encyclopedie: 's-Hertogenbosch streets and buildings, for Place facts and Free walking tours. | facts only | no | no |
+| `fx-cz-drobne-pamatky` | `www.drobnepamatky.cz` | Drobné památky: wayside crosses, chapels and small monuments of Czech villages with history, for Place facts and Places to see. | facts only | no | no |
+| `fx-cz-vets` | `www.vets.cz` | Spolek pro vojenská pietní místa: war memorials in every Czech/Slovak town and village with history, for Place facts and Places to see. | facts only | no | no |
 | `fx-daily-jstor-org` | `daily.jstor.org` | JSTOR Daily: "nor may you undertake any activity such as computer programs that automatically download or export JSTOR Daily content and that may interfere with, disrupt or otherwise burden" the servers; a polite feed reader arguabl…, for Place facts and Travel tips. | facts only | no | no |
+| `fx-dcbd-nl` | `dcbd.nl` | Dutch Caribbean Biodiversity Database: history and curiosities of the places it covers, for Place facts. | facts only | no | no |
+| `fx-de-sl-saar-nostalgie` | `saar-nostalgie.de` | Saar-Nostalgie (Saarland 1945–1959): the Saar Protectorate era (own currency, stamps, anthem, Olympic team), for Place facts. | facts only | no | no |
+| `fx-de-stadtgeschichte-muenchen` | `stadtgeschichte-muenchen.de` | Stadtgeschichte München (de / Munich streets, districts, chronicle): street-name origins, district history, for Place facts and Free walking tours. | facts only | no | no |
+| `fx-devon-heritage` | `www.devonheritage.org` | Devon Heritage: Devon parish and town histories, for Place facts and Places to see. | facts only | no | no |
 | `fx-enterprise-wikimedia-com` | `enterprise.wikimedia.com` | Wikimedia Enterprise (Structured Contents, snapshots): /`, Content-Signal ai-input=yes, for Place facts. | facts only | no | yes |
+| `fx-es-dbe-rah` | `dbe.rah.es` | DB~e / Historia Hispánica (Real Academia de la Historia): history and curiosities of the places it covers, for Place facts. | facts only | no | no |
+| `fx-estonica` | `www.estonica.org` | Estonica (Eesti Instituut): Estonian history/culture encyclopedia, for Place facts. | facts only | no | no |
+| `fx-esu-ukraine` | `esu.com.ua` | Енциклопедія Сучасної України: Ukrainian towns, villages (Academy of Sciences), for Place facts and Places to see. | facts only | no | no |
+| `fx-fr-retronews` | `www.retronews.fr` | RetroNews (BnF press archive editorial) (fr): dated "on this day" items from the old French press, by place, for Place facts. | facts only | no | no |
 | `fx-genealogy-trails` | `www.genealogytrails.com` | Genealogy Trails county histories: transcribed town and county histories for every US state, for Place facts. | facts only | no | no |
+| `fx-hertfordshire-genealogy` | `hertfordshire-genealogy.co.uk` | Hertfordshire Genealogy (Herts places): town and village pages, for Place facts and Places to see. | facts only | no | no |
 | `fx-highpointers` | `highpointers.org` | Highpointers Club (US state high points): highest point of each US state, for Place facts. | facts only | no | no |
+| `fx-historia-ro` | `historia.ro` | Historia.ro: Romanian history magazine, for Place facts. | facts only | no | no |
+| `fx-hrady-cz` | `www.hrady.cz` | Hrady.cz: history of ~10k Czech/Slovak castles, chateaux, monuments, for Place facts and Places to see. | facts only | no | no |
+| `fx-imperium-ahlfeldt-se` | `imperium.ahlfeldt.se` | Digital Atlas of the Roman Empire (DARE): history and curiosities of the places it covers, for Place facts. | facts only | no | no |
+| `fx-is-ferlir` | `ferlir.is` | FERLIR: Reykjanesskaginn í máli og myndum: thousands of Reykjanes ruins, cairns, trails and place-name histories, for Place facts, Places to see and Free walking tours. | facts only | no | no |
+| `fx-it-romaierioggi` | `romaierioggi.it` | Roma Ieri Oggi (it / Rome streets then and now): dated historic photos with captions per piazza or street, for Place facts and Free walking tours. | facts only | no | no |
 | `fx-jankrogh-geosite` | `geosite.jankrogh.com` | Jan S. Krogh's GeoSite (tripoints of the world, true enclaves): catalogue of every international tripoint and enclave, for Place facts. | facts only | no | no |
 | `fx-kaikki-org` | `kaikki.org` | Kaikki.org (machine-readable Wiktionary): history and curiosities of the places it covers, for Place facts. | facts only | no | no |
+| `fx-kent-opc` | `kent-opc.org` | Kent Online Parish Clerks: parish pages with history descriptions, for Place facts and Places to see. | facts only | no | no |
+| `fx-knowyourplace-org-uk` | `www.knowyourplace.org.uk` | www.knowyourplace.org.uk: history and curiosities of the places it covers, for Place facts. | facts only | no | no |
+| `fx-kylat-pohjois-karjala` | `kylat.fi` | Pohjois-Karjalan Kylät ry (North Karelia villages association): village profiles, "village of the year", local events, for Place facts and Events. | facts only | no | no |
 | `fx-lincstothepast-com` | `www.lincstothepast.com` | www.lincstothepast.com: history and curiosities of the places it covers, for Place facts. | facts only | no | no |
 | `fx-lobid-org` | `lobid.org` | lobid-gnd (GND authority, hbz): history and curiosities of the places it covers, for Place facts. | facts only | no | no |
 | `fx-mainehistory-org` | `mainehistory.org` | mainehistory.org: history and curiosities of the places it covers, for Place facts. | facts only | no | no |
+| `fx-museum-digital` | `nat.museum-digital.de` | museum-digital (DE): museum objects with place links, for Place facts. | open | no | no |
+| `fx-norfolk-churches` | `www.norfolkchurches.co.uk` | The Norfolk Churches Site: Norfolk village and church essays, for Place facts and Places to see. | facts only | no | no |
+| `fx-notrehistoire` | `notrehistoire.ch` | notreHistoire.ch: community local-history of Romandy, for Place facts. | facts only | no | no |
 | `fx-nygenweb` | `www.nygenweb.net` | NYGenWeb place names: NY place-name origins list, for Place facts. | facts only | no | no |
+| `fx-onh-noord-holland` | `onh.nl` | Oneindig Noord-Holland (Noord-Hollands Archief and partners): "niet toegestaan om deze website of gedeelten daarvan te verveelvoudigen, op te slaan in een geautomatiseerd gegevensbestand… zonder… schriftelijke toestemming". This is standard Dutch copyright wording, but it names st…, for Place facts. | facts only | no | no |
+| `fx-opoznai-bg` | `opoznai.bg` | Опознай.bg: Bulgarian sights and towns with history, for Place facts and Places to see. | facts only | no | no |
+| `fx-our-nottinghamshire` | `www.ournottinghamshire.org.uk` | Our Nottinghamshire: community-written town and village histories, for Place facts and Places to see. | facts only | no | no |
+| `fx-patrimonio-galego` | `patrimoniogalego.net` | Patrimonio Galego (catálogo social): Galician heritage catalogue (community, sourced), for Place facts and Places to see. | facts only | no | no |
 | `fx-pimaweb-org` | `pimaweb.org` | Pacific Islands Museums Association: history and curiosities of the places it covers, for Place facts. | facts only | no | no |
+| `fx-pl-fotopolska` | `fotopolska.eu` | Fotopolska.eu: per-town and per-building history notes with old photos (Wrocław, Katowice: covers the Wrocław gap), for Place facts and Places to see. | facts only | no | no |
 | `fx-planet-openhistoricalmap-org` | `planet.openhistoricalmap.org` | OpenHistoricalMap planet: history and curiosities of the places it covers, for Place facts. | facts only | no | no |
 | `fx-poles-inaccessibility` | `inaccessibility.net` | Poles of Inaccessibility: remotest point of each country and continent, for Place facts. | facts only | no | no |
 | `fx-population-un-org` | `population.un.org` | UN World Urbanization Prospects: history and curiosities of the places it covers, for Place facts. | facts only | no | no |
+| `fx-radzima` | `radzima.org` | Radzima.org: notable places and monuments of Belarus, Lithuania and Podlasie: town and village histories and monuments, for Place facts and Places to see. | facts only | no | no |
 | `fx-readtheplaque` | `readtheplaque.com` | Read The Plaque: transcribed historical-marker texts with location, worldwide (mostly US/UK), for Place facts, Places to see and Free walking tours. | open | no | no |
+| `fx-repetti-toscana` | `www406.regione.toscana.it` | Dizionario geografico fisico storico della Toscana (Repetti, 1833–46; Regione Toscana): a 19th-century public-domain entry for every Tuscan village and parish, for Place facts. | facts only | no | no |
+| `fx-ru-drevo` | `drevo-info.ru` | Древо: открытая православная энциклопедия: towns, churches and monasteries, for Place facts and Places to see. | facts only | no | no |
+| `fx-ru-rbth` | `www.rbth.com` | Russia Beyond: many "facts about Russian cities" pieces, for Place facts. | facts only | no | no |
+| `fx-ru-sobory` | `sobory.ru` | Народный каталог православной архитектуры: 50k+ churches with build dates and history, for Place facts, Places to see and Free walking tours. | facts only | no | no |
 | `fx-songramernotebook-com` | `songramernotebook.com` | songramernotebook.com: transcribed newspaper clippings and book excerpts, mostly third-party copyright. robots.txt allows (wp-sitemap listed); terms not found. Useful for 1971 events by district, but the rights in the archived material are un…, for Place facts. | facts only | no | no |
+| `fx-stadtwiki-dresden` | `www.stadtwikidd.de` | Stadtwiki Dresden: Dresden streets, buildings, curiosities, for Place facts and Places to see. | share-alike | no | no |
+| `fx-stataccscot-ed-ac-uk` | `stataccscot.ed.ac.uk` | stataccscot.ed.ac.uk: history and curiosities of the places it covers, for Place facts. | facts only | no | no |
+| `fx-suffolk-churches` | `suffolkchurches.co.uk` | The Suffolk Churches Site (Simon Knott): a village and church essay for each of 600+ Suffolk churches, for Place facts and Places to see. | facts only | no | no |
+| `fx-wikishire` | `wikishire.co.uk` | Wikishire (historic counties wiki): parish and village articles by historic county, for Place facts and Places to see. | share-alike | no | no |
+| `fx-wiltshire-opc` | `www.wiltshire-opc.org.uk` | Wiltshire OPC: parish history pages for every Wiltshire parish, for Place facts and Places to see. | facts only | no | no |
 | `fx-world-history-encyclopedia` | `www.worldhistory.org` | World History Encyclopedia: history and curiosities of the places it covers, for Place facts. | facts only | no | no |
+| `fx-zanikle-obce` | `www.zanikleobce.cz` | Zaniklé obce (lost and destroyed villages of Czechia): about 300,000 records on vanished villages, farmsteads and churches (why and when each disappeared), for Place facts. | facts only | no | no |
+| `gov-az-culture` | `culture.gov.az` | Azərbaycan Mədəniyyət Nazirliyi: heritage monuments of Azerbaijan, for Place facts. | facts only | no | no |
 | `gov-kemenparekraf` | `kemenparekraf.go.id` | Indonesia Ministry of Tourism: official visitor guide, for Places to see and Events; also history and curiosities for Place facts. | facts only | no | no |
+| `gov-lagis-hessen-ortslexikon` | `lagis.hessen.de` | LAGIS Hessen: Historisches Ortslexikon (Hessisches Institut für Landesgeschichte): more than 13,000 existing and deserted settlements in Hesse with first documented mention, lordship, church patron and population history, for Place facts and Places to see. | facts only | no | no |
 | `gov-mct-china` | `en.mct.gov.cn` | China Ministry of Culture and Tourism (English): official visitor guide, for Travel tips and Places to see; also history and curiosities for Place facts. | facts only | no | no |
 | `gov-mot-cambodia` | `www.tourism.gov.kh` | Cambodia Ministry of Tourism: Official Cambodia tourism notices, for Places to see and Travel tips; also history and curiosities for Place facts. | facts only | no | no |
+| `gov-tm-altyn-asyr` | `www.turkmenistan.gov.tm` | Turkmenistan: Altyn Asyr (state information portal): about the only Turkmen-place source found; state-controlled, uncritical, for Place facts. | facts only | no | no |
 | `gov-tourism-mm` | `tourism.gov.mm` | Myanmar Ministry of Hotels and Tourism: official visitor guide, for Places to see and Travel tips; also history and curiosities for Place facts. | facts only | no | no |
+| `her-bg-ninkn-lists` | `www.ninkn.bg` | НИНКН register list files: history and curiosities of the places it covers, for Place facts. | facts only | no | no |
+| `her-cassini-ehess` | `cassini.ehess.fr` | Des villages de Cassini aux communes d'aujourd'hui (EHESS): every French commune's history of names, mergers and population since the 18th century, for Place facts. | facts only | no | no |
+| `her-ch-kgs` | `data.geo.admin.ch` | KGS-Inventar (Swiss cultural property of national importance): Swiss A-objects (castles, churches, archives) with commune, for Place facts and Places to see. | facts only | no | no |
+| `her-de-berlin-gedenktafeln` | `www.gedenktafeln-in-berlin.de` | Gedenktafeln in Berlin: more than 3k Berlin memorial plaques with background texts, for Place facts, Places to see and Free walking tours. | facts only | no | no |
+| `her-de-by-denkmalatlas` | `geoportal.bayern.de` | Bayerischer Denkmal-Atlas (BLfD): history and curiosities of the places it covers, for Place facts. | facts only | no | no |
+| `her-de-ni-denkmalatlas` | `denkmalatlas.niedersachsen.de` | Denkmalatlas Niedersachsen: history and curiosities of the places it covers, for Place facts. | facts only | no | no |
 | `her-hmdb-tidytuesday` | `raw.githubusercontent.com` | HMDB USA index snapshot (TidyTuesday 2023-07-04): marker titles, coordinates and HMDb links (a 2023 snapshot), for Place facts and Places to see. | facts only | no | no |
+| `her-hr-registar` | `registar.kulturnadobra.hr` | Registar kulturnih dobara (Croatia): history and curiosities of the places it covers, for Place facts. | facts only | no | no |
+| `her-it-vincoli` | `vincoliinrete.beniculturali.it` | Vincoli in Rete (MiC): history and curiosities of the places it covers, for Place facts. | facts only | no | no |
+| `her-kyppi` | `www.kyppi.fi` | Kulttuuriympäristön palveluikkuna (Museovirasto): Finnish protected sites, for Place facts. | open | no | no |
+| `her-mantojums-lv` | `mantojums.lv` | Mantojums.lv (Latvian heritage): Latvian monuments, for Place facts. | facts only | no | no |
+| `her-pt-culturanorte` | `culturanorte.gov.pt` | Direção Regional de Cultura do Norte (now CCDR-N cultura): history and curiosities of the places it covers, for Place facts. | facts only | no | no |
+| `her-scot-canmore-points` | `inspire.hes.scot` | Canmore points (NRHE, ~320k sites): site name, type and period for every recorded site in Scotland, with links to trove.scot, for Place facts and Places to see. | open | no | no |
+| `her-uk-camra-pub-interiors` | `camra.org.uk` | CAMRA Historic Pub Interiors / National Inventory (en / UK towns): oldest and unaltered pub interiors per town (record-type facts), for Place facts and Places to see. | facts only | no | no |
 | `her-uk-london-remembers` | `www.londonremembers.com` | London Remembers: every London plaque and memorial, with researched subjects, for Place facts, Places to see and Free walking tours. | facts only | no | no |
+| `her-uk-nhle-opendata` | `opendata-historicengland.hub.arcgis.com` | Historic England Open Data Hub (NHLE): listed buildings, scheduled monuments, parks, battlefields, wrecks in England, for Place facts and Places to see. | open | no | no |
+| `her-uz-madaniymeros` | `madaniymeros.uz` | O'zbekiston Madaniy Meros Agentligi: official heritage agency (register of monuments), for Place facts and Places to see. | facts only | no | no |
+| `her-wales-historic-placenames` | `historicplacenames.rcahmw.gov.uk` | List of Historic Place Names of Wales (RCAHMW): earliest recorded forms and dates of Welsh names, for Place facts. | facts only | no | no |
 | `museum-kizhi` | `www.kizhi.karelia.ru` | Kizhi island wooden churches, opening times and boat access, for Places to see and Events; also history and curiosities for Place facts. | facts only | no | no |
 | `od-althurayya` | `althurayya.github.io` | al-Ṯurayyā gazetteer (early Islamic world): history and curiosities of the places it covers, for Place facts. | facts only | no | no |
+| `od-atlas-mutual-heritage` | `www.atlasofmutualheritage.nl` | JS search app (home has 28 links): history and curiosities of the places it covers, for Place facts. | facts only | no | no |
+| `od-benb` | `ortsnamenbuch.unibe.ch` | Berner Namenbuch (BENB): etymology of Bern names, for Place facts. | facts only | no | no |
+| `od-cso-ie` | `www.cso.ie` | CSO Ireland PxStat: the smallest and largest towns and the fastest-growing places, for Place facts. | facts only | no | no |
+| `od-cz-historicky-lexikon` | `csu.gov.cz` | Historický lexikon obcí ČR 1869–2011/2015 (ČSÚ): history and curiosities of the places it covers, for Place facts. | open | no | no |
 | `od-dane-gov-pl` | `dane.gov.pl` | dane.gov.pl (Polish open data): government open-data datasets (tourism, events, transport), for Places to see and Events; also history and curiosities for Place facts. | open | no | no |
+| `od-danmarks-stednavne` | `danmarksstednavne.navneforskning.ku.dk` | Danmarks Stednavne: about 200k Danish names with interpretations, for Place facts. | facts only | no | no |
 | `od-data-gov-sg` | `data.gov.sg` | data.gov.sg: Singapore attractions, parks, museums and hawker centre datasets, for Places to see and Activities; also history and curiosities for Place facts. | open | no | no |
 | `od-data-gv-at` | `www.data.gv.at` | data.gv.at: government open-data datasets (tourism, events, transport), for Events, Places to see and Local transportation; also history and curiosities for Place facts. | open | no | no |
 | `od-data-public-lu` | `data.public.lu` | data.public.lu: government open-data datasets (tourism, events, transport), for Events, Places to see and Local transportation; also history and curiosities for Place facts. | open | no | no |
 | `od-data-qld` | `www.data.qld.gov.au` | Queensland open data: Queensland tourism, parks and transport datasets, for Places to see and Activities; also history and curiosities for Place facts. | open | no | no |
 | `od-datos-gov-co` | `www.datos.gov.co` | Portal de Datos Abiertos de Colombia (MinTIC, Socrata): registered tourism providers (RNT), attractions, events datasets, for Places to see, Events and Hotels; also history and curiosities for Place facts. | open | no | no |
+| `od-de-hh-denkmalliste-2` | `transparenz.hamburg.de` | Hamburg Transparenzportal (Denkmalliste): Hamburg monument list, for Place facts and Places to see. | open | no | no |
+| `od-de-sh-denkmalliste` | `opendata.schleswig-holstein.de` | Denkmalliste Schleswig-Holstein (Open-Data SH): statewide list of monuments (type, date, place), for Place facts and Places to see. | open | no | no |
+| `od-dicotopo` | `dicotopo.cths.fr` | DicoTopo: Dictionnaire topographique de la France (CTHS/École des chartes): historical forms of French commune names, for Place facts. | facts only | no | no |
+| `od-es-cnig-nomenclator` | `centrodedescargas.cnig.es` | Nomenclátor Geográfico de Municipios y Entidades de Población (IGN/CNIG): history and curiosities of the places it covers, for Place facts. | open | no | no |
+| `od-es-madoz-jcyl` | `bibliotecadigital.jcyl.es` | Diccionario Madoz (1845–50) at Biblioteca Digital de Castilla y León: history and curiosities of the places it covers, for Place facts. | open | no | no |
 | `od-fr-merimee` | `data.culture.gouv.fr` | Mérimée (French protected monuments): About 45,000 protected historic monuments in France with locations, for Places to see; also history and curiosities for Place facts. | open | no | no |
 | `od-glims` | `www.glims.org` | GLIMS glacier inventory: the largest glaciers per region, for Place facts. | facts only | no | no |
 | `od-gnis-history` | `prd-tnm.s3.amazonaws.com` | USGS GNIS Feature Description/History: official name origin and history for US places and features (History field up to 3,000 chars), for Place facts and Places to see. | open | no | no |
 | `od-grottocenter` | `api.grottocenter.org` | Grottocenter (open cave database, CC BY-SA): longest and deepest caves per country (UIS-type records), for Place facts. | share-alike | no | no |
+| `od-ie-nms-smr` | `www.archaeology.ie` | National Monuments Service open data (SMR): Sites and Monuments Record, with more than 150k Irish archaeological sites, for Place facts and Places to see. | open | no | no |
+| `od-it-mic-lod` | `dati.beniculturali.it` | MiC Linked Open Data (dati.beniculturali.it): history and curiosities of the places it covers, for Place facts. | facts only | no | no |
+| `od-it-situas` | `situas.istat.it` | ISTAT SITUAS (history of every comune: mergers, name changes since 1861): history and curiosities of the places it covers, for Place facts. | open | no | no |
+| `od-kringla` | `www.kringla.nu` | Kringla / K-samsök (Riksantikvarieämbetet): Swedish heritage objects per place, for Place facts. | open | no | no |
+| `od-nimisampo` | `nimisampo.fi` | NimiSampo (Finnish names archive as linked data): 2.7M Finnish name slips with notes, for Place facts. | open | no | no |
+| `od-nl-amsterdam-monumenten` | `maps.amsterdam.nl`, `data.amsterdam.nl` | Amsterdam monumenten map/data: history and curiosities of the places it covers, for Place facts. | facts only | no | no |
 | `od-nl-rijksmonumenten` | `linkeddata.cultureelerfgoed.nl` | Rijksmonumentenregister (RCE): About 63,000 Dutch national monuments with locations, for Places to see; also history and curiosities for Place facts. | open | no | no |
+| `od-ortsnamen-ch` | `ortsnamen.ch` | ortsnamen.ch (Swiss place-name portal): etymology from most Swiss place-name books, for Place facts. | facts only | no | no |
+| `od-placenamesni` | `www.placenamesni.org` | Northern Ireland Place-Name Project: meanings of NI townlands and towns, for Place facts. | facts only | no | no |
+| `od-ru-mkrf-egrokn` | `opendata.mkrf.ru` | ЕГРОКН: Единый госреестр объектов культурного наследия (opendata.mkrf.ru): the official register of every protected monument in Russia, with build dates, for Place facts, Places to see and Free walking tours. | open | no | no |
+| `od-se-ksamsok` | `www.kulturarvsdata.se` | K-samsök / SOCH (Sweden): history and curiosities of the places it covers, for Place facts. | facts only | no | no |
+| `od-sk-historicko-demograficky` | `slovak.statistics.sk` | Historicko-demografický lexikón obcí Slovenska 1880–1910 (ŠÚ SR): history and curiosities of the places it covers, for Place facts. | facts only | no | no |
+| `od-sk-lexikon-obci` | `www.scitanie.sk` | Štatistický lexikón obcí SR 2021 (Sčítanie 2021): history and curiosities of the places it covers, for Place facts. | facts only | no | no |
 | `od-slavevoyages` | `slavevoyages.org` | SlaveVoyages (Emory): history and curiosities of the places it covers, for Place facts. | facts only | no | no |
 | `od-topostext` | `topostext.org` | ToposText: history and curiosities of the places it covers, for Place facts. | facts only | no | no |
+| `od-tr-dergipark` | `dergipark.org.tr` | DergiPark (TÜBİTAK ULAKBİM): peer-reviewed local histories of Turkish towns and villages ("köy tarihi"), for Place facts. | facts only | no | no |
+| `od-tr-tuik` | `data.tuik.gov.tr` | TÜİK (Türkiye İstatistik Kurumu): population records (largest, smallest, fastest-growing districts and villages), for Place facts. | open | no | no |
+| `od-uk-deep-epns` | `deep.kdl.kcl.ac.uk` | DEEP / Survey of English Place-Names data (EPNS, CC BY-NC 4.0): origin of English place names, for Place facts. | facts only | no | no |
+| `od-uk-kepn` | `kepn.nottingham.ac.uk` | Key to English Place-Names: history and curiosities of the places it covers, for Place facts. | facts only | no | no |
 | `od-uk-openplaques-dmn` | `datamillnorth.org` | Public-domain mirror of Open Plaques (dataset https://datamillnorth.org/dataset/open-plaq…: //datamillnorth.org/dataset/open-plaques-2rxxd). openplaques.org itself has robots `Disallow: /` for every bot, so the owner should decide whether a third-party mirror is acceptable. Data Mill North blocks AI bots in ro…, for Place facts. | facts only | no | no |
+| `ref-ancient-tree-inventory` | `ati.woodlandtrust.org.uk` | Ancient Tree Inventory (Woodland Trust): notable and ancient trees by village or parish (girth, age class), for Place facts and Places to see. | facts only | no | no |
 | `ref-european-geoparks` | `www.europeangeoparks.org` | Every European UNESCO geopark with its landscapes and visitor centres, for Places to see and Activities; also history and curiosities for Place facts. | facts only | no | no |
 | `ref-kehilalinks` | `kehilalinks.jewishgen.org` | JewishGen KehilaLinks (town pages): history of thousands of towns and shtetls in Central and Eastern Europe, for Place facts. | facts only | no | no |
 | `ref-odysseus-culture-gr` | `odysseus.culture.gr` | Odysseus (Greek Ministry of Culture monuments and museums): official visitor guide, for Places to see; also history and curiosities for Place facts. | facts only | no | no |
@@ -4359,7 +5260,12 @@ source's notes say where to sign up and what it costs.
 | `api-metlink-nz` | `opendata.metlink.org.nz` | getting_around | needs an API key: owner must register a free key at https://opendata.metlink.org.nz/; then the gtfs_static adapter |
 | `api-nrel-afdc` | `developer.nrel.gov` | carbon, getting_around | needs an API key: https://developer.nrel.gov/signup/ (free: free NREL developer key) |
 | `api-tdx-taiwan` | `tdx.transportdata.tw` | getting_around, places, events | needs an API key: owner must register a free member key at https://tdx.transportdata.tw/register; adapter pending: TDX JSON reader |
+| `arch-ddb-api` | `api.deutsche-digitale-bibliothek.de` | facts | needs owner key: Deutsche Digitale Bibliothek API (https://www.deutsche-digitale-bibliothek.de/user/apikey; free) |
 | `arch-digitalnz-mch` | `api.digitalnz.org` | facts, places | needs owner key: DigitalNZ API v3 (https://digitalnz.org/developers; free) |
+| `arch-dimu-api` | `api.dimu.org` | facts, places | needs owner key: DigitaltMuseum / KulturNav API (KulturIT, Norway/Sweden) (https://api.dimu.org/api/solr/select?api.key=…; free) |
+| `arch-duchas` | `www.duchas.ie` | facts, places | needs owner key: Dúchas.ie (National Folklore Collection, UCD) (https://docs.gaois.ie/en/data/duchas/v0.6/licence; free) |
+| `arch-logainm-api` | `www.logainm.ie` | facts | needs owner key: Logainm API (sign-up in the notes; free) |
+| `arch-nb-bygdeboker` | `www.nb.no` | facts | needs owner key: Nasjonalbiblioteket (digitised bygdebøker) (https://api.nb.no/catalog/v1/items?q=bygdebok; free) |
 | `arch-nypl-api` | `api.repo.nypl.org` | facts, places | needs owner key: NYPL Digital Collections API (https://api.repo.nypl.org/; free) |
 | `atdw-atlas` | `developer.atdw.com.au` | events, activities, hotels | needs an API key: owner must sign the ATDW Distributor Licence Agreement at https://developer.atdw.com.au/ (paid: Industry A$165/month + A$165 set-up, Lite A$200/month + A$660, Premium A$400/month + A$660; 30-day trial key); adapter pending |
 | `bandsintown` | `rest.bandsintown.com` | events | needs an API key: owner must request an app_id and Bandsintown's written consent at https://help.artists.bandsintown.com/ (free, by approval); adapter pending |
