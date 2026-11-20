@@ -25,10 +25,12 @@ kinds:
 - attraction
 - event
 - transport_option
+- place_fact
 llm_kinds:
 - attraction
 - event
 - transport_option
+- place_fact
 render: never
 cadence: monthly
 min_delay_s: 5
@@ -40,11 +42,14 @@ key_secret: null
 max_retention_days: null
 display_requirements: null
 notes: 'Research 2026-11-18 (corpus LatAm): robots.txt: 200, ajax and search disallowed; terms: terms
-  not found. Terms unconfirmed; owner accepted for non-commercial use 2026-11-18. Facts only.'
+  not found. Terms unconfirmed; owner accepted for non-commercial use 2026-11-18. Facts only. | Place
+  facts (research 2026-11-20): not refetched; each has "history" / "did you know" / destination pages
+  that can feed `facts`'
 relevance:
   sections:
   - places
   - events
   - getting_around
+  - facts
   why: 'The Islands of The Bahamas (Ministry of Tourism): official visitor guide, for Places to see, Events
-    and Local transportation.'
+    and Local transportation; also history and curiosities for Place facts.'

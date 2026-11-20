@@ -36,7 +36,10 @@ display_requirements: null
 notes: 'Research 2026-11-18 (corpus Asia-Pacific): robots.txt: robots 200, path allowed; AI-bot block
   → title + link only; terms: "may not be copied, reproduced or imitated ... unless expressly permitted"
   (copyright reservation; no robot clause). No automated-access clause; facts only. robots.txt reserves
-  AI use (AI crawlers blocked), so title and link only: no LLM kinds.'
+  AI use (AI crawlers blocked), so title and link only: no LLM kinds. | Place facts (research 2026-11-20):
+  state and city heritage pages, Langkawi legends | Place facts: not wired yet (no LLM kinds on non-share-alike
+  text and no adapter that emits place_fact), so no `facts` section or place_fact kind; the note above
+  is what to extract once a reader exists.'
 relevance:
   sections:
   - events

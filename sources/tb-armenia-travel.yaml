@@ -25,10 +25,12 @@ kinds:
 - attraction
 - event
 - tip
+- place_fact
 llm_kinds:
 - attraction
 - event
 - tip
+- place_fact
 render: never
 cadence: weekly
 min_delay_s: 5
@@ -41,10 +43,13 @@ max_retention_days: null
 display_requirements: null
 notes: 'Research 2026-11-18 (corpus Africa-ME): robots.txt: disallows /fr/articles/, /hy/articles/, query
   params; terms: terms not found. Terms unconfirmed; owner accepted for non-commercial use 2026-11-18.
-  Facts only.'
+  Facts only. | Place facts (research 2026-11-20): history, name-origin and curiosity pages of the places
+  it covers'
 relevance:
   sections:
   - places
   - events
   - tips
-  why: 'Tourism Committee of Armenia: official Armenia board, for Places to see, Events and Travel tips.'
+  - facts
+  why: 'Tourism Committee of Armenia: official Armenia board, for Places to see, Events and Travel tips;
+    also history and curiosities for Place facts.'

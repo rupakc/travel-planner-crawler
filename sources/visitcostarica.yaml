@@ -24,10 +24,12 @@ kinds:
 - activity
 - event
 - article
+- place_fact
 llm_kinds:
 - attraction
 - activity
 - event
+- place_fact
 render: never
 cadence: weekly
 min_delay_s: 5
@@ -39,9 +41,13 @@ key_secret: null
 max_retention_days: null
 display_requirements: null
 notes: 'HOLD (research 2026-11-17): terms not found. Blocker was: terms not found. Terms unconfirmed;
-  owner accepted for non-commercial use 2026-11-17.'
+  owner accepted for non-commercial use 2026-11-17. | Place facts (research 2026-11-20): "history", "did
+  you know", culture pages per destination / not refetched; each has "history" / "did you know" / destination
+  pages that can feed `facts` / add country facts pages'
 relevance:
   sections:
   - itinerary
   - activities
-  why: Official Costa Rican itineraries and things to do, for the itinerary and Activities.
+  - facts
+  why: Official Costa Rican itineraries and things to do, for the itinerary and Activities; also history
+    and curiosities for Place facts.

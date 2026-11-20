@@ -28,11 +28,13 @@ kinds:
 - activity
 - event
 - walking_tour
+- place_fact
 llm_kinds:
 - attraction
 - activity
 - event
 - walking_tour
+- place_fact
 render: never
 cadence: weekly
 min_delay_s: 5
@@ -43,13 +45,17 @@ needs_key: false
 key_secret: null
 max_retention_days: null
 display_requirements: null
-notes: robots 200, 4 Disallows, no AI block. 'NPS-created material ... is generally considered in the
-  public domain'; credit NPS.
+notes: 'robots 200, 4 Disallows, no AI block. ''NPS-created material ... is generally considered in the
+  public domain''; credit NPS. | Place facts (research 2026-11-20): park "history and culture" pages,
+  "Things To Know", NRHP and National Historic Landmark descriptions; the API `parks` description fields
+  / NRHP data downloads (https://home.nps.gov/subjects/nationalregister/data-downloads.htm) and NHL pages
+  / park superlatives (deepest lake: Crater Lake; longest cave: Mammoth Cave)'
 relevance:
   sections:
   - places
   - activities
   - itinerary
   - events
+  - facts
   why: Official things to do, tours, trails and ranger events for more than 400 US national parks, for
-    Places to see, Activities, the itinerary and Events.
+    Places to see, Activities, the itinerary and Events; also history and curiosities for Place facts.

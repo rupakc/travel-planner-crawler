@@ -25,9 +25,11 @@ kinds:
 - attraction
 - activity
 - article
+- place_fact
 llm_kinds:
 - attraction
 - activity
+- place_fact
 render: never
 cadence: weekly
 min_delay_s: 5
@@ -40,11 +42,13 @@ max_retention_days: null
 display_requirements: null
 notes: 'Research 2026-11-18 (corpus LatAm): robots.txt: 200, search and thank-you paths disallowed; terms:
   https://www.ytuqueplanes.com/terminos-y-condiciones: data-protection and offers text; no robot or AI
-  clause. No automated-access clause; facts only.'
+  clause. No automated-access clause; facts only. | Place facts (research 2026-11-20): not refetched;
+  each has "history" / "did you know" / destination pages that can feed `facts`'
 relevance:
   sections:
   - places
   - activities
   - itinerary
+  - facts
   why: '¿Y tú qué planes? (PromPerú domestic tourism): regional routes across all of Peru, for Places
-    to see, Activities and the itinerary.'
+    to see, Activities and the itinerary; also history and curiosities for Place facts.'

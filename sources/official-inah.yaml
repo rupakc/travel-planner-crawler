@@ -23,9 +23,11 @@ kinds:
 - place
 - attraction
 - tip
+- place_fact
 llm_kinds:
 - attraction
 - tip
+- place_fact
 render: never
 cadence: quarterly
 min_delay_s: 5
@@ -40,10 +42,12 @@ notes: 'robots.txt (research 2026-11-18): allowed. No terms page found. Terms un
   for non-commercial use 2026-11-18. LatAm re-vet 2026-11-18: inah.gob.mx links the gob.mx terms, which
   allow the materials ''solamente para su uso personal y no para un uso comercial''. Terms restrict to
   personal/non-commercial use; owner accepted for non-commercial use 2026-11-18 (gob.mx personal-use clause);
-  stays on, facts only.'
+  stays on, facts only. | Place facts (research 2026-11-20): per archaeological zone: history, founding
+  dates, curiosities / INAH archaeological zones'
 relevance:
   sections:
   - places
   - tips
+  - facts
   why: Mexico's national museums and archaeological sites with prices and opening days, for Places to
-    see and Travel tips.
+    see and Travel tips; also history and curiosities for Place facts.

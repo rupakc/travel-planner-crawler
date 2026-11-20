@@ -24,10 +24,12 @@ kinds:
 - attraction
 - event
 - hotel
+- place_fact
 llm_kinds:
 - attraction
 - event
 - hotel
+- place_fact
 render: never
 cadence: weekly
 min_delay_s: 5
@@ -42,11 +44,14 @@ notes: 'Research 2026-11-18 (corpus LatAm): robots.txt: 200, Crawl-delay 1; only
   terms: https://herramientas.datos.gov.co/terminos: data may be used for "cualquier tipo de actividad
   comercial o no comercial" with the citation "Fuente: Portal de Datos Abiertos www.datos.gov.co". | Disabled:
   adapter pending: choose tourism datasets + dataset reader (crawling the portal''s HTML is not useful)
-  (Socrata SODA paging)'
+  (Socrata SODA paging) | Place facts (research 2026-11-20): Socrata datasets found via /api/catalog/v1?q=patrimonio:
+  6zkz-uunt (Inventario Patrimonio Arquitectónico de Risaralda), k2b5-jms2 (Patrimonio Natural y Construido,
+  Palmira), c2kj-cqd8 (POT sitios arqueológicos)'
 relevance:
   sections:
   - places
   - events
   - hotels
+  - facts
   why: 'Portal de Datos Abiertos de Colombia (MinTIC, Socrata): registered tourism providers (RNT), attractions,
-    events datasets, for Places to see, Events and Hotels.'
+    events datasets, for Places to see, Events and Hotels; also history and curiosities for Place facts.'

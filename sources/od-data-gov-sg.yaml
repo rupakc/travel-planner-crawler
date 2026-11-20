@@ -22,9 +22,11 @@ kinds:
 - place
 - attraction
 - activity
+- place_fact
 llm_kinds:
 - attraction
 - activity
+- place_fact
 render: never
 cadence: monthly
 min_delay_s: 5
@@ -37,10 +39,13 @@ max_retention_days: null
 display_requirements: null
 notes: 'Research 2026-11-18 (corpus Asia-Pacific): robots.txt: see research (2026-11-18); terms: Singapore
   Open Data Licence 1.0. | Disabled: adapter pending: choose tourism datasets + dataset reader (crawling
-  the portal''s HTML is not useful) (data.gov.sg v2 API)'
+  the portal''s HTML is not useful) (data.gov.sg v2 API) | Place facts (research 2026-11-20): history,
+  name-origin and curiosity pages of the places it covers / Singapore Monuments GeoJSON; Roots.sg historic
+  sites and markers'
 relevance:
   sections:
   - places
   - activities
+  - facts
   why: 'data.gov.sg: Singapore attractions, parks, museums and hawker centre datasets, for Places to see
-    and Activities.'
+    and Activities; also history and curiosities for Place facts.'

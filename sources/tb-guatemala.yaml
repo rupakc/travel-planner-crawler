@@ -23,8 +23,10 @@ kinds:
 - place
 - attraction
 - article
+- place_fact
 llm_kinds:
 - attraction
+- place_fact
 render: never
 cadence: monthly
 min_delay_s: 5
@@ -36,9 +38,12 @@ key_secret: null
 max_retention_days: null
 display_requirements: null
 notes: 'Research 2026-11-18 (corpus LatAm): robots.txt: 404 (allow); terms: terms not found. Terms unconfirmed;
-  owner accepted for non-commercial use 2026-11-18. Facts only.'
+  owner accepted for non-commercial use 2026-11-18. Facts only. | Place facts (research 2026-11-20): not
+  refetched; each has "history" / "did you know" / destination pages that can feed `facts`'
 relevance:
   sections:
   - places
   - itinerary
-  why: 'Visit Guatemala (INGUAT): Antigua, Tikal, Atitlán, for Places to see and the itinerary.'
+  - facts
+  why: 'Visit Guatemala (INGUAT): Antigua, Tikal, Atitlán, for Places to see and the itinerary; also history
+    and curiosities for Place facts.'

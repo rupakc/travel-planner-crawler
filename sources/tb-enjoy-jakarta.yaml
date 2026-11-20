@@ -24,9 +24,11 @@ kinds:
 - event
 - place
 - attraction
+- place_fact
 llm_kinds:
 - event
 - attraction
+- place_fact
 render: never
 cadence: weekly
 min_delay_s: 5
@@ -40,10 +42,12 @@ display_requirements: null
 notes: 'Research 2026-11-18 (corpus Asia-Pacific): robots.txt: jakarta-tourism.go.id and enjoy.jakarta.go.id
   robots 200, no Disallow; terms: https://enjoy.jakarta.go.id/terms-condition read: no robot/AI clause.
   No automated-access clause; facts only. The sitemap lives on jakarta-tourism.go.id (robots.txt read
-  in research: 200, no Disallow).'
+  in research: 200, no Disallow). | Place facts (research 2026-11-20): Indonesian destination histories
+  (Jakarta Ensiklopedia was formerly a sub-site; host not found now)'
 relevance:
   sections:
   - events
   - places
+  - facts
   why: 'Jakarta Tourism (Enjoy Jakarta): Official Jakarta events calendar and attractions, for Events
-    and Places to see.'
+    and Places to see; also history and curiosities for Place facts.'

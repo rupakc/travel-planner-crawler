@@ -21,8 +21,10 @@ max_depth: 2
 kinds:
 - place
 - attraction
+- place_fact
 llm_kinds:
 - attraction
+- place_fact
 render: never
 cadence: monthly
 min_delay_s: 5
@@ -36,9 +38,11 @@ display_requirements: null
 notes: 'Research 2026-11-18 (corpus Europe): robots.txt: connection refused (no response); terms: unreadable.
   Terms unconfirmed; owner accepted for non-commercial use 2026-11-18. Facts only. | Disabled: re-test
   from the crawler VM before enabling (robots.txt gave no response during research from a European IP;
-  content and terms unchecked)'
+  content and terms unchecked) | Place facts (research 2026-11-20): Greek monuments and archaeological
+  sites'
 relevance:
   sections:
   - places
+  - facts
   why: 'Odysseus (Greek Ministry of Culture monuments and museums): official visitor guide, for Places
-    to see.'
+    to see; also history and curiosities for Place facts.'

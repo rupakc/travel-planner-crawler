@@ -25,9 +25,11 @@ kinds:
 - attraction
 - activity
 - hotel
+- place_fact
 llm_kinds:
 - attraction
 - activity
+- place_fact
 render: never
 cadence: weekly
 min_delay_s: 5
@@ -40,11 +42,12 @@ max_retention_days: null
 display_requirements: null
 notes: 'robots.txt (research 2026-11-18): 200, no blanket disallow. ''it is licensed under the Creative
   Commons Attribution 4.0 International (CC BY 4.0)''; images, video and databases are excluded (text
-  facts only).'
+  facts only). | Place facts (research 2026-11-20): park and historic-site history'
 relevance:
   sections:
   - places
   - activities
   - hotels
+  - facts
   why: Every New South Wales national park, walking track and campground or cabin, for Places to see,
-    Activities and Hotels.
+    Activities and Hotels; also history and curiosities for Place facts.

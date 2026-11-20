@@ -707,3 +707,32 @@ fn factbook_symbols_become_our_own_sentence() {
     assert_eq!(s("eagle (a symbol used since the 12th century)"), None);
     assert_eq!(s(""), None);
 }
+
+/// Every seed of the place-fact sources in `sources/` is a row its adapter reads (2026-11-20):
+/// a Factbook country file, an EntityData item or a dump directory.
+#[test]
+fn place_fact_sources_seed_rows_their_adapters_read() {
+    let specs = vc_sources::load_dir(&common::repo_root().join("sources")).unwrap();
+    let mut seen = std::collections::BTreeMap::new();
+    for s in &specs {
+        let Some(a) = s.adapter.as_deref() else {
+            continue;
+        };
+        for u in &s.seeds {
+            let c = CanonicalUrl::parse(u.as_str()).unwrap();
+            let ok = match a {
+                factbook_json::ID => factbook_json::file_code(&c).is_some(),
+                wikidata_facts::ID => {
+                    wikidata_facts::entity_data_qid(&c).is_some()
+                        || c.as_str()
+                            .starts_with("https://dumps.wikimedia.org/wikidatawiki/")
+                }
+                _ => true,
+            };
+            assert!(ok, "{}: {u} is not a row {a} reads", s.id.0);
+        }
+        *seen.entry(a.to_string()).or_insert(0) += 1;
+    }
+    assert!(seen.get(factbook_json::ID).is_some_and(|n| *n == 1));
+    assert!(seen.get(wikidata_facts::ID).is_some_and(|n| *n == 2));
+}

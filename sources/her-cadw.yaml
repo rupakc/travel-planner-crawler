@@ -24,9 +24,11 @@ kinds:
 - place
 - attraction
 - event
+- place_fact
 llm_kinds:
 - attraction
 - event
+- place_fact
 render: never
 cadence: weekly
 min_delay_s: 5
@@ -38,10 +40,12 @@ key_secret: null
 max_retention_days: null
 display_requirements: null
 notes: 'Research 2026-11-18 (corpus thematic): robots.txt: 200; allow; terms: T&C: no re-sale or reproduction
-  in contravention (copyright); no bot clause. No automated-access clause; facts only.'
+  in contravention (copyright); no bot clause. No automated-access clause; facts only. | Place facts (research
+  2026-11-20): listing descriptions: build year, architect, notable events / properties-in-care histories'
 relevance:
   sections:
   - places
   - events
+  - facts
   why: 'Cadw (Welsh Government historic environment): 130+ castles, abbeys, opening times, events, for
-    Places to see and Events.'
+    Places to see and Events; also history and curiosities for Place facts.'

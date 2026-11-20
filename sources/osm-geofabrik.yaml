@@ -34,7 +34,11 @@ needs_key: false
 key_secret: null
 max_retention_days: null
 display_requirements: null
-notes: hotels, attractions, transit; shared
+notes: 'hotels, attractions, transit; shared | Place facts (research 2026-11-20): extract: Tags `historic=*`,
+  `memorial=*`, `inscription=*` (plaque texts), `start_date`, `name:etymology`, `name:etymology:wikidata`,
+  `heritage=*` + `heritage:operator`, `ref:whc`, `old_name`, `height`/`ele`, `wikidata` | Place facts:
+  not wired yet (no LLM kinds on non-share-alike text and no adapter that emits place_fact), so no `facts`
+  section or place_fact kind; the note above is what to extract once a reader exists.'
 relevance:
   sections:
   - hotels

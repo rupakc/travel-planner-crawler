@@ -23,10 +23,12 @@ kinds:
 - attraction
 - tip
 - event
+- place_fact
 llm_kinds:
 - attraction
 - tip
 - event
+- place_fact
 render: never
 cadence: monthly
 min_delay_s: 5
@@ -39,11 +41,13 @@ max_retention_days: null
 display_requirements: null
 notes: 'Research 2026-11-18 (corpus Asia-Pacific): robots.txt: robots 200, path allowed; terms: terms
   not found. Terms unconfirmed; owner accepted for non-commercial use 2026-11-18. Facts only. | Disabled:
-  challenge page at first full crawl 2026-11-19; do not retry another way (host denylisted)'
+  challenge page at first full crawl 2026-11-19; do not retry another way (host denylisted) | Place facts
+  (research 2026-11-20): temple history, Bagan, Kampong Ayer facts'
 relevance:
   sections:
   - places
   - tips
   - events
+  - facts
   why: 'Brunei Tourism: Official Brunei attractions and practical info, for Places to see, Travel tips
-    and Events.'
+    and Events; also history and curiosities for Place facts.'

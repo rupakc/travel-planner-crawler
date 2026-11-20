@@ -22,8 +22,10 @@ max_depth: 2
 kinds:
 - place
 - attraction
+- place_fact
 llm_kinds:
 - attraction
+- place_fact
 render: never
 cadence: quarterly
 min_delay_s: 5
@@ -36,8 +38,11 @@ max_retention_days: null
 display_requirements: null
 notes: 'Research 2026-11-18 (corpus LatAm): robots.txt: robots.txt answers 200 with the HTML home page
   (no rules, so allow); terms: terms not found. Terms unconfirmed; owner accepted for non-commercial use
-  2026-11-18. Facts only.'
+  2026-11-18. Facts only. | Place facts (research 2026-11-20): not refetched; each has "history" / "did
+  you know" / destination pages that can feed `facts`'
 relevance:
   sections:
   - places
-  why: 'Honduras Travel (IHT): Roatán, Copán, for Places to see.'
+  - facts
+  why: 'Honduras Travel (IHT): Roatán, Copán, for Places to see; also history and curiosities for Place
+    facts.'

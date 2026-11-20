@@ -22,9 +22,11 @@ kinds:
 - place
 - attraction
 - hotel
+- place_fact
 llm_kinds:
 - attraction
 - hotel
+- place_fact
 render: never
 cadence: monthly
 min_delay_s: 5
@@ -36,10 +38,12 @@ key_secret: null
 max_retention_days: null
 display_requirements: null
 notes: 'Research 2026-11-18 (corpus Asia-Pacific): robots.txt: robots 404 (allow all); terms: policies
-  page read: no robot/AI clause. No automated-access clause; facts only.'
+  page read: no robot/AI clause. No automated-access clause; facts only. | Place facts (research 2026-11-20):
+  destination history and "did you know" lines'
 relevance:
   sections:
   - places
   - hotels
+  - facts
   why: 'Bangladesh Parjatan Corporation: Official destinations and state-run tourist accommodation, for
-    Places to see and Hotels.'
+    Places to see and Hotels; also history and curiosities for Place facts.'

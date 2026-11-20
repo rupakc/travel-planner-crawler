@@ -25,10 +25,12 @@ kinds:
 - attraction
 - event
 - walking_tour
+- place_fact
 llm_kinds:
 - attraction
 - event
 - walking_tour
+- place_fact
 render: never
 cadence: weekly
 min_delay_s: 5
@@ -40,11 +42,14 @@ key_secret: null
 max_retention_days: null
 display_requirements: null
 notes: 'Research 2026-11-18 (corpus Africa-ME): robots.txt: disallows sort/paging/source params and */get-tickets;
-  terms: terms not found. Terms unconfirmed; owner accepted for non-commercial use 2026-11-18. Facts only.'
+  terms: terms not found. Terms unconfirmed; owner accepted for non-commercial use 2026-11-18. Facts only.
+  | Place facts (research 2026-11-20): Jerusalem quarters and sites (jerusalem.muni.il is 403)'
 relevance:
   sections:
   - places
   - events
   - walking_tours
+  - facts
   why: 'iTravelJerusalem (Jerusalem Development Authority): official Jerusalem city guide (goisrael info
-    site is 403), for Places to see, Events and Free walking tours.'
+    site is 403), for Places to see, Events and Free walking tours; also history and curiosities for Place
+    facts.'

@@ -24,10 +24,12 @@ kinds:
 - event
 - activity
 - attraction
+- place_fact
 llm_kinds:
 - event
 - activity
 - attraction
+- place_fact
 render: never
 cadence: weekly
 min_delay_s: 5
@@ -41,9 +43,12 @@ display_requirements: null
 notes: 'robots.txt (research 2026-11-18): 200, no AI-bot block (onboarding re-read 2026-11-18); the sitemap
   is one flat urlset. terms restrict to personal/non-commercial use; owner accepted for non-commercial
   use 2026-11-18 (''pour votre usage et information à des fins personnelles et non commerciales''). Facts
-  only (headline, link, short excerpt).'
+  only (headline, link, short excerpt). | Place facts (research 2026-11-20): history, name-origin and
+  curiosity pages of the places it covers'
 relevance:
   sections:
   - events
   - activities
-  why: Montréal events and things to do from the city's tourism bureau, for Events and Activities.
+  - facts
+  why: Montréal events and things to do from the city's tourism bureau, for Events and Activities; also
+    history and curiosities for Place facts.

@@ -24,9 +24,11 @@ kinds:
 - place
 - attraction
 - event
+- place_fact
 llm_kinds:
 - attraction
 - event
+- place_fact
 render: never
 cadence: quarterly
 min_delay_s: 5
@@ -39,10 +41,13 @@ max_retention_days: null
 display_requirements: null
 notes: 'Research 2026-11-18 (corpus LatAm): robots.txt: 200, only `/_et` disallowed, 2 sitemaps; terms:
   terms not found. Sitemap lastmod 2017, so records may be old. Terms unconfirmed; owner accepted for
-  non-commercial use 2026-11-18. Facts only.'
+  non-commercial use 2026-11-18. Facts only. | Place facts (research 2026-11-20): per-municipio cultural
+  fichas (state cronista documents seen in search results)'
 relevance:
   sections:
   - places
   - events
+  - facts
   why: 'Sistema de Información Cultural (Secretaría de Cultura): national directory of museums, archaeological
-    zones, theatres and festivals, for Places to see and Events.'
+    zones, theatres and festivals, for Places to see and Events; also history and curiosities for Place
+    facts.'

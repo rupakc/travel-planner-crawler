@@ -24,10 +24,12 @@ kinds:
 - attraction
 - event
 - activity
+- place_fact
 llm_kinds:
 - attraction
 - event
 - activity
+- place_fact
 render: never
 cadence: monthly
 min_delay_s: 5
@@ -40,10 +42,13 @@ max_retention_days: null
 display_requirements: null
 notes: 'Research 2026-11-18 (corpus Europe): robots.txt: allowed, no sitemap in robots; terms: T&C: "private
   and non-commercial use" applies to user-content pages only; no bot clause. No automated-access clause;
-  facts only.'
+  facts only. | Place facts (research 2026-11-20): site history pages: historical facts per property /
+  listing descriptions: build year, architect, notable events / London blue plaques pages (/visit/blue-plaques/)'
 relevance:
   sections:
   - places
   - events
   - activities
-  why: 'English Heritage: 400+ sites, opening times, events, for Places to see, Events and Activities.'
+  - facts
+  why: 'English Heritage: 400+ sites, opening times, events, for Places to see, Events and Activities;
+    also history and curiosities for Place facts.'

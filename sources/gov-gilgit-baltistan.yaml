@@ -22,9 +22,11 @@ kinds:
 - place
 - attraction
 - tip
+- place_fact
 llm_kinds:
 - attraction
 - tip
+- place_fact
 render: never
 cadence: monthly
 min_delay_s: 5
@@ -38,9 +40,12 @@ display_requirements: null
 notes: 'Research 2026-11-18 (hidden gems, small islands and remote places; Asia/Pakistan): robots 404
   (allowed). Terms: terms not found; robots 404. Terms unconfirmed; owner accepted for non-commercial
   use 2026-11-18; facts only. Advisory-risk destination (government travel advisories apply: ADVISORY:
-  Pakistan (GB/LoC areas)): added normally, flagged here.'
+  Pakistan (GB/LoC areas)): added normally, flagged here. | Place facts (research 2026-11-20): city and
+  valley history pages (Lahore, Hunza, Skardu forts)'
 relevance:
   sections:
   - places
   - tips
-  why: Gilgit-Baltistan Government notices (NOC/permits), for Places to see and Travel tips.
+  - facts
+  why: Gilgit-Baltistan Government notices (NOC/permits), for Places to see and Travel tips; also history
+    and curiosities for Place facts.

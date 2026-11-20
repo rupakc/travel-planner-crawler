@@ -31,7 +31,10 @@ needs_key: false
 key_secret: null
 max_retention_days: null
 display_requirements: null
-notes: RSS verified 2026-11-15
+notes: 'RSS verified 2026-11-15 | Place facts (research 2026-11-20): history, name-origin and curiosity
+  pages of the places it covers | Place facts: not wired yet (no LLM kinds on non-share-alike text and
+  no adapter that emits place_fact), so no `facts` section or place_fact kind; the note above is what
+  to extract once a reader exists.'
 relevance:
   sections:
   - tips

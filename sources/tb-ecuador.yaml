@@ -24,10 +24,12 @@ kinds:
 - attraction
 - visa_rule
 - activity
+- place_fact
 llm_kinds:
 - attraction
 - visa_rule
 - activity
+- place_fact
 render: never
 cadence: monthly
 min_delay_s: 5
@@ -39,10 +41,14 @@ key_secret: null
 max_retention_days: null
 display_requirements: null
 notes: 'Research 2026-11-18 (corpus LatAm): robots.txt: 200, `/admin/` and `/login/` disallowed; terms:
-  terms not found. Terms unconfirmed; owner accepted for non-commercial use 2026-11-18. Facts only.'
+  terms not found. Terms unconfirmed; owner accepted for non-commercial use 2026-11-18. Facts only. |
+  Place facts (research 2026-11-20): not refetched; each has "history" / "did you know" / destination
+  pages that can feed `facts`'
 relevance:
   sections:
   - places
   - visa
   - activities
-  why: 'Ecuador Travel (MINTUR): official visitor guide, for Places to see, Visa and Activities.'
+  - facts
+  why: 'Ecuador Travel (MINTUR): official visitor guide, for Places to see, Visa and Activities; also
+    history and curiosities for Place facts.'

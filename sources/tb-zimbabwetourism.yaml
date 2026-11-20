@@ -25,10 +25,12 @@ kinds:
 - attraction
 - activity
 - tip
+- place_fact
 llm_kinds:
 - attraction
 - activity
 - tip
+- place_fact
 render: never
 cadence: weekly
 min_delay_s: 5
@@ -41,11 +43,12 @@ max_retention_days: null
 display_requirements: null
 notes: 'Research 2026-11-18 (corpus Africa-ME): robots.txt: WP default + /wp-content/uploads/wpforms/
   disallowed; terms: terms not found. Terms unconfirmed; owner accepted for non-commercial use 2026-11-18.
-  Facts only.'
+  Facts only. | Place facts (research 2026-11-20): Great Zimbabwe and Khami, while NMMZ is down'
 relevance:
   sections:
   - places
   - activities
   - tips
+  - facts
   why: 'Zimbabwe Tourism Authority: Victoria Falls, Hwange and other official destination pages, for Places
-    to see, Activities and Travel tips.'
+    to see, Activities and Travel tips; also history and curiosities for Place facts.'

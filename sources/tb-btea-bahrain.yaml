@@ -23,9 +23,11 @@ kinds:
 - place
 - attraction
 - event
+- place_fact
 llm_kinds:
 - attraction
 - event
+- place_fact
 render: never
 cadence: weekly
 min_delay_s: 5
@@ -38,10 +40,12 @@ max_retention_days: null
 display_requirements: null
 notes: 'Research 2026-11-18 (corpus Africa-ME): robots.txt: admin/identity/cms paths disallowed; terms:
   terms not found (/terms-of-use answered 302). Terms unconfirmed; owner accepted for non-commercial use
-  2026-11-18. Facts only.'
+  2026-11-18. Facts only. | Place facts (research 2026-11-20): Manama history (Bab Al Bahrain, the pearling
+  path); Bahrain''s "Manama Story" was not found as its own host'
 relevance:
   sections:
   - places
   - events
+  - facts
   why: 'Bahrain Tourism & Exhibitions Authority: official Bahrain board (bahrain.bh is robots Disallow:
-    /), for Places to see and Events.'
+    /), for Places to see and Events; also history and curiosities for Place facts.'

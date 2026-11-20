@@ -24,10 +24,12 @@ kinds:
 - activity
 - event
 - article
+- place_fact
 llm_kinds:
 - attraction
 - activity
 - event
+- place_fact
 render: never
 cadence: weekly
 min_delay_s: 5
@@ -40,9 +42,13 @@ max_retention_days: null
 display_requirements: null
 notes: 'HOLD (research 2026-11-17): terms 1.3 allow material only via ''means ... the site provides''
   (ambiguous). | Disabled: terms not yet confirmed: terms 1.3 allow material only via ''means ... the
-  site provides'' (may bar automated access); not covered by the owner''s 2026-11-17 acceptance'
+  site provides'' (may bar automated access); not covered by the owner''s 2026-11-17 acceptance | Place
+  facts (research 2026-11-20): not refetched; each has "history" / "did you know" / destination pages
+  that can feed `facts`'
 relevance:
   sections:
   - places
   - itinerary
-  why: Official Colombian destinations and itineraries, for Places to see and the itinerary.
+  - facts
+  why: Official Colombian destinations and itineraries, for Places to see and the itinerary; also history
+    and curiosities for Place facts.

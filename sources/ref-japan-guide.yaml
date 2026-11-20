@@ -24,10 +24,12 @@ kinds:
 - attraction
 - activity
 - tip
+- place_fact
 llm_kinds:
 - attraction
 - activity
 - tip
+- place_fact
 render: never
 cadence: weekly
 min_delay_s: 5
@@ -43,10 +45,13 @@ notes: 'Research 2026-11-18 (corpus Asia-Pacific): robots.txt: allowed (only sum
   to resell, redistribute ... or create derivative works''. Terms restrict to personal/non-commercial
   use; owner accepted for non-commercial use 2026-11-18 (''Web site users may download and copy the material
   for personal, non-commercial use, without the right to resell, redistribute ... or create derivative
-  works''). Facts only.'
+  works''). Facts only. | Place facts (research 2026-11-20): place history and curiosities sections /
+  destination "history/culture/facts" pages'
 relevance:
   sections:
   - places
   - activities
   - tips
-  why: 'japan-guide.com: travel articles and guides, for Places to see, Activities and Travel tips.'
+  - facts
+  why: 'japan-guide.com: travel articles and guides, for Places to see, Activities and Travel tips; also
+    history and curiosities for Place facts.'

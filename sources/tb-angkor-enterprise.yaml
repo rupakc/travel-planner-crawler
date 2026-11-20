@@ -23,10 +23,12 @@ kinds:
 - activity
 - attraction
 - tip
+- place_fact
 llm_kinds:
 - activity
 - attraction
 - tip
+- place_fact
 render: never
 cadence: monthly
 min_delay_s: 5
@@ -39,10 +41,12 @@ max_retention_days: null
 display_requirements: null
 notes: 'Research 2026-11-18 (corpus Asia-Pacific): robots.txt: robots 200, path allowed; terms: terms
   not found. Terms unconfirmed; owner accepted for non-commercial use 2026-11-18. Facts only. | Disabled:
-  challenge page at first full crawl 2026-11-19; government site, not denylisted: re-test later'
+  challenge page at first full crawl 2026-11-19; government site, not denylisted: re-test later | Place
+  facts (research 2026-11-20): temple history, Bagan, Kampong Ayer facts'
 relevance:
   sections:
   - activities
   - tips
+  - facts
   why: 'Angkor Enterprise (Angkor pass): Angkor pass prices, validity, opening hours and ticket rules,
-    for Activities and Travel tips.'
+    for Activities and Travel tips; also history and curiosities for Place facts.'

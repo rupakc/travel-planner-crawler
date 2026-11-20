@@ -24,9 +24,11 @@ kinds:
 - place
 - attraction
 - activity
+- place_fact
 llm_kinds:
 - attraction
 - activity
+- place_fact
 render: never
 cadence: monthly
 min_delay_s: 5
@@ -39,9 +41,12 @@ max_retention_days: null
 display_requirements: null
 notes: 'Research 2026-11-18 (corpus Asia-Pacific): robots.txt: robots 200, path allowed (some /kn/ pages
   disallowed); terms: https://karnatakatourism.org/en/terms-conditions/ read: property of the department;
-  no robot/AI clause. No automated-access clause; facts only.'
+  no robot/AI clause. No automated-access clause; facts only. | Place facts (research 2026-11-20): history,
+  name-origin and curiosity pages of the places it covers'
 relevance:
   sections:
   - places
   - activities
-  why: 'Karnataka Tourism: Karnataka destinations (Hampi, Mysuru, Coorg), for Places to see and Activities.'
+  - facts
+  why: 'Karnataka Tourism: Karnataka destinations (Hampi, Mysuru, Coorg), for Places to see and Activities;
+    also history and curiosities for Place facts.'

@@ -24,9 +24,11 @@ kinds:
 - place
 - attraction
 - event
+- place_fact
 llm_kinds:
 - attraction
 - event
+- place_fact
 render: never
 cadence: monthly
 min_delay_s: 5
@@ -38,10 +40,12 @@ key_secret: null
 max_retention_days: null
 display_requirements: null
 notes: 'Research 2026-11-18 (corpus Asia-Pacific): robots.txt: robots 200, path allowed; terms: https://www.mptourism.com/disclaimer.php
-  read: no robot/AI clause. No automated-access clause; facts only.'
+  read: no robot/AI clause. No automated-access clause; facts only. | Place facts (research 2026-11-20):
+  "history" and "about" pages per destination'
 relevance:
   sections:
   - places
   - events
+  - facts
   why: 'Madhya Pradesh Tourism: MP destinations (Khajuraho, national parks), festivals, for Places to
-    see and Events.'
+    see and Events; also history and curiosities for Place facts.'

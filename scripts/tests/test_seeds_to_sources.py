@@ -892,7 +892,9 @@ def test_batch2_off_sources_say_why(generated):
                 "licence:", "robots.txt", "access route", "owner decision", "dataset retired",
                 "bot wall", "seed unresolved", "relevance:", "re-test from the crawler VM",
                 "terms forbid storage/redistribution", "meta robots", "terms forbid automated access",
-                "5xx at", "duplicate:", "gone:", "restricted licence") + FULL_CRAWL_REFUSED_PREFIXES
+                "5xx at", "duplicate:", "gone:", "restricted licence",
+                # Place facts corpus (2026-11-20).
+                "needs owner key", "enable after a check from the crawler VM", "hook adapter removed") + FULL_CRAWL_REFUSED_PREFIXES
     for sid in s2s.SOURCE_CLASS:
         spec = generated[sid]
         if spec["enabled"]:
@@ -966,7 +968,7 @@ def test_batch2_api_and_dump_sources_run_only_on_an_adapter(generated):
                     or COUNTRY_INFO_AND_FOOD.get(sid) or WIKIVOYAGE_EDITIONS.get(sid)
                     or OPEN_DATA_READERS.get(sid, (None,))[0] or CARBON_ADAPTERS.get(sid)
                     or ("factor_table" if sid in FACTOR_TABLE_SOURCES else None)
-                    or CARBON_KEYED.get(sid, (None,))[0])
+                    or CARBON_KEYED.get(sid, (None,))[0] or FACTS_ADAPTERS.get(sid))
             assert spec["adapter"] == want, sid
             assert spec["enabled"] is (want is not None), sid
         if spec["needs_key"] and sid in CARBON_KEYED:
@@ -983,11 +985,11 @@ def test_batch2_enabled_sources_are_polite_and_scoped(generated):
         assert spec["method"] in ("html", "rss", "sitemap") or sid in OPEN_DATA_ADAPTERS \
             or sid in ADAPTED_2026_11_18 or sid in COUNTRY_INFO_AND_FOOD or sid in OPEN_DATA_READERS \
             or sid in WIKIVOYAGE_EDITIONS or sid in CARBON_ADAPTERS or sid in FACTOR_TABLE_SOURCES \
-            or sid in CARBON_KEYED, sid
+            or sid in CARBON_KEYED or sid in FACTS_ADAPTERS, sid
         assert spec["daily_budget"] <= 500 and spec["max_depth"] <= 2 and spec["min_delay_s"] >= 5, sid
         assert spec["licence"]["class"] in ("open", "facts_only") or (
             (sid in ("openholidays", "enwiki-visa-requirements") + tuple(CORPUS_SHARE_ALIKE)
-             or sid in WIKIVOYAGE_EDITIONS)
+             or sid in WIKIVOYAGE_EDITIONS or sid in s2s.FACTS_IDS)
             and spec["licence"]["class"] == "share_alike"), sid
         assert spec["cadence"] in ("daily", "h12", "weekly", "monthly", "quarterly", "yearly"), sid
         # Every include regex is pinned to the source's own host.
@@ -1045,7 +1047,7 @@ def test_ramp_2_extends_ramp_1_with_enabled_runnable_sources():
     on = ({sid for sid in s2s.SOURCE_CLASS if committed[sid]["enabled"]} - set(OPEN_DATA_ADAPTERS)
           - set(s2s.GTFS_FEEDS) - set(ADAPTED_2026_11_18) - set(COUNTRY_INFO_AND_FOOD)
           - set(OPEN_DATA_READERS) - set(WIKIVOYAGE_EDITIONS) - set(CARBON_ADAPTERS)
-          - set(FACTOR_TABLE_SOURCES) - set(CARBON_KEYED))
+          - set(FACTOR_TABLE_SOURCES) - set(CARBON_KEYED) - set(FACTS_ADAPTERS))
     assert on <= set(r2), sorted(on - set(r2))
 
 
@@ -1071,7 +1073,7 @@ def test_ramp_3_is_ramp_2_plus_the_open_data_sources():
     assert r3[: len(r2)] == r2
     assert set(r3[len(r2):]) == (set(OPEN_DATA_ADAPTERS) | s2s.GTFS_ON | set(COUNTRY_INFO_AND_FOOD)
                                  | set(OPEN_DATA_READERS) | set(WIKIVOYAGE_EDITIONS) | set(CARBON_ADAPTERS)
-                                 | set(FACTOR_TABLE_SOURCES) | set(CARBON_KEYED))
+                                 | set(FACTOR_TABLE_SOURCES) | set(CARBON_KEYED) | set(FACTS_ADAPTERS))
     v = _validator()
     for sid in r3:
         spec = committed[sid]
@@ -1450,6 +1452,8 @@ AFRICA_STAY_ALLOWED = ["https://visitkzn-sa.com/sitemap.xml",
 
 # --- Corpus expansion: Asia-Pacific (research vetted 2026-11-18, corpus_asia_pacific.md) ---
 AP_OFF = {
+    # Terms that ban automated copying, found by the place-facts research (2026-11-20).
+    "tb-uzbekistan": "terms forbid automated access",
     "api-cwa-taiwan": "needs an API key", "api-metlink-nz": "needs an API key",
     "api-tdx-taiwan": "needs an API key", "gov-kemenparekraf": "re-test from the crawler VM",
     "gov-mct-china": "re-test from the crawler VM", "gov-mot-cambodia": "adapter pending",
@@ -1489,7 +1493,7 @@ def test_corpus_asia_pacific_2026_11_18(generated):
     ids = _batch_ids(seeds, "tb-osaka-info", "prague-pid-gtfs")
     assert len(ids) == 183
     _corpus_batch_check(generated, ids, AP_OFF, AP_DELAYS, AP_AI_RESERVED, AP_PERSONAL_TERMS)
-    assert len([s for s in ids if s not in AP_OFF]) == 141
+    assert len([s for s in ids if s not in AP_OFF]) == 140  # 141, less tb-uzbekistan (2026-11-20)
     # Wellington's sitemap lives on admin.wellingtonnz.com, whose robots.txt was read first.
     wl = generated["tb-wellington"]
     assert wl["sitemaps"] == ["https://admin.wellingtonnz.com/sitemap.xml"]
@@ -1597,7 +1601,7 @@ HIDDEN_GEMS_DENIED = [
 HIDDEN_GEMS_ALLOWED = [
     "https://visithvar.hr/", "https://visitkorcula.eu/", "https://www.visitmadeira.com/en",
     "https://www.experiencealula.com/", "https://www.myoutislands.com/", "https://www.visit-micronesia.fm/",
-    "https://www.visitsolomons.com.sb/", "https://www.uzbekistan.travel/", "https://www.visitsaaremaa.ee/",
+    "https://www.visitsolomons.com.sb/", "https://www.visitsaaremaa.ee/",  # uzbekistan.travel: denied 2026-11-20
 ]
 
 
@@ -1917,3 +1921,211 @@ def test_carbon_corpus_2026_11_19(generated):
         assert s2s.denied(url, DENYLIST) is not None, url
     for url in CARBON_STAY_ALLOWED:
         assert s2s.denied(url, DENYLIST) is None, url
+
+
+# --- Place facts corpus (research vetted 2026-11-20) -------------------------------------------
+# Structured readers (ramp-3 only); every other enabled facts source is html/rss/sitemap.
+FACTS_ADAPTERS = {
+    "od-factbook-json": "factbook_json",
+    "od-wikidata-entitydata": "wikidata_facts",
+}
+# The research's regions, grouped as the PRs that add them (one PR per group, merged in turn).
+FACTS_GROUP = {
+    "Global / multi-country": "global",
+    "Europe (incl. Russia, Turkey)": "europe", "Central Asia & Caucasus": "europe",
+    "East Asia": "asia", "Southeast Asia": "asia", "South Asia": "asia",
+    "North America": "americas", "Latin America & Caribbean": "americas",
+    "Africa": "africa-me-oceania", "Middle East": "africa-me-oceania", "Oceania": "africa-me-oceania",
+}
+FACTS_COUNTS = {
+    "global": {"on": 117, "adapter pending": 62, "needs owner key": 4, "owner decision": 15,
+               "hook adapter removed": 37},
+}
+FACTS_OFF_PREFIXES = ("enable after a check from the crawler VM", "adapter pending", "needs owner key",
+                      "owner decision", "seed unresolved", "hook adapter removed")
+# The Wikipedia hook pages: the hook reader was taken out of #148 (a hook is share-alike article text).
+FACTS_HOOK_OFF = "hook adapter removed (share-alike text); needs an own-words extractor"
+FACTS_DENIED = ["https://www.treccani.it/enciclopedia/", "https://kotobank.jp/", "https://www.geograph.org.uk/",
+                "https://www.waymarking.com/", "https://www.canadiana.ca/", "https://uzbekistan.travel/en/",
+                "https://www.wa.gov.au/organisation", "https://www.meteoswiss.admin.ch/",
+                # Review 2026-11-20: SKIP rows with a terms ban, and Peepul Tree's other domain.
+                "https://www.livehistoryindia.com/", "https://www.aljazeera.net/encyclopedia/",
+                "https://www.nyasatimes.com/", "https://icesco.org/", "https://www.atheer.om/history/",
+                "https://www.assamtourismonline.com/"]
+FACTS_STAY_ALLOWED = ["https://catalogue.data.wa.gov.au/", "https://www.admin.ch/", "https://www.geonames.org/"]
+
+
+def _facts_group(spec):
+    m = re.search(r"place facts corpus; ([^;]+); verdict", " ".join((spec["notes"] or "").split()))
+    return FACTS_GROUP[m.group(1)] if m else None
+
+
+def test_place_facts_corpus_2026_11_20(generated):
+    r2, r3 = set(_ramp("ramp-2.txt")), set(_ramp("ramp-3.txt"))
+    assert len(FACTS_ADAPTERS) == 2 and len(s2s.FACTS_IDS) == len(set(s2s.FACTS_IDS))
+    counts: dict[str, dict[str, int]] = {}
+    for sid in s2s.FACTS_IDS:
+        spec = generated[sid]
+        notes = " ".join(spec["notes"].split())
+        group = _facts_group(spec)
+        assert group, sid
+        assert spec["category"] == "facts" and spec["relevance"]["sections"][0] == "facts", sid
+        assert "place_fact" in spec["kinds"] and set(spec["llm_kinds"]) <= {"place_fact"}, sid
+        assert spec["cadence"] in ("monthly", "quarterly", "yearly"), sid
+        assert spec["max_depth"] <= 2 and spec["min_delay_s"] >= 5 and spec["daily_budget"] <= 300, sid
+        lic = spec["licence"]["class"]
+        assert lic in ("open", "facts_only", "share_alike"), sid
+        if lic == "facts_only":
+            assert "owner accepted for non-commercial use 2026-11-18" in notes, sid
+        if lic == "share_alike" or "AI-reserved robots.txt" in notes:
+            assert spec["llm_kinds"] == [], sid  # never sent to a model
+        if not spec["enabled"]:
+            reason = notes.split("Disabled: ", 1)[1]
+            prefix = next(p for p in FACTS_OFF_PREFIXES if reason.startswith(p))
+            assert sid not in r2 and sid not in r3, sid
+            assert spec["needs_key"] is (prefix == "needs owner key"), sid
+            counts.setdefault(group, {}).setdefault(prefix, 0)
+            counts[group][prefix] += 1
+            continue
+        counts.setdefault(group, {}).setdefault("on", 0)
+        counts[group]["on"] += 1
+        assert spec["source_class"] in ("official", "reference", "editorial"), sid
+        assert not spec["needs_key"], sid
+        if sid in FACTS_ADAPTERS:
+            assert spec["adapter"] == FACTS_ADAPTERS[sid] and spec["method"] in ("api", "dump"), sid
+            assert spec["llm_kinds"] == [] and spec["max_depth"] == 0, sid
+            assert sid in r3 and sid not in r2, sid
+            continue
+        assert spec["method"] in ("html", "rss", "sitemap") and spec["adapter"] is None, sid
+        assert sid in r2 and sid in r3, sid
+        assert spec["kinds"] == ["place_fact", "article"], sid
+        hosts = {u.split("/")[2] for u in spec["seeds"] + spec["sitemaps"] + spec["feeds"]}
+        for r in spec["include"]:
+            assert any(r.startswith(f"^https?://{h.replace('.', chr(92) + '.')}/") for h in hosts), (sid, r)
+        for u in spec["seeds"]:
+            assert not re.search(r"\.(csv|zip|xlsx?|ods|parquet|json)(\?|$)", u), (sid, u)
+    assert counts == FACTS_COUNTS
+
+
+def test_place_facts_structured_readers_2026_11_20(generated):
+    for sid, adapter in FACTS_ADAPTERS.items():
+        spec = generated[sid]
+        assert spec["enabled"] and spec["kinds"] == ["place_fact"] and spec["llm_kinds"] == [], sid
+        assert spec["adapter"] == adapter, sid
+    hooks = [sid for sid in s2s.FACTS_IDS if sid.startswith("wiki-facts-")]
+    assert len(hooks) == 37
+    for sid in hooks:
+        spec = generated[sid]
+        reason = " ".join(spec["notes"].split()).split("Disabled: ", 1)[1]
+        assert not spec["enabled"] and spec["adapter"] is None and reason.startswith(FACTS_HOOK_OFF), sid
+        assert spec["licence"]["class"] == "share_alike" and spec["llm_kinds"] == [], sid
+    fb = generated["od-factbook-json"]
+    assert len(fb["seeds"]) == 255 and fb["licence"]["spdx"] == "CC0-1.0" and fb["cadence"] == "yearly"
+    assert all(re.match(r"^https://raw\.githubusercontent\.com/factbook/factbook\.json/[0-9a-f]{40}/[a-z-]+/[a-z]{2}\.json$", u)
+               for u in fb["seeds"])
+    assert not any("/oceans/" in u or "/world/" in u for u in fb["seeds"])
+    wd = generated["od-wikidata-entitydata"]
+    assert all(re.match(r"^https://www\.wikidata\.org/wiki/Special:EntityData/Q[0-9]+\.json$", u) for u in wd["seeds"])
+    assert len(wd["seeds"]) == len(set(wd["seeds"])) >= 100
+    # The dump route is wired to the existing wikidata-dump source, which stays off (too large).
+    dump = generated["wikidata-dump"]
+    assert dump["adapter"] == "wikidata_facts" and not dump["enabled"] and "place_fact" in dump["kinds"]
+    assert "facts" in dump["relevance"]["sections"]
+
+
+def test_place_facts_existing_sources_and_denylist_2026_11_20(generated):
+    assert len(s2s.FACTS_REUSE) >= 150
+    wired = 0
+    for sid in s2s.FACTS_REUSE:
+        spec = generated[sid]
+        assert "Place facts (research 2026-11-20)" in spec["notes"], sid
+        # `facts` and place_fact only where something produces one: an adapter that emits
+        # place_fact, or LLM kinds on non-share-alike text (review 2026-11-20).
+        reader = spec["adapter"] in s2s.FACTS_ADAPTER_IDS
+        llm = bool(set(spec["llm_kinds"]) - {"place_fact"}) and spec["licence"]["class"] != "share_alike"
+        if reader or llm:
+            wired += 1
+            assert "facts" in spec["relevance"]["sections"] and "place_fact" in spec["kinds"], sid
+            assert spec["source_class"] in ("official", "reference", "editorial"), sid
+            assert ("place_fact" in spec["llm_kinds"]) is (not reader), sid
+        else:
+            assert "facts" not in spec["relevance"]["sections"], sid
+            assert "place_fact" not in spec["kinds"] + spec["llm_kinds"], sid
+            assert "Place facts: not wired yet" in spec["notes"], sid
+    assert wired == 137, wired
+    # Clipped at a clause boundary, never mid-word.
+    for sid, what in s2s.FACTS_REUSE.items():
+        assert len(what) <= 400 and not what.endswith(("`Wikipe", "qualifi")), sid
+        assert what not in ("also in brief: -", "-"), sid
+    assert generated["tb-uzbekistan"]["enabled"] is False
+    for url in FACTS_DENIED:
+        assert s2s.denied(url, DENYLIST) is not None, url
+    for url in FACTS_STAY_ALLOWED:
+        assert s2s.denied(url, DENYLIST) is None, url
+
+
+# Review of the place-facts PRs (2026-11-20): research rows parsed with their columns intact,
+# unverified robots.txt answers kept off, Crawl-delays carried, denylisted publishers kept out.
+FACTS_UNVERIFIED_ROBOTS = re.compile(r"no response|timed? ?out|timeout|unreachable|tls handshake|handshake failed",
+                                     re.I)
+# Rows whose include regex held `|` inside backticks (the naive cell split lost it).
+FACTS_INCLUDE_CARRIED = {
+    "arch-adeac": "(top|texthtml|catalog)", "arch-nysl": None, "fx-palace-museum": None,
+    "gov-in-kachchh": None, "gov-in-madurai": None, "gov-rcu-alula": None, "gov-oman-mht": None,
+    "her-in-intach": None, "her-my-pht": None, "her-nysm": None, "od-digital-giza": None,
+    "tb-brand-south-africa": None,
+}
+# "Anything but these paths" includes (`^/(?!a|b)`) become excludes: the crawler's regex engine
+# has no lookahead.
+FACTS_EXCLUDE_CARRIED = {"fx-historic-hawaii": "donate", "her-ogebc": "shop", "fx-sahapedia": "admin"}
+# Crawl-delays the shifted rows had lost.
+FACTS_DELAYS = {"arch-adeac": 10, "arch-awm": 10, "arch-sudan-memory": 10, "fx-victorian-places": 10,
+                "gov-nvculture": 10, "her-jp-bunka-online": 10}
+FACTS_RESEARCH_OFF = ["arch-chicago-encyclopedia", "arch-digitalnc", "arch-disa", "arch-heritage-nl",
+                      "arch-mass-moments", "arch-naa", "arch-vision-of-britain", "fx-norfolk-churches",
+                      "arch-anzac-portal", "fx-adelaidia", "arch-vch-gloucestershire", "fx-suffolk-churches"]
+
+
+def test_place_facts_research_rows_parsed_whole_2026_11_20(generated):
+    facts = set(s2s.FACTS_IDS)
+    for sid in s2s.FACTS_IDS:
+        spec = generated[sid]
+        notes = " ".join(spec["notes"].split())
+        # A cell from another column (licence, class) never lands in the robots or terms text.
+        assert not re.search(r"robots\.txt: (facts_only|open|share_alike|official|reference|editorial)\. ", notes), sid
+        assert not re.search(r"Terms: (official|reference|editorial|facts_only|open|share_alike)\.", notes), sid
+        assert not re.search(r"\)/?`", spec["relevance"]["why"]), sid  # no regex tail from the include cell
+        m = re.search(r"robots\.txt: (.*?)\. Terms: ", notes)
+        if spec["enabled"] and not spec["adapter"]:
+            assert not (m and FACTS_UNVERIFIED_ROBOTS.search(m.group(1))), sid
+            # The copyright boilerplate is only said when the terms were read.
+            t = re.search(r"Terms: (.*?)\. (Sourced|Copyright|Terms|Share|Open)", notes)
+            if t and re.search(r"not read|not found|unreachable", t.group(1)):
+                assert "Copyright reserved, no bot" not in notes, sid
+        d = re.search(r"Crawl-delay (\d+) honoured as min_delay_s", notes)
+        if d:
+            assert spec["min_delay_s"] == int(d.group(1)), sid
+        if sid.startswith(("gov-in-dist-", "gov-bd-dist-", "gov-bd-upz-")):
+            assert spec["daily_budget"] == 20, sid  # shared national hosting
+    for sid, part in FACTS_INCLUDE_CARRIED.items():
+        if sid in facts:
+            inc = generated[sid]["include"]
+            assert inc and (part is None or any(part in r for r in inc)), sid
+    for sid, part in FACTS_EXCLUDE_CARRIED.items():
+        if sid in facts:
+            assert any(part in r for r in generated[sid]["exclude"]), sid
+    for sid, d in FACTS_DELAYS.items():
+        if sid in facts:
+            assert generated[sid]["min_delay_s"] == d, sid
+    for sid in FACTS_RESEARCH_OFF:
+        if sid in facts:
+            assert generated[sid]["enabled"] is False, sid
+            assert generated[sid]["notes"].split("Disabled: ", 1)[1].startswith(
+                "enable after a check from the crawler VM"), sid
+    # Peepul Tree's terms ban robots on peepultree.world; its other domain is denylisted and not added.
+    assert "fx-livehistoryindia" not in facts
+    for sid in s2s.FACTS_IDS:
+        spec = generated[sid]
+        if spec["enabled"]:
+            for u in spec["seeds"] + spec["sitemaps"] + spec["feeds"]:
+                assert s2s.denied(u, DENYLIST) is None, (sid, u)

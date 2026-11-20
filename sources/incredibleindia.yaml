@@ -26,10 +26,12 @@ kinds:
 - activity
 - event
 - article
+- place_fact
 llm_kinds:
 - attraction
 - activity
 - event
+- place_fact
 render: never
 cadence: monthly
 min_delay_s: 5
@@ -40,12 +42,13 @@ needs_key: false
 key_secret: null
 max_retention_days: null
 display_requirements: null
-notes: robots 200, 1 Disallow. Must not 'sell, reproduce, publish, distribute' without authorisation;
-  no robots clause.
+notes: 'robots 200, 1 Disallow. Must not ''sell, reproduce, publish, distribute'' without authorisation;
+  no robots clause. | Place facts (research 2026-11-20): "history" and "about" pages per destination'
 relevance:
   sections:
   - places
   - itinerary
   - events
+  - facts
   why: Official Indian destinations, attractions, festivals and itineraries, for Places to see, the itinerary
-    and Events.
+    and Events; also history and curiosities for Place facts.

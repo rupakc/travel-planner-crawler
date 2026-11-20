@@ -24,9 +24,11 @@ kinds:
 - place
 - attraction
 - walking_tour
+- place_fact
 llm_kinds:
 - attraction
 - walking_tour
+- place_fact
 render: never
 cadence: weekly
 min_delay_s: 5
@@ -39,10 +41,13 @@ max_retention_days: null
 display_requirements: null
 notes: 'Research 2026-11-18 (corpus Asia-Pacific): robots.txt: robots 200, path allowed; terms: https://www.roots.gov.sg/terms-of-use
   read: no robot/AI clause. No automated-access clause; facts only. | Disabled: robots.txt challenge at
-  first full crawl 2026-11-19; government site, not denylisted: re-test later'
+  first full crawl 2026-11-19; government site, not denylisted: re-test later | Place facts (research
+  2026-11-20): place history and curiosities sections / history, name-origin and curiosity pages of the
+  places it covers / Singapore Monuments GeoJSON; Roots.sg historic sites and markers'
 relevance:
   sections:
   - places
   - walking_tours
+  - facts
   why: 'Roots.sg (National Heritage Board): Heritage sites, trails and monuments of Singapore, for Places
-    to see and Free walking tours.'
+    to see and Free walking tours; also history and curiosities for Place facts.'

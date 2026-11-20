@@ -38,7 +38,12 @@ display_requirements: null
 notes: 'HOLD (research 2026-11-17): developer.nps.gov/robots.txt answers 403 (do-not-crawl origin); ask
   NPS. | Disabled: robots.txt of developer.nps.gov answers 403 to VoyagerBot (research 2026-11-17): do-not-crawl
   origin; needs an API key (free, https://www.nps.gov/subjects/developer/get-started.htm); the public-domain
-  nps.gov site is nps-site'
+  nps.gov site is nps-site | Place facts (research 2026-11-20): park "history and culture" pages, "Things
+  To Know", NRHP and National Historic Landmark descriptions; the API `parks` description fields / NRHP
+  data downloads (https://home.nps.gov/subjects/nationalregister/data-downloads.htm) and NHL pages / park
+  superlatives (deepest lake: Crater Lake; longest cave: Mammoth Cave) | Place facts: not wired yet (no
+  LLM kinds on non-share-alike text and no adapter that emits place_fact), so no `facts` section or place_fact
+  kind; the note above is what to extract once a reader exists.'
 relevance:
   sections:
   - activities

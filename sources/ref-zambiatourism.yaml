@@ -22,9 +22,11 @@ kinds:
 - place
 - attraction
 - hotel
+- place_fact
 llm_kinds:
 - attraction
 - hotel
+- place_fact
 render: never
 cadence: weekly
 min_delay_s: 5
@@ -39,9 +41,12 @@ notes: 'Research 2026-11-18 (corpus Africa-ME): robots.txt: allowed (research 20
   to use the website ... for your personal purposes''. Terms restrict to personal/non-commercial use;
   owner accepted for non-commercial use 2026-11-18 (''entitled to use the website ... for your personal
   purposes''). Facts only. Private company, not the Zambia Tourism Agency; a commercial accommodation
-  directory, low priority.'
+  directory, low priority. | Place facts (research 2026-11-20): /monuments/: the national monuments list
+  (Zawi Hill, Kalomo Administrator''s House)'
 relevance:
   sections:
   - places
   - hotels
-  why: 'Zambia Tourism (private portal): traveller information, for Places to see and Hotels.'
+  - facts
+  why: 'Zambia Tourism (private portal): traveller information, for Places to see and Hotels; also history
+    and curiosities for Place facts.'

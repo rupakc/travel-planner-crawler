@@ -22,9 +22,11 @@ kinds:
 - place
 - attraction
 - tip
+- place_fact
 llm_kinds:
 - attraction
 - tip
+- place_fact
 render: never
 cadence: monthly
 min_delay_s: 5
@@ -37,10 +39,13 @@ max_retention_days: null
 display_requirements: null
 notes: 'Research 2026-11-18 (corpus Asia-Pacific): robots.txt: see research (2026-11-18); terms: Copyright;
   terms not found. Terms unconfirmed; owner accepted for non-commercial use 2026-11-18. Facts only. |
-  Disabled: adapter pending: JavaScript SPA (5 KB shell on /en); needs render and a review'
+  Disabled: adapter pending: JavaScript SPA (5 KB shell on /en); needs render and a review | Place facts
+  (research 2026-11-20): destination "history/culture/facts" pages / relic and old-quarter history (Hội
+  An WH office lists its relics)'
 relevance:
   sections:
   - places
   - tips
+  - facts
   why: 'Vietnam National Authority of Tourism: Official Vietnam tourism information, for Places to see
-    and Travel tips.'
+    and Travel tips; also history and curiosities for Place facts.'

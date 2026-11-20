@@ -35,7 +35,12 @@ needs_key: false
 key_secret: null
 max_retention_days: null
 display_requirements: null
-notes: shared by flights, visa, sim, emergency, packing
+notes: 'shared by flights, visa, sim, emergency, packing | Place facts (research 2026-11-20): "Etymology"/"Toponymy"/"Name"
+  sections of settlement articles; list pages "List of highest towns by country", "List of enclaves and
+  exclaves", "Extreme points of …", "List of geographic centres" (use only with citations) / place properties
+  (founding date, highest point, records) and "Did you know" items; es/pt wikis for municipalities | Place
+  facts: not wired yet (no LLM kinds on non-share-alike text and no adapter that emits place_fact), so
+  no `facts` section or place_fact kind; the note above is what to extract once a reader exists.'
 relevance:
   sections:
   - places

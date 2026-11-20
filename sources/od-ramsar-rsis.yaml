@@ -34,7 +34,10 @@ display_requirements: null
 notes: 'Research 2026-11-18 (hidden gems; NEEDS-ADAPTER row): robots.txt 200 (* group, 34 disallows, /
   allowed); meta robots noindex, follow. Terms not found (the link was a search page). Export (CSV/XLS/SHP)
   via the RSIS search. Terms unconfirmed; owner accepted for non-commercial use 2026-11-18. | Disabled:
-  adapter pending: RSIS site export reader (CSV/XLS) -> place'
+  adapter pending: RSIS site export reader (CSV/XLS) -> place | Place facts (research 2026-11-20): the
+  first designated site per country, the largest wetland, the site''s "justification" criteria | Place
+  facts: not wired yet (no LLM kinds on non-share-alike text and no adapter that emits place_fact), so
+  no `facts` section or place_fact kind; the note above is what to extract once a reader exists.'
 relevance:
   sections:
   - places

@@ -27,12 +27,14 @@ kinds:
 - event
 - tip
 - transport_option
+- place_fact
 llm_kinds:
 - attraction
 - activity
 - event
 - tip
 - transport_option
+- place_fact
 render: never
 cadence: weekly
 min_delay_s: 5
@@ -46,7 +48,8 @@ display_requirements: null
 notes: 'Research 2026-11-18 (corpus Asia-Pacific): robots.txt: robots 200, path allowed (Disallow /totalSearch/search.do
   only); terms: terms not found (footer link is JavaScript; footer: ''Copyright Korea Tourism Organization.
   All Rights Reserved.''; KTO TourAPI already via apis.data.go.kr). Terms unconfirmed; owner accepted
-  for non-commercial use 2026-11-18. Facts only.'
+  for non-commercial use 2026-11-18. Facts only. | Place facts (research 2026-11-20): destination "history/culture/facts"
+  pages'
 relevance:
   sections:
   - places
@@ -54,5 +57,7 @@ relevance:
   - events
   - tips
   - getting_around
+  - facts
   why: 'Korea Tourism Organization (VisitKorea, English): National tourism board: regions, attractions,
-    festivals and practical info, for Places to see, Activities, Events, Travel tips and Local transportation.'
+    festivals and practical info, for Places to see, Activities, Events, Travel tips and Local transportation;
+    also history and curiosities for Place facts.'

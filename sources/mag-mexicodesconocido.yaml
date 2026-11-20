@@ -35,7 +35,9 @@ display_requirements: null
 notes: 'robots.txt (research 2026-11-18): allowed. Crawl-delay: 10; CCBot, PerplexityBot and Bytespider
   blocked. robots.txt reserves AI use (AI crawlers blocked), so title and link only: no LLM kinds. No
   terms page or no automated-access clause found. Terms unconfirmed; owner accepted for non-commercial
-  use 2026-11-18.'
+  use 2026-11-18. | Place facts (research 2026-11-20): place history and curiosities sections | Place
+  facts: not wired yet (no LLM kinds on non-share-alike text and no adapter that emits place_fact), so
+  no `facts` section or place_fact kind; the note above is what to extract once a reader exists.'
 relevance:
   sections:
   - places

@@ -26,11 +26,13 @@ kinds:
 - activity
 - event
 - tip
+- place_fact
 llm_kinds:
 - attraction
 - activity
 - event
 - tip
+- place_fact
 render: never
 cadence: weekly
 min_delay_s: 5
@@ -42,12 +44,14 @@ key_secret: null
 max_retention_days: null
 display_requirements: null
 notes: 'Research 2026-11-18 (corpus Africa-ME): robots.txt: WP default (wp-admin only); no AI blocks;
-  terms: terms not found. Terms unconfirmed; owner accepted for non-commercial use 2026-11-18. Facts only.'
+  terms: terms not found. Terms unconfirmed; owner accepted for non-commercial use 2026-11-18. Facts only.
+  | Place facts (research 2026-11-20): Accra history (Jamestown, Osu Castle), the replacement for AMA'
 relevance:
   sections:
   - places
   - activities
   - events
   - tips
+  - facts
   why: 'Ghana Tourism Authority: official Ghana destinations and attractions, for Places to see, Activities,
-    Events and Travel tips.'
+    Events and Travel tips; also history and curiosities for Place facts.'

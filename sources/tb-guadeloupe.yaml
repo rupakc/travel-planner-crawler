@@ -40,7 +40,10 @@ notes: 'Research 2026-11-18 (corpus LatAm): robots.txt: **AI-bot block (all majo
   title and link only; terms: Mentions légales: electronic reproduction needs authorisation (copyright
   only). No automated-access clause; facts only. robots.txt reserves AI use (AI crawlers blocked), so
   title and link only: no LLM kinds. | Disabled: challenge page at first full crawl 2026-11-19; do not
-  retry another way (host denylisted)'
+  retry another way (host denylisted) | Place facts (research 2026-11-20): not refetched; each has "history"
+  / "did you know" / destination pages that can feed `facts` | Place facts: not wired yet (no LLM kinds
+  on non-share-alike text and no adapter that emits place_fact), so no `facts` section or place_fact kind;
+  the note above is what to extract once a reader exists.'
 relevance:
   sections:
   - places

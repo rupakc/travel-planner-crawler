@@ -22,9 +22,11 @@ kinds:
 - place
 - attraction
 - event
+- place_fact
 llm_kinds:
 - attraction
 - event
+- place_fact
 render: never
 cadence: monthly
 min_delay_s: 5
@@ -37,10 +39,14 @@ max_retention_days: null
 display_requirements: null
 notes: 'Research 2026-11-18 (corpus Europe): robots.txt: allowed; terms: metadata CC0, media rights per
   item. | Disabled: needs an API key: owner must register a free key at https://pro.europeana.eu/page/get-api;
-  adapter pending: Europeana search reader'
+  adapter pending: Europeana search reader | Place facts (research 2026-11-20): extract: Local-history
+  items per place (`what`/`where` queries) for "historic photo of X in 1900" facts / Use the Europeana
+  Entity API places (`/entity/place/…`, descriptions and alt names) and `www.europeana.eu/sitemap-entity-index.xml`
+  place pages (robots ok) for per-place "highlights" and dated items.'
 relevance:
   sections:
   - places
   - events
+  - facts
   why: 'Europeana Search and Record API: Museum and cultural-heritage records (50M items) with places
-    and dates, for Places to see and Events.'
+    and dates, for Places to see and Events; also history and curiosities for Place facts.'

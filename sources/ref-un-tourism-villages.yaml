@@ -21,8 +21,10 @@ max_depth: 2
 kinds:
 - place
 - attraction
+- place_fact
 llm_kinds:
 - attraction
+- place_fact
 render: never
 cadence: monthly
 min_delay_s: 5
@@ -38,8 +40,11 @@ notes: 'Research 2026-11-18 (hidden gems, small islands and remote places; World
   terms page not located at vetting. Terms restrict to personal/non-commercial use; owner accepted for
   non-commercial use 2026-11-18 (UN Tourism terms of use are non-commercial (brief); terms page not located
   at vetting); facts only. | Disabled: seed unresolved: the Best Tourism Villages listing URL was not
-  pinned at research (2026-11-18) and the terms page was not located'
+  pinned at research (2026-11-18) and the terms page was not located | Place facts (research 2026-11-20):
+  village pages already crawled: add a facts extractor (founding date, "classified since", heritage highlights)'
 relevance:
   sections:
   - places
-  why: UN Tourism Best Tourism Villages (untourism.int), for Places to see.
+  - facts
+  why: UN Tourism Best Tourism Villages (untourism.int), for Places to see; also history and curiosities
+    for Place facts.

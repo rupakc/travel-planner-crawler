@@ -26,11 +26,13 @@ kinds:
 - event
 - activity
 - tip
+- place_fact
 llm_kinds:
 - attraction
 - event
 - activity
 - tip
+- place_fact
 render: never
 cadence: weekly
 min_delay_s: 5
@@ -46,12 +48,14 @@ notes: 'Research 2026-11-18 (corpus Asia-Pacific): robots.txt: robots 200, path 
   purposes, please source the information appropriately" (non-commercial reuse with credit; Voyager is
   non-commercial - flag for owner). Terms restrict to personal/non-commercial use; owner accepted for
   non-commercial use 2026-11-18 (''When using the content of this website for personal/non-commercial
-  purposes, please source the information appropriately''). Facts only.'
+  purposes, please source the information appropriately''). Facts only. | Place facts (research 2026-11-20):
+  destination "history/culture/facts" pages'
 relevance:
   sections:
   - places
   - events
   - activities
   - tips
+  - facts
   why: 'Taiwan Tourism Administration (English): National tourism board: attractions, festivals, itineraries,
-    for Places to see, Events, Activities and Travel tips.'
+    for Places to see, Events, Activities and Travel tips; also history and curiosities for Place facts.'

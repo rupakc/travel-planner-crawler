@@ -22,9 +22,11 @@ kinds:
 - place
 - attraction
 - activity
+- place_fact
 llm_kinds:
 - attraction
 - activity
+- place_fact
 render: never
 cadence: monthly
 min_delay_s: 5
@@ -37,10 +39,12 @@ max_retention_days: null
 display_requirements: null
 notes: 'Research 2026-11-18 (corpus Asia-Pacific): robots.txt: robots 200 (no rules, curl recv error after
   body); terms: terms not found. Terms unconfirmed; owner accepted for non-commercial use 2026-11-18.
-  Facts only.'
+  Facts only. | Place facts (research 2026-11-20): lists of centrally protected monuments by state, with
+  dates (historical facts) / ASI Centrally Protected Monuments list (CPM_List.pdf)'
 relevance:
   sections:
   - places
   - activities
+  - facts
   why: 'Archaeological Survey of India: Protected monuments, ticketed monuments list and timings, for
-    Places to see and Activities.'
+    Places to see and Activities; also history and curiosities for Place facts.'

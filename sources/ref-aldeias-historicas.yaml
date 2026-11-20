@@ -27,10 +27,12 @@ kinds:
 - attraction
 - activity
 - walking_tour
+- place_fact
 llm_kinds:
 - attraction
 - activity
 - walking_tour
+- place_fact
 render: never
 cadence: monthly
 min_delay_s: 5
@@ -43,11 +45,13 @@ max_retention_days: null
 display_requirements: null
 notes: 'Research 2026-11-18 (hidden gems, small islands and remote places; Europe/Portugal): robots 200
   (* group, 0 disallows, / allowed). Terms: terms page: no bot/AI clause. Terms hold no bot, AI or personal-use
-  clause (copyright only): facts only.'
+  clause (copyright only): facts only. | Place facts (research 2026-11-20): village pages already crawled:
+  add a facts extractor (founding date, "classified since", heritage highlights)'
 relevance:
   sections:
   - places
   - activities
   - walking_tours
+  - facts
   why: 'Aldeias Históricas de Portugal: 12 villages, GR22 route, for Places to see, Activities and Walking
-    tours.'
+    tours; also history and curiosities for Place facts.'

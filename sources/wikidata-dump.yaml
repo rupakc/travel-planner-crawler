@@ -14,7 +14,7 @@ seeds:
 - https://dumps.wikimedia.org/wikidatawiki/entities/
 sitemaps: []
 feeds: []
-adapter: null
+adapter: wikidata_facts
 include: []
 exclude: []
 max_depth: 0
@@ -23,6 +23,7 @@ kinds:
 - attraction
 - emergency_numbers
 - packing_hint
+- place_fact
 llm_kinds: []
 render: never
 cadence: monthly
@@ -35,8 +36,13 @@ key_secret: null
 max_retention_days: null
 display_requirements: null
 notes: 'POIs, P2852 emergency, P2853 plugs, P2884 voltage | Disabled: Full dump too large; Wikidata is
-  queried via SPARQL (spec §5.10).'
+  queried via SPARQL (spec §5.10). | Place facts (research 2026-11-20): Philippine NHCP historical markers
+  (items with P1435 heritage designation + coordinates; the NHCP gap); China''s 全国重点文物保护单位 (P1435 = Major
+  Historical and Cultural Site Protected at the National Level) with batch dates / place properties (founding
+  date, highest point, records) and "Did you know" items; es/pt wikis for municipalities'
 relevance:
   sections:
   - places
-  why: Facts about places and sights from Wikidata for Places to see; the full dump is too large, so off.
+  - facts
+  why: Facts about places and sights from Wikidata for Places to see; the full dump is too large, so off;
+    also history and curiosities for Place facts.

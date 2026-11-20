@@ -25,10 +25,12 @@ kinds:
 - activity
 - event
 - article
+- place_fact
 llm_kinds:
 - attraction
 - activity
 - event
+- place_fact
 render: never
 cadence: monthly
 min_delay_s: 5
@@ -39,12 +41,14 @@ needs_key: false
 key_secret: null
 max_retention_days: null
 display_requirements: null
-notes: robots 200, no Disallow; /sitemap.xml answered 404. No robots clause; photos need permission before
-  reuse.
+notes: 'robots 200, no Disallow; /sitemap.xml answered 404. No robots clause; photos need permission before
+  reuse. | Place facts (research 2026-11-20): not refetched; each has "history" / "did you know" / destination
+  pages that can feed `facts`'
 relevance:
   sections:
   - places
   - activities
   - itinerary
+  - facts
   why: Official Argentine destinations, experiences and itineraries, for Places to see, Activities and
-    the itinerary.
+    the itinerary; also history and curiosities for Place facts.

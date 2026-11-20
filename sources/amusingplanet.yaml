@@ -34,7 +34,11 @@ display_requirements: null
 notes: 'www.amusingplanet.com robots 200, no Disallow; feeds.feedburner.com/robots.txt answered 200 with
   an HTML page that redirects to /lander (a parked-domain lander, not a robots file; checked 2026-11-17).
   No terms page found. | Disabled: terms not yet confirmed: no terms page found; feeds.feedburner.com
-  serves a parked-domain lander instead of robots.txt (checked 2026-11-17): do not fetch the feed there'
+  serves a parked-domain lander instead of robots.txt (checked 2026-11-17): do not fetch the feed there
+  | Place facts (research 2026-11-20): enabled:false; robots allowed, feed 200 (25 items): enable for
+  facts (curiosities about places, sourced) | Place facts: not wired yet (no LLM kinds on non-share-alike
+  text and no adapter that emits place_fact), so no `facts` section or place_fact kind; the note above
+  is what to extract once a reader exists.'
 relevance:
   sections:
   - places

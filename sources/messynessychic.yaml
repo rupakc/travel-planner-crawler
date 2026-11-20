@@ -33,7 +33,10 @@ max_retention_days: null
 display_requirements: null
 notes: 'robots 200, Crawl-delay 3, 3 Disallows; RSS 200. No terms page found. | Disabled: terms not yet
   confirmed: no terms page found; also the relevance gate: not a whole-travel publication (the owner may
-  add messynessychic.com to TRAVEL_PUBLICATIONS)'
+  add messynessychic.com to TRAVEL_PUBLICATIONS) | Place facts (research 2026-11-20): enabled:false; curiosities
+  about places: enable for facts | Place facts: not wired yet (no LLM kinds on non-share-alike text and
+  no adapter that emits place_fact), so no `facts` section or place_fact kind; the note above is what
+  to extract once a reader exists.'
 relevance:
   sections:
   - places

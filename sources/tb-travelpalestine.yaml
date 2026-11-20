@@ -24,10 +24,12 @@ kinds:
 - attraction
 - activity
 - event
+- place_fact
 llm_kinds:
 - attraction
 - activity
 - event
+- place_fact
 render: never
 cadence: weekly
 min_delay_s: 5
@@ -40,11 +42,13 @@ max_retention_days: null
 display_requirements: null
 notes: 'Research 2026-11-18 (corpus Africa-ME): robots.txt: /admin, /login, /cart disallowed; sitemap.xml
   answered HTML; terms: terms not found. Terms unconfirmed; owner accepted for non-commercial use 2026-11-18.
-  Facts only.'
+  Facts only. | Place facts (research 2026-11-20): /en/Site/ pages: Ministry of Tourism and Antiquities
+  site histories (also covers mota.ps)'
 relevance:
   sections:
   - places
   - activities
   - events
+  - facts
   why: 'Palestine Ministry of Tourism & Antiquities: Travel Palestine: Bethlehem, Jericho, Hebron, for
-    Places to see, Activities and Events.'
+    Places to see, Activities and Events; also history and curiosities for Place facts.'

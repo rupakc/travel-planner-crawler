@@ -23,9 +23,11 @@ kinds:
 - place
 - attraction
 - event
+- place_fact
 llm_kinds:
 - attraction
 - event
+- place_fact
 render: never
 cadence: weekly
 min_delay_s: 5
@@ -37,9 +39,13 @@ key_secret: null
 max_retention_days: null
 display_requirements: null
 notes: 'Research 2026-11-18 (corpus LatAm): robots.txt: 404 (allow); terms: terms not found. Terms unconfirmed;
-  owner accepted for non-commercial use 2026-11-18. Facts only.'
+  owner accepted for non-commercial use 2026-11-18. Facts only. | Place facts (research 2026-11-20): "history",
+  "did you know", culture pages per destination / /es/places/ city pages with history (Colonia, Durazno),
+  /es/datos/'
 relevance:
   sections:
   - places
   - events
-  why: 'Uruguay Natural (Ministerio de Turismo): official destinations, for Places to see and Events.'
+  - facts
+  why: 'Uruguay Natural (Ministerio de Turismo): official destinations, for Places to see and Events;
+    also history and curiosities for Place facts.'

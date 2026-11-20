@@ -23,9 +23,11 @@ kinds:
 - place
 - attraction
 - activity
+- place_fact
 llm_kinds:
 - attraction
 - activity
+- place_fact
 render: never
 cadence: daily
 min_delay_s: 5
@@ -39,10 +41,12 @@ display_requirements: null
 notes: 'Research 2026-11-18 (hidden gems, small islands and remote places; Asia/Japan): robots 200 (*
   group, 1 disallows, / allowed). Terms: site-policy: no bot/AI clause. Terms hold no bot, AI or personal-use
   clause (copyright only): facts only. Onboarding: www.utsukushii-mura.jp redirects to japan-utsukushii-mura.com;
-  its robots.txt read 2026-11-18 (200, disallows /wp-admin/ only).'
+  its robots.txt read 2026-11-18 (200, disallows /wp-admin/ only). | Place facts (research 2026-11-20):
+  village pages already crawled: add a facts extractor (founding date, "classified since", heritage highlights)'
 relevance:
   sections:
   - places
   - activities
+  - facts
   why: The Most Beautiful Villages in Japan association (japan-utsukushii-mura.com), for Places to see
-    and Activities.
+    and Activities; also history and curiosities for Place facts.

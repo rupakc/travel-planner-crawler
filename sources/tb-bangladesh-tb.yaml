@@ -22,9 +22,11 @@ kinds:
 - place
 - attraction
 - event
+- place_fact
 llm_kinds:
 - attraction
 - event
+- place_fact
 render: never
 cadence: monthly
 min_delay_s: 5
@@ -36,9 +38,12 @@ key_secret: null
 max_retention_days: null
 display_requirements: null
 notes: 'Research 2026-11-18 (corpus Asia-Pacific): robots.txt: robots 404 (allow all); terms: terms not
-  found. Terms unconfirmed; owner accepted for non-commercial use 2026-11-18. Facts only.'
+  found. Terms unconfirmed; owner accepted for non-commercial use 2026-11-18. Facts only. | Place facts
+  (research 2026-11-20): destination history and "did you know" lines'
 relevance:
   sections:
   - places
   - events
-  why: 'Bangladesh Tourism Board: Bangladesh destinations and notices, for Places to see and Events.'
+  - facts
+  why: 'Bangladesh Tourism Board: Bangladesh destinations and notices, for Places to see and Events; also
+    history and curiosities for Place facts.'

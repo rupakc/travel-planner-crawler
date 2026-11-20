@@ -26,10 +26,12 @@ kinds:
 - attraction
 - activity
 - tip
+- place_fact
 llm_kinds:
 - attraction
 - activity
 - tip
+- place_fact
 render: never
 cadence: weekly
 min_delay_s: 5
@@ -42,12 +44,14 @@ max_retention_days: null
 display_requirements: null
 notes: 'robots.txt (research 2026-11-18): 200; disallows only /admin/ /bin/ /api/. ''the material on this
   website is Crown Copyright and can be reused under the terms of the Creative Commons Attribution 4.0
-  International Licence (CC BY 4.0)''.'
+  International Licence (CC BY 4.0)''. | Place facts (research 2026-11-20): historic places on conservation
+  land (history text per site)'
 relevance:
   sections:
   - places
   - activities
   - tips
   - itinerary
+  - facts
   why: Official New Zealand tracks, huts, campsites, Great Walks and the outdoor care code, for Places
-    to see, Activities, Travel tips and the itinerary.
+    to see, Activities, Travel tips and the itinerary; also history and curiosities for Place facts.

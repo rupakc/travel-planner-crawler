@@ -24,10 +24,12 @@ kinds:
 - place
 - attraction
 - transport_option
+- place_fact
 llm_kinds:
 - event
 - attraction
 - transport_option
+- place_fact
 render: never
 cadence: monthly
 min_delay_s: 5
@@ -40,11 +42,12 @@ max_retention_days: null
 display_requirements: null
 notes: 'Research 2026-11-18 (corpus Europe): robots.txt: robots 404 = allowed; terms: "tout le contenu…
   Creative Commons CC0". | Disabled: adapter pending: choose tourism datasets + dataset reader (crawling
-  the portal''s HTML is not useful)'
+  the portal''s HTML is not useful) | Place facts (research 2026-11-20): immeubles et objets classés'
 relevance:
   sections:
   - events
   - places
   - getting_around
+  - facts
   why: 'data.public.lu: government open-data datasets (tourism, events, transport), for Events, Places
-    to see and Local transportation.'
+    to see and Local transportation; also history and curiosities for Place facts.'

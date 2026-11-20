@@ -21,8 +21,10 @@ max_depth: 0
 kinds:
 - place
 - attraction
+- place_fact
 llm_kinds:
 - attraction
+- place_fact
 render: never
 cadence: monthly
 min_delay_s: 5
@@ -35,9 +37,10 @@ max_retention_days: null
 display_requirements: null
 notes: 'Research 2026-11-18 (corpus thematic): robots.txt: allowed (research 2026-11-18); terms: Licence
   Ouverte 2.0. | Disabled: adapter pending: Opendatasoft CSV/JSON export reader (the portal is a JavaScript
-  SPA)'
+  SPA) | Place facts (research 2026-11-20): Mérimée "historique" field and protection dates'
 relevance:
   sections:
   - places
+  - facts
   why: 'Mérimée (French protected monuments): About 45,000 protected historic monuments in France with
-    locations, for Places to see.'
+    locations, for Places to see; also history and curiosities for Place facts.'

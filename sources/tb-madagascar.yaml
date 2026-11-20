@@ -25,11 +25,13 @@ kinds:
 - activity
 - visa_rule
 - tip
+- place_fact
 llm_kinds:
 - attraction
 - activity
 - visa_rule
 - tip
+- place_fact
 render: never
 cadence: weekly
 min_delay_s: 5
@@ -42,12 +44,13 @@ max_retention_days: null
 display_requirements: null
 notes: 'Research 2026-11-18 (corpus Africa-ME): robots.txt: empty robots.txt (all allowed); terms: terms
   not found ("©Copyright 2026 Madagascar Tourisme" only). Terms unconfirmed; owner accepted for non-commercial
-  use 2026-11-18. Facts only.'
+  use 2026-11-18. Facts only. | Place facts (research 2026-11-20): Ambohimanga and the royal-hill histories'
 relevance:
   sections:
   - places
   - activities
   - visa
   - tips
+  - facts
   why: 'Office National du Tourisme de Madagascar: official national guide (FR/EN), for Places to see,
-    Activities, Visa and Travel tips.'
+    Activities, Visa and Travel tips; also history and curiosities for Place facts.'

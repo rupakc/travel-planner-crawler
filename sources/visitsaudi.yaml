@@ -24,10 +24,12 @@ kinds:
 - activity
 - event
 - article
+- place_fact
 llm_kinds:
 - attraction
 - activity
 - event
+- place_fact
 render: never
 cadence: weekly
 min_delay_s: 5
@@ -39,9 +41,12 @@ key_secret: null
 max_retention_days: null
 display_requirements: null
 notes: 'HOLD (research 2026-11-17): ''Principles of use'' page rendered empty. Blocker was: ''Principles
-  of use'' page rendered empty. Terms unconfirmed; owner accepted for non-commercial use 2026-11-17.'
+  of use'' page rendered empty. Terms unconfirmed; owner accepted for non-commercial use 2026-11-17. |
+  Place facts (research 2026-11-20): Riyadh and Diriyah facts'
 relevance:
   sections:
   - events
   - places
-  why: Official Saudi destinations, events and things to do, for Events and Places to see.
+  - facts
+  why: Official Saudi destinations, events and things to do, for Events and Places to see; also history
+    and curiosities for Place facts.

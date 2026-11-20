@@ -21,9 +21,11 @@ max_depth: 1
 kinds:
 - attraction
 - event
+- place_fact
 llm_kinds:
 - attraction
 - event
+- place_fact
 render: never
 cadence: monthly
 min_delay_s: 5
@@ -40,11 +42,13 @@ notes: 'Official city information, the alternative to capetown.travel (Cloudflar
   personal non-commercial use and copies for personal use crediting the site; other use needs written
   permission (cct.webmaster@capetown.gov.za). Terms restrict to personal/non-commercial use; owner accepted
   for non-commercial use 2026-11-18 (redistribution or reproduction prohibited except personal non-commercial
-  use). Facts only, with the source and link.'
+  use). Facts only, with the source and link. | Place facts (research 2026-11-20): add history-of-Cape-Town
+  pages; terms personal/non-commercial'
 relevance:
   sections:
   - places
   - activities
   - events
+  - facts
   why: Cape Town's official beaches, nature reserves, parks and city events, for Places to see, Activities
-    and Events.
+    and Events; also history and curiosities for Place facts.

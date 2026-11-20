@@ -24,10 +24,12 @@ kinds:
 - attraction
 - event
 - place
+- place_fact
 llm_kinds:
 - activity
 - attraction
 - event
+- place_fact
 render: never
 cadence: weekly
 min_delay_s: 5
@@ -39,10 +41,13 @@ key_secret: null
 max_retention_days: null
 display_requirements: null
 notes: 'Research 2026-11-18 (corpus Europe): robots.txt: robots 404 = allowed; terms: terms not found.
-  Terms unconfirmed; owner accepted for non-commercial use 2026-11-18. Facts only.'
+  Terms unconfirmed; owner accepted for non-commercial use 2026-11-18. Facts only. | Place facts (research
+  2026-11-20): history, name-origin and curiosity pages of the places it covers'
 relevance:
   sections:
   - activities
   - events
   - places
-  why: 'Kraków Travel: official visitor guide, for Activities, Events and Places to see.'
+  - facts
+  why: 'Kraków Travel: official visitor guide, for Activities, Events and Places to see; also history
+    and curiosities for Place facts.'

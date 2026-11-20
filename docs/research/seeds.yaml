@@ -20358,3 +20358,3188 @@ seeds:
     notes: 'Research 2026-11-19 (carbon footprint corpus; gaps; verdict ADD): Per-country CO2/GHG per capita and consumption-based
       emissions for every country. Destination context and a fallback for Africa and the Gulf. Yearly. Format: csv. Licence
       (research): CC BY 4.0 (open). robots 404 (allowed).'
+  - id: fx-hespress-histoire
+    category: facts
+    name: Hespress (histoire section)
+    url: https://www.hespress.com/sitemap_index.xml
+    method: sitemap
+    license: Copyright; no automated-access clause
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Global / multi-country; verdict ADD): Moroccan history articles (Arabic),
+      for Place facts. robots.txt: 200; /author disallowed. Terms: /conditions: copyright, republication only with a link (no
+      bot ban). Sourced: partly. Copyright reserved, no bot, scraping, TDM or AI ban quoted; owner accepted for non-commercial
+      use 2026-11-18. Facts only.'
+  - id: fx-burkina24-culture
+    category: facts
+    name: Burkina24 (culture)
+    url: https://burkina24.com/feed/
+    method: rss
+    license: Copyright; no automated-access clause
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Global / multi-country; verdict ADD): Burkinabè heritage news, for Place
+      facts. robots.txt: 200. Terms: mentions légales: "Tous les droits de reproduction y sont réservés". Sourced: no. Copyright
+      reserved, no bot, scraping, TDM or AI ban quoted; owner accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: fx-radiookapi-identite
+    category: facts
+    name: 'Radio Okapi: Identité culturelle'
+    url: https://www.radiookapi.net/identite-culturelle
+    method: html
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Global / multi-country; verdict ADD): Identité culturelle: DRC cultural
+      identity and local history programmes per province, for Place facts. robots.txt: 200; Crawl-delay 10. Terms: terms not
+      found. Sourced: partly. Terms not read or not found; owner accepted for non-commercial use 2026-11-18. Facts only. Crawl-delay
+      10 honoured as min_delay_s.'
+  - id: fx-kapitalis-culture
+    category: facts
+    name: Kapitalis (culture)
+    url: https://kapitalis.com/tunisie/feed/
+    method: rss
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Global / multi-country; verdict ADD): Tunisian heritage, for Place facts.
+      robots.txt: 404 (allowed). Terms: terms not found. Sourced: no. Terms not read or not found; owner accepted for non-commercial
+      use 2026-11-18. Facts only.'
+  - id: gov-sabanew-yemen
+    category: facts
+    name: Saba Net (sabanew.net)
+    url: https://www.sabanew.net/
+    method: html
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Global / multi-country; verdict ADD): Yemeni heritage news (thin; politically
+      contested agency), for Place facts. robots.txt: 200 CS. Terms: terms not found. Sourced: no. Terms not read or not found;
+      owner accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: arch-openedition-journals
+    category: facts
+    name: OpenEdition Journals (Cahiers d'études africaines, Afriques, Journal des africanistes, Revue des mondes musulmans,
+      Arabian Humanities)
+    url: https://journals.openedition.org/feed.php
+    method: html
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Global / multi-country; verdict ADD): peer-reviewed place histories for
+      cities and villages across Africa and the Arab world, for Place facts. robots.txt: 200; /oai, /lodel disallowed. Terms:
+      GTCU page JS-rendered (unread); legal notice has no ban. Sourced: yes. Terms not read or not found; owner accepted for
+      non-commercial use 2026-11-18. Facts only.'
+  - id: arch-openedition-books
+    category: facts
+    name: OpenEdition Books (IRD, IFRA, IFPO, CEMCA presses)
+    url: https://books.openedition.org/rss/?format=rss
+    method: rss
+    license: Copyright; no automated-access clause
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Global / multi-country; verdict ADD): monographs on Levant, Maghreb and
+      African towns, for Place facts. robots.txt: 200; /catalogue, /api disallowed. Terms: GTCU unread (JS). Sourced: yes. Copyright
+      reserved, no bot, scraping, TDM or AI ban quoted; owner accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: arch-hypotheses
+    category: facts
+    name: Hypotheses (OpenEdition academic blogs)
+    url: https://hypotheses.org/feed
+    method: rss
+    license: Copyright; no automated-access clause
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Global / multi-country; verdict ADD): research notes on African and Middle
+      Eastern places, for Place facts. robots.txt: 200; /xmlrpc.php disallowed. Terms: legal notice: no ban. Sourced: yes. Copyright
+      reserved, no bot, scraping, TDM or AI ban quoted; owner accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: arch-hal-africa
+    category: facts
+    name: HAL open archive (incl. DUMAS theses)
+    url: https://api.archives-ouvertes.fr/search/
+    method: html
+    license: Copyright; no automated-access clause
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Global / multi-country; verdict NEEDS-ADAPTER): theses and articles on
+      African town histories, for Place facts. robots.txt: 200; many AI bots blocked; asks for API use. Terms: legal notice:
+      no ban. Sourced: yes. Copyright reserved, no bot, scraping, TDM or AI ban quoted; owner accepted for non-commercial use
+      2026-11-18. Facts only. AI-reserved robots.txt (or Content-Signal): title and link only, no LLM kinds.'
+  - id: arch-oapen
+    category: facts
+    name: OAPEN Library
+    url: https://library.oapen.org/feed/rss_2.0/site
+    method: rss
+    license: Open data licence (see notes)
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Global / multi-country; verdict ADD): open-licensed monographs on African
+      and Middle Eastern history, for Place facts. robots.txt: 200 (DSpace standard). Terms: terms not fetched (CC per title).
+      Sourced: yes. Open licence (Open data licence (see notes)).'
+  - id: arch-akofena
+    category: facts
+    name: Akofena (Ivorian journal, CRAC-INSAAC)
+    url: https://www.revue-akofena.com/sitemap_index.xml
+    method: sitemap
+    license: CC BY 4.0
+    cadence: quarterly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Global / multi-country; verdict ADD): occasional West African toponymy
+      and local history (low yield), for Place facts. robots.txt: 200. Terms: editorial policy: "licensed under .. CC-BY 4.0".
+      Sourced: yes. Open licence (CC BY 4.0).'
+  - id: arch-codesria
+    category: facts
+    name: CODESRIA
+    url: https://codesria.org/wp-sitemap.xml
+    method: sitemap
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Global / multi-country; verdict ADD): Afrika Zamani and African history
+      publications (low direct yield), for Place facts. robots.txt: 200. Terms: terms not found. Sourced: yes. Terms not read
+      or not found; owner accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: her-alecso
+    category: facts
+    name: ALECSO (Arab League Educational, Cultural and Scientific Organization)
+    url: https://www.alecso.org/nsite/ar/
+    method: html
+    license: Copyright; terms not found
+    cadence: quarterly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Global / multi-country; verdict ADD): Arab heritage lists and culture news
+      (low yield), for Place facts. robots.txt: 200 (Joomla). Terms: terms not found. Sourced: partly. Terms not read or not
+      found; owner accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: her-apartheid-museum
+    category: facts
+    name: Apartheid Museum
+    url: https://www.apartheidmuseum.org/
+    method: html
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Global / multi-country; verdict ADD): history and curiosities of the places
+      it covers, for Place facts and Activities. robots.txt: /craft/ only. Terms: terms not found (privacy PDF only). Sourced:
+      no. Terms not read or not found; owner accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: arch-mandela-foundation
+    category: facts
+    name: Nelson Mandela Foundation
+    url: https://www.nelsonmandela.org/
+    method: html
+    license: Copyright; no automated-access clause
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Global / multi-country; verdict ADD): Mandela-linked places (Qunu, Mvezo,
+      Houghton), for Place facts. robots.txt: /craft/ only; AI-block (ClaudeBot, GPTBot, CCBot, Google-Extended…). Terms: Website
+      Policy PDF has no crawler clause. Sourced: partly. Copyright reserved, no bot, scraping, TDM or AI ban quoted; owner accepted
+      for non-commercial use 2026-11-18. Facts only. AI-reserved robots.txt (or Content-Signal): title and link only, no LLM
+      kinds.'
+  - id: her-awhf
+    category: facts
+    name: African World Heritage Fund
+    url: https://awhf.net/feed/
+    method: rss
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Global / multi-country; verdict ADD): pan-African World Heritage site facts,
+      for Place facts. robots.txt: calendar views, /author/. Terms: terms not found. Sourced: partly. Terms not read or not
+      found; owner accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: her-zamani
+    category: facts
+    name: Zamani Project (University of Cape Town)
+    url: https://zamaniproject.org/digital-heritage-archive.html
+    method: html
+    license: Copyright; terms not found
+    cadence: quarterly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Global / multi-country; verdict ADD): pages on documented heritage sites
+      across Africa and the Middle East (Lalibela, Gondar, Kilwa, Petra…), for Place facts and Places to see. robots.txt: robots
+      404. Terms: terms not found (privacy only). Sourced: yes. Terms not read or not found; owner accepted for non-commercial
+      use 2026-11-18. Facts only.'
+  - id: fx-tara-rock-art
+    category: facts
+    name: 'TARA: Trust for African Rock Art'
+    url: https://africanrockart.org/sitemap.xml
+    method: sitemap
+    license: Copyright; terms not found
+    cadence: quarterly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Global / multi-country; verdict ADD): Trust for African Rock Art: rock-art
+      sites by country, for Place facts and Places to see. robots.txt: /wp-admin/; Crawl-delay 10. Terms: terms not found. Sourced:
+      yes. Terms not read or not found; owner accepted for non-commercial use 2026-11-18. Facts only. Crawl-delay 10 honoured
+      as min_delay_s.'
+  - id: fx-encyclopaedia-africana
+    category: facts
+    name: Encyclopaedia Africana Project
+    url: https://encyclopaediaafricana.com/sitemap.xml
+    method: sitemap
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Global / multi-country; verdict ADD): entries on African homelands, kingdoms
+      and heroes, for Place facts. robots.txt: shop paths; Crawl-delay 3. Terms: terms not found (privacy only). Sourced: partly
+      (says peer-reviewed). Terms not read or not found; owner accepted for non-commercial use 2026-11-18. Facts only. Crawl-delay
+      5 honoured as min_delay_s.'
+  - id: fx-conversation-africa
+    category: facts
+    name: The Conversation Africa
+    url: https://theconversation.com/africa/sitemap_news.xml
+    method: sitemap
+    license: Copyright; no automated-access clause
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Global / multi-country; verdict ADD): academic explainers on African and
+      Middle Eastern places, for Place facts. robots.txt: AI-block (35 bots incl. anthropic-ai, ClaudeBot). Terms: terms have
+      no crawler ban (CC BY-ND republishing). Sourced: yes. Copyright reserved, no bot, scraping, TDM or AI ban quoted; owner
+      accepted for non-commercial use 2026-11-18. Facts only. AI-reserved robots.txt (or Content-Signal): title and link only,
+      no LLM kinds.'
+  - id: fx-the-conversation
+    category: facts
+    name: The Conversation (history, heritage)
+    url: https://theconversation.com/global/articles.atom
+    method: html
+    license: Open data licence (see notes)
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Global / multi-country; verdict ADD): academic-written history of places;
+      filter by topic, for Place facts. robots.txt: AI-bot blocks (all major) -> title+link only; Crawl-delay 10. Terms: T&C:
+      no scraping/AI clause found; articles CC BY-ND (republishing guidelines). Sourced: yes (academic authors, linked studies).
+      Open licence (Open data licence (see notes)). AI-reserved robots.txt (or Content-Signal): title and link only, no LLM
+      kinds. Crawl-delay 10 honoured as min_delay_s.'
+  - id: fx-aramcoworld
+    category: facts
+    name: AramcoWorld
+    url: https://www.aramcoworld.com/sitemap.xml
+    method: sitemap
+    license: Copyright; no automated-access clause
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Global / multi-country; verdict ADD): history and culture of Arab/Islamic-world
+      cities, for Place facts and Places to see. robots.txt: allowed. Terms: texts "may be reprinted .. without specific prior
+      permission" (conditions apply); no ban. Sourced: yes. Copyright reserved, no bot, scraping, TDM or AI ban quoted; owner
+      accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: fx-discover-islamic-art
+    category: facts
+    name: Discover Islamic Art (Museum With No Frontiers)
+    url: https://islamicart.museumwnf.org/
+    method: html
+    license: Copyright; terms not found
+    cadence: quarterly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Global / multi-country; verdict ADD): monument records for Islamic heritage
+      across MENA, for Place facts and Places to see. robots.txt: robots 404 (allowed). Terms: legal notice is a JS SPA, so
+      terms not found. Sourced: yes. Terms not read or not found; owner accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: fx-qantara
+    category: facts
+    name: 'Qantara: Mediterranean heritage (Institut du monde arabe)'
+    url: https://www.qantara-med.org/
+    method: html
+    license: Copyright; personal/non-commercial terms (owner accepted)
+    cadence: quarterly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Global / multi-country; verdict ADD): Mediterranean heritage (Institut
+      du monde arabe): monuments and objects of the Mediterranean, Maghreb and Levant, for Place facts. robots.txt: robots 404.
+      Terms: "reproduction… autorisée à des fins exclusives d''information pour un usage strictement personnel et privé" (personal;
+      owner accepted). Sourced: yes. Terms restrict to personal/non-commercial use; owner accepted for non-commercial use 2026-11-18.
+      Facts only.'
+  - id: od-syriaca
+    category: facts
+    name: Syriaca.org Gazetteer
+    url: https://syriaca.org/sitemap.xml
+    method: sitemap
+    license: CC BY 4.0
+    cadence: quarterly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Global / multi-country; verdict ADD): historical Syriac and Middle Eastern
+      place gazetteer, for Place facts and Places to see. robots.txt: disallows /search and `/*?`. Terms: "licensed under a
+      Creative Commons Attribution 4.0 International License". Sourced: yes. Open licence (CC BY 4.0).'
+  - id: fx-bibleplaces
+    category: facts
+    name: BiblePlaces.com
+    url: https://www.bibleplaces.com/sitemap_index.xml
+    method: sitemap
+    license: Copyright; no automated-access clause
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Global / multi-country; verdict ADD): archaeological site histories in
+      Israel, Palestine, Jordan and Egypt, for Place facts and Places to see. robots.txt: WooCommerce paths only. Terms: copyright
+      page covers photo licensing only. Sourced: yes. Copyright reserved, no bot, scraping, TDM or AI ban quoted; owner accepted
+      for non-commercial use 2026-11-18. Facts only.'
+  - id: arch-bibalex
+    category: facts
+    name: Bibliotheca Alexandrina
+    url: https://www.bibalex.org/en/default
+    method: html
+    license: Copyright; terms not found
+    cadence: quarterly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Global / multi-country; verdict ADD): Alexandria and Egypt heritage projects
+      (Memory of Modern Egypt lives on a subdomain, not vetted), for Place facts. robots.txt: robots 404. Terms: terms not found.
+      Sourced: partly. Terms not read or not found; owner accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: wiki-dump-ar
+    category: facts
+    name: Arabic Wikipedia dump
+    url: https://dumps.wikimedia.org/arwiki/latest/
+    method: dump
+    license: CC BY-SA 4.0
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Global / multi-country; verdict ADD): local-language history sections for
+      Arab places, for Place facts and Places to see. robots.txt: host already vetted (enwiki-dump). Terms: Wikimedia dumps
+      licence. Sourced: yes. Share-alike: kept apart, never merged into our own wording and never sent to a model (no LLM kinds).'
+  - id: wiki-dump-he
+    category: facts
+    name: Hebrew Wikipedia dump
+    url: https://dumps.wikimedia.org/hewiki/latest/
+    method: dump
+    license: CC BY-SA 4.0
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Global / multi-country; verdict ADD): Israeli towns, kibbutzim, sites,
+      for Place facts. robots.txt: as above. Terms: as above. Sourced: yes. Share-alike: kept apart, never merged into our own
+      wording and never sent to a model (no LLM kinds).'
+  - id: wiki-dump-fa
+    category: facts
+    name: Persian Wikipedia dump
+    url: https://dumps.wikimedia.org/fawiki/latest/
+    method: dump
+    license: CC BY-SA 4.0
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Global / multi-country; verdict ADD): Iranian villages and national-heritage
+      list, for Place facts. robots.txt: as above. Terms: as above. Sourced: yes. Share-alike: kept apart, never merged into
+      our own wording and never sent to a model (no LLM kinds).'
+  - id: wiki-dump-sw
+    category: facts
+    name: Swahili Wikipedia dump
+    url: https://dumps.wikimedia.org/swwiki/latest/
+    method: dump
+    license: CC BY-SA 4.0
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Global / multi-country; verdict ADD): East African towns and wards, for
+      Place facts. robots.txt: as above. Terms: as above. Sourced: partly. Share-alike: kept apart, never merged into our own
+      wording and never sent to a model (no LLM kinds).'
+  - id: wiki-dump-af
+    category: facts
+    name: Afrikaans Wikipedia dump
+    url: https://dumps.wikimedia.org/afwiki/latest/
+    method: dump
+    license: CC BY-SA 4.0
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Global / multi-country; verdict ADD): SA and Namibian towns, for Place
+      facts. robots.txt: as above. Terms: as above. Sourced: yes. Share-alike: kept apart, never merged into our own wording
+      and never sent to a model (no LLM kinds).'
+  - id: wiki-dump-am
+    category: facts
+    name: Amharic Wikipedia dump
+    url: https://dumps.wikimedia.org/amwiki/latest/
+    method: dump
+    license: CC BY-SA 4.0
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Global / multi-country; verdict ADD): Ethiopian towns, for Place facts.
+      robots.txt: as above. Terms: as above. Sourced: partly. Share-alike: kept apart, never merged into our own wording and
+      never sent to a model (no LLM kinds).'
+  - id: wiki-dump-ha
+    category: facts
+    name: Hausa Wikipedia dump
+    url: https://dumps.wikimedia.org/hawiki/latest/
+    method: dump
+    license: CC BY-SA 4.0
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Global / multi-country; verdict ADD): Nigerian and Nigerien towns, LGAs,
+      for Place facts. robots.txt: as above. Terms: as above. Sourced: partly. Share-alike: kept apart, never merged into our
+      own wording and never sent to a model (no LLM kinds).'
+  - id: wiki-dump-yo
+    category: facts
+    name: Yoruba Wikipedia dump
+    url: https://dumps.wikimedia.org/yowiki/latest/
+    method: dump
+    license: CC BY-SA 4.0
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Global / multi-country; verdict ADD): Yoruba towns and kingdoms, for Place
+      facts. robots.txt: as above. Terms: as above. Sourced: partly. Share-alike: kept apart, never merged into our own wording
+      and never sent to a model (no LLM kinds).'
+  - id: wiki-dump-zu
+    category: facts
+    name: Zulu Wikipedia dump
+    url: https://dumps.wikimedia.org/zuwiki/latest/
+    method: dump
+    license: CC BY-SA 4.0
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Global / multi-country; verdict ADD): KwaZulu-Natal places, for Place facts.
+      robots.txt: as above. Terms: as above. Sourced: partly. Share-alike: kept apart, never merged into our own wording and
+      never sent to a model (no LLM kinds).'
+  - id: wp-zh-dyk
+    category: facts
+    name: zh.wikipedia "你知道吗" (新条目推荐)
+    url: https://dumps.wikimedia.org/
+    method: dump
+    license: CC BY-SA 4.0
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Global / multi-country; verdict ADD): 15+ years of "did you know" hooks,
+      for Place facts. robots.txt: as above. Terms: Wikimedia ToU. Sourced: yes. Share-alike: kept apart, never merged into
+      our own wording and never sent to a model (no LLM kinds). Data files not seeded (no reader yet): https://dumps.wikimedia.org/zhwiki/latest/zhwiki-latest-pages-articles-multistream.xml.bz2.'
+  - id: wiki-dump-ru
+    category: facts
+    name: 'Wikipedia (ru) dump: place articles'
+    url: https://dumps.wikimedia.org/ruwiki/latest/
+    method: dump
+    license: CC BY-SA 4.0
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Global / multi-country; verdict ADD): history, name-origin and record facts
+      in place articles, for Place facts. robots.txt: existing host (enwiki-dump). Terms: CC BY-SA 4.0. Sourced: partly. Share-alike:
+      kept apart, never merged into our own wording and never sent to a model (no LLM kinds).'
+  - id: wiki-dump-en
+    category: facts
+    name: 'Wikipedia (en) dump: place articles'
+    url: https://dumps.wikimedia.org/enwiki/latest/
+    method: dump
+    license: CC BY-SA 4.0
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Global / multi-country; verdict ADD): history, name-origin and record facts
+      in place articles, for Place facts. robots.txt: existing host (enwiki-dump). Terms: CC BY-SA 4.0. Sourced: partly. Share-alike:
+      kept apart, never merged into our own wording and never sent to a model (no LLM kinds).'
+  - id: wikisource-dump-en
+    category: facts
+    name: English Wikisource dump (EB1911, gazetteers)
+    url: https://dumps.wikimedia.org/
+    method: dump
+    license: CC BY-SA 4.0
+    cadence: quarterly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Global / multi-country; verdict ADD): dated public-domain descriptions
+      ("in 1911 X was…") for historical facts; join via Wikidata P1343, for Place facts and Places to see. robots.txt: dumps:
+      404 (allowed); en.wikisource.org: Wikimedia standard. Terms: Wikimedia ToU; always label as a historical source with its
+      year; sourced: original publication. Share-alike: kept apart, never merged into our own wording and never sent to a model
+      (no LLM kinds). Data files not seeded (no reader yet): https://dumps.wikimedia.org/enwikisource/latest/enwikisource-latest-pages-articles.xml.bz2.'
+  - id: od-slavevoyages
+    category: facts
+    name: SlaveVoyages (Emory)
+    url: https://slavevoyages.org/
+    method: html
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Global / multi-country; verdict NEEDS-ADAPTER): history and curiosities
+      of the places it covers, for Place facts. Terms: terms not found. Terms not read or not found; owner accepted for non-commercial
+      use 2026-11-18. Facts only. format: React SPA plus CSV/SPSS downloads of the voyages and ports databases ; note: robots
+      returns the SPA (no robots file, so allowed); terms not found; ports of embarkation per African town, fully sourced. Seed:
+      the host root (the research row names no URL).'
+  - id: od-althurayya
+    category: facts
+    name: al-Ṯurayyā gazetteer (early Islamic world)
+    url: https://althurayya.github.io/
+    method: html
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Global / multi-country; verdict NEEDS-ADAPTER): history and curiosities
+      of the places it covers, for Place facts. Terms: terms not found. Terms not read or not found; owner accepted for non-commercial
+      use 2026-11-18. Facts only. format: static GeoJSON/JSON on GitHub (not WFS) ; note: robots 404; licence not stated on
+      page; about 2,000 Islamic-era places with routes. Seed: the host root (the research row names no URL).'
+  - id: od-topostext
+    category: facts
+    name: ToposText
+    url: https://topostext.org/
+    method: html
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Global / multi-country; verdict NEEDS-ADAPTER): history and curiosities
+      of the places it covers, for Place facts. Terms: terms not found. Terms not read or not found; owner accepted for non-commercial
+      use 2026-11-18. Facts only. format: downloads at https://topostext.org/TT-downloads (KML/CSV of places linked to ancient
+      texts) ; note: robots 404; licence not found; could go through csv_filter once the format is checked. Seed: the host root
+      (the research row names no URL).'
+  - id: fx-world-history-encyclopedia
+    category: facts
+    name: World History Encyclopedia
+    url: https://www.worldhistory.org/rss/
+    method: rss
+    license: Copyright; no automated-access clause
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Global / multi-country; verdict OWNER-DECISION): history and curiosities
+      of the places it covers, for Place facts. robots.txt: host 403. Terms: the only programmatic route is TollBit content
+      licensing (tollbit.com/marketplace/world-history-encyclopedia), which is paid and on request. Sourced: yes. Copyright
+      reserved, no bot, scraping, TDM or AI ban quoted; owner accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: fx-african-world-heritage
+    category: facts
+    name: African World Heritage Sites
+    url: https://africanworldheritagesites.org/
+    method: html
+    license: Copyright; terms not found
+    cadence: yearly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Global / multi-country; verdict ADD): per-site histories of every African
+      World Heritage site, for Place facts and Places to see. robots.txt: 200; blocks GPTBot, ClaudeBot, CCBot, Google-Extended
+      and other AI bots (→ store title + link only). Terms: terms not found. Sourced: partly. Terms not read or not found; owner
+      accepted for non-commercial use 2026-11-18. Facts only. AI-reserved robots.txt (or Content-Signal): title and link only,
+      no LLM kinds.'
+  - id: fx-historylink
+    category: facts
+    name: HistoryLink.org (Washington State history)
+    url: https://www.historylink.org/
+    method: html
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Global / multi-country; verdict ADD): town essays, "This Day" items, for
+      Place facts and Places to see. robots.txt: GPTBot/ClaudeBot/CCBot/Google-Extended/Bytespider blocked + Content-Signal
+      -> title+link only. Terms: terms not found. Sourced: yes. Terms not read or not found; owner accepted for non-commercial
+      use 2026-11-18. Facts only. AI-reserved robots.txt (or Content-Signal): title and link only, no LLM kinds. also in brief:
+      libraries-archives.'
+  - id: fx-encyclopedia-virginia
+    category: facts
+    name: Encyclopedia Virginia
+    url: https://encyclopediavirginia.org/
+    method: html
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Global / multi-country; verdict ADD): history and curiosities of the places
+      it covers, for Place facts and Places to see. robots.txt: robots allow; /wp-json/ and /search/ disallowed; AdsBot blocked.
+      Terms: terms not found. Sourced: yes. Terms not read or not found; owner accepted for non-commercial use 2026-11-18. Facts
+      only.'
+  - id: fx-64-parishes
+    category: facts
+    name: 64 Parishes
+    url: https://64parishes.org/sitemap_index.xml
+    method: sitemap
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Global / multi-country; verdict ADD): history and curiosities of the places
+      it covers, for Place facts and Places to see. robots.txt: allowed, no AI blocks; Crawl-delay 10 (round 1). Terms: only
+      https://64parishes.org/privacy-policy and a social-media code of conduct; no ToU, so it stays "terms not found". Sourced:
+      yes. Terms not read or not found; owner accepted for non-commercial use 2026-11-18. Facts only. Crawl-delay 10 honoured
+      as min_delay_s.'
+  - id: fx-connecticut-history
+    category: facts
+    name: ConnecticutHistory.org (CT Humanities)
+    url: https://connecticuthistory.org/sitemap.xml
+    method: sitemap
+    license: CC BY-SA 4.0
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Global / multi-country; verdict ADD): town pages and history articles,
+      for Place facts and Places to see. robots.txt: 200; Crawl-delay 10. Terms: CC licensing page linked; no ban seen. Sourced:
+      yes. Share-alike: kept apart, never merged into our own wording and never sent to a model (no LLM kinds). Crawl-delay
+      10 honoured as min_delay_s.'
+  - id: fx-statesymbolsusa
+    category: facts
+    name: State Symbols USA
+    url: https://statesymbolsusa.org/sitemap.xml
+    method: sitemap
+    license: Copyright; no automated-access clause
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Global / multi-country; verdict ADD): every official US state symbol with
+      adoption year and statute, for Place facts and Places to see. robots.txt: allow all. Terms: copyright page: images per
+      caption licence; no bot ban. Sourced: yes (statutes). Copyright reserved, no bot, scraping, TDM or AI ban quoted; owner
+      accepted for non-commercial use 2026-11-18. Facts only. also in brief: -.'
+  - id: arch-dloc
+    category: facts
+    name: Digital Library of the Caribbean (dLOC)
+    url: https://dloc.com/sitemaps/sitemap-index.xml
+    method: sitemap
+    license: Copyright; terms not found
+    cadence: quarterly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Global / multi-country; verdict ADD): Caribbean island and town history
+      items (descriptions only), for Place facts. robots.txt: Some item disallows; React app (titles may need render). Terms:
+      terms not found. Sourced: yes. Terms not read or not found; owner accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: fx-cervantes-historia
+    category: facts
+    name: Biblioteca Virtual Miguel de Cervantes (history portals)
+    url: https://www.cervantesvirtual.com/portales/
+    method: html
+    license: Copyright; personal/non-commercial terms (owner accepted)
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Global / multi-country; verdict ADD): country and city history portals
+      for Spanish America (low priority, mostly literature), for Place facts. robots.txt: allowed (capitulos/servlet disallowed);
+      no AI blocks. Terms: marco legal "5.- USO PERSONAL .. sin finalidad comercial"; personal, owner accepted. Sourced: yes.
+      Terms restrict to personal/non-commercial use; owner accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: fx-hunter-living-histories
+    category: facts
+    name: Hunter Living Histories (Univ. of Newcastle)
+    url: https://hunterlivinghistories.com/sitemap_index.xml
+    method: sitemap
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Global / multi-country; verdict ADD): Newcastle and Hunter Valley place
+      histories, for Place facts and Free walking tours. robots.txt: 200; allow all. Terms: terms not found. Sourced: yes. Terms
+      not read or not found; owner accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: arch-auckland-museum
+    category: facts
+    name: Auckland War Memorial Museum stories
+    url: https://www.aucklandmuseum.com/sitemap.xml
+    method: sitemap
+    license: Copyright; personal/non-commercial terms (owner accepted)
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Global / multi-country; verdict ADD): Auckland and NZ history stories,
+      for Place facts. robots.txt: 200; many AI-bot groups blocked; /api/ disallowed. Terms: website terms: benefits personal
+      use only; content may be CC-licensed; no robot ban. Sourced: yes. Terms restrict to personal/non-commercial use; owner
+      accepted for non-commercial use 2026-11-18. Facts only. AI-reserved robots.txt (or Content-Signal): title and link only,
+      no LLM kinds.'
+  - id: arch-puke-ariki
+    category: facts
+    name: Puke Ariki (Taranaki museum and libraries)
+    url: https://pukeariki.com/sitemap
+    method: sitemap
+    license: Copyright; personal/non-commercial terms (owner accepted)
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Global / multi-country; verdict ADD): Taranaki stories and local history,
+      for Place facts. robots.txt: 200; Umbraco defaults. Terms: "reproduce … provided you only use that content for informational,
+      non-commercial purposes" (non-commercial, owner accepted). Sourced: yes. Terms restrict to personal/non-commercial use;
+      owner accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: arch-canterbury-museum
+    category: facts
+    name: Canterbury Museum (explore)
+    url: https://www.canterburymuseum.com/sitemaps-1-sitemap.xml
+    method: sitemap
+    license: Open data licence (see notes)
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Global / multi-country; verdict ADD): Canterbury and Antarctic history
+      stories, for Place facts. robots.txt: 200; allow all except CMS paths. Terms: "all content on this website is licensed
+      under a Creative Commons Attribution Non Commercial Licence". Sourced: yes. Open licence (Open data licence (see notes)).'
+  - id: fx-nygenweb
+    category: facts
+    name: NYGenWeb place names
+    url: https://www.nygenweb.net/places/names.htm
+    method: html
+    license: Copyright; terms not found
+    cadence: yearly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Global / multi-country; verdict ADD): NY place-name origins list, for Place
+      facts. robots.txt: 404 (allowed). Terms: terms not found. Sourced: partly. Terms not read or not found; owner accepted
+      for non-commercial use 2026-11-18. Facts only.'
+  - id: fx-genealogy-trails
+    category: facts
+    name: Genealogy Trails county histories
+    url: https://www.genealogytrails.com/neast/index.html
+    method: html
+    license: Copyright; no automated-access clause
+    cadence: yearly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Global / multi-country; verdict ADD): transcribed town and county histories
+      for every US state, for Place facts. robots.txt: 200; 1 AI-bot group blocked. Terms: legal terms page: no robot or AI
+      ban. Sourced: yes (transcriptions name the source book). Copyright reserved, no bot, scraping, TDM or AI ban quoted; owner
+      accepted for non-commercial use 2026-11-18. Facts only. AI-reserved robots.txt (or Content-Signal): title and link only,
+      no LLM kinds.'
+  - id: her-keys-to-the-past
+    category: facts
+    name: Keys to the Past (Durham and Northumberland HER)
+    url: https://keystothepast.info/wp-sitemap.xml
+    method: sitemap
+    license: Copyright; no automated-access clause
+    cadence: quarterly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Global / multi-country; verdict ADD): archaeology and history of every
+      parish in the two counties, for Place facts, Places to see and Free walking tours. robots.txt: 200; allow all. Terms:
+      legal information page: no ban. Sourced: yes. Copyright reserved, no bot, scraping, TDM or AI ban quoted; owner accepted
+      for non-commercial use 2026-11-18. Facts only.'
+  - id: her-cornwall-heritage-trust
+    category: facts
+    name: Cornwall Heritage Trust
+    url: https://www.cornwallheritagetrust.org/our_sites/prince-of-wales-engine-house/
+    method: html
+    license: Copyright; terms not found
+    cadence: yearly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Global / multi-country; verdict ADD): the trust''s Cornish monument sites,
+      for Place facts and Places to see. robots.txt: 200; allow all. Terms: terms not found. Sourced: yes. Terms not read or
+      not found; owner accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: fx-lincstothepast-com
+    category: facts
+    name: www.lincstothepast.com
+    url: https://www.lincstothepast.com/
+    method: html
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Global / multi-country; verdict NEEDS-ADAPTER): history and curiosities
+      of the places it covers, for Place facts. Terms: terms not found. Terms not read or not found; owner accepted for non-commercial
+      use 2026-11-18. Facts only. format: the home page is a JS app (no crawlable links); http robots 200. Needs its search
+      API. Seed: the host root (the research row names no URL).'
+  - id: fx-mainehistory-org
+    category: facts
+    name: mainehistory.org
+    url: https://mainehistory.org/
+    method: html
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Global / multi-country; verdict NEEDS-ADAPTER): history and curiosities
+      of the places it covers, for Place facts. Terms: terms not found. Terms not read or not found; owner accepted for non-commercial
+      use 2026-11-18. Facts only. format: the home page is a 4.7 KB JS app shell; robots allowed (AI blocks); mainememory.net
+      is already covered. Seed: the host root (the research row names no URL).'
+  - id: fx-sahapedia
+    category: facts
+    name: Sahapedia
+    url: https://www.sahapedia.org/
+    method: html
+    license: CC BY-NC-SA (owner accepted, kept separate)
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Global / multi-country; verdict ADD): heritage-walk and city-culture essays,
+      for Place facts, Free walking tours and Places to see. robots.txt: Drupal default (core assets) allowed. Terms: §16: "Spiders,
+      bots, and scripts… must obey all reasonable restrictions on mass downloading" (bots permitted politely); content CC BY-NC-SA
+      4.0. Sourced: yes. Share-alike: kept apart, never merged into our own wording and never sent to a model (no LLM kinds).'
+  - id: fx-siam-society
+    category: facts
+    name: The Siam Society (Journal of the Siam Society)
+    url: https://thesiamsociety.org/index.php/sitemap.xml
+    method: sitemap
+    license: Copyright; terms not found
+    cadence: quarterly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Global / multi-country; verdict ADD): Thai local history (peer-reviewed),
+      for Place facts. robots.txt: `Allow: /`, Crawl-delay 3. Terms: terms not found. Sourced: yes. Terms not read or not found;
+      owner accepted for non-commercial use 2026-11-18. Facts only. Crawl-delay 5 honoured as min_delay_s.'
+  - id: arch-digitalnz-mch
+    category: facts
+    name: DigitalNZ API, filtered to Manatū Taonga (Te Ara, NZHistory)
+    url: https://api.digitalnz.org/
+    method: html
+    license: Copyright; personal/non-commercial terms (owner accepted)
+    cadence: monthly
+    needs_key: true
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Global / multi-country; verdict API-OR-KEY): Te Ara and NZHistory records
+      (title, description, link). This is the only reachable route to MCH content, for Place facts and Places to see. robots.txt:
+      api.digitalnz.org robots 404 = allowed; digitalnz.org itself answers 202 with an empty body (AWS WAF), so key sign-up
+      must be done by the owner in a browser. Terms: free key at https://digitalnz.org/developers. The terms page was unreadable
+      (WAF); a secondary source says "free for non-commercial use with attribution". Sourced: yes. Terms restrict to personal/non-commercial
+      use; owner accepted for non-commercial use 2026-11-18. Facts only. Data files not seeded (no reader yet): https://api.digitalnz.org/v3/records.json?api_key=%E2%80%A6&and%5Bcontent_partner.'
+  - id: her-hmdb-tidytuesday
+    category: facts
+    name: HMDB USA index snapshot (TidyTuesday 2023-07-04)
+    url: https://raw.githubusercontent.com/rfordatascience/tidytuesday/main/data/2023/2023-07-04/readme.md
+    method: html
+    license: Copyright; no automated-access clause
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Global / multi-country; verdict OWNER-DECISION): marker titles, coordinates
+      and HMDb links (a 2023 snapshot), for Place facts and Places to see. robots.txt: raw.githubusercontent robots 404 = allowed.
+      Terms: the data comes from hmdb.org, whose terms page is a Cloudflare 403. Reuse rights are unknown, so the owner should
+      decide or ask HMDb. Sourced: partly. Copyright reserved, no bot, scraping, TDM or AI ban quoted; owner accepted for non-commercial
+      use 2026-11-18. Facts only.'
+  - id: fx-historyextra
+    category: facts
+    name: HistoryExtra (BBC History Magazine)
+    url: https://www.historyextra.com/sitemap.xml
+    method: sitemap
+    license: Copyright; personal/non-commercial terms (owner accepted)
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Global / multi-country; verdict ADD): UK/world place history explainers
+      by named historians, for Place facts and Places to see. robots.txt: AI-bot blocks (GPTBot, ClaudeBot, CCBot, Bytespider,
+      meta-externalagent) -> title+link only; Crawl-delay 12. Terms: "only access its contents for your own personal and non-commercial
+      use" (Immediate Media T&C); personal/non-commercial, owner accepted. Sourced: yes (expert authors). Terms restrict to
+      personal/non-commercial use; owner accepted for non-commercial use 2026-11-18. Facts only. AI-reserved robots.txt (or
+      Content-Signal): title and link only, no LLM kinds. Crawl-delay 12 honoured as min_delay_s.'
+  - id: fx-guinness-records
+    category: facts
+    name: Guinness World Records (place records)
+    url: https://www.guinnessworldrecords.com/world-records/
+    method: html
+    license: Copyright; personal/non-commercial terms (owner accepted)
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Global / multi-country; verdict ADD): highest/oldest/largest records tied
+      to places (unbelievable/record facts), for Place facts. robots.txt: allowed, no AI-bot blocks, no Crawl-delay. Terms:
+      "for personal use only and may not be used in connection with any commercial endeavours"; no robot/scraper clause found;
+      personal/non-commercial, owner accepted. Sourced: yes (adjudicated records). Terms restrict to personal/non-commercial
+      use; owner accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: fx-futilitycloset
+    category: facts
+    name: Futility Closet
+    url: http://feeds.feedburner.com/FutilityCloset
+    method: html
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Global / multi-country; verdict ADD): historical curiosities, many about
+      specific towns and places, for Place facts. robots.txt: allowed, no AI blocks. Terms: terms not found. Sourced: yes (each
+      post cites its source). Terms not read or not found; owner accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: fx-sapiens
+    category: facts
+    name: SAPIENS (anthropology magazine)
+    url: https://www.sapiens.org/feed/
+    method: rss
+    license: Open data licence (see notes)
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Global / multi-country; verdict ADD): cultural/archaeological history of
+      places, for Place facts and Places to see. robots.txt: GPTBot blocked -> title+link only for AI. Terms: "Some SAPIENS
+      Content is published under .. CC BY-ND 4.0"; no scraping ban. Sourced: yes (peer-reviewed authors). Open licence (Open
+      data licence (see notes)). AI-reserved robots.txt (or Content-Signal): title and link only, no LLM kinds.'
+  - id: fx-thevintagenews
+    category: facts
+    name: The Vintage News
+    url: https://www.thevintagenews.com/sitemap_index.xml
+    method: sitemap
+    license: Copyright; no automated-access clause
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Global / multi-country; verdict ADD): historical stories, some about places,
+      for Place facts. robots.txt: allowed, no AI blocks. Terms: /terms/: no robot/AI clause found. Sourced: partial. Copyright
+      reserved, no bot, scraping, TDM or AI ban quoted; owner accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: fx-heritagedaily
+    category: facts
+    name: HeritageDaily
+    url: https://www.heritagedaily.com/sitemap_index.xml
+    method: sitemap
+    license: Copyright; personal/non-commercial terms (owner accepted)
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Global / multi-country; verdict ADD): archaeology news tied to sites, for
+      Place facts and Places to see. robots.txt: allowed, no AI blocks. Terms: "use the information .. for your own personal
+      use and reference only"; personal, owner accepted; site says it uses AI for editing. Sourced: partial (links to studies).
+      Terms restrict to personal/non-commercial use; owner accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: fx-odditycentral
+    category: facts
+    name: Oddity Central
+    url: http://feeds.feedburner.com/OddityCentral
+    method: html
+    license: Copyright; no automated-access clause
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Global / multi-country; verdict ADD): unusual places/towns (filter: many
+      items are about people), for Place facts. robots.txt: allowed. Terms: disclaimer: copyright only. Sourced: partial (links
+      news sources). Copyright reserved, no bot, scraping, TDM or AI ban quoted; owner accepted for non-commercial use 2026-11-18.
+      Facts only.'
+  - id: fx-todayifoundout
+    category: facts
+    name: Today I Found Out
+    url: http://feeds.feedburner.com/TodayIFoundOut
+    method: html
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Global / multi-country; verdict ADD): origins of place names, landmarks,
+      little-known history, for Place facts. robots.txt: allowed. Terms: terms not found. Sourced: yes (bibliography per article).
+      Terms not read or not found; owner accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: fx-hakai
+    category: facts
+    name: Hakai Magazine
+    url: https://hakaimagazine.com/feed/
+    method: rss
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Global / multi-country; verdict ADD): coastal places, islands, ports, for
+      Place facts and Places to see. robots.txt: allowed. Terms: terms not found. Sourced: yes. Terms not read or not found;
+      owner accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: fx-archaeology-mag
+    category: facts
+    name: Archaeology Magazine (AIA)
+    url: https://archaeology.org/sitemap_index.xml
+    method: sitemap
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Global / multi-country; verdict ADD): discoveries at named sites, for Place
+      facts and Places to see. robots.txt: allowed. Terms: terms not found on site (AIA ''Copyright and Disclaimer'' seen in
+      search only: copyright reserved). Sourced: yes. Terms not read or not found; owner accepted for non-commercial use 2026-11-18.
+      Facts only.'
+  - id: fx-damninteresting
+    category: facts
+    name: Damn Interesting
+    url: https://www.damninteresting.com/feeds/everything/
+    method: rss
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Global / multi-country; verdict ADD): obscure true stories, many about
+      places, for Place facts. robots.txt: AI-bot blocks (GPTBot, ClaudeBot, anthropic-ai, PerplexityBot, meta) -> title+link
+      only; Crawl-delay 5. Terms: no terms page; /about-us/ai-policy/ describes their own LLM use, no ban. Sourced: yes (sources
+      listed). Terms not read or not found; owner accepted for non-commercial use 2026-11-18. Facts only. AI-reserved robots.txt
+      (or Content-Signal): title and link only, no LLM kinds. Crawl-delay 5 honoured as min_delay_s.'
+  - id: fx-lookup-london
+    category: facts
+    name: Look Up London
+    url: https://lookup.london/feed/
+    method: rss
+    license: Copyright; no automated-access clause
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Global / multi-country; verdict ADD): weekly London hidden-history posts
+      by a Blue Badge guide, for Place facts and Free walking tours. robots.txt: AI-bot blocks (all major) -> title+link only.
+      Terms: T&C: newsletter/privacy only, no ban. Sourced: partial. Copyright reserved, no bot, scraping, TDM or AI ban quoted;
+      owner accepted for non-commercial use 2026-11-18. Facts only. AI-reserved robots.txt (or Content-Signal): title and link
+      only, no LLM kinds.'
+  - id: fx-spitalfieldslife
+    category: facts
+    name: Spitalfields Life
+    url: https://spitalfieldslife.com/feed/
+    method: rss
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Global / multi-country; verdict ADD): East London street and building history,
+      for Place facts. robots.txt: allowed. Terms: terms not found. Sourced: partial. Terms not read or not found; owner accepted
+      for non-commercial use 2026-11-18. Facts only.'
+  - id: fx-historyhit
+    category: facts
+    name: History Hit (places)
+    url: https://www.historyhit.com/wp-sitemap.xml
+    method: sitemap
+    license: Copyright; personal/non-commercial terms (owner accepted)
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Global / multi-country; verdict ADD): historic site guides and ''10 facts
+      about'' place pages, for Place facts and Places to see. robots.txt: allowed. Terms: "print or download extracts .. for
+      your personal use only"; personal, owner accepted. Sourced: partial. Terms restrict to personal/non-commercial use; owner
+      accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: fx-alondoninheritance
+    category: facts
+    name: A London Inheritance
+    url: https://alondoninheritance.com/feed/
+    method: rss
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Global / multi-country; verdict ADD): London street-by-street history,
+      for Place facts and Free walking tours. robots.txt: allowed. Terms: terms not found. Sourced: yes (maps, archives cited).
+      Terms not read or not found; owner accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: fx-abandonedspaces
+    category: facts
+    name: Abandoned Spaces
+    url: https://www.abandonedspaces.com/feed/
+    method: rss
+    license: Copyright; no automated-access clause
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Global / multi-country; verdict ADD): history of abandoned towns, ghost
+      towns, for Place facts. robots.txt: allowed. Terms: /terms: no robot/AI clause. Sourced: partial. Copyright reserved,
+      no bot, scraping, TDM or AI ban quoted; owner accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: fx-historynet
+    category: facts
+    name: HistoryNet
+    url: https://historynet.com/feed/
+    method: rss
+    license: Copyright; personal/non-commercial terms (owner accepted)
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Global / multi-country; verdict ADD): battlefields, historic sites, US/world
+      history, for Place facts. robots.txt: GPTBot blocked -> title+link only for AI. Terms: "provided solely for your personal
+      noncommercial use"; owner accepted. Sourced: yes. Terms restrict to personal/non-commercial use; owner accepted for non-commercial
+      use 2026-11-18. Facts only. AI-reserved robots.txt (or Content-Signal): title and link only, no LLM kinds.'
+  - id: fx-geographyrealm
+    category: facts
+    name: Geography Realm
+    url: https://www.geographyrealm.com/feed/
+    method: rss
+    license: Copyright; no automated-access clause
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Global / multi-country; verdict ADD): geography facts about countries,
+      borders, place names, for Place facts. robots.txt: allowed. Terms: copyright page only. Sourced: partial. Copyright reserved,
+      no bot, scraping, TDM or AI ban quoted; owner accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: fx-rarehistoricalphotos
+    category: facts
+    name: Rare Historical Photos
+    url: https://rarehistoricalphotos.com/feed/
+    method: rss
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Global / multi-country; verdict ADD): historical context of places in old
+      photos (low priority), for Place facts. robots.txt: allowed. Terms: terms not found. Sourced: partial. Terms not read
+      or not found; owner accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: fx-comeheretome
+    category: facts
+    name: Come Here To Me (Dublin)
+    url: https://comeheretome.com/feed/
+    method: rss
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Global / multi-country; verdict ADD): Dublin street/pub/building history,
+      for Place facts. robots.txt: allowed. Terms: terms not found. Sourced: yes. Terms not read or not found; owner accepted
+      for non-commercial use 2026-11-18. Facts only.'
+  - id: fx-atlas-of-wonders
+    category: facts
+    name: Atlas of Wonders
+    url: https://feeds.feedburner.com/AtlasOfWonders
+    method: html
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Global / multi-country; verdict ADD): natural/man-made wonders (low priority),
+      for Place facts and Places to see. robots.txt: allowed. Terms: terms not found. Sourced: partial. Terms not read or not
+      found; owner accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: fx-bowery-boys
+    category: facts
+    name: The Bowery Boys
+    url: https://www.boweryboyshistory.com/feed
+    method: rss
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Global / multi-country; verdict ADD): NYC neighbourhood history, for Place
+      facts and Free walking tours. robots.txt: allowed. Terms: terms not found. Sourced: yes. Terms not read or not found;
+      owner accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: fx-exploring-castles
+    category: facts
+    name: Exploring Castles
+    url: https://www.exploring-castles.com/sitemap_index.xml
+    method: sitemap
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Global / multi-country; verdict ADD): castle histories, Europe, for Place
+      facts and Places to see. robots.txt: allowed. Terms: terms not found. Sourced: partial. Terms not read or not found; owner
+      accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: fx-daily-jstor-org
+    category: facts
+    name: JSTOR Daily
+    url: https://daily.jstor.org/
+    method: html
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Global / multi-country; verdict OWNER-DECISION): "nor may you undertake
+      any activity such as computer programs that automatically download or export JSTOR Daily content and that may interfere
+      with, disrupt or otherwise burden" the servers; a polite feed reader arguabl…, for Place facts and Travel tips. Terms:
+      terms not found. Terms not read or not found; owner accepted for non-commercial use 2026-11-18. Facts only. notes: robots
+      allowed; feed /feed/ likely. Seed: the host root (the research row names no URL).'
+  - id: arch-regionalgeschichte-net
+    category: facts
+    name: regionalgeschichte.net (Institut für Geschichtliche Landeskunde, Mainz)
+    url: https://www.regionalgeschichte.net/wp-sitemap.xml
+    method: sitemap
+    license: Copyright; no automated-access clause
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Global / multi-country; verdict ADD): village and town histories for Rhineland-Palatinate,
+      for Place facts and Places to see. robots.txt: WP default. Terms: Impressum: images under copyright; no bot ban. Sourced:
+      yes. Copyright reserved, no bot, scraping, TDM or AI ban quoted; owner accepted for non-commercial use 2026-11-18. Facts
+      only.'
+  - id: fx-enciclopedia-cat
+    category: facts
+    name: Enciclopèdia.cat (Gran Enciclopèdia Catalana)
+    url: https://www.enciclopedia.cat/
+    method: html
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Global / multi-country; verdict ADD): an entry for every Catalan municipality
+      and many villages and hamlets (history, heritage, population), for Place facts and Places to see. robots.txt: Crawl-delay
+      10 (also a ClaudeBot group with Crawl-delay 10, no block); `/cerca/gec` disallowed. Terms: "Qualsevol reproducció total
+      o parcial… requereix l''autorització escrita" (copyright only; terms on grupenciclopedia.cat, whose robots.txt was not
+      read, see note). Sourced: yes. Terms not read or not found; owner accepted for non-commercial use 2026-11-18. Facts only.
+      AI-reserved robots.txt (or Content-Signal): title and link only, no LLM kinds. Crawl-delay 10 honoured as min_delay_s.'
+  - id: fx-erih
+    category: facts
+    name: European Route of Industrial Heritage
+    url: https://erih.net/sitemap.xml
+    method: sitemap
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Global / multi-country; verdict ADD): industrial heritage sites with history
+      across Europe, for Place facts, Places to see and Activities. robots.txt: AI bots blocked; Content-Signal search=yes,ai-train=no,use=reference
+      -> title+link only. Terms: terms not found. Sourced: yes. Terms not read or not found; owner accepted for non-commercial
+      use 2026-11-18. Facts only. AI-reserved robots.txt (or Content-Signal): title and link only, no LLM kinds.'
+  - id: wiki-dump-de
+    category: facts
+    name: 'Wikipedia (de) dump: place articles'
+    url: https://dumps.wikimedia.org/dewiki/latest/
+    method: dump
+    license: CC BY-SA 4.0
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Global / multi-country; verdict ADD): history, name-origin and record facts
+      in place articles, for Place facts. robots.txt: robots 404 (allowed); existing host, same reader as enwiki-dump. Terms:
+      terms not found. Share-alike: kept apart, never merged into our own wording and never sent to a model (no LLM kinds).
+      languages: de fr it es pt ca gl eu nl pl cs sk sl hr sr bs mk sq bg ro hu el sv da no fi is et lv lt uk ; what to extract:
+      "Geschichte"/"Histoire"/"Storia" sections of place articles; local "Did you know" archives (de "Schon gewusst?", fr "Le
+      saviez-vous ?",….'
+  - id: wiki-dump-fr
+    category: facts
+    name: 'Wikipedia (fr) dump: place articles'
+    url: https://dumps.wikimedia.org/frwiki/latest/
+    method: dump
+    license: CC BY-SA 4.0
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Global / multi-country; verdict ADD): history, name-origin and record facts
+      in place articles, for Place facts. robots.txt: robots 404 (allowed); existing host, same reader as enwiki-dump. Terms:
+      terms not found. Share-alike: kept apart, never merged into our own wording and never sent to a model (no LLM kinds).
+      languages: de fr it es pt ca gl eu nl pl cs sk sl hr sr bs mk sq bg ro hu el sv da no fi is et lv lt uk ; what to extract:
+      "Geschichte"/"Histoire"/"Storia" sections of place articles; local "Did you know" archives (de "Schon gewusst?", fr "Le
+      saviez-vous ?",….'
+  - id: wiki-dump-it
+    category: facts
+    name: 'Wikipedia (it) dump: place articles'
+    url: https://dumps.wikimedia.org/itwiki/latest/
+    method: dump
+    license: CC BY-SA 4.0
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Global / multi-country; verdict ADD): history, name-origin and record facts
+      in place articles, for Place facts. robots.txt: robots 404 (allowed); existing host, same reader as enwiki-dump. Terms:
+      terms not found. Share-alike: kept apart, never merged into our own wording and never sent to a model (no LLM kinds).
+      languages: de fr it es pt ca gl eu nl pl cs sk sl hr sr bs mk sq bg ro hu el sv da no fi is et lv lt uk ; what to extract:
+      "Geschichte"/"Histoire"/"Storia" sections of place articles; local "Did you know" archives (de "Schon gewusst?", fr "Le
+      saviez-vous ?",….'
+  - id: wiki-dump-es
+    category: facts
+    name: 'Wikipedia (es) dump: place articles'
+    url: https://dumps.wikimedia.org/eswiki/latest/
+    method: dump
+    license: CC BY-SA 4.0
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Global / multi-country; verdict ADD): history, name-origin and record facts
+      in place articles, for Place facts. robots.txt: robots 404 (allowed); existing host, same reader as enwiki-dump. Terms:
+      terms not found. Share-alike: kept apart, never merged into our own wording and never sent to a model (no LLM kinds).
+      languages: de fr it es pt ca gl eu nl pl cs sk sl hr sr bs mk sq bg ro hu el sv da no fi is et lv lt uk ; what to extract:
+      "Geschichte"/"Histoire"/"Storia" sections of place articles; local "Did you know" archives (de "Schon gewusst?", fr "Le
+      saviez-vous ?",….'
+  - id: wiki-dump-pt
+    category: facts
+    name: 'Wikipedia (pt) dump: place articles'
+    url: https://dumps.wikimedia.org/ptwiki/latest/
+    method: dump
+    license: CC BY-SA 4.0
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Global / multi-country; verdict ADD): history, name-origin and record facts
+      in place articles, for Place facts. robots.txt: robots 404 (allowed); existing host, same reader as enwiki-dump. Terms:
+      terms not found. Share-alike: kept apart, never merged into our own wording and never sent to a model (no LLM kinds).
+      languages: de fr it es pt ca gl eu nl pl cs sk sl hr sr bs mk sq bg ro hu el sv da no fi is et lv lt uk ; what to extract:
+      "Geschichte"/"Histoire"/"Storia" sections of place articles; local "Did you know" archives (de "Schon gewusst?", fr "Le
+      saviez-vous ?",….'
+  - id: wiki-dump-ca
+    category: facts
+    name: 'Wikipedia (ca) dump: place articles'
+    url: https://dumps.wikimedia.org/cawiki/latest/
+    method: dump
+    license: CC BY-SA 4.0
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Global / multi-country; verdict ADD): history, name-origin and record facts
+      in place articles, for Place facts. robots.txt: robots 404 (allowed); existing host, same reader as enwiki-dump. Terms:
+      terms not found. Share-alike: kept apart, never merged into our own wording and never sent to a model (no LLM kinds).
+      languages: de fr it es pt ca gl eu nl pl cs sk sl hr sr bs mk sq bg ro hu el sv da no fi is et lv lt uk ; what to extract:
+      "Geschichte"/"Histoire"/"Storia" sections of place articles; local "Did you know" archives (de "Schon gewusst?", fr "Le
+      saviez-vous ?",….'
+  - id: wiki-dump-gl
+    category: facts
+    name: 'Wikipedia (gl) dump: place articles'
+    url: https://dumps.wikimedia.org/glwiki/latest/
+    method: dump
+    license: CC BY-SA 4.0
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Global / multi-country; verdict ADD): history, name-origin and record facts
+      in place articles, for Place facts. robots.txt: robots 404 (allowed); existing host, same reader as enwiki-dump. Terms:
+      terms not found. Share-alike: kept apart, never merged into our own wording and never sent to a model (no LLM kinds).
+      languages: de fr it es pt ca gl eu nl pl cs sk sl hr sr bs mk sq bg ro hu el sv da no fi is et lv lt uk ; what to extract:
+      "Geschichte"/"Histoire"/"Storia" sections of place articles; local "Did you know" archives (de "Schon gewusst?", fr "Le
+      saviez-vous ?",….'
+  - id: wiki-dump-eu
+    category: facts
+    name: 'Wikipedia (eu) dump: place articles'
+    url: https://dumps.wikimedia.org/euwiki/latest/
+    method: dump
+    license: CC BY-SA 4.0
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Global / multi-country; verdict ADD): history, name-origin and record facts
+      in place articles, for Place facts. robots.txt: robots 404 (allowed); existing host, same reader as enwiki-dump. Terms:
+      terms not found. Share-alike: kept apart, never merged into our own wording and never sent to a model (no LLM kinds).
+      languages: de fr it es pt ca gl eu nl pl cs sk sl hr sr bs mk sq bg ro hu el sv da no fi is et lv lt uk ; what to extract:
+      "Geschichte"/"Histoire"/"Storia" sections of place articles; local "Did you know" archives (de "Schon gewusst?", fr "Le
+      saviez-vous ?",….'
+  - id: wiki-dump-nl
+    category: facts
+    name: 'Wikipedia (nl) dump: place articles'
+    url: https://dumps.wikimedia.org/nlwiki/latest/
+    method: dump
+    license: CC BY-SA 4.0
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Global / multi-country; verdict ADD): history, name-origin and record facts
+      in place articles, for Place facts. robots.txt: robots 404 (allowed); existing host, same reader as enwiki-dump. Terms:
+      terms not found. Share-alike: kept apart, never merged into our own wording and never sent to a model (no LLM kinds).
+      languages: de fr it es pt ca gl eu nl pl cs sk sl hr sr bs mk sq bg ro hu el sv da no fi is et lv lt uk ; what to extract:
+      "Geschichte"/"Histoire"/"Storia" sections of place articles; local "Did you know" archives (de "Schon gewusst?", fr "Le
+      saviez-vous ?",….'
+  - id: wiki-dump-pl
+    category: facts
+    name: 'Wikipedia (pl) dump: place articles'
+    url: https://dumps.wikimedia.org/plwiki/latest/
+    method: dump
+    license: CC BY-SA 4.0
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Global / multi-country; verdict ADD): history, name-origin and record facts
+      in place articles, for Place facts. robots.txt: robots 404 (allowed); existing host, same reader as enwiki-dump. Terms:
+      terms not found. Share-alike: kept apart, never merged into our own wording and never sent to a model (no LLM kinds).
+      languages: de fr it es pt ca gl eu nl pl cs sk sl hr sr bs mk sq bg ro hu el sv da no fi is et lv lt uk ; what to extract:
+      "Geschichte"/"Histoire"/"Storia" sections of place articles; local "Did you know" archives (de "Schon gewusst?", fr "Le
+      saviez-vous ?",….'
+  - id: wiki-dump-cs
+    category: facts
+    name: 'Wikipedia (cs) dump: place articles'
+    url: https://dumps.wikimedia.org/cswiki/latest/
+    method: dump
+    license: CC BY-SA 4.0
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Global / multi-country; verdict ADD): history, name-origin and record facts
+      in place articles, for Place facts. robots.txt: robots 404 (allowed); existing host, same reader as enwiki-dump. Terms:
+      terms not found. Share-alike: kept apart, never merged into our own wording and never sent to a model (no LLM kinds).
+      languages: de fr it es pt ca gl eu nl pl cs sk sl hr sr bs mk sq bg ro hu el sv da no fi is et lv lt uk ; what to extract:
+      "Geschichte"/"Histoire"/"Storia" sections of place articles; local "Did you know" archives (de "Schon gewusst?", fr "Le
+      saviez-vous ?",….'
+  - id: wiki-dump-sk
+    category: facts
+    name: 'Wikipedia (sk) dump: place articles'
+    url: https://dumps.wikimedia.org/skwiki/latest/
+    method: dump
+    license: CC BY-SA 4.0
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Global / multi-country; verdict ADD): history, name-origin and record facts
+      in place articles, for Place facts. robots.txt: robots 404 (allowed); existing host, same reader as enwiki-dump. Terms:
+      terms not found. Share-alike: kept apart, never merged into our own wording and never sent to a model (no LLM kinds).
+      languages: de fr it es pt ca gl eu nl pl cs sk sl hr sr bs mk sq bg ro hu el sv da no fi is et lv lt uk ; what to extract:
+      "Geschichte"/"Histoire"/"Storia" sections of place articles; local "Did you know" archives (de "Schon gewusst?", fr "Le
+      saviez-vous ?",….'
+  - id: wiki-dump-sl
+    category: facts
+    name: 'Wikipedia (sl) dump: place articles'
+    url: https://dumps.wikimedia.org/slwiki/latest/
+    method: dump
+    license: CC BY-SA 4.0
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Global / multi-country; verdict ADD): history, name-origin and record facts
+      in place articles, for Place facts. robots.txt: robots 404 (allowed); existing host, same reader as enwiki-dump. Terms:
+      terms not found. Share-alike: kept apart, never merged into our own wording and never sent to a model (no LLM kinds).
+      languages: de fr it es pt ca gl eu nl pl cs sk sl hr sr bs mk sq bg ro hu el sv da no fi is et lv lt uk ; what to extract:
+      "Geschichte"/"Histoire"/"Storia" sections of place articles; local "Did you know" archives (de "Schon gewusst?", fr "Le
+      saviez-vous ?",….'
+  - id: wiki-dump-hr
+    category: facts
+    name: 'Wikipedia (hr) dump: place articles'
+    url: https://dumps.wikimedia.org/hrwiki/latest/
+    method: dump
+    license: CC BY-SA 4.0
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Global / multi-country; verdict ADD): history, name-origin and record facts
+      in place articles, for Place facts. robots.txt: robots 404 (allowed); existing host, same reader as enwiki-dump. Terms:
+      terms not found. Share-alike: kept apart, never merged into our own wording and never sent to a model (no LLM kinds).
+      languages: de fr it es pt ca gl eu nl pl cs sk sl hr sr bs mk sq bg ro hu el sv da no fi is et lv lt uk ; what to extract:
+      "Geschichte"/"Histoire"/"Storia" sections of place articles; local "Did you know" archives (de "Schon gewusst?", fr "Le
+      saviez-vous ?",….'
+  - id: wiki-dump-sr
+    category: facts
+    name: 'Wikipedia (sr) dump: place articles'
+    url: https://dumps.wikimedia.org/srwiki/latest/
+    method: dump
+    license: CC BY-SA 4.0
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Global / multi-country; verdict ADD): history, name-origin and record facts
+      in place articles, for Place facts. robots.txt: robots 404 (allowed); existing host, same reader as enwiki-dump. Terms:
+      terms not found. Share-alike: kept apart, never merged into our own wording and never sent to a model (no LLM kinds).
+      languages: de fr it es pt ca gl eu nl pl cs sk sl hr sr bs mk sq bg ro hu el sv da no fi is et lv lt uk ; what to extract:
+      "Geschichte"/"Histoire"/"Storia" sections of place articles; local "Did you know" archives (de "Schon gewusst?", fr "Le
+      saviez-vous ?",….'
+  - id: wiki-dump-bs
+    category: facts
+    name: 'Wikipedia (bs) dump: place articles'
+    url: https://dumps.wikimedia.org/bswiki/latest/
+    method: dump
+    license: CC BY-SA 4.0
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Global / multi-country; verdict ADD): history, name-origin and record facts
+      in place articles, for Place facts. robots.txt: robots 404 (allowed); existing host, same reader as enwiki-dump. Terms:
+      terms not found. Share-alike: kept apart, never merged into our own wording and never sent to a model (no LLM kinds).
+      languages: de fr it es pt ca gl eu nl pl cs sk sl hr sr bs mk sq bg ro hu el sv da no fi is et lv lt uk ; what to extract:
+      "Geschichte"/"Histoire"/"Storia" sections of place articles; local "Did you know" archives (de "Schon gewusst?", fr "Le
+      saviez-vous ?",….'
+  - id: wiki-dump-mk
+    category: facts
+    name: 'Wikipedia (mk) dump: place articles'
+    url: https://dumps.wikimedia.org/mkwiki/latest/
+    method: dump
+    license: CC BY-SA 4.0
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Global / multi-country; verdict ADD): history, name-origin and record facts
+      in place articles, for Place facts. robots.txt: robots 404 (allowed); existing host, same reader as enwiki-dump. Terms:
+      terms not found. Share-alike: kept apart, never merged into our own wording and never sent to a model (no LLM kinds).
+      languages: de fr it es pt ca gl eu nl pl cs sk sl hr sr bs mk sq bg ro hu el sv da no fi is et lv lt uk ; what to extract:
+      "Geschichte"/"Histoire"/"Storia" sections of place articles; local "Did you know" archives (de "Schon gewusst?", fr "Le
+      saviez-vous ?",….'
+  - id: wiki-dump-sq
+    category: facts
+    name: 'Wikipedia (sq) dump: place articles'
+    url: https://dumps.wikimedia.org/sqwiki/latest/
+    method: dump
+    license: CC BY-SA 4.0
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Global / multi-country; verdict ADD): history, name-origin and record facts
+      in place articles, for Place facts. robots.txt: robots 404 (allowed); existing host, same reader as enwiki-dump. Terms:
+      terms not found. Share-alike: kept apart, never merged into our own wording and never sent to a model (no LLM kinds).
+      languages: de fr it es pt ca gl eu nl pl cs sk sl hr sr bs mk sq bg ro hu el sv da no fi is et lv lt uk ; what to extract:
+      "Geschichte"/"Histoire"/"Storia" sections of place articles; local "Did you know" archives (de "Schon gewusst?", fr "Le
+      saviez-vous ?",….'
+  - id: wiki-dump-bg
+    category: facts
+    name: 'Wikipedia (bg) dump: place articles'
+    url: https://dumps.wikimedia.org/bgwiki/latest/
+    method: dump
+    license: CC BY-SA 4.0
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Global / multi-country; verdict ADD): history, name-origin and record facts
+      in place articles, for Place facts. robots.txt: robots 404 (allowed); existing host, same reader as enwiki-dump. Terms:
+      terms not found. Share-alike: kept apart, never merged into our own wording and never sent to a model (no LLM kinds).
+      languages: de fr it es pt ca gl eu nl pl cs sk sl hr sr bs mk sq bg ro hu el sv da no fi is et lv lt uk ; what to extract:
+      "Geschichte"/"Histoire"/"Storia" sections of place articles; local "Did you know" archives (de "Schon gewusst?", fr "Le
+      saviez-vous ?",….'
+  - id: wiki-dump-ro
+    category: facts
+    name: 'Wikipedia (ro) dump: place articles'
+    url: https://dumps.wikimedia.org/rowiki/latest/
+    method: dump
+    license: CC BY-SA 4.0
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Global / multi-country; verdict ADD): history, name-origin and record facts
+      in place articles, for Place facts. robots.txt: robots 404 (allowed); existing host, same reader as enwiki-dump. Terms:
+      terms not found. Share-alike: kept apart, never merged into our own wording and never sent to a model (no LLM kinds).
+      languages: de fr it es pt ca gl eu nl pl cs sk sl hr sr bs mk sq bg ro hu el sv da no fi is et lv lt uk ; what to extract:
+      "Geschichte"/"Histoire"/"Storia" sections of place articles; local "Did you know" archives (de "Schon gewusst?", fr "Le
+      saviez-vous ?",….'
+  - id: wiki-dump-hu
+    category: facts
+    name: 'Wikipedia (hu) dump: place articles'
+    url: https://dumps.wikimedia.org/huwiki/latest/
+    method: dump
+    license: CC BY-SA 4.0
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Global / multi-country; verdict ADD): history, name-origin and record facts
+      in place articles, for Place facts. robots.txt: robots 404 (allowed); existing host, same reader as enwiki-dump. Terms:
+      terms not found. Share-alike: kept apart, never merged into our own wording and never sent to a model (no LLM kinds).
+      languages: de fr it es pt ca gl eu nl pl cs sk sl hr sr bs mk sq bg ro hu el sv da no fi is et lv lt uk ; what to extract:
+      "Geschichte"/"Histoire"/"Storia" sections of place articles; local "Did you know" archives (de "Schon gewusst?", fr "Le
+      saviez-vous ?",….'
+  - id: wiki-dump-el
+    category: facts
+    name: 'Wikipedia (el) dump: place articles'
+    url: https://dumps.wikimedia.org/elwiki/latest/
+    method: dump
+    license: CC BY-SA 4.0
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Global / multi-country; verdict ADD): history, name-origin and record facts
+      in place articles, for Place facts. robots.txt: robots 404 (allowed); existing host, same reader as enwiki-dump. Terms:
+      terms not found. Share-alike: kept apart, never merged into our own wording and never sent to a model (no LLM kinds).
+      languages: de fr it es pt ca gl eu nl pl cs sk sl hr sr bs mk sq bg ro hu el sv da no fi is et lv lt uk ; what to extract:
+      "Geschichte"/"Histoire"/"Storia" sections of place articles; local "Did you know" archives (de "Schon gewusst?", fr "Le
+      saviez-vous ?",….'
+  - id: wiki-dump-sv
+    category: facts
+    name: 'Wikipedia (sv) dump: place articles'
+    url: https://dumps.wikimedia.org/svwiki/latest/
+    method: dump
+    license: CC BY-SA 4.0
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Global / multi-country; verdict ADD): history, name-origin and record facts
+      in place articles, for Place facts. robots.txt: robots 404 (allowed); existing host, same reader as enwiki-dump. Terms:
+      terms not found. Share-alike: kept apart, never merged into our own wording and never sent to a model (no LLM kinds).
+      languages: de fr it es pt ca gl eu nl pl cs sk sl hr sr bs mk sq bg ro hu el sv da no fi is et lv lt uk ; what to extract:
+      "Geschichte"/"Histoire"/"Storia" sections of place articles; local "Did you know" archives (de "Schon gewusst?", fr "Le
+      saviez-vous ?",….'
+  - id: wiki-dump-da
+    category: facts
+    name: 'Wikipedia (da) dump: place articles'
+    url: https://dumps.wikimedia.org/dawiki/latest/
+    method: dump
+    license: CC BY-SA 4.0
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Global / multi-country; verdict ADD): history, name-origin and record facts
+      in place articles, for Place facts. robots.txt: robots 404 (allowed); existing host, same reader as enwiki-dump. Terms:
+      terms not found. Share-alike: kept apart, never merged into our own wording and never sent to a model (no LLM kinds).
+      languages: de fr it es pt ca gl eu nl pl cs sk sl hr sr bs mk sq bg ro hu el sv da no fi is et lv lt uk ; what to extract:
+      "Geschichte"/"Histoire"/"Storia" sections of place articles; local "Did you know" archives (de "Schon gewusst?", fr "Le
+      saviez-vous ?",….'
+  - id: wiki-dump-no
+    category: facts
+    name: 'Wikipedia (no) dump: place articles'
+    url: https://dumps.wikimedia.org/nowiki/latest/
+    method: dump
+    license: CC BY-SA 4.0
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Global / multi-country; verdict ADD): history, name-origin and record facts
+      in place articles, for Place facts. robots.txt: robots 404 (allowed); existing host, same reader as enwiki-dump. Terms:
+      terms not found. Share-alike: kept apart, never merged into our own wording and never sent to a model (no LLM kinds).
+      languages: de fr it es pt ca gl eu nl pl cs sk sl hr sr bs mk sq bg ro hu el sv da no fi is et lv lt uk ; what to extract:
+      "Geschichte"/"Histoire"/"Storia" sections of place articles; local "Did you know" archives (de "Schon gewusst?", fr "Le
+      saviez-vous ?",….'
+  - id: wiki-dump-fi
+    category: facts
+    name: 'Wikipedia (fi) dump: place articles'
+    url: https://dumps.wikimedia.org/fiwiki/latest/
+    method: dump
+    license: CC BY-SA 4.0
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Global / multi-country; verdict ADD): history, name-origin and record facts
+      in place articles, for Place facts. robots.txt: robots 404 (allowed); existing host, same reader as enwiki-dump. Terms:
+      terms not found. Share-alike: kept apart, never merged into our own wording and never sent to a model (no LLM kinds).
+      languages: de fr it es pt ca gl eu nl pl cs sk sl hr sr bs mk sq bg ro hu el sv da no fi is et lv lt uk ; what to extract:
+      "Geschichte"/"Histoire"/"Storia" sections of place articles; local "Did you know" archives (de "Schon gewusst?", fr "Le
+      saviez-vous ?",….'
+  - id: wiki-dump-is
+    category: facts
+    name: 'Wikipedia (is) dump: place articles'
+    url: https://dumps.wikimedia.org/iswiki/latest/
+    method: dump
+    license: CC BY-SA 4.0
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Global / multi-country; verdict ADD): history, name-origin and record facts
+      in place articles, for Place facts. robots.txt: robots 404 (allowed); existing host, same reader as enwiki-dump. Terms:
+      terms not found. Share-alike: kept apart, never merged into our own wording and never sent to a model (no LLM kinds).
+      languages: de fr it es pt ca gl eu nl pl cs sk sl hr sr bs mk sq bg ro hu el sv da no fi is et lv lt uk ; what to extract:
+      "Geschichte"/"Histoire"/"Storia" sections of place articles; local "Did you know" archives (de "Schon gewusst?", fr "Le
+      saviez-vous ?",….'
+  - id: wiki-dump-et
+    category: facts
+    name: 'Wikipedia (et) dump: place articles'
+    url: https://dumps.wikimedia.org/etwiki/latest/
+    method: dump
+    license: CC BY-SA 4.0
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Global / multi-country; verdict ADD): history, name-origin and record facts
+      in place articles, for Place facts. robots.txt: robots 404 (allowed); existing host, same reader as enwiki-dump. Terms:
+      terms not found. Share-alike: kept apart, never merged into our own wording and never sent to a model (no LLM kinds).
+      languages: de fr it es pt ca gl eu nl pl cs sk sl hr sr bs mk sq bg ro hu el sv da no fi is et lv lt uk ; what to extract:
+      "Geschichte"/"Histoire"/"Storia" sections of place articles; local "Did you know" archives (de "Schon gewusst?", fr "Le
+      saviez-vous ?",….'
+  - id: wiki-dump-lv
+    category: facts
+    name: 'Wikipedia (lv) dump: place articles'
+    url: https://dumps.wikimedia.org/lvwiki/latest/
+    method: dump
+    license: CC BY-SA 4.0
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Global / multi-country; verdict ADD): history, name-origin and record facts
+      in place articles, for Place facts. robots.txt: robots 404 (allowed); existing host, same reader as enwiki-dump. Terms:
+      terms not found. Share-alike: kept apart, never merged into our own wording and never sent to a model (no LLM kinds).
+      languages: de fr it es pt ca gl eu nl pl cs sk sl hr sr bs mk sq bg ro hu el sv da no fi is et lv lt uk ; what to extract:
+      "Geschichte"/"Histoire"/"Storia" sections of place articles; local "Did you know" archives (de "Schon gewusst?", fr "Le
+      saviez-vous ?",….'
+  - id: wiki-dump-lt
+    category: facts
+    name: 'Wikipedia (lt) dump: place articles'
+    url: https://dumps.wikimedia.org/ltwiki/latest/
+    method: dump
+    license: CC BY-SA 4.0
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Global / multi-country; verdict ADD): history, name-origin and record facts
+      in place articles, for Place facts. robots.txt: robots 404 (allowed); existing host, same reader as enwiki-dump. Terms:
+      terms not found. Share-alike: kept apart, never merged into our own wording and never sent to a model (no LLM kinds).
+      languages: de fr it es pt ca gl eu nl pl cs sk sl hr sr bs mk sq bg ro hu el sv da no fi is et lv lt uk ; what to extract:
+      "Geschichte"/"Histoire"/"Storia" sections of place articles; local "Did you know" archives (de "Schon gewusst?", fr "Le
+      saviez-vous ?",….'
+  - id: wiki-dump-uk
+    category: facts
+    name: 'Wikipedia (uk) dump: place articles'
+    url: https://dumps.wikimedia.org/ukwiki/latest/
+    method: dump
+    license: CC BY-SA 4.0
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Global / multi-country; verdict ADD): history, name-origin and record facts
+      in place articles, for Place facts. robots.txt: robots 404 (allowed); existing host, same reader as enwiki-dump. Terms:
+      terms not found. Share-alike: kept apart, never merged into our own wording and never sent to a model (no LLM kinds).
+      languages: de fr it es pt ca gl eu nl pl cs sk sl hr sr bs mk sq bg ro hu el sv da no fi is et lv lt uk ; what to extract:
+      "Geschichte"/"Histoire"/"Storia" sections of place articles; local "Did you know" archives (de "Schon gewusst?", fr "Le
+      saviez-vous ?",….'
+  - id: arch-lwl-westfalen-regional
+    category: facts
+    name: Westfalen regional (LWL)
+    url: https://www.lwl.org/westfalen-regional/
+    method: html
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Global / multi-country; verdict ADD): Westphalian towns, regions and history,
+      for Place facts and Places to see. robots.txt: Crawl-delay 5–10; AI-bot blocks (ClaudeBot, GPTBot). Terms: Impressum:
+      no use ban found; terms not found. Sourced: yes. Terms not read or not found; owner accepted for non-commercial use 2026-11-18.
+      Facts only. AI-reserved robots.txt (or Content-Signal): title and link only, no LLM kinds. Crawl-delay 5 honoured as min_delay_s.'
+  - id: od-spc-sdd-country
+    category: facts
+    name: SPC Statistics for Development Division country pages
+    url: https://sdd.spc.int/fj
+    method: html
+    license: Copyright; terms not found
+    cadence: quarterly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Global / multi-country; verdict ADD): official key figures for 22 Pacific
+      countries and territories (population, land area, EEZ), for Place facts. robots.txt: allowed for VoyagerBot; Cloudflare-managed
+      AI-bot block (anthropic-ai, GPTBot, CCBot..) → title+link only. Terms: terms not found on home. Sourced: yes (official
+      statistics). Terms not read or not found; owner accepted for non-commercial use 2026-11-18. Facts only. AI-reserved robots.txt
+      (or Content-Signal): title and link only, no LLM kinds.'
+  - id: her-virunga
+    category: facts
+    name: Virunga National Park
+    url: https://virunga.org/sitemap_index.xml
+    method: sitemap
+    license: Copyright; no automated-access clause
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Global / multi-country; verdict ADD): Africa''s oldest national park (1925),
+      mountain gorillas, Nyiragongo (DRC), for Place facts and Activities. robots.txt: allowed (/pdfs/ disallowed). Terms: terms
+      page read (https://virunga.org/terms-conditions): no robot, TDM or AI clauses. Sourced: partly. Copyright reserved, no
+      bot, scraping, TDM or AI ban quoted; owner accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: her-statia-park
+    category: facts
+    name: St. Eustatius National Parks (STENAPA)
+    url: https://statiapark.org/sitemap_index.xml
+    method: sitemap
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Global / multi-country; verdict ADD): The Quill volcano, marine park (Sint
+      Eustatius), for Place facts and Activities. robots.txt: allowed. Terms: terms not found. Sourced: no. Terms not read or
+      not found; owner accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: her-stinapa-bonaire
+    category: facts
+    name: STINAPA Bonaire
+    url: https://stinapabonaire.org/sitemap_index.xml
+    method: sitemap
+    license: Copyright; no automated-access clause
+    cadence: quarterly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Global / multi-country; verdict ADD): Washington Slagbaai NP, Bonaire marine
+      park (stinapa.org redirects here), for Place facts and Activities. robots.txt: allowed. Terms: terms page read (https://stinapabonaire.org/terms-conditions/):
+      fee terms only, no robot, TDM or AI clauses. Sourced: no. Copyright reserved, no bot, scraping, TDM or AI ban quoted;
+      owner accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: arch-saba-heritage
+    category: facts
+    name: Saba Heritage Center
+    url: https://sabaheritagecenter.org/sitemap.xml
+    method: sitemap
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Global / multi-country; verdict ADD): history of Saba villages (The Bottom,
+      Windwardside), for Place facts and Free walking tours. robots.txt: allowed. Terms: terms not found. Sourced: partly. Terms
+      not read or not found; owner accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: her-terramar-bonaire
+    category: facts
+    name: TERRAMAR Museum (Bonaire)
+    url: https://terramarmuseum.org/sitemap_index.xml
+    method: sitemap
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Global / multi-country; verdict ADD): archaeology and history of Bonaire
+      and the ABC islands (terramarmuseum.com redirects here), for Place facts. robots.txt: allowed. Terms: terms not found.
+      Sourced: partly. Terms not read or not found; owner accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: fx-factsanddetails
+    category: facts
+    name: Facts and Details (Jeffrey Hays)
+    url: https://factsanddetails.com/central-asia/
+    method: html
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Global / multi-country; verdict ADD): deep, sourced pages on Kazakhstan,
+      Kyrgyzstan, Tajikistan, Turkmenistan, Uzbekistan, Mongolia, Myanmar, Laos, Cambodia, Brunei, for Place facts. robots.txt:
+      robots.txt 404 = allowed. Terms: terms not found. Sourced: yes (source list on every page). Terms not read or not found;
+      owner accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: gov-akdn-historic-cities
+    category: facts
+    name: Aga Khan Trust for Culture / Historic Cities Programme
+    url: https://the.akdn/sitemap.xml
+    method: sitemap
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Global / multi-country; verdict ADD): restored sites such as Bagh-e Babur
+      and Herat old city (Afghanistan), Djenné/Mopti/Timbuktu mosques (Mali), Bukhara, Zanzibar, for Place facts and Places
+      to see. robots.txt: allowed (/test only). akdn.org redirects to the.akdn. Terms: terms not found (not linked on home).
+      Sourced: partly. Terms not read or not found; owner accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: fx-turquoise-mountain
+    category: facts
+    name: Turquoise Mountain
+    url: https://www.turquoisemountain.org/sitemaps-2-sitemap.xml
+    method: sitemap
+    license: Copyright; terms not found
+    cadence: quarterly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Global / multi-country; verdict ADD): Murad Khani old city (Kabul), Yangon
+      heritage buildings, for Place facts. robots.txt: allowed. Terms: terms not found (privacy policy only). Sourced: no. Terms
+      not read or not found; owner accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: tb-nouvellecaledonie
+    category: facts
+    name: Nouvelle-Calédonie Tourisme
+    url: https://www.nouvellecaledonie.travel/sitemap.xml/
+    method: sitemap
+    license: Copyright; personal/non-commercial terms (owner accepted)
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Global / multi-country; verdict ADD): Nouméa, Loyalty Islands, Grand Sud,
+      east and west coasts, for Place facts, Places to see and Activities. robots.txt: allowed (/wp/, /r/, *.php disallowed).
+      Apex has a self-signed certificate: use www. Terms: "consultation des pages .. à titre personnel"; terms restrict to personal/non-commercial
+      use; owner accepted. Sourced: no. Terms restrict to personal/non-commercial use; owner accepted for non-commercial use
+      2026-11-18. Facts only.'
+  - id: arch-jps
+    category: facts
+    name: Journal of the Polynesian Society (Waka Kuaka)
+    url: https://thepolynesiansociety.org/index.php/JPS/gateway/plugin/WebFeedGatewayPlugin/atom
+    method: rss
+    license: Copyright; terms not found
+    cadence: quarterly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Global / multi-country; verdict ADD): peer-reviewed Pacific history and
+      place studies; use open-access articles only, for Place facts. robots.txt: allowed (/cache/). Terms: terms not found.
+      Sourced: yes. Terms not read or not found; owner accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: fx-seasite-niu
+    category: facts
+    name: SEAsite (Northern Illinois University)
+    url: https://seasite.niu.edu/lao
+    method: html
+    license: Copyright; no automated-access clause
+    cadence: yearly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Global / multi-country; verdict ADD): culture and history pages for Laos,
+      Cambodia, Myanmar (static, rarely updated), for Place facts. robots.txt: robots.txt 404 = allowed. Terms: copyright notes
+      page read: no robot, TDM or AI clauses. Sourced: partly. Copyright reserved, no bot, scraping, TDM or AI ban quoted; owner
+      accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: arch-aodl
+    category: facts
+    name: African Online Digital Library (MSU)
+    url: https://aodl.org/explore
+    method: html
+    license: Copyright; terms not found
+    cadence: yearly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Global / multi-country; verdict ADD): curated West African heritage collections
+      and exhibits, for Place facts. robots.txt: robots.txt 404 = allowed. Terms: terms not found. Sourced: yes. Terms not read
+      or not found; owner accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: fx-craterre
+    category: facts
+    name: CRAterre (earthen architecture)
+    url: https://craterre.org/sitemap_index.xml
+    method: sitemap
+    license: Copyright; no automated-access clause
+    cadence: quarterly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Global / multi-country; verdict ADD): earthen heritage sites such as the
+      Djenné mosque and Sahel towns (low yield), for Place facts. robots.txt: allowed. Terms: mentions légales read: reproduction
+      reserved; no robot, TDM or AI clauses. Sourced: partly. Copyright reserved, no bot, scraping, TDM or AI ban quoted; owner
+      accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: fx-turkmenportal
+    category: facts
+    name: 'Turkmenportal: articles'
+    url: https://turkmenportal.com/sitemap.xml
+    method: sitemap
+    license: Copyright; no automated-access clause
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Global / multi-country; verdict ADD): articles: articles on Turkmen cities,
+      history and sights (Merv, Nisa, Kunya-Urgench); verify each item, for Place facts. robots.txt: allowed. Terms: rules page
+      read: image copyright and user-post rules only; no robot, TDM or AI clauses. Sourced: no. Copyright reserved, no bot,
+      scraping, TDM or AI ban quoted; owner accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: fx-pimaweb-org
+    category: facts
+    name: Pacific Islands Museums Association
+    url: https://pimaweb.org/
+    method: html
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Global / multi-country; verdict NEEDS-ADAPTER): history and curiosities
+      of the places it covers, for Place facts. Terms: terms not found. Terms not read or not found; owner accepted for non-commercial
+      use 2026-11-18. Facts only. format / note: JS SPA (/assets only, robots 404); needs JS rendering. Seed: the host root
+      (the research row names no URL).'
+  - id: od-grottocenter
+    category: facts
+    name: Grottocenter (open cave database, CC BY-SA)
+    url: https://api.grottocenter.org/
+    method: html
+    license: CC BY-SA 4.0
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Global / multi-country; verdict NEEDS-ADAPTER): longest and deepest caves
+      per country (UIS-type records), for Place facts. robots.txt: www: `Disallow: /` → do not crawl the site; the API host
+      has no robots. Terms: licence CC BY-SA per project (not re-read). Sourced: yes. Share-alike: kept apart, never merged
+      into our own wording and never sent to a model (no LLM kinds). Seed: the host root (the research row names no URL).'
+  - id: her-uk-london-remembers
+    category: facts
+    name: London Remembers
+    url: https://www.londonremembers.com/sitemap.xml
+    method: sitemap
+    license: Copyright; personal/non-commercial terms (owner accepted)
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Global / multi-country; verdict ADD): every London plaque and memorial,
+      with researched subjects, for Place facts, Places to see and Free walking tours. robots.txt: allowed; blocks AI bots →
+      title+link only; Cloudflare JS but pages served. Terms: "non-commercial educational and research purposes" → owner accepted.
+      Sourced: yes. Terms restrict to personal/non-commercial use; owner accepted for non-commercial use 2026-11-18. Facts only.
+      AI-reserved robots.txt (or Content-Signal): title and link only, no LLM kinds.'
+  - id: fx-wmf
+    category: facts
+    name: World Monuments Fund
+    url: https://www.wmf.org/sitemap.xml
+    method: sitemap
+    license: Copyright; no automated-access clause
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Global / multi-country; verdict ADD): World Monuments Watch site histories
+      worldwide, for Place facts and Places to see. robots.txt: allowed; reCAPTCHA script only. Terms: "content … may only be
+      used with written permission" (copyright reservation; we keep facts + link). Sourced: partly. Copyright reserved, no bot,
+      scraping, TDM or AI ban quoted; owner accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: fx-europanostra
+    category: facts
+    name: Europa Nostra
+    url: https://www.europanostra.org/sitemap_index.xml
+    method: sitemap
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Global / multi-country; verdict ADD): European Heritage Awards and "7 Most
+      Endangered" site write-ups, for Place facts and Places to see. robots.txt: allowed. Terms: terms not found (privacy only).
+      Sourced: partly. Terms not read or not found; owner accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: od-uk-openplaques-dmn
+    category: facts
+    name: Public-domain mirror of Open Plaques (dataset https://datamillnorth.org/dataset/open-plaques-2rxxd). openplaques.org
+      itself has robots `Dis…
+    url: https://datamillnorth.org/
+    method: html
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Global / multi-country; verdict OWNER-DECISION): //datamillnorth.org/dataset/open-plaques-2rxxd).
+      openplaques.org itself has robots `Disallow: /` for every bot, so the owner should decide whether a third-party mirror
+      is acceptable. Data Mill North blocks AI bots in ro…, for Place facts. Terms: terms not found. Terms not read or not found;
+      owner accepted for non-commercial use 2026-11-18. Facts only. Seed: the host root (the research row names no URL).'
+  - id: fx-haiti-reference
+    category: facts
+    name: Haïti Référence
+    url: https://www.haiti-reference.info/pages/plan/
+    method: html
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Global / multi-country; verdict ADD): long-running Haitian reference site
+      (history, regions, notables, culture), for Place facts and Places to see. robots.txt: robots 404 = allowed. Terms: terms
+      not found. Sourced: partly. Terms not read or not found; owner accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: fx-historia-nuevo-mundo
+    category: facts
+    name: Historia del Nuevo Mundo
+    url: https://www.historiadelnuevomundo.com/feed/
+    method: rss
+    license: Copyright; no automated-access clause
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Global / multi-country; verdict ADD): city and place histories across Hispanic
+      America, for Place facts and Places to see. robots.txt: allowed, no AI blocks. Terms: privacy/legal page: content is intellectual
+      property, no licence granted (copyright only, no robot clause). Sourced: partly. Copyright reserved, no bot, scraping,
+      TDM or AI ban quoted; owner accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: arch-encyclopedia-detroit
+    category: facts
+    name: Encyclopedia of Detroit (Detroit Historical Society)
+    url: https://www.detroithistorical.org/sitemap.xml
+    method: sitemap
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Global / multi-country; verdict ADD): Detroit landmarks and neighbourhoods,
+      for Place facts, Places to see and Free walking tours. robots.txt: Drupal defaults. Terms: terms (iubenda T&C) not fetched;
+      terms not found. Sourced: yes. Terms not read or not found; owner accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: arch-sachsen-digital
+    category: facts
+    name: sachsen.digital (SLUB Dresden)
+    url: https://sachsen.digital/
+    method: html
+    license: CC BY-SA 4.0
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Global / multi-country; verdict ADD): Saxon local history, town chronicles,
+      historic maps, for Place facts and Places to see. robots.txt: AI-bot blocks (ClaudeBot, GPTBot, PerplexityBot). Terms:
+      "Die auf dieser Seite erstellten Texte sind veröffentlicht unter der Lizenz CC-BY-SA 4.0" (Impressum). Sourced: yes. Share-alike:
+      kept apart, never merged into our own wording and never sent to a model (no LLM kinds). AI-reserved robots.txt (or Content-Signal):
+      title and link only, no LLM kinds.'
+  - id: arch-layers-of-london
+    category: facts
+    name: Layers of London (Institute of Historical Research)
+    url: https://www.layersoflondon.org/
+    method: html
+    license: Copyright; terms not found
+    cadence: quarterly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Global / multi-country; verdict ADD): geolocated London history records,
+      for Place facts and Free walking tours. robots.txt: Open. Terms: Terms page is JS-only (empty to curl); terms not found.
+      Sourced: partly. Terms not read or not found; owner accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: arch-nypl-api
+    category: facts
+    name: NYPL Digital Collections API
+    url: https://api.repo.nypl.org/
+    method: html
+    license: Copyright; no automated-access clause
+    cadence: monthly
+    needs_key: true
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Global / multi-country; verdict API-OR-KEY): NYC neighbourhood photos and
+      maps (e.g. Lionel Pincus map division), for Place facts and Places to see. robots.txt: API robots: only commented lines
+      → allowed; digitalcollections.nypl.org = Incapsula challenge (SKIP site). Terms: terms not fetched. Copyright reserved,
+      no bot, scraping, TDM or AI ban quoted; owner accepted for non-commercial use 2026-11-18. Facts only. api / sign-up: https://api.repo.nypl.org/
+      (token on sign-up) ; free?: yes. Seed: the host root (the research row names no URL).'
+  - id: arch-whg
+    category: facts
+    name: World Historical Gazetteer
+    url: https://whgazetteer.org/
+    method: html
+    license: CC BY 4.0
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Global / multi-country; verdict NEEDS-ADAPTER): historical names and attestations
+      of places worldwide, for Place facts and Places to see. robots.txt: robots 404 → allowed. Terms: "/licenses/": the database
+      is CC-BY-4.0, each dataset keeps its own licence. Open licence (CC BY 4.0). format: REST API + Linked Places Format (JSON-LD)
+      dataset downloads. Seed: the host root (the research row names no URL).'
+  - id: arch-pleiades
+    category: facts
+    name: Pleiades gazetteer of ancient places
+    url: https://pleiades.stoa.org/
+    method: html
+    license: CC BY 3.0
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Global / multi-country; verdict NEEDS-ADAPTER): the ancient history of
+      Mediterranean and Near-East places, for Place facts and Places to see. robots.txt: Crawl-delay 3; AI-bot blocks; /names/,
+      /features/ disallowed (use the dumps). Terms: terms not found (licence known: CC BY). Open licence (CC BY 3.0). AI-reserved
+      robots.txt (or Content-Signal): title and link only, no LLM kinds. Crawl-delay 5 honoured as min_delay_s. format: JSON/CSV
+      dumps on atlantides.org (robots for atlantides.org not yet checked). Seed: the host root (the research row names no URL).'
+  - id: arch-wellcome-api
+    category: facts
+    name: Wellcome Collection Catalogue API
+    url: https://api.wellcomecollection.org/
+    method: html
+    license: CC BY 4.0
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Global / multi-country; verdict NEEDS-ADAPTER): medical and social history
+      tied to places (lower yield), for Place facts. robots.txt: API robots 404 → allowed; the site blocks AI bots. Terms: "Except
+      where otherwise noted, content on this site is licensed under … CC BY 4.0". Open licence (CC BY 4.0). AI-reserved robots.txt
+      (or Content-Signal): title and link only, no LLM kinds. format: REST JSON, no key: `https://api.wellcomecollection.org/catalogue/v2/works?query=…`
+      (plus bulk snapshots). Seed: the host root (the research row names no URL).'
+  - id: od-undata-profiles
+    category: facts
+    name: UNdata country profiles
+    url: https://data.un.org/en/index.html
+    method: html
+    license: Open data licence (see notes)
+    cadence: yearly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Global / multi-country; verdict ADD): area, population, capital, economy
+      facts per country, for Place facts. robots.txt: robots 404 = allowed. Terms: "available free of charge and may be copied
+      freely .. provided that UNdata is cited". Sourced: yes. Open licence (Open data licence (see notes)). also in brief: open-knowledge.'
+  - id: gov-eu-countries
+    category: facts
+    name: 'European Union: EU country profiles'
+    url: https://european-union.europa.eu/sitemap.xml
+    method: sitemap
+    license: CC BY 4.0
+    cadence: yearly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Global / multi-country; verdict ADD): EU country profiles: capitals, languages,
+      accession history per member state, for Place facts and Travel tips. robots.txt: allow all. Terms: "licensed under CC
+      BY 4.0". Sourced: yes. Open licence (CC BY 4.0). also in brief: -.'
+  - id: city-barcelona
+    category: facts
+    name: Ajuntament de Barcelona (historia de la ciutat)
+    url: https://ajuntament.barcelona.cat/ca/
+    method: html
+    license: Copyright; terms not found
+    cadence: yearly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Global / multi-country; verdict ADD): history and curiosities of the places
+      it covers, for Place facts and Places to see. robots.txt: all AI bots blocked incl. ClaudeBot -> title+link only. Terms:
+      terms not found (avis-legal 404). Sourced: yes. Terms not read or not found; owner accepted for non-commercial use 2026-11-18.
+      Facts only. AI-reserved robots.txt (or Content-Signal): title and link only, no LLM kinds. also in brief: -.'
+  - id: api-qlever-wikidata
+    category: facts
+    name: QLever SPARQL over Wikidata (Univ. of Freiburg)
+    url: https://qlever.dev/api/wikidata
+    method: html
+    license: CC0
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Global / multi-country; verdict ADD): robots-allowed replacement for WDQS;
+      batch queries like "all cities with P138 named-after + P571", for Place facts and Places to see. robots.txt: 404 (allowed;
+      qlever.cs.uni-freiburg.de 308→qlever.dev). Terms: terms not found; academic service, so keep it low-rate; sourced: as
+      Wikidata. Open licence (CC0).'
+  - id: api-wikimedia-pageviews
+    category: facts
+    name: Wikimedia Pageviews REST API
+    url: https://wikimedia.org/api/rest_v1/metrics/pageviews/per-article/%7Bproject%7D/all-access/user/%7Btitle%7D/monthly/%7Bstart%7D/%7Bend%7D
+    method: html
+    license: CC0
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Global / multi-country; verdict ADD): popularity signal to rank "popular
+      facts" and pick which DYK/place facts to show first, for Place facts and Places to see. robots.txt: wikimedia.org 302→www.wikimedia.org/robots.txt
+      404 (allowed); analytics.wikimedia.org disallows `/datasets/` (not used). Terms: Wikimedia ToU; sourced: n/a (metrics).
+      Open licence (CC0).'
+  - id: od-gnis-history
+    category: facts
+    name: USGS GNIS Feature Description/History
+    url: https://prd-tnm.s3.amazonaws.com/StagedProducts/GeographicNames/
+    method: html
+    license: US public domain
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Global / multi-country; verdict ADD): official name origin and history
+      for US places and features (History field up to 3,000 chars), for Place facts and Places to see. robots.txt: prd-tnm 404
+      (allowed); www.usgs.gov 200, nothing relevant disallowed. Terms: Public domain (17 U.S.C. §105); sourced: yes (BGN decision
+      records). Open licence (US public domain).'
+  - id: fx-readtheplaque
+    category: facts
+    name: Read The Plaque
+    url: https://readtheplaque.com/
+    method: html
+    license: CC BY 4.0
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Global / multi-country; verdict ADD): transcribed historical-marker texts
+      with location, worldwide (mostly US/UK), for Place facts, Places to see and Free walking tours. robots.txt: 200; `/api`
+      disallowed, plaque pages allowed; no AI-bot block. Terms: "Read The Plaque is licensed under a Creative Commons Attribution
+      4.0 International License unless otherwise noted"; sourced: plaque photo (primary). Open licence (CC BY 4.0).'
+  - id: rec-skyscrapercenter
+    category: facts
+    name: The Skyscraper Center (Council on Vertical Urbanism, ex-CTBUH)
+    url: https://www.skyscrapercenter.com/cities
+    method: html
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Global / multi-country; verdict ADD): record facts ("tallest building in
+      X, completed 20xx, N m") from the height-criteria authority, for Place facts and Places to see. robots.txt: 200; `*` allowed
+      except `/map/`; Content-Signal ai-train=no; blocks CCBot, ClaudeBot, GPTBot. Terms: terms not found (terms-of-use URL
+      404); sourced: yes (verified heights). Terms not read or not found; owner accepted for non-commercial use 2026-11-18.
+      Facts only. AI-reserved robots.txt (or Content-Signal): title and link only, no LLM kinds.'
+  - id: od-dbpedia
+    category: facts
+    name: DBpedia (SPARQL + Databus dumps)
+    url: https://dbpedia.org/sparql
+    method: html
+    license: CC BY-SA 3.0
+    cadence: quarterly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Global / multi-country; verdict ADD): infobox nicknames, mottos and founding
+      dates not yet in Wikidata; low priority (largely redundant with enwiki-dump), for Place facts and Places to see. robots.txt:
+      dbpedia.org 200, Crawl-delay 10, `/sparql` not disallowed; databus 404 HTML (allowed). Terms: "under the terms of the
+      Creative Commons Attribution-ShareAlike 3.0 License and the GNU Free Documentation License"; sourced: inherits Wikipedia.
+      Share-alike: kept apart, never merged into our own wording and never sent to a model (no LLM kinds). Crawl-delay 10 honoured
+      as min_delay_s.'
+  - id: fx-enterprise-wikimedia-com
+    category: facts
+    name: Wikimedia Enterprise (Structured Contents, snapshots)
+    url: https://enterprise.wikimedia.com/
+    method: html
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: true
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Global / multi-country; verdict API-OR-KEY): /`, Content-Signal ai-input=yes,
+      for Place facts. Terms: terms not found. Terms not read or not found; owner accepted for non-commercial use 2026-11-18.
+      Facts only. key / sign-up: https://enterprise.wikimedia.com/pricing/ (free account) ; free?: yes, free tier (monthly request
+      allowance + twice-monthly snapshots). Seed: the host root (the research row names no URL).'
+  - id: fx-api-geonames-org
+    category: facts
+    name: GeoNames web services
+    url: https://api.geonames.org/
+    method: html
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: true
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Global / multi-country; verdict API-OR-KEY): /` and www `Disallow: /dump/`;
+      api host gave no response in research. The app already ships GeoNames-derived data offline (backend/app/db/data), for
+      Place facts. Terms: terms not found. Terms not read or not found; owner accepted for non-commercial use 2026-11-18. Facts
+      only. key / sign-up: free username https://www.geonames.org/login ; free?: yes. Seed: the host root (the research row
+      names no URL).'
+  - id: fx-atlantides-org
+    category: facts
+    name: Pleiades gazetteer of ancient places
+    url: https://atlantides.org/
+    method: html
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Global / multi-country; verdict NEEDS-ADAPTER): history and curiosities
+      of the places it covers, for Place facts. Terms: terms not found. Terms not read or not found; owner accepted for non-commercial
+      use 2026-11-18. Facts only. AI-reserved robots.txt (or Content-Signal): title and link only, no LLM kinds. format: gzipped
+      JSON/CSV dump https://atlantides.org/downloads/pleiades/json/ ; notes: CC BY 3.0 (open); per-place descriptions, periods,
+      names; pleiades.stoa.org robots 200 (Crawl-delay 3, AI-bot block, `/places` not disallowed); atlantides robots 404 (allow….
+      Seed: the host root (the research row names no URL).'
+  - id: fx-lobid-org
+    category: facts
+    name: lobid-gnd (GND authority, hbz)
+    url: https://lobid.org/
+    method: html
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Global / multi-country; verdict NEEDS-ADAPTER): history and curiosities
+      of the places it covers, for Place facts. Terms: terms not found. Terms not read or not found; owner accepted for non-commercial
+      use 2026-11-18. Facts only. format: REST JSON, no key: https://lobid.org/gnd/search?q=…&filter=type:PlaceOrGeographicName&format=json
+      ; notes: CC0; fields such as `biographicalOrHistoricalInformation`, `dateOfEstablishment`, variant (historic) names; robots
+      disallows `/resource/ /api/ /…. Seed: the host root (the research row names no URL).'
+  - id: fx-planet-openhistoricalmap-org
+    category: facts
+    name: OpenHistoricalMap planet
+    url: https://planet.openhistoricalmap.org/
+    method: html
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Global / multi-country; verdict NEEDS-ADAPTER): history and curiosities
+      of the places it covers, for Place facts. Terms: terms not found. Terms not read or not found; owner accepted for non-commercial
+      use 2026-11-18. Facts only. AI-reserved robots.txt (or Content-Signal): title and link only, no LLM kinds. format: OSM
+      PBF/XML planet with `start_date`/`end_date` (maybe readable by the geofabrik PBF path) ; notes: Licence reportedly CC0,
+      but www.openhistoricalmap.org/copyright answered a Cloudflare 403, so verify it. Planet robots 200: `Allow: /`, Content-Signal….
+      Seed: the host root (the research row names no URL).'
+  - id: fx-kaikki-org
+    category: facts
+    name: Kaikki.org (machine-readable Wiktionary)
+    url: https://kaikki.org/
+    method: html
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Global / multi-country; verdict NEEDS-ADAPTER): history and curiosities
+      of the places it covers, for Place facts. Terms: terms not found. Terms not read or not found; owner accepted for non-commercial
+      use 2026-11-18. Facts only. format: JSONL(.gz) extracts per language ; notes: CC BY-SA (from Wiktionary); place-name etymologies
+      ("From Latin Londinium…"); robots allows except `/dictionary/search/`; sitemaps listed. Seed: the host root (the research
+      row names no URL).'
+  - id: fx-population-un-org
+    category: facts
+    name: UN World Urbanization Prospects
+    url: https://population.un.org/
+    method: html
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Global / multi-country; verdict NEEDS-ADAPTER): history and curiosities
+      of the places it covers, for Place facts. Terms: terms not found. Terms not read or not found; owner accepted for non-commercial
+      use 2026-11-18. Facts only. format: XLSX files (WUP 2018/2025 city series 1950–2050) ; notes: Robots redirect to www.un.org
+      root file (allowed, Crawl-delay 10); UN terms allow reuse with citation; xlsx reader needed. Seed: the host root (the
+      research row names no URL).'
+  - id: fx-peaklist
+    category: facts
+    name: Peaklist.org (world prominence lists)
+    url: http://peaklist.org/
+    method: html
+    license: Copyright; terms not found
+    cadence: yearly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Global / multi-country; verdict ADD): highest and most prominent peaks
+      per country and region, for Place facts. robots.txt: http only (https certificate invalid); Crawl-delay 10. Terms: terms
+      not found. Sourced: yes. Terms not read or not found; owner accepted for non-commercial use 2026-11-18. Facts only. Crawl-delay
+      10 honoured as min_delay_s.'
+  - id: od-wmo-extremes
+    category: facts
+    name: WMO World Weather and Climate Extremes Archive
+    url: https://wmo.int/site/world-weather-and-climate-extremes-archive
+    method: html
+    license: Copyright; personal/non-commercial terms (owner accepted)
+    cadence: quarterly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Global / multi-country; verdict ADD): world, hemispheric and regional records
+      with site, coordinates and date (e.g. Kebili 55.0 °C), for Place facts and Weather. robots.txt: allowed (Drupal default).
+      The old wmo.asu.edu host now sends users to wmo.int. Terms: "You may freely download and copy the WMO material … for your
+      personal, non-commercial use, without any right to resell, redistribute, compile or create derivative works". Sourced:
+      yes (evaluation committees). Terms restrict to personal/non-commercial use; owner accepted for non-commercial use 2026-11-18.
+      Facts only.'
+  - id: her-opendomesday
+    category: facts
+    name: Open Domesday (every place in Domesday Book, 1086)
+    url: https://opendomesday.org/place/
+    method: html
+    license: CC BY-SA 4.0
+    cadence: yearly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Global / multi-country; verdict ADD): what each English village was in
+      1086 (households, ploughs, mills, value, lords), for Place facts, Places to see and Free walking tours. robots.txt: no
+      disallow rules; only Content-Signal comments. Terms: "They''re available under the CC-BY-SA licence … please credit Professor
+      John Palmer, George Slater and opendomesday.org". Sourced: yes (Domesday text). Share-alike: kept apart, never merged
+      into our own wording and never sent to a model (no LLM kinds).'
+  - id: arch-euskaltzaindia-eoda
+    category: facts
+    name: Euskaltzaindia EODA (Basque onomastics, place names)
+    url: https://www.euskaltzaindia.eus/
+    method: html
+    license: CC BY-NC-SA (owner accepted, kept separate)
+    cadence: yearly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Global / multi-country; verdict ADD): official Basque names, historical
+      attestations, etymology notes, for Place facts. robots.txt: Joomla core dirs disallowed. Blocks GPTBot, ClaudeBot, CCBot,
+      PerplexityBot…: title + link only. Terms: "Aitortu - EzKomertziala - Partekatu Berdin 3.0 Espainia". Sourced: yes. Share-alike:
+      kept apart, never merged into our own wording and never sent to a model (no LLM kinds). AI-reserved robots.txt (or Content-Signal):
+      title and link only, no LLM kinds.'
+  - id: fx-barrys-borderpoints
+    category: facts
+    name: Barry's Borderpoints (enclaves, tripoints, border oddities)
+    url: https://barrysborderpoints.com/sitemap.xml
+    method: sitemap
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Global / multi-country; verdict ADD): documented tripoints and enclaves
+      (Baarle, Llívia…), for Place facts and Places to see. robots.txt: WP default. Terms: terms not found. Sourced: partly.
+      Terms not read or not found; owner accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: fx-jankrogh-geosite
+    category: facts
+    name: Jan S. Krogh's GeoSite (tripoints of the world, true enclaves)
+    url: http://geosite.jankrogh.com/
+    method: html
+    license: Copyright; terms not found
+    cadence: yearly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Global / multi-country; verdict ADD): catalogue of every international
+      tripoint and enclave, for Place facts. robots.txt: http only (the https certificate does not match the name); robots 404.
+      Terms: terms not found. Sourced: yes (treaties, visits). Terms not read or not found; owner accepted for non-commercial
+      use 2026-11-18. Facts only.'
+  - id: fx-poles-inaccessibility
+    category: facts
+    name: Poles of Inaccessibility
+    url: https://inaccessibility.net/sitemap.xml
+    method: sitemap
+    license: Copyright; terms not found
+    cadence: yearly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Global / multi-country; verdict ADD): remotest point of each country and
+      continent, for Place facts. robots.txt: allow all. Terms: terms not found. Sourced: partly. Terms not read or not found;
+      owner accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: fx-highpointers
+    category: facts
+    name: Highpointers Club (US state high points)
+    url: https://highpointers.org/sitemap_index.xml
+    method: sitemap
+    license: Copyright; terms not found
+    cadence: quarterly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Global / multi-country; verdict ADD): highest point of each US state, for
+      Place facts. robots.txt: Crawl-delay 10. Terms: terms not found (privacy policy only). Sourced: partly. Terms not read
+      or not found; owner accepted for non-commercial use 2026-11-18. Facts only. Crawl-delay 10 honoured as min_delay_s.'
+  - id: gov-ungegn
+    category: facts
+    name: UN Group of Experts on Geographical Names
+    url: https://unstats.un.org/unsd/ungegn/
+    method: html
+    license: Copyright; personal/non-commercial terms (owner accepted)
+    cadence: yearly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Global / multi-country; verdict ADD): official country and capital names,
+      exonyms. Low volume, for Place facts. robots.txt: only `/wiki/` disallowed. Terms: "…for the User''s personal, non-commercial
+      use, without any right to resell or redistribute them or to compile or create derivative works". Sourced: yes. Terms restrict
+      to personal/non-commercial use; owner accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: fx-statoids
+    category: facts
+    name: Statoids (administrative divisions of countries)
+    url: https://www.statoids.com/factoids.html
+    method: html
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Global / multi-country; verdict ADD): largest, smallest and oldest provinces
+      and counties, odd boundaries, name changes, for Place facts. robots.txt: 200, empty file = allowed. Terms: details.html:
+      no ban; terms page not found. Sourced: yes (details page plus a bibliography; cites national stati…. Terms not read or
+      not found; owner accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: ref-nsidc-glacier-facts
+    category: facts
+    name: 'NSIDC: Glacier quick facts'
+    url: https://nsidc.org/learn/parts-cryosphere/glaciers/glacier-quick-facts
+    method: html
+    license: Copyright; terms not found
+    cadence: yearly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Global / multi-country; verdict ADD): Glacier quick facts: largest, longest
+      and fastest glaciers and where they are, for Place facts. robots.txt: 200, Crawl-delay 5. Terms: terms not checked (fetch
+      limit); no ban seen on the page. Sourced: yes. Terms not read or not found; owner accepted for non-commercial use 2026-11-18.
+      Facts only. Crawl-delay 5 honoured as min_delay_s.'
+  - id: ref-oldlist
+    category: facts
+    name: 'OldList: a database of old trees (Rocky Mountain Tree-Ring Research)'
+    url: https://www.rmtrr.org/oldlist.htm
+    method: html
+    license: Copyright; terms not found
+    cadence: yearly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Global / multi-country; verdict ADD): a database of old trees (Rocky Mountain
+      Tree-Ring Research): the oldest dated trees per species and site (Methuselah, Old Tjikko), for Place facts. robots.txt:
+      robots 404 = allowed. Terms: terms not found. Sourced: yes (dated cores plus a reference list). Terms not read or not
+      found; owner accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: ref-ancient-yew
+    category: facts
+    name: Ancient Yew Group
+    url: https://www.ancient-yew.org/sitemap_index.xml
+    method: sitemap
+    license: Copyright; no automated-access clause
+    cadence: yearly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Global / multi-country; verdict ADD): churchyard yews over 1,000 years
+      old by village, for Place facts and Places to see. robots.txt: 200; disallow /wp-admin/. Terms: /copyright: "All rights
+      reserved. No part .. may be reproduced": reservation only, OK for facts_only. Sourced: yes. Copyright reserved, no bot,
+      scraping, TDM or AI ban quoted; owner accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: ref-highest-bridges
+    category: facts
+    name: HighestBridges.com
+    url: https://highestbridges.com/wiki/List_of_Highest_International_Bridges/Page_1
+    method: html
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Global / multi-country; verdict ADD): the highest bridges by country and
+      region (height, year), for Place facts. robots.txt: 200; /w/ is disallowed (so no Atom feed). Terms: the disclaimer page
+      answers 404: terms not found. Sourced: yes (survey heights, references). Terms not read or not found; owner accepted for
+      non-commercial use 2026-11-18. Facts only.'
+  - id: ref-structurae
+    category: facts
+    name: Structurae (international database of structures)
+    url: https://structurae.net/sitemapindex.xml
+    method: sitemap
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Global / multi-country; verdict ADD): records per structure (longest, tallest,
+      oldest bridge, dam or tower) by town, for Place facts and Places to see. robots.txt: 200; AI-bot blocks; `Content-Signal:
+      search=yes,ai-train=no,use=reference` (title+link only). Terms: licensing page covers images only; terms not found. Sourced:
+      yes (bibliography per structure). Terms not read or not found; owner accepted for non-commercial use 2026-11-18. Facts
+      only. AI-reserved robots.txt (or Content-Signal): title and link only, no LLM kinds.'
+  - id: fx-geology-com
+    category: facts
+    name: 'Geology.com: records'
+    url: https://geology.com/records/
+    method: html
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Global / multi-country; verdict ADD): records: geological superlatives
+      with places (highest waterfall, deepest ocean point, biggest tsunami), for Place facts. robots.txt: 200, allow all. Terms:
+      terms not found (/terms-of-use.shtml answers 404). Sourced: partial (written by geologists; cites sources on some pages).
+      Terms not read or not found; owner accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: ref-peakvisor
+    category: facts
+    name: PeakVisor
+    url: https://peakvisor.com/sitemap-destinations.xml
+    method: sitemap
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Global / multi-country; verdict ADD): the highest peak and prominence per
+      region, park and country, for Place facts. robots.txt: 200; AI bots explicitly allowed. Terms: about page: no ban; terms
+      not found. Sourced: partial (data from OSM and elevation models). Terms not read or not found; owner accepted for non-commercial
+      use 2026-11-18. Facts only.'
+  - id: gov-esa-earth-from-space
+    category: facts
+    name: 'ESA: Earth from Space'
+    url: https://www.esa.int/ESA_Multimedia/Sets/Earth_from_Space_programme
+    method: html
+    license: Copyright; personal/non-commercial terms (owner accepted)
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Global / multi-country; verdict ADD): Earth from Space: a weekly satellite
+      image of a named place with an explanatory caption, for Place facts and Places to see. robots.txt: 200, empty disallow.
+      Terms: "contents .. intended for the personal and non-commercial use"; terms restrict to personal/non-commercial use;
+      owner accepted. Sourced: yes. Terms restrict to personal/non-commercial use; owner accepted for non-commercial use 2026-11-18.
+      Facts only.'
+  - id: her-owhc-cities
+    category: facts
+    name: Organization of World Heritage Cities
+    url: https://www.ovpm.org/sitemap_index.xml
+    method: sitemap
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Global / multi-country; verdict ADD): about 300 member cities with their
+      World Heritage inscription and history (not a UNESCO host, so the unesco.org denial does not apply), for Place facts and
+      Places to see. robots.txt: 200, empty disallow. Terms: about page only; terms not found. Sourced: partial (city-supplied
+      text). Terms not read or not found; owner accepted for non-commercial use 2026-11-18. Facts only.'
+  - id: fx-henokiens
+    category: facts
+    name: Les Hénokiens (family companies 200+ years old)
+    url: https://www.henokiens.com/content.php?id=4&lg=en
+    method: html
+    license: Copyright; terms not found
+    cadence: yearly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Global / multi-country; verdict ADD): the oldest family companies by town
+      (Hōshi Ryokan, 718; Beretta, 1526) with founding years, for Place facts and Places to see. robots.txt: robots 404 = allowed.
+      Terms: terms not found. Sourced: yes (founding dates checked for membership). Terms not read or not found; owner accepted
+      for non-commercial use 2026-11-18. Facts only.'
+  - id: od-glims
+    category: facts
+    name: GLIMS glacier inventory
+    url: https://www.glims.org/
+    method: html
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Global / multi-country; verdict NEEDS-ADAPTER): the largest glaciers per
+      region, for Place facts. robots.txt: 200; disallow /cgi-bin, /for_glims_only. Terms: terms not found. Terms not read or
+      not found; owner accepted for non-commercial use 2026-11-18. Facts only. format: shapefile/GeoJSON downloads (via NSIDC).
+      Seed: the host root (the research row names no URL).'
+  - id: fx-songramernotebook-com
+    category: facts
+    name: songramernotebook.com
+    url: https://songramernotebook.com/
+    method: html
+    license: Copyright; terms not found
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Global / multi-country; verdict OWNER-DECISION): transcribed newspaper
+      clippings and book excerpts, mostly third-party copyright. robots.txt allows (wp-sitemap listed); terms not found. Useful
+      for 1971 events by district, but the rights in the archived material are un…, for Place facts. Terms: terms not found.
+      Terms not read or not found; owner accepted for non-commercial use 2026-11-18. Facts only. Seed: the host root (the research
+      row names no URL).'
+  - id: fx-seaarch
+    category: facts
+    name: 'SEAArch: Southeast Asian Archaeology'
+    url: https://www.southeastasianarchaeology.com/feed/
+    method: rss
+    license: Copyright; personal/non-commercial terms (owner accepted)
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Global / multi-country; verdict ADD): Southeast Asian Archaeology: new
+      finds and dated discoveries across SEA (links to the original reports), for Place facts. robots.txt: 200, WP default.
+      Terms: /terms-of-use/: "personal, non-commercial transitory viewing only"; terms restrict to personal/non-commercial use;
+      owner accepted. Sourced: yes (links originals). Terms restrict to personal/non-commercial use; owner accepted for non-commercial
+      use 2026-11-18. Facts only.'
+  - id: od-toponimia-galicia
+    category: facts
+    name: 'Toponimia de Galicia (Xunta: Proxecto Toponimia)'
+    url: https://toponimia.xunta.gal/gl
+    method: html
+    license: Open data licence (see notes)
+    cadence: quarterly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Global / multi-country; verdict ADD): Proxecto Toponimia): official names
+      of every Galician parish and lugar (hamlet), plus name-origin articles, for Place facts. robots.txt: Drupal default; core/
+      and profiles/ disallowed. Terms: "quedando autorizada a súa reprodución total ou parcial… para usos comerciais e non comerciais".
+      Sourced: yes. Open licence (Open data licence (see notes)).'
+  - id: ref-kehilalinks
+    category: facts
+    name: JewishGen KehilaLinks (town pages)
+    url: https://kehilalinks.jewishgen.org/
+    method: html
+    license: Copyright; terms not found
+    cadence: quarterly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Global / multi-country; verdict ADD): history of thousands of towns and
+      shtetls in Central and Eastern Europe, for Place facts. robots.txt: only UA `008` blocked; www.jewishgen.org blocks ClaudeBot
+      from /jcr-uk/ only, Crawl-delay 2. Terms: disclaimer link 404: terms not found. Sourced: yes. Terms not read or not found;
+      owner accepted for non-commercial use 2026-11-18. Facts only. AI-reserved robots.txt (or Content-Signal): title and link
+      only, no LLM kinds. Crawl-delay 5 honoured as min_delay_s.'
+  - id: wiki-facts-zh
+    category: facts
+    name: 'Wikipedia (zh): Did you know / On this day / unusual articles'
+    url: https://zh.wikipedia.org/wiki/Wikipedia:%E6%96%B0%E6%9D%A1%E7%9B%AE%E6%8E%A8%E8%8D%90
+    method: api
+    license: CC BY-SA 4.0
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Global / multi-country; verdict ADD): short sourced hooks that name places,
+      for Place facts and Itinerary. robots.txt: 200; Wikimedia standard robots.txt: /wiki/ allowed for *, /w/ and /api/ disallowed
+      (no api.php), no VoyagerBot group, no AI-bot block; every page path checked 2026-11-20. Terms: Wikimedia Terms of Use:
+      CC BY-SA 4.0 text, no crawl ban. Sourced: yes (DYK hooks must be cited in the article). Share-alike: kept apart, never
+      merged into our own wording and never sent to a model (no LLM kinds). Pages: Wikipedia:新条目推荐;
+      Wikipedia:历史上的今天; Wikipedia:維基誌異. Off: the hook reader was taken out in review (a hook is a whole sentence of share-alike article text, which we never copy or send to a model); needs an own-words extractor.'
+  - id: wiki-facts-ja
+    category: facts
+    name: 'Wikipedia (ja): Did you know / On this day / unusual articles'
+    url: https://ja.wikipedia.org/wiki/Wikipedia:%E6%9C%88%E9%96%93%E6%96%B0%E8%A8%98%E4%BA%8B%E8%B3%9E
+    method: api
+    license: CC BY-SA 4.0
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Global / multi-country; verdict ADD): short sourced hooks that name places,
+      for Place facts and Itinerary. robots.txt: 200; Wikimedia standard robots.txt: /wiki/ allowed for *, /w/ and /api/ disallowed
+      (no api.php), no VoyagerBot group, no AI-bot block; every page path checked 2026-11-20. Terms: Wikimedia Terms of Use:
+      CC BY-SA 4.0 text, no crawl ban. Sourced: yes (DYK hooks must be cited in the article). Share-alike: kept apart, never
+      merged into our own wording and never sent to a model (no LLM kinds). Pages: Wikipedia:月間新記事賞;
+      Wikipedia:今日は何の日; Wikipedia:珍項目. Off: the hook reader was taken out in review (a hook is a whole sentence of share-alike article text, which we never copy or send to a model); needs an own-words extractor.'
+  - id: wiki-facts-ko
+    category: facts
+    name: 'Wikipedia (ko): Did you know / On this day / unusual articles'
+    url: https://ko.wikipedia.org/wiki/%EC%9C%84%ED%82%A4%EB%B0%B1%EA%B3%BC:%EC%95%8C%EA%B3%A0_%EA%B3%84%EC%8B%AD%EB%8B%88%EA%B9%8C
+    method: api
+    license: CC BY-SA 4.0
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Global / multi-country; verdict ADD): short sourced hooks that name places,
+      for Place facts and Itinerary. robots.txt: 200; Wikimedia standard robots.txt: /wiki/ allowed for *, /w/ and /api/ disallowed
+      (no api.php), no VoyagerBot group, no AI-bot block; every page path checked 2026-11-20. Terms: Wikimedia Terms of Use:
+      CC BY-SA 4.0 text, no crawl ban. Sourced: yes (DYK hooks must be cited in the article). Share-alike: kept apart, never
+      merged into our own wording and never sent to a model (no LLM kinds). Pages: 위키백과:알고_계십니까;
+      위키백과:오늘의_역사; 위키백과:별난_문서. Off: the hook reader was taken out in review (a hook is a whole sentence of share-alike article text, which we never copy or send to a model); needs an own-words extractor.'
+  - id: wiki-facts-ar
+    category: facts
+    name: 'Wikipedia (ar): Did you know / On this day / unusual articles'
+    url: https://ar.wikipedia.org/wiki/%D9%88%D9%8A%D9%83%D9%8A%D8%A8%D9%8A%D8%AF%D9%8A%D8%A7:%D9%87%D9%84_%D8%AA%D8%B9%D9%84%D9%85
+    method: api
+    license: CC BY-SA 4.0
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Global / multi-country; verdict ADD): short sourced hooks that name places,
+      for Place facts and Itinerary. robots.txt: 200; Wikimedia standard robots.txt: /wiki/ allowed for *, /w/ and /api/ disallowed
+      (no api.php), no VoyagerBot group, no AI-bot block; every page path checked 2026-11-20. Terms: Wikimedia Terms of Use:
+      CC BY-SA 4.0 text, no crawl ban. Sourced: yes (DYK hooks must be cited in the article). Share-alike: kept apart, never
+      merged into our own wording and never sent to a model (no LLM kinds). Pages: ويكيبيديا:هل_تعلم;
+      ويكيبيديا:في_هذا_اليوم; ويكيبيديا:فريق_مقالات_غريبة. Off: the hook reader was taken out in review (a hook is a whole sentence of share-alike article text, which we never copy or send to a model); needs an own-words extractor.'
+  - id: wiki-facts-bg
+    category: facts
+    name: 'Wikipedia (bg): Did you know / On this day / unusual articles'
+    url: https://bg.wikipedia.org/wiki/%D0%A3%D0%B8%D0%BA%D0%B8%D0%BF%D0%B5%D0%B4%D0%B8%D1%8F:%D0%9F%D0%BE%D1%81%D0%BB%D0%B5%D0%B4%D0%BD%D0%B8_%D0%BF%D0%BE%D0%BF%D1%8A%D0%BB%D0%BD%D0%B5%D0%BD%D0%B8%D1%8F
+    method: api
+    license: CC BY-SA 4.0
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Global / multi-country; verdict ADD): short sourced hooks that name places,
+      for Place facts and Itinerary. robots.txt: 200; Wikimedia standard robots.txt: /wiki/ allowed for *, /w/ and /api/ disallowed
+      (no api.php), no VoyagerBot group, no AI-bot block; every page path checked 2026-11-20. Terms: Wikimedia Terms of Use:
+      CC BY-SA 4.0 text, no crawl ban. Sourced: yes (DYK hooks must be cited in the article). Share-alike: kept apart, never
+      merged into our own wording and never sent to a model (no LLM kinds). Pages: Уикипедия:Последни_попълнения;
+      Уикипедия:Избрани_годишнини; Уикипедия:Нестандартни_статии. Off: the hook reader was taken out in review (a hook is a whole sentence of share-alike article text, which we never copy or send to a model); needs an own-words extractor.'
+  - id: wiki-facts-bn
+    category: facts
+    name: 'Wikipedia (bn): Did you know / On this day / unusual articles'
+    url: https://bn.wikipedia.org/wiki/%E0%A6%89%E0%A6%87%E0%A6%95%E0%A6%BF%E0%A6%AA%E0%A6%BF%E0%A6%A1%E0%A6%BF%E0%A6%AF%E0%A6%BC%E0%A6%BE:%E0%A6%86%E0%A6%AA%E0%A6%A8%E0%A6%BF_%E0%A6%9C%E0%A6%BE%E0%A6%A8%E0%A7%87%E0%A6%A8_%E0%A6%95%E0%A6%BF
+    method: api
+    license: CC BY-SA 4.0
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Global / multi-country; verdict ADD): short sourced hooks that name places,
+      for Place facts and Itinerary. robots.txt: 200; Wikimedia standard robots.txt: /wiki/ allowed for *, /w/ and /api/ disallowed
+      (no api.php), no VoyagerBot group, no AI-bot block; every page path checked 2026-11-20. Terms: Wikimedia Terms of Use:
+      CC BY-SA 4.0 text, no crawl ban. Sourced: yes (DYK hooks must be cited in the article). Share-alike: kept apart, never
+      merged into our own wording and never sent to a model (no LLM kinds). Pages: উইকিপিডিয়া:আপনি_জানেন_কি;
+      উইকিপিডিয়া:নির্বাচিত_বার্ষিকী. Off: the hook reader was taken out in review (a hook is a whole sentence of share-alike article text, which we never copy or send to a model); needs an own-words extractor.'
+  - id: wiki-facts-ca
+    category: facts
+    name: 'Wikipedia (ca): Did you know / On this day / unusual articles'
+    url: https://ca.wikipedia.org/wiki/Viquip%C3%A8dia:Efem%C3%A8rides_seleccionades
+    method: api
+    license: CC BY-SA 4.0
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Global / multi-country; verdict ADD): short sourced hooks that name places,
+      for Place facts and Itinerary. robots.txt: 200; Wikimedia standard robots.txt: /wiki/ allowed for *, /w/ and /api/ disallowed
+      (no api.php), no VoyagerBot group, no AI-bot block; every page path checked 2026-11-20. Terms: Wikimedia Terms of Use:
+      CC BY-SA 4.0 text, no crawl ban. Sourced: yes (DYK hooks must be cited in the article). Share-alike: kept apart, never
+      merged into our own wording and never sent to a model (no LLM kinds). Pages: Viquipèdia:Efemèrides_seleccionades;
+      Viquipèdia:Articles_inusuals. Off: the hook reader was taken out in review (a hook is a whole sentence of share-alike article text, which we never copy or send to a model); needs an own-words extractor.'
+  - id: wiki-facts-cs
+    category: facts
+    name: 'Wikipedia (cs): Did you know / On this day / unusual articles'
+    url: https://cs.wikipedia.org/wiki/Wikipedie:Zaj%C3%ADmavosti
+    method: api
+    license: CC BY-SA 4.0
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Global / multi-country; verdict ADD): short sourced hooks that name places,
+      for Place facts and Itinerary. robots.txt: 200; Wikimedia standard robots.txt: /wiki/ allowed for *, /w/ and /api/ disallowed
+      (no api.php), no VoyagerBot group, no AI-bot block; every page path checked 2026-11-20. Terms: Wikimedia Terms of Use:
+      CC BY-SA 4.0 text, no crawl ban. Sourced: yes (DYK hooks must be cited in the article). Share-alike: kept apart, never
+      merged into our own wording and never sent to a model (no LLM kinds). Pages: Wikipedie:Zajímavosti;
+      Wikipedie:Vybraná_výročí_dne. Off: the hook reader was taken out in review (a hook is a whole sentence of share-alike article text, which we never copy or send to a model); needs an own-words extractor.'
+  - id: wiki-facts-da
+    category: facts
+    name: 'Wikipedia (da): Did you know / On this day / unusual articles'
+    url: https://da.wikipedia.org/wiki/Wikipedia:Vidste_du_at...
+    method: api
+    license: CC BY-SA 4.0
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Global / multi-country; verdict ADD): short sourced hooks that name places,
+      for Place facts and Itinerary. robots.txt: 200; Wikimedia standard robots.txt: /wiki/ allowed for *, /w/ and /api/ disallowed
+      (no api.php), no VoyagerBot group, no AI-bot block; every page path checked 2026-11-20. Terms: Wikimedia Terms of Use:
+      CC BY-SA 4.0 text, no crawl ban. Sourced: yes (DYK hooks must be cited in the article). Share-alike: kept apart, never
+      merged into our own wording and never sent to a model (no LLM kinds). Pages: Wikipedia:Vidste_du_at..;
+      Wikipedia:Årets_dage_kort; Wikipedia:Spøjse_artikler. Off: the hook reader was taken out in review (a hook is a whole sentence of share-alike article text, which we never copy or send to a model); needs an own-words extractor.'
+  - id: wiki-facts-de
+    category: facts
+    name: 'Wikipedia (de): Did you know / On this day / unusual articles'
+    url: https://de.wikipedia.org/wiki/Wikipedia:Hauptseite/Schon_gewusst
+    method: api
+    license: CC BY-SA 4.0
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Global / multi-country; verdict ADD): short sourced hooks that name places,
+      for Place facts and Itinerary. robots.txt: 200; Wikimedia standard robots.txt: /wiki/ allowed for *, /w/ and /api/ disallowed
+      (no api.php), no VoyagerBot group, no AI-bot block; every page path checked 2026-11-20. Terms: Wikimedia Terms of Use:
+      CC BY-SA 4.0 text, no crawl ban. Sourced: yes (DYK hooks must be cited in the article). Share-alike: kept apart, never
+      merged into our own wording and never sent to a model (no LLM kinds). Pages: Wikipedia:Hauptseite/Schon_gewusst;
+      Wikipedia:Hauptseite/Jahrestage; Wikipedia:Kuriositätenkabinett. Off: the hook reader was taken out in review (a hook is a whole sentence of share-alike article text, which we never copy or send to a model); needs an own-words extractor.'
+  - id: wiki-facts-es
+    category: facts
+    name: 'Wikipedia (es): Did you know / On this day / unusual articles'
+    url: https://es.wikipedia.org/wiki/Wikipedia:%C2%BFSab%C3%ADas_que...
+    method: api
+    license: CC BY-SA 4.0
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Global / multi-country; verdict ADD): short sourced hooks that name places,
+      for Place facts and Itinerary. robots.txt: 200; Wikimedia standard robots.txt: /wiki/ allowed for *, /w/ and /api/ disallowed
+      (no api.php), no VoyagerBot group, no AI-bot block; every page path checked 2026-11-20. Terms: Wikimedia Terms of Use:
+      CC BY-SA 4.0 text, no crawl ban. Sourced: yes (DYK hooks must be cited in the article). Share-alike: kept apart, never
+      merged into our own wording and never sent to a model (no LLM kinds). Pages: Wikipedia:¿Sabías_que..;
+      Wikipedia:Efemérides; Wikipedia:Artículos_peculiares. Off: the hook reader was taken out in review (a hook is a whole sentence of share-alike article text, which we never copy or send to a model); needs an own-words extractor.'
+  - id: wiki-facts-et
+    category: facts
+    name: 'Wikipedia (et): Did you know / On this day / unusual articles'
+    url: https://et.wikipedia.org/wiki/Vikipeedia:Kas_teadsid
+    method: api
+    license: CC BY-SA 4.0
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Global / multi-country; verdict ADD): short sourced hooks that name places,
+      for Place facts and Itinerary. robots.txt: 200; Wikimedia standard robots.txt: /wiki/ allowed for *, /w/ and /api/ disallowed
+      (no api.php), no VoyagerBot group, no AI-bot block; every page path checked 2026-11-20. Terms: Wikimedia Terms of Use:
+      CC BY-SA 4.0 text, no crawl ban. Sourced: yes (DYK hooks must be cited in the article). Share-alike: kept apart, never
+      merged into our own wording and never sent to a model (no LLM kinds). Pages: Vikipeedia:Kas_teadsid;
+      Vikipeedia:Valitud_sündmused. Off: the hook reader was taken out in review (a hook is a whole sentence of share-alike article text, which we never copy or send to a model); needs an own-words extractor.'
+  - id: wiki-facts-fa
+    category: facts
+    name: 'Wikipedia (fa): Did you know / On this day / unusual articles'
+    url: https://fa.wikipedia.org/wiki/%D9%88%DB%8C%DA%A9%DB%8C%E2%80%8C%D9%BE%D8%AF%DB%8C%D8%A7:%D8%A2%DB%8C%D8%A7_%D9%85%DB%8C%E2%80%8C%D8%AF%D8%A7%D9%86%D8%B3%D8%AA%DB%8C%D8%AF_%DA%A9%D9%87...%D8%9F
+    method: api
+    license: CC BY-SA 4.0
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Global / multi-country; verdict ADD): short sourced hooks that name places,
+      for Place facts and Itinerary. robots.txt: 200; Wikimedia standard robots.txt: /wiki/ allowed for *, /w/ and /api/ disallowed
+      (no api.php), no VoyagerBot group, no AI-bot block; every page path checked 2026-11-20. Terms: Wikimedia Terms of Use:
+      CC BY-SA 4.0 text, no crawl ban. Sourced: yes (DYK hooks must be cited in the article). Share-alike: kept apart, never
+      merged into our own wording and never sent to a model (no LLM kinds). Pages: ویکی‌پدیا:آیا_می‌دانستید_که..؟;
+      ویکی‌پدیا:یادبودهای_برگزیده; ویکی‌پدیا:مقالات_عجیب. Off: the hook reader was taken out in review (a hook is a whole sentence of share-alike article text, which we never copy or send to a model); needs an own-words extractor.'
+  - id: wiki-facts-fi
+    category: facts
+    name: 'Wikipedia (fi): Did you know / On this day / unusual articles'
+    url: https://fi.wikipedia.org/wiki/Wikipedia:Tiesitk%C3%B6%2C_ett%C3%A4...
+    method: api
+    license: CC BY-SA 4.0
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Global / multi-country; verdict ADD): short sourced hooks that name places,
+      for Place facts and Itinerary. robots.txt: 200; Wikimedia standard robots.txt: /wiki/ allowed for *, /w/ and /api/ disallowed
+      (no api.php), no VoyagerBot group, no AI-bot block; every page path checked 2026-11-20. Terms: Wikimedia Terms of Use:
+      CC BY-SA 4.0 text, no crawl ban. Sourced: yes (DYK hooks must be cited in the article). Share-alike: kept apart, never
+      merged into our own wording and never sent to a model (no LLM kinds). Pages: Wikipedia:Tiesitkö,_että..;
+      Wikipedia:Päivämalline; Wikipedia:Erikoiset_artikkelit. Off: the hook reader was taken out in review (a hook is a whole sentence of share-alike article text, which we never copy or send to a model); needs an own-words extractor.'
+  - id: wiki-facts-fr
+    category: facts
+    name: 'Wikipedia (fr): Did you know / On this day / unusual articles'
+    url: https://fr.wikipedia.org/wiki/Wikip%C3%A9dia:Le_saviez-vous_%3F
+    method: api
+    license: CC BY-SA 4.0
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Global / multi-country; verdict ADD): short sourced hooks that name places,
+      for Place facts and Itinerary. robots.txt: 200; Wikimedia standard robots.txt: /wiki/ allowed for *, /w/ and /api/ disallowed
+      (no api.php), no VoyagerBot group, no AI-bot block; every page path checked 2026-11-20. Terms: Wikimedia Terms of Use:
+      CC BY-SA 4.0 text, no crawl ban. Sourced: yes (DYK hooks must be cited in the article). Share-alike: kept apart, never
+      merged into our own wording and never sent to a model (no LLM kinds). Pages: Wikipédia:Le_saviez-vous_?;
+      Wikipédia:Éphéméride; Wikipédia:Articles_insolites. Off: the hook reader was taken out in review (a hook is a whole sentence of share-alike article text, which we never copy or send to a model); needs an own-words extractor.'
+  - id: wiki-facts-he
+    category: facts
+    name: 'Wikipedia (he): Did you know / On this day / unusual articles'
+    url: https://he.wikipedia.org/wiki/%D7%95%D7%99%D7%A7%D7%99%D7%A4%D7%93%D7%99%D7%94:%D7%94%D7%99%D7%93%D7%A2%D7%AA%3F
+    method: api
+    license: CC BY-SA 4.0
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Global / multi-country; verdict ADD): short sourced hooks that name places,
+      for Place facts and Itinerary. robots.txt: 200; Wikimedia standard robots.txt: /wiki/ allowed for *, /w/ and /api/ disallowed
+      (no api.php), no VoyagerBot group, no AI-bot block; every page path checked 2026-11-20. Terms: Wikimedia Terms of Use:
+      CC BY-SA 4.0 text, no crawl ban. Sourced: yes (DYK hooks must be cited in the article). Share-alike: kept apart, never
+      merged into our own wording and never sent to a model (no LLM kinds). Pages: ויקיפדיה:הידעת?;
+      ויקיפדיה:היום_בהיסטוריה; ויקיפדיה:ערכים_יוצאי_דופן. Off: the hook reader was taken out in review (a hook is a whole sentence of share-alike article text, which we never copy or send to a model); needs an own-words extractor.'
+  - id: wiki-facts-hi
+    category: facts
+    name: 'Wikipedia (hi): Did you know / On this day / unusual articles'
+    url: https://hi.wikipedia.org/wiki/%E0%A4%B5%E0%A4%BF%E0%A4%95%E0%A4%BF%E0%A4%AA%E0%A5%80%E0%A4%A1%E0%A4%BF%E0%A4%AF%E0%A4%BE:%E0%A4%95%E0%A5%8D%E0%A4%AF%E0%A4%BE_%E0%A4%86%E0%A4%AA_%E0%A4%9C%E0%A4%BE%E0%A4%A8%E0%A4%A4%E0%A5%87_%E0%A4%B9%E0%A5%88%E0%A4%82
+    method: api
+    license: CC BY-SA 4.0
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Global / multi-country; verdict ADD): short sourced hooks that name places,
+      for Place facts and Itinerary. robots.txt: 200; Wikimedia standard robots.txt: /wiki/ allowed for *, /w/ and /api/ disallowed
+      (no api.php), no VoyagerBot group, no AI-bot block; every page path checked 2026-11-20. Terms: Wikimedia Terms of Use:
+      CC BY-SA 4.0 text, no crawl ban. Sourced: yes (DYK hooks must be cited in the article). Share-alike: kept apart, never
+      merged into our own wording and never sent to a model (no LLM kinds). Pages: विकिपीडिया:क्या_आप_जानते_हैं. Off: the hook reader was taken out in review (a hook is a whole sentence of share-alike article text, which we never copy or send to a model); needs an own-words extractor.'
+  - id: wiki-facts-hu
+    category: facts
+    name: 'Wikipedia (hu): Did you know / On this day / unusual articles'
+    url: https://hu.wikipedia.org/wiki/Wikip%C3%A9dia:%C3%89vfordul%C3%B3k
+    method: api
+    license: CC BY-SA 4.0
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Global / multi-country; verdict ADD): short sourced hooks that name places,
+      for Place facts and Itinerary. robots.txt: 200; Wikimedia standard robots.txt: /wiki/ allowed for *, /w/ and /api/ disallowed
+      (no api.php), no VoyagerBot group, no AI-bot block; every page path checked 2026-11-20. Terms: Wikimedia Terms of Use:
+      CC BY-SA 4.0 text, no crawl ban. Sourced: yes (DYK hooks must be cited in the article). Share-alike: kept apart, never
+      merged into our own wording and never sent to a model (no LLM kinds). Pages: Wikipédia:Évfordulók;
+      Wikipédia:Az_élet_könnyedebb_oldala. Off: the hook reader was taken out in review (a hook is a whole sentence of share-alike article text, which we never copy or send to a model); needs an own-words extractor.'
+  - id: wiki-facts-id
+    category: facts
+    name: 'Wikipedia (id): Did you know / On this day / unusual articles'
+    url: https://id.wikipedia.org/wiki/Wikipedia:Tahukah_Anda
+    method: api
+    license: CC BY-SA 4.0
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Global / multi-country; verdict ADD): short sourced hooks that name places,
+      for Place facts and Itinerary. robots.txt: 200; Wikimedia standard robots.txt: /wiki/ allowed for *, /w/ and /api/ disallowed
+      (no api.php), no VoyagerBot group, no AI-bot block; every page path checked 2026-11-20. Terms: Wikimedia Terms of Use:
+      CC BY-SA 4.0 text, no crawl ban. Sourced: yes (DYK hooks must be cited in the article). Share-alike: kept apart, never
+      merged into our own wording and never sent to a model (no LLM kinds). Pages: Wikipedia:Tahukah_Anda;
+      Wikipedia:Hari_Ini_Dalam_Sejarah; Wikipedia:Artikel-artikel_yang_tidak_lazim. Off: the hook reader was taken out in review (a hook is a whole sentence of share-alike article text, which we never copy or send to a model); needs an own-words extractor.'
+  - id: wiki-facts-it
+    category: facts
+    name: 'Wikipedia (it): Did you know / On this day / unusual articles'
+    url: https://it.wikipedia.org/wiki/Wikipedia:Lo_sapevi_che
+    method: api
+    license: CC BY-SA 4.0
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Global / multi-country; verdict ADD): short sourced hooks that name places,
+      for Place facts and Itinerary. robots.txt: 200; Wikimedia standard robots.txt: /wiki/ allowed for *, /w/ and /api/ disallowed
+      (no api.php), no VoyagerBot group, no AI-bot block; every page path checked 2026-11-20. Terms: Wikimedia Terms of Use:
+      CC BY-SA 4.0 text, no crawl ban. Sourced: yes (DYK hooks must be cited in the article). Share-alike: kept apart, never
+      merged into our own wording and never sent to a model (no LLM kinds). Pages: Wikipedia:Lo_sapevi_che;
+      Wikipedia:Voci_insolite. Off: the hook reader was taken out in review (a hook is a whole sentence of share-alike article text, which we never copy or send to a model); needs an own-words extractor.'
+  - id: wiki-facts-ms
+    category: facts
+    name: 'Wikipedia (ms): Did you know / On this day / unusual articles'
+    url: https://ms.wikipedia.org/wiki/Wikipedia:Tahukah_anda
+    method: api
+    license: CC BY-SA 4.0
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Global / multi-country; verdict ADD): short sourced hooks that name places,
+      for Place facts and Itinerary. robots.txt: 200; Wikimedia standard robots.txt: /wiki/ allowed for *, /w/ and /api/ disallowed
+      (no api.php), no VoyagerBot group, no AI-bot block; every page path checked 2026-11-20. Terms: Wikimedia Terms of Use:
+      CC BY-SA 4.0 text, no crawl ban. Sourced: yes (DYK hooks must be cited in the article). Share-alike: kept apart, never
+      merged into our own wording and never sent to a model (no LLM kinds). Pages: Wikipedia:Tahukah_anda;
+      Wikipedia:Hari_ulang_tahun_pilihan. Off: the hook reader was taken out in review (a hook is a whole sentence of share-alike article text, which we never copy or send to a model); needs an own-words extractor.'
+  - id: wiki-facts-nl
+    category: facts
+    name: 'Wikipedia (nl): Did you know / On this day / unusual articles'
+    url: https://nl.wikipedia.org/wiki/Wikipedia:Wist_je_dat
+    method: api
+    license: CC BY-SA 4.0
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Global / multi-country; verdict ADD): short sourced hooks that name places,
+      for Place facts and Itinerary. robots.txt: 200; Wikimedia standard robots.txt: /wiki/ allowed for *, /w/ and /api/ disallowed
+      (no api.php), no VoyagerBot group, no AI-bot block; every page path checked 2026-11-20. Terms: Wikimedia Terms of Use:
+      CC BY-SA 4.0 text, no crawl ban. Sourced: yes (DYK hooks must be cited in the article). Share-alike: kept apart, never
+      merged into our own wording and never sent to a model (no LLM kinds). Pages: Wikipedia:Wist_je_dat;
+      Wikipedia:Dag_uit_de_geschiedenis; Wikipedia:Humor_en_onzin/Opmerkelijke_pagina''s. Off: the hook reader was taken out in review (a hook is a whole sentence of share-alike article text, which we never copy or send to a model); needs an own-words extractor.'
+  - id: wiki-facts-nb
+    category: facts
+    name: 'Wikipedia (no): Did you know / On this day / unusual articles'
+    url: https://no.wikipedia.org/wiki/Wikipedia:Visste_du_at
+    method: api
+    license: CC BY-SA 4.0
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Global / multi-country; verdict ADD): short sourced hooks that name places,
+      for Place facts and Itinerary. robots.txt: 200; Wikimedia standard robots.txt: /wiki/ allowed for *, /w/ and /api/ disallowed
+      (no api.php), no VoyagerBot group, no AI-bot block; every page path checked 2026-11-20. Terms: Wikimedia Terms of Use:
+      CC BY-SA 4.0 text, no crawl ban. Sourced: yes (DYK hooks must be cited in the article). Share-alike: kept apart, never
+      merged into our own wording and never sent to a model (no LLM kinds). Pages: Wikipedia:Visste_du_at;
+      Wikipedia:Hendelser; Wikipedia:Liste_over_merkverdige_artikler. Off: the hook reader was taken out in review (a hook is a whole sentence of share-alike article text, which we never copy or send to a model); needs an own-words extractor.'
+  - id: wiki-facts-pl
+    category: facts
+    name: 'Wikipedia (pl): Did you know / On this day / unusual articles'
+    url: https://pl.wikipedia.org/wiki/Wikiprojekt:Czy_wiesz
+    method: api
+    license: CC BY-SA 4.0
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Global / multi-country; verdict ADD): short sourced hooks that name places,
+      for Place facts and Itinerary. robots.txt: 200; Wikimedia standard robots.txt: /wiki/ allowed for *, /w/ and /api/ disallowed
+      (no api.php), no VoyagerBot group, no AI-bot block; every page path checked 2026-11-20. Terms: Wikimedia Terms of Use:
+      CC BY-SA 4.0 text, no crawl ban. Sourced: yes (DYK hooks must be cited in the article). Share-alike: kept apart, never
+      merged into our own wording and never sent to a model (no LLM kinds). Pages: Wikiprojekt:Czy_wiesz;
+      Wikiprojekt:Rocznice; Wikipedia:Nietypowe_artykuły. Off: the hook reader was taken out in review (a hook is a whole sentence of share-alike article text, which we never copy or send to a model); needs an own-words extractor.'
+  - id: wiki-facts-pt
+    category: facts
+    name: 'Wikipedia (pt): Did you know / On this day / unusual articles'
+    url: https://pt.wikipedia.org/wiki/Wikip%C3%A9dia:Sabia_que
+    method: api
+    license: CC BY-SA 4.0
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Global / multi-country; verdict ADD): short sourced hooks that name places,
+      for Place facts and Itinerary. robots.txt: 200; Wikimedia standard robots.txt: /wiki/ allowed for *, /w/ and /api/ disallowed
+      (no api.php), no VoyagerBot group, no AI-bot block; every page path checked 2026-11-20. Terms: Wikimedia Terms of Use:
+      CC BY-SA 4.0 text, no crawl ban. Sourced: yes (DYK hooks must be cited in the article). Share-alike: kept apart, never
+      merged into our own wording and never sent to a model (no LLM kinds). Pages: Wikipédia:Sabia_que;
+      Wikipédia:Efemérides; Wikipédia:Artigos_peculiares. Off: the hook reader was taken out in review (a hook is a whole sentence of share-alike article text, which we never copy or send to a model); needs an own-words extractor.'
+  - id: wiki-facts-ro
+    category: facts
+    name: 'Wikipedia (ro): Did you know / On this day / unusual articles'
+    url: https://ro.wikipedia.org/wiki/Wikipedia:%C8%98tia%C8%9Bi_c%C4%83
+    method: api
+    license: CC BY-SA 4.0
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Global / multi-country; verdict ADD): short sourced hooks that name places,
+      for Place facts and Itinerary. robots.txt: 200; Wikimedia standard robots.txt: /wiki/ allowed for *, /w/ and /api/ disallowed
+      (no api.php), no VoyagerBot group, no AI-bot block; every page path checked 2026-11-20. Terms: Wikimedia Terms of Use:
+      CC BY-SA 4.0 text, no crawl ban. Sourced: yes (DYK hooks must be cited in the article). Share-alike: kept apart, never
+      merged into our own wording and never sent to a model (no LLM kinds). Pages: Wikipedia:Știați_că;
+      Format:Aniversările_zilei; Wikipedia:Articole_neobișnuite. Off: the hook reader was taken out in review (a hook is a whole sentence of share-alike article text, which we never copy or send to a model); needs an own-words extractor.'
+  - id: wiki-facts-ru
+    category: facts
+    name: 'Wikipedia (ru): Did you know / On this day / unusual articles'
+    url: https://ru.wikipedia.org/wiki/%D0%9F%D1%80%D0%BE%D0%B5%D0%BA%D1%82:%D0%97%D0%BD%D0%B0%D0%B5%D1%82%D0%B5_%D0%BB%D0%B8_%D0%B2%D1%8B
+    method: api
+    license: CC BY-SA 4.0
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Global / multi-country; verdict ADD): short sourced hooks that name places,
+      for Place facts and Itinerary. robots.txt: 200; Wikimedia standard robots.txt: /wiki/ allowed for *, /w/ and /api/ disallowed
+      (no api.php), no VoyagerBot group, no AI-bot block; every page path checked 2026-11-20. Terms: Wikimedia Terms of Use:
+      CC BY-SA 4.0 text, no crawl ban. Sourced: yes (DYK hooks must be cited in the article). Share-alike: kept apart, never
+      merged into our own wording and never sent to a model (no LLM kinds). Pages: Проект:Знаете_ли_вы;
+      Проект:События_дня; Википедия:Необычные_статьи. Off: the hook reader was taken out in review (a hook is a whole sentence of share-alike article text, which we never copy or send to a model); needs an own-words extractor.'
+  - id: wiki-facts-simple
+    category: facts
+    name: 'Wikipedia (simple): Did you know / On this day / unusual articles'
+    url: https://simple.wikipedia.org/wiki/Wikipedia:Did_you_know
+    method: api
+    license: CC BY-SA 4.0
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Global / multi-country; verdict ADD): short sourced hooks that name places,
+      for Place facts and Itinerary. robots.txt: 200; Wikimedia standard robots.txt: /wiki/ allowed for *, /w/ and /api/ disallowed
+      (no api.php), no VoyagerBot group, no AI-bot block; every page path checked 2026-11-20. Terms: Wikimedia Terms of Use:
+      CC BY-SA 4.0 text, no crawl ban. Sourced: yes (DYK hooks must be cited in the article). Share-alike: kept apart, never
+      merged into our own wording and never sent to a model (no LLM kinds). Pages: Wikipedia:Did_you_know. Off: the hook reader was taken out in review (a hook is a whole sentence of share-alike article text, which we never copy or send to a model); needs an own-words extractor.'
+  - id: wiki-facts-sk
+    category: facts
+    name: 'Wikipedia (sk): Did you know / On this day / unusual articles'
+    url: https://sk.wikipedia.org/wiki/Wikip%C3%A9dia:Zauj%C3%ADmavosti
+    method: api
+    license: CC BY-SA 4.0
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Global / multi-country; verdict ADD): short sourced hooks that name places,
+      for Place facts and Itinerary. robots.txt: 200; Wikimedia standard robots.txt: /wiki/ allowed for *, /w/ and /api/ disallowed
+      (no api.php), no VoyagerBot group, no AI-bot block; every page path checked 2026-11-20. Terms: Wikimedia Terms of Use:
+      CC BY-SA 4.0 text, no crawl ban. Sourced: yes (DYK hooks must be cited in the article). Share-alike: kept apart, never
+      merged into our own wording and never sent to a model (no LLM kinds). Pages: Wikipédia:Zaujímavosti. Off: the hook reader was taken out in review (a hook is a whole sentence of share-alike article text, which we never copy or send to a model); needs an own-words extractor.'
+  - id: wiki-facts-sl
+    category: facts
+    name: 'Wikipedia (sl): Did you know / On this day / unusual articles'
+    url: https://sl.wikipedia.org/wiki/Wikipedija:Ste_vedeli
+    method: api
+    license: CC BY-SA 4.0
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Global / multi-country; verdict ADD): short sourced hooks that name places,
+      for Place facts and Itinerary. robots.txt: 200; Wikimedia standard robots.txt: /wiki/ allowed for *, /w/ and /api/ disallowed
+      (no api.php), no VoyagerBot group, no AI-bot block; every page path checked 2026-11-20. Terms: Wikimedia Terms of Use:
+      CC BY-SA 4.0 text, no crawl ban. Sourced: yes (DYK hooks must be cited in the article). Share-alike: kept apart, never
+      merged into our own wording and never sent to a model (no LLM kinds). Pages: Wikipedija:Ste_vedeli;
+      Wikipedija:Izbrane_obletnice; Wikipedija:Nenavadni_članki. Off: the hook reader was taken out in review (a hook is a whole sentence of share-alike article text, which we never copy or send to a model); needs an own-words extractor.'
+  - id: wiki-facts-sr
+    category: facts
+    name: 'Wikipedia (sr): Did you know / On this day / unusual articles'
+    url: https://sr.wikipedia.org/wiki/%D0%92%D0%B8%D0%BA%D0%B8%D0%BF%D0%B5%D0%B4%D0%B8%D1%98%D0%B0:%D0%94%D0%B0_%D0%BB%D0%B8_%D1%81%D1%82%D0%B5_%D0%B7%D0%BD%D0%B0%D0%BB%D0%B8
+    method: api
+    license: CC BY-SA 4.0
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Global / multi-country; verdict ADD): short sourced hooks that name places,
+      for Place facts and Itinerary. robots.txt: 200; Wikimedia standard robots.txt: /wiki/ allowed for *, /w/ and /api/ disallowed
+      (no api.php), no VoyagerBot group, no AI-bot block; every page path checked 2026-11-20. Terms: Wikimedia Terms of Use:
+      CC BY-SA 4.0 text, no crawl ban. Sourced: yes (DYK hooks must be cited in the article). Share-alike: kept apart, never
+      merged into our own wording and never sent to a model (no LLM kinds). Pages: Википедија:Да_ли_сте_знали;
+      Википедија:Изабрани_догађаји. Off: the hook reader was taken out in review (a hook is a whole sentence of share-alike article text, which we never copy or send to a model); needs an own-words extractor.'
+  - id: wiki-facts-sv
+    category: facts
+    name: 'Wikipedia (sv): Did you know / On this day / unusual articles'
+    url: https://sv.wikipedia.org/wiki/Wikipedia:Visste_du_att...
+    method: api
+    license: CC BY-SA 4.0
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Global / multi-country; verdict ADD): short sourced hooks that name places,
+      for Place facts and Itinerary. robots.txt: 200; Wikimedia standard robots.txt: /wiki/ allowed for *, /w/ and /api/ disallowed
+      (no api.php), no VoyagerBot group, no AI-bot block; every page path checked 2026-11-20. Terms: Wikimedia Terms of Use:
+      CC BY-SA 4.0 text, no crawl ban. Sourced: yes (DYK hooks must be cited in the article). Share-alike: kept apart, never
+      merged into our own wording and never sent to a model (no LLM kinds). Pages: Wikipedia:Visste_du_att..;
+      Wikipedia:Dagens_händelser; Wikipedia:Kuriosaartiklar. Off: the hook reader was taken out in review (a hook is a whole sentence of share-alike article text, which we never copy or send to a model); needs an own-words extractor.'
+  - id: wiki-facts-ta
+    category: facts
+    name: 'Wikipedia (ta): Did you know / On this day / unusual articles'
+    url: https://ta.wikipedia.org/wiki/%E0%AE%B5%E0%AE%BF%E0%AE%95%E0%AF%8D%E0%AE%95%E0%AE%BF%E0%AE%AA%E0%AF%8D%E0%AE%AA%E0%AF%80%E0%AE%9F%E0%AE%BF%E0%AE%AF%E0%AE%BE:%E0%AE%89%E0%AE%99%E0%AF%8D%E0%AE%95%E0%AE%B3%E0%AF%81%E0%AE%95%E0%AF%8D%E0%AE%95%E0%AF%81%E0%AE%A4%E0%AF%8D_%E0%AE%A4%E0%AF%86%E0%AE%B0%E0%AE%BF%E0%AE%AF%E0%AF%81%E0%AE%AE%E0%AE%BE
+    method: api
+    license: CC BY-SA 4.0
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Global / multi-country; verdict ADD): short sourced hooks that name places,
+      for Place facts and Itinerary. robots.txt: 200; Wikimedia standard robots.txt: /wiki/ allowed for *, /w/ and /api/ disallowed
+      (no api.php), no VoyagerBot group, no AI-bot block; every page path checked 2026-11-20. Terms: Wikimedia Terms of Use:
+      CC BY-SA 4.0 text, no crawl ban. Sourced: yes (DYK hooks must be cited in the article). Share-alike: kept apart, never
+      merged into our own wording and never sent to a model (no LLM kinds). Pages: விக்கிப்பீடியா:உங்களுக்குத்_தெரியுமா;
+      விக்கிப்பீடியா:ஆண்டு_நிறைவுகள். Off: the hook reader was taken out in review (a hook is a whole sentence of share-alike article text, which we never copy or send to a model); needs an own-words extractor.'
+  - id: wiki-facts-th
+    category: facts
+    name: 'Wikipedia (th): Did you know / On this day / unusual articles'
+    url: https://th.wikipedia.org/wiki/%E0%B8%A7%E0%B8%B4%E0%B8%81%E0%B8%B4%E0%B8%9E%E0%B8%B5%E0%B9%80%E0%B8%94%E0%B8%B5%E0%B8%A2:%E0%B8%A3%E0%B8%B9%E0%B9%89%E0%B9%84%E0%B8%AB%E0%B8%A1%E0%B8%A7%E0%B9%88%E0%B8%B2
+    method: api
+    license: CC BY-SA 4.0
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Global / multi-country; verdict ADD): short sourced hooks that name places,
+      for Place facts and Itinerary. robots.txt: 200; Wikimedia standard robots.txt: /wiki/ allowed for *, /w/ and /api/ disallowed
+      (no api.php), no VoyagerBot group, no AI-bot block; every page path checked 2026-11-20. Terms: Wikimedia Terms of Use:
+      CC BY-SA 4.0 text, no crawl ban. Sourced: yes (DYK hooks must be cited in the article). Share-alike: kept apart, never
+      merged into our own wording and never sent to a model (no LLM kinds). Pages: วิกิพีเดีย:รู้ไหมว่า;
+      วิกิพีเดีย:วันนี้ในอดีต. Off: the hook reader was taken out in review (a hook is a whole sentence of share-alike article text, which we never copy or send to a model); needs an own-words extractor.'
+  - id: wiki-facts-tr
+    category: facts
+    name: 'Wikipedia (tr): Did you know / On this day / unusual articles'
+    url: https://tr.wikipedia.org/wiki/Vikipedi:Biliyor_muydunuz%3F
+    method: api
+    license: CC BY-SA 4.0
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Global / multi-country; verdict ADD): short sourced hooks that name places,
+      for Place facts and Itinerary. robots.txt: 200; Wikimedia standard robots.txt: /wiki/ allowed for *, /w/ and /api/ disallowed
+      (no api.php), no VoyagerBot group, no AI-bot block; every page path checked 2026-11-20. Terms: Wikimedia Terms of Use:
+      CC BY-SA 4.0 text, no crawl ban. Sourced: yes (DYK hooks must be cited in the article). Share-alike: kept apart, never
+      merged into our own wording and never sent to a model (no LLM kinds). Pages: Vikipedi:Biliyor_muydunuz?;
+      Vikipedi:Tarihte_bugün. Off: the hook reader was taken out in review (a hook is a whole sentence of share-alike article text, which we never copy or send to a model); needs an own-words extractor.'
+  - id: wiki-facts-uk
+    category: facts
+    name: 'Wikipedia (uk): Did you know / On this day / unusual articles'
+    url: https://uk.wikipedia.org/wiki/%D0%92%D1%96%D0%BA%D1%96%D0%BF%D0%B5%D0%B4%D1%96%D1%8F:%D0%9F%D1%80%D0%BE%D1%94%D0%BA%D1%82:%D0%A7%D0%B8_%D0%B2%D0%B8_%D0%B7%D0%BD%D0%B0%D1%94%D1%82%D0%B5
+    method: api
+    license: CC BY-SA 4.0
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Global / multi-country; verdict ADD): short sourced hooks that name places,
+      for Place facts and Itinerary. robots.txt: 200; Wikimedia standard robots.txt: /wiki/ allowed for *, /w/ and /api/ disallowed
+      (no api.php), no VoyagerBot group, no AI-bot block; every page path checked 2026-11-20. Terms: Wikimedia Terms of Use:
+      CC BY-SA 4.0 text, no crawl ban. Sourced: yes (DYK hooks must be cited in the article). Share-alike: kept apart, never
+      merged into our own wording and never sent to a model (no LLM kinds). Pages: Вікіпедія:Проєкт:Чи_ви_знаєте;
+      Вікіпедія:Проєкт:Цей_день_в_історії; Вікіпедія:Неочікувані_статті. Off: the hook reader was taken out in review (a hook is a whole sentence of share-alike article text, which we never copy or send to a model); needs an own-words extractor.'
+  - id: wiki-facts-vi
+    category: facts
+    name: 'Wikipedia (vi): Did you know / On this day / unusual articles'
+    url: https://vi.wikipedia.org/wiki/Wikipedia:B%E1%BA%A1n_c%C3%B3_bi%E1%BA%BFt
+    method: api
+    license: CC BY-SA 4.0
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Global / multi-country; verdict ADD): short sourced hooks that name places,
+      for Place facts and Itinerary. robots.txt: 200; Wikimedia standard robots.txt: /wiki/ allowed for *, /w/ and /api/ disallowed
+      (no api.php), no VoyagerBot group, no AI-bot block; every page path checked 2026-11-20. Terms: Wikimedia Terms of Use:
+      CC BY-SA 4.0 text, no crawl ban. Sourced: yes (DYK hooks must be cited in the article). Share-alike: kept apart, never
+      merged into our own wording and never sent to a model (no LLM kinds). Pages: Wikipedia:Bạn_có_biết;
+      Wikipedia:Ngày_này_năm_xưa. Off: the hook reader was taken out in review (a hook is a whole sentence of share-alike article text, which we never copy or send to a model); needs an own-words extractor.'
+  - id: od-factbook-json
+    category: facts
+    name: CIA World Factbook, final edition (factbook.json, CC0)
+    url: https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/africa/ag.json
+    method: dump
+    license: CC0
+    cadence: yearly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Global / multi-country; verdict ADD): highest and lowest points, area,
+      World Heritage count, national symbols, former names and independence dates of every country, for Place facts. robots.txt:
+      raw.githubusercontent.com robots.txt answers 404 = allowed (checked 2026-11-20). Terms: factbook.json: CC0 1.0; the Factbook
+      itself is a US Government work (public domain). Sourced: yes. Open licence (CC0). Adapter factbook_json (2026-11-20):
+      255 country files at commit 144d6977b2b0 (listed through the GitHub API, robots.txt 404 = allowed); oceans and the World
+      file are not seeded (they resolve to no country). Frozen edition: one conditional GET a year.'
+  - id: od-wikidata-entitydata
+    category: facts
+    name: Wikidata EntityData (place items, JSON)
+    url: https://www.wikidata.org/wiki/Special:EntityData/Q30.json
+    method: api
+    license: CC0
+    cadence: monthly
+    needs_key: false
+    allowed: true
+    notes: 'Research 2026-11-20 (place facts corpus; Global / multi-country; verdict ADD): founding dates, former names, nicknames,
+      mottos, records, twin towns and heritage designations as typed statements, for Place facts and Places to see. robots.txt:
+      robots.txt: Allow: /wiki/Special:EntityData/*. (/w/api.php, Special:ItemByTitle and query.wikidata.org/sparql are disallowed
+      and never used). Terms: Wikidata: structured data CC0; Wikimedia Terms of Use, no crawl ban. Sourced: partial (per statement).
+      Open licence (CC0). Adapter wikidata_facts (2026-11-20), EntityData route: 142 seed items (countries and big cities);
+      each row also fetches up to 12 referenced items for their labels. Add place QIDs here as Voyager asks for them (the research
+      row: on demand, per place QID).'

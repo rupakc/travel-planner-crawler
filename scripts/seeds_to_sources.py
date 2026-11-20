@@ -50,6 +50,8 @@ KINDS = {
     "emission_factor", "grid_carbon_intensity",
     # 2026-11-19: average vehicle occupancy, persons per vehicle (adapter factor_table).
     "occupancy",
+    # 2026-11-20: place facts (adapters wikidata_facts, factbook_json; LLM extraction).
+    "place_fact",
 }
 
 
@@ -241,6 +243,11 @@ LICENCES: dict[str, tuple[str, str | None, str | None]] = {
     "Xunta de Galicia reuse terms (attribution)": ("open", None, None),
     # --- Carbon footprint corpus (research 2026-11-19) ----------------------------------------
     "Open data licence (see notes)": ("open", None, None),  # the quoted licence is in the notes
+    # --- Place facts corpus (research 2026-11-20) ----------------------------------------------
+    "CC BY-SA 3.0": ("share_alike", "CC-BY-SA-3.0", "https://creativecommons.org/licenses/by-sa/3.0/"),
+    # NC-SA licences of a few community and wiki-style sites: Voyager is non-commercial (owner
+    # accepted), and share-alike text is kept apart (never merged, never sent to a model).
+    "CC BY-NC-SA (owner accepted, kept separate)": ("share_alike", None, None),
     "MIT licence (data and docs)": ("open", "MIT", "https://opensource.org/license/mit"),
     # PRIMAP-hist: CC BY-NC-SA 4.0; Voyager is non-commercial (owner accepted), kept separate.
     "CC BY-NC-SA 4.0 (owner accepted, kept separate)": (
@@ -753,13 +760,17 @@ RELEVANCE: dict[str, tuple[list[str], str]] = {
 }
 
 
-def relevance(sid: str) -> dict:
-    """The `relevance:` block for a seed; a seed without one fails generation."""
+def relevance(sid: str, facts: bool = False) -> dict:
+    """The `relevance:` block for a seed; a seed without one fails generation. `facts` appends
+    the Place facts section (an existing source wired for place_fact, see facts_reuse_on)."""
     if sid not in RELEVANCE:
         raise MappingError(
             f"{sid}: no RELEVANCE entry; name the app section(s) it serves and why"
         )
     sections, why = RELEVANCE[sid]
+    if facts and "facts" not in sections:
+        sections = list(sections) + ["facts"]
+        why = f"{why.rstrip().rstrip('.')}; also history and curiosities for Place facts."
     bad = [s for s in sections if s not in SECTIONS]
     if not sections or bad or len(set(sections)) != len(sections):
         raise MappingError(f"{sid}: bad relevance sections {sections}")
@@ -18788,6 +18799,2449 @@ CARBON_TABLES_3_OFF = {
 DISABLED.update(CARBON_TABLES_3_OFF)
 
 
+# ---------------------------------------------------------------------------------------
+# Place facts corpus (research vetted 2026-11-20, 28 briefs; docs/wiki/Place-Facts-Data.md):
+# section `facts`, kind `place_fact`. Every source lists `facts` first, then the other sections
+# the research row names. Rules (owner rules 2026-11-18/19 as in the corpora above):
+#  - ADD rows on html/rss/sitemap are on: facts only unless an open licence was quoted (terms not
+#    found or personal/non-commercial terms: owner accepted for non-commercial use); kinds
+#    place_fact + article; the LLM extracts place_fact (one sentence in our own words plus the
+#    link) except from share-alike text and AI-reserved robots.txt (title and link only).
+#    Crawl-delays become min_delay_s; cadence monthly or slower; depth <= 2; 100 requests/day.
+#  - Off with the reason first: "enable after a check from the crawler VM" (robots.txt gave no
+#    response from the research laptop), "adapter pending: <format>", "needs owner key:
+#    <service>", "owner decision: <question>" (community-written sites included: place_fact
+#    takes official, reference and editorial sources only).
+#  - Structured readers on: factbook_json and wikidata_facts (EntityData); the existing
+#    wikidata-dump gets wikidata_facts (still off). The Wikipedia hook pages (wiki-facts-<lang>,
+#    one per Wikipedia) are off: "hook adapter removed (share-alike text); needs an own-words
+#    extractor".
+# ---------------------------------------------------------------------------------------
+FACTS_IDS: list[str] = []
+FACTS_DEFAULT_BUDGET = 100
+
+
+def _facts(sid: str, sections: list[str], why: str, *, cls: str,
+           kinds: list[str] = ("place_fact", "article"), llm: bool = True, off: str | None = None,
+           depth: int = 1, budget: int = FACTS_DEFAULT_BUDGET, delay: int | None = None,
+           adapter: str | None = None, seeds: list[str] = (), sitemaps: list[str] = (),
+           feeds: list[str] = (), include: list[str] = (), exclude: list[str] = ()) -> None:
+    """Registers a place-facts source (a thin wrapper over `_src`)."""
+    _src(sid, sections, why, cls=cls, kinds=list(kinds), llm=["place_fact"] if llm else [], off=off,
+         depth=depth, budget=budget, delay=delay, seeds=seeds, sitemaps=sitemaps, feeds=feeds,
+         include=include, exclude=exclude)
+    if adapter:
+        ADAPTERS[sid] = adapter
+    FACTS_IDS.append(sid)
+
+
+# Existing sources the research lists as EXISTING-REUSE: they also serve `facts` (appended to
+# their sections) and get the place_fact kind, which the LLM extracts only where the source
+# already has LLM kinds and is not share-alike. The value is what to extract (notes).
+FACTS_REUSE: dict[str, str] = {
+    'amusingplanet': 'enabled:false; robots allowed, feed 200 (25 items): enable for facts (curiosities about places, sourced)',
+    'api-europeana': 'extract: Local-history items per place (`what`/`where` queries) for "historic photo of X in 1900" facts / Use the Europeana Entity API places (`/entity/place/…`, descriptions and alt names) and `www.europeana.eu/sitemap-entity-index.xml` place pages (robots ok) for per-place "highlights" and dated items.',
+    'argentina-travel': 'not refetched; each has "history" / "did you know" / destination pages that can feed `facts`',
+    'blog-atlasandboots': "'facts about X' articles",
+    'blog-kuriositas': "curiosities about places: add 'facts' extraction",
+    'capetown-gov': 'add history-of-Cape-Town pages; terms personal/non-commercial',
+    'cbsa-travellers': 'add path ^/en/canadian-heritage/services/provincial-territorial-symbols-canada/ (13 province/territory symbol profiles); terms allow non-commercial reproduction',
+    'city-ba-ciudad': 'add city history pages; CC BY 2.5 AR',
+    'city-krakow': 'history, name-origin and curiosity pages of the places it covers',
+    'city-montreal': 'history, name-origin and curiosity pages of the places it covers',
+    'city-yerevan': '"History of Yerevan" and district pages (founding in 782 BC as Erebuni)',
+    'colombia-travel': 'not refetched; each has "history" / "did you know" / destination pages that can feed `facts`',
+    'culturetrip': "'facts about X' articles",
+    'datagovhk': 'AMO declared monuments and graded buildings datasets / AMO declared monuments list',
+    'doc-nz-api': 'historic places on conservation land (history text per site)',
+    'doc-nz-parks': 'historic places on conservation land (history text per site)',
+    'egymonuments': 'Cairo city facts: monuments by district (also covers the Cairo city-page brief) / Egyptian monuments',
+    'enwiki-dump': '"Etymology"/"Toponymy"/"Name" sections of settlement articles; list pages "List of highest towns by country", "List of enclaves and exclaves", "Extreme points of …", "List of geographic centres" (use only with citations) / place properties (founding date, highest point, records) and "Did you know" items; es/pt wikis for municipalities',
+    'ev-roots-sg': 'place history and curiosities sections / history, name-origin and curiosity pages of the places it covers / Singapore Monuments GeoJSON; Roots.sg historic sites and markers',
+    'goturkiye': 'history, name-origin and curiosity pages of the places it covers',
+    'gov-aad': 'Antarctic superlatives (coldest, windiest)',
+    'gov-beijing-en': 'city history and "facts" pages',
+    'gov-bonito': 'prefeitura history page, if not already crawled',
+    'gov-gilgit-baltistan': 'city and valley history pages (Lahore, Hunza, Skardu forts)',
+    'gov-kemenparekraf': 'Indonesian destination histories (Jakarta Ensiklopedia was formerly a sub-site; host not found now)',
+    'gov-leh': '"history" and "about" pages per destination',
+    'gov-mct-china': 'city history and "facts" pages',
+    'gov-mot-cambodia': 'temple history, Bagan, Kampong Ayer facts',
+    'gov-nepal-motca': 'destination history and "did you know" lines',
+    'gov-tourism-mm': 'temple history, Bagan, Kampong Ayer facts',
+    'her-cadw': 'listing descriptions: build year, architect, notable events / properties-in-care histories',
+    'incredibleindia': '"history" and "about" pages per destination',
+    'mag-hiddeneurope': 'Hidden Europe magazine: little-known places in Europe',
+    'mag-mexicodesconocido': 'place history and curiosities sections',
+    'messynessychic': 'enabled:false; curiosities about places: enable for facts',
+    'museum-kizhi': 'dates and records of the Kizhi churches (Church of the Transfiguration, 1714, built without nails)',
+    'museum-solovki': 'monastery history and dated events',
+    'news-bbc': 'history, name-origin and curiosity pages of the places it covers',
+    'news-guardian': 'history, name-origin and curiosity pages of the places it covers',
+    'news-nyt': 'history, name-origin and curiosity pages of the places it covers',
+    'news-smithsonian': 'add feeds https://www.smithsonianmag.com/rss/history/ and /rss/smart-news/ (robots ok, history feed 200); extract place facts from History',
+    'nps-data-api': 'park "history and culture" pages, "Things To Know", NRHP and National Historic Landmark descriptions; the API `parks` description fields / NRHP data downloads (https://home.nps.gov/subjects/nationalregister/data-downloads.htm) and NHL pages / park superlatives (deepest lake: Crater Lake; longest cave: Mammoth Cave)',
+    'nps-site': 'park "history and culture" pages, "Things To Know", NRHP and National Historic Landmark descriptions; the API `parks` description fields / NRHP data downloads (https://home.nps.gov/subjects/nationalregister/data-downloads.htm) and NHL pages / park superlatives (deepest lake: Crater Lake; longest cave: Mammoth Cave)',
+    'nsw-national-parks': 'park and historic-site history',
+    'od-dane-gov-pl': 'rejestr zabytków datasets',
+    'od-data-gov-sg': 'history, name-origin and curiosity pages of the places it covers / Singapore Monuments GeoJSON; Roots.sg historic sites and markers',
+    'od-data-gv-at': 'Vienna Kulturgut datasets (monuments, plaques)',
+    'od-data-public-lu': 'immeubles et objets classés',
+    'od-data-qld': 'Queensland Heritage Register XML (history + significance) / Queensland place names gazetteer, which has a "history/origin" field',
+    'od-datos-gov-co': 'Socrata datasets found via /api/catalog/v1?q=patrimonio: 6zkz-uunt (Inventario Patrimonio Arquitectónico de Risaralda), k2b5-jms2 (Patrimonio Natural y Construido, Palmira), c2kj-cqd8 (POT sitios arqueológicos)',
+    'od-fr-merimee': 'Mérimée "historique" field and protection dates',
+    'od-nl-rijksmonumenten': 'listing descriptions: build year, architect, notable events / rijksmonument descriptions (RCE content CC0; RCE\'s "AI-gebruik" page not read)',
+    'od-ramsar-rsis': 'the first designated site per country, the largest wetland, the site\'s "justification" criteria',
+    'od-wdpa': 'extract: Designation year and type of protected areas ("national park since 1872") / the oldest and largest protected area per country (designation year, area)',
+    'od-wien-ogd': 'Vienna Kulturgut datasets (monuments, plaques)',
+    'official-inah': 'per archaeological zone: history, founding dates, curiosities / INAH archaeological zones',
+    'osm-geofabrik': 'extract: Tags `historic=*`, `memorial=*`, `inscription=*` (plaque texts), `start_date`, `name:etymology`, `name:etymology:wikidata`, `heritage=*` + `heritage:operator`, `ref:whc`, `old_name`, `height`/`ele`, `wikidata`',
+    'park-alberta': 'add /alberta-emblems (Emblems of Alberta); non-commercial reproduction allowed',
+    'park-parks-canada': 'national historic sites: history pages / national historic sites and persons/events designations / add path ^/en/canadian-heritage/services/provincial-territorial-symbols-canada/ (13 province/territory symbol profiles); terms allow non-commercial reproduction',
+    'park-pn-ar': 'park history and records',
+    'park-sernanp': 'Mincultura: https://www.gob.pe/institucion/cultura/tema/patrimonio-cultural-o-arqueologico and the declaratorias under /institucion/cultura/normas-legales (patrimonio declarations by place). GPTBot is blocked; Crawl-delay 5.',
+    'peru-travel': '"history", "did you know", culture pages per destination / not refetched; each has "history" / "did you know" / destination pages that can feed `facts`',
+    'pl-asi': 'lists of centrally protected monuments by state, with dates (historical facts) / ASI Centrally Protected Monuments list (CPM_List.pdf)',
+    'ref-aldeias-historicas': 'village pages already crawled: add a facts extractor (founding date, "classified since", heritage highlights)',
+    'ref-aldeias-xisto': 'village pages already crawled: add a facts extractor (founding date, "classified since", heritage highlights)',
+    'ref-beaux-villages-wallonie': 'village pages already crawled: add a facts extractor (founding date, "classified since", heritage highlights)',
+    'ref-borghi-italia': 'village pages already crawled: add a facts extractor (founding date, "classified since", heritage highlights)',
+    'ref-european-geoparks': 'geopark superlatives (oldest rocks, fossils) per region',
+    'ref-global-geoparks': 'geopark superlatives (oldest rocks, fossils) per region',
+    'ref-japan-guide': 'place history and curiosities sections / destination "history/culture/facts" pages',
+    'ref-machupicchu': 'site history facts',
+    'ref-odysseus-culture-gr': 'Greek monuments and archaeological sites',
+    'ref-pueblos-bonitos-espana': 'village pages already crawled: add a facts extractor (founding date, "classified since", heritage highlights)',
+    'ref-showcaves': 'the longest and deepest show caves per country',
+    'ref-sic-cultura-mx': 'per-municipio cultural fichas (state cronista documents seen in search results)',
+    'ref-swiss-villages': 'village pages already crawled: add a facts extractor (founding date, "classified since", heritage highlights)',
+    'ref-un-tourism-villages': 'village pages already crawled: add a facts extractor (founding date, "classified since", heritage highlights)',
+    'ref-waterfalls': 'the tallest and largest-volume waterfalls per country',
+    'ref-zambiatourism': "/monuments/: the national monuments list (Zawi Hill, Kalomo Administrator's House)",
+    'srilanka-travel': 'destination "history/culture/facts" pages',
+    'tb-angkor-enterprise': 'temple history, Bagan, Kampong Ayer facts',
+    'tb-armenia-travel': 'history, name-origin and curiosity pages of the places it covers',
+    'tb-bahamas': 'not refetched; each has "history" / "did you know" / destination pages that can feed `facts`',
+    'tb-bali-disparda': 'Indonesian destination histories (Jakarta Ensiklopedia was formerly a sub-site; host not found now)',
+    'tb-bangladesh-tb': 'destination history and "did you know" lines',
+    'tb-barbados': 'not refetched; each has "history" / "did you know" / destination pages that can feed `facts`',
+    'tb-brunei': 'temple history, Bagan, Kampong Ayer facts',
+    'tb-btea-bahrain': 'Manama history (Bab Al Bahrain, the pearling path); Bahrain\'s "Manama Story" was not found as its own host',
+    'tb-cuba': 'not refetched; each has "history" / "did you know" / destination pages that can feed `facts`',
+    'tb-ecuador': 'not refetched; each has "history" / "did you know" / destination pages that can feed `facts`',
+    'tb-elsalvador': 'not refetched; each has "history" / "did you know" / destination pages that can feed `facts`',
+    'tb-english-heritage': 'site history pages: historical facts per property / listing descriptions: build year, architect, notable events / London blue plaques pages (/visit/blue-plaques/)',
+    'tb-enjoy-jakarta': 'Indonesian destination histories (Jakarta Ensiklopedia was formerly a sub-site; host not found now)',
+    'tb-godr': 'not refetched; each has "history" / "did you know" / destination pages that can feed `facts`',
+    'tb-guadeloupe': 'not refetched; each has "history" / "did you know" / destination pages that can feed `facts`',
+    'tb-guam': 'destination "history/culture/facts" pages',
+    'tb-guatemala': 'not refetched; each has "history" / "did you know" / destination pages that can feed `facts`',
+    'tb-hanoi-tourism': 'relic and old-quarter history (Hội An WH office lists its relics)',
+    'tb-heritageireland': 'listing descriptions: build year, architect, notable events',
+    'tb-historicenvironment-scot': 'site history pages: historical facts per property / properties-in-care histories',
+    'tb-hoi-an-heritage': 'relic and old-quarter history (Hội An WH office lists its relics)',
+    'tb-honduras': 'not refetched; each has "history" / "did you know" / destination pages that can feed `facts`',
+    'tb-itraveljerusalem': 'Jerusalem quarters and sites (jerusalem.muni.il is 403)',
+    'tb-japan-beautiful-villages': 'village pages already crawled: add a facts extractor (founding date, "classified since", heritage highlights)',
+    'tb-karnataka': 'history, name-origin and curiosity pages of the places it covers',
+    'tb-kazakhstan': 'history, name-origin and curiosity pages of the places it covers',
+    'tb-kerala': '"history" and "about" pages per destination',
+    'tb-ktb-turkey': 'history, name-origin and curiosity pages of the places it covers',
+    'tb-kyoto-travel': 'destination "history/culture/facts" pages',
+    'tb-langkawi': 'state and city heritage pages, Langkawi legends',
+    'tb-madagascar': 'Ambohimanga and the royal-hill histories',
+    'tb-madhya-pradesh': '"history" and "about" pages per destination',
+    'tb-martinique': 'not refetched; each has "history" / "did you know" / destination pages that can feed `facts`',
+    'tb-mato-grosso-do-sul': '"history", "did you know", culture pages per destination',
+    'tb-mintoul-cm': 'Cameroon heritage sites (Bimbia, Ngondo); also covers the MINAC gap',
+    'tb-moldova': 'history, name-origin and curiosity pages of the places it covers',
+    'tb-mypenang': 'state and city heritage pages, Langkawi legends',
+    'tb-nepal-ntb': 'destination history and "did you know" lines',
+    'tb-new-caledonia': 'destination "history/culture/facts" pages',
+    'tb-newmexico': 'NM town facts',
+    'tb-niue': 'destination "history/culture/facts" pages',
+    'tb-odisha': '"history" and "about" pages per destination',
+    'tb-pakistan': 'city and valley history pages (Lahore, Hunza, Skardu forts)',
+    'tb-paraguay': 'not refetched; each has "history" / "did you know" / destination pages that can feed `facts`',
+    'tb-parjatan-bd': 'destination history and "did you know" lines',
+    'tb-png': 'destination "history/culture/facts" pages',
+    'tb-punjab-pk': 'city and valley history pages (Lahore, Hunza, Skardu forts)',
+    'tb-qatarmuseums': 'Qatar museum and site histories / Msheireb and Doha old-town facts',
+    'tb-rajasthan': '"history" and "about" pages per destination',
+    'tb-santacatarina': '"history", "did you know", culture pages per destination',
+    'tb-sltda': 'destination history and "did you know" lines',
+    'tb-solomons': 'destination "history/culture/facts" pages',
+    'tb-taiwan-tourism': 'destination "history/culture/facts" pages',
+    'tb-tamilnadu': '"history" and "about" pages per destination',
+    'tb-tourism-cambodia': 'destination "history/culture/facts" pages',
+    'tb-tourism-malaysia-corp': 'state and city heritage pages, Langkawi legends',
+    'tb-tourisme-ci': 'Grand-Bassam (UNESCO 2012, first colonial capital 1893–1900)',
+    'tb-tourismpanama': 'destination pages with history; Crawl-delay 2',
+    'tb-travelpalestine': '/en/Site/ pages: Ministry of Tourism and Antiquities site histories (also covers mota.ps)',
+    'tb-uruguaynatural': '"history", "did you know", culture pages per destination / /es/places/ city pages with history (Colonia, Durazno), /es/datos/',
+    'tb-vanuatu': 'destination "history/culture/facts" pages',
+    'tb-visit-hcmc': 'relic and old-quarter history (Hội An WH office lists its relics)',
+    'tb-visit-nara': 'destination "history/culture/facts" pages',
+    'tb-visitghana': 'Accra history (Jamestown, Osu Castle), the replacement for AMA',
+    'tb-visitjamaica': 'not refetched; each has "history" / "did you know" / destination pages that can feed `facts`',
+    'tb-visitjogja': 'Indonesian destination histories (Jakarta Ensiklopedia was formerly a sub-site; host not found now)',
+    'tb-visitkl': 'state and city heritage pages, Langkawi legends',
+    'tb-visitkorea-en': 'destination "history/culture/facts" pages',
+    'tb-visitmalawi': "/museums-and-monuments/ and /department-of-culture/: Malawi's 200+ monuments, Chongoni, Kamuzu Mausoleum",
+    'tb-vnat': 'destination "history/culture/facts" pages / relic and old-quarter history (Hội An WH office lists its relics)',
+    'tb-ytuqueplanes': 'not refetched; each has "history" / "did you know" / destination pages that can feed `facts`',
+    'tb-zimbabwetourism': 'Great Zimbabwe and Khami, while NMMZ is down',
+    'toronto-events': 'add /explore-enjoy/history-art-culture/ (heritage plaques, city history)',
+    'visitcostarica': '"history", "did you know", culture pages per destination / not refetched; each has "history" / "did you know" / destination pages that can feed `facts` / add country facts pages',
+    'visitjordan': 'Amman history (the Citadel, the Roman Theatre), while media.ammancity.gov.jo is unreachable',
+    'visitmaldives': 'destination "history/culture/facts" pages',
+    'visitqatar': 'Qatar museum and site histories / Msheireb and Doha old-town facts',
+    'visitsaudi': 'Riyadh and Diriyah facts',
+    'wikidata-dump': 'Philippine NHCP historical markers (items with P1435 heritage designation + coordinates; the NHCP gap); China\'s 全国重点文物保护单位 (P1435 = Major Historical and Cultural Site Protected at the National Level) with batch dates / place properties (founding date, highest point, records) and "Did you know" items; es/pt wikis for municipalities',
+    'wikivoyage-dump': 'extract: "Understand"/"History" sections (short history per destination), "Talk"/"Respect" for cultural curiosities, `{{quickbar}}` fields / "Understand" sections (history), with no superlatives unless cited',
+    'wikivoyage-dump-de': '"Hintergrund"/"Comprendre"/"Da sapere"/"Historia" sections of city/region pages',
+    'wikivoyage-dump-es': 'place properties (founding date, highest point, records) and "Did you know" items; es/pt wikis for municipalities',
+    'wikivoyage-dump-fa': '"Understand" history paragraphs',
+    'wikivoyage-dump-he': '"Understand" history paragraphs',
+    'wikivoyage-dump-ru': 'the "История" / "Tarihçe" sections of city articles',
+}
+# Adapters that emit place_fact rows themselves (no LLM).
+FACTS_ADAPTER_IDS = {"wikidata_facts", "factbook_json"}
+
+
+def facts_reuse_on(sid: str, llm_kinds: list[str], lclass: str) -> bool:
+    """A FACTS_REUSE source gets `facts` and place_fact only where something can produce one:
+    its adapter emits place_fact, or it already has LLM kinds and is not share-alike."""
+    if sid not in FACTS_REUSE:
+        return False
+    return ADAPTERS.get(sid) in FACTS_ADAPTER_IDS or (bool(llm_kinds) and lclass != "share_alike")
+
+
+for _sid, _what in FACTS_REUSE.items():
+    NOTES_APPEND[_sid] = " ".join(filter(None, (NOTES_APPEND.get(_sid), f"Place facts (research 2026-11-20): {_what}")))
+# The dump route of wikidata_facts (items with a GeoNames id or an ISO 3166-1 code, slimmed on the
+# fly); the source stays off: the full dump is far over the 2 GB dump cap.
+ADAPTERS["wikidata-dump"] = "wikidata_facts"
+# The place-facts research found terms that ban automated copying on uzbekistan.travel
+# (/ru/polzovatelskoe-soglashenie/, 2026-11-20): off and denylisted, out of ramp-2 and ramp-3.
+DISABLED["tb-uzbekistan"] = (
+    "terms forbid automated access: the user agreement (/ru/polzovatelskoe-soglashenie/) bans "
+    "automated scripts for mass copying of materials (place facts research 2026-11-20); host denylisted")
+
+# Place facts corpus, global and multi-country sources, structured readers (research vetted 2026-11-20).
+_facts(
+    'fx-hespress-histoire',
+    ['facts'],
+    'Hespress (histoire section): Moroccan history articles (Arabic), for Place facts.',
+    cls='editorial',
+    seeds=['https://www.hespress.com/histoire'],
+    sitemaps=['https://www.hespress.com/sitemap_index.xml'],
+    include=['^https?://www\\.hespress\\.com/histoire'],
+)
+_facts(
+    'fx-burkina24-culture',
+    ['facts'],
+    'Burkina24 (culture): Burkinabè heritage news, for Place facts.',
+    cls='editorial',
+    seeds=['https://burkina24.com/category/actualite/culture/'],
+    feeds=['https://burkina24.com/feed/'],
+    include=['^https?://burkina24\\.com/category/actualite/culture/'],
+)
+_facts(
+    'fx-radiookapi-identite',
+    ['facts'],
+    'Radio Okapi: Identité culturelle: DRC cultural identity and local history programmes per province, for Place facts.',
+    cls='editorial',
+    delay=10,
+    seeds=['https://www.radiookapi.net/identite-culturelle'],
+    include=['^https?://www\\.radiookapi\\.net/(identite-culturelle|\\d{4}/\\d\\d/\\d\\d/emissions/identite-culturelle/)'],
+)
+_facts(
+    'fx-kapitalis-culture',
+    ['facts'],
+    'Kapitalis (culture): Tunisian heritage, for Place facts.',
+    cls='editorial',
+    feeds=['https://kapitalis.com/tunisie/feed/'],
+    include=['^https?://kapitalis\\.com/tunisie/category/culture/'],
+)
+_facts(
+    'gov-sabanew-yemen',
+    ['facts'],
+    'Saba Net (sabanew.net): Yemeni heritage news (thin; politically contested agency), for Place facts.',
+    cls='official',
+    seeds=['https://www.sabanew.net/'],
+    include=['^https?://www\\.sabanew\\.net/story/'],
+)
+_facts(
+    'arch-openedition-journals',
+    ['facts'],
+    "OpenEdition Journals (Cahiers d'études africaines, Afriques, Journal des africanistes, Re…: peer-reviewed place histories for cities and villages across Africa and the Arab world, for Place facts.",
+    cls='reference',
+    depth=2,
+    seeds=['https://journals.openedition.org/feed.php', 'https://journals.openedition.org/etudesafricaines', 'https://journals.openedition.org/afriques', 'https://journals.openedition.org/africanistes', 'https://journals.openedition.org/remmm', 'https://journals.openedition.org/cy'],
+    include=['^https?://journals\\.openedition\\.org/(etudesafricaines|afriques|africanistes|remmm|cy|ethiopiques)/\\d+'],
+)
+_facts(
+    'arch-openedition-books',
+    ['facts'],
+    'OpenEdition Books (IRD, IFRA, IFPO, CEMCA presses): monographs on Levant, Maghreb and African towns, for Place facts.',
+    cls='reference',
+    depth=2,
+    seeds=['https://books.openedition.org/sites/sitemap/index'],
+    feeds=['https://books.openedition.org/rss/?format=rss'],
+    include=['^https?://books\\.openedition\\.org/(ifpo|irdeditions|ifra|cjb|iremam)/'],
+)
+_facts(
+    'arch-hypotheses',
+    ['facts'],
+    'Hypotheses (OpenEdition academic blogs): research notes on African and Middle Eastern places, for Place facts.',
+    cls='reference',
+    feeds=['https://hypotheses.org/feed'],
+    include=['^https?://hypotheses\\.org/'],
+)
+_facts(
+    'arch-hal-africa',
+    ['facts'],
+    'HAL open archive (incl. DUMAS theses): theses and articles on African town histories, for Place facts.',
+    cls='reference',
+    llm=False,
+    off='adapter pending: api',
+    seeds=['https://api.archives-ouvertes.fr/search/'],
+)
+_facts(
+    'arch-oapen',
+    ['facts'],
+    'OAPEN Library: open-licensed monographs on African and Middle Eastern history, for Place facts.',
+    cls='reference',
+    feeds=['https://library.oapen.org/feed/rss_2.0/site'],
+    include=['^https?://library\\.oapen\\.org/handle/'],
+)
+_facts(
+    'arch-akofena',
+    ['facts'],
+    'Akofena (Ivorian journal, CRAC-INSAAC): occasional West African toponymy and local history (low yield), for Place facts.',
+    cls='reference',
+    sitemaps=['https://www.revue-akofena.com/sitemap_index.xml'],
+    feeds=['https://www.revue-akofena.com/feed/'],
+    include=['^https?://www\\.revue-akofena\\.com/'],
+)
+_facts(
+    'arch-codesria',
+    ['facts'],
+    'CODESRIA: Afrika Zamani and African history publications (low direct yield), for Place facts.',
+    cls='reference',
+    sitemaps=['https://codesria.org/wp-sitemap.xml'],
+    include=['^https?://codesria\\.org/(fr/)?(publications|spip|IMG)'],
+)
+_facts(
+    'her-alecso',
+    ['facts'],
+    'ALECSO (Arab League Educational, Cultural and Scientific Organization): Arab heritage lists and culture news (low yield), for Place facts.',
+    cls='official',
+    seeds=['https://www.alecso.org/nsite/ar/'],
+    include=['^https?://www\\.alecso\\.org/nsite/ar/'],
+)
+_facts(
+    'her-apartheid-museum',
+    ['facts', 'activities'],
+    'Apartheid Museum: history and curiosities of the places it covers, for Place facts and Activities.',
+    cls='official',
+    depth=2,
+    seeds=['https://www.apartheidmuseum.org/'],
+    include=['^https?://www\\.apartheidmuseum\\.org/(exhibitions|about|learn)'],
+)
+_facts(
+    'arch-mandela-foundation',
+    ['facts'],
+    'Nelson Mandela Foundation: Mandela-linked places (Qunu, Mvezo, Houghton), for Place facts.',
+    cls='official',
+    llm=False,
+    seeds=['https://www.nelsonmandela.org/'],
+    include=['^https?://www\\.nelsonmandela\\.org/(news|content)/'],
+)
+_facts(
+    'her-awhf',
+    ['facts'],
+    'African World Heritage Fund: pan-African World Heritage site facts, for Place facts.',
+    cls='official',
+    seeds=['https://awhf.net/southern-africa/'],
+    feeds=['https://awhf.net/feed/'],
+    exclude=['^https?://awhf\\.net/(?:calendar|wp-)'],
+)
+_facts(
+    'her-zamani',
+    ['facts', 'places'],
+    'Zamani Project (University of Cape Town): pages on documented heritage sites across Africa and the Middle East (Lalibela, Gondar, Kilwa, Petra…), for Place facts and Places to see.',
+    cls='reference',
+    depth=2,
+    seeds=['https://zamaniproject.org/digital-heritage-archive.html'],
+    include=['^https?://zamaniproject\\.org/site-.*\\.html$'],
+)
+_facts(
+    'fx-tara-rock-art',
+    ['facts', 'places'],
+    'TARA: Trust for African Rock Art: rock-art sites by country, for Place facts and Places to see.',
+    cls='reference',
+    delay=10,
+    sitemaps=['https://africanrockart.org/sitemap.xml'],
+    feeds=['https://africanrockart.org/feed/'],
+    exclude=['^https?://africanrockart\\.org/(?:wp-)'],
+)
+_facts(
+    'fx-encyclopaedia-africana',
+    ['facts'],
+    'Encyclopaedia Africana Project: entries on African homelands, kingdoms and heroes, for Place facts.',
+    cls='reference',
+    delay=5,
+    sitemaps=['https://encyclopaediaafricana.com/sitemap.xml'],
+    feeds=['https://encyclopaediaafricana.com/feed/'],
+    include=['^https?://encyclopaediaafricana\\.com/(homelands|heroes-and-heroines|[a-z0-9-]+/)$'],
+)
+_facts(
+    'fx-conversation-africa',
+    ['facts'],
+    'The Conversation Africa: academic explainers on African and Middle Eastern places, for Place facts.',
+    cls='editorial',
+    llm=False,
+    sitemaps=['https://theconversation.com/africa/sitemap_news.xml'],
+    include=['^https?://theconversation\\.com/[a-z0-9-]+-\\d+$'],
+)
+_facts(
+    'fx-the-conversation',
+    ['facts'],
+    'The Conversation (history, heritage): academic-written history of places; filter by topic, for Place facts.',
+    cls='editorial',
+    llm=False,
+    delay=10,
+    seeds=['https://theconversation.com/global/articles.atom'],
+    sitemaps=['https://theconversation.com/sitemap.xml'],
+    include=['^https?://theconversation\\.com/.*(?:history|heritage|archaeolog)'],
+)
+_facts(
+    'fx-aramcoworld',
+    ['facts', 'places'],
+    'AramcoWorld: history and culture of Arab/Islamic-world cities, for Place facts and Places to see.',
+    cls='editorial',
+    sitemaps=['https://www.aramcoworld.com/sitemap.xml'],
+    include=['^https?://www\\.aramcoworld\\.com/articles/'],
+)
+_facts(
+    'fx-discover-islamic-art',
+    ['facts', 'places'],
+    'Discover Islamic Art (Museum With No Frontiers): monument records for Islamic heritage across MENA, for Place facts and Places to see.',
+    cls='reference',
+    depth=2,
+    seeds=['https://islamicart.museumwnf.org/'],
+    include=['^https?://islamicart\\.museumwnf\\.org/(database_item|monuments)'],
+)
+_facts(
+    'fx-qantara',
+    ['facts'],
+    'Qantara: Mediterranean heritage (Institut du monde arabe): monuments and objects of the Mediterranean, Maghreb and Levant, for Place facts.',
+    cls='reference',
+    depth=2,
+    seeds=['https://www.qantara-med.org/'],
+    include=['^https?://www\\.qantara-med\\.org/public/show_document\\.php'],
+)
+_facts(
+    'od-syriaca',
+    ['facts', 'places'],
+    'Syriaca.org Gazetteer: historical Syriac and Middle Eastern place gazetteer, for Place facts and Places to see.',
+    cls='reference',
+    sitemaps=['https://syriaca.org/sitemap.xml'],
+    include=['^https?://syriaca\\.org/place/\\d+'],
+)
+_facts(
+    'fx-bibleplaces',
+    ['facts', 'places'],
+    'BiblePlaces.com: archaeological site histories in Israel, Palestine, Jordan and Egypt, for Place facts and Places to see.',
+    cls='editorial',
+    sitemaps=['https://www.bibleplaces.com/sitemap_index.xml'],
+    feeds=['https://bibleplaces.com/feed/'],
+    exclude=['^https?://www\\.bibleplaces\\.com/(?:shop|product|cart|wp-)', '^https?://bibleplaces\\.com/(?:shop|product|cart|wp-)'],
+)
+_facts(
+    'arch-bibalex',
+    ['facts'],
+    'Bibliotheca Alexandrina: Alexandria and Egypt heritage projects (Memory of Modern Egypt lives on a subdomain, not vetted), for Place facts.',
+    cls='official',
+    seeds=['https://www.bibalex.org/en/default'],
+    include=['^https?://www\\.bibalex\\.org/en/(Project|Page)/'],
+)
+_facts(
+    'wiki-dump-ar',
+    ['facts', 'places'],
+    'Arabic Wikipedia dump: local-language history sections for Arab places, for Place facts and Places to see.',
+    cls='reference',
+    llm=False,
+    off='adapter pending: a rule-based place_fact reader for share-alike Wikipedia dumps (History/Etymology sections; CC BY-SA text is never sent to a model)',
+    depth=0,
+    seeds=['https://dumps.wikimedia.org/arwiki/latest/'],
+)
+_facts(
+    'wiki-dump-he',
+    ['facts'],
+    'Hebrew Wikipedia dump: Israeli towns, kibbutzim, sites, for Place facts.',
+    cls='reference',
+    llm=False,
+    off='adapter pending: a rule-based place_fact reader for share-alike Wikipedia dumps (History/Etymology sections; CC BY-SA text is never sent to a model)',
+    depth=0,
+    seeds=['https://dumps.wikimedia.org/hewiki/latest/'],
+)
+_facts(
+    'wiki-dump-fa',
+    ['facts'],
+    'Persian Wikipedia dump: Iranian villages and national-heritage list, for Place facts.',
+    cls='reference',
+    llm=False,
+    off='adapter pending: a rule-based place_fact reader for share-alike Wikipedia dumps (History/Etymology sections; CC BY-SA text is never sent to a model)',
+    depth=0,
+    seeds=['https://dumps.wikimedia.org/fawiki/latest/'],
+)
+_facts(
+    'wiki-dump-sw',
+    ['facts'],
+    'Swahili Wikipedia dump: East African towns and wards, for Place facts.',
+    cls='reference',
+    llm=False,
+    off='adapter pending: a rule-based place_fact reader for share-alike Wikipedia dumps (History/Etymology sections; CC BY-SA text is never sent to a model)',
+    depth=0,
+    seeds=['https://dumps.wikimedia.org/swwiki/latest/'],
+)
+_facts(
+    'wiki-dump-af',
+    ['facts'],
+    'Afrikaans Wikipedia dump: SA and Namibian towns, for Place facts.',
+    cls='reference',
+    llm=False,
+    off='adapter pending: a rule-based place_fact reader for share-alike Wikipedia dumps (History/Etymology sections; CC BY-SA text is never sent to a model)',
+    depth=0,
+    seeds=['https://dumps.wikimedia.org/afwiki/latest/'],
+)
+_facts(
+    'wiki-dump-am',
+    ['facts'],
+    'Amharic Wikipedia dump: Ethiopian towns, for Place facts.',
+    cls='reference',
+    llm=False,
+    off='adapter pending: a rule-based place_fact reader for share-alike Wikipedia dumps (History/Etymology sections; CC BY-SA text is never sent to a model)',
+    depth=0,
+    seeds=['https://dumps.wikimedia.org/amwiki/latest/'],
+)
+_facts(
+    'wiki-dump-ha',
+    ['facts'],
+    'Hausa Wikipedia dump: Nigerian and Nigerien towns, LGAs, for Place facts.',
+    cls='reference',
+    llm=False,
+    off='adapter pending: a rule-based place_fact reader for share-alike Wikipedia dumps (History/Etymology sections; CC BY-SA text is never sent to a model)',
+    depth=0,
+    seeds=['https://dumps.wikimedia.org/hawiki/latest/'],
+)
+_facts(
+    'wiki-dump-yo',
+    ['facts'],
+    'Yoruba Wikipedia dump: Yoruba towns and kingdoms, for Place facts.',
+    cls='reference',
+    llm=False,
+    off='adapter pending: a rule-based place_fact reader for share-alike Wikipedia dumps (History/Etymology sections; CC BY-SA text is never sent to a model)',
+    depth=0,
+    seeds=['https://dumps.wikimedia.org/yowiki/latest/'],
+)
+_facts(
+    'wiki-dump-zu',
+    ['facts'],
+    'Zulu Wikipedia dump: KwaZulu-Natal places, for Place facts.',
+    cls='reference',
+    llm=False,
+    off='adapter pending: a rule-based place_fact reader for share-alike Wikipedia dumps (History/Etymology sections; CC BY-SA text is never sent to a model)',
+    depth=0,
+    seeds=['https://dumps.wikimedia.org/zuwiki/latest/'],
+)
+_facts(
+    'wp-zh-dyk',
+    ['facts'],
+    'zh.wikipedia "你知道吗" (新条目推荐): 15+ years of "did you know" hooks, for Place facts.',
+    cls='reference',
+    llm=False,
+    off='adapter pending: a rule-based place_fact reader for share-alike Wikipedia dumps (History/Etymology sections; CC BY-SA text is never sent to a model)',
+    depth=0,
+    seeds=['https://dumps.wikimedia.org/'],
+)
+_facts(
+    'wiki-dump-ru',
+    ['facts'],
+    'ru Wikipedia dump: history, name-origin and record facts in place articles, for Place facts.',
+    cls='reference',
+    llm=False,
+    off='adapter pending: a rule-based place_fact reader for share-alike Wikipedia dumps (History/Etymology sections; CC BY-SA text is never sent to a model)',
+    depth=0,
+    seeds=['https://dumps.wikimedia.org/ruwiki/latest/'],
+)
+_facts(
+    'wiki-dump-en',
+    ['facts'],
+    'en Wikipedia dump: history, name-origin and record facts in place articles, for Place facts.',
+    cls='reference',
+    llm=False,
+    off='adapter pending: a rule-based place_fact reader for share-alike Wikipedia dumps (History/Etymology sections; CC BY-SA text is never sent to a model)',
+    depth=0,
+    seeds=['https://dumps.wikimedia.org/enwiki/latest/'],
+)
+_facts(
+    'wikisource-dump-en',
+    ['facts', 'places'],
+    'English Wikisource dump (EB1911, gazetteers): dated public-domain descriptions ("in 1911 X was…") for historical facts; join via Wikidata P1343, for Place facts and Places to see.',
+    cls='reference',
+    llm=False,
+    off='adapter pending: a rule-based place_fact reader for share-alike Wikipedia dumps (History/Etymology sections; CC BY-SA text is never sent to a model)',
+    depth=0,
+    seeds=['https://dumps.wikimedia.org/'],
+)
+_facts(
+    'od-slavevoyages',
+    ['facts'],
+    'SlaveVoyages (Emory): history and curiosities of the places it covers, for Place facts.',
+    cls='reference',
+    off='adapter pending: React SPA plus CSV/SPSS downloads of the voyages and ports databases',
+    seeds=['https://slavevoyages.org/'],
+)
+_facts(
+    'od-althurayya',
+    ['facts'],
+    'al-Ṯurayyā gazetteer (early Islamic world): history and curiosities of the places it covers, for Place facts.',
+    cls='reference',
+    off='adapter pending: static GeoJSON/JSON on GitHub (not WFS)',
+    seeds=['https://althurayya.github.io/'],
+)
+_facts(
+    'od-topostext',
+    ['facts'],
+    'ToposText: history and curiosities of the places it covers, for Place facts.',
+    cls='reference',
+    off='adapter pending: downloads at https://topostext.org/TT-downloads (KML/CSV of places linked to ancient texts)',
+    seeds=['https://topostext.org/'],
+)
+_facts(
+    'fx-world-history-encyclopedia',
+    ['facts'],
+    'World History Encyclopedia: history and curiosities of the places it covers, for Place facts.',
+    cls='editorial',
+    off='owner decision: Host answers 403; the only programmatic route is paid TollBit licensing. Pay or ask WHE, or drop it.',
+    feeds=['https://www.worldhistory.org/rss/'],
+    include=['^https?://www\\.worldhistory\\.org/.*(?:n/a)'],
+)
+_facts(
+    'fx-african-world-heritage',
+    ['facts', 'places'],
+    'African World Heritage Sites: per-site histories of every African World Heritage site, for Place facts and Places to see.',
+    cls='editorial',
+    llm=False,
+    depth=2,
+    seeds=['https://africanworldheritagesites.org/'],
+    include=['^https?://africanworldheritagesites\\.org/(cultural-places|natural-places|[a-z-]+/[a-z-]+\\.html)'],
+)
+_facts(
+    'fx-historylink',
+    ['facts', 'places'],
+    'HistoryLink.org (Washington State history): town essays, "This Day" items, for Place facts and Places to see.',
+    cls='editorial',
+    llm=False,
+    depth=2,
+    seeds=['https://www.historylink.org/'],
+    include=['^https?://www\\.historylink\\.org/File/'],
+)
+_facts(
+    'fx-encyclopedia-virginia',
+    ['facts', 'places'],
+    'Encyclopedia Virginia: history and curiosities of the places it covers, for Place facts and Places to see.',
+    cls='editorial',
+    depth=2,
+    seeds=['https://encyclopediavirginia.org/'],
+    sitemaps=['https://encyclopediavirginia.org/sitemap-index.xml', 'https://encyclopediavirginia.org/wp-sitemap.xml'],
+    include=['^https?://encyclopediavirginia\\.org/entries/'],
+)
+_facts(
+    'fx-64-parishes',
+    ['facts', 'places'],
+    '64 Parishes: history and curiosities of the places it covers, for Place facts and Places to see.',
+    cls='editorial',
+    delay=10,
+    sitemaps=['https://64parishes.org/sitemap_index.xml'],
+    include=['^https?://64parishes\\.org/entry/'],
+)
+_facts(
+    'fx-connecticut-history',
+    ['facts', 'places'],
+    'ConnecticutHistory.org (CT Humanities): town pages and history articles, for Place facts and Places to see.',
+    cls='editorial',
+    llm=False,
+    delay=10,
+    seeds=['https://connecticuthistory.org/towns-page/'],
+    sitemaps=['https://connecticuthistory.org/sitemap.xml'],
+    include=['^https?://connecticuthistory\\.org/(towns-page|[a-z0-9-]+)/$'],
+)
+_facts(
+    'fx-statesymbolsusa',
+    ['facts', 'places'],
+    'State Symbols USA: every official US state symbol with adoption year and statute, for Place facts and Places to see.',
+    cls='editorial',
+    seeds=['https://statesymbolsusa.org/'],
+    sitemaps=['https://statesymbolsusa.org/sitemap.xml'],
+    include=['^https?://statesymbolsusa\\.org/(symbol-official-item|states)/'],
+)
+_facts(
+    'arch-dloc',
+    ['facts'],
+    'Digital Library of the Caribbean (dLOC): Caribbean island and town history items (descriptions only), for Place facts.',
+    cls='official',
+    sitemaps=['https://dloc.com/sitemaps/sitemap-index.xml'],
+    include=['^https?://dloc\\.com/(AA|UF)\\d+/'],
+)
+_facts(
+    'fx-cervantes-historia',
+    ['facts'],
+    'Biblioteca Virtual Miguel de Cervantes (history portals): country and city history portals for Spanish America (low priority, mostly literature), for Place facts.',
+    cls='reference',
+    depth=2,
+    seeds=['https://www.cervantesvirtual.com/portales/'],
+    include=['^https?://www\\.cervantesvirtual\\.com/portales/'],
+)
+_facts(
+    'fx-hunter-living-histories',
+    ['facts', 'walking_tours'],
+    'Hunter Living Histories (Univ. of Newcastle): Newcastle and Hunter Valley place histories, for Place facts and Free walking tours.',
+    cls='reference',
+    sitemaps=['https://hunterlivinghistories.com/sitemap_index.xml'],
+    feeds=['https://hunterlivinghistories.com/feed/'],
+    include=['^https?://hunterlivinghistories\\.com/20\\d\\d/'],
+)
+_facts(
+    'arch-auckland-museum',
+    ['facts'],
+    'Auckland War Memorial Museum stories: Auckland and NZ history stories, for Place facts.',
+    cls='official',
+    llm=False,
+    seeds=['https://www.aucklandmuseum.com/discover/collections'],
+    sitemaps=['https://www.aucklandmuseum.com/sitemap.xml'],
+    include=['^https?://www\\.aucklandmuseum\\.com/discover/'],
+)
+_facts(
+    'arch-puke-ariki',
+    ['facts'],
+    'Puke Ariki (Taranaki museum and libraries): Taranaki stories and local history, for Place facts.',
+    cls='official',
+    seeds=['https://pukeariki.com/research-and-heritage/'],
+    sitemaps=['https://pukeariki.com/sitemap'],
+    include=['^https?://pukeariki\\.com/research-and-heritage/'],
+)
+_facts(
+    'arch-canterbury-museum',
+    ['facts'],
+    'Canterbury Museum (explore): Canterbury and Antarctic history stories, for Place facts.',
+    cls='official',
+    seeds=['https://www.canterburymuseum.com/explore'],
+    sitemaps=['https://www.canterburymuseum.com/sitemaps-1-sitemap.xml'],
+    include=['^https?://www\\.canterburymuseum\\.com/explore/'],
+)
+_facts(
+    'fx-nygenweb',
+    ['facts'],
+    'NYGenWeb place names: NY place-name origins list, for Place facts.',
+    cls='community',
+    llm=False,
+    off='owner decision: community-written site; the place_fact kind takes official, reference and editorial sources only (kinds.toml). Allow community sources behind corroboration, or keep off?',
+    seeds=['https://www.nygenweb.net/places/names.htm', 'https://www.nygenweb.net/county.htm'],
+    include=['^https?://www\\.nygenweb\\.net/places/'],
+)
+_facts(
+    'fx-genealogy-trails',
+    ['facts'],
+    'Genealogy Trails county histories: transcribed town and county histories for every US state, for Place facts.',
+    cls='community',
+    llm=False,
+    off='owner decision: community-written site; the place_fact kind takes official, reference and editorial sources only (kinds.toml). Allow community sources behind corroboration, or keep off?',
+    depth=2,
+    seeds=['https://www.genealogytrails.com/neast/index.html', 'https://www.genealogytrails.com/seast/', 'https://www.genealogytrails.com/south/', 'https://www.genealogytrails.com/mwest/', 'https://www.genealogytrails.com/upmid/'],
+    include=['^https?://www\\.genealogytrails\\.com/[a-z]{2,5}/[a-z]+/.*hist'],
+)
+_facts(
+    'her-keys-to-the-past',
+    ['facts', 'places', 'walking_tours'],
+    'Keys to the Past (Durham and Northumberland HER): archaeology and history of every parish in the two counties, for Place facts, Places to see and Free walking tours.',
+    cls='official',
+    sitemaps=['https://keystothepast.info/wp-sitemap.xml'],
+    feeds=['https://keystothepast.info/feed/'],
+    include=['^https?://keystothepast\\.info/(sites-to-visit|[a-z0-9-]+)/'],
+)
+_facts(
+    'her-cornwall-heritage-trust',
+    ['facts', 'places'],
+    "Cornwall Heritage Trust: the trust's Cornish monument sites, for Place facts and Places to see.",
+    cls='editorial',
+    seeds=['https://www.cornwallheritagetrust.org/our_sites/prince-of-wales-engine-house/', 'https://www.cornwallheritagetrust.org/our_sites/'],
+    include=['^https?://www\\.cornwallheritagetrust\\.org/our_sites/'],
+)
+_facts(
+    'fx-lincstothepast-com',
+    ['facts'],
+    'www.lincstothepast.com: history and curiosities of the places it covers, for Place facts.',
+    cls='editorial',
+    off='adapter pending: the home page is a JS app (no crawlable links)',
+    seeds=['https://www.lincstothepast.com/'],
+)
+_facts(
+    'fx-mainehistory-org',
+    ['facts'],
+    'mainehistory.org: history and curiosities of the places it covers, for Place facts.',
+    cls='editorial',
+    off='adapter pending: the home page is a 4.7 KB JS app shell',
+    seeds=['https://mainehistory.org/'],
+)
+_facts(
+    'fx-sahapedia',
+    ['facts', 'walking_tours', 'places'],
+    'Sahapedia: heritage-walk and city-culture essays, for Place facts, Free walking tours and Places to see.',
+    cls='reference',
+    llm=False,
+    seeds=['https://www.sahapedia.org/'],
+    exclude=['^https?://www\\.sahapedia\\.org/(?:user|admin|search)'],
+)
+_facts(
+    'fx-siam-society',
+    ['facts'],
+    'The Siam Society (Journal of the Siam Society): Thai local history (peer-reviewed), for Place facts.',
+    cls='reference',
+    delay=5,
+    sitemaps=['https://thesiamsociety.org/index.php/sitemap.xml'],
+    include=['^https?://thesiamsociety\\.org/(en/)?(jss|journal|publications)'],
+)
+_facts(
+    'arch-digitalnz-mch',
+    ['facts', 'places'],
+    'DigitalNZ API, filtered to Manatū Taonga (Te Ara, NZHistory): Te Ara and NZHistory records (title, description, link). This is the only reachable route to MCH content, for Place facts and Places to see.',
+    cls='official',
+    off='needs owner key: DigitalNZ API v3 (https://digitalnz.org/developers; free)',
+    depth=0,
+    seeds=['https://api.digitalnz.org/'],
+    include=['^https?://api\\.digitalnz\\.org/.*(?:n/a)'],
+)
+_facts(
+    'her-hmdb-tidytuesday',
+    ['facts', 'places'],
+    'HMDB USA index snapshot (TidyTuesday 2023-07-04): marker titles, coordinates and HMDb links (a 2023 snapshot), for Place facts and Places to see.',
+    cls='community',
+    llm=False,
+    off='owner decision: HMDB snapshot via TidyTuesday; hmdb.org terms are a Cloudflare 403, so reuse rights are unknown. Ask HMDb?',
+    depth=0,
+    seeds=['https://raw.githubusercontent.com/rfordatascience/tidytuesday/main/data/2023/2023-07-04/readme.md'],
+    include=['^https?://raw\\.githubusercontent\\.com/.*(?:n/a)'],
+)
+_facts(
+    'fx-historyextra',
+    ['facts', 'places'],
+    'HistoryExtra (BBC History Magazine): UK/world place history explainers by named historians, for Place facts and Places to see.',
+    cls='editorial',
+    llm=False,
+    delay=12,
+    sitemaps=['https://www.historyextra.com/sitemap.xml'],
+    feeds=['https://www.historyextra.com/feed'],
+    include=['^https?://www\\.historyextra\\.com/period/|^/places/'],
+)
+_facts(
+    'fx-guinness-records',
+    ['facts'],
+    'Guinness World Records (place records): highest/oldest/largest records tied to places (unbelievable/record facts), for Place facts.',
+    cls='reference',
+    depth=2,
+    seeds=['https://www.guinnessworldrecords.com/world-records/'],
+    include=['^https?://www\\.guinnessworldrecords\\.com/world-records/'],
+)
+_facts(
+    'fx-futilitycloset',
+    ['facts'],
+    'Futility Closet: historical curiosities, many about specific towns and places, for Place facts.',
+    cls='editorial',
+    seeds=['http://feeds.feedburner.com/FutilityCloset'],
+)
+_facts(
+    'fx-sapiens',
+    ['facts', 'places'],
+    'SAPIENS (anthropology magazine): cultural/archaeological history of places, for Place facts and Places to see.',
+    cls='editorial',
+    llm=False,
+    feeds=['https://www.sapiens.org/feed/'],
+)
+_facts(
+    'fx-thevintagenews',
+    ['facts'],
+    'The Vintage News: historical stories, some about places, for Place facts.',
+    cls='editorial',
+    sitemaps=['https://www.thevintagenews.com/sitemap_index.xml'],
+    feeds=['https://www.thevintagenews.com/feed/'],
+)
+_facts(
+    'fx-heritagedaily',
+    ['facts', 'places'],
+    'HeritageDaily: archaeology news tied to sites, for Place facts and Places to see.',
+    cls='editorial',
+    sitemaps=['https://www.heritagedaily.com/sitemap_index.xml'],
+    include=['^https?://www\\.heritagedaily\\.com/20\\d\\d/'],
+)
+_facts(
+    'fx-odditycentral',
+    ['facts'],
+    'Oddity Central: unusual places/towns (filter: many items are about people), for Place facts.',
+    cls='editorial',
+    seeds=['http://feeds.feedburner.com/OddityCentral'],
+)
+_facts(
+    'fx-todayifoundout',
+    ['facts'],
+    'Today I Found Out: origins of place names, landmarks, little-known history, for Place facts.',
+    cls='editorial',
+    seeds=['http://feeds.feedburner.com/TodayIFoundOut'],
+    sitemaps=['https://www.todayifoundout.com/wp-sitemap.xml'],
+)
+_facts(
+    'fx-hakai',
+    ['facts', 'places'],
+    'Hakai Magazine: coastal places, islands, ports, for Place facts and Places to see.',
+    cls='editorial',
+    feeds=['https://hakaimagazine.com/feed/'],
+)
+_facts(
+    'fx-archaeology-mag',
+    ['facts', 'places'],
+    'Archaeology Magazine (AIA): discoveries at named sites, for Place facts and Places to see.',
+    cls='editorial',
+    sitemaps=['https://archaeology.org/sitemap_index.xml'],
+    feeds=['https://archaeology.org/feed/'],
+)
+_facts(
+    'fx-damninteresting',
+    ['facts'],
+    'Damn Interesting: obscure true stories, many about places, for Place facts.',
+    cls='editorial',
+    llm=False,
+    delay=5,
+    feeds=['https://www.damninteresting.com/feeds/everything/', 'https://www.damninteresting.com/feeds/damn-interesting-curio-cabinet/'],
+)
+_facts(
+    'fx-lookup-london',
+    ['facts', 'walking_tours'],
+    'Look Up London: weekly London hidden-history posts by a Blue Badge guide, for Place facts and Free walking tours.',
+    cls='editorial',
+    llm=False,
+    feeds=['https://lookup.london/feed/'],
+)
+_facts(
+    'fx-spitalfieldslife',
+    ['facts'],
+    'Spitalfields Life: East London street and building history, for Place facts.',
+    cls='editorial',
+    feeds=['https://spitalfieldslife.com/feed/'],
+)
+_facts(
+    'fx-historyhit',
+    ['facts', 'places'],
+    "History Hit (places): historic site guides and '10 facts about' place pages, for Place facts and Places to see.",
+    cls='editorial',
+    sitemaps=['https://www.historyhit.com/wp-sitemap.xml'],
+    include=['^https?://www\\.historyhit\\.com/locations/|^/history-of-|^/facts-about-'],
+)
+_facts(
+    'fx-alondoninheritance',
+    ['facts', 'walking_tours'],
+    'A London Inheritance: London street-by-street history, for Place facts and Free walking tours.',
+    cls='editorial',
+    feeds=['https://alondoninheritance.com/feed/'],
+    include=['^https?://alondoninheritance\\.com/london-history/|^/london-streets/'],
+)
+_facts(
+    'fx-abandonedspaces',
+    ['facts'],
+    'Abandoned Spaces: history of abandoned towns, ghost towns, for Place facts.',
+    cls='editorial',
+    feeds=['https://www.abandonedspaces.com/feed/'],
+)
+_facts(
+    'fx-historynet',
+    ['facts'],
+    'HistoryNet: battlefields, historic sites, US/world history, for Place facts.',
+    cls='editorial',
+    llm=False,
+    feeds=['https://historynet.com/feed/'],
+)
+_facts(
+    'fx-geographyrealm',
+    ['facts'],
+    'Geography Realm: geography facts about countries, borders, place names, for Place facts.',
+    cls='editorial',
+    feeds=['https://www.geographyrealm.com/feed/'],
+)
+_facts(
+    'fx-rarehistoricalphotos',
+    ['facts'],
+    'Rare Historical Photos: historical context of places in old photos (low priority), for Place facts.',
+    cls='editorial',
+    feeds=['https://rarehistoricalphotos.com/feed/'],
+)
+_facts(
+    'fx-comeheretome',
+    ['facts'],
+    'Come Here To Me (Dublin): Dublin street/pub/building history, for Place facts.',
+    cls='editorial',
+    feeds=['https://comeheretome.com/feed/'],
+)
+_facts(
+    'fx-atlas-of-wonders',
+    ['facts', 'places'],
+    'Atlas of Wonders: natural/man-made wonders (low priority), for Place facts and Places to see.',
+    cls='editorial',
+    seeds=['https://feeds.feedburner.com/AtlasOfWonders'],
+)
+_facts(
+    'fx-bowery-boys',
+    ['facts', 'walking_tours'],
+    'The Bowery Boys: NYC neighbourhood history, for Place facts and Free walking tours.',
+    cls='editorial',
+    feeds=['https://www.boweryboyshistory.com/feed'],
+)
+_facts(
+    'fx-exploring-castles',
+    ['facts', 'places'],
+    'Exploring Castles: castle histories, Europe, for Place facts and Places to see.',
+    cls='editorial',
+    sitemaps=['https://www.exploring-castles.com/sitemap_index.xml'],
+)
+_facts(
+    'fx-daily-jstor-org',
+    ['facts', 'tips'],
+    'JSTOR Daily: "nor may you undertake any activity such as computer programs that automatically download or export JSTOR Daily content and that may interfere with, disrupt or otherwise burden" the servers; a polite feed reader arguabl…, for Place facts and Travel tips.',
+    cls='editorial',
+    off='owner decision: JSTOR Daily: robots allowed, but it belongs to a paywalled publisher and its terms are unclear. Decide whether editorial articles are acceptable.',
+    seeds=['https://daily.jstor.org/'],
+)
+_facts(
+    'arch-regionalgeschichte-net',
+    ['facts', 'places'],
+    'regionalgeschichte.net (Institut für Geschichtliche Landeskunde, Mainz): village and town histories for Rhineland-Palatinate, for Place facts and Places to see.',
+    cls='reference',
+    sitemaps=['https://www.regionalgeschichte.net/wp-sitemap.xml'],
+    include=['^https?://www\\.regionalgeschichte\\.net/(rheinhessen|pfalz|hunsrueck|mittelrhein|naheland|eifel|westerwald)/'],
+)
+_facts(
+    'fx-enciclopedia-cat',
+    ['facts', 'places'],
+    'Enciclopèdia.cat (Gran Enciclopèdia Catalana): an entry for every Catalan municipality and many villages and hamlets (history, heritage, population), for Place facts and Places to see.',
+    cls='reference',
+    llm=False,
+    depth=2,
+    delay=10,
+    seeds=['https://www.enciclopedia.cat/', 'https://www.enciclopedia.cat/gran-enciclopedia-catalana/'],
+    include=['^https?://www\\.enciclopedia\\.cat/gran-enciclopedia-catalana/'],
+)
+_facts(
+    'fx-erih',
+    ['facts', 'places', 'activities'],
+    'European Route of Industrial Heritage: industrial heritage sites with history across Europe, for Place facts, Places to see and Activities.',
+    cls='reference',
+    llm=False,
+    seeds=['https://www.erih.net/i-want-to-go-there'],
+    sitemaps=['https://erih.net/sitemap.xml'],
+    include=['^https?://www\\.erih\\.net/i-want-to-go-there/site/', '^https?://erih\\.net/i-want-to-go-there/site/'],
+)
+_facts(
+    'wiki-dump-de',
+    ['facts'],
+    'de Wikipedia dump: history, name-origin and record facts in place articles, for Place facts.',
+    cls='reference',
+    llm=False,
+    off='adapter pending: a rule-based place_fact reader for share-alike Wikipedia dumps (History/Etymology sections; CC BY-SA text is never sent to a model)',
+    depth=0,
+    seeds=['https://dumps.wikimedia.org/dewiki/latest/'],
+)
+_facts(
+    'wiki-dump-fr',
+    ['facts'],
+    'fr Wikipedia dump: history, name-origin and record facts in place articles, for Place facts.',
+    cls='reference',
+    llm=False,
+    off='adapter pending: a rule-based place_fact reader for share-alike Wikipedia dumps (History/Etymology sections; CC BY-SA text is never sent to a model)',
+    depth=0,
+    seeds=['https://dumps.wikimedia.org/frwiki/latest/'],
+)
+_facts(
+    'wiki-dump-it',
+    ['facts'],
+    'it Wikipedia dump: history, name-origin and record facts in place articles, for Place facts.',
+    cls='reference',
+    llm=False,
+    off='adapter pending: a rule-based place_fact reader for share-alike Wikipedia dumps (History/Etymology sections; CC BY-SA text is never sent to a model)',
+    depth=0,
+    seeds=['https://dumps.wikimedia.org/itwiki/latest/'],
+)
+_facts(
+    'wiki-dump-es',
+    ['facts'],
+    'es Wikipedia dump: history, name-origin and record facts in place articles, for Place facts.',
+    cls='reference',
+    llm=False,
+    off='adapter pending: a rule-based place_fact reader for share-alike Wikipedia dumps (History/Etymology sections; CC BY-SA text is never sent to a model)',
+    depth=0,
+    seeds=['https://dumps.wikimedia.org/eswiki/latest/'],
+)
+_facts(
+    'wiki-dump-pt',
+    ['facts'],
+    'pt Wikipedia dump: history, name-origin and record facts in place articles, for Place facts.',
+    cls='reference',
+    llm=False,
+    off='adapter pending: a rule-based place_fact reader for share-alike Wikipedia dumps (History/Etymology sections; CC BY-SA text is never sent to a model)',
+    depth=0,
+    seeds=['https://dumps.wikimedia.org/ptwiki/latest/'],
+)
+_facts(
+    'wiki-dump-ca',
+    ['facts'],
+    'ca Wikipedia dump: history, name-origin and record facts in place articles, for Place facts.',
+    cls='reference',
+    llm=False,
+    off='adapter pending: a rule-based place_fact reader for share-alike Wikipedia dumps (History/Etymology sections; CC BY-SA text is never sent to a model)',
+    depth=0,
+    seeds=['https://dumps.wikimedia.org/cawiki/latest/'],
+)
+_facts(
+    'wiki-dump-gl',
+    ['facts'],
+    'gl Wikipedia dump: history, name-origin and record facts in place articles, for Place facts.',
+    cls='reference',
+    llm=False,
+    off='adapter pending: a rule-based place_fact reader for share-alike Wikipedia dumps (History/Etymology sections; CC BY-SA text is never sent to a model)',
+    depth=0,
+    seeds=['https://dumps.wikimedia.org/glwiki/latest/'],
+)
+_facts(
+    'wiki-dump-eu',
+    ['facts'],
+    'eu Wikipedia dump: history, name-origin and record facts in place articles, for Place facts.',
+    cls='reference',
+    llm=False,
+    off='adapter pending: a rule-based place_fact reader for share-alike Wikipedia dumps (History/Etymology sections; CC BY-SA text is never sent to a model)',
+    depth=0,
+    seeds=['https://dumps.wikimedia.org/euwiki/latest/'],
+)
+_facts(
+    'wiki-dump-nl',
+    ['facts'],
+    'nl Wikipedia dump: history, name-origin and record facts in place articles, for Place facts.',
+    cls='reference',
+    llm=False,
+    off='adapter pending: a rule-based place_fact reader for share-alike Wikipedia dumps (History/Etymology sections; CC BY-SA text is never sent to a model)',
+    depth=0,
+    seeds=['https://dumps.wikimedia.org/nlwiki/latest/'],
+)
+_facts(
+    'wiki-dump-pl',
+    ['facts'],
+    'pl Wikipedia dump: history, name-origin and record facts in place articles, for Place facts.',
+    cls='reference',
+    llm=False,
+    off='adapter pending: a rule-based place_fact reader for share-alike Wikipedia dumps (History/Etymology sections; CC BY-SA text is never sent to a model)',
+    depth=0,
+    seeds=['https://dumps.wikimedia.org/plwiki/latest/'],
+)
+_facts(
+    'wiki-dump-cs',
+    ['facts'],
+    'cs Wikipedia dump: history, name-origin and record facts in place articles, for Place facts.',
+    cls='reference',
+    llm=False,
+    off='adapter pending: a rule-based place_fact reader for share-alike Wikipedia dumps (History/Etymology sections; CC BY-SA text is never sent to a model)',
+    depth=0,
+    seeds=['https://dumps.wikimedia.org/cswiki/latest/'],
+)
+_facts(
+    'wiki-dump-sk',
+    ['facts'],
+    'sk Wikipedia dump: history, name-origin and record facts in place articles, for Place facts.',
+    cls='reference',
+    llm=False,
+    off='adapter pending: a rule-based place_fact reader for share-alike Wikipedia dumps (History/Etymology sections; CC BY-SA text is never sent to a model)',
+    depth=0,
+    seeds=['https://dumps.wikimedia.org/skwiki/latest/'],
+)
+_facts(
+    'wiki-dump-sl',
+    ['facts'],
+    'sl Wikipedia dump: history, name-origin and record facts in place articles, for Place facts.',
+    cls='reference',
+    llm=False,
+    off='adapter pending: a rule-based place_fact reader for share-alike Wikipedia dumps (History/Etymology sections; CC BY-SA text is never sent to a model)',
+    depth=0,
+    seeds=['https://dumps.wikimedia.org/slwiki/latest/'],
+)
+_facts(
+    'wiki-dump-hr',
+    ['facts'],
+    'hr Wikipedia dump: history, name-origin and record facts in place articles, for Place facts.',
+    cls='reference',
+    llm=False,
+    off='adapter pending: a rule-based place_fact reader for share-alike Wikipedia dumps (History/Etymology sections; CC BY-SA text is never sent to a model)',
+    depth=0,
+    seeds=['https://dumps.wikimedia.org/hrwiki/latest/'],
+)
+_facts(
+    'wiki-dump-sr',
+    ['facts'],
+    'sr Wikipedia dump: history, name-origin and record facts in place articles, for Place facts.',
+    cls='reference',
+    llm=False,
+    off='adapter pending: a rule-based place_fact reader for share-alike Wikipedia dumps (History/Etymology sections; CC BY-SA text is never sent to a model)',
+    depth=0,
+    seeds=['https://dumps.wikimedia.org/srwiki/latest/'],
+)
+_facts(
+    'wiki-dump-bs',
+    ['facts'],
+    'bs Wikipedia dump: history, name-origin and record facts in place articles, for Place facts.',
+    cls='reference',
+    llm=False,
+    off='adapter pending: a rule-based place_fact reader for share-alike Wikipedia dumps (History/Etymology sections; CC BY-SA text is never sent to a model)',
+    depth=0,
+    seeds=['https://dumps.wikimedia.org/bswiki/latest/'],
+)
+_facts(
+    'wiki-dump-mk',
+    ['facts'],
+    'mk Wikipedia dump: history, name-origin and record facts in place articles, for Place facts.',
+    cls='reference',
+    llm=False,
+    off='adapter pending: a rule-based place_fact reader for share-alike Wikipedia dumps (History/Etymology sections; CC BY-SA text is never sent to a model)',
+    depth=0,
+    seeds=['https://dumps.wikimedia.org/mkwiki/latest/'],
+)
+_facts(
+    'wiki-dump-sq',
+    ['facts'],
+    'sq Wikipedia dump: history, name-origin and record facts in place articles, for Place facts.',
+    cls='reference',
+    llm=False,
+    off='adapter pending: a rule-based place_fact reader for share-alike Wikipedia dumps (History/Etymology sections; CC BY-SA text is never sent to a model)',
+    depth=0,
+    seeds=['https://dumps.wikimedia.org/sqwiki/latest/'],
+)
+_facts(
+    'wiki-dump-bg',
+    ['facts'],
+    'bg Wikipedia dump: history, name-origin and record facts in place articles, for Place facts.',
+    cls='reference',
+    llm=False,
+    off='adapter pending: a rule-based place_fact reader for share-alike Wikipedia dumps (History/Etymology sections; CC BY-SA text is never sent to a model)',
+    depth=0,
+    seeds=['https://dumps.wikimedia.org/bgwiki/latest/'],
+)
+_facts(
+    'wiki-dump-ro',
+    ['facts'],
+    'ro Wikipedia dump: history, name-origin and record facts in place articles, for Place facts.',
+    cls='reference',
+    llm=False,
+    off='adapter pending: a rule-based place_fact reader for share-alike Wikipedia dumps (History/Etymology sections; CC BY-SA text is never sent to a model)',
+    depth=0,
+    seeds=['https://dumps.wikimedia.org/rowiki/latest/'],
+)
+_facts(
+    'wiki-dump-hu',
+    ['facts'],
+    'hu Wikipedia dump: history, name-origin and record facts in place articles, for Place facts.',
+    cls='reference',
+    llm=False,
+    off='adapter pending: a rule-based place_fact reader for share-alike Wikipedia dumps (History/Etymology sections; CC BY-SA text is never sent to a model)',
+    depth=0,
+    seeds=['https://dumps.wikimedia.org/huwiki/latest/'],
+)
+_facts(
+    'wiki-dump-el',
+    ['facts'],
+    'el Wikipedia dump: history, name-origin and record facts in place articles, for Place facts.',
+    cls='reference',
+    llm=False,
+    off='adapter pending: a rule-based place_fact reader for share-alike Wikipedia dumps (History/Etymology sections; CC BY-SA text is never sent to a model)',
+    depth=0,
+    seeds=['https://dumps.wikimedia.org/elwiki/latest/'],
+)
+_facts(
+    'wiki-dump-sv',
+    ['facts'],
+    'sv Wikipedia dump: history, name-origin and record facts in place articles, for Place facts.',
+    cls='reference',
+    llm=False,
+    off='adapter pending: a rule-based place_fact reader for share-alike Wikipedia dumps (History/Etymology sections; CC BY-SA text is never sent to a model)',
+    depth=0,
+    seeds=['https://dumps.wikimedia.org/svwiki/latest/'],
+)
+_facts(
+    'wiki-dump-da',
+    ['facts'],
+    'da Wikipedia dump: history, name-origin and record facts in place articles, for Place facts.',
+    cls='reference',
+    llm=False,
+    off='adapter pending: a rule-based place_fact reader for share-alike Wikipedia dumps (History/Etymology sections; CC BY-SA text is never sent to a model)',
+    depth=0,
+    seeds=['https://dumps.wikimedia.org/dawiki/latest/'],
+)
+_facts(
+    'wiki-dump-no',
+    ['facts'],
+    'no Wikipedia dump: history, name-origin and record facts in place articles, for Place facts.',
+    cls='reference',
+    llm=False,
+    off='adapter pending: a rule-based place_fact reader for share-alike Wikipedia dumps (History/Etymology sections; CC BY-SA text is never sent to a model)',
+    depth=0,
+    seeds=['https://dumps.wikimedia.org/nowiki/latest/'],
+)
+_facts(
+    'wiki-dump-fi',
+    ['facts'],
+    'fi Wikipedia dump: history, name-origin and record facts in place articles, for Place facts.',
+    cls='reference',
+    llm=False,
+    off='adapter pending: a rule-based place_fact reader for share-alike Wikipedia dumps (History/Etymology sections; CC BY-SA text is never sent to a model)',
+    depth=0,
+    seeds=['https://dumps.wikimedia.org/fiwiki/latest/'],
+)
+_facts(
+    'wiki-dump-is',
+    ['facts'],
+    'is Wikipedia dump: history, name-origin and record facts in place articles, for Place facts.',
+    cls='reference',
+    llm=False,
+    off='adapter pending: a rule-based place_fact reader for share-alike Wikipedia dumps (History/Etymology sections; CC BY-SA text is never sent to a model)',
+    depth=0,
+    seeds=['https://dumps.wikimedia.org/iswiki/latest/'],
+)
+_facts(
+    'wiki-dump-et',
+    ['facts'],
+    'et Wikipedia dump: history, name-origin and record facts in place articles, for Place facts.',
+    cls='reference',
+    llm=False,
+    off='adapter pending: a rule-based place_fact reader for share-alike Wikipedia dumps (History/Etymology sections; CC BY-SA text is never sent to a model)',
+    depth=0,
+    seeds=['https://dumps.wikimedia.org/etwiki/latest/'],
+)
+_facts(
+    'wiki-dump-lv',
+    ['facts'],
+    'lv Wikipedia dump: history, name-origin and record facts in place articles, for Place facts.',
+    cls='reference',
+    llm=False,
+    off='adapter pending: a rule-based place_fact reader for share-alike Wikipedia dumps (History/Etymology sections; CC BY-SA text is never sent to a model)',
+    depth=0,
+    seeds=['https://dumps.wikimedia.org/lvwiki/latest/'],
+)
+_facts(
+    'wiki-dump-lt',
+    ['facts'],
+    'lt Wikipedia dump: history, name-origin and record facts in place articles, for Place facts.',
+    cls='reference',
+    llm=False,
+    off='adapter pending: a rule-based place_fact reader for share-alike Wikipedia dumps (History/Etymology sections; CC BY-SA text is never sent to a model)',
+    depth=0,
+    seeds=['https://dumps.wikimedia.org/ltwiki/latest/'],
+)
+_facts(
+    'wiki-dump-uk',
+    ['facts'],
+    'uk Wikipedia dump: history, name-origin and record facts in place articles, for Place facts.',
+    cls='reference',
+    llm=False,
+    off='adapter pending: a rule-based place_fact reader for share-alike Wikipedia dumps (History/Etymology sections; CC BY-SA text is never sent to a model)',
+    depth=0,
+    seeds=['https://dumps.wikimedia.org/ukwiki/latest/'],
+)
+_facts(
+    'arch-lwl-westfalen-regional',
+    ['facts', 'places'],
+    'Westfalen regional (LWL): Westphalian towns, regions and history, for Place facts and Places to see.',
+    cls='official',
+    llm=False,
+    depth=2,
+    delay=5,
+    seeds=['https://www.lwl.org/westfalen-regional/'],
+    sitemaps=['https://www.lwl.org/delosApi/sitemap'],
+    include=['^https?://www\\.lwl\\.org/westfalen-regional/'],
+)
+_facts(
+    'od-spc-sdd-country',
+    ['facts'],
+    'SPC Statistics for Development Division country pages: official key figures for 22 Pacific countries and territories (population, land area, EEZ), for Place facts.',
+    cls='official',
+    llm=False,
+    seeds=['https://sdd.spc.int/fj', 'https://sdd.spc.int/ws', 'https://sdd.spc.int/to', 'https://sdd.spc.int/pg', 'https://sdd.spc.int/vu', 'https://sdd.spc.int/sb', 'https://sdd.spc.int/ki', 'https://sdd.spc.int/tv', 'https://sdd.spc.int/fm', 'https://sdd.spc.int/pw', 'https://sdd.spc.int/mh', 'https://sdd.spc.int/pf', 'https://sdd.spc.int/nc', 'https://sdd.spc.int/ck', 'https://sdd.spc.int/nr', 'https://sdd.spc.int/nu', 'https://sdd.spc.int/tk', 'https://sdd.spc.int/wf', 'https://sdd.spc.int/as', 'https://sdd.spc.int/gu', 'https://sdd.spc.int/mp', 'https://sdd.spc.int/pn'],
+    include=['^https?://sdd\\.spc\\.int/(as|ck|fj|fm|gu|ki|mh|mp|nc|nr|nu|pf|pg|pn|pw|sb|tk|to|tv|vu|wf|ws)/?$'],
+)
+_facts(
+    'her-virunga',
+    ['facts', 'activities'],
+    "Virunga National Park: Africa's oldest national park (1925), mountain gorillas, Nyiragongo (DRC), for Place facts and Activities.",
+    cls='official',
+    seeds=['https://virunga.org/virunga-centennial-timeline'],
+    sitemaps=['https://virunga.org/sitemap_index.xml'],
+    feeds=['https://virunga.org/feed/'],
+    include=['^https?://virunga\\.org/(about|wildlife|virunga-centennial-timeline|eco-tourism|conservation)/'],
+)
+_facts(
+    'her-statia-park',
+    ['facts', 'activities'],
+    'St. Eustatius National Parks (STENAPA): The Quill volcano, marine park (Sint Eustatius), for Place facts and Activities.',
+    cls='official',
+    sitemaps=['https://statiapark.org/sitemap_index.xml'],
+    feeds=['https://statiapark.org/feed/'],
+    include=['^https?://statiapark\\.org/(our-park|ambassador-species|hiking-2|diving-2|faq|stenapa)/'],
+)
+_facts(
+    'her-stinapa-bonaire',
+    ['facts', 'activities'],
+    'STINAPA Bonaire: Washington Slagbaai NP, Bonaire marine park (stinapa.org redirects here), for Place facts and Activities.',
+    cls='official',
+    sitemaps=['https://stinapabonaire.org/sitemap_index.xml'],
+    include=['^https?://stinapabonaire\\.org/(washington-slagbaai-national-park|bonaire-national-marine-park|nature-projects)/'],
+)
+_facts(
+    'arch-saba-heritage',
+    ['facts', 'walking_tours'],
+    'Saba Heritage Center: history of Saba villages (The Bottom, Windwardside), for Place facts and Free walking tours.',
+    cls='official',
+    sitemaps=['https://sabaheritagecenter.org/sitemap.xml'],
+    feeds=['https://sabaheritagecenter.org/feed/'],
+)
+_facts(
+    'her-terramar-bonaire',
+    ['facts'],
+    'TERRAMAR Museum (Bonaire): archaeology and history of Bonaire and the ABC islands (terramarmuseum.com redirects here), for Place facts.',
+    cls='official',
+    sitemaps=['https://terramarmuseum.org/sitemap_index.xml'],
+    feeds=['https://terramarmuseum.org/feed/'],
+)
+_facts(
+    'fx-factsanddetails',
+    ['facts'],
+    'Facts and Details (Jeffrey Hays): deep, sourced pages on Kazakhstan, Kyrgyzstan, Tajikistan, Turkmenistan, Uzbekistan, Mongolia, Myanmar, Laos, Cambodia, Brunei, for Place facts.',
+    cls='editorial',
+    depth=2,
+    seeds=['https://factsanddetails.com/central-asia/', 'https://factsanddetails.com/southeast-asia/'],
+    include=['^https?://factsanddetails\\.com/(central-asia|southeast-asia)/'],
+)
+_facts(
+    'gov-akdn-historic-cities',
+    ['facts', 'places'],
+    'Aga Khan Trust for Culture / Historic Cities Programme: restored sites such as Bagh-e Babur and Herat old city (Afghanistan), Djenné/Mopti/Timbuktu mosques (Mali), Bukhara, Zanzibar, for Place facts and Places to see.',
+    cls='editorial',
+    seeds=['https://the.akdn/en/feed.xml', 'https://the.akdn/en/what-we-do/honouring-cultural-heritage/historic-cities'],
+    sitemaps=['https://the.akdn/sitemap.xml'],
+    include=['^https?://the\\.akdn/en/(what-we-do/honouring-cultural-heritage|how-we-work/our-agencies/aga-khan-trust-culture)/'],
+)
+_facts(
+    'fx-turquoise-mountain',
+    ['facts'],
+    'Turquoise Mountain: Murad Khani old city (Kabul), Yangon heritage buildings, for Place facts.',
+    cls='editorial',
+    seeds=['https://www.turquoisemountain.org/afghanistan', 'https://www.turquoisemountain.org/myanmar'],
+    sitemaps=['https://www.turquoisemountain.org/sitemaps-2-sitemap.xml'],
+    include=['^https?://www\\.turquoisemountain\\.org/(afghanistan|myanmar)(/|$)'],
+)
+_facts(
+    'tb-nouvellecaledonie',
+    ['facts', 'places', 'activities'],
+    'Nouvelle-Calédonie Tourisme: Nouméa, Loyalty Islands, Grand Sud, east and west coasts, for Place facts, Places to see and Activities.',
+    cls='official',
+    sitemaps=['https://www.nouvellecaledonie.travel/sitemap.xml/'],
+    include=['^https?://www\\.nouvellecaledonie\\.travel/destination/'],
+)
+_facts(
+    'arch-jps',
+    ['facts'],
+    'Journal of the Polynesian Society (Waka Kuaka): peer-reviewed Pacific history and place studies; use open-access articles only, for Place facts.',
+    cls='reference',
+    seeds=['https://thepolynesiansociety.org/index.php/JPS'],
+    feeds=['https://thepolynesiansociety.org/index.php/JPS/gateway/plugin/WebFeedGatewayPlugin/atom'],
+    include=['^https?://thepolynesiansociety\\.org/index.php/JPS/(issue|article)/view/'],
+)
+_facts(
+    'fx-seasite-niu',
+    ['facts'],
+    'SEAsite (Northern Illinois University): culture and history pages for Laos, Cambodia, Myanmar (static, rarely updated), for Place facts.',
+    cls='reference',
+    depth=2,
+    seeds=['https://seasite.niu.edu/lao', 'https://seasite.niu.edu/khmer', 'https://seasite.niu.edu/Burmese'],
+    include=['^https?://seasite\\.niu\\.edu/(lao|khmer|Burmese)/'],
+)
+_facts(
+    'arch-aodl',
+    ['facts'],
+    'African Online Digital Library (MSU): curated West African heritage collections and exhibits, for Place facts.',
+    cls='reference',
+    depth=2,
+    seeds=['https://aodl.org/explore'],
+    include=['^https?://aodl\\.org/(explore|purpose)'],
+)
+_facts(
+    'fx-craterre',
+    ['facts'],
+    'CRAterre (earthen architecture): earthen heritage sites such as the Djenné mosque and Sahel towns (low yield), for Place facts.',
+    cls='reference',
+    sitemaps=['https://craterre.org/sitemap_index.xml'],
+    feeds=['https://craterre.org/feed/'],
+    include=['^https?://craterre\\.org/(actualites|expertise|ressources)/'],
+)
+_facts(
+    'fx-turkmenportal',
+    ['facts'],
+    'Turkmenportal: articles: articles on Turkmen cities, history and sights (Merv, Nisa, Kunya-Urgench); verify each item, for Place facts.',
+    cls='editorial',
+    seeds=['https://turkmenportal.com/ru/articles'],
+    sitemaps=['https://turkmenportal.com/sitemap.xml'],
+    include=['^https?://turkmenportal\\.com/ru/articles/\\d+'],
+)
+_facts(
+    'fx-pimaweb-org',
+    ['facts'],
+    'Pacific Islands Museums Association: history and curiosities of the places it covers, for Place facts.',
+    cls='editorial',
+    off='adapter pending: format / note: JS SPA (/assets only, robots 404); needs JS rendering',
+    seeds=['https://pimaweb.org/'],
+)
+_facts(
+    'od-grottocenter',
+    ['facts'],
+    'Grottocenter (open cave database, CC BY-SA): longest and deepest caves per country (UIS-type records), for Place facts.',
+    cls='community',
+    llm=False,
+    off='adapter pending: REST JSON API',
+    seeds=['https://api.grottocenter.org/'],
+)
+_facts(
+    'her-uk-london-remembers',
+    ['facts', 'places', 'walking_tours'],
+    'London Remembers: every London plaque and memorial, with researched subjects, for Place facts, Places to see and Free walking tours.',
+    cls='community',
+    llm=False,
+    off='owner decision: community-written site; the place_fact kind takes official, reference and editorial sources only (kinds.toml). Allow community sources behind corroboration, or keep off?',
+    sitemaps=['https://www.londonremembers.com/sitemap.xml'],
+    include=['^https?://www\\.londonremembers\\.com/(memorials|subjects)/'],
+)
+_facts(
+    'fx-wmf',
+    ['facts', 'places'],
+    'World Monuments Fund: World Monuments Watch site histories worldwide, for Place facts and Places to see.',
+    cls='editorial',
+    sitemaps=['https://www.wmf.org/sitemap.xml'],
+    include=['^https?://www\\.wmf\\.org/(projects|monuments)/'],
+)
+_facts(
+    'fx-europanostra',
+    ['facts', 'places'],
+    'Europa Nostra: European Heritage Awards and "7 Most Endangered" site write-ups, for Place facts and Places to see.',
+    cls='editorial',
+    sitemaps=['https://www.europanostra.org/sitemap_index.xml'],
+    include=['^https?://www\\.europanostra\\.org/(\\d{4}|our-work)/'],
+)
+_facts(
+    'od-uk-openplaques-dmn',
+    ['facts'],
+    'Public-domain mirror of Open Plaques (dataset https://datamillnorth.org/dataset/open-plaq…: //datamillnorth.org/dataset/open-plaques-2rxxd). openplaques.org itself has robots `Disallow: /` for every bot, so the owner should decide whether a third-party mirror is acceptable. Data Mill North blocks AI bots in ro…, for Place facts.',
+    cls='reference',
+    off='owner decision: Public-domain mirror of Open Plaques, but openplaques.org itself disallows all bots. Is a third-party mirror acceptable?',
+    seeds=['https://datamillnorth.org/'],
+)
+_facts(
+    'fx-haiti-reference',
+    ['facts', 'places'],
+    'Haïti Référence: long-running Haitian reference site (history, regions, notables, culture), for Place facts and Places to see.',
+    cls='reference',
+    depth=2,
+    seeds=['https://www.haiti-reference.info/pages/plan/'],
+    include=['^https?://www\\.haiti-reference\\.info/pages/plan/'],
+)
+_facts(
+    'fx-historia-nuevo-mundo',
+    ['facts', 'places'],
+    'Historia del Nuevo Mundo: city and place histories across Hispanic America, for Place facts and Places to see.',
+    cls='editorial',
+    seeds=['https://www.historiadelnuevomundo.com/category/ciudades/', 'https://www.historiadelnuevomundo.com/category/lugares/'],
+    feeds=['https://www.historiadelnuevomundo.com/feed/'],
+    include=['^https?://www\\.historiadelnuevomundo\\.com/(category/(ciudades|lugares)|[a-z0-9-]+/$)'],
+)
+_facts(
+    'arch-encyclopedia-detroit',
+    ['facts', 'places', 'walking_tours'],
+    'Encyclopedia of Detroit (Detroit Historical Society): Detroit landmarks and neighbourhoods, for Place facts, Places to see and Free walking tours.',
+    cls='reference',
+    sitemaps=['https://www.detroithistorical.org/sitemap.xml'],
+    include=['^https?://www\\.detroithistorical\\.org/learn/encyclopedia-of-detroit/'],
+)
+_facts(
+    'arch-sachsen-digital',
+    ['facts', 'places'],
+    'sachsen.digital (SLUB Dresden): Saxon local history, town chronicles, historic maps, for Place facts and Places to see.',
+    cls='official',
+    llm=False,
+    depth=2,
+    seeds=['https://sachsen.digital/'],
+    include=['^https?://sachsen\\.digital/(werkansicht|sammlungen|themen)/'],
+)
+_facts(
+    'arch-layers-of-london',
+    ['facts', 'walking_tours'],
+    'Layers of London (Institute of Historical Research): geolocated London history records, for Place facts and Free walking tours.',
+    cls='community',
+    llm=False,
+    off='owner decision: community-written site; the place_fact kind takes official, reference and editorial sources only (kinds.toml). Allow community sources behind corroboration, or keep off?',
+    seeds=['https://www.layersoflondon.org/'],
+    include=['^https?://www\\.layersoflondon\\.org/map/records/'],
+)
+_facts(
+    'arch-nypl-api',
+    ['facts', 'places'],
+    'NYPL Digital Collections API: NYC neighbourhood photos and maps (e.g. Lionel Pincus map division), for Place facts and Places to see.',
+    cls='reference',
+    off='needs owner key: NYPL Digital Collections API (https://api.repo.nypl.org/; free)',
+    seeds=['https://api.repo.nypl.org/'],
+)
+_facts(
+    'arch-whg',
+    ['facts', 'places'],
+    'World Historical Gazetteer: historical names and attestations of places worldwide, for Place facts and Places to see.',
+    cls='reference',
+    off='adapter pending: REST API + Linked Places Format (JSON-LD) dataset downloads',
+    seeds=['https://whgazetteer.org/'],
+)
+_facts(
+    'arch-pleiades',
+    ['facts', 'places'],
+    'Pleiades gazetteer of ancient places: the ancient history of Mediterranean and Near-East places, for Place facts and Places to see.',
+    cls='reference',
+    llm=False,
+    off='adapter pending: JSON/CSV dumps on atlantides.org (robots for atlantides.org not yet checked)',
+    delay=5,
+    seeds=['https://pleiades.stoa.org/'],
+)
+_facts(
+    'arch-wellcome-api',
+    ['facts'],
+    'Wellcome Collection Catalogue API: medical and social history tied to places (lower yield), for Place facts.',
+    cls='reference',
+    llm=False,
+    off='adapter pending: REST JSON, no key: `https://api.wellcomecollection.org/catalogue/v2/works?query=…` (plus bulk snapshots)',
+    seeds=['https://api.wellcomecollection.org/'],
+)
+_facts(
+    'od-undata-profiles',
+    ['facts'],
+    'UNdata country profiles: area, population, capital, economy facts per country, for Place facts.',
+    cls='official',
+    seeds=['https://data.un.org/en/index.html'],
+    include=['^https?://data\\.un\\.org/en/iso/'],
+)
+_facts(
+    'gov-eu-countries',
+    ['facts', 'tips'],
+    'European Union: EU country profiles: capitals, languages, accession history per member state, for Place facts and Travel tips.',
+    cls='official',
+    seeds=['https://european-union.europa.eu/principles-countries-history/eu-countries_en'],
+    sitemaps=['https://european-union.europa.eu/sitemap.xml'],
+    include=['^https?://european-union\\.europa\\.eu/principles-countries-history/'],
+)
+_facts(
+    'city-barcelona',
+    ['facts', 'places'],
+    'Ajuntament de Barcelona (historia de la ciutat): history and curiosities of the places it covers, for Place facts and Places to see.',
+    cls='official',
+    llm=False,
+    depth=2,
+    seeds=['https://ajuntament.barcelona.cat/ca/'],
+    include=['^https?://ajuntament\\.barcelona\\.cat/.*(?:(historia|arxiu))'],
+)
+_facts(
+    'api-qlever-wikidata',
+    ['facts', 'places'],
+    'QLever SPARQL over Wikidata (Univ. of Freiburg): robots-allowed replacement for WDQS; batch queries like "all cities with P138 named-after + P571", for Place facts and Places to see.',
+    cls='reference',
+    depth=0,
+    seeds=['https://qlever.dev/api/wikidata', 'https://qlever.dev/api/osm-planet', 'https://qlever.dev/api/ohm-planet', 'https://qlever.dev/api/dbpedia', 'https://qlever.dev/api/yago-4'],
+    include=['^https?://qlever\\.dev/api/(wikidata|osm-planet|ohm-planet)'],
+)
+_facts(
+    'api-wikimedia-pageviews',
+    ['facts', 'places'],
+    'Wikimedia Pageviews REST API: popularity signal to rank "popular facts" and pick which DYK/place facts to show first, for Place facts and Places to see.',
+    cls='reference',
+    depth=0,
+    seeds=['https://wikimedia.org/api/rest_v1/metrics/pageviews/per-article/%7Bproject%7D/all-access/user/%7Btitle%7D/monthly/%7Bstart%7D/%7Bend%7D', 'https://wikimedia.org/api/rest_v1/metrics/pageviews/top-per-country/%7BCC%7D/all-access/%7Byyyy%7D/%7Bmm%7D/all-days'],
+    include=['^https?://wikimedia\\.org/api/rest_v1/metrics/pageviews/'],
+)
+_facts(
+    'od-gnis-history',
+    ['facts', 'places'],
+    'USGS GNIS Feature Description/History: official name origin and history for US places and features (History field up to 3,000 chars), for Place facts and Places to see.',
+    cls='official',
+    off='adapter pending: a place_fact mapping for this dataset on the csv_filter reader',
+    depth=0,
+    seeds=['https://prd-tnm.s3.amazonaws.com/StagedProducts/GeographicNames/'],
+    include=['^https?://prd-tnm\\.s3\\.amazonaws\\.com/StagedProducts/GeographicNames/'],
+)
+_facts(
+    'fx-readtheplaque',
+    ['facts', 'places', 'walking_tours'],
+    'Read The Plaque: transcribed historical-marker texts with location, worldwide (mostly US/UK), for Place facts, Places to see and Free walking tours.',
+    cls='community',
+    llm=False,
+    off='owner decision: community-written site; the place_fact kind takes official, reference and editorial sources only (kinds.toml). Allow community sources behind corroboration, or keep off?',
+    depth=2,
+    seeds=['https://readtheplaque.com/'],
+    include=['^https?://readtheplaque\\.com/plaque/'],
+)
+_facts(
+    'rec-skyscrapercenter',
+    ['facts', 'places'],
+    'The Skyscraper Center (Council on Vertical Urbanism, ex-CTBUH): record facts ("tallest building in X, completed 20xx, N m") from the height-criteria authority, for Place facts and Places to see.',
+    cls='reference',
+    llm=False,
+    depth=2,
+    seeds=['https://www.skyscrapercenter.com/cities'],
+    include=['^https?://www\\.skyscrapercenter\\.com/(city|building)/'],
+)
+_facts(
+    'od-dbpedia',
+    ['facts', 'places'],
+    'DBpedia (SPARQL + Databus dumps): infobox nicknames, mottos and founding dates not yet in Wikidata; low priority (largely redundant with enwiki-dump), for Place facts and Places to see.',
+    cls='reference',
+    llm=False,
+    depth=0,
+    delay=10,
+    seeds=['https://dbpedia.org/sparql', 'https://databus.dbpedia.org/dbpedia/mappings/'],
+    include=['^https?://dbpedia\\.org/sparql', '^https?://databus\\.dbpedia\\.org/sparql'],
+)
+_facts(
+    'fx-enterprise-wikimedia-com',
+    ['facts'],
+    'Wikimedia Enterprise (Structured Contents, snapshots): /`, Content-Signal ai-input=yes, for Place facts.',
+    cls='editorial',
+    off='needs owner key: Wikimedia Enterprise (https://enterprise.wikimedia.com/pricing/; free)',
+    seeds=['https://enterprise.wikimedia.com/'],
+)
+_facts(
+    'fx-api-geonames-org',
+    ['facts'],
+    'GeoNames web services: /` and www `Disallow: /dump/`; api host gave no response in research. The app already ships GeoNames-derived data offline (backend/app/db/data), for Place facts.',
+    cls='editorial',
+    off='needs owner key: GeoNames web services (https://www.geonames.org/login; free)',
+    seeds=['https://api.geonames.org/'],
+)
+_facts(
+    'fx-atlantides-org',
+    ['facts'],
+    'Pleiades gazetteer of ancient places: history and curiosities of the places it covers, for Place facts.',
+    cls='editorial',
+    llm=False,
+    off='adapter pending: gzipped JSON/CSV dump https://atlantides.org/downloads/pleiades/json/',
+    seeds=['https://atlantides.org/'],
+)
+_facts(
+    'fx-lobid-org',
+    ['facts'],
+    'lobid-gnd (GND authority, hbz): history and curiosities of the places it covers, for Place facts.',
+    cls='editorial',
+    off='adapter pending: REST JSON, no key: https://lobid.org/gnd/search?q=…&filter=type:PlaceOrGeographicName&format=json',
+    seeds=['https://lobid.org/'],
+)
+_facts(
+    'fx-planet-openhistoricalmap-org',
+    ['facts'],
+    'OpenHistoricalMap planet: history and curiosities of the places it covers, for Place facts.',
+    cls='editorial',
+    llm=False,
+    off='adapter pending: OSM PBF/XML planet with `start_date`/`end_date` (maybe readable by the geofabrik PBF path)',
+    seeds=['https://planet.openhistoricalmap.org/'],
+)
+_facts(
+    'fx-kaikki-org',
+    ['facts'],
+    'Kaikki.org (machine-readable Wiktionary): history and curiosities of the places it covers, for Place facts.',
+    cls='editorial',
+    off='adapter pending: JSONL(.gz) extracts per language',
+    seeds=['https://kaikki.org/'],
+)
+_facts(
+    'fx-population-un-org',
+    ['facts'],
+    'UN World Urbanization Prospects: history and curiosities of the places it covers, for Place facts.',
+    cls='editorial',
+    off='adapter pending: XLSX files (WUP 2018/2025 city series 1950–2050)',
+    seeds=['https://population.un.org/'],
+)
+_facts(
+    'fx-peaklist',
+    ['facts'],
+    'Peaklist.org (world prominence lists): highest and most prominent peaks per country and region, for Place facts.',
+    cls='reference',
+    depth=2,
+    delay=10,
+    seeds=['http://peaklist.org/'],
+    include=['^https?://peaklist\\.org/'],
+)
+_facts(
+    'od-wmo-extremes',
+    ['facts', 'weather'],
+    'WMO World Weather and Climate Extremes Archive: world, hemispheric and regional records with site, coordinates and date (e.g. Kebili 55.0 °C), for Place facts and Weather.',
+    cls='official',
+    depth=2,
+    seeds=['https://wmo.int/site/world-weather-and-climate-extremes-archive', 'https://wmo.int/files/records-of-weather-and-climate-extremes-table', 'https://wmo.int/site/world-weather-and-climate-extremes-archive/visualisation/world-weather-climate-extremes-map'],
+    include=['^https?://wmo\\.int/site/world-weather-and-climate-extremes-archive', '^https?://wmo\\.int/files/records-of-weather-and-climate-extremes-table'],
+)
+_facts(
+    'her-opendomesday',
+    ['facts', 'places', 'walking_tours'],
+    'Open Domesday (every place in Domesday Book, 1086): what each English village was in 1086 (households, ploughs, mills, value, lords), for Place facts, Places to see and Free walking tours.',
+    cls='reference',
+    llm=False,
+    depth=2,
+    seeds=['https://opendomesday.org/place/', 'https://opendomesday.org/api/'],
+    include=['^https?://opendomesday\\.org/place/', '^https?://opendomesday\\.org/api/'],
+)
+_facts(
+    'arch-euskaltzaindia-eoda',
+    ['facts'],
+    'Euskaltzaindia EODA (Basque onomastics, place names): official Basque names, historical attestations, etymology notes, for Place facts.',
+    cls='official',
+    llm=False,
+    depth=2,
+    seeds=['https://www.euskaltzaindia.eus/'],
+    include=['^https?://www\\.euskaltzaindia\\.eus/index.php\\?option=com_eoda', '^https?://www\\.euskaltzaindia\\.eus/onomastika'],
+)
+_facts(
+    'fx-barrys-borderpoints',
+    ['facts', 'places'],
+    "Barry's Borderpoints (enclaves, tripoints, border oddities): documented tripoints and enclaves (Baarle, Llívia…), for Place facts and Places to see.",
+    cls='community',
+    llm=False,
+    off='owner decision: community-written site; the place_fact kind takes official, reference and editorial sources only (kinds.toml). Allow community sources behind corroboration, or keep off?',
+    seeds=['https://barrysborderpoints.com/enclaves-and-exclaves/'],
+    sitemaps=['https://barrysborderpoints.com/sitemap.xml'],
+    include=['^https?://barrysborderpoints\\.com/[0-9]{4}/', '^https?://barrysborderpoints\\.com/enclaves-and-exclaves/'],
+)
+_facts(
+    'fx-jankrogh-geosite',
+    ['facts'],
+    "Jan S. Krogh's GeoSite (tripoints of the world, true enclaves): catalogue of every international tripoint and enclave, for Place facts.",
+    cls='community',
+    llm=False,
+    off='owner decision: community-written site; the place_fact kind takes official, reference and editorial sources only (kinds.toml). Allow community sources behind corroboration, or keep off?',
+    depth=2,
+    seeds=['http://geosite.jankrogh.com/'],
+    include=['^https?://geosite\\.jankrogh\\.com/'],
+)
+_facts(
+    'fx-poles-inaccessibility',
+    ['facts'],
+    'Poles of Inaccessibility: remotest point of each country and continent, for Place facts.',
+    cls='community',
+    llm=False,
+    off='owner decision: community-written site; the place_fact kind takes official, reference and editorial sources only (kinds.toml). Allow community sources behind corroboration, or keep off?',
+    sitemaps=['https://inaccessibility.net/sitemap.xml'],
+    include=['^https?://inaccessibility\\.net/[a-z0-9-]+$'],
+)
+_facts(
+    'fx-highpointers',
+    ['facts'],
+    'Highpointers Club (US state high points): highest point of each US state, for Place facts.',
+    cls='community',
+    llm=False,
+    off='owner decision: community-written site; the place_fact kind takes official, reference and editorial sources only (kinds.toml). Allow community sources behind corroboration, or keep off?',
+    delay=10,
+    sitemaps=['https://highpointers.org/sitemap_index.xml'],
+)
+_facts(
+    'gov-ungegn',
+    ['facts'],
+    'UN Group of Experts on Geographical Names: official country and capital names, exonyms. Low volume, for Place facts.',
+    cls='official',
+    depth=2,
+    seeds=['https://unstats.un.org/unsd/ungegn/'],
+    include=['^https?://unstats\\.un\\.org/unsd/ungegn/'],
+)
+_facts(
+    'fx-statoids',
+    ['facts'],
+    'Statoids (administrative divisions of countries): largest, smallest and oldest provinces and counties, odd boundaries, name changes, for Place facts.',
+    cls='reference',
+    seeds=['https://www.statoids.com/factoids.html'],
+    include=['^https?://www\\.statoids\\.com/(factoids|u[a-z]{2})\\.html$'],
+)
+_facts(
+    'ref-nsidc-glacier-facts',
+    ['facts'],
+    'NSIDC: Glacier quick facts: largest, longest and fastest glaciers and where they are, for Place facts.',
+    cls='official',
+    delay=5,
+    seeds=['https://nsidc.org/learn/parts-cryosphere/glaciers/glacier-quick-facts'],
+    include=['^https?://nsidc\\.org/learn/parts-cryosphere/'],
+)
+_facts(
+    'ref-oldlist',
+    ['facts'],
+    'OldList: a database of old trees (Rocky Mountain Tree-Ring Research): the oldest dated trees per species and site (Methuselah, Old Tjikko), for Place facts.',
+    cls='reference',
+    seeds=['https://www.rmtrr.org/oldlist.htm', 'https://www.rmtrr.org/oldlist_references.htm'],
+    include=['^https?://www\\.rmtrr\\.org/oldlist'],
+)
+_facts(
+    'ref-ancient-yew',
+    ['facts', 'places'],
+    'Ancient Yew Group: churchyard yews over 1,000 years old by village, for Place facts and Places to see.',
+    cls='reference',
+    seeds=['https://www.ancient-yew.org/yew-map-tree-register/'],
+    sitemaps=['https://www.ancient-yew.org/sitemap_index.xml'],
+    include=['^https?://www\\.ancient-yew\\.org/(churchyard-yews|yew-map-tree-register|ancient-yews)'],
+)
+_facts(
+    'ref-highest-bridges',
+    ['facts'],
+    'HighestBridges.com: the highest bridges by country and region (height, year), for Place facts.',
+    cls='reference',
+    seeds=['https://highestbridges.com/wiki/List_of_Highest_International_Bridges/Page_1', 'https://highestbridges.com/wiki/List_of_Highest_Railway_Bridges/Page_1', 'https://highestbridges.com/wiki/World%27s_Highest_Footbridges/Page_1'],
+)
+_facts(
+    'ref-structurae',
+    ['facts', 'places'],
+    'Structurae (international database of structures): records per structure (longest, tallest, oldest bridge, dam or tower) by town, for Place facts and Places to see.',
+    cls='reference',
+    llm=False,
+    sitemaps=['https://structurae.net/sitemapindex.xml'],
+    include=['^https?://structurae\\.net/en/structures/'],
+)
+_facts(
+    'fx-geology-com',
+    ['facts'],
+    'Geology.com: records: geological superlatives with places (highest waterfall, deepest ocean point, biggest tsunami), for Place facts.',
+    cls='editorial',
+    seeds=['https://geology.com/records/', 'https://geology.com/articles/', 'https://geology.com/records/biggest-tsunami.shtml', 'https://geology.com/records/largest-earthquake/'],
+    include=['^https?://geology\\.com/(records|articles)/'],
+)
+_facts(
+    'ref-peakvisor',
+    ['facts'],
+    'PeakVisor: the highest peak and prominence per region, park and country, for Place facts.',
+    cls='reference',
+    sitemaps=['https://peakvisor.com/sitemap-destinations.xml', 'https://peakvisor.com/sitemap.xml'],
+    include=['^https?://peakvisor\\.com/(en/)?(park|adm|range|peak)/'],
+)
+_facts(
+    'gov-esa-earth-from-space',
+    ['facts', 'places'],
+    'ESA: Earth from Space: a weekly satellite image of a named place with an explanatory caption, for Place facts and Places to see.',
+    cls='official',
+    seeds=['https://www.esa.int/ESA_Multimedia/Sets/Earth_from_Space_programme', 'https://www.esa.int/media-collection/earth-from-space-programme'],
+    include=['^https?://www\\.esa\\.int/ESA_Multimedia/Images/'],
+)
+_facts(
+    'her-owhc-cities',
+    ['facts', 'places'],
+    'Organization of World Heritage Cities: about 300 member cities with their World Heritage inscription and history (not a UNESCO host, so the unesco.org denial does not apply), for Place facts and Places to see.',
+    cls='reference',
+    seeds=['https://www.ovpm.org/members/cities/'],
+    sitemaps=['https://www.ovpm.org/sitemap_index.xml'],
+    include=['^https?://www\\.ovpm\\.org/(members/cities|city)/'],
+)
+_facts(
+    'fx-henokiens',
+    ['facts', 'places'],
+    'Les Hénokiens (family companies 200+ years old): the oldest family companies by town (Hōshi Ryokan, 718; Beretta, 1526) with founding years, for Place facts and Places to see.',
+    cls='reference',
+    depth=2,
+    seeds=['https://www.henokiens.com/content.php?id=4&lg=en'],
+    include=['^https?://www\\.henokiens\\.com/.*(?:content\\.php\\?id=(4|51))'],
+)
+_facts(
+    'od-glims',
+    ['facts'],
+    'GLIMS glacier inventory: the largest glaciers per region, for Place facts.',
+    cls='reference',
+    off='adapter pending: shapefile/GeoJSON downloads (via NSIDC)',
+    seeds=['https://www.glims.org/'],
+)
+_facts(
+    'fx-songramernotebook-com',
+    ['facts'],
+    'songramernotebook.com: transcribed newspaper clippings and book excerpts, mostly third-party copyright. robots.txt allows (wp-sitemap listed); terms not found. Useful for 1971 events by district, but the rights in the archived material are un…, for Place facts.',
+    cls='editorial',
+    off='owner decision: 1971 Liberation War archive made mostly of third-party copyrighted clippings; the rights are unclear.',
+    seeds=['https://songramernotebook.com/'],
+)
+_facts(
+    'fx-seaarch',
+    ['facts'],
+    'SEAArch: Southeast Asian Archaeology: new finds and dated discoveries across SEA (links to the original reports), for Place facts.',
+    cls='editorial',
+    feeds=['https://www.southeastasianarchaeology.com/feed/'],
+    include=['^https?://www\\.southeastasianarchaeology\\.com/\\d{4}/\\d{2}/\\d{2}/'],
+)
+_facts(
+    'od-toponimia-galicia',
+    ['facts'],
+    'Toponimia de Galicia (Xunta: Proxecto Toponimia): official names of every Galician parish and lugar (hamlet), plus name-origin articles, for Place facts.',
+    cls='official',
+    depth=2,
+    seeds=['https://toponimia.xunta.gal/gl', 'https://toponimia.xunta.gal/gl/toponimia', 'https://toponimia.xunta.gal/gl/novas'],
+    include=['^https?://toponimia\\.xunta\\.gal/gl/(toponimia|nova|novas)/'],
+)
+_facts(
+    'ref-kehilalinks',
+    ['facts'],
+    'JewishGen KehilaLinks (town pages): history of thousands of towns and shtetls in Central and Eastern Europe, for Place facts.',
+    cls='community',
+    llm=False,
+    off='owner decision: community-written site; the place_fact kind takes official, reference and editorial sources only (kinds.toml). Allow community sources behind corroboration, or keep off?',
+    depth=2,
+    delay=5,
+    seeds=['https://kehilalinks.jewishgen.org/'],
+    include=['^https?://kehilalinks\\.jewishgen\\.org/[a-z_-]+/'],
+)
+_facts(
+    'wiki-facts-zh',
+    ['facts', 'itinerary'],
+    'zh Wikipedia hook pages (Did you know, On this day, unusual articles): short sourced hooks that name places, for Place facts and Itinerary.',
+    cls='reference',
+    kinds=['place_fact'],
+    llm=False,
+    depth=0,
+    off='hook adapter removed (share-alike text); needs an own-words extractor',
+    seeds=['https://zh.wikipedia.org/wiki/Wikipedia:%E6%96%B0%E6%9D%A1%E7%9B%AE%E6%8E%A8%E8%8D%90', 'https://zh.wikipedia.org/wiki/Wikipedia:%E5%8E%86%E5%8F%B2%E4%B8%8A%E7%9A%84%E4%BB%8A%E5%A4%A9', 'https://zh.wikipedia.org/wiki/Wikipedia:%E7%B6%AD%E5%9F%BA%E8%AA%8C%E7%95%B0'],
+)
+_facts(
+    'wiki-facts-ja',
+    ['facts', 'itinerary'],
+    'ja Wikipedia hook pages (Did you know, On this day, unusual articles): short sourced hooks that name places, for Place facts and Itinerary.',
+    cls='reference',
+    kinds=['place_fact'],
+    llm=False,
+    depth=0,
+    off='hook adapter removed (share-alike text); needs an own-words extractor',
+    seeds=['https://ja.wikipedia.org/wiki/Wikipedia:%E6%9C%88%E9%96%93%E6%96%B0%E8%A8%98%E4%BA%8B%E8%B3%9E', 'https://ja.wikipedia.org/wiki/Wikipedia:%E4%BB%8A%E6%97%A5%E3%81%AF%E4%BD%95%E3%81%AE%E6%97%A5', 'https://ja.wikipedia.org/wiki/Wikipedia:%E7%8F%8D%E9%A0%85%E7%9B%AE'],
+)
+_facts(
+    'wiki-facts-ko',
+    ['facts', 'itinerary'],
+    'ko Wikipedia hook pages (Did you know, On this day, unusual articles): short sourced hooks that name places, for Place facts and Itinerary.',
+    cls='reference',
+    kinds=['place_fact'],
+    llm=False,
+    depth=0,
+    off='hook adapter removed (share-alike text); needs an own-words extractor',
+    seeds=['https://ko.wikipedia.org/wiki/%EC%9C%84%ED%82%A4%EB%B0%B1%EA%B3%BC:%EC%95%8C%EA%B3%A0_%EA%B3%84%EC%8B%AD%EB%8B%88%EA%B9%8C', 'https://ko.wikipedia.org/wiki/%EC%9C%84%ED%82%A4%EB%B0%B1%EA%B3%BC:%EC%98%A4%EB%8A%98%EC%9D%98_%EC%97%AD%EC%82%AC', 'https://ko.wikipedia.org/wiki/%EC%9C%84%ED%82%A4%EB%B0%B1%EA%B3%BC:%EB%B3%84%EB%82%9C_%EB%AC%B8%EC%84%9C'],
+)
+_facts(
+    'wiki-facts-ar',
+    ['facts', 'itinerary'],
+    'ar Wikipedia hook pages (Did you know, On this day, unusual articles): short sourced hooks that name places, for Place facts and Itinerary.',
+    cls='reference',
+    kinds=['place_fact'],
+    llm=False,
+    depth=0,
+    off='hook adapter removed (share-alike text); needs an own-words extractor',
+    seeds=['https://ar.wikipedia.org/wiki/%D9%88%D9%8A%D9%83%D9%8A%D8%A8%D9%8A%D8%AF%D9%8A%D8%A7:%D9%87%D9%84_%D8%AA%D8%B9%D9%84%D9%85', 'https://ar.wikipedia.org/wiki/%D9%88%D9%8A%D9%83%D9%8A%D8%A8%D9%8A%D8%AF%D9%8A%D8%A7:%D9%81%D9%8A_%D9%87%D8%B0%D8%A7_%D8%A7%D9%84%D9%8A%D9%88%D9%85', 'https://ar.wikipedia.org/wiki/%D9%88%D9%8A%D9%83%D9%8A%D8%A8%D9%8A%D8%AF%D9%8A%D8%A7:%D9%81%D8%B1%D9%8A%D9%82_%D9%85%D9%82%D8%A7%D9%84%D8%A7%D8%AA_%D8%BA%D8%B1%D9%8A%D8%A8%D8%A9'],
+)
+_facts(
+    'wiki-facts-bg',
+    ['facts', 'itinerary'],
+    'bg Wikipedia hook pages (Did you know, On this day, unusual articles): short sourced hooks that name places, for Place facts and Itinerary.',
+    cls='reference',
+    kinds=['place_fact'],
+    llm=False,
+    depth=0,
+    off='hook adapter removed (share-alike text); needs an own-words extractor',
+    seeds=['https://bg.wikipedia.org/wiki/%D0%A3%D0%B8%D0%BA%D0%B8%D0%BF%D0%B5%D0%B4%D0%B8%D1%8F:%D0%9F%D0%BE%D1%81%D0%BB%D0%B5%D0%B4%D0%BD%D0%B8_%D0%BF%D0%BE%D0%BF%D1%8A%D0%BB%D0%BD%D0%B5%D0%BD%D0%B8%D1%8F', 'https://bg.wikipedia.org/wiki/%D0%A3%D0%B8%D0%BA%D0%B8%D0%BF%D0%B5%D0%B4%D0%B8%D1%8F:%D0%98%D0%B7%D0%B1%D1%80%D0%B0%D0%BD%D0%B8_%D0%B3%D0%BE%D0%B4%D0%B8%D1%88%D0%BD%D0%B8%D0%BD%D0%B8', 'https://bg.wikipedia.org/wiki/%D0%A3%D0%B8%D0%BA%D0%B8%D0%BF%D0%B5%D0%B4%D0%B8%D1%8F:%D0%9D%D0%B5%D1%81%D1%82%D0%B0%D0%BD%D0%B4%D0%B0%D1%80%D1%82%D0%BD%D0%B8_%D1%81%D1%82%D0%B0%D1%82%D0%B8%D0%B8'],
+)
+_facts(
+    'wiki-facts-bn',
+    ['facts', 'itinerary'],
+    'bn Wikipedia hook pages (Did you know, On this day, unusual articles): short sourced hooks that name places, for Place facts and Itinerary.',
+    cls='reference',
+    kinds=['place_fact'],
+    llm=False,
+    depth=0,
+    off='hook adapter removed (share-alike text); needs an own-words extractor',
+    seeds=['https://bn.wikipedia.org/wiki/%E0%A6%89%E0%A6%87%E0%A6%95%E0%A6%BF%E0%A6%AA%E0%A6%BF%E0%A6%A1%E0%A6%BF%E0%A6%AF%E0%A6%BC%E0%A6%BE:%E0%A6%86%E0%A6%AA%E0%A6%A8%E0%A6%BF_%E0%A6%9C%E0%A6%BE%E0%A6%A8%E0%A7%87%E0%A6%A8_%E0%A6%95%E0%A6%BF', 'https://bn.wikipedia.org/wiki/%E0%A6%89%E0%A6%87%E0%A6%95%E0%A6%BF%E0%A6%AA%E0%A6%BF%E0%A6%A1%E0%A6%BF%E0%A6%AF%E0%A6%BC%E0%A6%BE:%E0%A6%A8%E0%A6%BF%E0%A6%B0%E0%A7%8D%E0%A6%AC%E0%A6%BE%E0%A6%9A%E0%A6%BF%E0%A6%A4_%E0%A6%AC%E0%A6%BE%E0%A6%B0%E0%A7%8D%E0%A6%B7%E0%A6%BF%E0%A6%95%E0%A7%80'],
+)
+_facts(
+    'wiki-facts-ca',
+    ['facts', 'itinerary'],
+    'ca Wikipedia hook pages (Did you know, On this day, unusual articles): short sourced hooks that name places, for Place facts and Itinerary.',
+    cls='reference',
+    kinds=['place_fact'],
+    llm=False,
+    depth=0,
+    off='hook adapter removed (share-alike text); needs an own-words extractor',
+    seeds=['https://ca.wikipedia.org/wiki/Viquip%C3%A8dia:Efem%C3%A8rides_seleccionades', 'https://ca.wikipedia.org/wiki/Viquip%C3%A8dia:Articles_inusuals'],
+)
+_facts(
+    'wiki-facts-cs',
+    ['facts', 'itinerary'],
+    'cs Wikipedia hook pages (Did you know, On this day, unusual articles): short sourced hooks that name places, for Place facts and Itinerary.',
+    cls='reference',
+    kinds=['place_fact'],
+    llm=False,
+    depth=0,
+    off='hook adapter removed (share-alike text); needs an own-words extractor',
+    seeds=['https://cs.wikipedia.org/wiki/Wikipedie:Zaj%C3%ADmavosti', 'https://cs.wikipedia.org/wiki/Wikipedie:Vybran%C3%A1_v%C3%BDro%C4%8D%C3%AD_dne'],
+)
+_facts(
+    'wiki-facts-da',
+    ['facts', 'itinerary'],
+    'da Wikipedia hook pages (Did you know, On this day, unusual articles): short sourced hooks that name places, for Place facts and Itinerary.',
+    cls='reference',
+    kinds=['place_fact'],
+    llm=False,
+    depth=0,
+    off='hook adapter removed (share-alike text); needs an own-words extractor',
+    seeds=['https://da.wikipedia.org/wiki/Wikipedia:Vidste_du_at...', 'https://da.wikipedia.org/wiki/Wikipedia:%C3%85rets_dage_kort', 'https://da.wikipedia.org/wiki/Wikipedia:Sp%C3%B8jse_artikler'],
+)
+_facts(
+    'wiki-facts-de',
+    ['facts', 'itinerary'],
+    'de Wikipedia hook pages (Did you know, On this day, unusual articles): short sourced hooks that name places, for Place facts and Itinerary.',
+    cls='reference',
+    kinds=['place_fact'],
+    llm=False,
+    depth=0,
+    off='hook adapter removed (share-alike text); needs an own-words extractor',
+    seeds=['https://de.wikipedia.org/wiki/Wikipedia:Hauptseite/Schon_gewusst', 'https://de.wikipedia.org/wiki/Wikipedia:Hauptseite/Jahrestage', 'https://de.wikipedia.org/wiki/Wikipedia:Kuriosit%C3%A4tenkabinett'],
+)
+_facts(
+    'wiki-facts-es',
+    ['facts', 'itinerary'],
+    'es Wikipedia hook pages (Did you know, On this day, unusual articles): short sourced hooks that name places, for Place facts and Itinerary.',
+    cls='reference',
+    kinds=['place_fact'],
+    llm=False,
+    depth=0,
+    off='hook adapter removed (share-alike text); needs an own-words extractor',
+    seeds=['https://es.wikipedia.org/wiki/Wikipedia:%C2%BFSab%C3%ADas_que...', 'https://es.wikipedia.org/wiki/Wikipedia:Efem%C3%A9rides', 'https://es.wikipedia.org/wiki/Wikipedia:Art%C3%ADculos_peculiares'],
+)
+_facts(
+    'wiki-facts-et',
+    ['facts', 'itinerary'],
+    'et Wikipedia hook pages (Did you know, On this day, unusual articles): short sourced hooks that name places, for Place facts and Itinerary.',
+    cls='reference',
+    kinds=['place_fact'],
+    llm=False,
+    depth=0,
+    off='hook adapter removed (share-alike text); needs an own-words extractor',
+    seeds=['https://et.wikipedia.org/wiki/Vikipeedia:Kas_teadsid', 'https://et.wikipedia.org/wiki/Vikipeedia:Valitud_s%C3%BCndmused'],
+)
+_facts(
+    'wiki-facts-fa',
+    ['facts', 'itinerary'],
+    'fa Wikipedia hook pages (Did you know, On this day, unusual articles): short sourced hooks that name places, for Place facts and Itinerary.',
+    cls='reference',
+    kinds=['place_fact'],
+    llm=False,
+    depth=0,
+    off='hook adapter removed (share-alike text); needs an own-words extractor',
+    seeds=['https://fa.wikipedia.org/wiki/%D9%88%DB%8C%DA%A9%DB%8C%E2%80%8C%D9%BE%D8%AF%DB%8C%D8%A7:%D8%A2%DB%8C%D8%A7_%D9%85%DB%8C%E2%80%8C%D8%AF%D8%A7%D9%86%D8%B3%D8%AA%DB%8C%D8%AF_%DA%A9%D9%87...%D8%9F', 'https://fa.wikipedia.org/wiki/%D9%88%DB%8C%DA%A9%DB%8C%E2%80%8C%D9%BE%D8%AF%DB%8C%D8%A7:%DB%8C%D8%A7%D8%AF%D8%A8%D9%88%D8%AF%D9%87%D8%A7%DB%8C_%D8%A8%D8%B1%DA%AF%D8%B2%DB%8C%D8%AF%D9%87', 'https://fa.wikipedia.org/wiki/%D9%88%DB%8C%DA%A9%DB%8C%E2%80%8C%D9%BE%D8%AF%DB%8C%D8%A7:%D9%85%D9%82%D8%A7%D9%84%D8%A7%D8%AA_%D8%B9%D8%AC%DB%8C%D8%A8'],
+)
+_facts(
+    'wiki-facts-fi',
+    ['facts', 'itinerary'],
+    'fi Wikipedia hook pages (Did you know, On this day, unusual articles): short sourced hooks that name places, for Place facts and Itinerary.',
+    cls='reference',
+    kinds=['place_fact'],
+    llm=False,
+    depth=0,
+    off='hook adapter removed (share-alike text); needs an own-words extractor',
+    seeds=['https://fi.wikipedia.org/wiki/Wikipedia:Tiesitk%C3%B6%2C_ett%C3%A4...', 'https://fi.wikipedia.org/wiki/Wikipedia:P%C3%A4iv%C3%A4malline', 'https://fi.wikipedia.org/wiki/Wikipedia:Erikoiset_artikkelit'],
+)
+_facts(
+    'wiki-facts-fr',
+    ['facts', 'itinerary'],
+    'fr Wikipedia hook pages (Did you know, On this day, unusual articles): short sourced hooks that name places, for Place facts and Itinerary.',
+    cls='reference',
+    kinds=['place_fact'],
+    llm=False,
+    depth=0,
+    off='hook adapter removed (share-alike text); needs an own-words extractor',
+    seeds=['https://fr.wikipedia.org/wiki/Wikip%C3%A9dia:Le_saviez-vous_%3F', 'https://fr.wikipedia.org/wiki/Wikip%C3%A9dia:%C3%89ph%C3%A9m%C3%A9ride', 'https://fr.wikipedia.org/wiki/Wikip%C3%A9dia:Articles_insolites'],
+)
+_facts(
+    'wiki-facts-he',
+    ['facts', 'itinerary'],
+    'he Wikipedia hook pages (Did you know, On this day, unusual articles): short sourced hooks that name places, for Place facts and Itinerary.',
+    cls='reference',
+    kinds=['place_fact'],
+    llm=False,
+    depth=0,
+    off='hook adapter removed (share-alike text); needs an own-words extractor',
+    seeds=['https://he.wikipedia.org/wiki/%D7%95%D7%99%D7%A7%D7%99%D7%A4%D7%93%D7%99%D7%94:%D7%94%D7%99%D7%93%D7%A2%D7%AA%3F', 'https://he.wikipedia.org/wiki/%D7%95%D7%99%D7%A7%D7%99%D7%A4%D7%93%D7%99%D7%94:%D7%94%D7%99%D7%95%D7%9D_%D7%91%D7%94%D7%99%D7%A1%D7%98%D7%95%D7%A8%D7%99%D7%94', 'https://he.wikipedia.org/wiki/%D7%95%D7%99%D7%A7%D7%99%D7%A4%D7%93%D7%99%D7%94:%D7%A2%D7%A8%D7%9B%D7%99%D7%9D_%D7%99%D7%95%D7%A6%D7%90%D7%99_%D7%93%D7%95%D7%A4%D7%9F'],
+)
+_facts(
+    'wiki-facts-hi',
+    ['facts', 'itinerary'],
+    'hi Wikipedia hook pages (Did you know, On this day, unusual articles): short sourced hooks that name places, for Place facts and Itinerary.',
+    cls='reference',
+    kinds=['place_fact'],
+    llm=False,
+    depth=0,
+    off='hook adapter removed (share-alike text); needs an own-words extractor',
+    seeds=['https://hi.wikipedia.org/wiki/%E0%A4%B5%E0%A4%BF%E0%A4%95%E0%A4%BF%E0%A4%AA%E0%A5%80%E0%A4%A1%E0%A4%BF%E0%A4%AF%E0%A4%BE:%E0%A4%95%E0%A5%8D%E0%A4%AF%E0%A4%BE_%E0%A4%86%E0%A4%AA_%E0%A4%9C%E0%A4%BE%E0%A4%A8%E0%A4%A4%E0%A5%87_%E0%A4%B9%E0%A5%88%E0%A4%82'],
+)
+_facts(
+    'wiki-facts-hu',
+    ['facts', 'itinerary'],
+    'hu Wikipedia hook pages (Did you know, On this day, unusual articles): short sourced hooks that name places, for Place facts and Itinerary.',
+    cls='reference',
+    kinds=['place_fact'],
+    llm=False,
+    depth=0,
+    off='hook adapter removed (share-alike text); needs an own-words extractor',
+    seeds=['https://hu.wikipedia.org/wiki/Wikip%C3%A9dia:%C3%89vfordul%C3%B3k', 'https://hu.wikipedia.org/wiki/Wikip%C3%A9dia:Az_%C3%A9let_k%C3%B6nnyedebb_oldala'],
+)
+_facts(
+    'wiki-facts-id',
+    ['facts', 'itinerary'],
+    'id Wikipedia hook pages (Did you know, On this day, unusual articles): short sourced hooks that name places, for Place facts and Itinerary.',
+    cls='reference',
+    kinds=['place_fact'],
+    llm=False,
+    depth=0,
+    off='hook adapter removed (share-alike text); needs an own-words extractor',
+    seeds=['https://id.wikipedia.org/wiki/Wikipedia:Tahukah_Anda', 'https://id.wikipedia.org/wiki/Wikipedia:Hari_Ini_Dalam_Sejarah', 'https://id.wikipedia.org/wiki/Wikipedia:Artikel-artikel_yang_tidak_lazim'],
+)
+_facts(
+    'wiki-facts-it',
+    ['facts', 'itinerary'],
+    'it Wikipedia hook pages (Did you know, On this day, unusual articles): short sourced hooks that name places, for Place facts and Itinerary.',
+    cls='reference',
+    kinds=['place_fact'],
+    llm=False,
+    depth=0,
+    off='hook adapter removed (share-alike text); needs an own-words extractor',
+    seeds=['https://it.wikipedia.org/wiki/Wikipedia:Lo_sapevi_che', 'https://it.wikipedia.org/wiki/Wikipedia:Voci_insolite'],
+)
+_facts(
+    'wiki-facts-ms',
+    ['facts', 'itinerary'],
+    'ms Wikipedia hook pages (Did you know, On this day, unusual articles): short sourced hooks that name places, for Place facts and Itinerary.',
+    cls='reference',
+    kinds=['place_fact'],
+    llm=False,
+    depth=0,
+    off='hook adapter removed (share-alike text); needs an own-words extractor',
+    seeds=['https://ms.wikipedia.org/wiki/Wikipedia:Tahukah_anda', 'https://ms.wikipedia.org/wiki/Wikipedia:Hari_ulang_tahun_pilihan'],
+)
+_facts(
+    'wiki-facts-nl',
+    ['facts', 'itinerary'],
+    'nl Wikipedia hook pages (Did you know, On this day, unusual articles): short sourced hooks that name places, for Place facts and Itinerary.',
+    cls='reference',
+    kinds=['place_fact'],
+    llm=False,
+    depth=0,
+    off='hook adapter removed (share-alike text); needs an own-words extractor',
+    seeds=['https://nl.wikipedia.org/wiki/Wikipedia:Wist_je_dat', 'https://nl.wikipedia.org/wiki/Wikipedia:Dag_uit_de_geschiedenis', 'https://nl.wikipedia.org/wiki/Wikipedia:Humor_en_onzin/Opmerkelijke_pagina%27s'],
+)
+_facts(
+    'wiki-facts-nb',
+    ['facts', 'itinerary'],
+    'no Wikipedia hook pages (Did you know, On this day, unusual articles): short sourced hooks that name places, for Place facts and Itinerary.',
+    cls='reference',
+    kinds=['place_fact'],
+    llm=False,
+    depth=0,
+    off='hook adapter removed (share-alike text); needs an own-words extractor',
+    seeds=['https://no.wikipedia.org/wiki/Wikipedia:Visste_du_at', 'https://no.wikipedia.org/wiki/Wikipedia:Hendelser', 'https://no.wikipedia.org/wiki/Wikipedia:Liste_over_merkverdige_artikler'],
+)
+_facts(
+    'wiki-facts-pl',
+    ['facts', 'itinerary'],
+    'pl Wikipedia hook pages (Did you know, On this day, unusual articles): short sourced hooks that name places, for Place facts and Itinerary.',
+    cls='reference',
+    kinds=['place_fact'],
+    llm=False,
+    depth=0,
+    off='hook adapter removed (share-alike text); needs an own-words extractor',
+    seeds=['https://pl.wikipedia.org/wiki/Wikiprojekt:Czy_wiesz', 'https://pl.wikipedia.org/wiki/Wikiprojekt:Rocznice', 'https://pl.wikipedia.org/wiki/Wikipedia:Nietypowe_artyku%C5%82y'],
+)
+_facts(
+    'wiki-facts-pt',
+    ['facts', 'itinerary'],
+    'pt Wikipedia hook pages (Did you know, On this day, unusual articles): short sourced hooks that name places, for Place facts and Itinerary.',
+    cls='reference',
+    kinds=['place_fact'],
+    llm=False,
+    depth=0,
+    off='hook adapter removed (share-alike text); needs an own-words extractor',
+    seeds=['https://pt.wikipedia.org/wiki/Wikip%C3%A9dia:Sabia_que', 'https://pt.wikipedia.org/wiki/Wikip%C3%A9dia:Efem%C3%A9rides', 'https://pt.wikipedia.org/wiki/Wikip%C3%A9dia:Artigos_peculiares'],
+)
+_facts(
+    'wiki-facts-ro',
+    ['facts', 'itinerary'],
+    'ro Wikipedia hook pages (Did you know, On this day, unusual articles): short sourced hooks that name places, for Place facts and Itinerary.',
+    cls='reference',
+    kinds=['place_fact'],
+    llm=False,
+    depth=0,
+    off='hook adapter removed (share-alike text); needs an own-words extractor',
+    seeds=['https://ro.wikipedia.org/wiki/Wikipedia:%C8%98tia%C8%9Bi_c%C4%83', 'https://ro.wikipedia.org/wiki/Format:Anivers%C4%83rile_zilei', 'https://ro.wikipedia.org/wiki/Wikipedia:Articole_neobi%C8%99nuite'],
+)
+_facts(
+    'wiki-facts-ru',
+    ['facts', 'itinerary'],
+    'ru Wikipedia hook pages (Did you know, On this day, unusual articles): short sourced hooks that name places, for Place facts and Itinerary.',
+    cls='reference',
+    kinds=['place_fact'],
+    llm=False,
+    depth=0,
+    off='hook adapter removed (share-alike text); needs an own-words extractor',
+    seeds=['https://ru.wikipedia.org/wiki/%D0%9F%D1%80%D0%BE%D0%B5%D0%BA%D1%82:%D0%97%D0%BD%D0%B0%D0%B5%D1%82%D0%B5_%D0%BB%D0%B8_%D0%B2%D1%8B', 'https://ru.wikipedia.org/wiki/%D0%9F%D1%80%D0%BE%D0%B5%D0%BA%D1%82:%D0%A1%D0%BE%D0%B1%D1%8B%D1%82%D0%B8%D1%8F_%D0%B4%D0%BD%D1%8F', 'https://ru.wikipedia.org/wiki/%D0%92%D0%B8%D0%BA%D0%B8%D0%BF%D0%B5%D0%B4%D0%B8%D1%8F:%D0%9D%D0%B5%D0%BE%D0%B1%D1%8B%D1%87%D0%BD%D1%8B%D0%B5_%D1%81%D1%82%D0%B0%D1%82%D1%8C%D0%B8'],
+)
+_facts(
+    'wiki-facts-simple',
+    ['facts', 'itinerary'],
+    'simple Wikipedia hook pages (Did you know, On this day, unusual articles): short sourced hooks that name places, for Place facts and Itinerary.',
+    cls='reference',
+    kinds=['place_fact'],
+    llm=False,
+    depth=0,
+    off='hook adapter removed (share-alike text); needs an own-words extractor',
+    seeds=['https://simple.wikipedia.org/wiki/Wikipedia:Did_you_know'],
+)
+_facts(
+    'wiki-facts-sk',
+    ['facts', 'itinerary'],
+    'sk Wikipedia hook pages (Did you know, On this day, unusual articles): short sourced hooks that name places, for Place facts and Itinerary.',
+    cls='reference',
+    kinds=['place_fact'],
+    llm=False,
+    depth=0,
+    off='hook adapter removed (share-alike text); needs an own-words extractor',
+    seeds=['https://sk.wikipedia.org/wiki/Wikip%C3%A9dia:Zauj%C3%ADmavosti'],
+)
+_facts(
+    'wiki-facts-sl',
+    ['facts', 'itinerary'],
+    'sl Wikipedia hook pages (Did you know, On this day, unusual articles): short sourced hooks that name places, for Place facts and Itinerary.',
+    cls='reference',
+    kinds=['place_fact'],
+    llm=False,
+    depth=0,
+    off='hook adapter removed (share-alike text); needs an own-words extractor',
+    seeds=['https://sl.wikipedia.org/wiki/Wikipedija:Ste_vedeli', 'https://sl.wikipedia.org/wiki/Wikipedija:Izbrane_obletnice', 'https://sl.wikipedia.org/wiki/Wikipedija:Nenavadni_%C4%8Dlanki'],
+)
+_facts(
+    'wiki-facts-sr',
+    ['facts', 'itinerary'],
+    'sr Wikipedia hook pages (Did you know, On this day, unusual articles): short sourced hooks that name places, for Place facts and Itinerary.',
+    cls='reference',
+    kinds=['place_fact'],
+    llm=False,
+    depth=0,
+    off='hook adapter removed (share-alike text); needs an own-words extractor',
+    seeds=['https://sr.wikipedia.org/wiki/%D0%92%D0%B8%D0%BA%D0%B8%D0%BF%D0%B5%D0%B4%D0%B8%D1%98%D0%B0:%D0%94%D0%B0_%D0%BB%D0%B8_%D1%81%D1%82%D0%B5_%D0%B7%D0%BD%D0%B0%D0%BB%D0%B8', 'https://sr.wikipedia.org/wiki/%D0%92%D0%B8%D0%BA%D0%B8%D0%BF%D0%B5%D0%B4%D0%B8%D1%98%D0%B0:%D0%98%D0%B7%D0%B0%D0%B1%D1%80%D0%B0%D0%BD%D0%B8_%D0%B4%D0%BE%D0%B3%D0%B0%D1%92%D0%B0%D1%98%D0%B8'],
+)
+_facts(
+    'wiki-facts-sv',
+    ['facts', 'itinerary'],
+    'sv Wikipedia hook pages (Did you know, On this day, unusual articles): short sourced hooks that name places, for Place facts and Itinerary.',
+    cls='reference',
+    kinds=['place_fact'],
+    llm=False,
+    depth=0,
+    off='hook adapter removed (share-alike text); needs an own-words extractor',
+    seeds=['https://sv.wikipedia.org/wiki/Wikipedia:Visste_du_att...', 'https://sv.wikipedia.org/wiki/Wikipedia:Dagens_h%C3%A4ndelser', 'https://sv.wikipedia.org/wiki/Wikipedia:Kuriosaartiklar'],
+)
+_facts(
+    'wiki-facts-ta',
+    ['facts', 'itinerary'],
+    'ta Wikipedia hook pages (Did you know, On this day, unusual articles): short sourced hooks that name places, for Place facts and Itinerary.',
+    cls='reference',
+    kinds=['place_fact'],
+    llm=False,
+    depth=0,
+    off='hook adapter removed (share-alike text); needs an own-words extractor',
+    seeds=['https://ta.wikipedia.org/wiki/%E0%AE%B5%E0%AE%BF%E0%AE%95%E0%AF%8D%E0%AE%95%E0%AE%BF%E0%AE%AA%E0%AF%8D%E0%AE%AA%E0%AF%80%E0%AE%9F%E0%AE%BF%E0%AE%AF%E0%AE%BE:%E0%AE%89%E0%AE%99%E0%AF%8D%E0%AE%95%E0%AE%B3%E0%AF%81%E0%AE%95%E0%AF%8D%E0%AE%95%E0%AF%81%E0%AE%A4%E0%AF%8D_%E0%AE%A4%E0%AF%86%E0%AE%B0%E0%AE%BF%E0%AE%AF%E0%AF%81%E0%AE%AE%E0%AE%BE', 'https://ta.wikipedia.org/wiki/%E0%AE%B5%E0%AE%BF%E0%AE%95%E0%AF%8D%E0%AE%95%E0%AE%BF%E0%AE%AA%E0%AF%8D%E0%AE%AA%E0%AF%80%E0%AE%9F%E0%AE%BF%E0%AE%AF%E0%AE%BE:%E0%AE%86%E0%AE%A3%E0%AF%8D%E0%AE%9F%E0%AF%81_%E0%AE%A8%E0%AE%BF%E0%AE%B1%E0%AF%88%E0%AE%B5%E0%AF%81%E0%AE%95%E0%AE%B3%E0%AF%8D'],
+)
+_facts(
+    'wiki-facts-th',
+    ['facts', 'itinerary'],
+    'th Wikipedia hook pages (Did you know, On this day, unusual articles): short sourced hooks that name places, for Place facts and Itinerary.',
+    cls='reference',
+    kinds=['place_fact'],
+    llm=False,
+    depth=0,
+    off='hook adapter removed (share-alike text); needs an own-words extractor',
+    seeds=['https://th.wikipedia.org/wiki/%E0%B8%A7%E0%B8%B4%E0%B8%81%E0%B8%B4%E0%B8%9E%E0%B8%B5%E0%B9%80%E0%B8%94%E0%B8%B5%E0%B8%A2:%E0%B8%A3%E0%B8%B9%E0%B9%89%E0%B9%84%E0%B8%AB%E0%B8%A1%E0%B8%A7%E0%B9%88%E0%B8%B2', 'https://th.wikipedia.org/wiki/%E0%B8%A7%E0%B8%B4%E0%B8%81%E0%B8%B4%E0%B8%9E%E0%B8%B5%E0%B9%80%E0%B8%94%E0%B8%B5%E0%B8%A2:%E0%B8%A7%E0%B8%B1%E0%B8%99%E0%B8%99%E0%B8%B5%E0%B9%89%E0%B9%83%E0%B8%99%E0%B8%AD%E0%B8%94%E0%B8%B5%E0%B8%95'],
+)
+_facts(
+    'wiki-facts-tr',
+    ['facts', 'itinerary'],
+    'tr Wikipedia hook pages (Did you know, On this day, unusual articles): short sourced hooks that name places, for Place facts and Itinerary.',
+    cls='reference',
+    kinds=['place_fact'],
+    llm=False,
+    depth=0,
+    off='hook adapter removed (share-alike text); needs an own-words extractor',
+    seeds=['https://tr.wikipedia.org/wiki/Vikipedi:Biliyor_muydunuz%3F', 'https://tr.wikipedia.org/wiki/Vikipedi:Tarihte_bug%C3%BCn'],
+)
+_facts(
+    'wiki-facts-uk',
+    ['facts', 'itinerary'],
+    'uk Wikipedia hook pages (Did you know, On this day, unusual articles): short sourced hooks that name places, for Place facts and Itinerary.',
+    cls='reference',
+    kinds=['place_fact'],
+    llm=False,
+    depth=0,
+    off='hook adapter removed (share-alike text); needs an own-words extractor',
+    seeds=['https://uk.wikipedia.org/wiki/%D0%92%D1%96%D0%BA%D1%96%D0%BF%D0%B5%D0%B4%D1%96%D1%8F:%D0%9F%D1%80%D0%BE%D1%94%D0%BA%D1%82:%D0%A7%D0%B8_%D0%B2%D0%B8_%D0%B7%D0%BD%D0%B0%D1%94%D1%82%D0%B5', 'https://uk.wikipedia.org/wiki/%D0%92%D1%96%D0%BA%D1%96%D0%BF%D0%B5%D0%B4%D1%96%D1%8F:%D0%9F%D1%80%D0%BE%D1%94%D0%BA%D1%82:%D0%A6%D0%B5%D0%B9_%D0%B4%D0%B5%D0%BD%D1%8C_%D0%B2_%D1%96%D1%81%D1%82%D0%BE%D1%80%D1%96%D1%97', 'https://uk.wikipedia.org/wiki/%D0%92%D1%96%D0%BA%D1%96%D0%BF%D0%B5%D0%B4%D1%96%D1%8F:%D0%9D%D0%B5%D0%BE%D1%87%D1%96%D0%BA%D1%83%D0%B2%D0%B0%D0%BD%D1%96_%D1%81%D1%82%D0%B0%D1%82%D1%82%D1%96'],
+)
+_facts(
+    'wiki-facts-vi',
+    ['facts', 'itinerary'],
+    'vi Wikipedia hook pages (Did you know, On this day, unusual articles): short sourced hooks that name places, for Place facts and Itinerary.',
+    cls='reference',
+    kinds=['place_fact'],
+    llm=False,
+    depth=0,
+    off='hook adapter removed (share-alike text); needs an own-words extractor',
+    seeds=['https://vi.wikipedia.org/wiki/Wikipedia:B%E1%BA%A1n_c%C3%B3_bi%E1%BA%BFt', 'https://vi.wikipedia.org/wiki/Wikipedia:Ng%C3%A0y_n%C3%A0y_n%C4%83m_x%C6%B0a'],
+)
+_facts(
+    'od-factbook-json',
+    ['facts'],
+    'CIA World Factbook final edition (2026-02-04) as JSON: highest and lowest points, area, World Heritage count, national symbols, former names and independence dates of every country, for Place facts.',
+    cls='reference',
+    kinds=['place_fact'],
+    llm=False,
+    depth=0,
+    adapter='factbook_json',
+    seeds=['https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/africa/ag.json', 'https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/africa/ao.json', 'https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/africa/bc.json', 'https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/africa/bn.json', 'https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/africa/by.json', 'https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/africa/cd.json', 'https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/africa/cf.json', 'https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/africa/cg.json', 'https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/africa/cm.json', 'https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/africa/cn.json', 'https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/africa/ct.json', 'https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/africa/cv.json', 'https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/africa/dj.json', 'https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/africa/eg.json', 'https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/africa/ek.json', 'https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/africa/er.json', 'https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/africa/et.json', 'https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/africa/ga.json', 'https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/africa/gb.json', 'https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/africa/gh.json', 'https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/africa/gv.json', 'https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/africa/iv.json', 'https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/africa/ke.json', 'https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/africa/li.json', 'https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/africa/lt.json', 'https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/africa/ly.json', 'https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/africa/ma.json', 'https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/africa/mi.json', 'https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/africa/ml.json', 'https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/africa/mo.json', 'https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/africa/mp.json', 'https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/africa/mr.json', 'https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/africa/mz.json', 'https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/africa/ng.json', 'https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/africa/ni.json', 'https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/africa/od.json', 'https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/africa/pu.json', 'https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/africa/rw.json', 'https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/africa/se.json', 'https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/africa/sf.json', 'https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/africa/sg.json', 'https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/africa/sh.json', 'https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/africa/sl.json', 'https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/africa/so.json', 'https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/africa/su.json', 'https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/africa/to.json', 'https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/africa/tp.json', 'https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/africa/ts.json', 'https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/africa/tz.json', 'https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/africa/ug.json', 'https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/africa/uv.json', 'https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/africa/wa.json', 'https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/africa/wi.json', 'https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/africa/wz.json', 'https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/africa/za.json', 'https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/africa/zi.json', 'https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/antarctica/ay.json', 'https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/antarctica/bv.json', 'https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/antarctica/fs.json', 'https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/antarctica/hm.json', 'https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/australia-oceania/aq.json', 'https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/australia-oceania/as.json', 'https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/australia-oceania/at.json', 'https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/australia-oceania/bp.json', 'https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/australia-oceania/ck.json', 'https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/australia-oceania/cq.json', 'https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/australia-oceania/cr.json', 'https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/australia-oceania/cw.json', 'https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/australia-oceania/fj.json', 'https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/australia-oceania/fm.json', 'https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/australia-oceania/fp.json', 'https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/australia-oceania/gq.json', 'https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/australia-oceania/kr.json', 'https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/australia-oceania/kt.json', 'https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/australia-oceania/nc.json', 'https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/australia-oceania/ne.json', 'https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/australia-oceania/nf.json', 'https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/australia-oceania/nh.json', 'https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/australia-oceania/nr.json', 'https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/australia-oceania/nz.json', 'https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/australia-oceania/pc.json', 'https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/australia-oceania/ps.json', 'https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/australia-oceania/rm.json', 'https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/australia-oceania/tl.json', 'https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/australia-oceania/tn.json', 'https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/australia-oceania/tv.json', 'https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/australia-oceania/um.json', 'https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/australia-oceania/wf.json', 'https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/australia-oceania/wq.json', 'https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/australia-oceania/ws.json', 'https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/central-america-n-caribbean/aa.json', 'https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/central-america-n-caribbean/ac.json', 'https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/central-america-n-caribbean/av.json', 'https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/central-america-n-caribbean/bb.json', 'https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/central-america-n-caribbean/bf.json', 'https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/central-america-n-caribbean/bh.json', 'https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/central-america-n-caribbean/bq.json', 'https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/central-america-n-caribbean/cj.json', 'https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/central-america-n-caribbean/cs.json', 'https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/central-america-n-caribbean/cu.json', 'https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/central-america-n-caribbean/do.json', 'https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/central-america-n-caribbean/dr.json', 'https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/central-america-n-caribbean/es.json', 'https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/central-america-n-caribbean/gj.json', 'https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/central-america-n-caribbean/gt.json', 'https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/central-america-n-caribbean/ha.json', 'https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/central-america-n-caribbean/ho.json', 'https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/central-america-n-caribbean/jm.json', 'https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/central-america-n-caribbean/mh.json', 'https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/central-america-n-caribbean/nn.json', 'https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/central-america-n-caribbean/nu.json', 'https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/central-america-n-caribbean/pm.json', 'https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/central-america-n-caribbean/rn.json', 'https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/central-america-n-caribbean/rq.json', 'https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/central-america-n-caribbean/sc.json', 'https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/central-america-n-caribbean/st.json', 'https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/central-america-n-caribbean/tb.json', 'https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/central-america-n-caribbean/td.json', 'https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/central-america-n-caribbean/tk.json', 'https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/central-america-n-caribbean/uc.json', 'https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/central-america-n-caribbean/vc.json', 'https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/central-america-n-caribbean/vi.json', 'https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/central-america-n-caribbean/vq.json', 'https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/central-asia/aj.json', 'https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/central-asia/am.json', 'https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/central-asia/gg.json', 'https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/central-asia/kg.json', 'https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/central-asia/kz.json', 'https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/central-asia/rs.json', 'https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/central-asia/ti.json', 'https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/central-asia/tx.json', 'https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/central-asia/uz.json', 'https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/east-n-southeast-asia/bm.json', 'https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/east-n-southeast-asia/bx.json', 'https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/east-n-southeast-asia/cb.json', 'https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/east-n-southeast-asia/ch.json', 'https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/east-n-southeast-asia/hk.json', 'https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/east-n-southeast-asia/id.json', 'https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/east-n-southeast-asia/ja.json', 'https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/east-n-southeast-asia/kn.json', 'https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/east-n-southeast-asia/ks.json', 'https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/east-n-southeast-asia/la.json', 'https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/east-n-southeast-asia/mc.json', 'https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/east-n-southeast-asia/mg.json', 'https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/east-n-southeast-asia/my.json', 'https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/east-n-southeast-asia/pf.json', 'https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/east-n-southeast-asia/pg.json', 'https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/east-n-southeast-asia/pp.json', 'https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/east-n-southeast-asia/rp.json', 'https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/east-n-southeast-asia/sn.json', 'https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/east-n-southeast-asia/th.json', 'https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/east-n-southeast-asia/tt.json', 'https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/east-n-southeast-asia/tw.json', 'https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/east-n-southeast-asia/vm.json', 'https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/europe/al.json', 'https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/europe/an.json', 'https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/europe/au.json', 'https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/europe/ax.json', 'https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/europe/be.json', 'https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/europe/bk.json', 'https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/europe/bo.json', 'https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/europe/bu.json', 'https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/europe/cy.json', 'https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/europe/da.json', 'https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/europe/dx.json', 'https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/europe/ee.json', 'https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/europe/ei.json', 'https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/europe/en.json', 'https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/europe/ez.json', 'https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/europe/fi.json', 'https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/europe/fo.json', 'https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/europe/fr.json', 'https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/europe/gi.json', 'https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/europe/gk.json', 'https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/europe/gm.json', 'https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/europe/gr.json', 'https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/europe/hr.json', 'https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/europe/hu.json', 'https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/europe/ic.json', 'https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/europe/im.json', 'https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/europe/it.json', 'https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/europe/je.json', 'https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/europe/jn.json', 'https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/europe/kv.json', 'https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/europe/lg.json', 'https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/europe/lh.json', 'https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/europe/lo.json', 'https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/europe/ls.json', 'https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/europe/lu.json', 'https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/europe/md.json', 'https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/europe/mj.json', 'https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/europe/mk.json', 'https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/europe/mn.json', 'https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/europe/mt.json', 'https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/europe/nl.json', 'https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/europe/no.json', 'https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/europe/pl.json', 'https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/europe/po.json', 'https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/europe/ri.json', 'https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/europe/ro.json', 'https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/europe/si.json', 'https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/europe/sm.json', 'https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/europe/sp.json', 'https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/europe/sv.json', 'https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/europe/sw.json', 'https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/europe/sz.json', 'https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/europe/uk.json', 'https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/europe/up.json', 'https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/europe/vt.json', 'https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/middle-east/ae.json', 'https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/middle-east/ba.json', 'https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/middle-east/gz.json', 'https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/middle-east/ir.json', 'https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/middle-east/is.json', 'https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/middle-east/iz.json', 'https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/middle-east/jo.json', 'https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/middle-east/ku.json', 'https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/middle-east/le.json', 'https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/middle-east/mu.json', 'https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/middle-east/qa.json', 'https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/middle-east/sa.json', 'https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/middle-east/sy.json', 'https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/middle-east/tu.json', 'https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/middle-east/we.json', 'https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/middle-east/ym.json', 'https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/north-america/bd.json', 'https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/north-america/ca.json', 'https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/north-america/gl.json', 'https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/north-america/ip.json', 'https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/north-america/mx.json', 'https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/north-america/sb.json', 'https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/north-america/us.json', 'https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/south-america/ar.json', 'https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/south-america/bl.json', 'https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/south-america/br.json', 'https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/south-america/ci.json', 'https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/south-america/co.json', 'https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/south-america/ec.json', 'https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/south-america/fk.json', 'https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/south-america/gy.json', 'https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/south-america/ns.json', 'https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/south-america/pa.json', 'https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/south-america/pe.json', 'https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/south-america/sx.json', 'https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/south-america/uy.json', 'https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/south-america/ve.json', 'https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/south-asia/af.json', 'https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/south-asia/bg.json', 'https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/south-asia/bt.json', 'https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/south-asia/ce.json', 'https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/south-asia/in.json', 'https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/south-asia/io.json', 'https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/south-asia/mv.json', 'https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/south-asia/np.json', 'https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/south-asia/pk.json'],
+)
+_facts(
+    'od-wikidata-entitydata',
+    ['facts', 'places'],
+    'Wikidata place items (CC0): founding dates, former names, nicknames, mottos, records, twin towns and heritage designations as typed statements, for Place facts and Places to see.',
+    cls='reference',
+    kinds=['place_fact'],
+    llm=False,
+    depth=0,
+    budget=300,
+    adapter='wikidata_facts',
+    seeds=['https://www.wikidata.org/wiki/Special:EntityData/Q30.json', 'https://www.wikidata.org/wiki/Special:EntityData/Q183.json', 'https://www.wikidata.org/wiki/Special:EntityData/Q142.json', 'https://www.wikidata.org/wiki/Special:EntityData/Q145.json', 'https://www.wikidata.org/wiki/Special:EntityData/Q17.json', 'https://www.wikidata.org/wiki/Special:EntityData/Q148.json', 'https://www.wikidata.org/wiki/Special:EntityData/Q668.json', 'https://www.wikidata.org/wiki/Special:EntityData/Q155.json', 'https://www.wikidata.org/wiki/Special:EntityData/Q159.json', 'https://www.wikidata.org/wiki/Special:EntityData/Q38.json', 'https://www.wikidata.org/wiki/Special:EntityData/Q16.json', 'https://www.wikidata.org/wiki/Special:EntityData/Q408.json', 'https://www.wikidata.org/wiki/Special:EntityData/Q96.json', 'https://www.wikidata.org/wiki/Special:EntityData/Q884.json', 'https://www.wikidata.org/wiki/Special:EntityData/Q252.json', 'https://www.wikidata.org/wiki/Special:EntityData/Q43.json', 'https://www.wikidata.org/wiki/Special:EntityData/Q29.json', 'https://www.wikidata.org/wiki/Special:EntityData/Q55.json', 'https://www.wikidata.org/wiki/Special:EntityData/Q39.json', 'https://www.wikidata.org/wiki/Special:EntityData/Q40.json', 'https://www.wikidata.org/wiki/Special:EntityData/Q31.json', 'https://www.wikidata.org/wiki/Special:EntityData/Q34.json', 'https://www.wikidata.org/wiki/Special:EntityData/Q20.json', 'https://www.wikidata.org/wiki/Special:EntityData/Q35.json', 'https://www.wikidata.org/wiki/Special:EntityData/Q33.json', 'https://www.wikidata.org/wiki/Special:EntityData/Q189.json', 'https://www.wikidata.org/wiki/Special:EntityData/Q27.json', 'https://www.wikidata.org/wiki/Special:EntityData/Q45.json', 'https://www.wikidata.org/wiki/Special:EntityData/Q41.json', 'https://www.wikidata.org/wiki/Special:EntityData/Q36.json', 'https://www.wikidata.org/wiki/Special:EntityData/Q213.json', 'https://www.wikidata.org/wiki/Special:EntityData/Q28.json', 'https://www.wikidata.org/wiki/Special:EntityData/Q218.json', 'https://www.wikidata.org/wiki/Special:EntityData/Q219.json', 'https://www.wikidata.org/wiki/Special:EntityData/Q224.json', 'https://www.wikidata.org/wiki/Special:EntityData/Q403.json', 'https://www.wikidata.org/wiki/Special:EntityData/Q212.json', 'https://www.wikidata.org/wiki/Special:EntityData/Q79.json', 'https://www.wikidata.org/wiki/Special:EntityData/Q258.json', 'https://www.wikidata.org/wiki/Special:EntityData/Q1028.json', 'https://www.wikidata.org/wiki/Special:EntityData/Q114.json', 'https://www.wikidata.org/wiki/Special:EntityData/Q1033.json', 'https://www.wikidata.org/wiki/Special:EntityData/Q115.json', 'https://www.wikidata.org/wiki/Special:EntityData/Q924.json', 'https://www.wikidata.org/wiki/Special:EntityData/Q414.json', 'https://www.wikidata.org/wiki/Special:EntityData/Q298.json', 'https://www.wikidata.org/wiki/Special:EntityData/Q419.json', 'https://www.wikidata.org/wiki/Special:EntityData/Q739.json', 'https://www.wikidata.org/wiki/Special:EntityData/Q77.json', 'https://www.wikidata.org/wiki/Special:EntityData/Q241.json', 'https://www.wikidata.org/wiki/Special:EntityData/Q664.json', 'https://www.wikidata.org/wiki/Special:EntityData/Q869.json', 'https://www.wikidata.org/wiki/Special:EntityData/Q881.json', 'https://www.wikidata.org/wiki/Special:EntityData/Q928.json', 'https://www.wikidata.org/wiki/Special:EntityData/Q833.json', 'https://www.wikidata.org/wiki/Special:EntityData/Q334.json', 'https://www.wikidata.org/wiki/Special:EntityData/Q843.json', 'https://www.wikidata.org/wiki/Special:EntityData/Q902.json', 'https://www.wikidata.org/wiki/Special:EntityData/Q837.json', 'https://www.wikidata.org/wiki/Special:EntityData/Q854.json', 'https://www.wikidata.org/wiki/Special:EntityData/Q794.json', 'https://www.wikidata.org/wiki/Special:EntityData/Q851.json', 'https://www.wikidata.org/wiki/Special:EntityData/Q878.json', 'https://www.wikidata.org/wiki/Special:EntityData/Q801.json', 'https://www.wikidata.org/wiki/Special:EntityData/Q810.json', 'https://www.wikidata.org/wiki/Special:EntityData/Q822.json', 'https://www.wikidata.org/wiki/Special:EntityData/Q865.json', 'https://www.wikidata.org/wiki/Special:EntityData/Q8646.json', 'https://www.wikidata.org/wiki/Special:EntityData/Q14773.json', 'https://www.wikidata.org/wiki/Special:EntityData/Q711.json', 'https://www.wikidata.org/wiki/Special:EntityData/Q232.json', 'https://www.wikidata.org/wiki/Special:EntityData/Q265.json', 'https://www.wikidata.org/wiki/Special:EntityData/Q230.json', 'https://www.wikidata.org/wiki/Special:EntityData/Q399.json', 'https://www.wikidata.org/wiki/Special:EntityData/Q227.json', 'https://www.wikidata.org/wiki/Special:EntityData/Q233.json', 'https://www.wikidata.org/wiki/Special:EntityData/Q229.json', 'https://www.wikidata.org/wiki/Special:EntityData/Q32.json', 'https://www.wikidata.org/wiki/Special:EntityData/Q347.json', 'https://www.wikidata.org/wiki/Special:EntityData/Q235.json', 'https://www.wikidata.org/wiki/Special:EntityData/Q238.json', 'https://www.wikidata.org/wiki/Special:EntityData/Q237.json', 'https://www.wikidata.org/wiki/Special:EntityData/Q228.json', 'https://www.wikidata.org/wiki/Special:EntityData/Q211.json', 'https://www.wikidata.org/wiki/Special:EntityData/Q37.json', 'https://www.wikidata.org/wiki/Special:EntityData/Q191.json', 'https://www.wikidata.org/wiki/Special:EntityData/Q214.json', 'https://www.wikidata.org/wiki/Special:EntityData/Q215.json', 'https://www.wikidata.org/wiki/Special:EntityData/Q221.json', 'https://www.wikidata.org/wiki/Special:EntityData/Q222.json', 'https://www.wikidata.org/wiki/Special:EntityData/Q225.json', 'https://www.wikidata.org/wiki/Special:EntityData/Q236.json', 'https://www.wikidata.org/wiki/Special:EntityData/Q217.json', 'https://www.wikidata.org/wiki/Special:EntityData/Q184.json', 'https://www.wikidata.org/wiki/Special:EntityData/Q64.json', 'https://www.wikidata.org/wiki/Special:EntityData/Q90.json', 'https://www.wikidata.org/wiki/Special:EntityData/Q84.json', 'https://www.wikidata.org/wiki/Special:EntityData/Q60.json', 'https://www.wikidata.org/wiki/Special:EntityData/Q1490.json', 'https://www.wikidata.org/wiki/Special:EntityData/Q220.json', 'https://www.wikidata.org/wiki/Special:EntityData/Q2807.json', 'https://www.wikidata.org/wiki/Special:EntityData/Q727.json', 'https://www.wikidata.org/wiki/Special:EntityData/Q1748.json', 'https://www.wikidata.org/wiki/Special:EntityData/Q1754.json', 'https://www.wikidata.org/wiki/Special:EntityData/Q585.json', 'https://www.wikidata.org/wiki/Special:EntityData/Q1757.json', 'https://www.wikidata.org/wiki/Special:EntityData/Q1741.json', 'https://www.wikidata.org/wiki/Special:EntityData/Q1781.json', 'https://www.wikidata.org/wiki/Special:EntityData/Q1085.json', 'https://www.wikidata.org/wiki/Special:EntityData/Q270.json', 'https://www.wikidata.org/wiki/Special:EntityData/Q597.json', 'https://www.wikidata.org/wiki/Special:EntityData/Q1524.json', 'https://www.wikidata.org/wiki/Special:EntityData/Q406.json', 'https://www.wikidata.org/wiki/Special:EntityData/Q649.json', 'https://www.wikidata.org/wiki/Special:EntityData/Q956.json', 'https://www.wikidata.org/wiki/Special:EntityData/Q8686.json', 'https://www.wikidata.org/wiki/Special:EntityData/Q1353.json', 'https://www.wikidata.org/wiki/Special:EntityData/Q1156.json', 'https://www.wikidata.org/wiki/Special:EntityData/Q85.json', 'https://www.wikidata.org/wiki/Special:EntityData/Q3870.json', 'https://www.wikidata.org/wiki/Special:EntityData/Q5465.json', 'https://www.wikidata.org/wiki/Special:EntityData/Q3130.json', 'https://www.wikidata.org/wiki/Special:EntityData/Q3141.json', 'https://www.wikidata.org/wiki/Special:EntityData/Q172.json', 'https://www.wikidata.org/wiki/Special:EntityData/Q340.json', 'https://www.wikidata.org/wiki/Special:EntityData/Q65.json', 'https://www.wikidata.org/wiki/Special:EntityData/Q62.json', 'https://www.wikidata.org/wiki/Special:EntityData/Q1297.json', 'https://www.wikidata.org/wiki/Special:EntityData/Q61.json', 'https://www.wikidata.org/wiki/Special:EntityData/Q1489.json', 'https://www.wikidata.org/wiki/Special:EntityData/Q174.json', 'https://www.wikidata.org/wiki/Special:EntityData/Q8678.json', 'https://www.wikidata.org/wiki/Special:EntityData/Q1486.json', 'https://www.wikidata.org/wiki/Special:EntityData/Q2887.json', 'https://www.wikidata.org/wiki/Special:EntityData/Q2868.json', 'https://www.wikidata.org/wiki/Special:EntityData/Q1861.json', 'https://www.wikidata.org/wiki/Special:EntityData/Q8684.json', 'https://www.wikidata.org/wiki/Special:EntityData/Q35765.json', 'https://www.wikidata.org/wiki/Special:EntityData/Q34600.json', 'https://www.wikidata.org/wiki/Special:EntityData/Q612.json', 'https://www.wikidata.org/wiki/Special:EntityData/Q1218.json', 'https://www.wikidata.org/wiki/Special:EntityData/Q1492.json'],
+)
+
+
 METHODS = {"html", "rss", "sitemap", "api", "dump"}
 
 
@@ -18855,6 +21309,11 @@ def build_spec(seed: dict) -> dict:
 
     kinds = KINDS_OVERRIDE.get(sid, KINDS_BY_CATEGORY.get(category, []))
     llm_kinds = LLM_KINDS_OVERRIDE.get(sid, LLM_KINDS_BY_CATEGORY.get(category, []))
+    facts = facts_reuse_on(sid, llm_kinds, lclass)
+    if facts and "place_fact" not in kinds:
+        kinds = list(kinds) + ["place_fact"]
+        if ADAPTERS.get(sid) not in FACTS_ADAPTER_IDS:
+            llm_kinds = list(llm_kinds) + ["place_fact"]
     if not set(llm_kinds) <= set(kinds) or not set(kinds) <= KINDS:
         raise MappingError(f"{sid}: bad kinds {kinds} / llm_kinds {llm_kinds}")
 
@@ -18877,6 +21336,10 @@ def build_spec(seed: dict) -> dict:
         notes.append(f"Disabled: {DISABLED[sid]}")
     if sid in NOTES_APPEND:
         notes.append(NOTES_APPEND[sid])
+    if sid in FACTS_REUSE and not facts:
+        notes.append("Place facts: not wired yet (no LLM kinds on non-share-alike text and no adapter that "
+                     "emits place_fact), so no `facts` section or place_fact kind; the note above is what to "
+                     "extract once a reader exists.")
     if seed["cadence"] in {"never", "semiannual", "on_change", "4x_daily", "hourly_cache"}:
         notes.append(f"Research cadence: {seed['cadence']}.")
 
@@ -18922,7 +21385,7 @@ def build_spec(seed: dict) -> dict:
         "max_retention_days": MAX_RETENTION_DAYS.get(sid),
         "display_requirements": DISPLAY_REQUIREMENTS.get(sid),
         "notes": " | ".join(notes) or None,
-        "relevance": relevance(sid),
+        "relevance": relevance(sid, facts),
     }
     return spec
 

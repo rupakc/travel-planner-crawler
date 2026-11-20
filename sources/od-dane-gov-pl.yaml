@@ -22,9 +22,11 @@ kinds:
 - place
 - attraction
 - event
+- place_fact
 llm_kinds:
 - attraction
 - event
+- place_fact
 render: never
 cadence: monthly
 min_delay_s: 5
@@ -37,10 +39,12 @@ max_retention_days: null
 display_requirements: null
 notes: 'Research 2026-11-18 (corpus Europe): robots.txt: timed out (no response); terms: unreadable. |
   Disabled: adapter pending: choose tourism datasets + dataset reader (crawling the portal''s HTML is
-  not useful); also re-test robots.txt from the crawler VM'
+  not useful); also re-test robots.txt from the crawler VM | Place facts (research 2026-11-20): rejestr
+  zabytków datasets'
 relevance:
   sections:
   - places
   - events
+  - facts
   why: 'dane.gov.pl (Polish open data): government open-data datasets (tourism, events, transport), for
-    Places to see and Events.'
+    Places to see and Events; also history and curiosities for Place facts.'

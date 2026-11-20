@@ -23,9 +23,11 @@ kinds:
 - place
 - attraction
 - tip
+- place_fact
 llm_kinds:
 - attraction
 - tip
+- place_fact
 render: never
 cadence: weekly
 min_delay_s: 10
@@ -38,10 +40,12 @@ max_retention_days: null
 display_requirements: null
 notes: 'Research 2026-11-18 (corpus LatAm): robots.txt: 200, **Crawl-delay 10**, `*?tca=*` disallowed;
   terms: https://www.argentina.gob.ar/terminos-y-condiciones: "El Administrador licencia todos sus contenidos
-  bajo la licencia Creative Commons Atribución 4.0 Internacional".'
+  bajo la licencia Creative Commons Atribución 4.0 Internacional". | Place facts (research 2026-11-20):
+  park history and records'
 relevance:
   sections:
   - places
   - tips
+  - facts
   why: 'Parques Nacionales Argentina (argentina.gob.ar): Iguazú, Los Glaciares, Nahuel Huapi: fees, rules,
-    closures, for Places to see and Travel tips.'
+    closures, for Places to see and Travel tips; also history and curiosities for Place facts.'
