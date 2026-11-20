@@ -25885,6 +25885,4226 @@ _facts(
 )
 
 
+# Place facts corpus, East, Southeast and South Asia (research vetted 2026-11-20).
+_facts(
+    'wp-ja-dyk',
+    ['facts'],
+    'ja.wikipedia "新しい記事" (DYK): hooks for new Japanese articles, many of them place curiosities, for Place facts.',
+    cls='reference',
+    llm=False,
+    off='adapter pending: a rule-based place_fact reader for share-alike Wikipedia dumps (History/Etymology sections; CC BY-SA text is never sent to a model)',
+    depth=0,
+    seeds=['https://dumps.wikimedia.org/'],
+)
+_facts(
+    'gov-in-history',
+    ['facts', 'places', 'walking_tours'],
+    'Indiana Historical Bureau (markers, state symbols): historical-marker texts per town, for Place facts, Places to see and Free walking tours.',
+    cls='official',
+    depth=2,
+    seeds=['https://www.in.gov/history/'],
+    sitemaps=['https://www.in.gov/api/vtl/sitemap'],
+    include=['^https?://www\\.in\\.gov/history/'],
+)
+_facts(
+    'arch-indianculture',
+    ['facts', 'places', 'walking_tours'],
+    'Indian Culture portal (Ministry of Culture): state, city and monument histories and snippets, for Place facts, Places to see and Free walking tours.',
+    cls='official',
+    depth=2,
+    seeds=['https://www.indianculture.gov.in/'],
+    include=['^https?://www\\.indianculture\\.gov\\.in/(stories|snippets|historic-cities|unesco|food-and-culture|indian-states)/'],
+)
+_facts(
+    'gov-in-varanasi',
+    ['facts', 'places'],
+    'Varanasi district (NIC S3WaaS) history page: official district history and notable sites, for Place facts and Places to see.',
+    cls='official',
+    seeds=['https://varanasi.nic.in/history/', 'https://varanasi.nic.in/tourism/'],
+    include=['^https?://varanasi\\.nic\\.in/(history|tourism|about-district|culture-heritage)/'],
+)
+_facts(
+    'gov-in-madurai',
+    ['facts', 'places'],
+    'Madurai district (NIC S3WaaS): history and curiosities of the places it covers, for Place facts and Places to see.',
+    cls='official',
+    seeds=['https://madurai.nic.in/history/'],
+    include=['^https?://madurai\\.nic\\.in/(history|tourism|about-district)/'],
+)
+_facts(
+    'gov-in-kachchh',
+    ['facts', 'places'],
+    'Kachchh district (NIC S3WaaS): history and curiosities of the places it covers, for Place facts and Places to see.',
+    cls='official',
+    seeds=['https://kachchh.nic.in/history/'],
+    include=['^https?://kachchh\\.nic\\.in/(history|tourism|about-district)/'],
+)
+_facts(
+    'her-in-nmma',
+    ['facts', 'places'],
+    'National Mission on Monuments and Antiquities: built-heritage inventory with dates, for Place facts and Places to see.',
+    cls='official',
+    off='enable after a check from the crawler VM: a robots.txt or page fetch failed or timed out from the research laptop (timeout (reach-unverified)); read robots.txt, terms and content first',
+    depth=2,
+    seeds=['https://nmma.nic.in/'],
+    include=['^https?://nmma\\.nic\\.in/nmma/'],
+)
+_facts(
+    'her-in-intach',
+    ['facts', 'walking_tours'],
+    'INTACH: history and curiosities of the places it covers, for Place facts and Free walking tours.',
+    cls='editorial',
+    seeds=['https://intach.org/'],
+    include=['^https?://intach\\.org/(chapter|heritage|listing)'],
+)
+_facts(
+    'fx-pari',
+    ['facts'],
+    "People's Archive of Rural India: village-level stories and little-known rural facts, for Place facts.",
+    cls='editorial',
+    llm=False,
+    sitemaps=['https://ruralindiaonline.org/sitemap.xml'],
+    include=['^https?://ruralindiaonline\\.org/en/articles/', '^https?://ruralindiaonline\\.org/*/locations/*'],
+)
+_facts(
+    'arch-banglapedia',
+    ['facts', 'places'],
+    'Banglapedia (Asiatic Society of Bangladesh): national encyclopedia entries for every district, upazila and town, for Place facts and Places to see.',
+    cls='reference',
+    depth=2,
+    seeds=['https://en.banglapedia.org/index.php?title=Main_Page'],
+    include=['^https?://en\\.banglapedia\\.org/index.php\\?title=[^:&]+$'],
+)
+_facts(
+    'her-lk-archaeology',
+    ['facts', 'places'],
+    'Department of Archaeology Sri Lanka: history and curiosities of the places it covers, for Place facts and Places to see.',
+    cls='official',
+    off='enable after a check from the crawler VM: a robots.txt or page fetch failed or timed out from the research laptop (timeout (reach-unverified)); read robots.txt, terms and content first',
+    seeds=['https://www.archaeology.gov.lk/'],
+)
+_facts(
+    'her-cn-ncha',
+    ['facts', 'places'],
+    'National Cultural Heritage Administration (国家文物局): major protected sites lists, for Place facts and Places to see.',
+    cls='official',
+    depth=2,
+    seeds=['http://www.ncha.gov.cn/'],
+    include=['^https?://www\\.ncha\\.gov\\.cn/col/'],
+)
+_facts(
+    'her-cn-ihchina',
+    ['facts'],
+    '中国非物质文化遗产网: ICH items by county, for Place facts.',
+    cls='official',
+    off='enable after a check from the crawler VM: robots.txt gave no response from the research laptop (re-check: timeout again); terms and content not yet seen',
+    depth=2,
+    seeds=['https://www.ihchina.cn/'],
+    include=['^https?://www\\.ihchina\\.cn/(project|news_1)'],
+)
+_facts(
+    'fx-palace-museum',
+    ['facts', 'places', 'activities'],
+    'Palace Museum (故宫博物院): Forbidden City history and records, for Place facts, Places to see and Activities.',
+    cls='official',
+    depth=2,
+    seeds=['https://www.dpm.org.cn/'],
+    include=['^https?://www\\.dpm\\.org\\.cn/(explore|court|building)/'],
+)
+_facts(
+    'fx-sixthtone',
+    ['facts'],
+    'Sixth Tone: Chinese towns and villages, local curiosities, for Place facts.',
+    cls='editorial',
+    seeds=['https://www.sixthtone.com/'],
+    include=['^https?://www\\.sixthtone\\.com/news/'],
+)
+_facts(
+    'gov-cn-chinaabc',
+    ['facts'],
+    'China ABC (State Council English portal): provinces, geography, history (state-authored: label as such), for Place facts.',
+    cls='official',
+    depth=2,
+    seeds=['https://english.www.gov.cn/archive/chinaabc/'],
+    include=['^https?://english\\.www\\.gov\\.cn/archive/chinaabc/'],
+)
+_facts(
+    'fx-chinaculture',
+    ['facts'],
+    'China Culture (Ministry of Culture English): cultural and historic places, for Place facts.',
+    cls='official',
+    depth=2,
+    seeds=['http://en.chinaculture.org/'],
+    include=['^https?://en\\.chinaculture\\.org/(chineseway|library|focus)/'],
+)
+_facts(
+    'her-hk-amo',
+    ['facts', 'walking_tours', 'places'],
+    'Antiquities and Monuments Office HK: declared monuments and graded buildings, for Place facts, Free walking tours and Places to see.',
+    cls='official',
+    depth=2,
+    seeds=['https://www.amo.gov.hk/en/historic-buildings/monuments/index.html'],
+    include=['^https?://www\\.amo\\.gov\\.hk/en/(historic-buildings|monuments)/'],
+)
+_facts(
+    'arch-hkmemory',
+    ['facts', 'places', 'walking_tours'],
+    'Hong Kong Memory (HKU / HK Govt-funded): "Hong Kong Place" district histories and oral histories, for Place facts, Places to see and Free walking tours.',
+    cls='official',
+    sitemaps=['https://www.hkmemory.hk/resources/sitemap/sitemap_index.xml'],
+    include=['^https?://www\\.hkmemory\\.hk/(tc|en)/collections/'],
+)
+_facts(
+    'her-mo-wh',
+    ['facts', 'walking_tours'],
+    'Macao World Heritage (文化局): history and curiosities of the places it covers, for Place facts and Free walking tours.',
+    cls='official',
+    llm=False,
+    depth=2,
+    seeds=['https://www.wh.mo/en/'],
+    include=['^https?://www\\.wh\\.mo/(en|cn)/site/'],
+)
+_facts(
+    'her-tw-nchdb',
+    ['facts', 'places', 'walking_tours'],
+    '國家文化資產網 (Taiwan heritage database): Taiwanese monuments, historic buildings and sites, with histories, for Place facts, Places to see and Free walking tours.',
+    cls='official',
+    depth=2,
+    seeds=['https://nchdb.boch.gov.tw/'],
+    include=['^https?://nchdb\\.boch\\.gov\\.tw/assets/overview/'],
+)
+_facts(
+    'arch-tw-tcmb',
+    ['facts'],
+    'Taiwan Cultural Memory Bank (國家文化記憶庫): local memories and curiosities per township, for Place facts.',
+    cls='official',
+    depth=2,
+    seeds=['https://tcmb.culture.tw/zh-tw'],
+    include=['^https?://tcmb\\.culture\\.tw/zh-tw/detail'],
+)
+_facts(
+    'gov-tw-taiwantoday',
+    ['facts'],
+    'Taiwan Today (MOFA): history and curiosities of the places it covers, for Place facts.',
+    cls='official',
+    sitemaps=['http://www.taiwantoday.tw/sitemap.xml'],
+    include=['^https?://www\\.taiwantoday\\.tw/(Culture|Society)/'],
+)
+_facts(
+    'gov-tw-about',
+    ['facts'],
+    'Taiwan.gov.tw: About Taiwan (Executive Yuan): geography, history, records, for Place facts.',
+    cls='official',
+    seeds=['https://www.taiwan.gov.tw/'],
+    sitemaps=['http://www.taiwan.gov.tw/sitemap.xml'],
+    include=['^https?://www\\.taiwan\\.gov\\.tw/content_'],
+)
+_facts(
+    'her-jp-bunka-online',
+    ['facts', 'places'],
+    'Cultural Heritage Online (文化遺産オンライン): history and curiosities of the places it covers, for Place facts and Places to see.',
+    cls='official',
+    depth=2,
+    delay=10,
+    seeds=['https://online.bunka.go.jp/'],
+    include=['^https?://online\\.bunka\\.go\\.jp/(heritages|db)/'],
+)
+_facts(
+    'her-jp-kunishitei',
+    ['facts', 'places'],
+    '国指定文化財等データベース: national treasures, important cultural properties, historic sites and scenic spots, for Place facts and Places to see.',
+    cls='official',
+    depth=2,
+    seeds=['https://kunishitei.bunka.go.jp/bsys/index'],
+    include=['^https?://kunishitei\\.bunka\\.go\\.jp/heritage/detail/'],
+)
+_facts(
+    'arch-jpsearch',
+    ['facts'],
+    'Japan Search (NDL): local-history items, for Place facts.',
+    cls='reference',
+    sitemaps=['https://jpsearch.go.jp/sitemap-index.xml'],
+    include=['^https?://jpsearch\\.go\\.jp/item/'],
+)
+_facts(
+    'fx-nippon-com',
+    ['facts', 'places'],
+    'nippon.com (Japan): Japan Data facts, regional history, for Place facts and Places to see.',
+    cls='editorial',
+    sitemaps=['https://www.nippon.com/en/sitemap.xml'],
+    include=['^https?://www\\.nippon\\.com/en/japan-topics/|^/en/japan-data/|^/en/guide-to-japan/'],
+)
+_facts(
+    'od-jp-rekichime',
+    ['facts'],
+    'Rekichime historical place names (GeoShape, NII): little-known former names and municipal mergers ("X was a separate village until 1955"), for Place facts.',
+    cls='reference',
+    off='adapter pending: a place_fact mapping for this dataset on the csv_filter reader',
+    seeds=['https://geoshape.ex.nii.ac.jp/rekichime/'],
+    include=['^https?://geoshape\\.ex\\.nii\\.ac\\.jp/rekichime/'],
+)
+_facts(
+    'arch-adeac',
+    ['facts'],
+    'ADEAC municipal history archives (TRC): digitised 市史/町史 of Japanese towns, for Place facts.',
+    cls='reference',
+    depth=2,
+    delay=10,
+    seeds=['https://adeac.jp/'],
+    include=['^https?://adeac\\.jp/[a-z-]+/(top|texthtml|catalog)/'],
+)
+_facts(
+    'arch-nichibun',
+    ['facts'],
+    'Nichibun databases (e.g. Kaii-Yokai folklore DB): unbelievable and folklore facts per locality, for Place facts.',
+    cls='reference',
+    depth=2,
+    seeds=['https://www.nichibun.ac.jp/ja/db/'],
+    include=['^https?://www\\.nichibun\\.ac\\.jp/(ja|en)/db/'],
+)
+_facts(
+    'gov-jp-bunka',
+    ['facts'],
+    'Agency for Cultural Affairs (文化庁): history and curiosities of the places it covers, for Place facts.',
+    cls='official',
+    depth=2,
+    seeds=['https://www.bunka.go.jp/seisaku/bunkazai/'],
+    include=['^https?://www\\.bunka\\.go\\.jp/seisaku/bunkazai/'],
+)
+_facts(
+    'arch-encykorea',
+    ['facts', 'places'],
+    'Encyclopedia of Korean Culture (Academy of Korean Studies): a scholarly entry for every Korean city, county and village, for Place facts and Places to see.',
+    cls='reference',
+    sitemaps=['https://encykorea.aks.ac.kr/sitemap.xml'],
+    include=['^https?://encykorea\\.aks\\.ac\\.kr/Article/E\\d+'],
+)
+_facts(
+    'arch-kr-grandculture',
+    ['facts', 'places'],
+    'Encyclopedia of Korean Local Culture (향토문화전자대전): town and village level (the best Korean village source), for Place facts and Places to see.',
+    cls='reference',
+    llm=False,
+    depth=2,
+    seeds=['http://www.grandculture.net/korea'],
+    include=['^https?://www\\.grandculture\\.net/[a-z]+/toc/', '^https?://www\\.grandculture\\.net/[a-z]+/dir/'],
+)
+_facts(
+    'fx-koreana',
+    ['facts'],
+    'Koreana (Korea Foundation): history and curiosities of the places it covers, for Place facts.',
+    cls='editorial',
+    depth=2,
+    seeds=['https://www.koreana.or.kr/koreana/main.do'],
+    include=['^https?://www\\.koreana\\.or\\.kr/koreana/na/ntt/'],
+)
+_facts(
+    'arch-kr-folkency',
+    ['facts'],
+    'Encyclopedia of Korean Folk Culture (NFM): village rites and local legends, for Place facts.',
+    cls='official',
+    sitemaps=['https://folkency.nfm.go.kr/sitemap.xml'],
+    include=['^https?://folkency\\.nfm\\.go\\.kr/topic/detail/'],
+)
+_facts(
+    'her-th-finearts',
+    ['facts', 'places'],
+    'Fine Arts Department (Thailand): registered ancient monuments and site histories, for Place facts and Places to see.',
+    cls='official',
+    depth=2,
+    seeds=['https://www.finearts.go.th/main'],
+    include=['^https?://www\\.finearts\\.go\\.th/main/(view|categorie)/'],
+)
+_facts(
+    'her-vn-dsvh',
+    ['facts'],
+    'Vietnam Cultural Heritage Department (Cục Di sản văn hóa): special national relics with histories, for Place facts.',
+    cls='official',
+    depth=2,
+    seeds=['http://dsvh.gov.vn/'],
+    include=['^https?://dsvh\\.gov\\.vn/[a-z0-9-]+-\\d+$'],
+)
+_facts(
+    'gov-id-portal',
+    ['facts'],
+    'Portal Informasi Indonesia: province profiles, history, for Place facts.',
+    cls='official',
+    sitemaps=['https://indonesia.go.id/sitemap.xml'],
+    include=['^https?://indonesia\\.go\\.id/(profil|provinsi)'],
+)
+_facts(
+    'her-my-pht',
+    ['facts', 'walking_tours'],
+    'Penang Heritage Trust: history and curiosities of the places it covers, for Place facts and Free walking tours.',
+    cls='editorial',
+    sitemaps=['https://pht.org.my/wp-sitemap.xml'],
+    feeds=['https://pht.org.my/feed/'],
+    include=['^https?://pht\\.org\\.my/(heritage|articles|[0-9]{4})/'],
+)
+_facts(
+    'her-ph-ncca',
+    ['facts'],
+    'NCCA Philippines (Registry of Cultural Property): history and curiosities of the places it covers, for Place facts.',
+    cls='official',
+    off='enable after a check from the crawler VM: a robots.txt or page fetch failed or timed out from the research laptop (DNS no response (reach-unverified)); read robots.txt, terms and content first',
+    seeds=['https://ncca.gov.ph/'],
+)
+_facts(
+    'gov-vn-portal',
+    ['facts', 'places'],
+    'Vietnam.vn: history and curiosities of the places it covers, for Place facts and Places to see.',
+    cls='official',
+    llm=False,
+    sitemaps=['https://www.vietnam.vn/en/sitemap.xml'],
+    feeds=['https://www.vietnam.vn/en/sitemap.rss'],
+    include=['^https?://www\\.vietnam\\.vn/en/'],
+)
+_facts(
+    'fx-montsame',
+    ['facts'],
+    'MONTSAME (Mongolian national news agency): Mongolian aimags and soums (culture section), for Place facts.',
+    cls='editorial',
+    sitemaps=['https://montsame.mn/en/sitemap.xml'],
+    include=['^https?://montsame\\.mn/en/read/'],
+)
+_facts(
+    'od-kr-heritage-api',
+    ['facts'],
+    '국가유산청 open APIs (Korea): history and curiosities of the places it covers, for Place facts.',
+    cls='reference',
+    off='needs owner key: Trove API v3 (NLA, AU) (https://trove.nla.gov.au/about/create-something/using-api; free)',
+    seeds=['https://data.go.kr/'],
+)
+_facts(
+    'od-kr-nrich',
+    ['facts'],
+    '국가유산 지식이음 (NRICH) Open API: history and curiosities of the places it covers, for Place facts.',
+    cls='reference',
+    off='needs owner key: Trove API v3 (NLA, AU) (https://trove.nla.gov.au/about/create-something/using-api; free)',
+    seeds=['https://portal.nrich.go.kr/'],
+)
+_facts(
+    'od-in-census-village',
+    ['facts'],
+    'Census of India: District Census Handbooks / village directory: history and curiosities of the places it covers, for Place facts.',
+    cls='reference',
+    off='adapter pending: PDF and XLSX per district (Census Digital Library)',
+    seeds=['https://censusindia.gov.in/'],
+)
+_facts(
+    'od-jp-gsi-gazetteer',
+    ['facts'],
+    'Gazetteer of Japan (地名集日本): history and curiosities of the places it covers, for Place facts.',
+    cls='reference',
+    off='adapter pending: PDF list',
+    seeds=['https://www.gsi.go.jp/'],
+)
+_facts(
+    'her-jp-yamanashi-bunkazai',
+    ['facts', 'places'],
+    '山梨の文化財ガイド (山梨県; national + prefectural designated properties, also as CSV open data): every designated property in Yamanashi with municipality, era and designation date; the CSV is the cleanest prefectural list found, for Place facts and Places to see.',
+    cls='official',
+    off='adapter pending: a place_fact mapping for this dataset on the csv_filter reader',
+    seeds=['https://www.pref.yamanashi.jp/bunka/bunkazaihogo/bunkazai_guide0001.html'],
+    include=['^https?://www\\.pref\\.yamanashi\\.jp/bunka/bunkazaihogo/'],
+)
+_facts(
+    'her-jp-fukuoka-bunkazai',
+    ['facts', 'places', 'walking_tours'],
+    '福岡県文化財データベース (Fukuoka Prefecture): national and prefectural properties of Fukuoka with descriptions, plus 文化財を巡る routes, for Place facts, Places to see and Free walking tours.',
+    cls='official',
+    depth=2,
+    seeds=['https://fukuoka-bunkazai.jp/frmSearchList.aspx', 'https://fukuoka-bunkazai.jp/frmIntro01.aspx', 'https://fukuoka-bunkazai.jp/frmAroundList.aspx'],
+    include=['^https?://fukuoka-bunkazai\\.jp/frm(SearchList|Detail|Around|Intro)'],
+)
+_facts(
+    'her-jp-wakayama-bunkazai',
+    ['facts', 'places'],
+    'わかやまの文化財 (Wakayama Prefecture portal): Wakayama designated properties (Kumano Kodo, Koyasan) with explanations and a glossary, for Place facts and Places to see.',
+    cls='official',
+    sitemaps=['https://wakayama-bunkazai.jp/sitemap.xml'],
+    include=['^https?://wakayama-bunkazai\\.jp/(bunkazai|heritage|cultural)'],
+)
+_facts(
+    'her-jp-yamaguchi-bunkazai',
+    ['facts', 'places'],
+    '山口県の文化財 (Yamaguchi Prefecture): designated properties of Yamaguchi (Hagi, Iwakuni Kintaikyo), for Place facts and Places to see.',
+    cls='official',
+    llm=False,
+    seeds=['https://bunkazai.pref.yamaguchi.lg.jp/'],
+)
+_facts(
+    'gov-jp-pref-hiroshima',
+    ['facts', 'places', 'walking_tours'],
+    '広島県の文化財 (Hiroshima Board of Education): a dedicated cultural-properties sub-site (Itsukushima, Tomonoura, Takehara), for Place facts, Places to see and Free walking tours.',
+    cls='official',
+    depth=2,
+    seeds=['https://www.pref.hiroshima.lg.jp/site/bunkazai/'],
+    sitemaps=['https://www.pref.hiroshima.lg.jp/sitemap_index.xml'],
+    include=['^https?://www\\.pref\\.hiroshima\\.lg\\.jp/site/bunkazai/'],
+)
+_facts(
+    'gov-jp-pref-nagasaki',
+    ['facts', 'places', 'walking_tours'],
+    '長崎県 文化財・世界遺産: hidden-Christian villages, Tsushima and Iki island history (対馬歴史研究センター), for Place facts, Places to see and Free walking tours.',
+    cls='official',
+    depth=2,
+    seeds=['https://www.pref.nagasaki.jp/bunrui/kanko-kyoiku-bunka/bukazai-sekaiisan/', 'https://www.pref.nagasaki.jp/organization/edu/edu-tsushimarekishi/'],
+    include=['^https?://www\\.pref\\.nagasaki\\.jp/bunrui/kanko-kyoiku-bunka/bukazai-sekaiisan/'],
+)
+_facts(
+    'gov-jp-pref-hokkaido',
+    ['facts', 'places', 'walking_tours'],
+    '北海道 (文化財/歴史 pages): Ainu heritage, Hokkaido place-name origins (many from Ainu), for Place facts, Places to see and Free walking tours.',
+    cls='official',
+    seeds=['https://www.pref.hokkaido.lg.jp/sitemap/index.html'],
+)
+_facts(
+    'gov-jp-pref-aomori',
+    ['facts', 'places', 'walking_tours'],
+    '青森県 (文化財/歴史 pages): Jomon sites (Sannai-Maruyama), Hirosaki, for Place facts, Places to see and Free walking tours.',
+    cls='official',
+    seeds=['https://www.pref.aomori.lg.jp/contents/sitemap.html'],
+)
+_facts(
+    'gov-jp-pref-iwate',
+    ['facts', 'places', 'walking_tours'],
+    '岩手県 (文化財/歴史 pages): Hiraizumi, Tono folklore villages, for Place facts, Places to see and Free walking tours.',
+    cls='official',
+    seeds=['https://www.pref.iwate.jp/sitemap.html'],
+)
+_facts(
+    'gov-jp-pref-miyagi',
+    ['facts', 'places', 'walking_tours'],
+    '宮城県 (文化財/歴史 pages): Matsushima, Date-clan sites, for Place facts, Places to see and Free walking tours.',
+    cls='official',
+    seeds=['https://www.pref.miyagi.jp/sitemap.html'],
+)
+_facts(
+    'gov-jp-pref-akita',
+    ['facts', 'places', 'walking_tours'],
+    '秋田県 (文化財/歴史 pages): Kakunodate, Namahage villages, for Place facts, Places to see and Free walking tours.',
+    cls='official',
+    sitemaps=['http://www.pref.akita.lg.jp/api/sitemap.xml', 'https://www.pref.akita.lg.jp/pages/sitemap'],
+)
+_facts(
+    'gov-jp-pref-yamagata',
+    ['facts', 'places', 'walking_tours'],
+    '山形県 (文化財/歴史 pages): Dewa Sanzan, Ginzan onsen, for Place facts, Places to see and Free walking tours.',
+    cls='official',
+    seeds=['https://www.pref.yamagata.jp/sitemap.html'],
+)
+_facts(
+    'gov-jp-pref-fukushima',
+    ['facts', 'places', 'walking_tours'],
+    '福島県 (文化財/歴史 pages): Aizu, Ouchi-juku, for Place facts, Places to see and Free walking tours.',
+    cls='official',
+    seeds=['https://www.pref.fukushima.lg.jp/sitemap.html'],
+)
+_facts(
+    'gov-jp-pref-ibaraki',
+    ['facts', 'places', 'walking_tours'],
+    '茨城県 (文化財/歴史 pages): Kairakuen, Mito domain, for Place facts, Places to see and Free walking tours.',
+    cls='official',
+    seeds=['https://www.pref.ibaraki.jp/'],
+)
+_facts(
+    'gov-jp-pref-tochigi',
+    ['facts', 'places', 'walking_tours'],
+    '栃木県 (文化財/歴史 pages): Nikko, Ashikaga Gakko (oldest school), for Place facts, Places to see and Free walking tours.',
+    cls='official',
+    seeds=['https://www.pref.tochigi.lg.jp/sitemap/index.html'],
+)
+_facts(
+    'gov-jp-pref-gunma',
+    ['facts', 'places', 'walking_tours'],
+    '群馬県 (文化財/歴史 pages): Tomioka silk mill, Kusatsu, for Place facts, Places to see and Free walking tours.',
+    cls='official',
+    seeds=['https://www.pref.gunma.jp/sitemap.html'],
+)
+_facts(
+    'gov-jp-pref-saitama',
+    ['facts', 'places', 'walking_tours'],
+    '埼玉県 (文化財/歴史 pages): Kawagoe, Sakitama kofun, for Place facts, Places to see and Free walking tours.',
+    cls='official',
+    seeds=['https://www.pref.saitama.lg.jp/sitemap.html'],
+)
+_facts(
+    'gov-jp-pref-chiba',
+    ['facts', 'places', 'walking_tours'],
+    '千葉県 (文化財/歴史 pages): Sawara, Boso village museum, for Place facts, Places to see and Free walking tours.',
+    cls='official',
+    seeds=['https://www.pref.chiba.lg.jp/cate/kbs/rekishi-bunka/index.html'],
+)
+_facts(
+    'gov-jp-pref-kanagawa',
+    ['facts', 'places', 'walking_tours'],
+    '神奈川県 (文化財/歴史 pages): Kamakura, Hakone post town, for Place facts, Places to see and Free walking tours.',
+    cls='official',
+    seeds=['https://www.pref.kanagawa.jp/master/sitemap.html'],
+)
+_facts(
+    'gov-jp-pref-niigata',
+    ['facts', 'places', 'walking_tours'],
+    '新潟県 (文化財/歴史 pages): Sado island, gold mine, for Place facts, Places to see and Free walking tours.',
+    cls='official',
+    seeds=['https://www.pref.niigata.lg.jp/sitemap.html'],
+)
+_facts(
+    'gov-jp-pref-toyama',
+    ['facts', 'places', 'walking_tours'],
+    '富山県 (文化財/歴史 pages): Gokayama gassho villages, for Place facts, Places to see and Free walking tours.',
+    cls='official',
+    seeds=['https://www.pref.toyama.jp/sitemap.html'],
+)
+_facts(
+    'gov-jp-pref-ishikawa',
+    ['facts', 'places', 'walking_tours'],
+    '石川県 (文化財/歴史 pages): Noto villages, Kaga domain, for Place facts, Places to see and Free walking tours.',
+    cls='official',
+    seeds=['https://www.pref.ishikawa.lg.jp/sitemap.html'],
+)
+_facts(
+    'gov-jp-pref-fukui',
+    ['facts', 'places', 'walking_tours'],
+    '福井県 (文化財/歴史 pages): Ichijodani, dinosaur fossils, for Place facts, Places to see and Free walking tours.',
+    cls='official',
+    seeds=['https://www.pref.fukui.lg.jp/sitemap.html'],
+)
+_facts(
+    'gov-jp-pref-gifu',
+    ['facts', 'places', 'walking_tours'],
+    '岐阜県 (文化財/歴史 pages): Shirakawa-go, Nakasendo post towns, Sekigahara, for Place facts, Places to see and Free walking tours.',
+    cls='official',
+    seeds=['https://www.pref.gifu.lg.jp/sitemap.html'],
+)
+_facts(
+    'gov-jp-pref-shizuoka',
+    ['facts', 'places', 'walking_tours'],
+    '静岡県 (文化財/歴史 pages): Mt Fuji heritage, Tokaido post towns, for Place facts, Places to see and Free walking tours.',
+    cls='official',
+    seeds=['https://www.pref.shizuoka.jp/sitemap.html'],
+)
+_facts(
+    'gov-jp-pref-shiga',
+    ['facts', 'places', 'walking_tours'],
+    '滋賀県 (文化財/歴史 pages): Hikone, Lake Biwa (largest lake), Omi merchant towns, for Place facts, Places to see and Free walking tours.',
+    cls='official',
+    seeds=['https://www.pref.shiga.lg.jp/sitemap.html'],
+)
+_facts(
+    'gov-jp-pref-hyogo',
+    ['facts', 'places', 'walking_tours'],
+    '兵庫県 (文化財/歴史 pages): Himeji castle, Ikuno silver road, for Place facts, Places to see and Free walking tours.',
+    cls='official',
+    seeds=['https://web.pref.hyogo.lg.jp/sitemap.html'],
+)
+_facts(
+    'gov-jp-pref-wakayama',
+    ['facts', 'places', 'walking_tours'],
+    '和歌山県 (文化財/歴史 pages): Kumano, Koyasan, for Place facts, Places to see and Free walking tours.',
+    cls='official',
+    seeds=['https://www.pref.wakayama.lg.jp/'],
+)
+_facts(
+    'gov-jp-pref-tottori',
+    ['facts', 'places', 'walking_tours'],
+    '鳥取県 (文化財/歴史 pages): Tottori dunes, Mt Mitoku, 智頭往来 history lectures, for Place facts, Places to see and Free walking tours.',
+    cls='official',
+    seeds=['https://www.pref.tottori.lg.jp/9318.htm'],
+)
+_facts(
+    'gov-jp-pref-okayama',
+    ['facts', 'places', 'walking_tours'],
+    '岡山県 (文化財/歴史 pages): Kurashiki, Bizen pottery villages, Shizutani school, for Place facts, Places to see and Free walking tours.',
+    cls='official',
+    seeds=['https://www.pref.okayama.jp/sitemap.html'],
+)
+_facts(
+    'gov-jp-pref-yamaguchi',
+    ['facts', 'places', 'walking_tours'],
+    '山口県 (文化財/歴史 pages): Hagi, Akiyoshidai (largest karst), for Place facts, Places to see and Free walking tours.',
+    cls='official',
+    seeds=['https://www.pref.yamaguchi.lg.jp/sitemap.html'],
+)
+_facts(
+    'gov-jp-pref-tokushima',
+    ['facts', 'places', 'walking_tours'],
+    '徳島県 (文化財/歴史 pages): Iya valley vine bridges, Awa Odori, for Place facts, Places to see and Free walking tours.',
+    cls='official',
+    seeds=['https://www.pref.tokushima.lg.jp/site_map/'],
+)
+_facts(
+    'gov-jp-pref-ehime',
+    ['facts', 'places', 'walking_tours'],
+    '愛媛県 (文化財/歴史 pages): Uchiko, Dogo onsen (oldest onsen claim), for Place facts, Places to see and Free walking tours.',
+    cls='official',
+    seeds=['https://www.pref.ehime.jp/sitemap.html'],
+)
+_facts(
+    'gov-jp-pref-kochi',
+    ['facts', 'places', 'walking_tours'],
+    '高知県 (文化財/歴史 pages): Shimanto river, Ryoma sites, for Place facts, Places to see and Free walking tours.',
+    cls='official',
+    seeds=['https://www.pref.kochi.lg.jp/sitemap.html'],
+    sitemaps=['https://www.pref.kochi.lg.jp/sitemap.xml'],
+)
+_facts(
+    'gov-jp-pref-kumamoto',
+    ['facts', 'places', 'walking_tours'],
+    '熊本県 (文化財/歴史 pages): Kumamoto castle, Aso, Amakusa Christian sites, for Place facts, Places to see and Free walking tours.',
+    cls='official',
+    sitemaps=['https://www.pref.kumamoto.jp/sitemap_index.xml'],
+)
+_facts(
+    'gov-jp-pref-oita',
+    ['facts', 'places', 'walking_tours'],
+    '大分県 (文化財/歴史 pages): Usa Jingu, Kunisaki peninsula, Beppu, for Place facts, Places to see and Free walking tours.',
+    cls='official',
+    seeds=['https://www.pref.oita.jp/sitemap.html'],
+)
+_facts(
+    'gov-jp-pref-miyazaki',
+    ['facts', 'places', 'walking_tours'],
+    '宮崎県 (文化財/歴史 pages): Takachiho myth sites, Saitobaru kofun, for Place facts, Places to see and Free walking tours.',
+    cls='official',
+    seeds=['https://www.pref.miyazaki.lg.jp/sitemap.html'],
+)
+_facts(
+    'gov-jp-pref-kagoshima',
+    ['facts', 'places', 'walking_tours'],
+    '鹿児島県 (文化財/歴史 pages): Satsuma, Yakushima, Chiran, for Place facts, Places to see and Free walking tours.',
+    cls='official',
+    seeds=['https://www.pref.kagoshima.jp/sitemap.html'],
+)
+_facts(
+    'city-jp-sapporo',
+    ['facts', 'places', 'walking_tours'],
+    '札幌市: Sapporo 地名の由来 (Ainu origins), 新札幌市史 (on ADEAC), for Place facts, Places to see and Free walking tours.',
+    cls='official',
+    seeds=['https://www.city.sapporo.jp/', 'https://www.city.sapporo.jp/sitemap.html'],
+)
+_facts(
+    'city-jp-sendai',
+    ['facts', 'places', 'walking_tours'],
+    '仙台市: Date Masamune castle town; 仙台市史, for Place facts, Places to see and Free walking tours.',
+    cls='official',
+    seeds=['https://www.city.sendai.jp/', 'https://www.city.sendai.jp/sitemap.html'],
+)
+_facts(
+    'city-jp-yokohama',
+    ['facts', 'places', 'walking_tours'],
+    '横浜市: 町名の由来 per ward; opening of the port 1859, for Place facts, Places to see and Free walking tours.',
+    cls='official',
+    seeds=['https://www.city.yokohama.lg.jp/', 'https://www.city.yokohama.lg.jp/sitemap.html'],
+)
+_facts(
+    'city-jp-nagoya',
+    ['facts', 'places', 'walking_tours'],
+    '名古屋市: Nagoya castle; 町名の由来; 名古屋市史, for Place facts, Places to see and Free walking tours.',
+    cls='official',
+    seeds=['https://www.city.nagoya.jp/', 'https://www.city.nagoya.jp/sitemap.html'],
+)
+_facts(
+    'city-jp-osaka',
+    ['facts', 'places', 'walking_tours'],
+    '大阪市: 区の歴史 and 地名由来 per ward, for Place facts, Places to see and Free walking tours.',
+    cls='official',
+    seeds=['https://www.city.osaka.lg.jp/', 'https://www.city.osaka.lg.jp/sitemap.html'],
+)
+_facts(
+    'city-jp-hiroshima',
+    ['facts', 'places', 'walking_tours'],
+    '広島市: Hiroshima history, 被爆建物 list, for Place facts, Places to see and Free walking tours.',
+    cls='official',
+    seeds=['https://www.city.hiroshima.lg.jp/', 'https://www.city.hiroshima.lg.jp/sitemap.html'],
+)
+_facts(
+    'city-jp-kitakyushu',
+    ['facts', 'places', 'walking_tours'],
+    '北九州市: Yawata steel works, Mojiko retro, for Place facts, Places to see and Free walking tours.',
+    cls='official',
+    seeds=['https://www.city.kitakyushu.lg.jp/', 'https://www.city.kitakyushu.lg.jp/sitemap.html'],
+)
+_facts(
+    'city-jp-kumamoto',
+    ['facts', 'places', 'walking_tours'],
+    '熊本市: castle town, 熊本市の文化財, for Place facts, Places to see and Free walking tours.',
+    cls='official',
+    seeds=['https://www.city.kumamoto.jp/', 'https://www.city.kumamoto.jp/sitemap.html'],
+)
+_facts(
+    'city-jp-kagoshima',
+    ['facts', 'places', 'walking_tours'],
+    '鹿児島市: Meiji Restoration sites, Sakurajima, for Place facts, Places to see and Free walking tours.',
+    cls='official',
+    seeds=['https://www.city.kagoshima.lg.jp/', 'https://www.city.kagoshima.lg.jp/sitemap.html'],
+)
+_facts(
+    'city-jp-naha',
+    ['facts', 'places', 'walking_tours'],
+    '那覇市: Shuri, Ryukyu kingdom sites, 那覇市歴史博物館, for Place facts, Places to see and Free walking tours.',
+    cls='official',
+    seeds=['https://www.city.naha.okinawa.jp/', 'https://www.city.naha.okinawa.jp/sitemap.html'],
+)
+_facts(
+    'city-jp-matsue',
+    ['facts', 'places', 'walking_tours'],
+    '松江市: Matsue castle (national treasure), Lafcadio Hearn, for Place facts, Places to see and Free walking tours.',
+    cls='official',
+    seeds=['https://www.city.matsue.lg.jp/', 'https://www.city.matsue.lg.jp/sitemap.html'],
+)
+_facts(
+    'city-jp-morioka',
+    ['facts', 'places', 'walking_tours'],
+    '盛岡市: castle town, Ishiwari-zakura, for Place facts, Places to see and Free walking tours.',
+    cls='official',
+    seeds=['https://www.city.morioka.iwate.jp/', 'https://www.city.morioka.iwate.jp/sitemap.html'],
+)
+_facts(
+    'city-jp-hirosaki',
+    ['facts', 'places', 'walking_tours'],
+    '弘前市: Hirosaki castle, samurai district, for Place facts, Places to see and Free walking tours.',
+    cls='official',
+    seeds=['https://www.city.hirosaki.aomori.jp/', 'https://www.city.hirosaki.aomori.jp/sitemap.html'],
+)
+_facts(
+    'city-jp-niigata',
+    ['facts', 'places', 'walking_tours'],
+    '新潟市: port-town history, 新潟市歴史博物館, for Place facts, Places to see and Free walking tours.',
+    cls='official',
+    seeds=['https://www.city.niigata.lg.jp/', 'https://www.city.niigata.lg.jp/sitemap.html'],
+)
+_facts(
+    'city-jp-matsuyama',
+    ['facts', 'places', 'walking_tours'],
+    '松山市: Matsuyama castle, Dogo, Shiki, for Place facts, Places to see and Free walking tours.',
+    cls='official',
+    seeds=['https://www.city.matsuyama.ehime.jp/', 'https://www.city.matsuyama.ehime.jp/sitemap.html'],
+)
+_facts(
+    'city-jp-kochi',
+    ['facts', 'places', 'walking_tours'],
+    '高知市: castle town, Ryoma, for Place facts, Places to see and Free walking tours.',
+    cls='official',
+    seeds=['https://www.city.kochi.kochi.jp/', 'https://www.city.kochi.kochi.jp/sitemap.html'],
+)
+_facts(
+    'city-jp-okayama',
+    ['facts', 'places', 'walking_tours'],
+    '岡山市: Korakuen, Momotaro legend sites, for Place facts, Places to see and Free walking tours.',
+    cls='official',
+    seeds=['https://www.city.okayama.jp/', 'https://www.city.okayama.jp/sitemap.html'],
+)
+_facts(
+    'city-jp-himeji',
+    ['facts', 'places', 'walking_tours'],
+    '姫路市: Himeji castle (first Japanese World Heritage site, 1993), for Place facts, Places to see and Free walking tours.',
+    cls='official',
+    seeds=['https://www.city.himeji.lg.jp/', 'https://www.city.himeji.lg.jp/sitemap.html'],
+)
+_facts(
+    'city-jp-sakai',
+    ['facts', 'places', 'walking_tours'],
+    '堺市: Mozu kofun group (Daisen, largest keyhole tomb), for Place facts, Places to see and Free walking tours.',
+    cls='official',
+    seeds=['https://www.city.sakai.lg.jp/', 'https://www.city.sakai.lg.jp/sitemap.html'],
+)
+_facts(
+    'city-jp-tono',
+    ['facts', 'places', 'walking_tours'],
+    '遠野市: Tono Monogatari folklore villages, for Place facts, Places to see and Free walking tours.',
+    cls='official',
+    seeds=['https://www.city.tono.iwate.jp/', 'https://www.city.tono.iwate.jp/sitemap.html'],
+)
+_facts(
+    'her-jp-mie-bunka',
+    ['facts', 'places'],
+    '三重の文化 (三重県 cultural-property search): Ise, Kumano Kodo Iseji, all national/prefectural/municipal properties, for Place facts and Places to see.',
+    cls='official',
+    off='enable after a check from the crawler VM: robots.txt gave no response from the research laptop (robots timeout (allowed per owner rule)); terms and content not yet seen',
+    depth=2,
+    seeds=['https://www.bunka.pref.mie.lg.jp/Miebunka/search?cls=cultural_heritage'],
+    include=['^https?://www\\.bunka\\.pref\\.mie\\.lg\\.jp/Miebunka/'],
+)
+_facts(
+    'city-jp-kumano',
+    ['facts'],
+    '熊野市: Maruyama senmaida terraces, Hana-no-iwaya (oldest shrine claim), for Place facts.',
+    cls='official',
+    off='enable after a check from the crawler VM: robots.txt gave no response from the research laptop (robots timeout); terms and content not yet seen',
+    seeds=['https://www.city.kumano.mie.jp/'],
+)
+_facts(
+    'her-jp-nabunken-webgis',
+    ['facts', 'places'],
+    '文化財総覧WebGIS (Nara National Research Institute): national + prefectural designated properties nationwide with coordinates; the one-stop 47-prefecture source, for Place facts and Places to see.',
+    cls='official',
+    off='adapter pending: JS SPA (SvelteKit; needs its JSON API)',
+    seeds=['https://heritagemap.nabunken.go.jp/'],
+)
+_facts(
+    'city-kr-yecheon',
+    ['facts'],
+    '예천군 읍면 지명유래: origin of every village name in each 읍면 (e.g. 용바우 dragon-rock legend, 이여송 pine), for Place facts.',
+    cls='official',
+    depth=2,
+    seeds=['https://www.ycg.kr/open.content/yongmun/tour/place/'],
+    include=['^https?://www\\.ycg\\.kr/open.content/[a-z]+/tour/place/'],
+)
+_facts(
+    'city-kr-chungju',
+    ['facts', 'places'],
+    '충주시: Jungwon Goguryeo stele, Tangeumdae, for Place facts and Places to see.',
+    cls='official',
+    seeds=['https://www.chungju.go.kr/'],
+)
+_facts(
+    'city-kr-okcheon',
+    ['facts', 'places'],
+    '옥천군: Jeong Ji-yong poet village; 문화관광 at /tour/, for Place facts and Places to see.',
+    cls='official',
+    seeds=['https://www.oc.go.kr/'],
+)
+_facts(
+    'city-kr-goesan',
+    ['facts', 'places'],
+    '괴산군: Hwayang valley, Sanmagi village, for Place facts and Places to see.',
+    cls='official',
+    seeds=['https://www.goesan.go.kr/'],
+)
+_facts(
+    'city-kr-chuncheon',
+    ['facts', 'places'],
+    '춘천시: Soyang, Jungdo prehistoric site, for Place facts and Places to see.',
+    cls='official',
+    seeds=['https://www.chuncheon.go.kr/'],
+)
+_facts(
+    'city-kr-uiseong',
+    ['facts', 'places'],
+    '의성군: Jorang-ri ancient tombs, Sanun village; tour at /tour/main.do, for Place facts and Places to see.',
+    cls='official',
+    seeds=['https://www.usc.go.kr/'],
+)
+_facts(
+    'city-kr-sangju',
+    ['facts', 'places'],
+    '상주시: Sangju (the "상" of 경상도), bicycle town, for Place facts and Places to see.',
+    cls='official',
+    seeds=['https://www.sangju.go.kr/'],
+)
+_facts(
+    'city-kr-mungyeong',
+    ['facts', 'places'],
+    '문경시: Mungyeong Saejae pass; tour at /tour, for Place facts and Places to see.',
+    cls='official',
+    seeds=['https://www.gbmg.go.kr/'],
+)
+_facts(
+    'city-kr-tongyeong',
+    ['facts', 'places'],
+    '통영시: Yi Sun-sin, Hansan island; sitemap page listed in robots, for Place facts and Places to see.',
+    cls='official',
+    seeds=['https://www.tongyeong.go.kr/'],
+)
+_facts(
+    'city-kr-miryang',
+    ['facts', 'places'],
+    '밀양시: Yeongnamnu pavilion, Pyochungsa, for Place facts and Places to see.',
+    cls='official',
+    delay=60,
+    seeds=['https://www.miryang.go.kr/'],
+)
+_facts(
+    'city-kr-jindo',
+    ['facts', 'places'],
+    '진도군: Jindo dog, sea-parting at Hoedong-ri, for Place facts and Places to see.',
+    cls='official',
+    seeds=['https://www.jindo.go.kr/'],
+)
+_facts(
+    'city-kr-buan',
+    ['facts', 'places'],
+    '부안군: Naesosa, Chaeseokgang cliffs, for Place facts and Places to see.',
+    cls='official',
+    seeds=['https://www.buan.go.kr/'],
+)
+_facts(
+    'city-kr-gunsan',
+    ['facts', 'places'],
+    '군산시: colonial-era port buildings (근대문화유산), for Place facts and Places to see.',
+    cls='official',
+    llm=False,
+    seeds=['https://www.gunsan.go.kr/'],
+)
+_facts(
+    'city-kr-incheon',
+    ['facts', 'places'],
+    '인천광역시: Korea firsts (first railway 1899, Chinatown), 지명유래 by gu, for Place facts and Places to see.',
+    cls='official',
+    seeds=['https://www.incheon.go.kr/'],
+)
+_facts(
+    'city-kr-gwangju',
+    ['facts', 'places'],
+    '광주광역시: May 18 sites, Yangnim-dong; sitemap_20250711.xml listed, for Place facts and Places to see.',
+    cls='official',
+    seeds=['https://www.gwangju.go.kr/'],
+)
+_facts(
+    'city-kr-ulsan',
+    ['facts', 'places'],
+    '울산광역시: Bangudae petroglyphs (whale hunting, ~7,000 years old), for Place facts and Places to see.',
+    cls='official',
+    seeds=['https://www.ulsan.go.kr/'],
+)
+_facts(
+    'city-kr-suwon',
+    ['facts', 'places'],
+    '수원시: Hwaseong fortress, 동 지명유래, for Place facts and Places to see.',
+    cls='official',
+    seeds=['https://www.suwon.go.kr/'],
+)
+_facts(
+    'city-kr-gimhae',
+    ['facts', 'places'],
+    '김해시: Geumgwan Gaya, Suro king legend, for Place facts and Places to see.',
+    cls='official',
+    seeds=['https://www.gimhae.go.kr/'],
+)
+_facts(
+    'city-kr-cheongju',
+    ['facts', 'places'],
+    '청주시: Jikji (oldest movable-metal-type book, 1377) temple Heungdeoksa, for Place facts and Places to see.',
+    cls='official',
+    seeds=['https://www.cheongju.go.kr/'],
+)
+_facts(
+    'city-kr-yeosu',
+    ['facts', 'places'],
+    '여수시: Jinnamgwan, Odongdo, for Place facts and Places to see.',
+    cls='official',
+    delay=30,
+    seeds=['https://www.yeosu.go.kr/'],
+)
+_facts(
+    'city-kr-mokpo',
+    ['facts', 'places'],
+    '목포시: modern history street, Gatbawi, for Place facts and Places to see.',
+    cls='official',
+    seeds=['https://www.mokpo.go.kr/'],
+)
+_facts(
+    'city-kr-jeongeup',
+    ['facts', 'places'],
+    '정읍시: Donghak revolution sites, Naejangsan, for Place facts and Places to see.',
+    cls='official',
+    seeds=['https://www.jeongeup.go.kr/'],
+)
+_facts(
+    'city-kr-naju',
+    ['facts', 'places'],
+    '나주시: Naju 읍성, Bannam tumuli, 나주 the "나" of 전라도, for Place facts and Places to see.',
+    cls='official',
+    seeds=['https://www.naju.go.kr/'],
+)
+_facts(
+    'city-kr-gongju',
+    ['facts', 'places'],
+    '공주시: Baekje capital Ungjin, Muryeong tomb (intro page; portal path to find), for Place facts and Places to see.',
+    cls='official',
+    seeds=['https://www.gongju.go.kr/'],
+)
+_facts(
+    'city-kr-jecheon',
+    ['facts', 'places'],
+    '제천시: Uirimji reservoir (one of the oldest), Cheongpung, for Place facts and Places to see.',
+    cls='official',
+    seeds=['https://www.jecheon.go.kr/'],
+)
+_facts(
+    'city-kr-visitgangneung',
+    ['facts', 'places'],
+    '강릉관광 비짓강릉: Ojukheon, Gyeongpo; Gangneung Dano (UNESCO ICH), for Place facts and Places to see.',
+    cls='official',
+    seeds=['https://www.visitgangneung.net/'],
+)
+_facts(
+    'city-kr-inje-tour',
+    ['facts', 'places'],
+    '인제군 문화관광: Baekdam temple, Bangtae river, for Place facts and Places to see.',
+    cls='official',
+    seeds=['https://tour.inje.go.kr/'],
+)
+_facts(
+    'city-kr-inje',
+    ['facts'],
+    '인제군: county history and village name origins, for Place facts.',
+    cls='official',
+    llm=False,
+    sitemaps=['https://www.inje.go.kr/sitemap.xml'],
+)
+_facts(
+    'city-kr-pohang',
+    ['facts'],
+    '포항시: Homigot (first sunrise), Guryongpo Japanese houses, for Place facts.',
+    cls='official',
+    llm=False,
+    seeds=['https://www.pohang.go.kr/main.do'],
+)
+_facts(
+    'city-kr-namhae',
+    ['facts'],
+    '남해군 / 산청군 / 거창군 / 강진군: village origins (Daraengi terraced village, Namsa yedam village), for Place facts.',
+    cls='official',
+    off='enable after a check from the crawler VM: robots.txt gave no response from the research laptop (robots timeout (allowed per owner rule); 4 hosts, give each its own id on import); terms and content not yet seen',
+    seeds=['https://www.namhae.go.kr/', 'https://www.sancheong.go.kr/', 'https://www.geochang.go.kr/', 'https://www.gangjin.go.kr/'],
+)
+_facts(
+    'gov-tw-tainan-culture',
+    ['facts', 'places', 'walking_tours'],
+    '臺南市政府文化局: Tainan (oldest city in Taiwan, Fort Zeelandia, 300+ temples) heritage and 文史 publications, for Place facts, Places to see and Free walking tours.',
+    cls='official',
+    delay=5,
+    seeds=['https://culture.tainan.gov.tw/'],
+)
+_facts(
+    'arch-tw-khm',
+    ['facts'],
+    '高雄市立歷史博物館: Kaohsiung district history, publisher of 高雄文獻, for Place facts.',
+    cls='official',
+    seeds=['https://www.khm.org.tw/'],
+)
+_facts(
+    'gov-tw-hualien-culture',
+    ['facts'],
+    '花蓮縣文化局 (incl. 花蓮縣志): Hualien county gazetteer and indigenous/township history, for Place facts.',
+    cls='official',
+    seeds=['https://www.hccc.gov.tw/', 'https://document.hccc.gov.tw/records/'],
+)
+_facts(
+    'gov-tw-hsinchu-county-culture',
+    ['facts'],
+    '新竹縣政府文化局: Hakka townships (Beipu, Neiwan) and 新竹縣志, for Place facts.',
+    cls='official',
+    seeds=['https://www.hchcc.gov.tw/'],
+)
+_facts(
+    'gov-tw-changhua-culture',
+    ['facts'],
+    '彰化縣文化局: Lukang (old harbour town), Changhua roundhouse, for Place facts.',
+    cls='official',
+    seeds=['https://www.bocach.gov.tw/'],
+)
+_facts(
+    'gov-tw-taoyuan-culture',
+    ['facts'],
+    '桃園市政府文化局: Daxi old street, Hakka and military-village history, for Place facts.',
+    cls='official',
+    seeds=['https://culture.tycg.gov.tw/'],
+)
+_facts(
+    'gov-tw-matsu-culture',
+    ['facts'],
+    '文化馬祖 (連江縣文化處): Matsu islands villages (Qinbi stone houses), war-front history, for Place facts.',
+    cls='official',
+    sitemaps=['https://matsucc.gov.tw/wp-sitemap.xml'],
+)
+_facts(
+    'arch-tw-yilan-history',
+    ['facts'],
+    '宜蘭縣史館 (宜蘭人文知識數位資料庫): the leading county 地方學 archive in Taiwan, for Place facts.',
+    cls='official',
+    off='enable after a check from the crawler VM: robots.txt gave no response from the research laptop (robots timeout (allowed per owner rule)); terms and content not yet seen',
+    seeds=['https://yihistory.e-land.gov.tw/'],
+)
+_facts(
+    'gov-tw-county-culture-batch',
+    ['facts'],
+    '臺中/高雄/苗栗/南投/嘉義縣/屏東/臺東/澎湖/金門/宜蘭 culture bureaus, 基隆: county gazetteers and township history (11 hosts; give each its own id on import), for Place facts.',
+    cls='official',
+    off='enable after a check from the crawler VM: robots.txt gave no response from the research laptop (robots timeout or connection refused (klccab) from a European IP; allowed per owner rule); terms and content not yet seen',
+    seeds=['https://www.culture.taichung.gov.tw/', 'https://khcc.gov.tw/', 'https://www.mlc.gov.tw/', 'https://www.nthcc.gov.tw/', 'https://www.cabcy.gov.tw/', 'https://www.cultural.pthg.gov.tw/', 'https://www.ccl.ttct.edu.tw/', 'https://www.phhcc.gov.tw/', 'https://www.kmccc.edu.tw/', 'https://www.ilccb.gov.tw/', 'https://www.klccab.gov.tw/'],
+)
+_facts(
+    'od-tw-ihp-placenames',
+    ['facts'],
+    '中國歷史地名查詢系統 (Academia Sinica IHP): historical place names of China with dynasties, for Place facts.',
+    cls='reference',
+    off='enable after a check from the crawler VM: robots.txt gave no response from the research laptop (robots timeout); terms and content not yet seen',
+    seeds=['http://archive.ihp.sinica.edu.tw/hplname/'],
+    include=['^https?://archive\\.ihp\\.sinica\\.edu\\.tw/hplname/'],
+)
+_facts(
+    'gov-tw-place-names',
+    ['facts'],
+    '地名資訊服務網 (MOI): official origins of village names, for Place facts.',
+    cls='official',
+    off='enable after a check from the crawler VM: robots.txt gave no response from the research laptop (re-check 2026-11-20: connect timeout again (3rd time; likely geo-restricted to Taiwan)); terms and content not yet seen',
+    seeds=['https://gn.moi.gov.tw/'],
+)
+_facts(
+    'arch-tw-th-onlinearchives',
+    ['facts'],
+    '國史館臺灣文獻館典藏管理系統: county government archive records; th.gov.tw itself is already a Round 3 ADD, for Place facts.',
+    cls='official',
+    off='adapter pending: catalogue search app (PHP, `*Display*` disallowed)',
+    seeds=['https://onlinearchives.th.gov.tw/index.php?act=Archive'],
+)
+_facts(
+    'arch-cn-fjdsfzw',
+    ['facts'],
+    '福建党史方志网 (中共福建省委党史研究和地方志编纂办公室): Fujian county 志 and 地情 items (e.g. 妈祖信俗在惠安, 永春 local culture); city/county sub-hosts give village-level coverage, for Place facts.',
+    cls='official',
+    depth=2,
+    seeds=['http://www.fjdsfzw.org.cn/', 'https://qz.fjdsfzw.org.cn/'],
+    include=['^https?://www\\.fjdsfzw\\.org\\.cn/\\d{4}-\\d{2}-\\d{2}/content_\\d+\\.html', '^https?://qz\\.fjdsfzw\\.org\\.cn/\\d{4}-\\d{2}-\\d{2}/content_\\d+\\.html', '^https?://www\\.fjdsfzw\\.org\\.cn/node_\\d+\\.html', '^https?://qz\\.fjdsfzw\\.org\\.cn/node_\\d+\\.html'],
+)
+_facts(
+    'arch-cn-zjda',
+    ['facts'],
+    '浙江档案网 (Zhejiang Archives): Zhejiang archival history items, 村档 programmes; 浙里有志 itself is app-only, for Place facts.',
+    cls='official',
+    depth=2,
+    seeds=['https://www.zjda.gov.cn/'],
+    include=['^https?://www\\.zjda\\.gov\\.cn/(col|art)/'],
+)
+_facts(
+    'fx-gxdfz-org-cn',
+    ['facts'],
+    '广西地方志 / 山东省情网 / 云南数字方志馆 (re-check of Round 3 guesses): history and curiosities of the places it covers, for Place facts.',
+    cls='editorial',
+    off='enable after a check from the crawler VM: robots.txt gave no response from the research laptop (timeout again 2026-11-20; identity still unconfirmed (search budget exhausted after 5 sea…); terms and content not yet seen',
+    seeds=['https://www.gxdfz.org.cn/', 'https://www.sdsqw.cn/', 'https://www.ynsdfz.cn/'],
+)
+_facts(
+    'fx-chuantongcunluo-com',
+    ['facts'],
+    '中国传统村落网 (guessed): history and curiosities of the places it covers, for Place facts.',
+    cls='editorial',
+    off='enable after a check from the crawler VM: robots.txt gave no response from the research laptop (empty reply; identity unconfirmed (dmctv.cn is the official museum, already listed)); terms and content not yet seen',
+    seeds=['https://www.chuantongcunluo.com/'],
+)
+_facts(
+    'her-jp-tokyo-bunkazai',
+    ['facts', 'places', 'walking_tours'],
+    "東京都文化財情報データベース (Tokyo Board of Education): every designated cultural property in Tokyo's wards, cities, towns and islands, with histories, for Place facts, Places to see and Free walking tours.",
+    cls='official',
+    depth=2,
+    seeds=['https://www.syougai.metro.tokyo.lg.jp/bunkazai/'],
+    include=['^https?://www\\.syougai\\.metro\\.tokyo\\.lg\\.jp/bunkazai/'],
+)
+_facts(
+    'arch-jp-tokyo-archives',
+    ['facts'],
+    '東京都公文書館: Tokyo local-history columns and exhibitions (都史紀要), for Place facts.',
+    cls='official',
+    seeds=['https://www.soumu.metro.tokyo.lg.jp/01soumu-archives'],
+    sitemaps=['https://www.soumu.metro.tokyo.lg.jp/sitemap.xml'],
+    include=['^https?://www\\.soumu\\.metro\\.tokyo\\.lg\\.jp/01soumu-archives'],
+)
+_facts(
+    'her-jp-denken',
+    ['facts', 'places', 'walking_tours'],
+    '全国伝統的建造物群保存地区協議会 (preserved historic towns): all ~127 重伝建 towns and villages (post towns, merchant quarters), each with history; the core small-town source, for Place facts, Places to see and Free walking tours.',
+    cls='official',
+    sitemaps=['https://denken.gr.jp/sitemap.xml'],
+    include=['^https?://denken\\.gr\\.jp/(chiku|area|list)'],
+)
+_facts(
+    'arch-jp-nabunken-sitereports',
+    ['facts'],
+    '全国遺跡報告総覧 (Nara National Research Institute for Cultural Properties): excavation reports and archaeological sites for every municipality (oldest settlements, kofun), for Place facts.',
+    cls='official',
+    depth=2,
+    seeds=['https://sitereports.nabunken.go.jp/ja'],
+    include=['^https?://sitereports\\.nabunken\\.go\\.jp/ja/(\\d+|site|cultural-heritage)'],
+)
+_facts(
+    'arch-jp-ndl-crd',
+    ['facts'],
+    'レファレンス協同データベース (NDL collaborative reference): sourced librarian answers on local history ("why is this village called…", origins of town names); cites its sources, for Place facts.',
+    cls='reference',
+    llm=False,
+    depth=2,
+    seeds=['https://crd.ndl.go.jp/reference/'],
+    include=['^https?://crd\\.ndl\\.go\\.jp/reference/detail'],
+)
+_facts(
+    'od-jp-codh-placenames',
+    ['facts'],
+    'CODH 歴史地名データ (ROIS-DS Center for Open Data in the Humanities): historical place names with old provinces and villages (Dai Nihon chimei jisho), for Place facts.',
+    cls='reference',
+    llm=False,
+    sitemaps=['https://codh.rois.ac.jp/sitemap0.xml.gz'],
+    include=['^https?://codh\\.rois\\.ac\\.jp/historical-place-names/'],
+)
+_facts(
+    'od-jp-nijinet-islands',
+    ['facts'],
+    "日本離島センター 島の情報: per-island facts for Japan's ~400 inhabited islands (area, population, history), for Place facts.",
+    cls='official',
+    depth=2,
+    seeds=['https://www.nijinet.or.jp/index/'],
+    include=['^https?://www\\.nijinet\\.or\\.jp/(guide|island)'],
+)
+_facts(
+    'arch-jp-kanagawa-archives',
+    ['facts'],
+    '神奈川県立公文書館: Kanagawa prefectural and village history exhibitions, for Place facts.',
+    cls='official',
+    depth=2,
+    seeds=['https://archives.pref.kanagawa.jp/sitemap.html'],
+    include=['^https?://archives\\.pref\\.kanagawa\\.jp/(www|exhibit|history)'],
+)
+_facts(
+    'arch-jp-saitama-monjo',
+    ['facts'],
+    '埼玉県立文書館: Saitama village documents and local-history columns, for Place facts.',
+    cls='official',
+    seeds=['https://monjo.spec.ed.jp/'],
+)
+_facts(
+    'arch-jp-okinawa-archives',
+    ['facts'],
+    '沖縄県公文書館: Okinawa island and village history ("この日の沖縄" daily history items), for Place facts.',
+    cls='official',
+    sitemaps=['https://www.archives.pref.okinawa.jp/wp-sitemap.xml'],
+    include=['^https?://www\\.archives\\.pref\\.okinawa\\.jp/(news|digital)'],
+)
+_facts(
+    'arch-jp-fukui-archives',
+    ['facts'],
+    '福井県文書館: Fukui town and village history ("文書館だより", local chronology), for Place facts.',
+    cls='official',
+    llm=False,
+    depth=2,
+    seeds=['https://www.library-archives.pref.fukui.lg.jp/'],
+    include=['^https?://www\\.library-archives\\.pref\\.fukui\\.lg\\.jp/archive/'],
+)
+_facts(
+    'arch-jp-ibaraki-rekishikan',
+    ['facts'],
+    '茨城県立歴史館: Ibaraki local history, for Place facts.',
+    cls='official',
+    sitemaps=['https://rekishikan-ibk.jp/wp-sitemap.xml'],
+    include=['^https?://rekishikan-ibk\\.jp/(exhibition|archives)'],
+)
+_facts(
+    'arch-jp-national-archives',
+    ['facts'],
+    '国立公文書館: national exhibitions on domains, castles and towns, for Place facts.',
+    cls='official',
+    depth=2,
+    sitemaps=['https://www.archives.go.jp/sitemap/'],
+    include=['^https?://www\\.archives\\.go\\.jp/(exhibition|ayumi)/'],
+)
+_facts(
+    'gov-jp-pref-kyoto',
+    ['facts', 'places'],
+    "京都府 (文化財 pages): Kyoto prefecture's designated properties beyond Kyoto city (Tango, Nantan), for Place facts and Places to see.",
+    cls='official',
+    depth=2,
+    seeds=['https://www.pref.kyoto.jp/sitemap.html'],
+    include=['^https?://www\\.pref\\.kyoto\\.jp/(bunkazai|bunka)', '^https?://www\\.pref\\.kyoto\\.jp/bunkazai/'],
+)
+_facts(
+    'gov-jp-pref-osaka',
+    ['facts'],
+    '大阪府: Osaka cultural properties and 大阪府の歴史, for Place facts.',
+    cls='official',
+    depth=2,
+    seeds=['https://www.pref.osaka.lg.jp/koho/sitemap/index.html'],
+    include=['^https?://www\\.pref\\.osaka\\.lg\\.jp/(bunkazaihogo|o\\d+/bunka)'],
+)
+_facts(
+    'gov-jp-pref-shimane',
+    ['facts'],
+    '島根県: Izumo myth sites, Iwami Ginzan, island villages (Oki), for Place facts.',
+    cls='official',
+    depth=2,
+    seeds=['https://www.pref.shimane.lg.jp/sitemap.html'],
+    include=['^https?://www\\.pref\\.shimane\\.lg\\.jp/(bunkazai|kodai|infra/culture)'],
+)
+_facts(
+    'gov-jp-pref-nagano',
+    ['facts'],
+    '長野県: Nagano cultural properties, Kiso post towns, for Place facts.',
+    cls='official',
+    depth=2,
+    seeds=['https://www.pref.nagano.lg.jp/sitemap.html'],
+    include=['^https?://www\\.pref\\.nagano\\.lg\\.jp/bunka/'],
+)
+_facts(
+    'gov-jp-pref-okinawa',
+    ['facts'],
+    '沖縄県: Okinawa islands, gusuku and culture, for Place facts.',
+    cls='official',
+    depth=2,
+    seeds=['https://www.pref.okinawa.lg.jp/sitemap.html'],
+    include=['^https?://www\\.pref\\.okinawa\\.lg\\.jp/(kyoiku|bunka)'],
+)
+_facts(
+    'city-jp-nara',
+    ['facts'],
+    "奈良市 文化財課 (奈良市史 digital): 奈良市史 通史 3–4 as OCR'd PDFs, plus cultural-property pages; PDFs need a PDF reader, for Place facts.",
+    cls='official',
+    depth=2,
+    seeds=['https://www.city.nara.lg.jp/site/bunkazai/7311.html', 'https://www.city.nara.lg.jp/sitemap.html'],
+    include=['^https?://www\\.city\\.nara\\.lg\\.jp/site/bunkazai/'],
+)
+_facts(
+    'city-jp-gojo',
+    ['facts'],
+    '五條市 『五條市史』 digital: full town history as searchable PDFs, for Place facts.',
+    cls='official',
+    off='adapter pending: PDF (OCR text)',
+    seeds=['https://www.city.gojo.lg.jp/soshiki/bunka/1_1/4/1411.html'],
+    include=['^https?://www\\.city\\.gojo\\.lg\\.jp/soshiki/bunka/'],
+)
+_facts(
+    'city-jp-susono',
+    ['facts'],
+    '裾野市史 PDF: town history PDFs, for Place facts.',
+    cls='official',
+    off='adapter pending: PDF (text-searchable)',
+    seeds=['https://www.city.susono.shizuoka.jp/kanko/6/2/8113.html'],
+    include=['^https?://www\\.city\\.susono\\.shizuoka\\.jp/kanko/6/'],
+)
+_facts(
+    'city-jp-misawa',
+    ['facts'],
+    '三沢市史 上中下巻 (e-book): Misawa city history (previously not for sale), for Place facts.',
+    cls='official',
+    off='adapter pending: e-book viewer / PDF',
+    seeds=['http://www.city.misawa.lg.jp/index.cfm/12'],
+    include=['^https?://www\\.city\\.misawa\\.lg\\.jp/index.cfm/12,'],
+)
+_facts(
+    'city-jp-hakodate',
+    ['facts'],
+    '函館市 (函館市史 digital): 函館市史 通説編 and the histories of 4 former eastern villages, for Place facts.',
+    cls='official',
+    depth=2,
+    sitemaps=['https://www.city.hakodate.hokkaido.jp/sitemap/'],
+    include=['^https?://www\\.city\\.hakodate\\.hokkaido\\.jp/docs/'],
+)
+_facts(
+    'city-jp-asahikawa',
+    ['facts'],
+    '旭川市 (旭川市史 digital archive): Asahikawa city history archive project, for Place facts.',
+    cls='official',
+    seeds=['https://www.city.asahikawa.hokkaido.jp/sitemap.html'],
+)
+_facts(
+    'city-jp-kanazawa',
+    ['facts', 'walking_tours'],
+    '金沢市: castle town, chaya districts, for Place facts and Free walking tours.',
+    cls='official',
+    seeds=['https://www4.city.kanazawa.lg.jp/sitemap.html'],
+)
+_facts(
+    'city-jp-kamakura',
+    ['facts'],
+    '鎌倉市: shogunate capital, 史跡, for Place facts.',
+    cls='official',
+    depth=2,
+    seeds=['https://www.city.kamakura.kanagawa.jp/sitemap.html'],
+    include=['^https?://www\\.city\\.kamakura\\.kanagawa\\.jp/(bunkazai|kamakura-kankou)'],
+)
+_facts(
+    'city-jp-nikko',
+    ['facts'],
+    '日光市: shrine town and post-town history, for Place facts.',
+    cls='official',
+    seeds=['https://www.city.nikko.lg.jp/sitemap.html'],
+)
+_facts(
+    'city-jp-takayama',
+    ['facts', 'walking_tours'],
+    '高山市: Sanmachi preserved district, for Place facts and Free walking tours.',
+    cls='official',
+    seeds=['https://www.city.takayama.lg.jp/sitemap.html'],
+)
+_facts(
+    'city-jp-hagi',
+    ['facts'],
+    '萩市: Meiji Restoration castle town, for Place facts.',
+    cls='official',
+    seeds=['https://www.city.hagi.lg.jp/sitemap.html'],
+)
+_facts(
+    'city-jp-kurashiki',
+    ['facts'],
+    '倉敷市: Bikan historical quarter, for Place facts.',
+    cls='official',
+    seeds=['https://www.city.kurashiki.okayama.jp/sitemap.html'],
+)
+_facts(
+    'city-jp-kawagoe',
+    ['facts'],
+    '川越市: Koedo kura warehouse town, for Place facts.',
+    cls='official',
+    seeds=['https://www.city.kawagoe.saitama.jp/sitemap.html'],
+)
+_facts(
+    'city-jp-hikone',
+    ['facts'],
+    '彦根市: Hikone castle (one of 5 national-treasure castles), for Place facts.',
+    cls='official',
+    seeds=['https://www.city.hikone.lg.jp/sitemap.html'],
+)
+_facts(
+    'city-jp-matsumoto',
+    ['facts'],
+    '松本市: Matsumoto castle, Kaichi school, for Place facts.',
+    cls='official',
+    seeds=['https://www.city.matsumoto.nagano.jp/sitemap.html'],
+)
+_facts(
+    'city-jp-izumo',
+    ['facts'],
+    '出雲市: Izumo Taisha, myth sites, for Place facts.',
+    cls='official',
+    depth=2,
+    seeds=['https://www.city.izumo.shimane.jp/www/sitemap.html'],
+    include=['^https?://www\\.city\\.izumo\\.shimane\\.jp/www/contents/'],
+)
+_facts(
+    'city-jp-dazaifu',
+    ['facts'],
+    '太宰府市: ancient Dazaifu government site, for Place facts.',
+    cls='official',
+    seeds=['https://www.city.dazaifu.lg.jp/sitemap.html'],
+)
+_facts(
+    'city-jp-nagasaki',
+    ['facts'],
+    '長崎市: Dejima, Glover, Hashima, for Place facts.',
+    cls='official',
+    seeds=['https://www.city.nagasaki.lg.jp/sitemap.html'],
+)
+_facts(
+    'city-jp-usuki',
+    ['facts'],
+    '臼杵市: Usuki stone Buddhas, for Place facts.',
+    cls='official',
+    sitemaps=['https://www.city.usuki.oita.jp/sitemap.xml'],
+    include=['^https?://www\\.city\\.usuki\\.oita\\.jp/docs/'],
+)
+_facts(
+    'city-jp-minamikyushu',
+    ['facts'],
+    '南九州市 (知覧): Chiran samurai district, for Place facts.',
+    cls='official',
+    seeds=['https://www.city.minamikyushu.lg.jp/sitemap.html'],
+)
+_facts(
+    'city-jp-kitakata',
+    ['facts'],
+    '喜多方市: kura town and ramen origin, for Place facts.',
+    cls='official',
+    seeds=['https://www.city.kitakata.fukushima.jp/sitemap.html'],
+)
+_facts(
+    'city-jp-semboku',
+    ['facts'],
+    "仙北市 (角館): Kakunodate samurai town, Lake Tazawa (Japan's deepest lake), for Place facts.",
+    cls='official',
+    seeds=['https://www.city.semboku.akita.jp/sitemap.html'],
+)
+_facts(
+    'town-jp-hiraizumi',
+    ['facts'],
+    '平泉町: Hiraizumi World Heritage town, for Place facts.',
+    cls='official',
+    sitemaps=['https://www.town.hiraizumi.iwate.jp/wp-sitemap.xml'],
+)
+_facts(
+    'town-jp-shimogo',
+    ['facts'],
+    '下郷町 (大内宿): Ouchi-juku thatched post town, for Place facts.',
+    cls='official',
+    seeds=['https://www.town.shimogo.fukushima.jp/'],
+)
+_facts(
+    'town-jp-tsuwano',
+    ['facts'],
+    '津和野町: "Little Kyoto" castle town, for Place facts.',
+    cls='official',
+    depth=2,
+    seeds=['https://www.town.tsuwano.lg.jp/www/sitemap.html'],
+    include=['^https?://www\\.town\\.tsuwano\\.lg\\.jp/www/contents/'],
+)
+_facts(
+    'town-jp-nagiso',
+    ['facts'],
+    '南木曽町 (妻籠宿): Tsumago-juku, the first preserved post town, for Place facts.',
+    cls='official',
+    seeds=['https://www.town.nagiso.nagano.jp/sitemap.html'],
+)
+_facts(
+    'vill-jp-shirakawa',
+    ['facts'],
+    '白川村: Shirakawa-go gassho villages, for Place facts.',
+    cls='official',
+    seeds=['https://www.vill.shirakawa.lg.jp/'],
+)
+_facts(
+    'arch-jp-rekihaku-kyudaka',
+    ['facts'],
+    '旧高旧領取調帳データベース (National Museum of Japanese History): every Edo-era village (~70,000) with its domain and rice yield; the definitive Japanese village-level dataset, for Place facts.',
+    cls='reference',
+    off='adapter pending: CGI query DB (form POST)',
+    seeds=['https://www.rekihaku.ac.jp/up-cgi/login.pl?p=param/kyud/db_param'],
+    include=['^https?://www\\.rekihaku\\.ac\\.jp/up-cgi/'],
+)
+_facts(
+    'arch-kr-seoul-history',
+    ['facts'],
+    '서울역사편찬원 (Seoul Historiography Institute; 서울지명사전): origins of Seoul dong and place names, Seoul history series, for Place facts.',
+    cls='official',
+    seeds=['https://history.seoul.go.kr/index.do'],
+)
+_facts(
+    'arch-kr-seoul-museum-archive',
+    ['facts'],
+    '서울역사아카이브 (Seoul Museum of History): Seoul neighbourhood history items, for Place facts.',
+    cls='official',
+    seeds=['https://museum.seoul.go.kr/archive/'],
+    sitemaps=['https://museum.seoul.go.kr/sitemap.xml'],
+    include=['^https?://museum\\.seoul\\.go\\.kr/archive/'],
+)
+_facts(
+    'arch-kr-seoul-archives',
+    ['facts'],
+    '서울기록원: Seoul city records, exhibitions on districts, for Place facts.',
+    cls='official',
+    depth=2,
+    seeds=['https://archives.seoul.go.kr/main'],
+    include=['^https?://archives\\.seoul\\.go\\.kr/(exhibitions-programs|contents)'],
+)
+_facts(
+    'arch-kr-national-archives',
+    ['facts'],
+    '국가기록원 국가기록포털: "기록으로 만나는 대한민국" themes on places and events, for Place facts.',
+    cls='official',
+    depth=2,
+    seeds=['https://www.archives.go.kr/next/viewMainNew.do'],
+    include=['^https?://www\\.archives\\.go\\.kr/next/(search|newcontents|archive)'],
+)
+_facts(
+    'od-kr-gyeonggi-memory',
+    ['facts', 'places'],
+    '경기도메모리 (Gyeonggi Provincial Library): Gyeonggi city, town and village records and local history, for Place facts and Places to see.',
+    cls='official',
+    depth=2,
+    seeds=['https://memory.library.kr/sitemaps', 'https://memory.library.kr/copyright'],
+    include=['^https?://memory\\.library\\.kr/(items|collections)'],
+)
+_facts(
+    'gov-kr-ggcf',
+    ['facts'],
+    '경기문화재단 (Gyeonggi Cultural Foundation): Gyeonggi heritage and local culture, for Place facts.',
+    cls='official',
+    seeds=['https://ggcf.kr/'],
+)
+_facts(
+    'arch-kr-kccf',
+    ['facts'],
+    '한국문화원연합회 (Korean Cultural Centers Federation, the umbrella of 230 local 문화원): local 향토사 programmes of each 시·군 문화원; directory of regional 문화원 sites, for Place facts.',
+    cls='official',
+    seeds=['https://www.kccf.or.kr/'],
+)
+_facts(
+    'arch-kr-jangseogak',
+    ['facts'],
+    '디지털 장서각 (AKS royal archive): Joseon local gazetteers (읍지) and maps, for Place facts.',
+    cls='reference',
+    llm=False,
+    seeds=['https://jsg.aks.ac.kr/'],
+)
+_facts(
+    'city-kr-gyeongju-tour',
+    ['facts', 'places'],
+    '경주시 문화관광: Silla capital sites and village origins, for Place facts and Places to see.',
+    cls='official',
+    depth=2,
+    seeds=['https://www.gyeongju.go.kr/tour/index.do'],
+    include=['^https?://www\\.gyeongju\\.go\\.kr/tour/'],
+)
+_facts(
+    'city-kr-damyang',
+    ['facts'],
+    '담양군: county and village name origins, for Place facts.',
+    cls='official',
+    seeds=['https://www.damyang.go.kr/'],
+)
+_facts(
+    'city-kr-gochang',
+    ['facts'],
+    '고창군: dolmen sites, eup-seong fortress, for Place facts.',
+    cls='official',
+    seeds=['https://www.gochang.go.kr/index.gochang'],
+)
+_facts(
+    'city-kr-gangneung',
+    ['facts'],
+    '강릉시: Gangneung history and Dano festival, for Place facts.',
+    cls='official',
+    llm=False,
+    depth=2,
+    seeds=['https://www.gn.go.kr/'],
+    include=['^https?://www\\.gn\\.go\\.kr/www/'],
+)
+_facts(
+    'city-kr-bonghwa',
+    ['facts'],
+    '봉화군 문화관광 지명유래: village-by-village name origins with locations, for Place facts.',
+    cls='official',
+    depth=2,
+    seeds=['https://www.bonghwa.go.kr/tour/contents/heritage/place/list.do?mid=0301000000'],
+    include=['^https?://www\\.bonghwa\\.go\\.kr/tour/contents/heritage/place/'],
+)
+_facts(
+    'city-kr-andong',
+    ['facts'],
+    '안동시: Hahoe village, Confucian academies, for Place facts.',
+    cls='official',
+    seeds=['https://www.andong.go.kr/tour/'],
+)
+_facts(
+    'city-kr-hadong',
+    ['facts'],
+    '하동군: village origins (Pyeongsa-ri, Hwagae), for Place facts.',
+    cls='official',
+    off='enable after a check from the crawler VM: robots.txt gave no response from the research laptop (robots timeout (allowed per owner rule)); terms and content not yet seen',
+    seeds=['https://www.hadong.go.kr/'],
+)
+_facts(
+    'city-kr-boseong',
+    ['facts'],
+    '보성군: tea-field and village history, for Place facts.',
+    cls='official',
+    off='enable after a check from the crawler VM: robots.txt gave no response from the research laptop (robots timeout); terms and content not yet seen',
+    seeds=['https://www.boseong.go.kr/'],
+)
+_facts(
+    'arch-kr-jeju-studies',
+    ['facts'],
+    '제주학아카이브 (Jeju Studies Center): Jeju village (마을) histories and oral history, for Place facts.',
+    cls='reference',
+    off='enable after a check from the crawler VM: robots.txt gave no response from the research laptop (robots timeout); terms and content not yet seen',
+    seeds=['https://www.jst.re.kr/'],
+)
+_facts(
+    'gov-cn-sichuan-gaikuang',
+    ['facts'],
+    '四川省人民政府 四川概况 (历史沿革, 市州概况): province, prefecture and county history and superlatives, for Place facts.',
+    cls='official',
+    depth=2,
+    seeds=['https://www.sc.gov.cn/10462/10778/10876/index.shtml', 'https://www.sc.gov.cn/10462/wza2012/wzdh/wzdh.shtml'],
+    include=['^https?://www\\.sc\\.gov\\.cn/10462/10778/'],
+)
+_facts(
+    'her-cn-dmctv',
+    ['facts'],
+    '中国传统村落数字博物馆: 8,000+ traditional villages, for Place facts.',
+    cls='official',
+    off='enable after a check from the crawler VM: robots.txt gave no response from the research laptop (re-check 2026-11-19: timeout again (allowed per owner rule)); terms and content not yet seen',
+    depth=2,
+    seeds=['https://www.dmctv.cn/villages.aspx'],
+    include=['^https?://www\\.dmctv\\.cn/(villages|zcfgShow|cunluo)\\.aspx'],
+)
+_facts(
+    'gov-cn-yunnan-digital-villages',
+    ['facts'],
+    '云南数字乡村 (every administrative village in Yunnan): village-level profiles (history, ethnicity, population), for Place facts.',
+    cls='official',
+    off='enable after a check from the crawler VM: robots.txt gave no response from the research laptop (robots timeout); terms and content not yet seen',
+    seeds=['https://www.ynszxc.net/'],
+)
+_facts(
+    'fx-sdsqw-cn',
+    ['facts'],
+    '山东省情网 (guessed host): history and curiosities of the places it covers, for Place facts.',
+    cls='editorial',
+    off='enable after a check from the crawler VM: robots.txt gave no response from the research laptop (timeout; identity unconfirmed); terms and content not yet seen',
+    seeds=['https://www.sdsqw.cn/'],
+)
+_facts(
+    'fx-tjdfz-org-cn',
+    ['facts'],
+    '天津地方志 (guessed host): history and curiosities of the places it covers, for Place facts.',
+    cls='editorial',
+    off='enable after a check from the crawler VM: robots.txt gave no response from the research laptop (timeout; identity unconfirmed); terms and content not yet seen',
+    seeds=['https://www.tjdfz.org.cn/'],
+)
+_facts(
+    'fx-cqdfz-cn',
+    ['facts'],
+    '重庆地方志 (guessed host): history and curiosities of the places it covers, for Place facts.',
+    cls='editorial',
+    off='enable after a check from the crawler VM: robots.txt gave no response from the research laptop (HTTP/2 protocol error); terms and content not yet seen',
+    seeds=['https://www.cqdfz.cn/'],
+)
+_facts(
+    'arch-tw-th',
+    ['facts'],
+    '國史館臺灣文獻館 (Taiwan Historica): publisher of 臺灣地名辭書 (village-level name origins) and the county gazetteers; the core Taiwan town and village source, for Place facts.',
+    cls='official',
+    seeds=['https://www.th.gov.tw/'],
+)
+_facts(
+    'arch-tw-ncl-taiwan-memory',
+    ['facts'],
+    '臺灣記憶 Taiwan Memory (National Central Library): local-history items, old photos and place records by township, for Place facts.',
+    cls='official',
+    seeds=['https://tm.ncl.edu.tw/sitemap?lang=chn'],
+)
+_facts(
+    'arch-tw-drnh',
+    ['facts'],
+    '國史館 (Academia Historica): national history items tied to places, for Place facts.',
+    cls='official',
+    seeds=['https://www.drnh.gov.tw/'],
+)
+_facts(
+    'gov-tw-cip-tribes',
+    ['facts'],
+    '原住民族委員會 (Council of Indigenous Peoples; 部落 data): indigenous villages (部落) and their histories, for Place facts.',
+    cls='official',
+    seeds=['https://www.cip.gov.tw/zh-tw/siteMap.html?cumid=B54B5C7E1E0F9940A317CF94970BC6D8'],
+)
+_facts(
+    'gov-tw-ntpc-culture',
+    ['facts'],
+    '新北市文化局: New Taipei district history (Tamsui, Jiufen), for Place facts.',
+    cls='official',
+    depth=2,
+    sitemaps=['https://www.culture.ntpc.gov.tw/sitemap'],
+)
+_facts(
+    'gov-tw-hakka',
+    ['facts'],
+    '客家委員會: Hakka townships and their history, for Place facts.',
+    cls='official',
+    seeds=['https://www.hakka.gov.tw/'],
+)
+_facts(
+    'od-tw-sinica-hgis',
+    ['facts'],
+    '臺灣百年歷史地圖 (Academia Sinica GIS): historical boundaries and settlements (indirect), for Place facts.',
+    cls='reference',
+    off='adapter pending: WMTS / map tiles',
+    seeds=['https://gissrv4.sinica.edu.tw/gis/twhgis'],
+)
+_facts(
+    'arch-hk-chronicles',
+    ['facts'],
+    '香港地方志中心 (Hong Kong Chronicles Institute; 香港志): the official Hong Kong gazetteer, district and village histories (e.g. walled villages), for Place facts.',
+    cls='official',
+    depth=2,
+    seeds=['https://hkchronicles.org.hk/'],
+    include=['^https?://hkchronicles\\.org\\.hk/((?:香港志|%E9%A6%99%E6%B8%AF%E5%BF%97)|(?:地方志|%E5%9C%B0%E6%96%B9%E5%BF%97)|node)'],
+)
+_facts(
+    'arch-hk-hkpl',
+    ['facts'],
+    '香港公共圖書館 (香港地方史 resources): Hong Kong local-history pages and the 香港文學/地方史 special collection, for Place facts.',
+    cls='official',
+    depth=2,
+    seeds=['https://www.hkpl.gov.hk/tc/sitemap.html'],
+    include=['^https?://www\\.hkpl\\.gov\\.hk/tc/(extension-activities|e-resources|about-us/collections)'],
+)
+_facts(
+    'arch-hk-museum-history',
+    ['facts'],
+    '香港歷史博物館: Hong Kong history, exhibitions on districts, for Place facts.',
+    cls='official',
+    depth=2,
+    seeds=['https://hk.history.museum/tc/web/mh/index.html'],
+    include=['^https?://hk\\.history\\.museum/(tc|en)/web/mh/'],
+)
+_facts(
+    'arch-hk-grs',
+    ['facts'],
+    '政府檔案處 (Government Records Service): online exhibitions on HK places and history, for Place facts.',
+    cls='official',
+    depth=2,
+    seeds=['https://www.grs.gov.hk/tc/sitemap.html'],
+    include=['^https?://www\\.grs\\.gov\\.hk/(tc|en)/(online_exhibitions|research)'],
+)
+_facts(
+    'arch-mo-macaumemory',
+    ['facts'],
+    '澳門記憶 Macau Memory (Macao Foundation): Macau history, neighbourhoods, ICH entries, for Place facts.',
+    cls='official',
+    depth=2,
+    seeds=['https://www.macaumemory.mo/index', 'https://www.macaumemory.mo/exhibitions/index'],
+    include=['^https?://www\\.macaumemory\\.mo/(entries_|category_|exhibitions)'],
+)
+_facts(
+    'her-mo-culturalheritage',
+    ['facts', 'places'],
+    '澳門文化遺產網 (Cultural Affairs Bureau heritage list): classified immovable heritage plus the ICH list (24 items), for Place facts and Places to see.',
+    cls='official',
+    llm=False,
+    depth=2,
+    seeds=['https://www.culturalheritage.mo/'],
+    include=['^https?://www\\.culturalheritage\\.mo/(detail|en/detail)/'],
+)
+_facts(
+    'arch-mo-museum',
+    ['facts'],
+    '澳門博物館: Macau history, for Place facts.',
+    cls='official',
+    llm=False,
+    seeds=['https://www.macaumuseum.gov.mo/'],
+)
+_facts(
+    'gov-mo-dscd',
+    ['facts'],
+    '文化體育局 (icm.gov.mo now redirects to dscd.gov.mo): heritage news, for Place facts.',
+    cls='official',
+    llm=False,
+    off='adapter pending: JS SPA (the sitemap may still work)',
+    sitemaps=['https://www.dscd.gov.mo/sitemap.xml'],
+)
+_facts(
+    'fx-remembersingapore',
+    ['facts', 'places'],
+    'Remember Singapore: Singapore estate and street histories, for Place facts and Places to see.',
+    cls='editorial',
+    feeds=['https://remembersingapore.org/feed/'],
+)
+_facts(
+    'fx-theworldofchinese',
+    ['facts'],
+    'The World of Chinese: Chinese city/region history and culture, for Place facts.',
+    cls='editorial',
+    feeds=['https://www.theworldofchinese.com/feed/'],
+)
+_facts(
+    'fx-tofugu',
+    ['facts'],
+    'Tofugu: Japanese places and culture explainers, for Place facts.',
+    cls='editorial',
+    seeds=['https://www.tofugu.com/feed.xml'],
+    include=['^https?://www\\.tofugu\\.com/japan/'],
+)
+_facts(
+    'tb-mn-mongolia-travel',
+    ['facts', 'places'],
+    'Mongolia.travel: official tourism pages on aimags, for Place facts and Places to see.',
+    cls='official',
+    off='adapter pending: needs adapter: JS-rendered SPA ("doesn\'t work without JavaScript")',
+    seeds=['https://www.mongolia.travel/'],
+)
+_facts(
+    'fx-aliph',
+    ['facts'],
+    'ALIPH (heritage protection in conflict areas): projects at threatened sites in Mali, Afghanistan, CAR, Chad and elsewhere, for Place facts.',
+    cls='editorial',
+    depth=2,
+    delay=10,
+    seeds=['https://www.aliph-foundation.org/en/projects'],
+    include=['^https?://www\\.aliph-foundation\\.org/en/projects'],
+)
+_facts(
+    'arch-acku',
+    ['facts'],
+    'Afghanistan Centre at Kabul University (ACKU): Afghan research publications (low yield; prefer its research papers on provinces), for Place facts.',
+    cls='reference',
+    sitemaps=['https://acku.edu.af/wp-sitemap.xml'],
+    include=['^https?://acku\\.edu\\.af/(research|our-programs/research|books)/'],
+)
+_facts(
+    'fx-nationalmuseum-af',
+    ['facts'],
+    'National Museum of Afghanistan: history and curiosities of the places it covers, for Place facts.',
+    cls='editorial',
+    off='adapter pending: format / note: JS-only SPA (/static, manifest), sitemap points to a vendor host (sms.ariadelta.af). Needs JS rendering,…',
+    seeds=['https://nationalmuseum.af/'],
+)
+_facts(
+    'fx-jp-rekishikaido',
+    ['facts'],
+    'WEB歴史街道 (PHP Institute) (ja / Japan): history features by named historians and writers (e.g. Sakai as the "Venice of Japan"), for Place facts.',
+    cls='editorial',
+    feeds=['https://rekishikaido.php.co.jp/rss'],
+    include=['^https?://rekishikaido\\.php\\.co\\.jp/detail/'],
+)
+_facts(
+    'arch-jp-shimohaku',
+    ['facts'],
+    '下関市立歴史博物館 (Shimonoseki City Museum of History) (ja / Shimonoseki): local history (Bakumatsu, Chōshū), exhibit notes, for Place facts.',
+    cls='official',
+    feeds=['https://www.shimohaku.jp/rss.xml'],
+    include=['^https?://www\\.shimohaku\\.jp/'],
+)
+_facts(
+    'arch-jp-edo-tokyo-museum',
+    ['facts', 'places'],
+    '江戸東京博物館 (Edo-Tokyo Museum) blog (ja / Tokyo): Edo and Tokyo history curiosities, for Place facts and Places to see.',
+    cls='official',
+    seeds=['https://www.edo-tokyo-museum.or.jp/online/blog/'],
+    include=['^https?://www\\.edo-tokyo-museum\\.or\\.jp/online/blog/'],
+)
+_facts(
+    'arch-jp-tnm-1089',
+    ['facts'],
+    "東京国立博物館 1089ブログ (Tokyo National Museum blog) (ja): curators' notes on temples and places (e.g. Daitokuji), for Place facts.",
+    cls='official',
+    seeds=['https://www.tnm.jp/modules/rblog/index.php/1'],
+    include=['^https?://www\\.tnm\\.jp/modules/rblog/index.php/1/[0-9]{4}/'],
+)
+_facts(
+    'arch-jp-nmhc',
+    ['facts'],
+    '長崎歴史文化博物館 (Nagasaki Museum of History and Culture) (ja / Nagasaki): Nagasaki trade and Dejima history, for Place facts.',
+    cls='official',
+    sitemaps=['https://www.nmhc.jp/wp-sitemap.xml'],
+    include=['^https?://www\\.nmhc\\.jp/(pickup|news_article)/'],
+)
+_facts(
+    'fx-tw-storystudio',
+    ['facts'],
+    '故事 StoryStudio (zh-Hant / Taiwan towns, 台灣風土誌): Taiwan local history and little-known stories; this is the successor of gushi.tw, for Place facts.',
+    cls='editorial',
+    sitemaps=['https://storystudio.tw/sitemap.xml'],
+    include=['^https?://storystudio\\.tw/article/'],
+)
+_facts(
+    'arch-tw-nmth',
+    ['facts'],
+    '國立臺灣歷史博物館 (National Museum of Taiwan History) (zh-Hant): Taiwan history, for Place facts.',
+    cls='official',
+    depth=2,
+    seeds=['https://www.nmth.gov.tw/'],
+    include=['^https?://www\\.nmth\\.gov\\.tw/(content|News)_'],
+)
+_facts(
+    'fx-id-historia',
+    ['facts'],
+    "Historia.ID (id / Indonesia, Jakarta): Indonesia's leading history magazine (Jakarta and regional history), for Place facts.",
+    cls='editorial',
+    depth=2,
+    seeds=['https://www.historia.id/articles'],
+    include=['^https?://www\\.historia\\.id/article/'],
+)
+_facts(
+    'fx-id-indonesiakaya',
+    ['facts', 'activities'],
+    'Indonesia Kaya (Djarum Foundation) (id / Indonesian regions): regional culture and history per province, for Place facts and Activities.',
+    cls='editorial',
+    sitemaps=['https://indonesiakaya.com/post-sitemap.xml'],
+    include=['^https?://indonesiakaya\\.com/pustaka-indonesia/'],
+)
+_facts(
+    'arch-in-bdlmuseum',
+    ['facts'],
+    "Dr. Bhau Daji Lad Mumbai City Museum (en / Mumbai): Mumbai's oldest museum (1855) and city history, for Place facts.",
+    cls='official',
+    seeds=['https://www.bdlmuseum.org/about/museum-story.php'],
+    include=['^https?://www\\.bdlmuseum\\.org/(about|collection|exhibitions)/'],
+)
+_facts(
+    'rec-jp-tsr-shinise',
+    ['facts'],
+    '東京商工リサーチ 老舗企業調査 (TSR long-established-company surveys) (ja / Japan by prefecture): oldest companies per prefecture and city (records), for Place facts.',
+    cls='reference',
+    seeds=['https://www.tsr-net.co.jp/news/analysis/'],
+    include=['^https?://www\\.tsr-net\\.co\\.jp/news/analysis/'],
+)
+_facts(
+    'arch-cn-chnmuseum',
+    ['facts'],
+    '中国国家博物馆 (National Museum of China) (zh / China): low priority, object and history notes, for Place facts.',
+    cls='official',
+    seeds=['https://www.chnmuseum.cn/'],
+    include=['^https?://www\\.chnmuseum\\.cn/(zx|yj)/'],
+)
+_facts(
+    'arch-kr-much',
+    ['facts'],
+    '대한민국역사박물관 (National Museum of Korean Contemporary History) (ko): low priority, modern Korean history, for Place facts.',
+    cls='official',
+    seeds=['https://www.much.go.kr/'],
+    include=['^https?://www\\.much\\.go\\.kr/MUCH/contents/'],
+)
+_facts(
+    'arch-cn-capitalmuseum',
+    ['facts'],
+    '首都博物馆 (Capital Museum, Beijing) (zh / Beijing): Beijing history, for Place facts.',
+    cls='official',
+    off='owner decision: Legal notice says even linking needs written authorisation. Ask, or SKIP.',
+    seeds=['https://www.capitalmuseum.org.cn/'],
+)
+_facts(
+    'arch-bunka-online',
+    ['facts', 'places'],
+    'Cultural Heritage Online (文化遺産オンライン, Agency for Cultural Affairs): designated cultural properties by prefecture and municipality, for Place facts and Places to see.',
+    cls='official',
+    depth=2,
+    delay=10,
+    seeds=['https://online.bunka.go.jp/'],
+    include=['^https?://online\\.bunka\\.go\\.jp/heritages/'],
+)
+_facts(
+    'her-np-doa',
+    ['facts', 'places'],
+    "Department of Archaeology Nepal: Nepal's protected monuments, for Place facts and Places to see.",
+    cls='official',
+    depth=2,
+    delay=10,
+    seeds=['https://www.doa.gov.np/'],
+    include=['^https?://www\\.doa\\.gov\\.np/(pages|post)/'],
+)
+_facts(
+    'her-my-jwn',
+    ['facts', 'places'],
+    'Jabatan Warisan Negara portal (new host of JWN): National Heritage Register with type, state, gazette number and date, for Place facts and Places to see.',
+    cls='official',
+    depth=2,
+    seeds=['https://www.heritage.gov.my/ms/tapak-warisan', 'https://www.heritage.gov.my/ms/objek-warisan', 'https://www.heritage.gov.my/utama-bahagian-daftar-warisan'],
+    include=['^https?://www\\.heritage\\.gov\\.my/(ms|en)/(tapak-warisan|objek-warisan|component/fabrik)'],
+)
+_facts(
+    'gov-mo-sos-symbols',
+    ['facts'],
+    'Missouri SOS: State Symbols: Missouri symbols and statutes, for Place facts.',
+    cls='official',
+    seeds=['https://www.sos.mo.gov/symbols'],
+    include=['^https?://www\\.sos\\.mo\\.gov/symbols'],
+)
+_facts(
+    'gov-mn-lrl-symbols',
+    ['facts'],
+    'Minnesota Legislative Reference Library: State Symbols: MN symbols with session-law citations, for Place facts.',
+    cls='official',
+    seeds=['https://www.lrl.mn.gov/leg/symbols'],
+    sitemaps=['https://www.lrl.mn.gov/sitemap.xml'],
+    include=['^https?://www\\.lrl\\.mn\\.gov/leg/symbols'],
+)
+_facts(
+    'gov-id-blue-book',
+    ['facts'],
+    'Idaho Secretary of State (Idaho Blue Book): symbols, county facts, for Place facts.',
+    cls='official',
+    seeds=['https://sos.idaho.gov/'],
+    include=['^https?://sos\\.idaho\\.gov/.*(?:blue-book)'],
+)
+_facts(
+    'gov-in-rajasthan',
+    ['facts'],
+    'Rajasthan State Portal: state history, culture, for Place facts.',
+    cls='official',
+    seeds=['https://rajasthan.gov.in/'],
+    sitemaps=['https://rajasthan.gov.in/sitemap.xml'],
+    include=['^https?://rajasthan\\.gov\\.in/.*(?:(about|history|culture))'],
+)
+_facts(
+    'gov-in-sikkim',
+    ['facts'],
+    'Government of Sikkim portal: history and curiosities of the places it covers, for Place facts.',
+    cls='official',
+    seeds=['https://www.sikkim.gov.in/'],
+    include=['^https?://www\\.sikkim\\.gov\\.in/(about|state-profile)'],
+)
+_facts(
+    'gov-in-kerala',
+    ['facts'],
+    'Kerala government portal: history and curiosities of the places it covers, for Place facts.',
+    cls='official',
+    seeds=['https://kerala.gov.in/'],
+    include=['^https?://kerala\\.gov\\.in/.*(?:(history|about))'],
+)
+_facts(
+    'gov-sg-singstat',
+    ['facts'],
+    'Singapore Department of Statistics: history and curiosities of the places it covers, for Place facts.',
+    cls='official',
+    delay=5,
+    seeds=['https://www.singstat.gov.sg/'],
+    include=['^https?://www\\.singstat\\.gov\\.sg/(find-data|publications)/'],
+)
+_facts(
+    'gov-jp-stat-handbook',
+    ['facts'],
+    'Statistics Bureau of Japan: Statistical Handbook of Japan: Japan and prefecture records, for Place facts.',
+    cls='official',
+    seeds=['https://www.stat.go.jp/english/data/handbook/index.html'],
+    include=['^https?://www\\.stat\\.go\\.jp/english/data/handbook/'],
+)
+_facts(
+    'gov-jp-japangov',
+    ['facts', 'places'],
+    'JapanGov (Cabinet Public Affairs): regional features, for Place facts and Places to see.',
+    cls='official',
+    depth=2,
+    seeds=['https://www.japan.go.jp/'],
+    include=['^https?://www\\.japan\\.go\\.jp/(kizuna|regions)/'],
+)
+_facts(
+    'gov-hk-facts',
+    ['facts'],
+    'GovHK: Hong Kong - the Facts: fact sheets (history, geography, records), for Place facts.',
+    cls='official',
+    seeds=['https://www.gov.hk/en/about/abouthk/facts.htm'],
+    include=['^https?://www\\.gov\\.hk/en/about/abouthk/'],
+)
+_facts(
+    'city-tokyo',
+    ['facts'],
+    'Tokyo Metropolitan Government (English): Tokyo facts, history, wards, for Place facts.',
+    cls='official',
+    depth=2,
+    seeds=['https://www.english.metro.tokyo.lg.jp/'],
+    sitemaps=['https://www.metro.tokyo.lg.jp/sitemap.xml'],
+    include=['^https?://www\\.english\\.metro\\.tokyo\\.lg\\.jp/(about|w)/', '^https?://www\\.metro\\.tokyo\\.lg\\.jp/(about|w)/'],
+)
+_facts(
+    'gov-in-s3waas-districts',
+    ['facts', 'places'],
+    'NIC S3WaaS district portals (/history/ pages, ~750 hosts): town/district history for every Indian district, for Place facts and Places to see.',
+    cls='official',
+    off='adapter pending: also in brief: -',
+    seeds=['https://pune.gov.in/history/'],
+    include=['^https?://pune\\.gov\\.in/(history|about-district)/'],
+)
+_facts(
+    'gov-in-od-districts',
+    ['facts', 'places'],
+    'Odisha district portals (puri.nic.in no longer resolves): history and curiosities of the places it covers, for Place facts and Places to see.',
+    cls='official',
+    off='enable after a check from the crawler VM: robots.txt gave no response from the research laptop (result: connection reset (all 3)); terms and content not yet seen',
+    seeds=['https://puri.odisha.gov.in/', 'https://ganjam.odisha.gov.in/', 'https://mayurbhanj.odisha.gov.in/'],
+)
+_facts(
+    'fx-nculture-jimyeong',
+    ['facts'],
+    '지역N문화 지명유래 (Korean place-name origins, Korean Cultural Center federation): origin stories of Korean towns and villages, for Place facts.',
+    cls='reference',
+    depth=2,
+    seeds=['https://www.nculture.org/oop/originalPlaceMain.do'],
+    include=['^https?://www\\.nculture\\.org/oop/'],
+)
+_facts(
+    'od-ilec-wldb',
+    ['facts', 'places'],
+    'ILEC World Lake Database: about 600 lakes with an area, depth, age and history sheet each ("deepest lake in X"), for Place facts and Places to see.',
+    cls='reference',
+    depth=2,
+    seeds=['https://wldb.ilec.or.jp/Search/listdata', 'https://wldb.ilec.or.jp/Search/RegionLakeList/%7BAFR', 'https://wldb.ilec.or.jp/files/lake_code_2017.txt'],
+    include=['^https?://wldb\\.ilec\\.or\\.jp/(Search/RegionLakeList|Display/html)/'],
+)
+_facts(
+    'arch-bn-banglapedia',
+    ['facts', 'places'],
+    'Banglapedia, Bangla edition (Asiatic Society of Bangladesh): Bangla entries for every district, upazila, town and monument of Bangladesh (founding dates, municipalities, 1971 events), for Place facts and Places to see.',
+    cls='reference',
+    depth=2,
+    seeds=['https://bn.banglapedia.org/index.php/%E0%A6%AC%E0%A6%97%E0%A7%81%E0%A6%A1%E0%A6%BC%E0%A6%BE_%E0%A6%9C%E0%A7%87%E0%A6%B2%E0%A6%BE'],
+    include=['^https?://bn\\.banglapedia\\.org/index\\.php(/|\\?title=)[^:&]+$'],
+)
+_facts(
+    'her-in-hr-archaeology',
+    ['facts', 'places', 'walking_tours'],
+    'Haryana Directorate of Archaeology & Museums: state-protected monuments and heritage walks, for Place facts, Places to see and Free walking tours.',
+    cls='official',
+    depth=2,
+    seeds=['https://archaeology.haryana.gov.in/', 'https://archaeology.haryana.gov.in/heritage-walkstours'],
+    include=['^https?://archaeology\\.haryana\\.gov\\.in/(heritage-|monument|museum|maps|department-history)'],
+)
+_facts(
+    'gov-in-nl-artculture',
+    ['facts', 'places'],
+    'Department of Art & Culture, Nagaland: archaeology and district culture-office pages (Mon, Phek, Tuensang, Kiphire, Mokokchung), for Place facts and Places to see.',
+    cls='official',
+    depth=2,
+    sitemaps=['https://artandculture.nagaland.gov.in/wp-sitemap.xml'],
+    feeds=['https://artandculture.nagaland.gov.in/feed/'],
+    include=['^https?://artandculture\\.nagaland\\.gov\\.in/(archaeology|cultural-research-and-studies|dco-[a-z-]+)/'],
+)
+_facts(
+    'tb-in-nagaland',
+    ['facts', 'places', 'events'],
+    'Tourism Nagaland: state history, Hornbill festival, district sights, for Place facts, Places to see and Events.',
+    cls='official',
+    depth=2,
+    seeds=['https://tourism.nagaland.gov.in/about-nagaland/'],
+    sitemaps=['https://tourism.nagaland.gov.in/wp-sitemap.xml'],
+    include=['^https?://tourism\\.nagaland\\.gov\\.in/(about-nagaland|destinations?|district|festival)'],
+)
+_facts(
+    'tb-in-manipur',
+    ['facts', 'places'],
+    'Manipur Tourism: culture and heritage, sights by district, for Place facts and Places to see.',
+    cls='official',
+    depth=2,
+    seeds=['https://manipurtourism.gov.in/culture-and-heritage/', 'https://manipurtourism.gov.in/district-wise-destination/'],
+    sitemaps=['https://manipurtourism.gov.in/wp-sitemap.xml'],
+    feeds=['https://manipurtourism.gov.in/feed/'],
+    include=['^https?://manipurtourism\\.gov\\.in/(culture-and-heritage|art-culture|places-to-see|district-wise-destination)'],
+)
+_facts(
+    'tb-in-goa-gtdc',
+    ['facts', 'places'],
+    'Goa Tourism Development Corporation: history and heritage, Goa fact sheet, for Place facts and Places to see.',
+    cls='official',
+    seeds=['https://goa-tourism.com/history', 'https://goa-tourism.com/media-room/goa-quick-fact-sheet', 'https://goa-tourism.com/culture', 'https://goa-tourism.com/museum/'],
+    include=['^https?://goa-tourism\\.com/(history|culture|museum|media-room/goa-quick-fact-sheet)'],
+)
+_facts(
+    'tb-in-delhi',
+    ['facts', 'places', 'walking_tours'],
+    'Delhi Tourism (DTTDC): heritage walks and monument pages, for Place facts, Places to see and Free walking tours.',
+    cls='official',
+    depth=2,
+    seeds=['https://delhitourism.gov.in/heritageWalk/heritage-walk.html', 'https://delhitourism.gov.in/aboutus/index.html'],
+    include=['^https?://delhitourism\\.gov\\.in/(heritageWalk|aboutus|delhitourism/tourist_place)'],
+)
+_facts(
+    'tb-in-chhattisgarh',
+    ['facts', 'places'],
+    'Chhattisgarh Tourism Board (operator to confirm): state sights, for Place facts and Places to see.',
+    cls='official',
+    sitemaps=['http://chhattisgarhtourism.co.in/sitemap.xml'],
+    include=['^https?://chhattisgarhtourism\\.co\\.in/(destination|places|heritage)'],
+)
+_facts(
+    'her-bd-liberation-war-museum',
+    ['facts', 'places'],
+    'Liberation War Museum, Dhaka: 1971 history sites (Jalladkhana killing field and others), for Place facts and Places to see.',
+    cls='official',
+    seeds=['https://liberationwarmuseumbd.org/page/history', 'https://liberationwarmuseumbd.org/page/jalladkhana-historical-site'],
+    include=['^https?://liberationwarmuseumbd\\.org/page/'],
+)
+_facts(
+    'od-in-iwp-hindi',
+    ['facts'],
+    'India Water Portal, Hindi: village and town water heritage (step-wells, tanks, traditional systems) in Hindi, for Place facts.',
+    cls='editorial',
+    llm=False,
+    sitemaps=['https://hindi.indiawaterportal.org/sitemap.xml'],
+    include=['^https?://hindi\\.indiawaterportal\\.org/(traditional-water|history|heritage|[a-z-]+/[a-z0-9-]+)'],
+)
+_facts(
+    'gov-np-kathmandu',
+    ['facts', 'places', 'walking_tours'],
+    "Kathmandu Metropolitan City: the city's heritage register pages, for Place facts, Places to see and Free walking tours.",
+    cls='official',
+    depth=2,
+    seeds=['https://kathmandu.gov.np/np/heritages'],
+    sitemaps=['https://kathmandu.gov.np/sitemap.xml'],
+    include=['^https?://kathmandu\\.gov\\.np/(np|en)/(heritages?|about-us)'],
+)
+_facts(
+    'her-np-patan-museum',
+    ['facts', 'places'],
+    'Patan Museum (Museum Development Committee): history of Patan Durbar and the museum building, historical views of Nepal, for Place facts and Places to see.',
+    cls='official',
+    seeds=['https://patanmuseum.gov.np/content/45/2026/18278888/'],
+    include=['^https?://patanmuseum\\.gov\\.np/content/'],
+)
+_facts(
+    'her-lk-museums',
+    ['facts', 'places'],
+    'Department of National Museums, Sri Lanka: national and regional museums (Colombo, Kandy, Anuradhapura and others), for Place facts and Places to see.',
+    cls='official',
+    depth=2,
+    seeds=['https://museum.gov.lk/v1/museums', 'https://museum.gov.lk/v1/places-visit'],
+    include=['^https?://museum\\.gov\\.lk/v1/(museums?|museum/[a-z-]+|places-visit)'],
+)
+_facts(
+    'her-lk-dalada-maligawa',
+    ['facts', 'places', 'events'],
+    'Sri Dalada Maligawa (Temple of the Tooth), Kandy: temple history, Esala Perahera, for Place facts, Places to see and Events.',
+    cls='official',
+    seeds=['https://sridaladamaligawa.lk/sri-dalada-maligawa-history/', 'https://sridaladamaligawa.lk/international-buddhist-museum/'],
+    include=['^https?://sridaladamaligawa\\.lk/(sri-dalada-maligawa-history|international-buddhist-museum)'],
+)
+_facts(
+    'gov-pk-sindh',
+    ['facts'],
+    'Government of Sindh portal: history of Sindh (complements sindhculture.gov.pk, already listed), for Place facts.',
+    cls='official',
+    seeds=['https://www.sindh.gov.pk/history'],
+    include=['^https?://www\\.sindh\\.gov\\.pk/(history|about)'],
+)
+_facts(
+    'gov-pk-balochistan',
+    ['facts', 'places'],
+    'Government of Balochistan portal: history, languages, places to visit, for Place facts and Places to see.',
+    cls='official',
+    llm=False,
+    seeds=['https://balochistan.gov.pk/about/history/', 'https://balochistan.gov.pk/about/visiting-places/'],
+    feeds=['https://balochistan.gov.pk/feed/'],
+    include=['^https?://balochistan\\.gov\\.pk/about/'],
+)
+_facts(
+    'her-in-ka-archaeology',
+    ['facts', 'places'],
+    'Karnataka state-protected monuments: history and curiosities of the places it covers, for Place facts and Places to see.',
+    cls='official',
+    off='enable after a check from the crawler VM: robots.txt gave no response from the research laptop (result: timeout 20 s); terms and content not yet seen',
+    seeds=['https://archaeology.karnataka.gov.in/'],
+)
+_facts(
+    'her-in-kl-archaeology',
+    ['facts', 'places'],
+    'Kerala State Archaeology monuments: history and curiosities of the places it covers, for Place facts and Places to see.',
+    cls='official',
+    off='enable after a check from the crawler VM: robots.txt gave no response from the research laptop (result: timeout); terms and content not yet seen',
+    seeds=['https://archaeology.kerala.gov.in/'],
+)
+_facts(
+    'her-in-mp-archaeology',
+    ['facts', 'places'],
+    'MP Directorate of Archaeology, Archives and Museums: history and curiosities of the places it covers, for Place facts and Places to see.',
+    cls='official',
+    off='enable after a check from the crawler VM: robots.txt gave no response from the research laptop (result: timeout); terms and content not yet seen',
+    seeds=['https://archaeology.mp.gov.in/'],
+)
+_facts(
+    'gov-in-od-culture',
+    ['facts', 'places'],
+    'Odisha Culture Dept: monuments, Odisha gazetteers: history and curiosities of the places it covers, for Place facts and Places to see.',
+    cls='official',
+    off='enable after a check from the crawler VM: robots.txt gave no response from the research laptop (result: timeout (both)); terms and content not yet seen',
+    seeds=['https://odishaculture.gov.in/'],
+)
+_facts(
+    'gov-in-ml-artsculture',
+    ['facts'],
+    'Meghalaya Arts & Culture: history and curiosities of the places it covers, for Place facts.',
+    cls='official',
+    off='enable after a check from the crawler VM: robots.txt gave no response from the research laptop (result: timeout (both)); terms and content not yet seen',
+    seeds=['https://megartsculture.gov.in/'],
+)
+_facts(
+    'gov-in-gj-gazetteer',
+    ['facts', 'places'],
+    'Gujarat State Gazetteers: history and curiosities of the places it covers, for Place facts and Places to see.',
+    cls='official',
+    off='enable after a check from the crawler VM: robots.txt gave no response from the research laptop (result: timeout); terms and content not yet seen',
+    seeds=['https://gazetteer.gujarat.gov.in/'],
+)
+_facts(
+    'gov-in-ka-gazetteer',
+    ['facts'],
+    'Karnataka Gazetteer Department: about 50 district gazetteers (English and Kannada), for Place facts.',
+    cls='official',
+    off='enable after a check from the crawler VM: robots.txt gave no response from the research laptop (timeout x2); terms and content not yet seen',
+    seeds=['https://gazetteer.kar.nic.in/'],
+    include=['^https?://gazetteer\\.kar\\.nic\\.in/'],
+)
+_facts(
+    'gov-in-as-districts',
+    ['facts', 'places'],
+    'Assam district portals (Cachar: Bengali-speaking Barak Valley): history and curiosities of the places it covers, for Place facts and Places to see.',
+    cls='official',
+    off='enable after a check from the crawler VM: robots.txt gave no response from the research laptop (result: timeout (all 4)); terms and content not yet seen',
+    seeds=['https://cachar.gov.in/'],
+)
+_facts(
+    'gov-in-gj-districts',
+    ['facts', 'places'],
+    'Gujarat district portals: history and curiosities of the places it covers, for Place facts and Places to see.',
+    cls='official',
+    off='enable after a check from the crawler VM: robots.txt gave no response from the research laptop (result: timeout); terms and content not yet seen',
+    seeds=['https://kutch.gujarat.gov.in/', 'https://junagadh.gujarat.gov.in/'],
+)
+_facts(
+    'gov-in-wb-districts-2',
+    ['facts', 'places'],
+    'West Bengal district portals (probably S3WaaS): history and curiosities of the places it covers, for Place facts and Places to see.',
+    cls='official',
+    off='enable after a check from the crawler VM: robots.txt gave no response from the research laptop (result: timeout (all 5)); terms and content not yet seen',
+    seeds=['https://hooghly.gov.in/', 'https://murshidabad.gov.in/', 'https://purbabardhaman.gov.in/', 'https://north24parganas.gov.in/', 'https://malda.gov.in/'],
+)
+_facts(
+    'gov-in-wb-portal',
+    ['facts'],
+    'West Bengal state portal (state profile): history and curiosities of the places it covers, for Place facts.',
+    cls='official',
+    off='enable after a check from the crawler VM: robots.txt gave no response from the research laptop (result: timeout); terms and content not yet seen',
+    seeds=['https://www.wb.gov.in/'],
+)
+_facts(
+    'gov-in-br-portal',
+    ['facts'],
+    'Bihar state portal (district pages): history and curiosities of the places it covers, for Place facts.',
+    cls='official',
+    off='enable after a check from the crawler VM: robots.txt gave no response from the research laptop (result: connection reset); terms and content not yet seen',
+    seeds=['https://state.bihar.gov.in/'],
+)
+_facts(
+    'tb-in-up',
+    ['facts', 'places'],
+    'UP Tourism (Hindi): history and curiosities of the places it covers, for Place facts and Places to see.',
+    cls='official',
+    off='enable after a check from the crawler VM: robots.txt gave no response from the research laptop (result: timeout); terms and content not yet seen',
+    seeds=['https://www.uptourism.gov.in/'],
+)
+_facts(
+    'tb-in-haryana',
+    ['facts', 'places'],
+    'Haryana Tourism: history and curiosities of the places it covers, for Place facts and Places to see.',
+    cls='official',
+    off='enable after a check from the crawler VM: robots.txt gave no response from the research laptop (result: timeout); terms and content not yet seen',
+    seeds=['https://www.haryanatourism.gov.in/'],
+)
+_facts(
+    'tb-in-jharkhand',
+    ['facts', 'places'],
+    'Jharkhand Tourism: history and curiosities of the places it covers, for Place facts and Places to see.',
+    cls='official',
+    off='enable after a check from the crawler VM: robots.txt gave no response from the research laptop (result: timeout); terms and content not yet seen',
+    seeds=['https://www.jharkhandtourism.gov.in/'],
+)
+_facts(
+    'tb-in-mp-gov',
+    ['facts', 'places'],
+    'MP Tourism (government host; mptourism.com is already listed): history and curiosities of the places it covers, for Place facts and Places to see.',
+    cls='official',
+    off='enable after a check from the crawler VM: robots.txt gave no response from the research laptop (result: timeout); terms and content not yet seen',
+    seeds=['https://tourism.mp.gov.in/'],
+)
+_facts(
+    'tb-in-bihar',
+    ['facts', 'places'],
+    'Bihar Tourism: history and curiosities of the places it covers, for Place facts and Places to see.',
+    cls='official',
+    off='enable after a check from the crawler VM: robots.txt gave no response from the research laptop (result: connection reset (both)); terms and content not yet seen',
+    seeds=['https://bihartourism.gov.in/', 'https://tourism.bihar.gov.in/'],
+)
+_facts(
+    'her-pk-lahore-museum',
+    ['facts', 'places'],
+    'Lahore Museum: history and curiosities of the places it covers, for Place facts and Places to see.',
+    cls='official',
+    off='enable after a check from the crawler VM: robots.txt gave no response from the research laptop (result: timeout (lahoremuseum.org: certificate expired)); terms and content not yet seen',
+    seeds=['https://lahoremuseum.punjab.gov.pk/'],
+)
+_facts(
+    'gov-pk-pb-districts',
+    ['facts'],
+    'Punjab (Pakistan) district and provincial portals: history and curiosities of the places it covers, for Place facts.',
+    cls='official',
+    off='enable after a check from the crawler VM: robots.txt gave no response from the research laptop (result: timeout (all 3)); terms and content not yet seen',
+    seeds=['https://lahore.punjab.gov.pk/', 'https://multan.punjab.gov.pk/', 'https://punjab.gov.pk/'],
+)
+_facts(
+    'gov-np-lalitpur',
+    ['facts', 'places'],
+    'Lalitpur (Patan) Metropolitan City heritage: history and curiosities of the places it covers, for Place facts and Places to see.',
+    cls='official',
+    off='enable after a check from the crawler VM: robots.txt gave no response from the research laptop (result: timeout); terms and content not yet seen',
+    seeds=['https://lalitpurmun.gov.np/'],
+)
+_facts(
+    'gov-np-pokhara',
+    ['facts', 'places'],
+    'Pokhara Metropolitan City: history and curiosities of the places it covers, for Place facts and Places to see.',
+    cls='official',
+    off='enable after a check from the crawler VM: robots.txt gave no response from the research laptop (result: timeout); terms and content not yet seen',
+    seeds=['https://pokharamun.gov.np/'],
+)
+_facts(
+    'arch-np-academy',
+    ['facts'],
+    'Nepal Academy (Nepali encyclopedia and publications): history and curiosities of the places it covers, for Place facts.',
+    cls='reference',
+    off='enable after a check from the crawler VM: robots.txt gave no response from the research laptop (result: timeout); terms and content not yet seen',
+    seeds=['https://nepalacademy.gov.np/'],
+)
+_facts(
+    'arch-np-archives',
+    ['facts'],
+    'National Archives of Nepal: history and curiosities of the places it covers, for Place facts.',
+    cls='reference',
+    off='enable after a check from the crawler VM: robots.txt gave no response from the research laptop (result: timeout); terms and content not yet seen',
+    seeds=['https://narchives.gov.np/'],
+)
+_facts(
+    'tb-bt-tourism',
+    ['facts', 'places'],
+    'Bhutan Department of Tourism: history and curiosities of the places it covers, for Place facts and Places to see.',
+    cls='official',
+    off='enable after a check from the crawler VM: robots.txt gave no response from the research laptop (result: timeout); terms and content not yet seen',
+    seeds=['https://www.tourism.gov.bt/'],
+)
+_facts(
+    'od-in-vikaspedia-hi',
+    ['facts'],
+    'client-rendered SPA (JSON content API behind it); robots allows `*` apart from admin path…: history and curiosities of the places it covers, for Place facts.',
+    cls='reference',
+    off='adapter pending: client-rendered SPA (JSON content API behind it)',
+    seeds=['https://hi.vikaspedia.in/'],
+)
+_facts(
+    'od-in-vikaspedia-bn',
+    ['facts'],
+    'same as above: history and curiosities of the places it covers, for Place facts.',
+    cls='reference',
+    off='adapter pending: same as above',
+    seeds=['https://bn.vikaspedia.in/'],
+)
+_facts(
+    'gov-pk-kp-portal',
+    ['facts'],
+    'React SPA (the HTML shell is 1.7 KB); robots.txt returns the SPA HTML (none): history and curiosities of the places it covers, for Place facts.',
+    cls='official',
+    off='adapter pending: React SPA (the HTML shell is 1.7 KB)',
+    seeds=['https://kp.gov.pk/'],
+)
+_facts(
+    'her-in-kmc-heritage',
+    ['facts'],
+    'JSP portal: the landing page auto-POSTs a form to /KMCPortal/LandingAction.do; the herita…: history and curiosities of the places it covers, for Place facts.',
+    cls='official',
+    off='adapter pending: JSP portal: the landing page auto-POSTs a form to /KMCPortal/LandingAction.do',
+    seeds=['https://www.kmcgov.in/'],
+)
+_facts(
+    'her-pk-lokvirsa',
+    ['facts', 'activities'],
+    'Lok Virsa (National Institute of Folk & Traditional Heritage): Pakistan folk heritage, crafts and regional traditions, for Place facts and Activities.',
+    cls='official',
+    sitemaps=['https://lokvirsa.org.pk/wp-sitemap.xml'],
+    feeds=['https://lokvirsa.org.pk/feed/'],
+    include=['^https?://lokvirsa\\.org\\.pk/(history|heritage|programs|museum)/'],
+)
+_facts(
+    'her-pk-doam',
+    ['facts', 'places'],
+    'Dept of Archaeology & Museums Pakistan: heritage site records: protected monuments with protecting act, date and location, for Place facts and Places to see.',
+    cls='official',
+    depth=2,
+    seeds=['https://doam.gov.pk/public/', 'https://doam.gov.pk/public/sites/10158'],
+    include=['^https?://doam\\.gov\\.pk/(public/)?(sites|heritage-sites)/\\d+'],
+)
+_facts(
+    'her-pk-sindh',
+    ['facts', 'places'],
+    'Sindh Culture, Tourism, Antiquities & Archaeology Dept: 126 transferred sites, protected-heritage notices, Mohenjo-daro/Makli, for Place facts and Places to see.',
+    cls='official',
+    seeds=['https://sindhculture.gov.pk/heritage'],
+    sitemaps=['https://sindhculture.gov.pk/sitemap.xml'],
+    feeds=['https://sindhculture.gov.pk/feed/'],
+    include=['^https?://sindhculture\\.gov\\.pk/(heritage|directorate-of-antiquities-archaeology|\\?p=)/'],
+)
+_facts(
+    'her-pk-walled-city',
+    ['facts', 'walking_tours', 'places'],
+    'Walled City of Lahore Authority: gates, havelis, Shahi Hammam, Wazir Khan Mosque history, for Place facts, Free walking tours and Places to see.',
+    cls='official',
+    sitemaps=['https://walledcitylahore.gop.pk/sitemap_index.xml'],
+    feeds=['https://walledcitylahore.gop.pk/feed/'],
+    include=['^https?://walledcitylahore\\.gop\\.pk/(heritage|monuments|projects|gates)/'],
+)
+_facts(
+    'her-np-danam',
+    ['facts', 'places', 'walking_tours'],
+    'DANAM / Nepal Heritage Documentation Project (Heidelberg): structured monument records (history, inscriptions, rituals) for Kathmandu Valley + West Nepal, for Place facts, Places to see and Free walking tours.',
+    cls='reference',
+    depth=2,
+    seeds=['https://danam.cats.uni-heidelberg.de/'],
+    include=['^https?://danam\\.cats\\.uni-heidelberg\\.de/(report|resource|monument)/'],
+)
+_facts(
+    'her-np-lumbini',
+    ['facts', 'places'],
+    'Lumbini Development Trust: Lumbini, Buddha birthplace monuments, Ashoka pillar, for Place facts and Places to see.',
+    cls='official',
+    seeds=['https://lumbinidevtrust.gov.np/'],
+    include=['^https?://lumbinidevtrust\\.gov\\.np/page/'],
+)
+_facts(
+    'gov-np-bhaktapur',
+    ['facts', 'walking_tours'],
+    'Bhaktapur Municipality: Durbar Square, Nyatapola facts; template shared by all Nepal municipal sites (*.gov.np MoFAGA), for Place facts and Free walking tours.',
+    cls='official',
+    seeds=['https://bhaktapurmun.gov.np/'],
+    include=['^https?://bhaktapurmun\\.gov\\.np/(content|page)/'],
+)
+_facts(
+    'her-np-kvpt',
+    ['facts', 'places'],
+    'Kathmandu Valley Preservation Trust: restoration histories of Patan Durbar Square monuments, for Place facts and Places to see.',
+    cls='editorial',
+    sitemaps=['https://www.kvptnepal.org/sitemap.xml'],
+    include=['^https?://www\\.kvptnepal\\.org/(projects|post)/'],
+)
+_facts(
+    'her-bt-dcdd',
+    ['facts', 'places'],
+    'Department of Culture and Dzongkha Development (MoHA Bhutan): dzong histories, conservation, founding dates (e.g. Lingzhi Dzong 1668), for Place facts and Places to see.',
+    cls='official',
+    sitemaps=['https://dcdd.moha.gov.bt/wp-sitemap.xml'],
+    feeds=['https://dcdd.moha.gov.bt/feed/'],
+    include=['^https?://dcdd\\.moha\\.gov\\.bt/\\?p=|^/(heritage|dzong)/'],
+)
+_facts(
+    'her-bt-museums',
+    ['facts', 'places'],
+    'National Museum of Bhutan / Ta Dzong: Ta Dzong, Royal Heritage Museum temples, for Place facts and Places to see.',
+    cls='official',
+    sitemaps=['https://museums.gov.bt/sitemap.xml'],
+    include=['^https?://museums\\.gov\\.bt/(our-museums|news-events)/'],
+)
+_facts(
+    'arch-bt-cbs',
+    ['facts'],
+    "Centre for Bhutan Studies & GNH Research (Journal of Bhutan Studies): peer-reviewed local histories of Bhutan's districts and villages, for Place facts.",
+    cls='reference',
+    sitemaps=['https://bhutanstudies.org.bt/wp-sitemap.xml'],
+    feeds=['https://bhutanstudies.org.bt/feed/'],
+    include=['^https?://bhutanstudies\\.org\\.bt/(publications|journal)/'],
+)
+_facts(
+    'her-mv-heritage',
+    ['facts', 'places'],
+    'National Centre for Cultural Heritage (Maldives): coral-stone mosques (21), ~400 surveyed sites, for Place facts and Places to see.',
+    cls='official',
+    seeds=['https://heritage.gov.mv/'],
+    include=['^https?://heritage\\.gov\\.mv/(en/)?(heritage|museum|news)/'],
+)
+_facts(
+    'arch-mv-archives',
+    ['facts'],
+    'National Archives of the Maldives: Maldivian history publications, island records, for Place facts.',
+    cls='official',
+    seeds=['https://archives.gov.mv/', 'https://archives.gov.mv/legal'],
+    include=['^https?://archives\\.gov\\.mv/(publications|documents|catalogue)/'],
+)
+_facts(
+    'her-bd-archaeology',
+    ['facts', 'places'],
+    'Department of Archaeology Bangladesh (প্রত্নতত্ত্ব অধিদপ্তর): protected sites by division/district (Paharpur, Mahasthangarh, Sixty Dome Mosque), for Place facts and Places to see.',
+    cls='official',
+    depth=2,
+    seeds=['https://archaeology.gov.bd/'],
+    include=['^https?://archaeology\\.gov\\.bd/site/(page|view)/'],
+)
+_facts(
+    'her-bd-museum',
+    ['facts'],
+    'Bangladesh National Museum: national history and collections, for Place facts.',
+    cls='official',
+    seeds=['https://bangladeshmuseum.gov.bd/'],
+    include=['^https?://bangladeshmuseum\\.gov\\.bd/site/page/'],
+)
+_facts(
+    'gov-bd-district-portals',
+    ['facts', 'places'],
+    'Bangladesh district portals (64 x *.gov.bd, e.g. Bogura): district history, famous people, heritage per district/upazila, for Place facts and Places to see.',
+    cls='official',
+    seeds=['https://bogura.gov.bd/'],
+    include=['^https?://bogura\\.gov\\.bd/site/page/'],
+)
+_facts(
+    'od-id-dapobud',
+    ['facts', 'places'],
+    'Data Pokok Kebudayaan (Dapobud): national cagar budaya register: successor of Sistem Registrasi Nasional Cagar Budaya; designated sites with SK dates; "data kebudayaan secara terbuka", for Place facts and Places to see.',
+    cls='official',
+    depth=2,
+    seeds=['https://dapobud.kemenbud.go.id/'],
+    include=['^https?://dapobud\\.kemenbud\\.go\\.id/(cagar-budaya|cbpn|odcb|dataset)/'],
+)
+_facts(
+    'fx-id-esi',
+    ['facts'],
+    'Ensiklopedia Sejarah Indonesia (Kemenbud, MediaWiki): official history-encyclopedia entries on places (Tempat), events, for Place facts.',
+    cls='official',
+    seeds=['https://esi.kemenbud.go.id/wiki/Category:Tempat'],
+    include=['^https?://esi\\.kemenbud\\.go\\.id/wiki/'],
+)
+_facts(
+    'her-id-bali-disbud',
+    ['facts', 'events'],
+    'Dinas Kebudayaan Provinsi Bali: Bali cagar budaya, temple and village traditions, for Place facts and Events.',
+    cls='official',
+    seeds=['https://disbud.baliprov.go.id/'],
+    include=['^https?://disbud\\.baliprov\\.go\\.id/(cagar-budaya|berita|artikel)/'],
+)
+_facts(
+    'arch-my-arkib',
+    ['facts'],
+    'Arkib Negara Malaysia: dated national and state history events, for Place facts.',
+    cls='official',
+    seeds=['https://www.arkib.gov.my/en/'],
+    include=['^https?://www\\.arkib\\.gov\\.my/(en|ms)/(hari-ini-dalam-sejarah|sejarah)/'],
+)
+_facts(
+    'her-my-perzim',
+    ['facts', 'places'],
+    'Perbadanan Muzium Melaka: Melaka museums and the history of their buildings, for Place facts and Places to see.',
+    cls='official',
+    sitemaps=['https://perzim.gov.my/wp-sitemap.xml'],
+    feeds=['https://perzim.gov.my/feed/'],
+    include=['^https?://perzim\\.gov\\.my/(muzium|galeri)/'],
+)
+_facts(
+    'fx-my-badan-warisan',
+    ['facts'],
+    'Badan Warisan Malaysia (heritage NGO): built-heritage stories (shophouses, Rumah Penghulu), for Place facts.',
+    cls='editorial',
+    sitemaps=['https://badanwarisanmalaysia.org/sitemap.xml'],
+    feeds=['https://badanwarisanmalaysia.org/feed/'],
+    include=['^https?://badanwarisanmalaysia\\.org/(heritage|news|\\d{4}/)/'],
+)
+_facts(
+    'fx-th-saranukrom',
+    ['facts'],
+    'สารานุกรมไทยสำหรับเยาวชน (Thai Junior Encyclopedia Foundation): royal-initiative encyclopedia, entries on provinces, canals, temples, for Place facts.',
+    cls='reference',
+    depth=2,
+    seeds=['https://saranukromthai.or.th/index'],
+    include=['^https?://saranukromthai\\.or\\.th/(sub/book|oldchild|article)/'],
+)
+_facts(
+    'gov-th-mculture',
+    ['facts', 'events'],
+    "Ministry of Culture Thailand: provincial culture offices' local history pages, for Place facts and Events.",
+    cls='official',
+    llm=False,
+    seeds=['https://www.m-culture.go.th/'],
+    include=['^https?://www\\.m-culture\\.go\\.th/(th/)?(article|province)/'],
+)
+_facts(
+    'gov-vn-special-relics',
+    ['facts', 'places'],
+    'Xây dựng chính sách (Gov. of Vietnam): lists of special national relics by batch: each Di tích quốc gia đặc biệt with decision number and batch (to round 19, 2026), for Place facts and Places to see.',
+    cls='official',
+    seeds=['https://xaydungchinhsach.chinhphu.vn/danh-sach-di-tich-quoc-gia-dac-biet-119260211160043009.htm'],
+    include=['^https?://xaydungchinhsach\\.chinhphu\\.vn/danh-sach-di-tich'],
+)
+_facts(
+    'her-vn-history-museum',
+    ['facts'],
+    'Bảo tàng Lịch sử Quốc gia (National Museum of Vietnamese History): research articles on dynasties, relic sites, provinces, for Place facts.',
+    cls='official',
+    seeds=['https://baotanglichsu.vn/Sitemap.aspx'],
+    include=['^https?://baotanglichsu\\.vn/vi/Articles/'],
+)
+_facts(
+    'her-vn-thang-long',
+    ['facts', 'places', 'walking_tours'],
+    'Imperial Citadel of Thang Long (Hoàng thành Thăng Long): Hanoi citadel history (UNESCO 2010), for Place facts, Places to see and Free walking tours.',
+    cls='official',
+    sitemaps=['https://hoangthanhthanglong.vn/sitemap_index.xml'],
+    feeds=['https://hoangthanhthanglong.vn/feed/'],
+    include=['^https?://hoangthanhthanglong\\.vn/(di-tich|nghien-cuu|tin-tuc)/'],
+)
+_facts(
+    'her-ph-talapamana',
+    ['facts', 'places'],
+    'TALAPAMANA: Philippine Registry of Heritage (NCCA, formerly PRECUP): declared cultural properties incl. NHCP-marked sites (the NHCP gap from round 1), for Place facts and Places to see.',
+    cls='official',
+    sitemaps=['https://talapamana.ncca.gov.ph/sitemap.xml'],
+    include=['^https?://talapamana\\.ncca\\.gov\\.ph/index\\.php/(announcements|registry)/'],
+)
+_facts(
+    'her-ph-national-museum',
+    ['facts'],
+    'National Museum of the Philippines: regional museums, archaeological sites (Butuan, Tabon), for Place facts.',
+    cls='official',
+    feeds=['https://www.nationalmuseum.gov.ph/feed/'],
+    include=['^https?://www\\.nationalmuseum\\.gov\\.ph/\\d{4}/|^/(our-collections|regional-museums)/'],
+)
+_facts(
+    'fx-ph-kahimyang',
+    ['facts'],
+    'The Kahimyang Project (Philippine history): "today in Philippine history", town founding dates, for Place facts.',
+    cls='editorial',
+    sitemaps=['https://kahimyang.com/sitemap.xml'],
+    include=['^https?://kahimyang\\.com/kauswagan/articles/|^/articles/'],
+)
+_facts(
+    'fx-kh-dccam',
+    ['facts', 'places'],
+    'Documentation Center of Cambodia: Khmer Rouge history and memorial sites per province, for Place facts and Places to see.',
+    cls='reference',
+    sitemaps=['https://www.dccam.org/wp-sitemap.xml'],
+    feeds=['https://www.dccam.org/feed/'],
+    include=['^https?://www\\.dccam\\.org/(\\d{4}|memorial|projects)/'],
+)
+_facts(
+    'gov-kh-mcfa',
+    ['facts', 'places'],
+    'Ministry of Culture and Fine Arts Cambodia: registered tangible heritage (6,000+ sites registered), Koh Ker, Sambor Prei Kuk, for Place facts and Places to see.',
+    cls='official',
+    seeds=['https://mcfa.gov.kh/heritage-type/tangible-heritage/'],
+    feeds=['https://mcfa.gov.kh/feed/'],
+    include=['^https?://mcfa\\.gov\\.kh/heritage(-type)?/'],
+)
+_facts(
+    'arch-kh-angkordb',
+    ['facts', 'places'],
+    'Angkor Database: temple specs, kings, dates for Angkor monuments, for Place facts and Places to see.',
+    cls='reference',
+    sitemaps=['https://angkordatabase.asia/sitemap.xml'],
+    include=['^https?://angkordatabase\\.asia/(libs|temples|glossary)/'],
+)
+_facts(
+    'gov-tl-portal',
+    ['facts'],
+    'Governo de Timor-Leste: História, Símbolos Nacionais: national history and symbols (Timor-Leste has no State-Party WH site yet), for Place facts.',
+    cls='official',
+    seeds=['https://timor-leste.gov.tl/'],
+    include=['^https?://timor-leste\\.gov\\.tl/\\?p='],
+)
+_facts(
+    'gov-cn-gd-dfz',
+    ['facts', 'places'],
+    '广东省情网 (Guangdong Local Chronicles Office): 省情要览 per city/county (history, specialities), for Place facts and Places to see.',
+    cls='official',
+    depth=2,
+    seeds=['https://dfz.gd.gov.cn/', 'https://dfz.gd.gov.cn/index/ztlm/szfzg/'],
+    include=['^https?://dfz\\.gd\\.gov\\.cn/(index/)?(sqyl|sqsjk|ztlm)/'],
+)
+_facts(
+    'gov-cn-hunan-dfz',
+    ['facts'],
+    '湖南省地方志编纂院: 省志/市县志 listings, "志说湖南" local-history features, for Place facts.',
+    cls='official',
+    depth=2,
+    seeds=['https://dfz.hunan.gov.cn/dfz/tslm_71564/dfzs/index.html'],
+    include=['^https?://dfz\\.hunan\\.gov\\.cn/dfz/(tslm|xxgk)_'],
+)
+_facts(
+    'gov-cn-bj-dfz',
+    ['facts', 'walking_tours'],
+    '京网 (Beijing Party History & Local Chronicles Office): Beijing district histories, 旧志 database news, for Place facts and Free walking tours.',
+    cls='official',
+    seeds=['https://www.bjdsdfz.cn/'],
+    include=['^https?://www\\.bjdsdfz\\.cn/(fzzs|bjsq|lsdq)/'],
+)
+_facts(
+    'arch-cn-bj-szfzg',
+    ['facts'],
+    '北京市数字方志馆 (Beijing digital gazetteer museum): digitised 方志 and 年鉴 (yearbooks) for Beijing districts; reader pages may be JS: verify, for Place facts.',
+    cls='official',
+    seeds=['https://bjsfzg.bjdsdfz.cn/'],
+    include=['^https?://bjsfzg\\.bjdsdfz\\.cn/(szfz|sznj)/'],
+)
+_facts(
+    'gov-cn-shaanxi-dfz',
+    ['facts'],
+    "陕西省地方志办公室 (陕西省情网): Shaanxi county 地情 (Xi'an, Yan'an), for Place facts.",
+    cls='official',
+    llm=False,
+    seeds=['http://www.sxsdq.cn/'],
+    include=['^https?://www\\.sxsdq\\.cn/(dqzlk|sqgk)/'],
+)
+_facts(
+    'fx-cn-dili360',
+    ['facts', 'places'],
+    '中国国家地理网 (Chinese National Geography): records and curiosities about Chinese places (highest, oldest), for Place facts and Places to see.',
+    cls='editorial',
+    seeds=['https://www.dili360.com/', 'https://www.dili360.com/magazine/'],
+    include=['^https?://www\\.dili360\\.com/(article|cng)/'],
+)
+_facts(
+    'her-pk-punjab-archaeology',
+    ['facts', 'places'],
+    'Directorate General of Archaeology Punjab (Pakistan): 400+ protected monuments, Punjab Special Premises Ordinance 1985, for Place facts and Places to see.',
+    cls='official',
+    off='enable after a check from the crawler VM: robots.txt gave no response from the research laptop (timeout x2 (15 s, 40 s)); terms and content not yet seen',
+    seeds=['https://archaeology.punjab.gov.pk/list-of-monuments-museums'],
+    include=['^https?://archaeology\\.punjab\\.gov\\.pk/(list-of-monuments|monuments)/'],
+)
+_facts(
+    'her-lk-ccf',
+    ['facts', 'places'],
+    'Central Cultural Fund Sri Lanka: Cultural Triangle sites (Sigiriya, Polonnaruwa, Dambulla, Abhayagiri), for Place facts and Places to see.',
+    cls='official',
+    off='enable after a check from the crawler VM: robots.txt gave no response from the research laptop (timeout x2); terms and content not yet seen',
+    seeds=['https://ccf.gov.lk/web/', 'https://ccf.gov.lk/web/wp-json/wp/v2/pages'],
+    include=['^https?://ccf\\.gov\\.lk/web/'],
+)
+_facts(
+    'arch-lk-archives',
+    ['facts'],
+    'Department of National Archives Sri Lanka: history and curiosities of the places it covers, for Place facts.',
+    cls='official',
+    off='enable after a check from the crawler VM: robots.txt gave no response from the research laptop (TLS failure: certificate expired); terms and content not yet seen',
+    seeds=['https://www.archives.gov.lk/'],
+    include=['^https?://www\\.archives\\.gov\\.lk/'],
+)
+_facts(
+    'her-bt-doc',
+    ['facts', 'places'],
+    'Department of Culture Bhutan publications (district heritage books, e.g. Bumthang, Mongar): per-district heritage inventories, for Place facts and Places to see.',
+    cls='official',
+    off='enable after a check from the crawler VM: robots.txt gave no response from the research laptop (timeout x2); terms and content not yet seen',
+    seeds=['https://doc.gov.bt/', 'https://doc.gov.bt/wp-content/uploads/2022/11/'],
+    include=['^https?://doc\\.gov\\.bt/(\\?p=|wp-content/uploads/)'],
+)
+_facts(
+    'gov-in-hr-gazetteers',
+    ['facts'],
+    'Gazetteers of Haryana (Revenue Dept): district gazetteers 1988 to 2020 (PDF), for Place facts.',
+    cls='official',
+    off='enable after a check from the crawler VM: robots.txt gave no response from the research laptop (timeout x2); terms and content not yet seen',
+    seeds=['https://revenueharyana.gov.in/gazetteers-of-haryana/'],
+    include=['^https?://revenueharyana\\.gov\\.in/gazetteers-of-haryana/'],
+)
+_facts(
+    'her-in-tn-archaeology',
+    ['facts', 'places'],
+    'Tamil Nadu State Department of Archaeology: state-protected monuments (TN gazetteers are not online, per the FLAME 2021 survey), for Place facts and Places to see.',
+    cls='official',
+    off='enable after a check from the crawler VM: robots.txt gave no response from the research laptop (timeout x2); terms and content not yet seen',
+    seeds=['https://www.tnarch.gov.in/'],
+    include=['^https?://www\\.tnarch\\.gov\\.in/'],
+)
+_facts(
+    'her-in-as-archaeology',
+    ['facts', 'places'],
+    'Directorate of Archaeology Assam (north-east): state-protected sites of Assam, for Place facts and Places to see.',
+    cls='official',
+    off='enable after a check from the crawler VM: robots.txt gave no response from the research laptop (timeout x2 (DNS resolves)); terms and content not yet seen',
+    seeds=['https://archaeology.assam.gov.in/'],
+    include=['^https?://archaeology\\.assam\\.gov\\.in/(information-services|portlets)/'],
+)
+_facts(
+    'her-id-jogjacagar',
+    ['facts', 'places', 'walking_tours'],
+    'Jogja Cagar (DIY Yogyakarta cagar budaya database): designated sites in Yogyakarta, for Place facts, Places to see and Free walking tours.',
+    cls='official',
+    off='enable after a check from the crawler VM: robots.txt gave no response from the research laptop (timeout x2); terms and content not yet seen',
+    depth=2,
+    seeds=['https://jogjacagar.jogjaprov.go.id/'],
+    include=['^https?://jogjacagar\\.jogjaprov\\.go\\.id/(cagar|detail)/'],
+)
+_facts(
+    'her-id-wbtb',
+    ['facts', 'events'],
+    'Warisan Budaya Takbenda (Kemenbud): intangible heritage per province, for Place facts and Events.',
+    cls='official',
+    off='enable after a check from the crawler VM: robots.txt gave no response from the research laptop (timeout (DNS resolves; the old kemdikbud host is gone)); terms and content not yet seen',
+    seeds=['https://warisanbudaya.kemenbud.go.id/'],
+    include=['^https?://warisanbudaya\\.kemenbud\\.go\\.id/(wbtb|dashboard)/'],
+)
+_facts(
+    'gov-id-kebudayaan',
+    ['facts', 'places'],
+    'Direktorat Jenderal Kebudayaan (Kemenbud; BPK regional offices): BPK site articles per region, for Place facts and Places to see.',
+    cls='official',
+    off='enable after a check from the crawler VM: robots.txt gave no response from the research laptop (timeout (DNS resolves)); terms and content not yet seen',
+    seeds=['https://kebudayaan.kemenbud.go.id/'],
+    include=['^https?://kebudayaan\\.kemenbud\\.go\\.id/(bpk|regnas)/'],
+)
+_facts(
+    'her-my-sarawak-museum',
+    ['facts'],
+    'Sarawak Museum Department: Sarawak history, Niah Caves, for Place facts.',
+    cls='official',
+    off='enable after a check from the crawler VM: robots.txt gave no response from the research laptop (timeout x2); terms and content not yet seen',
+    seeds=['https://museum.sarawak.gov.my/'],
+    include=['^https?://museum\\.sarawak\\.gov\\.my/'],
+)
+_facts(
+    'od-th-finearts',
+    ['facts', 'places'],
+    'Fine Arts Dept data catalogue (CKAN): ข้อมูลบัญชีตำแหน่งโบราณสถาน: location list of registered monuments nationwide (9,000+ sites), registration under the 1961 Act, for Place facts and Places to see.',
+    cls='official',
+    off='enable after a check from the crawler VM: robots.txt gave no response from the research laptop (TLS failure: certificate expired); terms and content not yet seen',
+    depth=0,
+    seeds=['https://data.finearts.go.th/dataset/gis_fad001'],
+    include=['^https?://data\\.finearts\\.go\\.th/(api/3|dataset)/'],
+)
+_facts(
+    'arch-vn-bachkhoa',
+    ['facts'],
+    'Từ điển Bách khoa Việt Nam (VASS): national encyclopedia entries on provinces, villages, for Place facts.',
+    cls='reference',
+    off='enable after a check from the crawler VM: robots.txt gave no response from the research laptop (timeout x2); terms and content not yet seen',
+    seeds=['https://bachkhoatoanthu.vass.gov.vn/'],
+    include=['^https?://bachkhoatoanthu\\.vass\\.gov\\.vn/(noidung|tu-dien)/'],
+)
+_facts(
+    'her-vn-hue',
+    ['facts', 'places', 'walking_tours'],
+    'Hue Monuments Conservation Centre: Hue citadel and tombs, for Place facts, Places to see and Free walking tours.',
+    cls='official',
+    off='enable after a check from the crawler VM: robots.txt gave no response from the research laptop (timeout x2); terms and content not yet seen',
+    seeds=['https://hueworldheritage.org.vn/'],
+    include=['^https?://hueworldheritage\\.org\\.vn/'],
+)
+_facts(
+    'her-bn-museums',
+    ['facts'],
+    'Brunei Museums Department: Brunei history, Kota Batu archaeology, for Place facts.',
+    cls='official',
+    off='enable after a check from the crawler VM: robots.txt gave no response from the research laptop (TLS failure: certificate expired); terms and content not yet seen',
+    seeds=['https://museums.gov.bn/'],
+    include=['^https?://museums\\.gov\\.bn/'],
+)
+_facts(
+    'gov-cn-sc-dfz',
+    ['facts'],
+    '四川省情网 / 四川省数字方志馆 (2,500 志鉴 online): Sichuan county 地情, for Place facts.',
+    cls='official',
+    off='enable after a check from the crawler VM: robots.txt gave no response from the research laptop (timeout x2); terms and content not yet seen',
+    seeds=['https://www.scdfz.org.cn/'],
+    include=['^https?://www\\.scdfz\\.org\\.cn/(sqgk|szfzg)/'],
+)
+_facts(
+    'od-cn-chgis',
+    ['facts'],
+    'China Historical GIS (Harvard / Fudan): history and curiosities of the places it covers, for Place facts.',
+    cls='reference',
+    off='adapter pending: format / notes: REST JSON "Placenames API" (TGAZ, no key) plus shapefile/CSV downloads on Harvard Dataverse: historical…',
+    seeds=['https://chgis.fas.harvard.edu/'],
+)
+_facts(
+    'gov-cn-sh-shtong',
+    ['facts'],
+    '上海数字方志 (Shanghai Local Chronicles Office): history and curiosities of the places it covers, for Place facts.',
+    cls='official',
+    off='adapter pending: format / notes: the site is a JS single-page app (Vite module bundle); needs its JSON API. robots path returns the SPA…',
+    seeds=['https://www.shtong.gov.cn/'],
+)
+_facts(
+    'od-mv-mhs',
+    ['facts'],
+    'Maldives Heritage Survey (Oxford): history and curiosities of the places it covers, for Place facts.',
+    cls='reference',
+    off='adapter pending: format / notes: the complete dataset is on the Bodleian ORA (DOI 10.5287/bodleian:wxAB8J6Qo), an archive of site record…',
+    seeds=['https://maldivesheritage.oxcis.ac.uk/'],
+)
+_facts(
+    'od-vn-sonla',
+    ['facts'],
+    'Sơn La open-data portal: ranked relics list: history and curiosities of the places it covers, for Place facts.',
+    cls='reference',
+    off='adapter pending: format / notes: provincial open-data portal (dataset pages with tabular views, export format to confirm); robots "Disal…',
+    seeds=['https://data.sonla.gov.vn/'],
+)
+_facts(
+    'tb-id-jadesta',
+    ['facts', 'places', 'activities'],
+    'Jadesta: Jejaring Desa Wisata (Indonesia Ministry of Tourism): profiles of thousands of Indonesian tourism villages (history, attractions; ADWI award winners), for Place facts, Places to see and Activities.',
+    cls='official',
+    depth=2,
+    seeds=['https://jadesta.kemenpar.go.id/'],
+    include=['^https?://jadesta\\.kemenpar\\.go\\.id/desa/', '^https?://jadesta\\.kemenpar\\.go\\.id/atraksi/'],
+)
+_facts(
+    'gov-ph-tangub-barangays',
+    ['facts'],
+    'Tangub City barangay pages (template for Philippine LGU sites): history and name origin of each barangay (e.g. Bongabong, from a tree), for Place facts.',
+    cls='official',
+    depth=2,
+    sitemaps=['https://www.tangubcity.gov.ph/sitemap'],
+    include=['^https?://www\\.tangubcity\\.gov\\.ph/blog/barangay-page/'],
+)
+_facts(
+    'gov-jp-zck',
+    ['facts'],
+    '全国町村会 (National Association of Towns and Villages, Japan): village initiatives and local mascots, for Place facts.',
+    cls='official',
+    depth=2,
+    seeds=['https://www.zck.or.jp/site/activities/', 'https://www.zck.or.jp/site/local-mascot/', 'https://www.zck.or.jp/site/essay/'],
+    include=['^https?://www\\.zck\\.or\\.jp/site/(activities|local-mascot|essay|info)/'],
+)
+_facts(
+    'gov-in-dist-gaya',
+    ['facts', 'places', 'itinerary'],
+    'Official Gaya district portal (Bihar, India): the district history page in Hindi, Bengali or English, for Place facts, Places to see and Itinerary.',
+    cls='official',
+    budget=20,
+    seeds=['https://gaya.nic.in/history/'],
+    include=['^https?://gaya\\.nic\\.in/((hi|bn|en|ta|kn|ml)/)?(about-district/)?(history|(?:इतिहास|%E0%A4%87%E0%A4%A4%E0%A4%BF%E0%A4%B9%E0%A4%BE%E0%A4%B8)|(?:ইতিহাস|%E0%A6%87%E0%A6%A4%E0%A6%BF%E0%A6%B9%E0%A6%BE%E0%A6%B8)[-0-9]*|profile|tourist-places?|culture-heritage)/'],
+)
+_facts(
+    'gov-in-dist-nalanda',
+    ['facts', 'places', 'itinerary'],
+    'Official Nalanda district portal (Bihar, India): the district history page in Hindi, Bengali or English, for Place facts, Places to see and Itinerary.',
+    cls='official',
+    budget=20,
+    seeds=['https://nalanda.nic.in/en/history/'],
+    include=['^https?://nalanda\\.nic\\.in/((hi|bn|en|ta|kn|ml)/)?(about-district/)?(history|(?:इतिहास|%E0%A4%87%E0%A4%A4%E0%A4%BF%E0%A4%B9%E0%A4%BE%E0%A4%B8)|(?:ইতিহাস|%E0%A6%87%E0%A6%A4%E0%A6%BF%E0%A6%B9%E0%A6%BE%E0%A6%B8)[-0-9]*|profile|tourist-places?|culture-heritage)/'],
+)
+_facts(
+    'gov-in-dist-patna',
+    ['facts', 'places', 'itinerary'],
+    'Official Patna district portal (Bihar, India): the district history page in Hindi, Bengali or English, for Place facts, Places to see and Itinerary.',
+    cls='official',
+    budget=20,
+    seeds=['https://patna.nic.in/history/'],
+    include=['^https?://patna\\.nic\\.in/((hi|bn|en|ta|kn|ml)/)?(about-district/)?(history|(?:इतिहास|%E0%A4%87%E0%A4%A4%E0%A4%BF%E0%A4%B9%E0%A4%BE%E0%A4%B8)|(?:ইতিহাস|%E0%A6%87%E0%A6%A4%E0%A6%BF%E0%A6%B9%E0%A6%BE%E0%A6%B8)[-0-9]*|profile|tourist-places?|culture-heritage)/'],
+)
+_facts(
+    'gov-in-dist-rohtas',
+    ['facts', 'places', 'itinerary'],
+    'Official Rohtas district portal (Bihar, India): the district history page in Hindi, Bengali or English, for Place facts, Places to see and Itinerary.',
+    cls='official',
+    budget=20,
+    seeds=['https://rohtas.nic.in/hi/%E0%A4%87%E0%A4%A4%E0%A4%BF%E0%A4%B9%E0%A4%BE%E0%A4%B8/'],
+    include=['^https?://rohtas\\.nic\\.in/((hi|bn|en|ta|kn|ml)/)?(about-district/)?(history|(?:इतिहास|%E0%A4%87%E0%A4%A4%E0%A4%BF%E0%A4%B9%E0%A4%BE%E0%A4%B8)|(?:ইতিহাস|%E0%A6%87%E0%A6%A4%E0%A6%BF%E0%A6%B9%E0%A6%BE%E0%A6%B8)[-0-9]*|profile|tourist-places?|culture-heritage)/'],
+)
+_facts(
+    'gov-in-dist-vaishali',
+    ['facts', 'places', 'itinerary'],
+    'Official Vaishali district portal (Bihar, India): the district history page in Hindi, Bengali or English, for Place facts, Places to see and Itinerary.',
+    cls='official',
+    budget=20,
+    seeds=['https://vaishali.nic.in/hi/%E0%A4%87%E0%A4%A4%E0%A4%BF%E0%A4%B9%E0%A4%BE%E0%A4%B8/'],
+    include=['^https?://vaishali\\.nic\\.in/((hi|bn|en|ta|kn|ml)/)?(about-district/)?(history|(?:इतिहास|%E0%A4%87%E0%A4%A4%E0%A4%BF%E0%A4%B9%E0%A4%BE%E0%A4%B8)|(?:ইতিহাস|%E0%A6%87%E0%A6%A4%E0%A6%BF%E0%A6%B9%E0%A6%BE%E0%A6%B8)[-0-9]*|profile|tourist-places?|culture-heritage)/'],
+)
+_facts(
+    'gov-in-dist-bastar',
+    ['facts', 'places', 'itinerary'],
+    'Official Bastar district portal (Chhattisgarh, India): the district history page in Hindi, Bengali or English, for Place facts, Places to see and Itinerary.',
+    cls='official',
+    budget=20,
+    seeds=['https://bastar.gov.in/%E0%A4%9C%E0%A4%BF%E0%A4%B2%E0%A5%87-%E0%A4%95%E0%A5%87-%E0%A4%AC%E0%A4%BE%E0%A4%B0%E0%A5%87-%E0%A4%AE%E0%A5%87%E0%A4%82/%E0%A4%87%E0%A4%A4%E0%A4%BF%E0%A4%B9%E0%A4%BE%E0%A4%B8/'],
+    include=['^https?://bastar\\.gov\\.in/((hi|bn|en|ta|kn|ml)/)?(about-district/)?(history|(?:इतिहास|%E0%A4%87%E0%A4%A4%E0%A4%BF%E0%A4%B9%E0%A4%BE%E0%A4%B8)|(?:ইতিহাস|%E0%A6%87%E0%A6%A4%E0%A6%BF%E0%A6%B9%E0%A6%BE%E0%A6%B8)[-0-9]*|profile|tourist-places?|culture-heritage)/'],
+)
+_facts(
+    'gov-in-dist-raipur',
+    ['facts', 'places', 'itinerary'],
+    'Official Raipur district portal (Chhattisgarh, India): the district history page in Hindi, Bengali or English, for Place facts, Places to see and Itinerary.',
+    cls='official',
+    budget=20,
+    seeds=['https://raipur.gov.in/%E0%A4%87%E0%A4%A4%E0%A4%BF%E0%A4%B9%E0%A4%BE%E0%A4%B8/'],
+    include=['^https?://raipur\\.gov\\.in/((hi|bn|en|ta|kn|ml)/)?(about-district/)?(history|(?:इतिहास|%E0%A4%87%E0%A4%A4%E0%A4%BF%E0%A4%B9%E0%A4%BE%E0%A4%B8)|(?:ইতিহাস|%E0%A6%87%E0%A6%A4%E0%A6%BF%E0%A6%B9%E0%A6%BE%E0%A6%B8)[-0-9]*|profile|tourist-places?|culture-heritage)/'],
+)
+_facts(
+    'gov-in-dist-northgoa',
+    ['facts', 'places', 'itinerary'],
+    'Official Northgoa district portal (Goa, India): the district history page in Hindi, Bengali or English, for Place facts, Places to see and Itinerary.',
+    cls='official',
+    budget=20,
+    seeds=['https://northgoa.gov.in/history/'],
+    include=['^https?://northgoa\\.gov\\.in/((hi|bn|en|ta|kn|ml)/)?(about-district/)?(history|(?:इतिहास|%E0%A4%87%E0%A4%A4%E0%A4%BF%E0%A4%B9%E0%A4%BE%E0%A4%B8)|(?:ইতিহাস|%E0%A6%87%E0%A6%A4%E0%A6%BF%E0%A6%B9%E0%A6%BE%E0%A6%B8)[-0-9]*|profile|tourist-places?|culture-heritage)/'],
+)
+_facts(
+    'gov-in-dist-southgoa',
+    ['facts', 'places', 'itinerary'],
+    'Official Southgoa district portal (Goa, India): the district history page in Hindi, Bengali or English, for Place facts, Places to see and Itinerary.',
+    cls='official',
+    budget=20,
+    seeds=['https://southgoa.nic.in/history/'],
+    include=['^https?://southgoa\\.nic\\.in/((hi|bn|en|ta|kn|ml)/)?(about-district/)?(history|(?:इतिहास|%E0%A4%87%E0%A4%A4%E0%A4%BF%E0%A4%B9%E0%A4%BE%E0%A4%B8)|(?:ইতিহাস|%E0%A6%87%E0%A6%A4%E0%A6%BF%E0%A6%B9%E0%A6%BE%E0%A6%B8)[-0-9]*|profile|tourist-places?|culture-heritage)/'],
+)
+_facts(
+    'gov-in-dist-hisar',
+    ['facts', 'places', 'itinerary'],
+    'Official Hisar district portal (Haryana, India): the district history page in Hindi, Bengali or English, for Place facts, Places to see and Itinerary.',
+    cls='official',
+    budget=20,
+    seeds=['https://hisar.gov.in/hi/%E0%A4%87%E0%A4%A4%E0%A4%BF%E0%A4%B9%E0%A4%BE%E0%A4%B8/'],
+    include=['^https?://hisar\\.gov\\.in/((hi|bn|en|ta|kn|ml)/)?(about-district/)?(history|(?:इतिहास|%E0%A4%87%E0%A4%A4%E0%A4%BF%E0%A4%B9%E0%A4%BE%E0%A4%B8)|(?:ইতিহাস|%E0%A6%87%E0%A6%A4%E0%A6%BF%E0%A6%B9%E0%A6%BE%E0%A6%B8)[-0-9]*|profile|tourist-places?|culture-heritage)/'],
+)
+_facts(
+    'gov-in-dist-kurukshetra',
+    ['facts', 'places', 'itinerary'],
+    'Official Kurukshetra district portal (Haryana, India): the district history page in Hindi, Bengali or English, for Place facts, Places to see and Itinerary.',
+    cls='official',
+    budget=20,
+    seeds=['https://kurukshetra.gov.in/history/'],
+    include=['^https?://kurukshetra\\.gov\\.in/((hi|bn|en|ta|kn|ml)/)?(about-district/)?(history|(?:इतिहास|%E0%A4%87%E0%A4%A4%E0%A4%BF%E0%A4%B9%E0%A4%BE%E0%A4%B8)|(?:ইতিহাস|%E0%A6%87%E0%A6%A4%E0%A6%BF%E0%A6%B9%E0%A6%BE%E0%A6%B8)[-0-9]*|profile|tourist-places?|culture-heritage)/'],
+)
+_facts(
+    'gov-in-dist-panipat',
+    ['facts', 'places', 'itinerary'],
+    'Official Panipat district portal (Haryana, India): the district history page in Hindi, Bengali or English, for Place facts, Places to see and Itinerary.',
+    cls='official',
+    budget=20,
+    seeds=['https://panipat.gov.in/hi/%E0%A4%87%E0%A4%A4%E0%A4%BF%E0%A4%B9%E0%A4%BE%E0%A4%B8/'],
+    include=['^https?://panipat\\.gov\\.in/((hi|bn|en|ta|kn|ml)/)?(about-district/)?(history|(?:इतिहास|%E0%A4%87%E0%A4%A4%E0%A4%BF%E0%A4%B9%E0%A4%BE%E0%A4%B8)|(?:ইতিহাস|%E0%A6%87%E0%A6%A4%E0%A6%BF%E0%A6%B9%E0%A6%BE%E0%A6%B8)[-0-9]*|profile|tourist-places?|culture-heritage)/'],
+)
+_facts(
+    'gov-in-dist-deoghar',
+    ['facts', 'places', 'itinerary'],
+    'Official Deoghar district portal (Jharkhand, India): the district history page in Hindi, Bengali or English, for Place facts, Places to see and Itinerary.',
+    cls='official',
+    budget=20,
+    seeds=['https://deoghar.nic.in/hi/%E0%A4%87%E0%A4%A4%E0%A4%BF%E0%A4%B9%E0%A4%BE%E0%A4%B8/'],
+    include=['^https?://deoghar\\.nic\\.in/((hi|bn|en|ta|kn|ml)/)?(about-district/)?(history|(?:इतिहास|%E0%A4%87%E0%A4%A4%E0%A4%BF%E0%A4%B9%E0%A4%BE%E0%A4%B8)|(?:ইতিহাস|%E0%A6%87%E0%A6%A4%E0%A6%BF%E0%A6%B9%E0%A6%BE%E0%A6%B8)[-0-9]*|profile|tourist-places?|culture-heritage)/'],
+)
+_facts(
+    'gov-in-dist-ranchi',
+    ['facts', 'places', 'itinerary'],
+    'Official Ranchi district portal (Jharkhand, India): the district history page in Hindi, Bengali or English, for Place facts, Places to see and Itinerary.',
+    cls='official',
+    budget=20,
+    seeds=['https://ranchi.nic.in/history/'],
+    include=['^https?://ranchi\\.nic\\.in/((hi|bn|en|ta|kn|ml)/)?(about-district/)?(history|(?:इतिहास|%E0%A4%87%E0%A4%A4%E0%A4%BF%E0%A4%B9%E0%A4%BE%E0%A4%B8)|(?:ইতিহাস|%E0%A6%87%E0%A6%A4%E0%A6%BF%E0%A6%B9%E0%A6%BE%E0%A6%B8)[-0-9]*|profile|tourist-places?|culture-heritage)/'],
+)
+_facts(
+    'gov-in-dist-bidar',
+    ['facts', 'places', 'itinerary'],
+    'Official Bidar district portal (Karnataka, India): the district history page in Hindi, Bengali or English, for Place facts, Places to see and Itinerary.',
+    cls='official',
+    budget=20,
+    seeds=['https://bidar.nic.in/'],
+    include=['^https?://bidar\\.nic\\.in/((hi|bn|en|ta|kn|ml)/)?(about-district/)?(history|(?:इतिहास|%E0%A4%87%E0%A4%A4%E0%A4%BF%E0%A4%B9%E0%A4%BE%E0%A4%B8)|(?:ইতিহাস|%E0%A6%87%E0%A6%A4%E0%A6%BF%E0%A6%B9%E0%A6%BE%E0%A6%B8)[-0-9]*|profile|tourist-places?|culture-heritage)/'],
+)
+_facts(
+    'gov-in-dist-hassan',
+    ['facts', 'places', 'itinerary'],
+    'Official Hassan district portal (Karnataka, India): the district history page in Hindi, Bengali or English, for Place facts, Places to see and Itinerary.',
+    cls='official',
+    budget=20,
+    seeds=['https://hassan.nic.in/en/history/'],
+    include=['^https?://hassan\\.nic\\.in/((hi|bn|en|ta|kn|ml)/)?(about-district/)?(history|(?:इतिहास|%E0%A4%87%E0%A4%A4%E0%A4%BF%E0%A4%B9%E0%A4%BE%E0%A4%B8)|(?:ইতিহাস|%E0%A6%87%E0%A6%A4%E0%A6%BF%E0%A6%B9%E0%A6%BE%E0%A6%B8)[-0-9]*|profile|tourist-places?|culture-heritage)/'],
+)
+_facts(
+    'gov-in-dist-kodagu',
+    ['facts', 'places', 'itinerary'],
+    'Official Kodagu district portal (Karnataka, India): the district history page in Hindi, Bengali or English, for Place facts, Places to see and Itinerary.',
+    cls='official',
+    budget=20,
+    seeds=['https://kodagu.nic.in/'],
+    include=['^https?://kodagu\\.nic\\.in/((hi|bn|en|ta|kn|ml)/)?(about-district/)?(history|(?:इतिहास|%E0%A4%87%E0%A4%A4%E0%A4%BF%E0%A4%B9%E0%A4%BE%E0%A4%B8)|(?:ইতিহাস|%E0%A6%87%E0%A6%A4%E0%A6%BF%E0%A6%B9%E0%A6%BE%E0%A6%B8)[-0-9]*|profile|tourist-places?|culture-heritage)/'],
+)
+_facts(
+    'gov-in-dist-mysore',
+    ['facts', 'places', 'itinerary'],
+    'Official Mysore district portal (Karnataka, India): the district history page in Hindi, Bengali or English, for Place facts, Places to see and Itinerary.',
+    cls='official',
+    budget=20,
+    seeds=['https://mysore.nic.in/en/history/'],
+    include=['^https?://mysore\\.nic\\.in/((hi|bn|en|ta|kn|ml)/)?(about-district/)?(history|(?:इतिहास|%E0%A4%87%E0%A4%A4%E0%A4%BF%E0%A4%B9%E0%A4%BE%E0%A4%B8)|(?:ইতিহাস|%E0%A6%87%E0%A6%A4%E0%A6%BF%E0%A6%B9%E0%A6%BE%E0%A6%B8)[-0-9]*|profile|tourist-places?|culture-heritage)/'],
+)
+_facts(
+    'gov-in-dist-udupi',
+    ['facts', 'places', 'itinerary'],
+    'Official Udupi district portal (Karnataka, India): the district history page in Hindi, Bengali or English, for Place facts, Places to see and Itinerary.',
+    cls='official',
+    budget=20,
+    seeds=['https://udupi.nic.in/en/history/'],
+    include=['^https?://udupi\\.nic\\.in/((hi|bn|en|ta|kn|ml)/)?(about-district/)?(history|(?:इतिहास|%E0%A4%87%E0%A4%A4%E0%A4%BF%E0%A4%B9%E0%A4%BE%E0%A4%B8)|(?:ইতিহাস|%E0%A6%87%E0%A6%A4%E0%A6%BF%E0%A6%B9%E0%A6%BE%E0%A6%B8)[-0-9]*|profile|tourist-places?|culture-heritage)/'],
+)
+_facts(
+    'gov-in-dist-vijayanagara',
+    ['facts', 'places', 'itinerary'],
+    'Official Vijayanagara district portal (Karnataka, India): the district history page in Hindi, Bengali or English, for Place facts, Places to see and Itinerary.',
+    cls='official',
+    budget=20,
+    seeds=['https://vijayanagara.nic.in/en/history/'],
+    include=['^https?://vijayanagara\\.nic\\.in/((hi|bn|en|ta|kn|ml)/)?(about-district/)?(history|(?:इतिहास|%E0%A4%87%E0%A4%A4%E0%A4%BF%E0%A4%B9%E0%A4%BE%E0%A4%B8)|(?:ইতিহাস|%E0%A6%87%E0%A6%A4%E0%A6%BF%E0%A6%B9%E0%A6%BE%E0%A6%B8)[-0-9]*|profile|tourist-places?|culture-heritage)/'],
+)
+_facts(
+    'gov-in-dist-alappuzha',
+    ['facts', 'places', 'itinerary'],
+    'Official Alappuzha district portal (Kerala, India): the district history page in Hindi, Bengali or English, for Place facts, Places to see and Itinerary.',
+    cls='official',
+    budget=20,
+    seeds=['https://alappuzha.nic.in/en/history/'],
+    include=['^https?://alappuzha\\.nic\\.in/((hi|bn|en|ta|kn|ml)/)?(about-district/)?(history|(?:इतिहास|%E0%A4%87%E0%A4%A4%E0%A4%BF%E0%A4%B9%E0%A4%BE%E0%A4%B8)|(?:ইতিহাস|%E0%A6%87%E0%A6%A4%E0%A6%BF%E0%A6%B9%E0%A6%BE%E0%A6%B8)[-0-9]*|profile|tourist-places?|culture-heritage)/'],
+)
+_facts(
+    'gov-in-dist-ernakulam',
+    ['facts', 'places', 'itinerary'],
+    'Official Ernakulam district portal (Kerala, India): the district history page in Hindi, Bengali or English, for Place facts, Places to see and Itinerary.',
+    cls='official',
+    budget=20,
+    seeds=['https://ernakulam.nic.in/en/history/'],
+    include=['^https?://ernakulam\\.nic\\.in/((hi|bn|en|ta|kn|ml)/)?(about-district/)?(history|(?:इतिहास|%E0%A4%87%E0%A4%A4%E0%A4%BF%E0%A4%B9%E0%A4%BE%E0%A4%B8)|(?:ইতিহাস|%E0%A6%87%E0%A6%A4%E0%A6%BF%E0%A6%B9%E0%A6%BE%E0%A6%B8)[-0-9]*|profile|tourist-places?|culture-heritage)/'],
+)
+_facts(
+    'gov-in-dist-kannur',
+    ['facts', 'places', 'itinerary'],
+    'Official Kannur district portal (Kerala, India): the district history page in Hindi, Bengali or English, for Place facts, Places to see and Itinerary.',
+    cls='official',
+    budget=20,
+    seeds=['https://kannur.nic.in/en/history/'],
+    include=['^https?://kannur\\.nic\\.in/((hi|bn|en|ta|kn|ml)/)?(about-district/)?(history|(?:इतिहास|%E0%A4%87%E0%A4%A4%E0%A4%BF%E0%A4%B9%E0%A4%BE%E0%A4%B8)|(?:ইতিহাস|%E0%A6%87%E0%A6%A4%E0%A6%BF%E0%A6%B9%E0%A6%BE%E0%A6%B8)[-0-9]*|profile|tourist-places?|culture-heritage)/'],
+)
+_facts(
+    'gov-in-dist-kottayam',
+    ['facts', 'places', 'itinerary'],
+    'Official Kottayam district portal (Kerala, India): the district history page in Hindi, Bengali or English, for Place facts, Places to see and Itinerary.',
+    cls='official',
+    budget=20,
+    seeds=['https://kottayam.nic.in/en/history/'],
+    include=['^https?://kottayam\\.nic\\.in/((hi|bn|en|ta|kn|ml)/)?(about-district/)?(history|(?:इतिहास|%E0%A4%87%E0%A4%A4%E0%A4%BF%E0%A4%B9%E0%A4%BE%E0%A4%B8)|(?:ইতিহাস|%E0%A6%87%E0%A6%A4%E0%A6%BF%E0%A6%B9%E0%A6%BE%E0%A6%B8)[-0-9]*|profile|tourist-places?|culture-heritage)/'],
+)
+_facts(
+    'gov-in-dist-thrissur',
+    ['facts', 'places', 'itinerary'],
+    'Official Thrissur district portal (Kerala, India): the district history page in Hindi, Bengali or English, for Place facts, Places to see and Itinerary.',
+    cls='official',
+    budget=20,
+    seeds=['https://thrissur.nic.in/'],
+    include=['^https?://thrissur\\.nic\\.in/((hi|bn|en|ta|kn|ml)/)?(about-district/)?(history|(?:इतिहास|%E0%A4%87%E0%A4%A4%E0%A4%BF%E0%A4%B9%E0%A4%BE%E0%A4%B8)|(?:ইতিহাস|%E0%A6%87%E0%A6%A4%E0%A6%BF%E0%A6%B9%E0%A6%BE%E0%A6%B8)[-0-9]*|profile|tourist-places?|culture-heritage)/'],
+)
+_facts(
+    'gov-in-dist-bhopal',
+    ['facts', 'places', 'itinerary'],
+    'Official Bhopal district portal (MP, India): the district history page in Hindi, Bengali or English, for Place facts, Places to see and Itinerary.',
+    cls='official',
+    budget=20,
+    seeds=['https://bhopal.nic.in/en/history/'],
+    include=['^https?://bhopal\\.nic\\.in/((hi|bn|en|ta|kn|ml)/)?(about-district/)?(history|(?:इतिहास|%E0%A4%87%E0%A4%A4%E0%A4%BF%E0%A4%B9%E0%A4%BE%E0%A4%B8)|(?:ইতিহাস|%E0%A6%87%E0%A6%A4%E0%A6%BF%E0%A6%B9%E0%A6%BE%E0%A6%B8)[-0-9]*|profile|tourist-places?|culture-heritage)/'],
+)
+_facts(
+    'gov-in-dist-chhatarpur',
+    ['facts', 'places', 'itinerary'],
+    'Official Chhatarpur district portal (MP, India): the district history page in Hindi, Bengali or English, for Place facts, Places to see and Itinerary.',
+    cls='official',
+    budget=20,
+    seeds=['https://chhatarpur.nic.in/'],
+    include=['^https?://chhatarpur\\.nic\\.in/((hi|bn|en|ta|kn|ml)/)?(about-district/)?(history|(?:इतिहास|%E0%A4%87%E0%A4%A4%E0%A4%BF%E0%A4%B9%E0%A4%BE%E0%A4%B8)|(?:ইতিহাস|%E0%A6%87%E0%A6%A4%E0%A6%BF%E0%A6%B9%E0%A6%BE%E0%A6%B8)[-0-9]*|profile|tourist-places?|culture-heritage)/'],
+)
+_facts(
+    'gov-in-dist-gwalior',
+    ['facts', 'places', 'itinerary'],
+    'Official Gwalior district portal (MP, India): the district history page in Hindi, Bengali or English, for Place facts, Places to see and Itinerary.',
+    cls='official',
+    budget=20,
+    seeds=['https://gwalior.nic.in/en/history/'],
+    include=['^https?://gwalior\\.nic\\.in/((hi|bn|en|ta|kn|ml)/)?(about-district/)?(history|(?:इतिहास|%E0%A4%87%E0%A4%A4%E0%A4%BF%E0%A4%B9%E0%A4%BE%E0%A4%B8)|(?:ইতিহাস|%E0%A6%87%E0%A6%A4%E0%A6%BF%E0%A6%B9%E0%A6%BE%E0%A6%B8)[-0-9]*|profile|tourist-places?|culture-heritage)/'],
+)
+_facts(
+    'gov-in-dist-indore',
+    ['facts', 'places', 'itinerary'],
+    'Official Indore district portal (MP, India): the district history page in Hindi, Bengali or English, for Place facts, Places to see and Itinerary.',
+    cls='official',
+    budget=20,
+    seeds=['https://indore.nic.in/en/history/'],
+    include=['^https?://indore\\.nic\\.in/((hi|bn|en|ta|kn|ml)/)?(about-district/)?(history|(?:इतिहास|%E0%A4%87%E0%A4%A4%E0%A4%BF%E0%A4%B9%E0%A4%BE%E0%A4%B8)|(?:ইতিহাস|%E0%A6%87%E0%A6%A4%E0%A6%BF%E0%A6%B9%E0%A6%BE%E0%A6%B8)[-0-9]*|profile|tourist-places?|culture-heritage)/'],
+)
+_facts(
+    'gov-in-dist-jabalpur',
+    ['facts', 'places', 'itinerary'],
+    'Official Jabalpur district portal (MP, India): the district history page in Hindi, Bengali or English, for Place facts, Places to see and Itinerary.',
+    cls='official',
+    budget=20,
+    seeds=['https://jabalpur.nic.in/%E0%A4%87%E0%A4%A4%E0%A4%BF%E0%A4%B9%E0%A4%BE%E0%A4%B8/'],
+    include=['^https?://jabalpur\\.nic\\.in/((hi|bn|en|ta|kn|ml)/)?(about-district/)?(history|(?:इतिहास|%E0%A4%87%E0%A4%A4%E0%A4%BF%E0%A4%B9%E0%A4%BE%E0%A4%B8)|(?:ইতিহাস|%E0%A6%87%E0%A6%A4%E0%A6%BF%E0%A6%B9%E0%A6%BE%E0%A6%B8)[-0-9]*|profile|tourist-places?|culture-heritage)/'],
+)
+_facts(
+    'gov-in-dist-niwari',
+    ['facts', 'places', 'itinerary'],
+    'Official Niwari district portal (MP, India): the district history page in Hindi, Bengali or English, for Place facts, Places to see and Itinerary.',
+    cls='official',
+    budget=20,
+    seeds=['https://niwari.nic.in/%E0%A4%87%E0%A4%A4%E0%A4%BF%E0%A4%B9%E0%A4%BE%E0%A4%B8/'],
+    include=['^https?://niwari\\.nic\\.in/((hi|bn|en|ta|kn|ml)/)?(about-district/)?(history|(?:इतिहास|%E0%A4%87%E0%A4%A4%E0%A4%BF%E0%A4%B9%E0%A4%BE%E0%A4%B8)|(?:ইতিহাস|%E0%A6%87%E0%A6%A4%E0%A6%BF%E0%A6%B9%E0%A6%BE%E0%A6%B8)[-0-9]*|profile|tourist-places?|culture-heritage)/'],
+)
+_facts(
+    'gov-in-dist-raisen',
+    ['facts', 'places', 'itinerary'],
+    'Official Raisen district portal (MP, India): the district history page in Hindi, Bengali or English, for Place facts, Places to see and Itinerary.',
+    cls='official',
+    budget=20,
+    seeds=['https://raisen.nic.in/%E0%A4%87%E0%A4%A4%E0%A4%BF%E0%A4%B9%E0%A4%BE%E0%A4%B8/'],
+    include=['^https?://raisen\\.nic\\.in/((hi|bn|en|ta|kn|ml)/)?(about-district/)?(history|(?:इतिहास|%E0%A4%87%E0%A4%A4%E0%A4%BF%E0%A4%B9%E0%A4%BE%E0%A4%B8)|(?:ইতিহাস|%E0%A6%87%E0%A6%A4%E0%A6%BF%E0%A6%B9%E0%A6%BE%E0%A6%B8)[-0-9]*|profile|tourist-places?|culture-heritage)/'],
+)
+_facts(
+    'gov-in-dist-ujjain',
+    ['facts', 'places', 'itinerary'],
+    'Official Ujjain district portal (MP, India): the district history page in Hindi, Bengali or English, for Place facts, Places to see and Itinerary.',
+    cls='official',
+    budget=20,
+    seeds=['https://ujjain.nic.in/en/history/'],
+    include=['^https?://ujjain\\.nic\\.in/((hi|bn|en|ta|kn|ml)/)?(about-district/)?(history|(?:इतिहास|%E0%A4%87%E0%A4%A4%E0%A4%BF%E0%A4%B9%E0%A4%BE%E0%A4%B8)|(?:ইতিহাস|%E0%A6%87%E0%A6%A4%E0%A6%BF%E0%A6%B9%E0%A6%BE%E0%A6%B8)[-0-9]*|profile|tourist-places?|culture-heritage)/'],
+)
+_facts(
+    'gov-in-dist-imphalwest',
+    ['facts', 'places', 'itinerary'],
+    'Official Imphalwest district portal (Manipur, India): the district history page in Hindi, Bengali or English, for Place facts, Places to see and Itinerary.',
+    cls='official',
+    budget=20,
+    seeds=['https://imphalwest.nic.in/history/'],
+    include=['^https?://imphalwest\\.nic\\.in/((hi|bn|en|ta|kn|ml)/)?(about-district/)?(history|(?:इतिहास|%E0%A4%87%E0%A4%A4%E0%A4%BF%E0%A4%B9%E0%A4%BE%E0%A4%B8)|(?:ইতিহাস|%E0%A6%87%E0%A6%A4%E0%A6%BF%E0%A6%B9%E0%A6%BE%E0%A6%B8)[-0-9]*|profile|tourist-places?|culture-heritage)/'],
+)
+_facts(
+    'gov-in-dist-eastkhasihills',
+    ['facts', 'places', 'itinerary'],
+    'Official Eastkhasihills district portal (Meghalaya, India): the district history page in Hindi, Bengali or English, for Place facts, Places to see and Itinerary.',
+    cls='official',
+    budget=20,
+    seeds=['https://eastkhasihills.gov.in/'],
+    include=['^https?://eastkhasihills\\.gov\\.in/((hi|bn|en|ta|kn|ml)/)?(about-district/)?(history|(?:इतिहास|%E0%A4%87%E0%A4%A4%E0%A4%BF%E0%A4%B9%E0%A4%BE%E0%A4%B8)|(?:ইতিহাস|%E0%A6%87%E0%A6%A4%E0%A6%BF%E0%A6%B9%E0%A6%BE%E0%A6%B8)[-0-9]*|profile|tourist-places?|culture-heritage)/'],
+)
+_facts(
+    'gov-in-dist-aizawl',
+    ['facts', 'places', 'itinerary'],
+    'Official Aizawl district portal (Mizoram, India): the district history page in Hindi, Bengali or English, for Place facts, Places to see and Itinerary.',
+    cls='official',
+    budget=20,
+    seeds=['https://aizawl.nic.in/history/'],
+    include=['^https?://aizawl\\.nic\\.in/((hi|bn|en|ta|kn|ml)/)?(about-district/)?(history|(?:इतिहास|%E0%A4%87%E0%A4%A4%E0%A4%BF%E0%A4%B9%E0%A4%BE%E0%A4%B8)|(?:ইতিহাস|%E0%A6%87%E0%A6%A4%E0%A6%BF%E0%A6%B9%E0%A6%BE%E0%A6%B8)[-0-9]*|profile|tourist-places?|culture-heritage)/'],
+)
+_facts(
+    'gov-in-dist-kohima',
+    ['facts', 'places', 'itinerary'],
+    'Official Kohima district portal (Nagaland, India): the district history page in Hindi, Bengali or English, for Place facts, Places to see and Itinerary.',
+    cls='official',
+    budget=20,
+    seeds=['https://kohima.nic.in/history/'],
+    include=['^https?://kohima\\.nic\\.in/((hi|bn|en|ta|kn|ml)/)?(about-district/)?(history|(?:इतिहास|%E0%A4%87%E0%A4%A4%E0%A4%BF%E0%A4%B9%E0%A4%BE%E0%A4%B8)|(?:ইতিহাস|%E0%A6%87%E0%A6%A4%E0%A6%BF%E0%A6%B9%E0%A6%BE%E0%A6%B8)[-0-9]*|profile|tourist-places?|culture-heritage)/'],
+)
+_facts(
+    'gov-in-dist-amritsar',
+    ['facts', 'places', 'itinerary'],
+    'Official Amritsar district portal (Punjab, India): the district history page in Hindi, Bengali or English, for Place facts, Places to see and Itinerary.',
+    cls='official',
+    budget=20,
+    seeds=['https://amritsar.nic.in/history/'],
+    include=['^https?://amritsar\\.nic\\.in/((hi|bn|en|ta|kn|ml)/)?(about-district/)?(history|(?:इतिहास|%E0%A4%87%E0%A4%A4%E0%A4%BF%E0%A4%B9%E0%A4%BE%E0%A4%B8)|(?:ইতিহাস|%E0%A6%87%E0%A6%A4%E0%A6%BF%E0%A6%B9%E0%A6%BE%E0%A6%B8)[-0-9]*|profile|tourist-places?|culture-heritage)/'],
+)
+_facts(
+    'gov-in-dist-kancheepuram',
+    ['facts', 'places', 'itinerary'],
+    'Official Kancheepuram district portal (TN, India): the district history page in Hindi, Bengali or English, for Place facts, Places to see and Itinerary.',
+    cls='official',
+    budget=20,
+    seeds=['https://kancheepuram.nic.in/about-district/history/'],
+    include=['^https?://kancheepuram\\.nic\\.in/((hi|bn|en|ta|kn|ml)/)?(about-district/)?(history|(?:इतिहास|%E0%A4%87%E0%A4%A4%E0%A4%BF%E0%A4%B9%E0%A4%BE%E0%A4%B8)|(?:ইতিহাস|%E0%A6%87%E0%A6%A4%E0%A6%BF%E0%A6%B9%E0%A6%BE%E0%A6%B8)[-0-9]*|profile|tourist-places?|culture-heritage)/'],
+)
+_facts(
+    'gov-in-dist-kanniyakumari',
+    ['facts', 'places', 'itinerary'],
+    'Official Kanniyakumari district portal (TN, India): the district history page in Hindi, Bengali or English, for Place facts, Places to see and Itinerary.',
+    cls='official',
+    budget=20,
+    seeds=['https://kanniyakumari.nic.in/history/'],
+    include=['^https?://kanniyakumari\\.nic\\.in/((hi|bn|en|ta|kn|ml)/)?(about-district/)?(history|(?:इतिहास|%E0%A4%87%E0%A4%A4%E0%A4%BF%E0%A4%B9%E0%A4%BE%E0%A4%B8)|(?:ইতিহাস|%E0%A6%87%E0%A6%A4%E0%A6%BF%E0%A6%B9%E0%A6%BE%E0%A6%B8)[-0-9]*|profile|tourist-places?|culture-heritage)/'],
+)
+_facts(
+    'gov-in-dist-ramanathapuram',
+    ['facts', 'places', 'itinerary'],
+    'Official Ramanathapuram district portal (TN, India): the district history page in Hindi, Bengali or English, for Place facts, Places to see and Itinerary.',
+    cls='official',
+    budget=20,
+    seeds=['https://ramanathapuram.nic.in/about-district/history/'],
+    include=['^https?://ramanathapuram\\.nic\\.in/((hi|bn|en|ta|kn|ml)/)?(about-district/)?(history|(?:इतिहास|%E0%A4%87%E0%A4%A4%E0%A4%BF%E0%A4%B9%E0%A4%BE%E0%A4%B8)|(?:ইতিহাস|%E0%A6%87%E0%A6%A4%E0%A6%BF%E0%A6%B9%E0%A6%BE%E0%A6%B8)[-0-9]*|profile|tourist-places?|culture-heritage)/'],
+)
+_facts(
+    'gov-in-dist-thanjavur',
+    ['facts', 'places', 'itinerary'],
+    'Official Thanjavur district portal (TN, India): the district history page in Hindi, Bengali or English, for Place facts, Places to see and Itinerary.',
+    cls='official',
+    budget=20,
+    seeds=['https://thanjavur.nic.in/history/'],
+    include=['^https?://thanjavur\\.nic\\.in/((hi|bn|en|ta|kn|ml)/)?(about-district/)?(history|(?:इतिहास|%E0%A4%87%E0%A4%A4%E0%A4%BF%E0%A4%B9%E0%A4%BE%E0%A4%B8)|(?:ইতিহাস|%E0%A6%87%E0%A6%A4%E0%A6%BF%E0%A6%B9%E0%A6%BE%E0%A6%B8)[-0-9]*|profile|tourist-places?|culture-heritage)/'],
+)
+_facts(
+    'gov-in-dist-tiruvannamalai',
+    ['facts', 'places', 'itinerary'],
+    'Official Tiruvannamalai district portal (TN, India): the district history page in Hindi, Bengali or English, for Place facts, Places to see and Itinerary.',
+    cls='official',
+    budget=20,
+    seeds=['https://tiruvannamalai.nic.in/history/'],
+    include=['^https?://tiruvannamalai\\.nic\\.in/((hi|bn|en|ta|kn|ml)/)?(about-district/)?(history|(?:इतिहास|%E0%A4%87%E0%A4%A4%E0%A4%BF%E0%A4%B9%E0%A4%BE%E0%A4%B8)|(?:ইতিহাস|%E0%A6%87%E0%A6%A4%E0%A6%BF%E0%A6%B9%E0%A6%BE%E0%A6%B8)[-0-9]*|profile|tourist-places?|culture-heritage)/'],
+)
+_facts(
+    'gov-in-dist-gomati',
+    ['facts', 'places', 'itinerary'],
+    'Official Gomati district portal (Tripura, India): the district history page in Hindi, Bengali or English, for Place facts, Places to see and Itinerary.',
+    cls='official',
+    budget=20,
+    seeds=['https://gomati.nic.in/bn/%E0%A6%87%E0%A6%A4%E0%A6%BF%E0%A6%B9%E0%A6%BE%E0%A6%B8/'],
+    include=['^https?://gomati\\.nic\\.in/((hi|bn|en|ta|kn|ml)/)?(about-district/)?(history|(?:इतिहास|%E0%A4%87%E0%A4%A4%E0%A4%BF%E0%A4%B9%E0%A4%BE%E0%A4%B8)|(?:ইতিহাস|%E0%A6%87%E0%A6%A4%E0%A6%BF%E0%A6%B9%E0%A6%BE%E0%A6%B8)[-0-9]*|profile|tourist-places?|culture-heritage)/'],
+)
+_facts(
+    'gov-in-dist-unakoti',
+    ['facts', 'places', 'itinerary'],
+    'Official Unakoti district portal (Tripura, India): the district history page in Hindi, Bengali or English, for Place facts, Places to see and Itinerary.',
+    cls='official',
+    budget=20,
+    seeds=['https://unakoti.nic.in/bn/%E0%A6%87%E0%A6%A4%E0%A6%BF%E0%A6%B9%E0%A6%BE%E0%A6%B8/'],
+    include=['^https?://unakoti\\.nic\\.in/((hi|bn|en|ta|kn|ml)/)?(about-district/)?(history|(?:इतिहास|%E0%A4%87%E0%A4%A4%E0%A4%BF%E0%A4%B9%E0%A4%BE%E0%A4%B8)|(?:ইতিহাস|%E0%A6%87%E0%A6%A4%E0%A6%BF%E0%A6%B9%E0%A6%BE%E0%A6%B8)[-0-9]*|profile|tourist-places?|culture-heritage)/'],
+)
+_facts(
+    'gov-in-dist-westtripura',
+    ['facts', 'places', 'itinerary'],
+    'Official Westtripura district portal (Tripura, India): the district history page in Hindi, Bengali or English, for Place facts, Places to see and Itinerary.',
+    cls='official',
+    budget=20,
+    seeds=['https://westtripura.nic.in/bn/%E0%A6%87%E0%A6%A4%E0%A6%BF%E0%A6%B9%E0%A6%BE%E0%A6%B8/'],
+    include=['^https?://westtripura\\.nic\\.in/((hi|bn|en|ta|kn|ml)/)?(about-district/)?(history|(?:इतिहास|%E0%A4%87%E0%A4%A4%E0%A4%BF%E0%A4%B9%E0%A4%BE%E0%A4%B8)|(?:ইতিহাস|%E0%A6%87%E0%A6%A4%E0%A6%BF%E0%A6%B9%E0%A6%BE%E0%A6%B8)[-0-9]*|profile|tourist-places?|culture-heritage)/'],
+)
+_facts(
+    'gov-in-dist-agra',
+    ['facts', 'places', 'itinerary'],
+    'Official Agra district portal (UP, India): the district history page in Hindi, Bengali or English, for Place facts, Places to see and Itinerary.',
+    cls='official',
+    budget=20,
+    seeds=['https://agra.nic.in/history/'],
+    include=['^https?://agra\\.nic\\.in/((hi|bn|en|ta|kn|ml)/)?(about-district/)?(history|(?:इतिहास|%E0%A4%87%E0%A4%A4%E0%A4%BF%E0%A4%B9%E0%A4%BE%E0%A4%B8)|(?:ইতিহাস|%E0%A6%87%E0%A6%A4%E0%A6%BF%E0%A6%B9%E0%A6%BE%E0%A6%B8)[-0-9]*|profile|tourist-places?|culture-heritage)/'],
+)
+_facts(
+    'gov-in-dist-ayodhya',
+    ['facts', 'places', 'itinerary'],
+    'Official Ayodhya district portal (UP, India): the district history page in Hindi, Bengali or English, for Place facts, Places to see and Itinerary.',
+    cls='official',
+    budget=20,
+    seeds=['https://ayodhya.nic.in/'],
+    include=['^https?://ayodhya\\.nic\\.in/((hi|bn|en|ta|kn|ml)/)?(about-district/)?(history|(?:इतिहास|%E0%A4%87%E0%A4%A4%E0%A4%BF%E0%A4%B9%E0%A4%BE%E0%A4%B8)|(?:ইতিহাস|%E0%A6%87%E0%A6%A4%E0%A6%BF%E0%A6%B9%E0%A6%BE%E0%A6%B8)[-0-9]*|profile|tourist-places?|culture-heritage)/'],
+)
+_facts(
+    'gov-in-dist-bareilly',
+    ['facts', 'places', 'itinerary'],
+    'Official Bareilly district portal (UP, India): the district history page in Hindi, Bengali or English, for Place facts, Places to see and Itinerary.',
+    cls='official',
+    budget=20,
+    seeds=['https://bareilly.nic.in/hi/%E0%A4%87%E0%A4%A4%E0%A4%BF%E0%A4%B9%E0%A4%BE%E0%A4%B8/'],
+    include=['^https?://bareilly\\.nic\\.in/((hi|bn|en|ta|kn|ml)/)?(about-district/)?(history|(?:इतिहास|%E0%A4%87%E0%A4%A4%E0%A4%BF%E0%A4%B9%E0%A4%BE%E0%A4%B8)|(?:ইতিহাস|%E0%A6%87%E0%A6%A4%E0%A6%BF%E0%A6%B9%E0%A6%BE%E0%A6%B8)[-0-9]*|profile|tourist-places?|culture-heritage)/'],
+)
+_facts(
+    'gov-in-dist-chitrakoot',
+    ['facts', 'places', 'itinerary'],
+    'Official Chitrakoot district portal (UP, India): the district history page in Hindi, Bengali or English, for Place facts, Places to see and Itinerary.',
+    cls='official',
+    budget=20,
+    seeds=['https://chitrakoot.nic.in/hi/%E0%A4%87%E0%A4%A4%E0%A4%BF%E0%A4%B9%E0%A4%BE%E0%A4%B8/'],
+    include=['^https?://chitrakoot\\.nic\\.in/((hi|bn|en|ta|kn|ml)/)?(about-district/)?(history|(?:इतिहास|%E0%A4%87%E0%A4%A4%E0%A4%BF%E0%A4%B9%E0%A4%BE%E0%A4%B8)|(?:ইতিহাস|%E0%A6%87%E0%A6%A4%E0%A6%BF%E0%A6%B9%E0%A6%BE%E0%A6%B8)[-0-9]*|profile|tourist-places?|culture-heritage)/'],
+)
+_facts(
+    'gov-in-dist-gorakhpur',
+    ['facts', 'places', 'itinerary'],
+    'Official Gorakhpur district portal (UP, India): the district history page in Hindi, Bengali or English, for Place facts, Places to see and Itinerary.',
+    cls='official',
+    budget=20,
+    seeds=['https://gorakhpur.nic.in/hi/%E0%A4%87%E0%A4%A4%E0%A4%BF%E0%A4%B9%E0%A4%BE%E0%A4%B8/'],
+    include=['^https?://gorakhpur\\.nic\\.in/((hi|bn|en|ta|kn|ml)/)?(about-district/)?(history|(?:इतिहास|%E0%A4%87%E0%A4%A4%E0%A4%BF%E0%A4%B9%E0%A4%BE%E0%A4%B8)|(?:ইতিহাস|%E0%A6%87%E0%A6%A4%E0%A6%BF%E0%A6%B9%E0%A6%BE%E0%A6%B8)[-0-9]*|profile|tourist-places?|culture-heritage)/'],
+)
+_facts(
+    'gov-in-dist-jhansi',
+    ['facts', 'places', 'itinerary'],
+    'Official Jhansi district portal (UP, India): the district history page in Hindi, Bengali or English, for Place facts, Places to see and Itinerary.',
+    cls='official',
+    budget=20,
+    seeds=['https://jhansi.nic.in/history/'],
+    include=['^https?://jhansi\\.nic\\.in/((hi|bn|en|ta|kn|ml)/)?(about-district/)?(history|(?:इतिहास|%E0%A4%87%E0%A4%A4%E0%A4%BF%E0%A4%B9%E0%A4%BE%E0%A4%B8)|(?:ইতিহাস|%E0%A6%87%E0%A6%A4%E0%A6%BF%E0%A6%B9%E0%A6%BE%E0%A6%B8)[-0-9]*|profile|tourist-places?|culture-heritage)/'],
+)
+_facts(
+    'gov-in-dist-kanpurnagar',
+    ['facts', 'places', 'itinerary'],
+    'Official Kanpurnagar district portal (UP, India): the district history page in Hindi, Bengali or English, for Place facts, Places to see and Itinerary.',
+    cls='official',
+    budget=20,
+    seeds=['https://kanpurnagar.nic.in/hi/%E0%A4%87%E0%A4%A4%E0%A4%BF%E0%A4%B9%E0%A4%BE%E0%A4%B8/'],
+    include=['^https?://kanpurnagar\\.nic\\.in/((hi|bn|en|ta|kn|ml)/)?(about-district/)?(history|(?:इतिहास|%E0%A4%87%E0%A4%A4%E0%A4%BF%E0%A4%B9%E0%A4%BE%E0%A4%B8)|(?:ইতিহাস|%E0%A6%87%E0%A6%A4%E0%A6%BF%E0%A6%B9%E0%A6%BE%E0%A6%B8)[-0-9]*|profile|tourist-places?|culture-heritage)/'],
+)
+_facts(
+    'gov-in-dist-kushinagar',
+    ['facts', 'places', 'itinerary'],
+    'Official Kushinagar district portal (UP, India): the district history page in Hindi, Bengali or English, for Place facts, Places to see and Itinerary.',
+    cls='official',
+    budget=20,
+    seeds=['https://kushinagar.nic.in/history/'],
+    include=['^https?://kushinagar\\.nic\\.in/((hi|bn|en|ta|kn|ml)/)?(about-district/)?(history|(?:इतिहास|%E0%A4%87%E0%A4%A4%E0%A4%BF%E0%A4%B9%E0%A4%BE%E0%A4%B8)|(?:ইতিহাস|%E0%A6%87%E0%A6%A4%E0%A6%BF%E0%A6%B9%E0%A6%BE%E0%A6%B8)[-0-9]*|profile|tourist-places?|culture-heritage)/'],
+)
+_facts(
+    'gov-in-dist-lucknow',
+    ['facts', 'places', 'itinerary'],
+    'Official Lucknow district portal (UP, India): the district history page in Hindi, Bengali or English, for Place facts, Places to see and Itinerary.',
+    cls='official',
+    budget=20,
+    seeds=['https://lucknow.nic.in/history/'],
+    include=['^https?://lucknow\\.nic\\.in/((hi|bn|en|ta|kn|ml)/)?(about-district/)?(history|(?:इतिहास|%E0%A4%87%E0%A4%A4%E0%A4%BF%E0%A4%B9%E0%A4%BE%E0%A4%B8)|(?:ইতিহাস|%E0%A6%87%E0%A6%A4%E0%A6%BF%E0%A6%B9%E0%A6%BE%E0%A6%B8)[-0-9]*|profile|tourist-places?|culture-heritage)/'],
+)
+_facts(
+    'gov-in-dist-mathura',
+    ['facts', 'places', 'itinerary'],
+    'Official Mathura district portal (UP, India): the district history page in Hindi, Bengali or English, for Place facts, Places to see and Itinerary.',
+    cls='official',
+    budget=20,
+    seeds=['https://mathura.nic.in/history/'],
+    include=['^https?://mathura\\.nic\\.in/((hi|bn|en|ta|kn|ml)/)?(about-district/)?(history|(?:इतिहास|%E0%A4%87%E0%A4%A4%E0%A4%BF%E0%A4%B9%E0%A4%BE%E0%A4%B8)|(?:ইতিহাস|%E0%A6%87%E0%A6%A4%E0%A6%BF%E0%A6%B9%E0%A6%BE%E0%A6%B8)[-0-9]*|profile|tourist-places?|culture-heritage)/'],
+)
+_facts(
+    'gov-in-dist-meerut',
+    ['facts', 'places', 'itinerary'],
+    'Official Meerut district portal (UP, India): the district history page in Hindi, Bengali or English, for Place facts, Places to see and Itinerary.',
+    cls='official',
+    budget=20,
+    seeds=['https://meerut.nic.in/hi/%E0%A4%87%E0%A4%A4%E0%A4%BF%E0%A4%B9%E0%A4%BE%E0%A4%B8/'],
+    include=['^https?://meerut\\.nic\\.in/((hi|bn|en|ta|kn|ml)/)?(about-district/)?(history|(?:इतिहास|%E0%A4%87%E0%A4%A4%E0%A4%BF%E0%A4%B9%E0%A4%BE%E0%A4%B8)|(?:ইতিহাস|%E0%A6%87%E0%A6%A4%E0%A6%BF%E0%A6%B9%E0%A6%BE%E0%A6%B8)[-0-9]*|profile|tourist-places?|culture-heritage)/'],
+)
+_facts(
+    'gov-in-dist-prayagraj',
+    ['facts', 'places', 'itinerary'],
+    'Official Prayagraj district portal (UP, India): the district history page in Hindi, Bengali or English, for Place facts, Places to see and Itinerary.',
+    cls='official',
+    budget=20,
+    seeds=['https://prayagraj.nic.in/history/'],
+    include=['^https?://prayagraj\\.nic\\.in/((hi|bn|en|ta|kn|ml)/)?(about-district/)?(history|(?:इतिहास|%E0%A4%87%E0%A4%A4%E0%A4%BF%E0%A4%B9%E0%A4%BE%E0%A4%B8)|(?:ইতিহাস|%E0%A6%87%E0%A6%A4%E0%A6%BF%E0%A6%B9%E0%A6%BE%E0%A6%B8)[-0-9]*|profile|tourist-places?|culture-heritage)/'],
+)
+_facts(
+    'gov-in-dist-almora',
+    ['facts', 'places', 'itinerary'],
+    'Official Almora district portal (Uttarakhand, India): the district history page in Hindi, Bengali or English, for Place facts, Places to see and Itinerary.',
+    cls='official',
+    budget=20,
+    seeds=['https://almora.nic.in/hi/%E0%A4%87%E0%A4%A4%E0%A4%BF%E0%A4%B9%E0%A4%BE%E0%A4%B8/'],
+    include=['^https?://almora\\.nic\\.in/((hi|bn|en|ta|kn|ml)/)?(about-district/)?(history|(?:इतिहास|%E0%A4%87%E0%A4%A4%E0%A4%BF%E0%A4%B9%E0%A4%BE%E0%A4%B8)|(?:ইতিহাস|%E0%A6%87%E0%A6%A4%E0%A6%BF%E0%A6%B9%E0%A6%BE%E0%A6%B8)[-0-9]*|profile|tourist-places?|culture-heritage)/'],
+)
+_facts(
+    'gov-in-dist-dehradun',
+    ['facts', 'places', 'itinerary'],
+    'Official Dehradun district portal (Uttarakhand, India): the district history page in Hindi, Bengali or English, for Place facts, Places to see and Itinerary.',
+    cls='official',
+    budget=20,
+    seeds=['https://dehradun.nic.in/history/'],
+    include=['^https?://dehradun\\.nic\\.in/((hi|bn|en|ta|kn|ml)/)?(about-district/)?(history|(?:इतिहास|%E0%A4%87%E0%A4%A4%E0%A4%BF%E0%A4%B9%E0%A4%BE%E0%A4%B8)|(?:ইতিহাস|%E0%A6%87%E0%A6%A4%E0%A6%BF%E0%A6%B9%E0%A6%BE%E0%A6%B8)[-0-9]*|profile|tourist-places?|culture-heritage)/'],
+)
+_facts(
+    'gov-in-dist-haridwar',
+    ['facts', 'places', 'itinerary'],
+    'Official Haridwar district portal (Uttarakhand, India): the district history page in Hindi, Bengali or English, for Place facts, Places to see and Itinerary.',
+    cls='official',
+    budget=20,
+    seeds=['https://haridwar.nic.in/history/'],
+    include=['^https?://haridwar\\.nic\\.in/((hi|bn|en|ta|kn|ml)/)?(about-district/)?(history|(?:इतिहास|%E0%A4%87%E0%A4%A4%E0%A4%BF%E0%A4%B9%E0%A4%BE%E0%A4%B8)|(?:ইতিহাস|%E0%A6%87%E0%A6%A4%E0%A6%BF%E0%A6%B9%E0%A6%BE%E0%A6%B8)[-0-9]*|profile|tourist-places?|culture-heritage)/'],
+)
+_facts(
+    'gov-in-dist-nainital',
+    ['facts', 'places', 'itinerary'],
+    'Official Nainital district portal (Uttarakhand, India): the district history page in Hindi, Bengali or English, for Place facts, Places to see and Itinerary.',
+    cls='official',
+    budget=20,
+    seeds=['https://nainital.nic.in/hi/%E0%A4%87%E0%A4%A4%E0%A4%BF%E0%A4%B9%E0%A4%BE%E0%A4%B8/'],
+    include=['^https?://nainital\\.nic\\.in/((hi|bn|en|ta|kn|ml)/)?(about-district/)?(history|(?:इतिहास|%E0%A4%87%E0%A4%A4%E0%A4%BF%E0%A4%B9%E0%A4%BE%E0%A4%B8)|(?:ইতিহাস|%E0%A6%87%E0%A6%A4%E0%A6%BF%E0%A6%B9%E0%A6%BE%E0%A6%B8)[-0-9]*|profile|tourist-places?|culture-heritage)/'],
+)
+_facts(
+    'gov-in-dist-alipurduar',
+    ['facts', 'places', 'itinerary'],
+    'Official Alipurduar district portal (WB, India): the district history page in Hindi, Bengali or English, for Place facts, Places to see and Itinerary.',
+    cls='official',
+    budget=20,
+    seeds=['https://alipurduar.gov.in/'],
+    include=['^https?://alipurduar\\.gov\\.in/((hi|bn|en|ta|kn|ml)/)?(about-district/)?(history|(?:इतिहास|%E0%A4%87%E0%A4%A4%E0%A4%BF%E0%A4%B9%E0%A4%BE%E0%A4%B8)|(?:ইতিহাস|%E0%A6%87%E0%A6%A4%E0%A6%BF%E0%A6%B9%E0%A6%BE%E0%A6%B8)[-0-9]*|profile|tourist-places?|culture-heritage)/'],
+)
+_facts(
+    'gov-in-dist-bankura',
+    ['facts', 'places', 'itinerary'],
+    'Official Bankura district portal (WB, India): the district history page in Hindi, Bengali or English, for Place facts, Places to see and Itinerary.',
+    cls='official',
+    budget=20,
+    seeds=['https://bankura.gov.in/history/'],
+    include=['^https?://bankura\\.gov\\.in/((hi|bn|en|ta|kn|ml)/)?(about-district/)?(history|(?:इतिहास|%E0%A4%87%E0%A4%A4%E0%A4%BF%E0%A4%B9%E0%A4%BE%E0%A4%B8)|(?:ইতিহাস|%E0%A6%87%E0%A6%A4%E0%A6%BF%E0%A6%B9%E0%A6%BE%E0%A6%B8)[-0-9]*|profile|tourist-places?|culture-heritage)/'],
+)
+_facts(
+    'gov-in-dist-birbhum',
+    ['facts', 'places', 'itinerary'],
+    'Official Birbhum district portal (WB, India): the district history page in Hindi, Bengali or English, for Place facts, Places to see and Itinerary.',
+    cls='official',
+    budget=20,
+    seeds=['https://birbhum.gov.in/history/'],
+    include=['^https?://birbhum\\.gov\\.in/((hi|bn|en|ta|kn|ml)/)?(about-district/)?(history|(?:इतिहास|%E0%A4%87%E0%A4%A4%E0%A4%BF%E0%A4%B9%E0%A4%BE%E0%A4%B8)|(?:ইতিহাস|%E0%A6%87%E0%A6%A4%E0%A6%BF%E0%A6%B9%E0%A6%BE%E0%A6%B8)[-0-9]*|profile|tourist-places?|culture-heritage)/'],
+)
+_facts(
+    'gov-in-dist-coochbehar',
+    ['facts', 'places', 'itinerary'],
+    'Official Coochbehar district portal (WB, India): the district history page in Hindi, Bengali or English, for Place facts, Places to see and Itinerary.',
+    cls='official',
+    budget=20,
+    seeds=['https://coochbehar.gov.in/about-district/history/'],
+    include=['^https?://coochbehar\\.gov\\.in/((hi|bn|en|ta|kn|ml)/)?(about-district/)?(history|(?:इतिहास|%E0%A4%87%E0%A4%A4%E0%A4%BF%E0%A4%B9%E0%A4%BE%E0%A4%B8)|(?:ইতিহাস|%E0%A6%87%E0%A6%A4%E0%A6%BF%E0%A6%B9%E0%A6%BE%E0%A6%B8)[-0-9]*|profile|tourist-places?|culture-heritage)/'],
+)
+_facts(
+    'gov-in-dist-darjeeling',
+    ['facts', 'places', 'itinerary'],
+    'Official Darjeeling district portal (WB, India): the district history page in Hindi, Bengali or English, for Place facts, Places to see and Itinerary.',
+    cls='official',
+    budget=20,
+    seeds=['https://darjeeling.gov.in/history/'],
+    include=['^https?://darjeeling\\.gov\\.in/((hi|bn|en|ta|kn|ml)/)?(about-district/)?(history|(?:इतिहास|%E0%A4%87%E0%A4%A4%E0%A4%BF%E0%A4%B9%E0%A4%BE%E0%A4%B8)|(?:ইতিহাস|%E0%A6%87%E0%A6%A4%E0%A6%BF%E0%A6%B9%E0%A6%BE%E0%A6%B8)[-0-9]*|profile|tourist-places?|culture-heritage)/'],
+)
+_facts(
+    'gov-in-dist-howrah',
+    ['facts', 'places', 'itinerary'],
+    'Official Howrah district portal (WB, India): the district history page in Hindi, Bengali or English, for Place facts, Places to see and Itinerary.',
+    cls='official',
+    budget=20,
+    seeds=['https://howrah.gov.in/bn/%E0%A6%87%E0%A6%A4%E0%A6%BF%E0%A6%B9%E0%A6%BE%E0%A6%B8-2/'],
+    include=['^https?://howrah\\.gov\\.in/((hi|bn|en|ta|kn|ml)/)?(about-district/)?(history|(?:इतिहास|%E0%A4%87%E0%A4%A4%E0%A4%BF%E0%A4%B9%E0%A4%BE%E0%A4%B8)|(?:ইতিহাস|%E0%A6%87%E0%A6%A4%E0%A6%BF%E0%A6%B9%E0%A6%BE%E0%A6%B8)[-0-9]*|profile|tourist-places?|culture-heritage)/'],
+)
+_facts(
+    'gov-in-dist-jalpaiguri',
+    ['facts', 'places', 'itinerary'],
+    'Official Jalpaiguri district portal (WB, India): the district history page in Hindi, Bengali or English, for Place facts, Places to see and Itinerary.',
+    cls='official',
+    budget=20,
+    seeds=['https://jalpaiguri.gov.in/bn/%E0%A6%9C%E0%A7%87%E0%A6%B2%E0%A6%BE-%E0%A6%B8%E0%A6%AE%E0%A7%8D%E0%A6%AA%E0%A6%B0%E0%A7%8D%E0%A6%95%E0%A7%87/%E0%A6%87%E0%A6%A4%E0%A6%BF%E0%A6%B9%E0%A6%BE%E0%A6%B8/'],
+    include=['^https?://jalpaiguri\\.gov\\.in/((hi|bn|en|ta|kn|ml)/)?(about-district/)?(history|(?:इतिहास|%E0%A4%87%E0%A4%A4%E0%A4%BF%E0%A4%B9%E0%A4%BE%E0%A4%B8)|(?:ইতিহাস|%E0%A6%87%E0%A6%A4%E0%A6%BF%E0%A6%B9%E0%A6%BE%E0%A6%B8)[-0-9]*|profile|tourist-places?|culture-heritage)/'],
+)
+_facts(
+    'gov-in-dist-jhargram',
+    ['facts', 'places', 'itinerary'],
+    'Official Jhargram district portal (WB, India): the district history page in Hindi, Bengali or English, for Place facts, Places to see and Itinerary.',
+    cls='official',
+    budget=20,
+    seeds=['https://jhargram.gov.in/bn/%E0%A6%87%E0%A6%A4%E0%A6%BF%E0%A6%B9%E0%A6%BE%E0%A6%B8/'],
+    include=['^https?://jhargram\\.gov\\.in/((hi|bn|en|ta|kn|ml)/)?(about-district/)?(history|(?:इतिहास|%E0%A4%87%E0%A4%A4%E0%A4%BF%E0%A4%B9%E0%A4%BE%E0%A4%B8)|(?:ইতিহাস|%E0%A6%87%E0%A6%A4%E0%A6%BF%E0%A6%B9%E0%A6%BE%E0%A6%B8)[-0-9]*|profile|tourist-places?|culture-heritage)/'],
+)
+_facts(
+    'gov-in-dist-kalimpong',
+    ['facts', 'places', 'itinerary'],
+    'Official Kalimpong district portal (WB, India): the district history page in Hindi, Bengali or English, for Place facts, Places to see and Itinerary.',
+    cls='official',
+    budget=20,
+    seeds=['https://kalimpong.gov.in/'],
+    include=['^https?://kalimpong\\.gov\\.in/((hi|bn|en|ta|kn|ml)/)?(about-district/)?(history|(?:इतिहास|%E0%A4%87%E0%A4%A4%E0%A4%BF%E0%A4%B9%E0%A4%BE%E0%A4%B8)|(?:ইতিহাস|%E0%A6%87%E0%A6%A4%E0%A6%BF%E0%A6%B9%E0%A6%BE%E0%A6%B8)[-0-9]*|profile|tourist-places?|culture-heritage)/'],
+)
+_facts(
+    'gov-in-dist-nadia',
+    ['facts', 'places', 'itinerary'],
+    'Official Nadia district portal (WB, India): the district history page in Hindi, Bengali or English, for Place facts, Places to see and Itinerary.',
+    cls='official',
+    budget=20,
+    seeds=['https://nadia.gov.in/history/'],
+    include=['^https?://nadia\\.gov\\.in/((hi|bn|en|ta|kn|ml)/)?(about-district/)?(history|(?:इतिहास|%E0%A4%87%E0%A4%A4%E0%A4%BF%E0%A4%B9%E0%A4%BE%E0%A4%B8)|(?:ইতিহাস|%E0%A6%87%E0%A6%A4%E0%A6%BF%E0%A6%B9%E0%A6%BE%E0%A6%B8)[-0-9]*|profile|tourist-places?|culture-heritage)/'],
+)
+_facts(
+    'gov-in-dist-paschimmedinipur',
+    ['facts', 'places', 'itinerary'],
+    'Official Paschimmedinipur district portal (WB, India): the district history page in Hindi, Bengali or English, for Place facts, Places to see and Itinerary.',
+    cls='official',
+    budget=20,
+    seeds=['https://paschimmedinipur.gov.in/history/'],
+    include=['^https?://paschimmedinipur\\.gov\\.in/((hi|bn|en|ta|kn|ml)/)?(about-district/)?(history|(?:इतिहास|%E0%A4%87%E0%A4%A4%E0%A4%BF%E0%A4%B9%E0%A4%BE%E0%A4%B8)|(?:ইতিহাস|%E0%A6%87%E0%A6%A4%E0%A6%BF%E0%A6%B9%E0%A6%BE%E0%A6%B8)[-0-9]*|profile|tourist-places?|culture-heritage)/'],
+)
+_facts(
+    'gov-in-dist-purbamedinipur',
+    ['facts', 'places', 'itinerary'],
+    'Official Purbamedinipur district portal (WB, India): the district history page in Hindi, Bengali or English, for Place facts, Places to see and Itinerary.',
+    cls='official',
+    budget=20,
+    seeds=['https://purbamedinipur.gov.in/bn/%E0%A6%87%E0%A6%A4%E0%A6%BF%E0%A6%B9%E0%A6%BE%E0%A6%B8-2/'],
+    include=['^https?://purbamedinipur\\.gov\\.in/((hi|bn|en|ta|kn|ml)/)?(about-district/)?(history|(?:इतिहास|%E0%A4%87%E0%A4%A4%E0%A4%BF%E0%A4%B9%E0%A4%BE%E0%A4%B8)|(?:ইতিহাস|%E0%A6%87%E0%A6%A4%E0%A6%BF%E0%A6%B9%E0%A6%BE%E0%A6%B8)[-0-9]*|profile|tourist-places?|culture-heritage)/'],
+)
+_facts(
+    'gov-in-dist-purulia',
+    ['facts', 'places', 'itinerary'],
+    'Official Purulia district portal (WB, India): the district history page in Hindi, Bengali or English, for Place facts, Places to see and Itinerary.',
+    cls='official',
+    budget=20,
+    seeds=['https://purulia.gov.in/bn/%E0%A6%87%E0%A6%A4%E0%A6%BF%E0%A6%B9%E0%A6%BE%E0%A6%B8/'],
+    include=['^https?://purulia\\.gov\\.in/((hi|bn|en|ta|kn|ml)/)?(about-district/)?(history|(?:इतिहास|%E0%A4%87%E0%A4%A4%E0%A4%BF%E0%A4%B9%E0%A4%BE%E0%A4%B8)|(?:ইতিহাস|%E0%A6%87%E0%A6%A4%E0%A6%BF%E0%A6%B9%E0%A6%BE%E0%A6%B8)[-0-9]*|profile|tourist-places?|culture-heritage)/'],
+)
+_facts(
+    'gov-bd-dist-bagerhat',
+    ['facts', 'places'],
+    'Official Bagerhat district portal (Bangladesh): the Bangla background, heritage and famous-people pages, for Place facts and Places to see.',
+    cls='official',
+    budget=20,
+    seeds=['https://bagerhat.gov.bd/pages/static-pages/69810197a31054345f1d4e91', 'https://bagerhat.gov.bd/pages/static-pages/6981333935ce18e1c06fb055'],
+    include=['^https?://bagerhat\\.gov\\.bd/pages/static-pages/'],
+)
+_facts(
+    'gov-bd-dist-bandarban',
+    ['facts', 'places'],
+    'Official Bandarban district portal (Bangladesh): the Bangla background, heritage and famous-people pages, for Place facts and Places to see.',
+    cls='official',
+    budget=20,
+    seeds=['https://bandarban.gov.bd/pages/static-pages/69914377516a96d4de411242', 'https://bandarban.gov.bd/pages/static-pages/6990df6435ce18e1c0721f16'],
+    include=['^https?://bandarban\\.gov\\.bd/pages/static-pages/'],
+)
+_facts(
+    'gov-bd-dist-barishal',
+    ['facts', 'places'],
+    'Official Barishal district portal (Bangladesh): the Bangla background, heritage and famous-people pages, for Place facts and Places to see.',
+    cls='official',
+    budget=20,
+    seeds=['https://barishal.gov.bd/pages/static-pages/69789b7235ce18e1c066e3aa', 'https://barishal.gov.bd/pages/static-pages/6978a32135ce18e1c0672261', 'https://barishal.gov.bd/pages/static-pages/6978a32235ce18e1c0672274'],
+    include=['^https?://barishal\\.gov\\.bd/pages/static-pages/'],
+)
+_facts(
+    'gov-bd-dist-brahmanbaria',
+    ['facts', 'places'],
+    'Official Brahmanbaria district portal (Bangladesh): the Bangla background, heritage and famous-people pages, for Place facts and Places to see.',
+    cls='official',
+    budget=20,
+    seeds=['https://brahmanbaria.gov.bd/pages/static-pages/69910abd35ce18e1c0739158', 'https://brahmanbaria.gov.bd/pages/static-pages/6990e98b35ce18e1c07282ea', 'https://brahmanbaria.gov.bd/pages/static-pages/6990e38535ce18e1c072368d'],
+    include=['^https?://brahmanbaria\\.gov\\.bd/pages/static-pages/'],
+)
+_facts(
+    'gov-bd-dist-chandpur',
+    ['facts', 'places'],
+    'Official Chandpur district portal (Bangladesh): the Bangla background, heritage and famous-people pages, for Place facts and Places to see.',
+    cls='official',
+    budget=20,
+    seeds=['https://chandpur.gov.bd/pages/static-pages/6991177e35ce18e1c073dad6', 'https://chandpur.gov.bd/pages/static-pages/6991384d516a96d4de40c3f5', 'https://chandpur.gov.bd/pages/static-pages/6991384d516a96d4de40c405'],
+    include=['^https?://chandpur\\.gov\\.bd/pages/static-pages/'],
+)
+_facts(
+    'gov-bd-dist-chapainawabganj',
+    ['facts', 'places'],
+    'Official Chapainawabganj district portal (Bangladesh): the Bangla background, heritage and famous-people pages, for Place facts and Places to see.',
+    cls='official',
+    budget=20,
+    seeds=['https://chapainawabganj.gov.bd/pages/static-pages/697f99c735ce18e1c06c09e0', 'https://chapainawabganj.gov.bd/pages/static-pages/697fb32535ce18e1c06ca94a', 'https://chapainawabganj.gov.bd/pages/static-pages/697f99c635ce18e1c06c0955'],
+    include=['^https?://chapainawabganj\\.gov\\.bd/pages/static-pages/'],
+)
+_facts(
+    'gov-bd-dist-chittagong',
+    ['facts', 'places'],
+    'Official Chittagong district portal (Bangladesh): the Bangla background, heritage and famous-people pages, for Place facts and Places to see.',
+    cls='official',
+    budget=20,
+    seeds=['https://chittagong.gov.bd/pages/static-pages/6990c76e35ce18e1c0717f16', 'https://chittagong.gov.bd/pages/static-pages/6991007235ce18e1c0732864', 'https://chittagong.gov.bd/pages/static-pages/6991007d35ce18e1c0732d21'],
+    include=['^https?://chittagong\\.gov\\.bd/pages/static-pages/'],
+)
+_facts(
+    'gov-bd-dist-comilla',
+    ['facts', 'places'],
+    'Official Comilla district portal (Bangladesh): the Bangla background, heritage and famous-people pages, for Place facts and Places to see.',
+    cls='official',
+    budget=20,
+    seeds=['https://comilla.gov.bd/pages/static-pages/699103de35ce18e1c07352d6', 'https://comilla.gov.bd/pages/static-pages/699145d3516a96d4de415484'],
+    include=['^https?://comilla\\.gov\\.bd/pages/static-pages/'],
+)
+_facts(
+    'gov-bd-dist-coxsbazar',
+    ['facts', 'places'],
+    'Official Coxsbazar district portal (Bangladesh): the Bangla background, heritage and famous-people pages, for Place facts and Places to see.',
+    cls='official',
+    budget=20,
+    seeds=['https://coxsbazar.gov.bd/pages/static-pages/6990db2035ce18e1c0720770', 'https://coxsbazar.gov.bd/pages/static-pages/6991218d516a96d4de4035aa', 'https://coxsbazar.gov.bd/pages/static-pages/6991176e35ce18e1c073d38c'],
+    include=['^https?://coxsbazar\\.gov\\.bd/pages/static-pages/'],
+)
+_facts(
+    'gov-bd-dist-dinajpur',
+    ['facts', 'places'],
+    'Official Dinajpur district portal (Bangladesh): the Bangla background, heritage and famous-people pages, for Place facts and Places to see.',
+    cls='official',
+    budget=20,
+    seeds=['https://dinajpur.gov.bd/pages/static-pages/69774bcdc4774958d7c1683b', 'https://dinajpur.gov.bd/pages/static-pages/%E0%A6%9C%E0%A7%87%E0%A6%B2%E0%A6%BE%E0%A6%B0-%E0%A6%90%E0%A6%A4%E0%A6%BF%E0%A6%B9%E0%A7%8D%E0%A6%AF-1d8ce8-6977240ec4774958d7c09115', 'https://dinajpur.gov.bd/pages/static-pages/697714bdc4774958d7c02fa3'],
+    include=['^https?://dinajpur\\.gov\\.bd/pages/static-pages/'],
+)
+_facts(
+    'gov-bd-dist-faridpur',
+    ['facts', 'places'],
+    'Official Faridpur district portal (Bangladesh): the Bangla background, heritage and famous-people pages, for Place facts and Places to see.',
+    cls='official',
+    budget=20,
+    seeds=['https://faridpur.gov.bd/pages/static-pages/6995e32935ce18e1c07b35fd', 'https://faridpur.gov.bd/pages/static-pages/6995b36935ce18e1c0798a69'],
+    include=['^https?://faridpur\\.gov\\.bd/pages/static-pages/'],
+)
+_facts(
+    'gov-bd-dist-feni',
+    ['facts', 'places'],
+    'Official Feni district portal (Bangladesh): the Bangla background, heritage and famous-people pages, for Place facts and Places to see.',
+    cls='official',
+    budget=20,
+    seeds=['https://feni.gov.bd/pages/static-pages/6990e3c235ce18e1c0725098', 'https://feni.gov.bd/pages/static-pages/6990e3c235ce18e1c0725099', 'https://feni.gov.bd/pages/static-pages/6990d1ed35ce18e1c071c692'],
+    include=['^https?://feni\\.gov\\.bd/pages/static-pages/'],
+)
+_facts(
+    'gov-bd-dist-gaibandha',
+    ['facts', 'places'],
+    'Official Gaibandha district portal (Bangladesh): the Bangla background, heritage and famous-people pages, for Place facts and Places to see.',
+    cls='official',
+    budget=20,
+    seeds=['https://gaibandha.gov.bd/pages/static-pages/69775349c4774958d7c1b067', 'https://gaibandha.gov.bd/pages/static-pages/69775360c4774958d7c1bba9', 'https://gaibandha.gov.bd/pages/static-pages/69771cd0c4774958d7c06af4'],
+    include=['^https?://gaibandha\\.gov\\.bd/pages/static-pages/'],
+)
+_facts(
+    'gov-bd-dist-gopalganj',
+    ['facts', 'places'],
+    'Official Gopalganj district portal (Bangladesh): the Bangla background, heritage and famous-people pages, for Place facts and Places to see.',
+    cls='official',
+    budget=20,
+    seeds=['https://gopalganj.gov.bd/pages/static-pages/6995b34935ce18e1c0797c6b', 'https://gopalganj.gov.bd/pages/static-pages/6995de8a35ce18e1c07aebf7'],
+    include=['^https?://gopalganj\\.gov\\.bd/pages/static-pages/'],
+)
+_facts(
+    'gov-bd-dist-habiganj',
+    ['facts', 'places'],
+    'Official Habiganj district portal (Bangladesh): the Bangla background, heritage and famous-people pages, for Place facts and Places to see.',
+    cls='official',
+    budget=20,
+    seeds=['https://habiganj.gov.bd/pages/static-pages/696cb96bc4774958d7ba734f', 'https://habiganj.gov.bd/pages/static-pages/696ca78ec4774958d7b99b14'],
+    include=['^https?://habiganj\\.gov\\.bd/pages/static-pages/'],
+)
+_facts(
+    'gov-bd-dist-jamalpur',
+    ['facts', 'places'],
+    'Official Jamalpur district portal (Bangladesh): the Bangla background, heritage and famous-people pages, for Place facts and Places to see.',
+    cls='official',
+    budget=20,
+    seeds=['https://jamalpur.gov.bd/pages/static-pages/69707b27a31054345f15377b', 'https://jamalpur.gov.bd/pages/static-pages/6970a1cfa31054345f161b96', 'https://jamalpur.gov.bd/pages/static-pages/6970a1caa31054345f16191e'],
+    include=['^https?://jamalpur\\.gov\\.bd/pages/static-pages/'],
+)
+_facts(
+    'gov-bd-dist-jashore',
+    ['facts', 'places'],
+    'Official Jashore district portal (Bangladesh): the Bangla background, heritage and famous-people pages, for Place facts and Places to see.',
+    cls='official',
+    budget=20,
+    seeds=['https://jashore.gov.bd/pages/static-pages/6981417735ce18e1c0701fcd', 'https://jashore.gov.bd/pages/static-pages/6981417735ce18e1c0701fbd', 'https://jashore.gov.bd/pages/static-pages/6981417735ce18e1c0701fd8'],
+    include=['^https?://jashore\\.gov\\.bd/pages/static-pages/'],
+)
+_facts(
+    'gov-bd-upz-kalapara-patuakhali',
+    ['facts', 'places'],
+    'Official Kalapara upazila portal (Bangladesh): the Bangla background, heritage and famous-people pages, for Place facts and Places to see.',
+    cls='official',
+    budget=20,
+    seeds=['https://kalapara.patuakhali.gov.bd/pages/static-pages/6978949f35ce18e1c066886b', 'https://kalapara.patuakhali.gov.bd/pages/static-pages/69789ad035ce18e1c066d065', 'https://kalapara.patuakhali.gov.bd/pages/static-pages/6978949f35ce18e1c0668881'],
+    include=['^https?://kalapara\\.patuakhali\\.gov\\.bd/pages/static-pages/'],
+)
+_facts(
+    'gov-bd-dist-khulna',
+    ['facts', 'places'],
+    'Official Khulna district portal (Bangladesh): the Bangla background, heritage and famous-people pages, for Place facts and Places to see.',
+    cls='official',
+    budget=20,
+    seeds=['https://khulna.gov.bd/pages/static-pages/6981018ba31054345f1d497d', 'https://khulna.gov.bd/pages/static-pages/the-heritage-of-khulna-district-vmsu6s-6abb5151918dbae4864cc', 'https://khulna.gov.bd/pages/static-pages/69812047a31054345f1e0bae'],
+    include=['^https?://khulna\\.gov\\.bd/pages/static-pages/'],
+)
+_facts(
+    'gov-bd-upz-kumarkhali-kushtia',
+    ['facts', 'places'],
+    'Official Kumarkhali upazila portal (Bangladesh): the Bangla background, heritage and famous-people pages, for Place facts and Places to see.',
+    cls='official',
+    budget=20,
+    seeds=['https://kumarkhali.kushtia.gov.bd/pages/static-pages/6981205fa31054345f1e1743', 'https://kumarkhali.kushtia.gov.bd/pages/static-pages/6980ee66a31054345f1ce28c'],
+    include=['^https?://kumarkhali\\.kushtia\\.gov\\.bd/pages/static-pages/'],
+)
+_facts(
+    'gov-bd-dist-kurigram',
+    ['facts', 'places'],
+    'Official Kurigram district portal (Bangladesh): the Bangla background, heritage and famous-people pages, for Place facts and Places to see.',
+    cls='official',
+    budget=20,
+    seeds=['https://kurigram.gov.bd/pages/static-pages/69774bb9c4774958d7c15f09', 'https://kurigram.gov.bd/pages/static-pages/697769bfc4774958d7c24206', 'https://kurigram.gov.bd/pages/static-pages/6977401cc4774958d7c14051'],
+    include=['^https?://kurigram\\.gov\\.bd/pages/static-pages/'],
+)
+_facts(
+    'gov-bd-dist-kushtia',
+    ['facts', 'places'],
+    'Official Kushtia district portal (Bangladesh): the Bangla background, heritage and famous-people pages, for Place facts and Places to see.',
+    cls='official',
+    budget=20,
+    seeds=['https://kushtia.gov.bd/pages/static-pages/6980f69ba31054345f1cf6ee', 'https://kushtia.gov.bd/pages/static-pages/6980fbe5a31054345f1d19aa', 'https://kushtia.gov.bd/pages/static-pages/69810195a31054345f1d4db7'],
+    include=['^https?://kushtia\\.gov\\.bd/pages/static-pages/'],
+)
+_facts(
+    'gov-bd-upz-mongla-bagerhat',
+    ['facts', 'places'],
+    'Official Mongla upazila portal (Bangladesh): the Bangla background, heritage and famous-people pages, for Place facts and Places to see.',
+    cls='official',
+    budget=20,
+    seeds=['https://mongla.bagerhat.gov.bd/pages/static-pages/69812ded35ce18e1c06f99a1', 'https://mongla.bagerhat.gov.bd/pages/static-pages/69812ded35ce18e1c06f99d6', 'https://mongla.bagerhat.gov.bd/pages/static-pages/6980f6ada31054345f1cfee4'],
+    include=['^https?://mongla\\.bagerhat\\.gov\\.bd/pages/static-pages/'],
+)
+_facts(
+    'gov-bd-dist-moulvibazar',
+    ['facts', 'places'],
+    'Official Moulvibazar district portal (Bangladesh): the Bangla background, heritage and famous-people pages, for Place facts and Places to see.',
+    cls='official',
+    budget=20,
+    seeds=['https://moulvibazar.gov.bd/pages/static-pages/background-of-moulvibazar-o1fkti-69d808f3d47e90032cfe8ca9', 'https://moulvibazar.gov.bd/pages/static-pages/696cb3a0c4774958d7ba20ae', 'https://moulvibazar.gov.bd/pages/static-pages/696cb384c4774958d7ba1499'],
+    include=['^https?://moulvibazar\\.gov\\.bd/pages/static-pages/'],
+)
+_facts(
+    'gov-bd-dist-munshiganj',
+    ['facts', 'places'],
+    'Official Munshiganj district portal (Bangladesh): the Bangla background, heritage and famous-people pages, for Place facts and Places to see.',
+    cls='official',
+    budget=20,
+    seeds=['https://munshiganj.gov.bd/pages/static-pages/6995e32a35ce18e1c07b3682', 'https://munshiganj.gov.bd/pages/static-pages/6995d78f35ce18e1c07aadaf', 'https://munshiganj.gov.bd/pages/static-pages/background-of-district-administration-1d0c7d-6995e32a35ce18e'],
+    include=['^https?://munshiganj\\.gov\\.bd/pages/static-pages/'],
+)
+_facts(
+    'gov-bd-dist-mymensingh',
+    ['facts', 'places'],
+    'Official Mymensingh district portal (Bangladesh): the Bangla background, heritage and famous-people pages, for Place facts and Places to see.',
+    cls='official',
+    budget=20,
+    seeds=['https://mymensingh.gov.bd/pages/static-pages/6973bc81c4774958d7bbf28f', 'https://mymensingh.gov.bd/pages/static-pages/697098e9a31054345f15f3a5', 'https://mymensingh.gov.bd/pages/static-pages/69709db5a31054345f1604fd'],
+    include=['^https?://mymensingh\\.gov\\.bd/pages/static-pages/'],
+)
+_facts(
+    'gov-bd-dist-naogaon',
+    ['facts', 'places'],
+    'Official Naogaon district portal (Bangladesh): the Bangla background, heritage and famous-people pages, for Place facts and Places to see.',
+    cls='official',
+    budget=20,
+    seeds=['https://naogaon.gov.bd/pages/static-pages/697f79c935ce18e1c06b595d', 'https://naogaon.gov.bd/pages/static-pages/antiquities-4plsio-6a8402fdcb81efaf5dccd4d2', 'https://naogaon.gov.bd/pages/static-pages/697f8d8135ce18e1c06bd3fe'],
+    include=['^https?://naogaon\\.gov\\.bd/pages/static-pages/'],
+)
+_facts(
+    'gov-bd-dist-narayanganj',
+    ['facts', 'places'],
+    'Official Narayanganj district portal (Bangladesh): the Bangla background, heritage and famous-people pages, for Place facts and Places to see.',
+    cls='official',
+    budget=20,
+    seeds=['https://narayanganj.gov.bd/pages/static-pages/6995cba735ce18e1c07a645e', 'https://narayanganj.gov.bd/pages/static-pages/6995bebc35ce18e1c079e8c0', 'https://narayanganj.gov.bd/pages/static-pages/6995976e35ce18e1c0786f42'],
+    include=['^https?://narayanganj\\.gov\\.bd/pages/static-pages/'],
+)
+_facts(
+    'gov-bd-dist-natore',
+    ['facts', 'places'],
+    'Official Natore district portal (Bangladesh): the Bangla background, heritage and famous-people pages, for Place facts and Places to see.',
+    cls='official',
+    budget=20,
+    seeds=['https://natore.gov.bd/pages/static-pages/697fbb1d35ce18e1c06cc350', 'https://natore.gov.bd/pages/static-pages/697ff44935ce18e1c06ddbf2', 'https://natore.gov.bd/pages/static-pages/697fbb1e35ce18e1c06cc3ce'],
+    include=['^https?://natore\\.gov\\.bd/pages/static-pages/'],
+)
+_facts(
+    'gov-bd-dist-netrokona',
+    ['facts', 'places'],
+    'Official Netrokona district portal (Bangladesh): the Bangla background, heritage and famous-people pages, for Place facts and Places to see.',
+    cls='official',
+    budget=20,
+    seeds=['https://netrokona.gov.bd/pages/static-pages/6970a1cfa31054345f161b76', 'https://netrokona.gov.bd/pages/static-pages/6970a1dea31054345f162262', 'https://netrokona.gov.bd/pages/static-pages/697098e8a31054345f15f34f'],
+    include=['^https?://netrokona\\.gov\\.bd/pages/static-pages/'],
+)
+_facts(
+    'gov-bd-dist-noakhali',
+    ['facts', 'places'],
+    'Official Noakhali district portal (Bangladesh): the Bangla background, heritage and famous-people pages, for Place facts and Places to see.',
+    cls='official',
+    budget=20,
+    seeds=['https://noakhali.gov.bd/pages/static-pages/699128e0516a96d4de406210', 'https://noakhali.gov.bd/pages/static-pages/69912184516a96d4de40317a'],
+    include=['^https?://noakhali\\.gov\\.bd/pages/static-pages/'],
+)
+_facts(
+    'gov-bd-dist-pabna',
+    ['facts', 'places'],
+    'Official Pabna district portal (Bangladesh): the Bangla background, heritage and famous-people pages, for Place facts and Places to see.',
+    cls='official',
+    budget=20,
+    seeds=['https://pabna.gov.bd/pages/static-pages/697fbb1e35ce18e1c06cc3d1', 'https://pabna.gov.bd/pages/static-pages/697fbb1e35ce18e1c06cc3d7', 'https://pabna.gov.bd/pages/static-pages/697fbb2035ce18e1c06cc4b3'],
+    include=['^https?://pabna\\.gov\\.bd/pages/static-pages/'],
+)
+_facts(
+    'gov-bd-dist-patuakhali',
+    ['facts', 'places'],
+    'Official Patuakhali district portal (Bangladesh): the Bangla background, heritage and famous-people pages, for Place facts and Places to see.',
+    cls='official',
+    budget=20,
+    seeds=['https://patuakhali.gov.bd/pages/static-pages/69789aa335ce18e1c066bb2e', 'https://patuakhali.gov.bd/pages/static-pages/district-tradition-4da12e-6978767bc4774958d7c4239f', 'https://patuakhali.gov.bd/pages/static-pages/697894ab35ce18e1c0668dc5'],
+    include=['^https?://patuakhali\\.gov\\.bd/pages/static-pages/'],
+)
+_facts(
+    'gov-bd-upz-puthia-rajshahi',
+    ['facts', 'places'],
+    'Official Puthia upazila portal (Bangladesh): the Bangla background, heritage and famous-people pages, for Place facts and Places to see.',
+    cls='official',
+    budget=20,
+    seeds=['https://puthia.rajshahi.gov.bd/pages/static-pages/697fbb2835ce18e1c06cc878', 'https://puthia.rajshahi.gov.bd/pages/static-pages/697f93c135ce18e1c06be9b2', 'https://puthia.rajshahi.gov.bd/pages/static-pages/697f6dc035ce18e1c06b0ff5'],
+    include=['^https?://puthia\\.rajshahi\\.gov\\.bd/pages/static-pages/'],
+)
+_facts(
+    'gov-bd-dist-rajshahi',
+    ['facts', 'places'],
+    'Official Rajshahi district portal (Bangladesh): the Bangla background, heritage and famous-people pages, for Place facts and Places to see.',
+    cls='official',
+    budget=20,
+    seeds=['https://rajshahi.gov.bd/pages/static-pages/697f99c435ce18e1c06c0882', 'https://rajshahi.gov.bd/pages/static-pages/697fb32435ce18e1c06ca908', 'https://rajshahi.gov.bd/pages/static-pages/697f99c535ce18e1c06c08ca'],
+    include=['^https?://rajshahi\\.gov\\.bd/pages/static-pages/'],
+)
+_facts(
+    'gov-bd-dist-rangamati',
+    ['facts', 'places'],
+    'Official Rangamati district portal (Bangladesh): the Bangla background, heritage and famous-people pages, for Place facts and Places to see.',
+    cls='official',
+    budget=20,
+    seeds=['https://rangamati.gov.bd/pages/static-pages/6991008b35ce18e1c0733357', 'https://rangamati.gov.bd/pages/static-pages/69910abd35ce18e1c073912a', 'https://rangamati.gov.bd/pages/static-pages/6991008b35ce18e1c0733323'],
+    include=['^https?://rangamati\\.gov\\.bd/pages/static-pages/'],
+)
+_facts(
+    'gov-bd-dist-rangpur',
+    ['facts', 'places'],
+    'Official Rangpur district portal (Bangladesh): the Bangla background, heritage and famous-people pages, for Place facts and Places to see.',
+    cls='official',
+    budget=20,
+    seeds=['https://rangpur.gov.bd/pages/static-pages/69770c61c4774958d7c01184', 'https://rangpur.gov.bd/pages/static-pages/69770c61c4774958d7c0117f', 'https://rangpur.gov.bd/pages/static-pages/6977698dc4774958d7c22a9d'],
+    include=['^https?://rangpur\\.gov\\.bd/pages/static-pages/'],
+)
+_facts(
+    'gov-bd-dist-satkhira',
+    ['facts', 'places'],
+    'Official Satkhira district portal (Bangladesh): the Bangla background, heritage and famous-people pages, for Place facts and Places to see.',
+    cls='official',
+    budget=20,
+    seeds=['https://satkhira.gov.bd/pages/static-pages/6980f6b5a31054345f1d02fc', 'https://satkhira.gov.bd/pages/static-pages/6980f6c5a31054345f1d0a00', 'https://satkhira.gov.bd/pages/static-pages/69810991a31054345f1da869'],
+    include=['^https?://satkhira\\.gov\\.bd/pages/static-pages/'],
+)
+_facts(
+    'gov-bd-upz-shibganj-bogura',
+    ['facts', 'places'],
+    'Official Shibganj upazila portal (Bangladesh): the Bangla background, heritage and famous-people pages, for Place facts and Places to see.',
+    cls='official',
+    budget=20,
+    seeds=['https://shibganj.bogura.gov.bd/pages/static-pages/697fa61a35ce18e1c06c6627', 'https://shibganj.bogura.gov.bd/pages/static-pages/697fbb5335ce18e1c06cdbf0', 'https://shibganj.bogura.gov.bd/pages/static-pages/697fa61a35ce18e1c06c663b'],
+    include=['^https?://shibganj\\.bogura\\.gov\\.bd/pages/static-pages/'],
+)
+_facts(
+    'gov-bd-upz-sonargaon-narayanganj',
+    ['facts', 'places'],
+    'Official Sonargaon upazila portal (Bangladesh): the Bangla background, heritage and famous-people pages, for Place facts and Places to see.',
+    cls='official',
+    budget=20,
+    seeds=['https://sonargaon.narayanganj.gov.bd/pages/static-pages/6995974835ce18e1c0785f36', 'https://sonargaon.narayanganj.gov.bd/pages/static-pages/6995974835ce18e1c0785f4a'],
+    include=['^https?://sonargaon\\.narayanganj\\.gov\\.bd/pages/static-pages/'],
+)
+_facts(
+    'gov-bd-upz-sreemangal-moulvibazar',
+    ['facts', 'places'],
+    'Official Sreemangal upazila portal (Bangladesh): the Bangla background, heritage and famous-people pages, for Place facts and Places to see.',
+    cls='official',
+    budget=20,
+    seeds=['https://sreemangal.moulvibazar.gov.bd/pages/static-pages/696cb396c4774958d7ba1c28', 'https://sreemangal.moulvibazar.gov.bd/pages/static-pages/696cb396c4774958d7ba1c2b'],
+    include=['^https?://sreemangal\\.moulvibazar\\.gov\\.bd/pages/static-pages/'],
+)
+_facts(
+    'gov-bd-dist-sunamganj',
+    ['facts', 'places'],
+    'Official Sunamganj district portal (Bangladesh): the Bangla background, heritage and famous-people pages, for Place facts and Places to see.',
+    cls='official',
+    budget=20,
+    seeds=['https://sunamganj.gov.bd/pages/static-pages/696cb968c4774958d7ba7189', 'https://sunamganj.gov.bd/pages/static-pages/696cb967c4774958d7ba7187', 'https://sunamganj.gov.bd/pages/static-pages/696cb96dc4774958d7ba7405'],
+    include=['^https?://sunamganj\\.gov\\.bd/pages/static-pages/'],
+)
+_facts(
+    'gov-bd-dist-sylhet',
+    ['facts', 'places'],
+    'Official Sylhet district portal (Bangladesh): the Bangla background, heritage and famous-people pages, for Place facts and Places to see.',
+    cls='official',
+    budget=20,
+    seeds=['https://sylhet.gov.bd/pages/static-pages/696cb362c4774958d7ba0692', 'https://sylhet.gov.bd/pages/static-pages/696cb362c4774958d7ba0699', 'https://sylhet.gov.bd/pages/static-pages/696cb361c4774958d7ba0634'],
+    include=['^https?://sylhet\\.gov\\.bd/pages/static-pages/'],
+)
+_facts(
+    'gov-bd-dist-tangail',
+    ['facts', 'places'],
+    'Official Tangail district portal (Bangladesh): the Bangla background, heritage and famous-people pages, for Place facts and Places to see.',
+    cls='official',
+    budget=20,
+    seeds=['https://tangail.gov.bd/pages/static-pages/6995cb9b35ce18e1c07a5f31', 'https://tangail.gov.bd/pages/static-pages/6995975d35ce18e1c0786874', 'https://tangail.gov.bd/pages/static-pages/6995de9d35ce18e1c07af3eb'],
+    include=['^https?://tangail\\.gov\\.bd/pages/static-pages/'],
+)
+_facts(
+    'gov-bd-upz-teknaf-coxsbazar',
+    ['facts', 'places'],
+    'Official Teknaf upazila portal (Bangladesh): the Bangla background, heritage and famous-people pages, for Place facts and Places to see.',
+    cls='official',
+    budget=20,
+    seeds=['https://teknaf.coxsbazar.gov.bd/pages/static-pages/6991008c35ce18e1c07333a6'],
+    include=['^https?://teknaf\\.coxsbazar\\.gov\\.bd/pages/static-pages/'],
+)
+_facts(
+    'gov-bd-dist-thakurgaon',
+    ['facts', 'places'],
+    'Official Thakurgaon district portal (Bangladesh): the Bangla background, heritage and famous-people pages, for Place facts and Places to see.',
+    cls='official',
+    budget=20,
+    seeds=['https://thakurgaon.gov.bd/pages/static-pages/background-of-the-district-73e916-69774bcdc4774958d7c16809', 'https://thakurgaon.gov.bd/pages/static-pages/69774bccc4774958d7c167e2', 'https://thakurgaon.gov.bd/pages/static-pages/697769bcc4774958d7c240ce'],
+    include=['^https?://thakurgaon\\.gov\\.bd/pages/static-pages/'],
+)
+
+
 METHODS = {"html", "rss", "sitemap", "api", "dump"}
 
 
