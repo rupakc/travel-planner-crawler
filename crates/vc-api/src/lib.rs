@@ -183,6 +183,7 @@ pub fn router(state: ApiState) -> Router {
         .route("/v1/carbon/factors", get(handlers::carbon_factors))
         .route("/v1/carbon/grid", get(handlers::carbon_grid))
         .route("/v1/carbon/occupancy", get(handlers::carbon_occupancy))
+        .route("/v1/facts", get(handlers::facts))
         .route("/v1/places/resolve", get(handlers::places_resolve))
         .route("/v1/changes", get(handlers::changes))
         .route("/v1/sources", get(handlers::sources))
@@ -233,6 +234,7 @@ pub fn metrics_router(state: &ApiState) -> Router {
         handlers::carbon_factors,
         handlers::carbon_grid,
         handlers::carbon_occupancy,
+        handlers::facts,
         handlers::places_resolve,
         handlers::changes,
         handlers::sources,

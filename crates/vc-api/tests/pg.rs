@@ -499,3 +499,208 @@ async fn pg_carbon_occupancy() {
     };
     assert!(store.carbon_occupancy(&none).await.expect("q").is_empty());
 }
+
+#[tokio::test]
+async fn pg_facts_resolve_bare_countries_and_filter_by_place() {
+    use vc_api::catalog::FactQuery;
+    use vc_core::usepolicy::UsePolicy;
+    let pool = testkit::pg().await;
+    let store = PgApiStore::new(pool.clone());
+    sqlx::query(
+        "INSERT INTO sources (source_id, name, category, source_class, licence_class, licence,
+                              method, enabled, spec, spec_hash)
+         VALUES ('wikidata-facts', 'Wikidata EntityData', 'facts', 'reference', 'open',
+                 '{\"class\": \"open\", \"attribution\": \"Wikidata\"}', 'api', true, '{}', 'h')",
+    )
+    .execute(&pool)
+    .await
+    .expect("source");
+    let full = UsePolicy::ALLOW_ALL;
+    let berlin = serde_json::json!({"geonames_id": 2950159, "wikidata_qid": "Q64",
+        "country": "DE", "name": "Berlin"});
+    let germany = serde_json::json!({"geonames_id": 2921044, "wikidata_qid": "Q183",
+        "admin_level": "country", "country": "DE", "name": "Germany"});
+    let wd = |place: &serde_json::Value, text: &str, ty: &str| {
+        serde_json::json!({"place": place, "fact_type": ty, "text": text,
+            "text_origin": "templated", "llm_ok": true, "confidence": "structured"})
+    };
+    let bare = |cc: &str, text: &str| {
+        serde_json::json!({"place": {"country": cc, "admin_level": "country"},
+            "fact_type": "unbelievable", "text": text,
+            "text_origin": "templated", "confidence": "structured"})
+    };
+    let put = |key: &'static str,
+               source: &'static str,
+               class: &'static str,
+               state: &'static str,
+               data: serde_json::Value,
+               policy: UsePolicy| {
+        let pool = pool.clone();
+        async move { put_record(&pool, "place_fact", key, source, class, state, data, policy).await }
+    };
+    let a = put(
+        "a",
+        "wikidata-facts",
+        "open",
+        "active",
+        wd(&berlin, "Berlin was founded in 1244.", "historical"),
+        full,
+    )
+    .await;
+    let b = put(
+        "b",
+        "wikidata-facts",
+        "open",
+        "stale",
+        wd(&berlin, "Berlin covers an area of 891.12 km².", "popular"),
+        full,
+    )
+    .await;
+    let g = put(
+        "g",
+        "wikidata-facts",
+        "open",
+        "active",
+        wd(
+            &germany,
+            "Germany covers an area of 357,588 km².",
+            "popular",
+        ),
+        full,
+    )
+    .await;
+    let mut rw = wd(&berlin, "A rewritten share-alike sentence.", "fun");
+    rw["text_origin"] = serde_json::json!("rewritten");
+    rw["llm_ok"] = serde_json::json!(false);
+    let e = put("e", "fx-example", "share_alike", "active", rw, full).await;
+    // Source text kept as written, tombstoned, deny-all: never served.
+    let mut hook = wd(&berlin, "... that a copied hook is never served?", "fun");
+    hook["text_origin"] = serde_json::json!("source_hook");
+    put(
+        "h",
+        "wiki-facts-simple",
+        "share_alike",
+        "active",
+        hook,
+        full,
+    )
+    .await;
+    put(
+        "t",
+        "wikidata-facts",
+        "open",
+        "tombstoned",
+        wd(&berlin, "A tombstoned fact about Berlin.", "fun"),
+        full,
+    )
+    .await;
+    put(
+        "d",
+        "wikidata-facts",
+        "open",
+        "active",
+        wd(&berlin, "A fact no client may see here.", "fun"),
+        UsePolicy::DENY_ALL,
+    )
+    .await;
+    let c = put(
+        "c",
+        "od-factbook-json",
+        "open",
+        "active",
+        bare("DE", "The highest point of Germany is Zugspitze (2,963 m)."),
+        full,
+    )
+    .await;
+    let f = put(
+        "f",
+        "od-factbook-json",
+        "open",
+        "active",
+        bare("FR", "The highest point of France is Mont Blanc (4,805 m)."),
+        full,
+    )
+    .await;
+    // Another kind with a `place` key is never a fact.
+    put(
+        "o",
+        "wikidata-facts",
+        "open",
+        "active",
+        wd(&berlin, "Not a fact kind at all.", "fun"),
+        full,
+    )
+    .await;
+    sqlx::query("UPDATE records SET kind = 'article' WHERE record_key = 'o'")
+        .execute(&pool)
+        .await
+        .expect("kind");
+
+    let q = |f: FactQuery| FactQuery {
+        licence_classes: vec![LicenceClass::Open, LicenceClass::ShareAlike],
+        limit: 10,
+        ..f
+    };
+    let ids =
+        |v: &[vc_api::catalog::FactRow]| v.iter().map(|r| r.item.id.clone()).collect::<Vec<_>>();
+    let s = |i: i64| i.to_string();
+    let all = store.facts(&q(FactQuery::default())).await.expect("q");
+    assert_eq!(ids(&all), [s(a), s(b), s(g), s(e), s(c), s(f)]);
+    assert_eq!(all[0].source_name.as_deref(), Some("Wikidata EntityData"));
+    assert_eq!(all[0].source_class.as_deref(), Some("reference"));
+    assert_eq!(all[4].place["wikidata_qid"], "Q183", "Germany's QID");
+    assert_eq!(all[4].place["geonames_id"], 2921044);
+    assert_eq!(all[4].place["country"], "DE");
+    assert!(all[5].place.get("wikidata_qid").is_none(), "no Wikidata FR");
+    assert_eq!(all[4].source_name, None, "no registry row");
+    let by_qid = |qid: &str| FactQuery {
+        wikidata_qid: Some(qid.into()),
+        ..FactQuery::default()
+    };
+    assert_eq!(
+        ids(&store.facts(&q(by_qid("Q64"))).await.expect("q")),
+        [s(a), s(b), s(e)]
+    );
+    assert_eq!(
+        ids(&store.facts(&q(by_qid("Q183"))).await.expect("q")),
+        [s(g), s(c)]
+    );
+    let by_gn = FactQuery {
+        geonames_id: Some(2921044),
+        ..FactQuery::default()
+    };
+    assert_eq!(ids(&store.facts(&q(by_gn)).await.expect("q")), [s(g), s(c)]);
+    let by_gn_type = FactQuery {
+        geonames_id: Some(2950159),
+        fact_type: Some("fun".into()),
+        ..FactQuery::default()
+    };
+    assert_eq!(ids(&store.facts(&q(by_gn_type)).await.expect("q")), [s(e)]);
+    let by_country = FactQuery {
+        country: Some("DE".into()),
+        fact_type: Some("unbelievable".into()),
+        ..FactQuery::default()
+    };
+    assert_eq!(ids(&store.facts(&q(by_country)).await.expect("q")), [s(c)]);
+    let open_only = FactQuery {
+        licence_classes: vec![LicenceClass::Open],
+        limit: 10,
+        ..FactQuery::default()
+    };
+    assert_eq!(
+        ids(&store.facts(&open_only).await.expect("q")),
+        [s(a), s(b), s(g), s(c), s(f)]
+    );
+    let page2 = FactQuery {
+        offset: 1,
+        limit: 2,
+        ..q(FactQuery::default())
+    };
+    let page2 = FactQuery { limit: 2, ..page2 };
+    assert_eq!(ids(&store.facts(&page2).await.expect("q")), [s(b), s(g)]);
+    let none = FactQuery {
+        licence_classes: vec![],
+        ..FactQuery::default()
+    };
+    assert!(store.facts(&none).await.expect("q").is_empty());
+}

@@ -109,6 +109,10 @@ pub(crate) struct Fetch<'a> {
     /// Plain, non-secret request headers an API requires (e.g. FHRS `x-api-version: 2`); kept
     /// in the stored request like any other header.
     pub headers: &'a [(&'static str, &'static str)],
+    /// Spool the response as a `subresource` capture instead of a `primary` one: raw evidence
+    /// that the processor never maps on its own (an adapter that derives one `resource` from
+    /// several responses, e.g. `wikidata_facts`, makes that resource the primary capture).
+    pub subresource: bool,
 }
 
 /// Removes a secret header from the request headers an exchange keeps (they are written to the
@@ -201,10 +205,15 @@ pub(crate) async fn fetch_raw(
     if mismatch {
         tracing::debug!(adapter = ?ctx.url.fetch_mode.to_string(), "media type sniff mismatch");
     }
+    let role = if opts.subresource {
+        CaptureRole::Subresource
+    } else {
+        CaptureRole::Primary
+    };
     let m = meta(
         ctx,
         &ex.url,
-        CaptureRole::Primary,
+        role,
         media,
         Some(ex.status.as_u16()),
         &ex.body,
@@ -230,12 +239,28 @@ pub(crate) async fn append_resource(
     body: Bytes,
     report: &mut AdapterReport,
 ) -> Result<()> {
+    append_resource_with_status(ctx, url, media, content_type, body, None, report).await
+}
+
+/// Appends a `resource` record with an HTTP status. A status-less adapter `resource` is a dump
+/// batch (one of many sharing a URL, so absence from it stales nothing); one derived from a
+/// single response (a bundle) carries that response's status, so the processor reconciles
+/// the URL's records against it in full.
+pub(crate) async fn append_resource_with_status(
+    ctx: &mut AdapterCtx<'_>,
+    url: &CanonicalUrl,
+    media: MediaType,
+    content_type: &str,
+    body: Bytes,
+    status: Option<u16>,
+    report: &mut AdapterReport,
+) -> Result<()> {
     let m = meta(
         ctx,
         url,
         CaptureRole::Primary,
         media,
-        None,
+        status,
         &body,
         Validators::default(),
     );

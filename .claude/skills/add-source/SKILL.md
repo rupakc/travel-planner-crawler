@@ -11,7 +11,7 @@ Spec: §5.9 (licences), §5.12 (extending), §17.8 (classes). Never evade: a bot
 
 Only relevant and pertinent sites are added. Before anything else, write down:
 
-- **which app section(s)** it serves, from the closed list `flights weather hotels activities places walking_tours events visa sim tips emergency_card getting_around forex packing itinerary`;
+- **which app section(s)** it serves, from the closed list `flights weather hotels activities places walking_tours events visa sim tips emergency_card getting_around forex packing itinerary carbon facts`;
 - **why**: one plain sentence (≥ 20 characters) on what traveller-facing data it gives those sections.
 
 That is the spec's required `relevance: {sections: [...], why: "..."}` block (`vcrawl admin source validate` and CI reject a spec without it). No non-travel sites. A `news` or `blogs` source must read a travel section (the URL contains `travel`) or a whole-travel publication listed in `TRAVEL_PUBLICATIONS` (`crates/vc-sources/src/relevance.rs`). **The owner approves every addition** in the PR; scout proposals are never auto-approved (`vcrawl admin source approve <id>` is run by a person).

@@ -257,6 +257,81 @@ from NTS 1999-2001), and `method_note` says how it was built. The TAG bus and co
 total counts one driver, derived from the data book's notes rather than stated: subtract 1 for
 passengers per vehicle before dividing a per-vehicle-km factor by it.
 
+### `GET /v1/facts`
+
+Place facts (kind `place_fact`, added 2026-11-20): short facts about one place (a country,
+region, city, town, village or feature), by record id. Every fact is one sentence in our own
+words with its source link (`text_origin` `templated` or `rewritten`); a record with any other
+text origin (source text kept as written) is never served, and a short quoted value (an
+official name, a nickname, a motto) is the most a sentence holds of the source. Every filter is
+an exact match on the **resolved place**; an invalid value is `400` (never a wildcard).
+Licence shaping as everywhere: a client only gets the licence classes it may receive; facts
+whose use policy is index-none or link-only are not listed here. Stale records (gone from the
+source's latest capture) are still served, as on every read route.
+
+| Parameter | |
+|---|---|
+| `geonames_id` | GeoNames id of the place (positive integer; also matches the record's resolved `place_ids`) |
+| `wikidata_qid` | Wikidata QID of the place (`Q64`, case-insensitive) |
+| `country` | ISO 3166-1 alpha-2 country of the place (case-insensitive) |
+| `fact_type` | `historical`, `fun`, `popular`, `unbelievable`, `little_known` |
+| `limit`, `cursor` | page size (default 20, max `max_page`); `next_cursor` of the previous page (`o:<offset>`) |
+
+Place resolution: a fact keyed only by its country code (`admin_level: country`, no GeoNames id
+and no QID: a Factbook fact) takes the `geonames_id` and `wikidata_qid` of the Wikidata country
+fact with the same `country` (lowest record id), so `?geonames_id=` and `?wikidata_qid=` find
+it too; with no such fact it is served under its country only. Every other fact's place is its
+own.
+
+Response (`FactPage`):
+
+```json
+{
+  "items": [
+    {
+      "id": "1234",
+      "place": {"geonames_id": 2950159, "wikidata_qid": "Q64", "admin_level": "admin1",
+                "country": "DE", "name": "Berlin", "name_lang": "en"},
+      "fact_type": "historical",
+      "text": "Berlin was founded in 1244.",
+      "lang": "en",
+      "text_en": null,
+      "value_lang": null,
+      "text_origin": "templated",
+      "llm_ok": true,
+      "date_ref": "1244",
+      "quantity": null,
+      "source": {"source_id": "od-wikidata-entitydata", "url": "https://www.wikidata.org/wiki/Q64#P571",
+                 "name": "Wikidata", "publisher": "Wikidata contributors (Wikimedia Foundation)",
+                 "source_class": "reference", "sourced": "yes"},
+      "licence": {"class": "open", "spdx": "CC0-1.0", "attribution": "Wikidata (CC0 1.0)", "url": "…"},
+      "as_of": "2026-11-20",
+      "confidence": "structured",
+      "ai_bot_blocked": false,
+      "updated_at": "2026-11-20T03:00:00Z"
+    }
+  ],
+  "next_cursor": "o:20"
+}
+```
+
+| Field | |
+|---|---|
+| `place` | `geonames_id` (the join key to Voyager's `places`/`features`), `wikidata_qid`, `admin_level` (`country`, `admin1`, `admin2`, `locality`, `village`, `feature`, when known), `country`, `name`, `name_lang`; any may be null (a Factbook fact has only the country) |
+| `fact_type` | `historical` (founding, former names, events, heritage designation), `popular` (nicknames, mottos, symbols, population, area), `unbelievable` (records: highest, lowest, oldest, largest), `little_known` (name origins, twin towns, borders), `fun` (editorial curiosities, rewritten) |
+| `text` | ≤ 280 characters, in `lang` |
+| `text_en` | machine translation made at ingest, when present |
+| `value_lang` | language of a quoted value in `text` (an official name, nickname or motto; `de` for "Spree-Athen"), else null |
+| `text_origin` | `templated` (our sentence over typed fields) or `rewritten` (our rewrite of a source sentence) |
+| `llm_ok` | false for share-alike text and AI-reserved sources: never put such text in a prompt |
+| `date_ref` | `YYYY`, `YYYY-MM` or `YYYY-MM-DD` (`-YYYY` BCE) the fact refers to |
+| `quantity` | `{value, unit, rank_scope}` behind a record or figure (`m`, `km2`, `people`, `sites`) |
+| `source` | `source_id`, `url` (deep link), `name`, `publisher`, `source_class` (from the source registry), `sourced` (`yes`/`partial`/`no`: whether the source cites its own sources) |
+| `licence` | the record's licence; show `attribution` with the fact |
+| `as_of` | the fact's date: Wikidata edit date, the frozen Factbook edition (2026-02-04), else the capture date |
+| `confidence` | `structured`, `extracted`, `corroborated` |
+| `ai_bot_blocked` | the source's robots.txt blocks AI bots |
+
 ### `GET /v1/places/resolve`
 
 Resolves a place name to GeoNames candidates, best first.

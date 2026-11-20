@@ -130,3 +130,15 @@ Third batch (2026-11-19; each file fetched once after its host's robots.txt):
 |---|---|---|---|
 | `ember_ci_yearly.json` | `GET api.ember-energy.org/v1/carbon-intensity/yearly?is_aggregate_entity=false&start_date=2000` (owner key, not stored) | `data` cut to 7 real rows (France, Germany, India 2023 and 2024; Kosovo 2024); `stats.number_of_records` set to 7, `query_value_range` removed | CC BY 4.0 (Ember) |
 | `ember_ci_monthly.json` | `GET …/v1/carbon-intensity/monthly?is_aggregate_entity=false&start_date=2019-01` | `data` cut to 4 real rows (France and New Zealand, January and February 2025); same `stats` edits | CC BY 4.0 (Ember) |
+
+
+### Place facts: wikidata_facts, factbook_json (2026-11-20)
+
+Fetched once each after the host's robots.txt (www.wikidata.org: `Allow: /wiki/Special:EntityData/*.`;
+raw.githubusercontent.com: 404 = allowed). No Wikipedia page was fetched or stored.
+
+| File | Source | How it was cut | Licence |
+|---|---|---|---|
+| `wikidata_entity_q64.json` | `www.wikidata.org/wiki/Special:EntityData/Q64.json` (Berlin, 475 KB) | labels en/de/fr, one description, sitelinks dewiki/enwiki/frwiki; claims P1566 (2), P571, P793 (Q65079568, Q8150), P1448, P1449, P610, P2044, P2046 (2), P1082 (preferred + the 2 latest dated), P190 (Q65, Q90), P47 (Q1208, Q6115), P17 (the first, historic, and the current Q183), P300, P31 (1); each statement keeps at most one reference with one snak | CC0 1.0 (Wikidata) |
+| `wikidata_entity_refs.json` | EntityData of Q183, Q19259618, Q65079568, Q8150, Q65, Q90, Q1208, Q6115 (the items Berlin's facts point to) | an object `{QID: EntityData body}`; each item keeps labels en/de and claims P297, P2044, P31 (first statement) | CC0 1.0 (Wikidata) |
+| `factbook_gm.json` | `raw.githubusercontent.com/factbook/factbook.json/master/europe/gm.json` (57 KB) | Introduction/Background (first 300 characters), Geography Location/Area/Elevation, Government Country name (etymology cut to 200 characters)/Capital name/Independence/National symbol(s)/National heritage (locales cut to 160 characters) | CC0 1.0 (factbook.json); the Factbook is a US Government work (public domain) |

@@ -42,6 +42,7 @@ SECTION_TITLES = {
     "packing": "Packing list",
     "itinerary": "Itinerary",
     "carbon": "Carbon footprint",
+    "facts": "Place facts",
 }
 
 LICENCE_WORDS = {
@@ -129,6 +130,12 @@ def render(specs: list[dict], licence_only: list[dict] | None = None) -> str:
         "per room and grid intensity), food and activities. Most factor tables are spreadsheets,",
         "PDFs or APIs: those sources stay off with \"adapter pending\" or \"needs an API key\" until",
         "a reader or a key exists.",
+        "",
+        "**Place facts** (section `facts`, added 2026-11-20) holds short facts about countries,",
+        "regions, cities, towns, villages and features (historical, fun, popular, record-breaking",
+        "and little-known), each one sentence in our own words with its source link. The first",
+        "readers are structured: Wikidata properties and the frozen CIA World Factbook JSON (see",
+        "docs/wiki/Place-Facts-Data.md).",
         "",
     ]
     for section, title in SECTION_TITLES.items():

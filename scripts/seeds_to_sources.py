@@ -592,6 +592,7 @@ SECTIONS = (
     "flights", "weather", "hotels", "activities", "places", "walking_tours", "events", "visa",
     "sim", "tips", "emergency_card", "getting_around", "forex", "packing", "itinerary",
     "carbon",  # trip carbon footprint (2026-11-19)
+    "facts",  # place facts (2026-11-20)
 )
 MIN_WHY_CHARS = 20
 

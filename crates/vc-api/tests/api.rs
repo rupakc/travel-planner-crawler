@@ -129,6 +129,7 @@ const V1_ROUTES: &[&str] = &[
     "/v1/carbon/factors?category=flights",
     "/v1/carbon/grid?country=FR",
     "/v1/carbon/occupancy?mode=car",
+    "/v1/facts?country=DE",
     "/v1/places/resolve?name=London",
     "/v1/changes",
     "/v1/sources",
@@ -1216,6 +1217,292 @@ async fn carbon_occupancy_needs_a_token() {
     let r = h
         .http
         .get(format!("{}/v1/carbon/occupancy", h.base))
+        .send()
+        .await
+        .expect("send");
+    assert_eq!(r.status(), StatusCode::UNAUTHORIZED);
+}
+
+// ---------------------------------------------------------------------------------------------
+// /v1/facts (2026-11-20): place facts in our own words; a country known only by its ISO code
+// (a Factbook fact) takes the GeoNames id and QID of the Wikidata country fact.
+// ---------------------------------------------------------------------------------------------
+
+fn fact(id: &str, class: LicenceClass, data: Value, source: &str) -> vc_core::index::Item {
+    let mut it = item(id, "place_fact", class);
+    it.data = data;
+    it.place_ids = vec![];
+    it.provenance = vec![provenance(source, &format!("https://example.org/{id}"))];
+    it
+}
+
+fn berlin_place() -> Value {
+    serde_json::json!({"geonames_id": 2950159, "wikidata_qid": "Q64", "admin_level": "admin1",
+        "country": "DE", "name": "Berlin", "name_lang": "en"})
+}
+
+fn factbook(country: &str, name: &str, text: &str) -> Value {
+    serde_json::json!({"place": {"country": country, "admin_level": "country", "name": name,
+            "native_id": "factbook:xx"},
+        "fact_type": "unbelievable", "text": text,
+        "text_origin": "templated", "llm_ok": true, "confidence": "structured",
+        "quantity": {"value": 2963.0, "unit": "m", "rank_scope": format!("highest point of {name}")},
+        "as_of": "2026-02-04"})
+}
+
+async fn facts_harness(classes: &[LicenceClass]) -> Harness {
+    let wd = |place: Value, text: &str, ty: &str, extra: Value| {
+        let mut d = serde_json::json!({"place": place, "fact_type": ty, "text": text,
+            "lang": "en", "text_origin": "templated", "llm_ok": true, "confidence": "structured",
+            "source_url": "https://www.wikidata.org/wiki/Q64#P571", "as_of": "2026-11-20",
+            "source": {"name": "Wikidata", "publisher": "Wikidata contributors", "sourced": "yes"}});
+        for (k, v) in extra.as_object().unwrap() {
+            d[k] = v.clone();
+        }
+        d
+    };
+    let germany = serde_json::json!({"geonames_id": 2921044, "wikidata_qid": "Q183",
+        "admin_level": "country", "country": "DE", "name": "Germany", "name_lang": "en"});
+    let cat = MemCatalog {
+        sources: vec![vc_api::dto::SourceDto {
+            source_id: "wikidata-facts".into(),
+            name: "Wikidata EntityData".into(),
+            category: "facts".into(),
+            source_class: "reference".into(),
+            licence: vc_api::dto::LicenceDto::from_core(&licence(LicenceClass::Open)).unwrap(),
+            method: "api".into(),
+            enabled: true,
+        }],
+        facts: vec![
+            fact(
+                "1",
+                LicenceClass::Open,
+                wd(
+                    berlin_place(),
+                    "Berlin was founded in 1244.",
+                    "historical",
+                    serde_json::json!({"date_ref": "1244"}),
+                ),
+                "wikidata-facts",
+            ),
+            fact(
+                "2",
+                LicenceClass::Open,
+                wd(
+                    berlin_place(),
+                    "Berlin is nicknamed \u{201c}Spree-Athen\u{201d}.",
+                    "popular",
+                    serde_json::json!({"value_lang": "de"}),
+                ),
+                "wikidata-facts",
+            ),
+            // The Wikidata country fact that a bare Factbook country resolves to.
+            fact(
+                "3",
+                LicenceClass::Open,
+                wd(
+                    germany,
+                    "Germany had a population of 83,445,000 in 2024.",
+                    "popular",
+                    serde_json::json!({"quantity": {"value": 83445000.0, "unit": "people"}}),
+                ),
+                "wikidata-facts",
+            ),
+            // Source text kept as written (no adapter makes these): never served.
+            fact(
+                "4",
+                LicenceClass::ShareAlike,
+                serde_json::json!({"place": berlin_place(), "fact_type": "fun",
+                    "text": "... that a copied sentence is never served?",
+                    "text_origin": "source_hook", "llm_ok": false, "confidence": "extracted"}),
+                "wiki-facts-simple",
+            ),
+            // A bare country (Factbook): resolved to Q183 / 2921044.
+            fact(
+                "5",
+                LicenceClass::Open,
+                factbook(
+                    "DE",
+                    "Germany",
+                    "The highest point of Germany is Zugspitze (2,963 m).",
+                ),
+                "od-factbook-json",
+            ),
+            // Link-only: never served here.
+            {
+                let mut it = fact(
+                    "6",
+                    LicenceClass::Open,
+                    wd(
+                        berlin_place(),
+                        "Berlin lies 34 m above sea level.",
+                        "popular",
+                        serde_json::json!({}),
+                    ),
+                    "wikidata-facts",
+                );
+                it.use_policy.serve = ServeUse::LinkOnly;
+                it
+            },
+            // An AI-reserved editorial fact: served, but never marked for a model.
+            fact(
+                "7",
+                LicenceClass::FactsOnly,
+                serde_json::json!({"place": {"geonames_id": 2950159, "country": "DE"},
+                    "fact_type": "little_known", "text": "A rewritten sentence about Berlin.",
+                    "text_origin": "rewritten", "llm_ok": true, "ai_bot_blocked": true,
+                    "confidence": "extracted"}),
+                "fx-example",
+            ),
+            // A bare country with no Wikidata country fact: served under its country only.
+            fact(
+                "9",
+                LicenceClass::Open,
+                factbook(
+                    "FR",
+                    "France",
+                    "The highest point of France is Mont Blanc (4,805 m).",
+                ),
+                "od-factbook-json",
+            ),
+        ],
+        ..MemCatalog::default()
+    };
+    let state = ApiState::new(
+        ApiConfig::default(),
+        Arc::new(MemIndex::new()),
+        Arc::new(MemPlaces::default()),
+        Arc::new(MemClientStore::new(vec![client(
+            "voyager", "s3cret", classes, 10_000,
+        )])),
+        Arc::new(cat),
+    );
+    let base = start(state).await;
+    Harness {
+        base,
+        http: reqwest::Client::new(),
+        index: Arc::new(MemIndex::new()),
+        token: "voyager.s3cret".into(),
+    }
+}
+
+#[tokio::test]
+async fn facts_filter_by_place_country_and_type_and_resolve_bare_countries() {
+    let h = facts_harness(ALL).await;
+    let all = h.json("/v1/facts").await;
+    assert_eq!(
+        ids(&all),
+        ["1", "2", "3", "5", "7", "9"],
+        "source text as written and link-only never served"
+    );
+    let f1 = &all["items"][0];
+    assert_eq!(f1["place"]["wikidata_qid"], "Q64");
+    assert_eq!(f1["place"]["geonames_id"], 2950159);
+    assert_eq!(f1["fact_type"], "historical");
+    assert_eq!(f1["text"], "Berlin was founded in 1244.");
+    assert_eq!(f1["text_origin"], "templated");
+    assert_eq!(f1["date_ref"], "1244");
+    assert_eq!(f1["llm_ok"], true);
+    assert_eq!(f1["confidence"], "structured");
+    assert_eq!(f1["as_of"], "2026-11-20");
+    assert_eq!(f1["source"]["source_id"], "wikidata-facts");
+    assert_eq!(
+        f1["source"]["url"],
+        "https://www.wikidata.org/wiki/Q64#P571"
+    );
+    assert_eq!(f1["source"]["name"], "Wikidata");
+    assert_eq!(f1["source"]["publisher"], "Wikidata contributors");
+    assert_eq!(
+        f1["source"]["source_class"], "reference",
+        "from the source registry"
+    );
+    assert_eq!(f1["source"]["sourced"], "yes");
+    assert_eq!(f1["licence"]["class"], "open");
+    assert!(f1["value_lang"].is_null());
+    assert_eq!(all["items"][1]["value_lang"], "de");
+    // The Factbook fact takes Germany's GeoNames id and QID; its own name stays.
+    let fb = &all["items"][3];
+    assert_eq!(fb["place"]["wikidata_qid"], "Q183");
+    assert_eq!(fb["place"]["geonames_id"], 2921044);
+    assert_eq!(fb["place"]["country"], "DE");
+    assert_eq!(fb["place"]["name"], "Germany");
+    assert_eq!(fb["quantity"]["rank_scope"], "highest point of Germany");
+    assert_eq!(all["items"][4]["llm_ok"], false, "AI-reserved source");
+    assert_eq!(all["items"][4]["ai_bot_blocked"], true);
+    let fr = &all["items"][5];
+    assert!(fr["place"]["wikidata_qid"].is_null() && fr["place"]["geonames_id"].is_null());
+    assert_eq!(
+        fr["as_of"], "2026-02-04",
+        "the edition date, not the capture date"
+    );
+
+    assert_eq!(ids(&h.json("/v1/facts?wikidata_qid=Q64").await), ["1", "2"]);
+    assert_eq!(ids(&h.json("/v1/facts?wikidata_qid=q64").await), ["1", "2"]);
+    assert_eq!(
+        ids(&h.json("/v1/facts?wikidata_qid=Q183").await),
+        ["3", "5"]
+    );
+    assert_eq!(
+        ids(&h.json("/v1/facts?geonames_id=2950159").await),
+        ["1", "2", "7"]
+    );
+    assert_eq!(
+        ids(&h.json("/v1/facts?geonames_id=2921044").await),
+        ["3", "5"]
+    );
+    assert_eq!(
+        ids(&h.json("/v1/facts?country=de&fact_type=unbelievable").await),
+        ["5"]
+    );
+    assert_eq!(
+        ids(&h.json("/v1/facts?fact_type=popular").await),
+        ["2", "3"]
+    );
+    assert_eq!(ids(&h.json("/v1/facts?country=FR").await), ["9"]);
+    assert!(ids(&h.json("/v1/facts?country=IT").await).is_empty());
+    // Paging.
+    let p1 = h.json("/v1/facts?limit=2").await;
+    assert_eq!(ids(&p1), ["1", "2"]);
+    let next = p1["next_cursor"].as_str().expect("cursor").to_string();
+    let p2 = h.json(&format!("/v1/facts?limit=2&cursor={next}")).await;
+    assert_eq!(ids(&p2), ["3", "5"]);
+    let p3 = h
+        .json(&format!(
+            "/v1/facts?limit=2&cursor={}",
+            p2["next_cursor"].as_str().unwrap()
+        ))
+        .await;
+    assert_eq!(ids(&p3), ["7", "9"]);
+    for bad in [
+        "/v1/facts?fact_type=trivia",
+        "/v1/facts?wikidata_qid=P31",
+        "/v1/facts?wikidata_qid=Q0",
+        "/v1/facts?country=D%25",
+        "/v1/facts?geonames_id=-1",
+        "/v1/facts?geonames_id=x",
+        "/v1/facts?cursor=abc",
+    ] {
+        let r = h.get(bad).send().await.expect("send");
+        assert_eq!(r.status(), StatusCode::BAD_REQUEST, "{bad}");
+    }
+}
+
+#[tokio::test]
+async fn facts_respect_the_client_licence_classes() {
+    let h = facts_harness(&[LicenceClass::Open]).await;
+    assert_eq!(
+        ids(&h.json("/v1/facts").await),
+        ["1", "2", "3", "5", "9"],
+        "no facts-only"
+    );
+}
+
+#[tokio::test]
+async fn facts_need_a_token() {
+    let h = facts_harness(ALL).await;
+    let r = h
+        .http
+        .get(format!("{}/v1/facts", h.base))
         .send()
         .await
         .expect("send");

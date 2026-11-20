@@ -15,8 +15,9 @@ use vc_core::index::{ChangeCursor, EntityLookup, SearchQuery};
 use crate::ApiState;
 use crate::auth::Client;
 use crate::dto::{
-    ChangeDto, ChangesDto, ClaimDto, EntityDto, ItemPage, ObservationDto, ObservationList,
-    PlaceDto, PlaceList, RedirectDto, SourceList, StatsDto, StatusDto, VersionPage,
+    ChangeDto, ChangesDto, ClaimDto, EntityDto, FactDto, FactPage, FactPlaceDto, FactQuantityDto,
+    FactSourceDto, ItemPage, LicenceDto, ObservationDto, ObservationList, PlaceDto, PlaceList,
+    RedirectDto, SourceList, StatsDto, StatusDto, VersionPage,
 };
 use crate::error::{ApiError, ErrorBody};
 use crate::shape::Shaper;
@@ -645,6 +646,173 @@ pub async fn carbon_occupancy(
     items.truncate(limit as usize);
     Ok(Json(ItemPage {
         items: items.iter().filter_map(|i| shaper.item(i)).collect(),
+        next_cursor: more.then(|| format!("o:{}", offset.saturating_add(limit))),
+    }))
+}
+
+/// `/v1/facts` filters (current `place_fact` records; every filter is exact and matches the
+/// resolved place).
+#[derive(Debug, Default, Deserialize, IntoParams)]
+#[into_params(parameter_in = Query)]
+pub struct FactParams {
+    /// GeoNames id of the place (e.g. `2950159`).
+    pub geonames_id: Option<i64>,
+    /// Wikidata QID of the place (e.g. `Q64`).
+    pub wikidata_qid: Option<String>,
+    /// ISO 3166-1 alpha-2 country of the place (e.g. `DE`).
+    pub country: Option<String>,
+    /// `historical`, `fun`, `popular`, `unbelievable` or `little_known`.
+    pub fact_type: Option<String>,
+    /// Page size (default 20, max `max_page`).
+    pub limit: Option<u32>,
+    /// `next_cursor` of the previous page.
+    pub cursor: Option<String>,
+}
+
+const FACT_TYPES: &[&str] = &[
+    "historical",
+    "fun",
+    "popular",
+    "unbelievable",
+    "little_known",
+];
+
+fn qid(s: Option<String>) -> ApiResult<Option<String>> {
+    match s
+        .map(|s| s.trim().to_ascii_uppercase())
+        .filter(|s| !s.is_empty())
+    {
+        None => Ok(None),
+        Some(q)
+            if q.len() <= 16
+                && q.starts_with('Q')
+                && q.len() > 1
+                && !q[1..].starts_with('0')
+                && q[1..].bytes().all(|b| b.is_ascii_digit()) =>
+        {
+            Ok(Some(q))
+        }
+        Some(_) => Err(ApiError::BadRequest(
+            "wikidata_qid must be a QID (Q64)".into(),
+        )),
+    }
+}
+
+fn str_of(v: &serde_json::Value, k: &str) -> Option<String> {
+    v.get(k).and_then(|x| x.as_str()).map(str::to_string)
+}
+
+/// One fact row as served to `shaper`'s client; `None` when it may not be served (licence
+/// class, use policy) or has no text.
+pub(crate) fn fact_dto(row: &crate::catalog::FactRow, shaper: &Shaper) -> Option<FactDto> {
+    use vc_core::licence::LicenceClass;
+    use vc_core::usepolicy::{IndexUse, ServeUse};
+    let it = &row.item;
+    if !shaper.permits(it.licence.class)
+        || it.use_policy.index != IndexUse::Full
+        || it.use_policy.serve == ServeUse::LinkOnly
+    {
+        return None;
+    }
+    let d = &it.data;
+    // Our own sentence (≤ 280 characters): within the served excerpt length for every class.
+    let text = crate::shape::truncate_chars(d.get("text")?.as_str()?, shaper.excerpt_max());
+    if text.is_empty() {
+        return None;
+    }
+    let p = &row.place;
+    let q = d.get("quantity");
+    let src = d.get("source");
+    let prov = it.provenance.first();
+    let ai_blocked = d.get("ai_bot_blocked").and_then(|v| v.as_bool()) == Some(true);
+    let share_alike = it.licence.class == LicenceClass::ShareAlike;
+    // Only our own sentences are served: a record with any other text origin (source text
+    // as written) is never listed.
+    let origin = str_of(d, "text_origin").unwrap_or_else(|| "templated".into());
+    if origin != "templated" && origin != "rewritten" {
+        return None;
+    }
+    Some(FactDto {
+        id: it.id.clone(),
+        place: FactPlaceDto {
+            geonames_id: p.get("geonames_id").and_then(|v| v.as_i64()),
+            wikidata_qid: str_of(p, "wikidata_qid"),
+            admin_level: str_of(p, "admin_level"),
+            country: str_of(p, "country"),
+            name: str_of(p, "name"),
+            name_lang: str_of(p, "name_lang"),
+        },
+        fact_type: str_of(d, "fact_type")?,
+        text,
+        lang: str_of(d, "lang"),
+        text_en: str_of(d, "text_en"),
+        value_lang: str_of(d, "value_lang"),
+        text_origin: origin,
+        llm_ok: d.get("llm_ok").and_then(|v| v.as_bool()).unwrap_or(false)
+            && !share_alike
+            && !ai_blocked,
+        date_ref: str_of(d, "date_ref"),
+        quantity: q.and_then(|q| {
+            Some(FactQuantityDto {
+                value: q.get("value")?.as_f64()?,
+                unit: str_of(q, "unit")?,
+                rank_scope: str_of(q, "rank_scope"),
+            })
+        }),
+        source: FactSourceDto {
+            source_id: prov.map(|p| p.source_id.0.clone()).unwrap_or_default(),
+            url: str_of(d, "source_url")
+                .or_else(|| prov.map(|p| p.url.clone()))
+                .unwrap_or_default(),
+            name: src
+                .and_then(|s| str_of(s, "name"))
+                .or_else(|| row.source_name.clone()),
+            publisher: src.and_then(|s| str_of(s, "publisher")),
+            source_class: row.source_class.clone(),
+            sourced: src.and_then(|s| str_of(s, "sourced")),
+        },
+        licence: LicenceDto::from_core(&it.licence)?,
+        as_of: str_of(d, "as_of")
+            .or_else(|| prov.map(|p| p.captured_at.format("%Y-%m-%d").to_string())),
+        confidence: str_of(d, "confidence").unwrap_or_else(|| "extracted".into()),
+        ai_bot_blocked: ai_blocked,
+        updated_at: it.updated_at,
+    })
+}
+
+/// Place facts (kind `place_fact`): short facts about one place (historical, fun, popular,
+/// record-breaking, little known), by record id: filtered by GeoNames id, Wikidata QID,
+/// country and fact type. Only our own sentences are served (`templated` or `rewritten`).
+#[utoipa::path(get, path = "/v1/facts", tag = "read", params(FactParams),
+    security(("bearer" = [])),
+    responses((status = 200, body = FactPage), (status = 400, body = ErrorBody),
+        (status = 401, body = ErrorBody), (status = 429, body = ErrorBody)))]
+pub async fn facts(
+    State(state): State<ApiState>,
+    Extension(client): Extension<Client>,
+    p: Result<Query<FactParams>, QueryRejection>,
+) -> ApiResult<Json<FactPage>> {
+    let p = query(p)?;
+    let offset = offset_cursor(p.cursor.as_deref())?;
+    let shaper = shaper(&state, &client);
+    let limit = limit(&state, p.limit);
+    if p.geonames_id.is_some_and(|g| g <= 0) {
+        return Err(ApiError::BadRequest("geonames_id must be positive".into()));
+    }
+    let q = crate::catalog::FactQuery {
+        geonames_id: p.geonames_id,
+        wikidata_qid: qid(p.wikidata_qid)?,
+        country: upper_code(p.country, 2, "country")?,
+        fact_type: one_of(p.fact_type, FACT_TYPES, "fact_type")?,
+        licence_classes: shaper.allowed().to_vec(),
+        limit: limit + 1,
+        offset,
+    };
+    let mut rows = state.catalog.facts(&q).await?;
+    let more = rows.len() > limit as usize;
+    rows.truncate(limit as usize);
+    Ok(Json(FactPage {
+        items: rows.iter().filter_map(|r| fact_dto(r, &shaper)).collect(),
         next_cursor: more.then(|| format!("o:{}", offset.saturating_add(limit))),
     }))
 }

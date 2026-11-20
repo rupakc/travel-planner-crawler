@@ -23,10 +23,11 @@ use vc_core::{CanonicalUrl, Error, Result};
 
 use super::{
     canada_advisories, canada_offices, countries, ecb_fx, ember_api, enwiki_visa,
-    eurostat_jsonstat, factor_table, fcdo_content_api, fsa_fhrs, govuk_medical_lists,
-    govuk_world_orgs, html_text, iso3, json_events, nyc_restaurant_inspections, openholidays,
-    phone, socrata, state_dept_advisories, state_dept_country_info, toronto_dinesafe,
-    travelpayouts_fares, udata_resource, wfs_geojson,
+    eurostat_jsonstat, factbook_json, factor_table, fcdo_content_api, fsa_fhrs,
+    govuk_medical_lists, govuk_world_orgs, html_text, iso3, json_events,
+    nyc_restaurant_inspections, openholidays, phone, socrata, state_dept_advisories,
+    state_dept_country_info, toronto_dinesafe, travelpayouts_fares, udata_resource, wfs_geojson,
+    wikidata_facts,
 };
 
 /// Bumped when a mapping changes (part of the extractor version string of adapter records).
@@ -53,6 +54,7 @@ pub const MAPPED: &[&str] = &[
     "ember_api",
     "enwiki_visa",
     "eurostat_jsonstat",
+    "factbook_json",
     "factor_table",
     "fcdo_content_api",
     "fsa_fhrs",
@@ -71,6 +73,7 @@ pub const MAPPED: &[&str] = &[
     "udata_resource",
     "wdi_csv",
     "wfs_geojson",
+    "wikidata_facts",
     "wikivoyage_dump",
 ];
 
@@ -84,6 +87,7 @@ pub fn records(adapter: &str, url: &CanonicalUrl, body: &[u8]) -> Option<Result<
         "ember_api" => factors(ember_api::items(url, body)),
         "enwiki_visa" => enwiki_visa_records(url, body),
         "eurostat_jsonstat" => eurostat(url, body),
+        "factbook_json" => place_facts(factbook_json::items(url, body)),
         "factor_table" => factors(factor_table::items(url, body)),
         "fcdo_content_api" => fcdo(url, body),
         "fsa_fhrs" => restaurants(fsa_fhrs::items(url, body)),
@@ -102,9 +106,23 @@ pub fn records(adapter: &str, url: &CanonicalUrl, body: &[u8]) -> Option<Result<
         "udata_resource" => rows(udata_resource::items(url, body)),
         "wdi_csv" => wdi(body),
         "wfs_geojson" => rows(wfs_geojson::items(url, body)),
+        "wikidata_facts" => place_facts(wikidata_facts::items(body)),
         "wikivoyage_dump" => wikivoyage(body),
         _ => return None,
     })
+}
+
+/// `place_fact` items (`wikidata_facts`, `factbook_json`).
+fn place_facts(items: Result<Vec<(String, Value)>>) -> Result<Vec<AdapterItem>> {
+    Ok(items?
+        .into_iter()
+        .map(|(id, data)| AdapterItem {
+            kind: "place_fact",
+            id: Some(id),
+            series_key: None,
+            data,
+        })
+        .collect())
 }
 
 fn obj(pairs: Vec<(&str, Option<Value>)>) -> Value {

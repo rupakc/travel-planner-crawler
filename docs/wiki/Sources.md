@@ -25,6 +25,12 @@ per room and grid intensity), food and activities. Most factor tables are spread
 PDFs or APIs: those sources stay off with "adapter pending" or "needs an API key" until
 a reader or a key exists.
 
+**Place facts** (section `facts`, added 2026-11-20) holds short facts about countries,
+regions, cities, towns, villages and features (historical, fun, popular, record-breaking
+and little-known), each one sentence in our own words with its source link. The first
+readers are structured: Wikidata properties and the frozen CIA World Factbook JSON (see
+docs/wiki/Place-Facts-Data.md).
+
 ## Flights
 
 | Source | Website | What we take | Licence | On | Key |
