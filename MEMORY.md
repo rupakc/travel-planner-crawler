@@ -405,3 +405,6 @@ plan = `docs/superpowers/plans/2026-11-15-voyager-crawler.md`, r1–r5 = `docs/r
 - 2026-11-20: **Place facts sources, part 4 of 5 (North America, Latin America and the Caribbean).** 333 sources (`_facts`,
   category `facts`): 270 on (html/rss/sitemap, ramp-2 and ramp-3), 63 off (adapter pending 32, enable after a check from the crawler VM 9, needs owner key 4, owner decision 18).
   (scripts/seeds_to_sources.py, docs/research/seeds.yaml)
+- 2026-11-20: **Place facts sources, part 5 of 5 (Africa, the Middle East and Oceania).** 243 sources (`_facts`,
+  category `facts`): 190 on (html/rss/sitemap, ramp-2 and ramp-3), 53 off (adapter pending 23, enable after a check from the crawler VM 21, needs owner key 1, owner decision 8).
+  (scripts/seeds_to_sources.py, docs/research/seeds.yaml)
