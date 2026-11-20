@@ -23,9 +23,11 @@ kinds:
 - place
 - attraction
 - event
+- place_fact
 llm_kinds:
 - attraction
 - event
+- place_fact
 render: never
 cadence: weekly
 min_delay_s: 5
@@ -39,10 +41,12 @@ display_requirements: null
 notes: 'Research 2026-11-18 (corpus Europe): robots.txt: allowed (research 2026-11-18); terms: ''we only
   provide our website for domestic and private use''. Terms restrict to personal/non-commercial use; owner
   accepted for non-commercial use 2026-11-18 (''we only provide our website for domestic and private use'').
-  Facts only.'
+  Facts only. | Place facts (research 2026-11-20): site history pages: historical facts per property /
+  properties-in-care histories'
 relevance:
   sections:
   - places
   - events
+  - facts
   why: 'Historic Environment Scotland: places to visit: official visitor guide, for Places to see and
-    Events.'
+    Events; also history and curiosities for Place facts.'

@@ -23,9 +23,11 @@ kinds:
 - place
 - attraction
 - activity
+- place_fact
 llm_kinds:
 - attraction
 - activity
+- place_fact
 render: never
 cadence: weekly
 min_delay_s: 5
@@ -40,10 +42,12 @@ notes: 'robots.txt (research 2026-11-18): robots.txt returns a sitemap XML url l
   which parses as no rules (allowed). Onboarding check 2026-11-18 (one request with the VoyagerBot UA):
   /sitemap.xml answers 301 to the home page, so the home page is the seed. Terms read (research 2026-11-18):
   alberta.ca, ''may be copied and distributed for non-commercial use without charge or further permission'';
-  facts only.'
+  facts only. | Place facts (research 2026-11-20): add /alberta-emblems (Emblems of Alberta); non-commercial
+  reproduction allowed'
 relevance:
   sections:
   - places
   - activities
+  - facts
   why: Alberta provincial parks (Kananaskis and others) with visitor information, for Places to see and
-    Activities.
+    Activities; also history and curiosities for Place facts.

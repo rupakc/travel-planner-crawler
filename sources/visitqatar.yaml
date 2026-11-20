@@ -26,10 +26,12 @@ kinds:
 - activity
 - event
 - article
+- place_fact
 llm_kinds:
 - attraction
 - activity
 - event
+- place_fact
 render: never
 cadence: weekly
 min_delay_s: 5
@@ -40,12 +42,14 @@ needs_key: false
 key_secret: null
 max_retention_days: null
 display_requirements: null
-notes: robots 200, 5 Disallows. 'reproduce any Content ... without our express written permission' is
-  prohibited; no robots clause.
+notes: 'robots 200, 5 Disallows. ''reproduce any Content ... without our express written permission''
+  is prohibited; no robots clause. | Place facts (research 2026-11-20): Qatar museum and site histories
+  / Msheireb and Doha old-town facts'
 relevance:
   sections:
   - events
   - activities
   - itinerary
+  - facts
   why: Qatar's official events calendar, things to do and itineraries, for Events, Activities and the
-    itinerary.
+    itinerary; also history and curiosities for Place facts.

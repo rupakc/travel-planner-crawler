@@ -23,10 +23,12 @@ kinds:
 - attraction
 - activity
 - event
+- place_fact
 llm_kinds:
 - attraction
 - activity
 - event
+- place_fact
 render: never
 cadence: weekly
 min_delay_s: 5
@@ -40,10 +42,13 @@ display_requirements: null
 notes: 'Research 2026-11-18 (corpus LatAm): robots.txt: 200, Crawl-delay 2; terms: ''view and download
   a single copy ... for your personal, non-commercial use''. Terms restrict to personal/non-commercial
   use; owner accepted for non-commercial use 2026-11-18 (''view and download a single copy ... for your
-  personal, non-commercial use''). Facts only.'
+  personal, non-commercial use''). Facts only. | Place facts (research 2026-11-20): not refetched; each
+  has "history" / "did you know" / destination pages that can feed `facts`'
 relevance:
   sections:
   - places
   - activities
   - events
-  why: 'Visit Jamaica (JTB): official visitor guide, for Places to see, Activities and Events.'
+  - facts
+  why: 'Visit Jamaica (JTB): official visitor guide, for Places to see, Activities and Events; also history
+    and curiosities for Place facts.'

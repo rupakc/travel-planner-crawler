@@ -25,6 +25,7 @@ kinds:
 - attraction
 - activity
 - event
+- place_fact
 llm_kinds: []
 render: never
 cadence: weekly
@@ -40,10 +41,13 @@ notes: 'Research 2026-11-18 (corpus LatAm): robots.txt: **AI-bot block (all majo
   title and link only; terms: Mentions légales: electronic reproduction needs authorisation (copyright
   only). No automated-access clause; facts only. robots.txt reserves AI use (AI crawlers blocked), so
   title and link only: no LLM kinds. | Disabled: challenge page at first full crawl 2026-11-19; do not
-  retry another way (host denylisted)'
+  retry another way (host denylisted) | Place facts (research 2026-11-20): not refetched; each has "history"
+  / "did you know" / destination pages that can feed `facts`'
 relevance:
   sections:
   - places
   - activities
   - events
-  why: 'Îles de Guadeloupe (CTIG): official visitor guide, for Places to see, Activities and Events.'
+  - facts
+  why: 'Îles de Guadeloupe (CTIG): official visitor guide, for Places to see, Activities and Events; also
+    history and curiosities for Place facts.'

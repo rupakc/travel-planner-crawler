@@ -22,9 +22,11 @@ kinds:
 - tip
 - place
 - attraction
+- place_fact
 llm_kinds:
 - tip
 - attraction
+- place_fact
 render: never
 cadence: monthly
 min_delay_s: 5
@@ -39,10 +41,12 @@ notes: 'Research 2026-11-18 (hidden gems, small islands and remote places; Antar
   row): robots 200 (* group, 2 disallows, / allowed). Terms: "reproduce ... for your personal, non-commercial
   use or use within your organisation". Terms restrict to personal/non-commercial use; owner accepted
   for non-commercial use 2026-11-18 ("reproduce ... for your personal, non-commercial use or use within
-  your organisation"); facts only.'
+  your organisation"); facts only. | Place facts (research 2026-11-20): Antarctic superlatives (coldest,
+  windiest)'
 relevance:
   sections:
   - tips
   - places
+  - facts
   why: 'Australian Antarctic Program: visitor rules, Macquarie/Heard islands, for Travel tips and Places
-    to see.'
+    to see; also history and curiosities for Place facts.'

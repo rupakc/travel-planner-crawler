@@ -20,6 +20,7 @@ exclude: []
 max_depth: 1
 kinds:
 - article
+- place_fact
 llm_kinds: []
 render: never
 cadence: daily
@@ -33,9 +34,11 @@ max_retention_days: null
 display_requirements: null
 notes: 'robots 200, Crawl-delay 3, 3 Disallows; RSS 200. No terms page found. | Disabled: terms not yet
   confirmed: no terms page found; also the relevance gate: not a whole-travel publication (the owner may
-  add messynessychic.com to TRAVEL_PUBLICATIONS)'
+  add messynessychic.com to TRAVEL_PUBLICATIONS) | Place facts (research 2026-11-20): enabled:false; curiosities
+  about places: enable for facts'
 relevance:
   sections:
   - places
+  - facts
   why: Off-the-beaten-path curiosities and hidden places worldwide (headline, link and a short excerpt
-    only), for Places to see.
+    only), for Places to see; also history and curiosities for Place facts.

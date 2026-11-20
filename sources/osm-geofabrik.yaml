@@ -23,6 +23,7 @@ kinds:
 - place
 - attraction
 - transport_option
+- place_fact
 llm_kinds: []
 render: never
 cadence: monthly
@@ -34,11 +35,14 @@ needs_key: false
 key_secret: null
 max_retention_days: null
 display_requirements: null
-notes: hotels, attractions, transit; shared
+notes: 'hotels, attractions, transit; shared | Place facts (research 2026-11-20): extract: Tags `historic=*`,
+  `memorial=*`, `inscription=*` (plaque texts), `start_date`, `name:etymology`, `name:etymology:wikidata`,
+  `heritage=*` + `heritage:operator`, `ref:whc`, `old_name`, `height`/`ele`, `wikidata`'
 relevance:
   sections:
   - hotels
   - places
   - getting_around
+  - facts
   why: OpenStreetMap hotels, sights and transit stops per region, for Hotels, Places to see and Local
-    transportation.
+    transportation; also history and curiosities for Place facts.

@@ -24,9 +24,11 @@ kinds:
 - event
 - place
 - attraction
+- place_fact
 llm_kinds:
 - event
 - attraction
+- place_fact
 render: never
 cadence: daily
 min_delay_s: 5
@@ -38,10 +40,12 @@ key_secret: null
 max_retention_days: null
 display_requirements: null
 notes: 'Research 2026-11-18 (corpus LatAm): robots.txt: 200, standard Drupal Disallows; terms: terms not
-  found. Terms unconfirmed; owner accepted for non-commercial use 2026-11-18. Facts only.'
+  found. Terms unconfirmed; owner accepted for non-commercial use 2026-11-18. Facts only. | Place facts
+  (research 2026-11-20): add city history pages; CC BY 2.5 AR'
 relevance:
   sections:
   - events
   - places
+  - facts
   why: 'Buenos Aires Ciudad (agenda, culture): city agenda and cultural programme, for Events and Places
-    to see.'
+    to see; also history and curiosities for Place facts.'

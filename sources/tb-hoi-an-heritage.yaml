@@ -23,9 +23,11 @@ kinds:
 - place
 - attraction
 - event
+- place_fact
 llm_kinds:
 - attraction
 - event
+- place_fact
 render: never
 cadence: weekly
 min_delay_s: 5
@@ -37,10 +39,13 @@ key_secret: null
 max_retention_days: null
 display_requirements: null
 notes: 'Research 2026-11-18 (corpus Asia-Pacific): robots.txt: robots 200, path allowed; terms: terms
-  not found. Terms unconfirmed; owner accepted for non-commercial use 2026-11-18. Facts only.'
+  not found. Terms unconfirmed; owner accepted for non-commercial use 2026-11-18. Facts only. | Place
+  facts (research 2026-11-20): relic and old-quarter history (Hội An WH office lists its relics)'
 relevance:
   sections:
   - places
   - events
+  - facts
   why: 'Hoi An Centre for Cultural Heritage Management: Hoi An old-town ticket rules, heritage sites,
-    lantern festival news (mostly Vietnamese), for Places to see and Events.'
+    lantern festival news (mostly Vietnamese), for Places to see and Events; also history and curiosities
+    for Place facts.'

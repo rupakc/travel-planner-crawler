@@ -24,10 +24,12 @@ kinds:
 - attraction
 - event
 - transport_option
+- place_fact
 llm_kinds:
 - attraction
 - event
 - transport_option
+- place_fact
 render: never
 cadence: weekly
 min_delay_s: 5
@@ -41,10 +43,12 @@ display_requirements: null
 notes: 'Research 2026-11-18 (hidden gems, small islands and remote places; Russia/White Sea): robots 200
   (* group, 36 disallows, / allowed). Terms: terms not found. Terms unconfirmed; owner accepted for non-commercial
   use 2026-11-18; facts only. Advisory-risk destination (government travel advisories apply: Russia):
-  added normally, flagged here.'
+  added normally, flagged here. | Place facts (research 2026-11-20): monastery history and dated events'
 relevance:
   sections:
   - places
   - events
   - getting_around
-  why: 'Solovetsky Museum-Reserve: visiting, transport, events, for Places to see, Events and Local transportation.'
+  - facts
+  why: 'Solovetsky Museum-Reserve: visiting, transport, events, for Places to see, Events and Local transportation;
+    also history and curiosities for Place facts.'

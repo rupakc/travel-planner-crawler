@@ -88,7 +88,13 @@ The GNIS "Feature Description/History" dump (`prd-tnm.s3.amazonaws.com/StagedPro
 
 ## Sources
 
-This change adds the readers, the kind and the endpoint only. The sources that use them come in a separate PR: `od-wikidata-entitydata` and the Factbook files (no Wikipedia hook sources: see above). That PR is also where the existing `wikidata-dump` source gets `place_fact` and the section `facts`. Until then no source has the `facts` section, so `docs/SOURCES.md` shows none.
+The research's sources (2026-11-20, 28 briefs) are added in five PRs, one per region group, merged in turn: global and multi-country sources with the structured readers first, then Europe (with Central Asia and the Caucasus), Asia, the Americas, and Africa, the Middle East and Oceania. Every source is `category: facts`, lists `facts` first in its sections, and is built by `_facts(...)` in `scripts/seeds_to_sources.py` (`FACTS_IDS`).
+
+- **Structured readers (ramp-3):** `od-factbook-json` on `factbook_json` (255 country files pinned to one factbook.json commit) and `od-wikidata-entitydata` on `wikidata_facts` (EntityData of countries and big cities; add QIDs as Voyager asks for them). The existing `wikidata-dump` gets `wikidata_facts`, `place_fact` and `facts`, and stays off (too large). The 37 `wiki-facts-<lang>` sources (Did you know, On this day and unusual-articles pages, one per Wikipedia) are registered off: `hook adapter removed (share-alike text); needs an own-words extractor` (see Licences and model use).
+- **html, rss and sitemap sources (ramp-2 and ramp-3):** kinds `place_fact` + `article`. The LLM extracts `place_fact` (one sentence in our own words plus the link) except from share-alike text and from sources whose robots.txt reserves AI use (title and link only). Facts only unless an open licence was quoted; cadence monthly or slower, depth at most 2, 100 requests a day, Crawl-delays as `min_delay_s`.
+- **Off, with the reason first:** `enable after a check from the crawler VM` (robots.txt gave no response from the research laptop), `adapter pending: <format>`, `needs owner key: <service>`, `owner decision: <question>`. Community-written sites are owner decisions: `place_fact` accepts official, reference and editorial sources only.
+- **Existing sources** the research lists as reuse get `facts` and `place_fact` (`FACTS_REUSE`), extracted by the LLM only where the source already has LLM kinds and is not share-alike.
+- Terms that ban bots, scraping, TDM or AI put a host on `policy/denylist.yaml`; hosts that only answered 403, 5xx or a challenge to the research laptop are not listed.
 
 ## Rollout
 

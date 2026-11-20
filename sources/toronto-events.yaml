@@ -20,6 +20,7 @@ exclude: []
 max_depth: 0
 kinds:
 - event
+- place_fact
 llm_kinds: []
 render: never
 cadence: daily
@@ -34,8 +35,11 @@ display_requirements: null
 notes: 'open.toronto.ca robots 200; ckan0 host robots.txt 200, Allow: /api/ (checked 2026-11-17). ''Contains
   information licensed under the Open Government Licence – Toronto''. | Disabled: dataset retired: open.toronto.ca
   lists festivals-events as Retired with no resources (checked 2026-11-18); nothing to read until the
-  City republishes it'
+  City republishes it | Place facts (research 2026-11-20): add /explore-enjoy/history-art-culture/ (heritage
+  plaques, city history)'
 relevance:
   sections:
   - events
-  why: Festivals and events listed by the City of Toronto, for the Events section.
+  - facts
+  why: Festivals and events listed by the City of Toronto, for the Events section; also history and curiosities
+    for Place facts.

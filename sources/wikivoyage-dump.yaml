@@ -28,6 +28,7 @@ kinds:
 - sim_offer
 - packing_hint
 - walking_tour
+- place_fact
 llm_kinds:
 - attraction
 - activity
@@ -46,7 +47,10 @@ needs_key: false
 key_secret: null
 max_retention_days: null
 display_requirements: null
-notes: See/Do/Eat/Sleep/Get around/Connect/Stay safe/Respect; site crawl-delay 5, use dump
+notes: 'See/Do/Eat/Sleep/Get around/Connect/Stay safe/Respect; site crawl-delay 5, use dump | Place facts
+  (research 2026-11-20): extract: "Understand"/"History" sections (short history per destination), "Talk"/"Respect"
+  for cultural curiosities, `{{quickbar}}` fields / "Understand" sections (history), with no superlatives
+  unless cited'
 relevance:
   sections:
   - places
@@ -57,5 +61,6 @@ relevance:
   - sim
   - packing
   - walking_tours
+  - facts
   why: Wikivoyage destination guides (sights, things to do, where to stay, getting around, SIM and tips)
-    for those app sections.
+    for those app sections; also history and curiosities for Place facts.

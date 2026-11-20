@@ -23,10 +23,12 @@ kinds:
 - attraction
 - event
 - tip
+- place_fact
 llm_kinds:
 - attraction
 - event
 - tip
+- place_fact
 render: never
 cadence: weekly
 min_delay_s: 5
@@ -38,11 +40,15 @@ key_secret: null
 max_retention_days: null
 display_requirements: null
 notes: 'Research 2026-11-18 (corpus Asia-Pacific): robots.txt: robots 200, path allowed (empty Disallow);
-  terms: terms not found. Terms unconfirmed; owner accepted for non-commercial use 2026-11-18. Facts only.'
+  terms: terms not found. Terms unconfirmed; owner accepted for non-commercial use 2026-11-18. Facts only.
+  | Place facts (research 2026-11-20): Indonesian destination histories (Jakarta Ensiklopedia was formerly
+  a sub-site; host not found now)'
 relevance:
   sections:
   - places
   - events
   - tips
+  - facts
   why: 'Bali Provincial Tourism Office (Disparda Bali): Bali tourism rules (tourist levy), events and
-    destination news (Indonesian), for Places to see, Events and Travel tips.'
+    destination news (Indonesian), for Places to see, Events and Travel tips; also history and curiosities
+    for Place facts.'

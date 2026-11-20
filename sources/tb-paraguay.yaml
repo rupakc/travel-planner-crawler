@@ -22,9 +22,11 @@ kinds:
 - place
 - attraction
 - activity
+- place_fact
 llm_kinds:
 - attraction
 - activity
+- place_fact
 render: never
 cadence: monthly
 min_delay_s: 5
@@ -37,9 +39,13 @@ max_retention_days: null
 display_requirements: null
 notes: 'Research 2026-11-18 (hidden gems, small islands and remote places; SAmerica/Paraguay; re-vet row):
   robots.txt 526 at research from a laptop IP; robots.txt and terms not read yet. | Disabled: re-test
-  from the crawler VM: robots.txt 526 at research 2026-11-18 (not banned, not denylisted)'
+  from the crawler VM: robots.txt 526 at research 2026-11-18 (not banned, not denylisted) | Place facts
+  (research 2026-11-20): not refetched; each has "history" / "did you know" / destination pages that can
+  feed `facts`'
 relevance:
   sections:
   - places
   - activities
-  why: Official Paraguay sights, Chaco and Jesuit missions, for Places to see and Activities.
+  - facts
+  why: Official Paraguay sights, Chaco and Jesuit missions, for Places to see and Activities; also history
+    and curiosities for Place facts.

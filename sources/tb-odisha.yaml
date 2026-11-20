@@ -23,9 +23,11 @@ kinds:
 - place
 - attraction
 - event
+- place_fact
 llm_kinds:
 - attraction
 - event
+- place_fact
 render: never
 cadence: monthly
 min_delay_s: 5
@@ -38,9 +40,11 @@ max_retention_days: null
 display_requirements: null
 notes: 'Research 2026-11-18 (corpus Asia-Pacific): robots.txt: robots 200, path allowed (/search, /login
   disallowed); terms: https://odishatourism.gov.in/en/disclaimer read: no robot/AI clause. No automated-access
-  clause; facts only.'
+  clause; facts only. | Place facts (research 2026-11-20): "history" and "about" pages per destination'
 relevance:
   sections:
   - places
   - events
-  why: 'Odisha Tourism: Odisha temples, beaches and festivals (Rath Yatra), for Places to see and Events.'
+  - facts
+  why: 'Odisha Tourism: Odisha temples, beaches and festivals (Rath Yatra), for Places to see and Events;
+    also history and curiosities for Place facts.'

@@ -21,6 +21,7 @@ max_depth: 0
 kinds:
 - place
 - attraction
+- place_fact
 llm_kinds: []
 render: never
 cadence: monthly
@@ -37,8 +38,11 @@ notes: 'Research 2026-11-18 (hidden gems, small islands and remote places; World
   [not] be put to Commercial Use"; "You may not redistribute the WDPCA ... Data"; non-commercial licence;
   would need adapter (GDB/SHP).  robots.txt reserves content from AI crawlers: title and link only, no
   LLM kinds. | Disabled: terms forbid storage/redistribution ("You may not redistribute the WDPCA ...
-  Data"; no commercial use; a GDB/SHP adapter would also be needed)'
+  Data"; no commercial use; a GDB/SHP adapter would also be needed) | Place facts (research 2026-11-20):
+  extract: Designation year and type of protected areas ("national park since 1872") / the oldest and
+  largest protected area per country (designation year, area)'
 relevance:
   sections:
   - places
-  why: WDPA protected areas, for Places to see.
+  - facts
+  why: WDPA protected areas, for Places to see; also history and curiosities for Place facts.

@@ -23,10 +23,12 @@ kinds:
 - attraction
 - event
 - activity
+- place_fact
 llm_kinds:
 - attraction
 - event
 - activity
+- place_fact
 render: never
 cadence: monthly
 min_delay_s: 5
@@ -38,10 +40,13 @@ key_secret: null
 max_retention_days: null
 display_requirements: null
 notes: 'Research 2026-11-18 (corpus Asia-Pacific): robots.txt: robots 200, path allowed; Crawl-delay 2;
-  terms: terms not found. Terms unconfirmed; owner accepted for non-commercial use 2026-11-18. Facts only.'
+  terms: terms not found. Terms unconfirmed; owner accepted for non-commercial use 2026-11-18. Facts only.
+  | Place facts (research 2026-11-20): destination "history/culture/facts" pages'
 relevance:
   sections:
   - places
   - events
   - activities
-  why: 'Guam Visitors Bureau: Guam attractions and events, for Places to see, Events and Activities.'
+  - facts
+  why: 'Guam Visitors Bureau: Guam attractions and events, for Places to see, Events and Activities; also
+    history and curiosities for Place facts.'

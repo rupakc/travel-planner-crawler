@@ -20,6 +20,7 @@ exclude: []
 max_depth: 0
 kinds:
 - place
+- place_fact
 llm_kinds: []
 render: never
 cadence: yearly
@@ -34,9 +35,11 @@ display_requirements: null
 notes: 'Research 2026-11-18 (hidden gems; NEEDS-ADAPTER row): robots.txt 200 (* group, 34 disallows, /
   allowed); meta robots noindex, follow. Terms not found (the link was a search page). Export (CSV/XLS/SHP)
   via the RSIS search. Terms unconfirmed; owner accepted for non-commercial use 2026-11-18. | Disabled:
-  adapter pending: RSIS site export reader (CSV/XLS) -> place'
+  adapter pending: RSIS site export reader (CSV/XLS) -> place | Place facts (research 2026-11-20): the
+  first designated site per country, the largest wetland, the site''s "justification" criteria'
 relevance:
   sections:
   - places
+  - facts
   why: Wetlands of international importance (Ramsar sites) with locations, for remote nature spots in
-    Places to see.
+    Places to see; also history and curiosities for Place facts.

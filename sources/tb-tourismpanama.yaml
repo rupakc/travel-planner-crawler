@@ -25,10 +25,12 @@ kinds:
 - attraction
 - visa_rule
 - activity
+- place_fact
 llm_kinds:
 - attraction
 - visa_rule
 - activity
+- place_fact
 render: never
 cadence: monthly
 min_delay_s: 5
@@ -41,10 +43,13 @@ max_retention_days: null
 display_requirements: null
 notes: 'Research 2026-11-18 (corpus LatAm): robots.txt: 200, Crawl-delay 2 (min_delay 5 governs); visitpanama.com
   redirects here; terms: Site-wide terms not found (privacy policy and promo terms only). Terms unconfirmed;
-  owner accepted for non-commercial use 2026-11-18. Facts only.'
+  owner accepted for non-commercial use 2026-11-18. Facts only. | Place facts (research 2026-11-20): destination
+  pages with history; Crawl-delay 2'
 relevance:
   sections:
   - places
   - visa
   - activities
-  why: 'Visit Panamá (PROMTUR): official visitor guide, for Places to see, Visa and Activities.'
+  - facts
+  why: 'Visit Panamá (PROMTUR): official visitor guide, for Places to see, Visa and Activities; also history
+    and curiosities for Place facts.'

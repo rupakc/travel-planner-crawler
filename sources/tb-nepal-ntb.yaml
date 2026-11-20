@@ -24,11 +24,13 @@ kinds:
 - activity
 - event
 - tip
+- place_fact
 llm_kinds:
 - attraction
 - activity
 - event
 - tip
+- place_fact
 render: never
 cadence: weekly
 min_delay_s: 5
@@ -40,12 +42,14 @@ key_secret: null
 max_retention_days: null
 display_requirements: null
 notes: 'Research 2026-11-18 (corpus Asia-Pacific): robots.txt: robots 200, path allowed (empty Disallow);
-  terms: terms not found. Terms unconfirmed; owner accepted for non-commercial use 2026-11-18. Facts only.'
+  terms: terms not found. Terms unconfirmed; owner accepted for non-commercial use 2026-11-18. Facts only.
+  | Place facts (research 2026-11-20): destination history and "did you know" lines'
 relevance:
   sections:
   - places
   - activities
   - events
   - tips
+  - facts
   why: 'Nepal Tourism Board: Trekking permits (TIMS), destinations and events; replaces denied welcomenepal.com,
-    for Places to see, Activities, Events and Travel tips.'
+    for Places to see, Activities, Events and Travel tips; also history and curiosities for Place facts.'

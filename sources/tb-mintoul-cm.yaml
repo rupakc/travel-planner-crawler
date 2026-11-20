@@ -25,10 +25,12 @@ kinds:
 - attraction
 - tip
 - visa_rule
+- place_fact
 llm_kinds:
 - attraction
 - tip
 - visa_rule
+- place_fact
 render: never
 cadence: monthly
 min_delay_s: 5
@@ -40,11 +42,13 @@ key_secret: null
 max_retention_days: null
 display_requirements: null
 notes: 'Research 2026-11-18 (corpus Africa-ME): robots.txt: WP default; terms: terms not found. Terms
-  unconfirmed; owner accepted for non-commercial use 2026-11-18. Facts only.'
+  unconfirmed; owner accepted for non-commercial use 2026-11-18. Facts only. | Place facts (research 2026-11-20):
+  Cameroon heritage sites (Bimbia, Ngondo); also covers the MINAC gap'
 relevance:
   sections:
   - places
   - tips
   - visa
+  - facts
   why: 'Ministère du Tourisme et des Loisirs, Cameroun: official visitor guide, for Places to see, Travel
-    tips and Visa.'
+    tips and Visa; also history and curiosities for Place facts.'

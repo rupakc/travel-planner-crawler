@@ -23,9 +23,11 @@ kinds:
 - place
 - attraction
 - event
+- place_fact
 llm_kinds:
 - attraction
 - event
+- place_fact
 render: never
 cadence: weekly
 min_delay_s: 5
@@ -38,9 +40,12 @@ max_retention_days: null
 display_requirements: null
 notes: 'Research 2026-11-18 (corpus Africa-ME): robots.txt: robots 404 (allowed); terms: "Materials …
   may not be adapted, copied, reproduced, published or distributed without QM''s prior written permission"
-  (copyright only). No automated-access clause; facts only.'
+  (copyright only). No automated-access clause; facts only. | Place facts (research 2026-11-20): Qatar
+  museum and site histories / Msheireb and Doha old-town facts'
 relevance:
   sections:
   - places
   - events
-  why: 'Qatar Museums: museum hours, exhibitions, public art, for Places to see and Events.'
+  - facts
+  why: 'Qatar Museums: museum hours, exhibitions, public art, for Places to see and Events; also history
+    and curiosities for Place facts.'

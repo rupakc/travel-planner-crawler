@@ -22,9 +22,11 @@ max_depth: 1
 kinds:
 - event
 - transport_option
+- place_fact
 llm_kinds:
 - event
 - transport_option
+- place_fact
 render: never
 cadence: monthly
 min_delay_s: 5
@@ -36,9 +38,12 @@ key_secret: null
 max_retention_days: null
 display_requirements: null
 notes: 'Research 2026-11-18 (corpus Africa-ME): robots.txt: /uploads/pcs/ only; terms: terms of use page
-  has no restrictive text. No automated-access clause; facts only.'
+  has no restrictive text. No automated-access clause; facts only. | Place facts (research 2026-11-20):
+  "History of Yerevan" and district pages (founding in 782 BC as Erebuni)'
 relevance:
   sections:
   - events
   - getting_around
-  why: 'Yerevan Municipality: city notices (transport changes, events), for Events and Local transportation.'
+  - facts
+  why: 'Yerevan Municipality: city notices (transport changes, events), for Events and Local transportation;
+    also history and curiosities for Place facts.'

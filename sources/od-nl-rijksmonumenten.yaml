@@ -21,8 +21,10 @@ max_depth: 0
 kinds:
 - place
 - attraction
+- place_fact
 llm_kinds:
 - attraction
+- place_fact
 render: never
 cadence: monthly
 min_delay_s: 5
@@ -35,9 +37,11 @@ max_retention_days: null
 display_requirements: null
 notes: 'Research 2026-11-18 (corpus thematic): robots.txt: allowed (research 2026-11-18); terms: CC0.
   | Disabled: adapter pending: SPARQL / linked-data dump reader (robots.txt blocks AI bots on the HTML
-  site)'
+  site) | Place facts (research 2026-11-20): listing descriptions: build year, architect, notable events
+  / rijksmonument descriptions (RCE content CC0; RCE''s "AI-gebruik" page not read)'
 relevance:
   sections:
   - places
+  - facts
   why: 'Rijksmonumentenregister (RCE): About 63,000 Dutch national monuments with locations, for Places
-    to see.'
+    to see; also history and curiosities for Place facts.'

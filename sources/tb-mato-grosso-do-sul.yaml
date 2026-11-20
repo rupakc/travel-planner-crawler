@@ -24,10 +24,12 @@ kinds:
 - attraction
 - activity
 - event
+- place_fact
 llm_kinds:
 - attraction
 - activity
 - event
+- place_fact
 render: never
 cadence: weekly
 min_delay_s: 5
@@ -40,10 +42,13 @@ max_retention_days: null
 display_requirements: null
 notes: 'Research 2026-11-18 (hidden gems, small islands and remote places; SAmerica/Brazil): robots 200
   (* group, 1 disallows, / allowed). Terms: terms not found. Terms unconfirmed; owner accepted for non-commercial
-  use 2026-11-18; facts only.'
+  use 2026-11-18; facts only. | Place facts (research 2026-11-20): "history", "did you know", culture
+  pages per destination'
 relevance:
   sections:
   - places
   - activities
   - events
-  why: 'Fundtur MS: Pantanal, Bonito, events, for Places to see, Activities and Events.'
+  - facts
+  why: 'Fundtur MS: Pantanal, Bonito, events, for Places to see, Activities and Events; also history and
+    curiosities for Place facts.'

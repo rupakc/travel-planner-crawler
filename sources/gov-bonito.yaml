@@ -23,9 +23,11 @@ kinds:
 - place
 - attraction
 - activity
+- place_fact
 llm_kinds:
 - attraction
 - activity
+- place_fact
 render: never
 cadence: daily
 min_delay_s: 5
@@ -38,9 +40,12 @@ max_retention_days: null
 display_requirements: null
 notes: 'Research 2026-11-18 (hidden gems, small islands and remote places; SAmerica/Brazil): robots 200
   (* group, 0 disallows, / allowed). Terms: terms not found. Terms unconfirmed; owner accepted for non-commercial
-  use 2026-11-18; facts only.'
+  use 2026-11-18; facts only. | Place facts (research 2026-11-20): prefeitura history page, if not already
+  crawled'
 relevance:
   sections:
   - places
   - activities
-  why: 'Prefeitura de Bonito (MS): eco-tourism voucher rules, attractions, for Places to see and Activities.'
+  - facts
+  why: 'Prefeitura de Bonito (MS): eco-tourism voucher rules, attractions, for Places to see and Activities;
+    also history and curiosities for Place facts.'

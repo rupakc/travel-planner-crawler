@@ -25,10 +25,12 @@ kinds:
 - attraction
 - event
 - activity
+- place_fact
 llm_kinds:
 - attraction
 - event
 - activity
+- place_fact
 render: never
 cadence: weekly
 min_delay_s: 5
@@ -41,11 +43,13 @@ max_retention_days: null
 display_requirements: null
 notes: 'Research 2026-11-18 (corpus LatAm): robots.txt: 200, standard Drupal; terms: https://www.martinique.org/fr/mentions-legales:
   trademark and logo reproduction prohibited; no robot or AI clause. No automated-access clause; facts
-  only.'
+  only. | Place facts (research 2026-11-20): not refetched; each has "history" / "did you know" / destination
+  pages that can feed `facts`'
 relevance:
   sections:
   - places
   - events
   - activities
+  - facts
   why: 'Martinique (Comité Martiniquais du Tourisme): official visitor guide, for Places to see, Events
-    and Activities.'
+    and Activities; also history and curiosities for Place facts.'

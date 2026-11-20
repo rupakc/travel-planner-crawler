@@ -22,9 +22,11 @@ kinds:
 - place
 - attraction
 - event
+- place_fact
 llm_kinds:
 - attraction
 - event
+- place_fact
 render: never
 cadence: weekly
 min_delay_s: 5
@@ -38,9 +40,12 @@ display_requirements: null
 notes: 'Research 2026-11-18 (hidden gems, small islands and remote places; Russia/Karelia; re-vet row):
   unreachable at research from a laptop IP; robots.txt and terms not read yet. Advisory-risk destination
   (Russia): added normally, flagged here. | Disabled: re-test from the crawler VM: unreachable at research
-  2026-11-18 (not banned, not denylisted)'
+  2026-11-18 (not banned, not denylisted) | Place facts (research 2026-11-20): dates and records of the
+  Kizhi churches (Church of the Transfiguration, 1714, built without nails)'
 relevance:
   sections:
   - places
   - events
-  why: Kizhi island wooden churches, opening times and boat access, for Places to see and Events.
+  - facts
+  why: Kizhi island wooden churches, opening times and boat access, for Places to see and Events; also
+    history and curiosities for Place facts.

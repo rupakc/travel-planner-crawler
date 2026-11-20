@@ -24,10 +24,12 @@ kinds:
 - attraction
 - tip
 - event
+- place_fact
 llm_kinds:
 - attraction
 - tip
 - event
+- place_fact
 render: never
 cadence: monthly
 min_delay_s: 5
@@ -41,11 +43,13 @@ display_requirements: null
 notes: 'Research 2026-11-18 (corpus Africa-ME): robots.txt: `Allow: /`; terms: "tüm eserler Bakanlıktan
   izin alınmaksızın … çoğaltılamaz, yayımlanamaz" (copyright only). No automated-access clause; facts
   only. | Disabled: robots.txt 403 at first full crawl 2026-11-19; government site, not denylisted: re-test
-  later'
+  later | Place facts (research 2026-11-20): history, name-origin and curiosity pages of the places it
+  covers'
 relevance:
   sections:
   - places
   - tips
   - events
+  - facts
   why: 'Ministry of Culture and Tourism, Türkiye: official notices, museum and site regulations, for Places
-    to see, Travel tips and Events.'
+    to see, Travel tips and Events; also history and curiosities for Place facts.'

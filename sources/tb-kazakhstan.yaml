@@ -26,6 +26,7 @@ kinds:
 - activity
 - event
 - tip
+- place_fact
 llm_kinds: []
 render: never
 cadence: weekly
@@ -40,12 +41,14 @@ display_requirements: null
 notes: 'Research 2026-11-18 (corpus Asia-Pacific): robots.txt: robots 200, path allowed; AI-bot block
   → title + link only; /cabinet/, /api/ disallowed; terms: https://kazakhstan.travel/ru/terms read: no
   robot/AI clause. No automated-access clause; facts only. robots.txt reserves AI use (AI crawlers blocked),
-  so title and link only: no LLM kinds.'
+  so title and link only: no LLM kinds. | Place facts (research 2026-11-20): history, name-origin and
+  curiosity pages of the places it covers'
 relevance:
   sections:
   - places
   - activities
   - events
   - tips
+  - facts
   why: 'Kazakh Tourism (kazakhstan.travel): Kazakhstan destinations, routes and events, for Places to
-    see, Activities, Events and Travel tips.'
+    see, Activities, Events and Travel tips; also history and curiosities for Place facts.'

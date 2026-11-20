@@ -23,10 +23,12 @@ kinds:
 - attraction
 - visa_rule
 - tip
+- place_fact
 llm_kinds:
 - attraction
 - visa_rule
 - tip
+- place_fact
 render: never
 cadence: monthly
 min_delay_s: 5
@@ -40,10 +42,12 @@ display_requirements: null
 notes: 'Research 2026-11-18 (hidden gems, small islands and remote places; Asia/India): robots 204. Terms:
   terms not found; robots.txt 204 (empty). Terms unconfirmed; owner accepted for non-commercial use 2026-11-18;
   facts only. Advisory-risk destination (government travel advisories apply: Ladakh border areas): added
-  normally, flagged here.'
+  normally, flagged here. | Place facts (research 2026-11-20): "history" and "about" pages per destination'
 relevance:
   sections:
   - places
   - visa
   - tips
-  why: 'District Leh (Ladakh): tourism, permits, notices, for Places to see, Visa and Travel tips.'
+  - facts
+  why: 'District Leh (Ladakh): tourism, permits, notices, for Places to see, Visa and Travel tips; also
+    history and curiosities for Place facts.'

@@ -24,6 +24,7 @@ kinds:
 - attraction
 - activity
 - event
+- place_fact
 llm_kinds: []
 render: never
 cadence: weekly
@@ -38,11 +39,15 @@ display_requirements: null
 notes: 'HOLD (research 2026-11-17): developer.nps.gov/robots.txt answers 403 (do-not-crawl origin); ask
   NPS. | Disabled: robots.txt of developer.nps.gov answers 403 to VoyagerBot (research 2026-11-17): do-not-crawl
   origin; needs an API key (free, https://www.nps.gov/subjects/developer/get-started.htm); the public-domain
-  nps.gov site is nps-site'
+  nps.gov site is nps-site | Place facts (research 2026-11-20): park "history and culture" pages, "Things
+  To Know", NRHP and National Historic Landmark descriptions; the API `parks` description fields / NRHP
+  data downloads (https://home.nps.gov/subjects/nationalregister/data-downloads.htm) and NHL pages / park
+  superlatives (deepest lake: Crater Lake; longest cave: Mammoth Cave)'
 relevance:
   sections:
   - activities
   - events
   - itinerary
+  - facts
   why: US national park things to do, events and tours as structured data, for Activities, Events and
-    the itinerary.
+    the itinerary; also history and curiosities for Place facts.

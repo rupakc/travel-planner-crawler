@@ -26,11 +26,13 @@ kinds:
 - activity
 - tip
 - visa_rule
+- place_fact
 llm_kinds:
 - attraction
 - activity
 - tip
 - visa_rule
+- place_fact
 render: never
 cadence: monthly
 min_delay_s: 5
@@ -43,12 +45,13 @@ max_retention_days: null
 display_requirements: null
 notes: 'Research 2026-11-18 (corpus Asia-Pacific): robots.txt: robots 200, path allowed (Joomla system
   paths disallowed); terms: https://www.vanuatu.travel/en/terms-of-use read: no robot/AI clause. No automated-access
-  clause; facts only.'
+  clause; facts only. | Place facts (research 2026-11-20): destination "history/culture/facts" pages'
 relevance:
   sections:
   - places
   - activities
   - tips
   - visa
+  - facts
   why: 'Vanuatu Tourism Office: Vanuatu islands, practical info, entry, for Places to see, Activities,
-    Travel tips and Visa.'
+    Travel tips and Visa; also history and curiosities for Place facts.'

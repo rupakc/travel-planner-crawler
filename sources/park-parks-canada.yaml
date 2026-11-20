@@ -25,10 +25,12 @@ kinds:
 - attraction
 - activity
 - tip
+- place_fact
 llm_kinds:
 - attraction
 - activity
 - tip
+- place_fact
 render: never
 cadence: weekly
 min_delay_s: 5
@@ -41,11 +43,14 @@ max_retention_days: null
 display_requirements: null
 notes: 'robots.txt (research 2026-11-18): 404 (no robots.txt, so allowed). Terms read (research 2026-11-18):
   canada.ca terms, ''you may reproduce the materials ... for non-commercial purposes ... without charge
-  or further permission''; facts only (Crown copyright).'
+  or further permission''; facts only (Crown copyright). | Place facts (research 2026-11-20): national
+  historic sites: history pages / national historic sites and persons/events designations / add path ^/en/canadian-heritage/services/provincial-territorial-symbols-canada/
+  (13 province/territory symbol profiles); terms allow non-commercial reproduction'
 relevance:
   sections:
   - places
   - activities
   - tips
+  - facts
   why: Canada's national parks and historic sites (conditions, fees, closures), for Places to see, Activities
-    and Travel tips.
+    and Travel tips; also history and curiosities for Place facts.

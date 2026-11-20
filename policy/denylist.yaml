@@ -960,3 +960,131 @@ entries:
     except_hosts: [api.hestia.earth]
     reason: "Terms: 'Other than as expressly provided for by the HESTIA API, you shall not conduct ... text or data mining or web scraping', 2026-11-19"
     source: research 2026-11-19 carbon SKIP
+  # --- Place facts research (2026-11-20): terms that ban bots, scraping, TDM or AI only. Hosts that
+  # only answered 403, 5xx or a challenge to the research laptop are not listed.
+  - host: botswanalaws.com
+    reason: "Terms ban automated access or TDM/AI: 'You must not … use robots, scrapers, crawlers or other automated tools to access, copy or download content', 2026-11-20"
+    source: research 2026-11-20 place facts SKIP
+  - host: battlefields.org
+    reason: "Terms ban automated access or TDM/AI: 'use any data mining, robots or similar data gathering, web scraping', 2026-11-20"
+    source: research 2026-11-20 place facts SKIP
+  - host: nationaltrust.tt
+    reason: "Terms ban automated access or TDM/AI: 'use Our Website to ... spider, crawl, or scrape', 2026-11-20"
+    source: research 2026-11-20 place facts SKIP
+  - host: heritagemontreal.org
+    reason: "Terms ban automated access or TDM/AI: 'reproduire ou extraire systématiquement des contenus', 2026-11-20"
+    source: research 2026-11-20 place facts SKIP
+  - host: hawkesbaymuseum.com
+    reason: "Terms ban automated access or TDM/AI: 'use any automated means (including bots, scrapers, or data harvesting tools) to access, monitor, or copy any content … without our prior written', 2026-11-20"
+    source: research 2026-11-20 place facts SKIP
+  - host: michiganology.org
+    reason: "Terms ban automated access or TDM/AI: 'not to access … any of the website through any automated means (including … web crawlers or screen scrapers)', 2026-11-20"
+    source: research 2026-11-20 place facts SKIP
+  - host: local-historia.jp
+    reason: "Terms ban automated access or TDM/AI: 'ボット、スクリプト等による自動的なアクセス… スクレイピング等による大量データの自動収集', 2026-11-20"
+    source: research 2026-11-20 place facts SKIP
+  - host: kotobank.jp
+    reason: "Terms ban automated access or TDM/AI: 'データの複製、蓄積、AIの開発・学習利用', 2026-11-20"
+    source: research 2026-11-20 place facts SKIP
+  - host: uzbekistan.travel
+    reason: "Terms ban automated access or TDM/AI: 'Использовать автоматизированные скрипты для массового копирования материалов', 2026-11-20"
+    source: research 2026-11-20 place facts SKIP
+  - host: nlc.cn
+    reason: "Terms ban automated access or TDM/AI: '不得进行…数据采集、网络爬虫或类似的数据收集以及数据摘录等行为', 2026-11-20"
+    source: research 2026-11-20 place facts SKIP
+  - host: mentalfloss.com
+    reason: "Terms ban automated access or TDM/AI: 'Any automatic use ... including ... Bots, Crawlers, Spiders, Robots', 2026-11-20"
+    source: research 2026-11-20 place facts SKIP
+  - host: untappedcities.com
+    reason: "Terms ban automated access or TDM/AI: 'automated means, such as scrapers, bots or spiders', 2026-11-20"
+    source: research 2026-11-20 place facts SKIP
+  - host: aeon.co
+    reason: "Terms ban automated access or TDM/AI: 'scraping, mining, AI/ML use, automated scripting', 2026-11-20"
+    source: research 2026-11-20 place facts SKIP
+  - host: publicdomainreview.org
+    reason: "Terms ban automated access or TDM/AI: 'to spider, crawl, or scrape', 2026-11-20"
+    source: research 2026-11-20 place facts SKIP
+  - host: the-past.com
+    reason: "Terms ban automated access or TDM/AI: 'must not spider or systematically/mechanically interrogate', 2026-11-20"
+    source: research 2026-11-20 place facts SKIP
+  - host: focus.it
+    reason: "Terms ban automated access or TDM/AI: 'Divieto di scraping e crawling', 2026-11-20"
+    source: research 2026-11-20 place facts SKIP
+  - host: peepultree.world
+    reason: "Terms ban automated access or TDM/AI: 'robot, spider or other automatic device', 2026-11-20"
+    source: research 2026-11-20 place facts SKIP
+  - host: thebetterindia.com
+    reason: "Terms ban automated access or TDM/AI: 'any data mining, data gathering or extraction method', 2026-11-20"
+    source: research 2026-11-20 place facts SKIP
+  - host: laphamsquarterly.org
+    reason: "Terms ban automated access or TDM/AI: 'robots/scraping except search engines and public archives', 2026-11-20"
+    source: research 2026-11-20 place facts SKIP
+  - host: irishcentral.com
+    reason: "Terms ban automated access or TDM/AI: 'data mining, robots, extraction tools', 2026-11-20"
+    source: research 2026-11-20 place facts SKIP
+  - host: ripleys.com
+    reason: "Terms ban automated access or TDM/AI: 'any robot, spider, scraper, or other automated means', 2026-11-20"
+    source: research 2026-11-20 place facts SKIP
+  - host: unseen-japan.com
+    reason: "Terms ban automated access or TDM/AI: 'through a bot, script', 2026-11-20"
+    source: research 2026-11-20 place facts SKIP
+  - host: kulturenvanteri.com
+    reason: "Terms ban automated access or TDM/AI: 'bot, örümcek (spider), tarayıcı (crawler) ... 'içerik kazıma' (web scraping) ... kesinlikle yasaktır', 2026-11-20"
+    source: research 2026-11-20 place facts SKIP
+  - host: nashural.ru
+    reason: "Terms ban automated access or TDM/AI: 'не использовать скрипты (программы) для автоматизированного сбора информации', 2026-11-20"
+    source: research 2026-11-20 place facts SKIP
+  - host: venipedia.it
+    reason: "Terms ban automated access or TDM/AI: ': 'not ... access Venipedia using automated tools', 2026-11-20"
+    source: research 2026-11-20 place facts SKIP
+  - host: treccani.it
+    reason: "Terms ban automated access or TDM/AI: 'Dichiarazione di Esclusione dal TDM … l'uso di tutti i contenuti … per attività di text e data mining è espressamente vietato', 2026-11-20"
+    source: research 2026-11-20 place facts SKIP
+  - host: waymarking.com
+    reason: "Terms ban automated access or TDM/AI: 'use any robot, spider, scraper … to access … or collect data', 2026-11-20"
+    source: research 2026-11-20 place facts SKIP
+  - host: europeanheritagedays.com
+    reason: "Terms ban automated access or TDM/AI: 'harvesting bot, robot, spider, scraper', 2026-11-20"
+    source: research 2026-11-20 place facts SKIP
+  - host: birminghamcivicsociety.org.uk
+    reason: "Terms ban automated access or TDM/AI: 'automated data collection … scraping, data mining', 2026-11-20"
+    source: research 2026-11-20 place facts SKIP
+  - host: cpdoc.fgv.br
+    reason: "Terms ban automated access or TDM/AI: 'Não utilizar ferramentas automatizadas e/ou que possam ser identificadas como geradoras de padrão não-humano', 2026-11-20"
+    source: research 2026-11-20 place facts SKIP
+  - host: canadiana.ca
+    reason: "Terms ban automated access or TDM/AI: 'You may not use spiders, robots, data mining techniques or other automated devices or programs to catalog, download or otherwise reproduce', 2026-11-20"
+    source: research 2026-11-20 place facts SKIP
+  - host: www.wa.gov.au
+    reason: "Terms ban automated access or TDM/AI: 'not use any software (like bots, scraper tools etc) to access, monitor or copy', 2026-11-20"
+    source: research 2026-11-20 place facts SKIP
+  - host: encyclopedia.com
+    reason: "Terms ban automated access or TDM/AI: 'you shall not employ any automated search tools, including so called 'crawlers,' 'bots' and 'spiders'… nor may you 'scrape'…', 2026-11-20"
+    source: research 2026-11-20 place facts SKIP
+  - host: geograph.org.uk
+    reason: "Terms ban automated access or TDM/AI: 'You agree that You will not use any robot, spider, scraper or other automated means to access the Site for any purpose without Our express written per…', 2026-11-20"
+    source: research 2026-11-20 place facts SKIP
+  - host: meteoswiss.admin.ch
+    reason: "Terms ban automated access or TDM/AI: 'It is expressly forbidden to download or process data from the MeteoSwiss website using bots (web crawlers) or other automated methods', 2026-11-20"
+    source: research 2026-11-20 place facts SKIP
+  - host: everyculture.com
+    reason: "Terms ban automated access or TDM/AI: 'nor any use of data mining, robots, spiders, or similar data gathering and extraction tools for any purpose unless expressly permitted in advance', 2026-11-20"
+    source: research 2026-11-20 place facts SKIP
+  - host: worldpopulationreview.com
+    reason: "Terms ban automated access or TDM/AI: 'engaging in any data mining, data harvesting, data extracting or any other similar activity', 2026-11-20"
+    source: research 2026-11-20 place facts SKIP
+  - host: education.nationalgeographic.org
+    reason: "Terms ban automated access or TDM/AI: 'Prohibition on Data Scraping', 2026-11-20"
+    source: research 2026-11-20 place facts SKIP
+  - host: hydrosheds.org
+    reason: "Terms ban automated access or TDM/AI: 'use of any data mining, robots or similar data gathering or extraction methods', 2026-11-20"
+    source: research 2026-11-20 place facts SKIP
+  - host: gaonconnection.com
+    reason: "Terms ban automated access or TDM/AI: 'not to use... spiders, robots, avatars or intelligent agents to navigate or search this Site', 2026-11-20"
+    source: research 2026-11-20 place facts SKIP
+  - host: assamtourism.gov.in
+    reason: "Terms ban automated access or TDM/AI: 'Use any robot, spider, or other automatic device, process, or means to access Service for any purpose', 2026-11-20"
+    source: research 2026-11-20 place facts SKIP
+  - host: poblesdecatalunya.cat
+    reason: "Terms ban automated access or TDM/AI: 'Queden prohibits qualsevol dels recursos tecnològics o tècnics, pels quals un tercer… puguin beneficiar-se… dels continguts', 2026-11-20"
+    source: research 2026-11-20 place facts SKIP

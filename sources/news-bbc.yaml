@@ -20,6 +20,7 @@ exclude: []
 max_depth: 1
 kinds:
 - article
+- place_fact
 llm_kinds: []
 render: never
 cadence: h2
@@ -31,10 +32,13 @@ needs_key: false
 key_secret: null
 max_retention_days: null
 display_requirements: null
-notes: RSS verified 2026-11-15
+notes: 'RSS verified 2026-11-15 | Place facts (research 2026-11-20): history, name-origin and curiosity
+  pages of the places it covers'
 relevance:
   sections:
   - tips
   - places
+  - facts
   why: BBC Travel travel-section articles (destination features, openings, travel disruptions) for Travel
-    tips and Places to see (headline, link and a short excerpt only).
+    tips and Places to see (headline, link and a short excerpt only); also history and curiosities for
+    Place facts.

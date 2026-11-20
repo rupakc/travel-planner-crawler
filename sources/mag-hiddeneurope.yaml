@@ -21,8 +21,10 @@ max_depth: 1
 kinds:
 - article
 - tip
+- place_fact
 llm_kinds:
 - tip
+- place_fact
 render: never
 cadence: monthly
 min_delay_s: 5
@@ -34,11 +36,13 @@ key_secret: null
 max_retention_days: null
 display_requirements: null
 notes: 'Research 2026-11-18 (corpus Europe): robots.txt: allowed; terms: legal-stuff: no bot clause. No
-  automated-access clause; facts only.'
+  automated-access clause; facts only. | Place facts (research 2026-11-20): Hidden Europe magazine: little-known
+  places in Europe'
 relevance:
   sections:
   - getting_around
   - places
   - tips
+  - facts
   why: 'hidden europe magazine: travel articles and guides, for Local transportation, Places to see and
-    Travel tips.'
+    Travel tips; also history and curiosities for Place facts.'

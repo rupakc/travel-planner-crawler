@@ -20,6 +20,7 @@ exclude: []
 max_depth: 1
 kinds:
 - article
+- place_fact
 llm_kinds: []
 render: never
 cadence: daily
@@ -34,9 +35,12 @@ display_requirements: null
 notes: 'www.amusingplanet.com robots 200, no Disallow; feeds.feedburner.com/robots.txt answered 200 with
   an HTML page that redirects to /lander (a parked-domain lander, not a robots file; checked 2026-11-17).
   No terms page found. | Disabled: terms not yet confirmed: no terms page found; feeds.feedburner.com
-  serves a parked-domain lander instead of robots.txt (checked 2026-11-17): do not fetch the feed there'
+  serves a parked-domain lander instead of robots.txt (checked 2026-11-17): do not fetch the feed there
+  | Place facts (research 2026-11-20): enabled:false; robots allowed, feed 200 (25 items): enable for
+  facts (curiosities about places, sourced)'
 relevance:
   sections:
   - places
+  - facts
   why: Unusual places, natural wonders and hidden sights worldwide (headline, link and a short excerpt
-    only), for Places to see.
+    only), for Places to see; also history and curiosities for Place facts.

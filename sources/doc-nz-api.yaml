@@ -22,6 +22,7 @@ kinds:
 - place
 - attraction
 - tip
+- place_fact
 llm_kinds: []
 render: never
 cadence: weekly
@@ -34,11 +35,13 @@ key_secret: crawler-src-doc-nz-api-key
 max_retention_days: null
 display_requirements: null
 notes: 'Structured version of doc-nz-parks. robots.txt 404 (research 2026-11-18). | Disabled: needs an
-  API key: owner must register a key at https://api.doc.govt.nz/ (free); adapter pending: DOC API reader'
+  API key: owner must register a key at https://api.doc.govt.nz/ (free); adapter pending: DOC API reader
+  | Place facts (research 2026-11-20): historic places on conservation land (history text per site)'
 relevance:
   sections:
   - places
   - activities
   - tips
+  - facts
   why: New Zealand track, hut and campsite records with current alerts, for Places to see, Activities
-    and Travel tips.
+    and Travel tips; also history and curiosities for Place facts.

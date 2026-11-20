@@ -21,8 +21,10 @@ max_depth: 2
 kinds:
 - place
 - attraction
+- place_fact
 llm_kinds:
 - attraction
+- place_fact
 render: never
 cadence: monthly
 min_delay_s: 5
@@ -36,8 +38,11 @@ display_requirements: null
 notes: 'Research 2026-11-18 (corpus Asia-Pacific): robots.txt: no response from the research host (timeout);
   terms: not checked. Terms unconfirmed; owner accepted for non-commercial use 2026-11-18. Facts only.
   | Disabled: re-test from the crawler VM before enabling (robots.txt gave no response during research
-  from a European IP; content and terms unchecked)'
+  from a European IP; content and terms unchecked) | Place facts (research 2026-11-20): city and valley
+  history pages (Lahore, Hunza, Skardu forts)'
 relevance:
   sections:
   - places
-  why: 'Tourism Punjab (Pakistan): official visitor guide, for Places to see.'
+  - facts
+  why: 'Tourism Punjab (Pakistan): official visitor guide, for Places to see; also history and curiosities
+    for Place facts.'

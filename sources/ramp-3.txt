@@ -760,7 +760,6 @@ visa-maldives-immigration  # visa/tips: Maldives Immigration (sitemap, facts onl
 tb-bangladesh-tb           # places/events: Bangladesh Tourism Board (html, facts only, monthly, <= 50/day; terms owner-accepted)
 tb-parjatan-bd             # places/hotels: Bangladesh Parjatan Corporation (html, facts only, monthly, <= 50/day)
 tr-pakrail                 # getting_around: Pakistan Railways (html, facts only, monthly, <= 50/day)
-tb-uzbekistan              # places/tips/events: Uzbekistan Tourism Committee (uzbekistan.travel) (html, facts only, weekly, <= 100/day; terms owner-accepted)
 tb-kazakhstan              # places/activities/events: Kazakh Tourism (kazakhstan.travel) (sitemap, facts only, weekly, <= 100/day; robots reserves AI use: title and link only)
 visa-kyrgyz-evisa          # visa: Kyrgyz Republic eVisa portal (html, facts only, monthly, <= 50/day; terms owner-accepted)
 visa-mongolia-immigration  # visa: Immigration Agency of Mongolia (sitemap, facts only, weekly, <= 100/day)
@@ -1142,6 +1141,122 @@ carbon-ecomark-jp                  # carbon/hotels/tips: Japan Eco Mark Office: 
 tr-flix-methodology                # carbon/getting_around: Flix sustainability and ESG pages (html, facts only, yearly, <= 100/day)
 carbon-breeam-projects             # carbon/hotels: BREEAM certified projects (html, facts only, Crawl-delay 10, <= 50/day)
 carbon-greenbooklive               # carbon/hotels: GreenBookLive certification register (html, facts only, <= 50/day)
+# --- place facts: global and multi-country sources, structured readers (2026-11-20) ---
+fx-hespress-histoire                     # facts: sitemap, facts_only, monthly, 100/day
+fx-burkina24-culture                     # facts: rss, facts_only, monthly, 100/day
+fx-radiookapi-identite                   # facts: html, facts_only, monthly, 100/day
+fx-kapitalis-culture                     # facts: rss, facts_only, monthly, 100/day
+gov-sabanew-yemen                        # facts: html, facts_only, monthly, 100/day
+arch-openedition-journals                # facts: html, facts_only, monthly, 100/day
+arch-openedition-books                   # facts: rss, facts_only, monthly, 100/day
+arch-hypotheses                          # facts: rss, facts_only, monthly, 100/day
+arch-oapen                               # facts: rss, open, monthly, 100/day
+arch-akofena                             # facts: sitemap, open, quarterly, 100/day
+arch-codesria                            # facts: sitemap, facts_only, monthly, 100/day
+her-alecso                               # facts: html, facts_only, quarterly, 100/day
+her-apartheid-museum                     # facts: html, facts_only, monthly, 100/day
+arch-mandela-foundation                  # facts: html, facts_only, monthly, 100/day
+her-awhf                                 # facts: rss, facts_only, monthly, 100/day
+her-zamani                               # facts: html, facts_only, quarterly, 100/day
+fx-tara-rock-art                         # facts: sitemap, facts_only, quarterly, 100/day
+fx-encyclopaedia-africana                # facts: sitemap, facts_only, monthly, 100/day
+fx-conversation-africa                   # facts: sitemap, facts_only, monthly, 100/day
+fx-the-conversation                      # facts: html, open, monthly, 100/day
+fx-aramcoworld                           # facts: sitemap, facts_only, monthly, 100/day
+fx-discover-islamic-art                  # facts: html, facts_only, quarterly, 100/day
+fx-qantara                               # facts: html, facts_only, quarterly, 100/day
+od-syriaca                               # facts: sitemap, open, quarterly, 100/day
+fx-bibleplaces                           # facts: sitemap, facts_only, monthly, 100/day
+arch-bibalex                             # facts: html, facts_only, quarterly, 100/day
+fx-african-world-heritage                # facts: html, facts_only, yearly, 100/day
+fx-historylink                           # facts: html, facts_only, monthly, 100/day
+fx-encyclopedia-virginia                 # facts: html, facts_only, monthly, 100/day
+fx-64-parishes                           # facts: sitemap, facts_only, monthly, 100/day
+fx-connecticut-history                   # facts: sitemap, share_alike, monthly, 100/day
+fx-statesymbolsusa                       # facts: sitemap, facts_only, monthly, 100/day
+arch-dloc                                # facts: sitemap, facts_only, quarterly, 100/day
+fx-cervantes-historia                    # facts: html, facts_only, monthly, 100/day
+fx-hunter-living-histories               # facts: sitemap, facts_only, monthly, 100/day
+arch-auckland-museum                     # facts: sitemap, facts_only, monthly, 100/day
+arch-puke-ariki                          # facts: sitemap, facts_only, monthly, 100/day
+arch-canterbury-museum                   # facts: sitemap, open, monthly, 100/day
+her-keys-to-the-past                     # facts: sitemap, facts_only, quarterly, 100/day
+her-cornwall-heritage-trust              # facts: html, facts_only, yearly, 100/day
+fx-sahapedia                             # facts: html, open, monthly, 100/day
+fx-siam-society                          # facts: sitemap, facts_only, quarterly, 100/day
+fx-historyextra                          # facts: sitemap, facts_only, monthly, 100/day
+fx-guinness-records                      # facts: html, facts_only, monthly, 100/day
+fx-futilitycloset                        # facts: html, facts_only, monthly, 100/day
+fx-sapiens                               # facts: rss, open, monthly, 100/day
+fx-thevintagenews                        # facts: sitemap, facts_only, monthly, 100/day
+fx-heritagedaily                         # facts: sitemap, facts_only, monthly, 100/day
+fx-odditycentral                         # facts: html, facts_only, monthly, 100/day
+fx-todayifoundout                        # facts: html, facts_only, monthly, 100/day
+fx-hakai                                 # facts: rss, facts_only, monthly, 100/day
+fx-archaeology-mag                       # facts: sitemap, facts_only, monthly, 100/day
+fx-damninteresting                       # facts: rss, facts_only, monthly, 100/day
+fx-lookup-london                         # facts: rss, facts_only, monthly, 100/day
+fx-spitalfieldslife                      # facts: rss, facts_only, monthly, 100/day
+fx-historyhit                            # facts: sitemap, facts_only, monthly, 100/day
+fx-alondoninheritance                    # facts: rss, facts_only, monthly, 100/day
+fx-abandonedspaces                       # facts: rss, facts_only, monthly, 100/day
+fx-historynet                            # facts: rss, facts_only, monthly, 100/day
+fx-geographyrealm                        # facts: rss, facts_only, monthly, 100/day
+fx-rarehistoricalphotos                  # facts: rss, facts_only, monthly, 100/day
+fx-comeheretome                          # facts: rss, facts_only, monthly, 100/day
+fx-atlas-of-wonders                      # facts: html, facts_only, monthly, 100/day
+fx-bowery-boys                           # facts: rss, facts_only, monthly, 100/day
+fx-exploring-castles                     # facts: sitemap, facts_only, monthly, 100/day
+arch-regionalgeschichte-net              # facts: sitemap, facts_only, monthly, 100/day
+fx-enciclopedia-cat                      # facts: html, facts_only, monthly, 100/day
+fx-erih                                  # facts: sitemap, facts_only, monthly, 100/day
+arch-lwl-westfalen-regional              # facts: html, facts_only, monthly, 100/day
+od-spc-sdd-country                       # facts: html, facts_only, quarterly, 100/day
+her-virunga                              # facts: sitemap, facts_only, monthly, 100/day
+her-statia-park                          # facts: sitemap, facts_only, monthly, 100/day
+her-stinapa-bonaire                      # facts: sitemap, facts_only, quarterly, 100/day
+arch-saba-heritage                       # facts: sitemap, facts_only, monthly, 100/day
+her-terramar-bonaire                     # facts: sitemap, facts_only, monthly, 100/day
+fx-factsanddetails                       # facts: html, facts_only, monthly, 100/day
+gov-akdn-historic-cities                 # facts: sitemap, facts_only, monthly, 100/day
+fx-turquoise-mountain                    # facts: sitemap, facts_only, quarterly, 100/day
+tb-nouvellecaledonie                     # facts: sitemap, facts_only, monthly, 100/day
+arch-jps                                 # facts: rss, facts_only, quarterly, 100/day
+fx-seasite-niu                           # facts: html, facts_only, yearly, 100/day
+arch-aodl                                # facts: html, facts_only, yearly, 100/day
+fx-craterre                              # facts: sitemap, facts_only, quarterly, 100/day
+fx-turkmenportal                         # facts: sitemap, facts_only, monthly, 100/day
+fx-wmf                                   # facts: sitemap, facts_only, monthly, 100/day
+fx-europanostra                          # facts: sitemap, facts_only, monthly, 100/day
+fx-haiti-reference                       # facts: html, facts_only, monthly, 100/day
+fx-historia-nuevo-mundo                  # facts: rss, facts_only, monthly, 100/day
+arch-encyclopedia-detroit                # facts: sitemap, facts_only, monthly, 100/day
+arch-sachsen-digital                     # facts: html, share_alike, monthly, 100/day
+od-undata-profiles                       # facts: html, open, yearly, 100/day
+gov-eu-countries                         # facts: sitemap, open, yearly, 100/day
+city-barcelona                           # facts: html, facts_only, yearly, 100/day
+api-qlever-wikidata                      # facts: html, open, monthly, 100/day
+api-wikimedia-pageviews                  # facts: html, open, monthly, 100/day
+rec-skyscrapercenter                     # facts: html, facts_only, monthly, 100/day
+od-dbpedia                               # facts: html, share_alike, quarterly, 100/day
+fx-peaklist                              # facts: html, facts_only, yearly, 100/day
+od-wmo-extremes                          # facts: html, facts_only, quarterly, 100/day
+her-opendomesday                         # facts: html, share_alike, yearly, 100/day
+arch-euskaltzaindia-eoda                 # facts: html, share_alike, yearly, 100/day
+gov-ungegn                               # facts: html, facts_only, yearly, 100/day
+fx-statoids                              # facts: html, facts_only, monthly, 100/day
+ref-nsidc-glacier-facts                  # facts: html, facts_only, yearly, 100/day
+ref-oldlist                              # facts: html, facts_only, yearly, 100/day
+ref-ancient-yew                          # facts: sitemap, facts_only, yearly, 100/day
+ref-highest-bridges                      # facts: html, facts_only, monthly, 100/day
+ref-structurae                           # facts: sitemap, facts_only, monthly, 100/day
+fx-geology-com                           # facts: html, facts_only, monthly, 100/day
+ref-peakvisor                            # facts: sitemap, facts_only, monthly, 100/day
+gov-esa-earth-from-space                 # facts: html, facts_only, monthly, 100/day
+her-owhc-cities                          # facts: sitemap, facts_only, monthly, 100/day
+fx-henokiens                             # facts: html, facts_only, yearly, 100/day
+fx-seaarch                               # facts: rss, facts_only, monthly, 100/day
+od-toponimia-galicia                     # facts: html, open, quarterly, 100/day
 
 # --- ramp-3: open-data adapters (2026-11-18) ---
 openholidays               # events/tips: public + school holidays per country, this year and next (OpenHolidays API, ODbL share_alike, monthly, ~73 requests/month); openholidays adapter -> public_holiday
@@ -1233,3 +1348,6 @@ od-dft-tag-databook                # carbon/getting_around: DfT TAG data book A1
 od-mobitool-ch                     # carbon/getting_around: mobitool v3.1 life-cycle g CO2e per pkm, CH plus trains in DE FR IT AT (api, facts_only, yearly, <= 10/day); factor_table
 carbon-aib-residual-mix            # carbon/hotels: AIB 2025 production, residual and supplier mix g CO2/kWh for 34 European countries (api, facts_only, yearly, <= 10/day); factor_table
 od-epa-supply-chain-ghg            # carbon/activities: US EPA supply-chain kg CO2e per 2022 USD for 41 travel industries (api, open, yearly, <= 10/day); factor_table
+# --- place facts: global and multi-country sources, structured readers (2026-11-20) ---
+od-factbook-json                         # facts: adapter factbook_json, open, yearly, 100/day
+od-wikidata-entitydata                   # facts: adapter wikidata_facts, open, monthly, 300/day

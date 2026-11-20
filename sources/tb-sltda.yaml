@@ -21,9 +21,11 @@ max_depth: 2
 kinds:
 - tip
 - hotel
+- place_fact
 llm_kinds:
 - tip
 - hotel
+- place_fact
 render: never
 cadence: weekly
 min_delay_s: 5
@@ -37,9 +39,12 @@ display_requirements: null
 notes: 'Research 2026-11-18 (corpus Asia-Pacific): robots.txt: allowed (research 2026-11-18); terms: ''limited
   permission to access and display the Web pages ... for your personal, non-commercial use''. Terms restrict
   to personal/non-commercial use; owner accepted for non-commercial use 2026-11-18 (''limited permission
-  to access and display the Web pages ... for your personal, non-commercial use''). Facts only.'
+  to access and display the Web pages ... for your personal, non-commercial use''). Facts only. | Place
+  facts (research 2026-11-20): destination history and "did you know" lines'
 relevance:
   sections:
   - tips
   - hotels
-  why: 'Sri Lanka Tourism Development Authority: official visitor guide, for Travel tips and Hotels.'
+  - facts
+  why: 'Sri Lanka Tourism Development Authority: official visitor guide, for Travel tips and Hotels; also
+    history and curiosities for Place facts.'

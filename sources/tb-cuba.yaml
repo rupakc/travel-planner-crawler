@@ -24,9 +24,11 @@ kinds:
 - place
 - attraction
 - tip
+- place_fact
 llm_kinds:
 - attraction
 - tip
+- place_fact
 render: never
 cadence: quarterly
 min_delay_s: 5
@@ -39,9 +41,12 @@ max_retention_days: null
 display_requirements: null
 notes: 'Research 2026-11-18 (corpus LatAm): robots.txt: 200, DNN system dirs disallowed; terms: terms
   not found. **Sitemap lastmod 2020** (low cadence). Terms unconfirmed; owner accepted for non-commercial
-  use 2026-11-18. Facts only.'
+  use 2026-11-18. Facts only. | Place facts (research 2026-11-20): not refetched; each has "history" /
+  "did you know" / destination pages that can feed `facts`'
 relevance:
   sections:
   - places
   - tips
-  why: 'Cuba Travel (MINTUR): official visitor guide, for Places to see and Travel tips.'
+  - facts
+  why: 'Cuba Travel (MINTUR): official visitor guide, for Places to see and Travel tips; also history
+    and curiosities for Place facts.'

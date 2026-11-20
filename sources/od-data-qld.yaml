@@ -22,9 +22,11 @@ kinds:
 - place
 - attraction
 - activity
+- place_fact
 llm_kinds:
 - attraction
 - activity
+- place_fact
 render: never
 cadence: monthly
 min_delay_s: 5
@@ -37,10 +39,13 @@ max_retention_days: null
 display_requirements: null
 notes: 'Research 2026-11-18 (corpus Asia-Pacific): robots.txt: see research (2026-11-18); terms: CC BY
   4.0. | Disabled: adapter pending: choose tourism datasets + dataset reader (crawling the portal''s HTML
-  is not useful) (CKAN; robots.txt disallows /api/, Crawl-delay 10)'
+  is not useful) (CKAN; robots.txt disallows /api/, Crawl-delay 10) | Place facts (research 2026-11-20):
+  Queensland Heritage Register XML (history + significance) / Queensland place names gazetteer, which
+  has a "history/origin" field'
 relevance:
   sections:
   - places
   - activities
+  - facts
   why: 'Queensland open data: Queensland tourism, parks and transport datasets, for Places to see and
-    Activities.'
+    Activities; also history and curiosities for Place facts.'

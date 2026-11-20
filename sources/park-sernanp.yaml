@@ -23,9 +23,11 @@ kinds:
 - place
 - attraction
 - tip
+- place_fact
 llm_kinds:
 - attraction
 - tip
+- place_fact
 render: never
 cadence: monthly
 min_delay_s: 5
@@ -38,10 +40,13 @@ max_retention_days: null
 display_requirements: null
 notes: 'Research 2026-11-18 (corpus LatAm): robots.txt: 200, only `/admin/` and `?sheet=` disallowed;
   terms: gob.pe terms not found (only a privacy policy). Terms unconfirmed; owner accepted for non-commercial
-  use 2026-11-18. Facts only.'
+  use 2026-11-18. Facts only. | Place facts (research 2026-11-20): Mincultura: https://www.gob.pe/institucion/cultura/tema/patrimonio-cultural-o-arqueologico
+  and the declaratorias under /institucion/cultura/normas-legales (patrimonio declarations by place).
+  GPTBot is blocked; Crawl-delay 5.'
 relevance:
   sections:
   - places
   - tips
+  - facts
   why: 'SERNANP (Peru protected areas), gob.pe: national parks, fees, closures, for Places to see and
-    Travel tips.'
+    Travel tips; also history and curiosities for Place facts.'

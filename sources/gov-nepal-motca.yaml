@@ -24,10 +24,12 @@ kinds:
 - tip
 - activity
 - attraction
+- place_fact
 llm_kinds:
 - tip
 - activity
 - attraction
+- place_fact
 render: never
 cadence: weekly
 min_delay_s: 10
@@ -39,10 +41,12 @@ key_secret: null
 max_retention_days: null
 display_requirements: null
 notes: 'Research 2026-11-18 (corpus Asia-Pacific): robots.txt: robots 200, path allowed; Crawl-delay 10;
-  terms: terms not found. Terms unconfirmed; owner accepted for non-commercial use 2026-11-18. Facts only.'
+  terms: terms not found. Terms unconfirmed; owner accepted for non-commercial use 2026-11-18. Facts only.
+  | Place facts (research 2026-11-20): destination history and "did you know" lines'
 relevance:
   sections:
   - tips
   - activities
+  - facts
   why: 'Ministry of Culture, Tourism and Civil Aviation Nepal: Mountaineering royalties, tourism rules
-    and notices, for Travel tips and Activities.'
+    and notices, for Travel tips and Activities; also history and curiosities for Place facts.'

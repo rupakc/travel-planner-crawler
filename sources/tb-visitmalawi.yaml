@@ -24,9 +24,11 @@ kinds:
 - place
 - attraction
 - activity
+- place_fact
 llm_kinds:
 - attraction
 - activity
+- place_fact
 render: never
 cadence: weekly
 min_delay_s: 5
@@ -39,10 +41,12 @@ max_retention_days: null
 display_requirements: null
 notes: 'Research 2026-11-18 (corpus Africa-ME): robots.txt: WP default; /imunify-bot-check disallowed
   (Imunify360 present; watch for challenges); terms: terms not found. Terms unconfirmed; owner accepted
-  for non-commercial use 2026-11-18. Facts only.'
+  for non-commercial use 2026-11-18. Facts only. | Place facts (research 2026-11-20): /museums-and-monuments/
+  and /department-of-culture/: Malawi''s 200+ monuments, Chongoni, Kamuzu Mausoleum'
 relevance:
   sections:
   - places
   - activities
+  - facts
   why: 'Visit Malawi (Malawi Tourism): Lake Malawi, parks, official destination guide, for Places to see
-    and Activities.'
+    and Activities; also history and curiosities for Place facts.'

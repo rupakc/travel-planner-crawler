@@ -23,10 +23,12 @@ kinds:
 - attraction
 - activity
 - event
+- place_fact
 llm_kinds:
 - attraction
 - activity
 - event
+- place_fact
 render: never
 cadence: monthly
 min_delay_s: 5
@@ -39,11 +41,13 @@ max_retention_days: null
 display_requirements: null
 notes: 'Research 2026-11-18 (corpus Asia-Pacific): robots.txt: robots 200, path allowed (/wp/, /r/, *.php
   disallowed); terms: https://www.newcaledonia.travel/terms-of-use/ read: photos reserved; no robot/AI
-  clause. No automated-access clause; facts only.'
+  clause. No automated-access clause; facts only. | Place facts (research 2026-11-20): destination "history/culture/facts"
+  pages'
 relevance:
   sections:
   - places
   - activities
   - events
+  - facts
   why: 'New Caledonia Tourism: New Caledonia destinations and events, for Places to see, Activities and
-    Events.'
+    Events; also history and curiosities for Place facts.'

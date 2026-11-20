@@ -24,9 +24,11 @@ max_depth: 2
 kinds:
 - tip
 - packing_hint
+- place_fact
 llm_kinds:
 - tip
 - packing_hint
+- place_fact
 render: never
 cadence: monthly
 min_delay_s: 5
@@ -38,10 +40,12 @@ key_secret: null
 max_retention_days: null
 display_requirements: null
 notes: 'robots ok (traveller pages under /travel-voyage/ not disallowed). Canada.ca terms: non-commercial
-  reproduction; facts and links only.'
+  reproduction; facts and links only. | Place facts (research 2026-11-20): add path ^/en/canadian-heritage/services/provincial-territorial-symbols-canada/
+  (13 province/territory symbol profiles); terms allow non-commercial reproduction'
 relevance:
   sections:
   - tips
   - packing
+  - facts
   why: Canada's personal exemptions, restricted goods and the CAD 10,000 cash reporting rule, for Travel
-    tips and Packing.
+    tips and Packing; also history and curiosities for Place facts.

@@ -24,6 +24,7 @@ kinds:
 - place
 - attraction
 - activity
+- place_fact
 llm_kinds: []
 render: never
 cadence: monthly
@@ -37,10 +38,13 @@ max_retention_days: null
 display_requirements: null
 notes: 'Research 2026-11-18 (corpus Europe): robots.txt: allowed; ClaudeBot/GPTBot/Perplexity blocked;
   terms: terms not found. Terms unconfirmed; owner accepted for non-commercial use 2026-11-18. Facts only.
-  robots.txt reserves AI use (AI crawlers blocked), so title and link only: no LLM kinds.'
+  robots.txt reserves AI use (AI crawlers blocked), so title and link only: no LLM kinds. | Place facts
+  (research 2026-11-20): history, name-origin and curiosity pages of the places it covers'
 relevance:
   sections:
   - places
   - activities
+  - facts
   why: 'Moldova Travel: Official Moldova destinations and things to do (FCDO and the US advise against
-    travel to Transnistria only), for Places to see and Activities.'
+    travel to Transnistria only), for Places to see and Activities; also history and curiosities for Place
+    facts.'

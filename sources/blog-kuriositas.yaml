@@ -22,8 +22,10 @@ max_depth: 1
 kinds:
 - place
 - attraction
+- place_fact
 llm_kinds:
 - attraction
+- place_fact
 render: never
 cadence: daily
 min_delay_s: 5
@@ -36,8 +38,11 @@ max_retention_days: null
 display_requirements: null
 notes: 'Research 2026-11-18 (hidden gems, small islands and remote places; World): robots 200 (* group,
   2 disallows, / allowed). Terms: terms not found. Terms unconfirmed; owner accepted for non-commercial
-  use 2026-11-18; facts only.'
+  use 2026-11-18; facts only. | Place facts (research 2026-11-20): curiosities about places: add ''facts''
+  extraction'
 relevance:
   sections:
   - places
-  why: 'Kuriositas: unusual places worldwide (Blogger feed), for Places to see.'
+  - facts
+  why: 'Kuriositas: unusual places worldwide (Blogger feed), for Places to see; also history and curiosities
+    for Place facts.'

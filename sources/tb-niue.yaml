@@ -23,10 +23,12 @@ kinds:
 - attraction
 - activity
 - hotel
+- place_fact
 llm_kinds:
 - attraction
 - activity
 - hotel
+- place_fact
 render: never
 cadence: monthly
 min_delay_s: 5
@@ -38,10 +40,13 @@ key_secret: null
 max_retention_days: null
 display_requirements: null
 notes: 'Research 2026-11-18 (corpus Asia-Pacific): robots.txt: robots 200, path allowed; terms: https://www.niueisland.com/terms-and-conditions
-  read: no robot/AI clause. No automated-access clause; facts only.'
+  read: no robot/AI clause. No automated-access clause; facts only. | Place facts (research 2026-11-20):
+  destination "history/culture/facts" pages'
 relevance:
   sections:
   - places
   - activities
   - hotels
-  why: 'Niue Tourism: Niue activities and visitor info, for Places to see, Activities and Hotels.'
+  - facts
+  why: 'Niue Tourism: Niue activities and visitor info, for Places to see, Activities and Hotels; also
+    history and curiosities for Place facts.'
